@@ -177,23 +177,28 @@ result:=false;
 end;
 
 function T_ascomrestwheel.WaitConnecting(maxtime:integer):boolean;
-var count,maxcount:integer;
+var timemax,lastcheck: double;
+    ok: boolean;
 begin
  result:=true;
  try
-   maxcount:=maxtime div waitpoll;
-   count:=0;
-   while (V.Get('connecting').AsBool)and(count<maxcount) do begin
-      sleep(waitpoll);
+   timemax:=now+maxtime/1000/secperday;
+   lastcheck:=0;
+   repeat
+      if now>(lastcheck+waitpoll/1000/secperday) then begin
+         ok:=not (V.Get('connecting').AsBool);
+         if ok then break;
+         lastcheck:=now;
+      end;
+      sleep(10);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-      inc(count);
-   end;
-   result:=(count<maxcount);
+   until ok or (now>timemax);
+   result:=(now<timemax);
  except
-  on E: Exception do begin
-    msg(Format(rsConnectionEr, [E.Message]),0);
-    result:=false;
-  end;
+   on E: Exception do begin
+     msg(Format(rsConnectionEr, [E.Message]),0);
+     result:=false;
+   end;
  end;
 end;
 
@@ -240,23 +245,28 @@ begin
 end;
 
 function T_ascomrestwheel.WaitFilter(maxtime:integer):boolean;
-var count,maxcount:integer;
+var timemax,lastcheck: double;
+    ok: boolean;
 begin
  result:=true;
  if FStatus<>devConnected then exit;
  try
  StatusTimer.Enabled:=false;
  try
-   maxcount:=maxtime div waitpoll;
-   count:=0;
    stFilter:=-1;
    if Assigned(FonFilterChange) then FonFilterChange(stFilter);
-   while (V.Get('position').AsInt<0)and(count<maxcount) do begin
-      sleep(waitpoll);
+   timemax:=now+maxtime/1000/secperday;
+   lastcheck:=0;
+   repeat
+      if now>(lastcheck+waitpoll/1000/secperday) then begin
+         ok:=(V.Get('position').AsInt>=0);
+         if ok then break;
+         lastcheck:=now;
+      end;
+      sleep(10);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-      inc(count);
-   end;
-   result:=(count<maxcount);
+   until ok or (now>timemax);
+   result:=(now<timemax);
    if result and Assigned(FonFilterChange) then begin
      stFilter:=GetFilterReal;
      FonFilterChange(stFilter);
@@ -268,7 +278,6 @@ begin
    StatusTimer.Enabled:=true;
  end;
 end;
-
 
 procedure T_ascomrestwheel.SetFilter(num:integer);
 begin

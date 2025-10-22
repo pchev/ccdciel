@@ -213,26 +213,31 @@ end;
 
 function T_ascomfocuser.WaitConnecting(maxtime:integer):boolean;
 {$ifdef mswindows}
-var count,maxcount:integer;
+var timemax,lastcheck: double;
+    ok: boolean;
 {$endif}
 begin
  result:=true;
  {$ifdef mswindows}
  try
-   maxcount:=maxtime div waitpoll;
-   count:=0;
-   while (V.Connecting)and(count<maxcount) do begin
-      sleep(waitpoll);
+   timemax:=now+maxtime/1000/secperday;
+   lastcheck:=0;
+   repeat
+      if now>(lastcheck+waitpoll/1000/secperday) then begin
+         ok:=not V.Connecting;
+         if ok then break;
+         lastcheck:=now;
+      end;
+      sleep(10);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-      inc(count);
-   end;
-   result:=(count<maxcount);
+   until ok or (now>timemax);
+   result:=(now<timemax);
    if debug_msg then msg('finish to wait for connecting '+BoolToStr(result,true),9);
  except
-  on E: Exception do begin
-    msg(Format(rsConnectionEr, [E.Message]),0);
-    result:=false;
-  end;
+   on E: Exception do begin
+     msg(Format(rsConnectionEr, [E.Message]),0);
+     result:=false;
+   end;
  end;
  {$endif}
 end;
@@ -284,26 +289,26 @@ end;
 
 function T_ascomfocuser.WaitFocuserMoving(maxtime:integer):boolean;
 {$ifdef mswindows}
-var count,maxcount:integer;
+var timemax,lastcheck: double;
+    ok: boolean;
 {$endif}
 begin
  result:=true;
  {$ifdef mswindows}
  try
    if debug_msg then msg('Wait moving ... ');
-   maxcount:=maxtime div waitpoll;
-   count:=0;
-   while (V.IsMoving)and(count<maxcount) do begin
-      if debug_msg then begin
-      if (count mod 20) = 0 then begin
-         msg('Wait moving, IsMoving = '+BoolToStr(V.IsMoving, True));
+   timemax:=now+maxtime/1000/secperday;
+   lastcheck:=0;
+   repeat
+      if now>(lastcheck+waitpoll/1000/secperday) then begin
+         ok:=not V.IsMoving;
+         if ok then break;
+         lastcheck:=now;
       end;
-      end;
-      sleep(waitpoll);
+      sleep(10);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-      inc(count);
-   end;
-   result:=(count<maxcount);
+   until ok or (now>timemax);
+   result:=(now<timemax);
    if debug_msg then msg('Move completed '+BoolToStr(result, True));
  except
   on E: Exception do begin

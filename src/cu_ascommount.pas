@@ -598,20 +598,25 @@ end;
 
 function T_ascommount.WaitConnecting(maxtime:integer):boolean;
 {$ifdef mswindows}
-var count,maxcount:integer;
+var timemax,lastcheck: double;
+    ok: boolean;
 {$endif}
 begin
  result:=true;
  {$ifdef mswindows}
  try
-   maxcount:=maxtime div waitpoll;
-   count:=0;
-   while (V.Connecting)and(count<maxcount) do begin
-      sleep(waitpoll);
+   timemax:=now+maxtime/1000/secperday;
+   lastcheck:=0;
+   repeat
+      if now>(lastcheck+waitpoll/1000/secperday) then begin
+         ok:=not V.Connecting;
+         if ok then break;
+         lastcheck:=now;
+      end;
+      sleep(10);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-      inc(count);
-   end;
-   result:=(count<maxcount);
+   until ok or (now>timemax);
+   result:=(now<timemax);
    if debug_msg then msg('finish to wait for connecting '+BoolToStr(result,true),9);
  except
    on E: Exception do begin
@@ -624,21 +629,26 @@ end;
 
 function T_ascommount.WaitMountSlewing(maxtime:integer):boolean;
 {$ifdef mswindows}
-var count,maxcount:integer;
+var timemax,lastcheck: double;
+    ok: boolean;
 {$endif}
 begin
  result:=true;
  {$ifdef mswindows}
  try
  if CanSlewAsync then begin
-   maxcount:=maxtime div waitpoll;
-   count:=0;
-   while (V.Slewing)and(count<maxcount) do begin
-      sleep(waitpoll);
+   timemax:=now+maxtime/1000/secperday;
+   lastcheck:=0;
+   repeat
+      if now>(lastcheck+waitpoll/1000/secperday) then begin
+         ok:=not V.Slewing;
+         if ok then break;
+         lastcheck:=now;
+      end;
+      sleep(10);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-      inc(count);
-   end;
-   result:=(count<maxcount);
+   until ok or (now>timemax);
+   result:=(now<timemax);
    if debug_msg then msg('finish to wait for slew '+BoolToStr(result,true),9);
  end;
  except
@@ -649,21 +659,26 @@ end;
 
 function T_ascommount.WaitMountPark(maxtime:integer):boolean;
 {$ifdef mswindows}
-var count,maxcount:integer;
+var timemax,lastcheck: double;
+    ok: boolean;
 {$endif}
 begin
  result:=true;
  {$ifdef mswindows}
  try
  if CanPark then begin
-   maxcount:=maxtime div waitpoll;
-   count:=0;
-   while (not V.atPark)and(count<maxcount) do begin
-      sleep(waitpoll);
+   timemax:=now+maxtime/1000/secperday;
+   lastcheck:=0;
+   repeat
+      if now>(lastcheck+waitpoll/1000/secperday) then begin
+         ok:=V.atPark;
+         if ok then break;
+         lastcheck:=now;
+      end;
+      sleep(10);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-      inc(count);
-   end;
-   result:=(count<maxcount);
+   until ok or (now>timemax);
+   result:=(now<timemax);
    if debug_msg then msg('finish to wait for park '+BoolToStr(result,true),9);
  end;
  except

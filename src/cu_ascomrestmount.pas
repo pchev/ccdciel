@@ -576,18 +576,23 @@ begin
 end;
 
 function T_ascomrestmount.WaitConnecting(maxtime:integer):boolean;
-var count,maxcount:integer;
+var timemax,lastcheck: double;
+    ok: boolean;
 begin
  result:=true;
  try
-   maxcount:=maxtime div waitpoll;
-   count:=0;
-   while (V.Get('connecting').AsBool)and(count<maxcount) do begin
-      sleep(waitpoll);
+   timemax:=now+maxtime/1000/secperday;
+   lastcheck:=0;
+   repeat
+      if now>(lastcheck+waitpoll/1000/secperday) then begin
+         ok:=not (V.Get('connecting').AsBool);
+         if ok then break;
+         lastcheck:=now;
+      end;
+      sleep(10);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-      inc(count);
-   end;
-   result:=(count<maxcount);
+   until ok or (now>timemax);
+   result:=(now<timemax);
  except
    on E: Exception do begin
      msg(Format(rsConnectionEr, [E.Message]),0);
@@ -597,42 +602,49 @@ begin
 end;
 
 function T_ascomrestmount.WaitMountSlewing(maxtime:integer):boolean;
-var count,maxcount:integer;
+var timemax,lastcheck: double;
+    ok: boolean;
 begin
  result:=true;
- if FStatus<>devConnected then exit;
  try
- if CanSlewAsync then begin
-   maxcount:=maxtime div waitpoll;
-   count:=0;
-   while (V.Get('slewing').AsBool)and(count<maxcount) do begin
-      sleep(waitpoll);
+   timemax:=now+maxtime/1000/secperday;
+   lastcheck:=0;
+   repeat
+      if now>(lastcheck+waitpoll/1000/secperday) then begin
+         ok:=not (V.Get('slewing').AsBool);
+         if ok then break;
+         lastcheck:=now;
+      end;
+      sleep(10);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-      inc(count);
-   end;
-   result:=(count<maxcount);
- end;
+   until ok or (now>timemax);
+   result:=(now<timemax);
  except
    result:=false;
  end;
 end;
 
 function T_ascomrestmount.WaitMountPark(maxtime:integer):boolean;
-var count,maxcount:integer;
+var timemax,lastcheck: double;
+    ok: boolean;
 begin
  result:=true;
  if FStatus<>devConnected then exit;
  try
- if CanPark then begin
-   maxcount:=maxtime div waitpoll;
-   count:=0;
-   while (not V.Get('atpark').AsBool)and(count<maxcount) do begin
-      sleep(waitpoll);
+  if CanPark then begin
+   timemax:=now+maxtime/1000/secperday;
+   lastcheck:=0;
+   repeat
+      if now>(lastcheck+waitpoll/1000/secperday) then begin
+         ok:=(V.Get('atpark').AsBool);
+         if ok then break;
+         lastcheck:=now;
+      end;
+      sleep(10);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-      inc(count);
-   end;
-   result:=(count<maxcount);
- end;
+   until ok or (now>timemax);
+   result:=(now<timemax);
+  end;
  except
    result:=false;
  end;

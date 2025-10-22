@@ -189,23 +189,28 @@ result:=false;
 end;
 
 function T_ascomrestdome.WaitConnecting(maxtime:integer):boolean;
-var count,maxcount:integer;
+var timemax,lastcheck: double;
+    ok: boolean;
 begin
  result:=true;
  try
-   maxcount:=maxtime div waitpoll;
-   count:=0;
-   while (V.Get('connecting').AsBool)and(count<maxcount) do begin
-      sleep(waitpoll);
+   timemax:=now+maxtime/1000/secperday;
+   lastcheck:=0;
+   repeat
+      if now>(lastcheck+waitpoll/1000/secperday) then begin
+         ok:=not (V.Get('connecting').AsBool);
+         if ok then break;
+         lastcheck:=now;
+      end;
+      sleep(10);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-      inc(count);
-   end;
-   result:=(count<maxcount);
+   until ok or (now>timemax);
+   result:=(now<timemax);
  except
-  on E: Exception do begin
-    msg(Format(rsConnectionEr, [E.Message]),0);
-    result:=false;
-  end;
+   on E: Exception do begin
+     msg(Format(rsConnectionEr, [E.Message]),0);
+     result:=false;
+   end;
  end;
 end;
 
@@ -252,21 +257,23 @@ begin
 end;
 
 function T_ascomrestdome.WaitDomePark(maxtime:integer):boolean;
-var count,maxcount:integer;
+var timemax,lastcheck: double;
+    ok: boolean;
 begin
  result:=true;
- if FStatus<>devConnected then exit;
  try
- if FhasPark then begin
-   maxcount:=maxtime div waitpoll;
-   count:=0;
-   while (not V.Get('atpark').AsBool)and(count<maxcount) do begin
-      sleep(waitpoll);
+   timemax:=now+maxtime/1000/secperday;
+   lastcheck:=0;
+   repeat
+      if now>(lastcheck+waitpoll/1000/secperday) then begin
+         ok:=(V.Get('atpark').AsBool);
+         if ok then break;
+         lastcheck:=now;
+      end;
+      sleep(10);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-      inc(count);
-   end;
-   result:=(count<maxcount);
- end;
+   until ok or (now>timemax);
+   result:=(now<timemax);
  except
    result:=false;
  end;
@@ -279,6 +286,7 @@ begin
    if FhasPark and value then begin  // no ASCOM unpark
      if value<>GetPark then begin
        V.Put('park');
+       WaitDomePark(60000);
      end;
    end;
    except
@@ -304,23 +312,27 @@ begin
 end;
 
 function T_ascomrestdome.WaitShutter(onoff:boolean; maxtime:integer):boolean;
-var ShutterState,count,maxcount:integer;
+var ShutterState:integer;
+    timemax,lastcheck: double;
+    ok: boolean;
 begin
  result:=true;
  if FStatus<>devConnected then exit;
  if onoff then ShutterState:=0
           else ShutterState:=1;
  try
- if FhasShutter then begin
-   maxcount:=maxtime div waitpoll;
-   count:=0;
-   while (V.Get('shutterstatus').AsInt<>ShutterState)and(count<maxcount) do begin
-      sleep(waitpoll);
+   timemax:=now+maxtime/1000/secperday;
+   lastcheck:=0;
+   repeat
+      if now>(lastcheck+waitpoll/1000/secperday) then begin
+         ok:=(V.Get('shutterstatus').AsInt=ShutterState);
+         if ok then break;
+         lastcheck:=now;
+      end;
+      sleep(10);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-      inc(count);
-   end;
-   result:=(count<maxcount);
- end;
+   until ok or (now>timemax);
+   result:=(now<timemax);
  except
    result:=false;
  end;

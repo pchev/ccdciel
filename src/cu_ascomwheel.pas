@@ -174,26 +174,31 @@ end;
 
 function T_ascomwheel.WaitConnecting(maxtime:integer):boolean;
 {$ifdef mswindows}
-var count,maxcount:integer;
+var timemax,lastcheck: double;
+    ok: boolean;
 {$endif}
 begin
  result:=true;
  {$ifdef mswindows}
  try
-   maxcount:=maxtime div waitpoll;
-   count:=0;
-   while (V.Connecting)and(count<maxcount) do begin
-      sleep(waitpoll);
+   timemax:=now+maxtime/1000/secperday;
+   lastcheck:=0;
+   repeat
+      if now>(lastcheck+waitpoll/1000/secperday) then begin
+         ok:=not V.Connecting;
+         if ok then break;
+         lastcheck:=now;
+      end;
+      sleep(10);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-      inc(count);
-   end;
-   result:=(count<maxcount);
+   until ok or (now>timemax);
+   result:=(now<timemax);
    if debug_msg then msg('finish to wait for connecting '+BoolToStr(result,true),9);
  except
-  on E: Exception do begin
-    msg(Format(rsConnectionEr, [E.Message]),0);
-    result:=false;
-  end;
+   on E: Exception do begin
+     msg(Format(rsConnectionEr, [E.Message]),0);
+     result:=false;
+   end;
  end;
  {$endif}
 end;
@@ -245,7 +250,8 @@ end;
 
 function T_ascomwheel.WaitFilter(maxtime:integer):boolean;
 {$ifdef mswindows}
-var count,maxcount:integer;
+var timemax,lastcheck: double;
+    ok: boolean;
 {$endif}
 begin
  result:=true;
@@ -253,16 +259,20 @@ begin
  try
  StatusTimer.Enabled:=false;
  try
-   maxcount:=maxtime div waitpoll;
-   count:=0;
    stFilter:=-1;
    if Assigned(FonFilterChange) then FonFilterChange(stFilter);
-   while (V.Position<0)and(count<maxcount) do begin
-      sleep(waitpoll);
+   timemax:=now+maxtime/1000/secperday;
+   lastcheck:=0;
+   repeat
+      if now>(lastcheck+waitpoll/1000/secperday) then begin
+         ok:=V.Position>=0;
+         if ok then break;
+         lastcheck:=now;
+      end;
+      sleep(10);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-      inc(count);
-   end;
-   result:=(count<maxcount);
+   until ok or (now>timemax);
+   result:=(now<timemax);
    if result and Assigned(FonFilterChange) then begin
      stFilter:=GetFilter;
      FonFilterChange(stFilter);
@@ -275,7 +285,6 @@ begin
  end;
  {$endif}
 end;
-
 
 procedure T_ascomwheel.SetFilter(num:integer);
 begin
