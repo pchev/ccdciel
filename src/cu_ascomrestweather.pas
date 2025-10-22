@@ -126,13 +126,14 @@ begin
        msg('Error: unknown driver version',9);
      end;
      if isLocalIP(V.RemoteIP) then
-       statusinterval:=2000
+       statusinterval:=10000
      else
        statusinterval:=20000;
      msg(rsConnected3);
      FStatus := devConnected;
      GetCapabilities;
      if Assigned(FonStatusChange) then FonStatusChange(self);
+     StatusTimer.Interval:=statusinterval;
      StatusTimer.Enabled:=true;
   end
   else

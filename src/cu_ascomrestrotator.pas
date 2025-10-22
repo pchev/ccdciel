@@ -118,15 +118,16 @@ begin
      end;
      if isLocalIP(V.RemoteIP) then begin
        waitpoll:=500;
-       statusinterval:=2000;
+       statusinterval:=5000;
      end
      else begin
        waitpoll:=1000;
-       statusinterval:=3000;
+       statusinterval:=10000;
      end;
      msg(rsConnected3);
      FStatus := devConnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
+     StatusTimer.Interval:=statusinterval;
      StatusTimer.Enabled:=true;
   end
   else

@@ -134,12 +134,13 @@ begin
        end;
      end;
      if isLocalIP(V.RemoteIP) then
-       statusinterval:=1000
+       statusinterval:=5000
      else
-       statusinterval:=5000;
+       statusinterval:=10000;
      msg(rsConnected3);
      FStatus := devConnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
+     StatusTimer.Interval:=statusinterval;
      StatusTimer.Enabled:=true;
   end
   else
