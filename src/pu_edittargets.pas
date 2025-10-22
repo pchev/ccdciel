@@ -1437,7 +1437,7 @@ begin
   f.Caption:=rsStatus2;
   f.Memo1.Text:=rsSequence+blank+tt.TargetName+crlf+crlf+tt.DoneStatus;
   FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
-  f.Show;
+  f.ShowModal;
 end;
 
 procedure Tf_EditTargets.btnApplyAllClick(Sender: TObject);
