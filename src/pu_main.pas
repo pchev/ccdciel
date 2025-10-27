@@ -17701,6 +17701,13 @@ try
     buf:=f_scriptengine.cmd_Wheel_SetFilter(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
+  else if method='SET_FILTEROFFSET' then begin
+    CheckParamCount(2);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf2:=trim(value[attrib.IndexOf('params.1')]);
+    buf:=f_scriptengine.cmd_SetFilterOffset(buf1,buf2);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
   else if method='FOCUSER_SETPOSITION' then begin
     CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);

@@ -230,6 +230,7 @@ type
     function cmd_Wheel_SetFilter(num:string):string;
     function cmd_Wheel_GetFiltersName(var fl:TStringList):string;
     function cmd_Wheel_SetFiltersName(fl:TStringList):string;
+    function cmd_SetFilterOffset(f,o: string):string;
     function cmd_Focuser_SetPosition(p:string):string;
     function cmd_Ccd_SetTemperature(t:string):string;
     function cmd_Preview_SetExposure(exp:string):string;
@@ -1926,6 +1927,23 @@ try
 result:=msgFailed;
 Ffilter.FilterNames.Assign(fl);
 result:=msgOK;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_SetFilterOffset(f,o: string):string;
+var i,n: integer;
+begin
+try
+result:=msgFailed;
+i:=FilterList.IndexOf(f);
+if i>=0 then begin
+  n:=StrToInt(o);
+  FilterOffset[i]:=n;
+  config.SetValue('/Filters/Offset'+IntToStr(i),n);
+  result:=msgOK;
+end;
 except
   result:=msgFailed;
 end;
