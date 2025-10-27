@@ -3318,6 +3318,7 @@ begin
   if i>0 then begin
     lst:=TStringList.Create;
     SplitRec(AlpacaSwitchList.Items[i],tab,lst);
+    if lst[0]<>'' then SwitchNickname.Text:=lst[0];
     SwitchARestHost.Text:=lst[1];
     SwitchARestPort.Text:=lst[2];
     SwitchARestDevice.Value:=StrToInt(lst[4]);
