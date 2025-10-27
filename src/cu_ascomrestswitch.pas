@@ -172,6 +172,7 @@ begin
   except
    on E: Exception do begin
       msg(Format(rsConnectionEr, [E.Message]),0);
+      FLastError:=E.Message;
       Disconnect;
    end;
   end;
@@ -180,6 +181,7 @@ end;
 procedure T_ascomrestswitch.Disconnect;
 begin
    StatusTimer.Enabled:=false;
+   FLastError:='';
    try
    if FInterfaceVersion>=3 then begin
      V.Put('Disconnect');
@@ -264,6 +266,7 @@ end;
 function  T_ascomrestswitch.GetSwitch:TSwitchList;
 var i: integer;
 begin
+  FLastError:='';
   if (FStatus<>devConnected)or(FNumSwitch=0) then exit;
   try
     SetLength(result,FNumSwitch);
@@ -276,14 +279,30 @@ begin
       result[i].Step       := FSwitch[i].Step;
       result[i].IndiGroup  := -1;
       if result[i].MultiState then begin
+        try
         result[i].Value    := V.Get('getswitchvalue','Id='+IntToStr(i)).AsFloat;
         if (FStatus<>devConnected)or(FNumSwitch=0) then exit;
         result[i].Checked  := (result[i].Value = result[i].Max);
+        except
+         on E: Exception do begin
+           FLastError:=E.Message;
+           result[i].Value    := FSwitch[i].Min;
+           result[i].Checked  := False;
+         end;
+        end;
       end
       else begin
+        try
         result[i].Value    := FSwitch[i].Value;
         result[i].Checked  := V.Get('getswitch','Id='+IntToStr(i)).AsBool;
         if (FStatus<>devConnected)or(FNumSwitch=0) then exit;
+        except
+          on E: Exception do begin
+            FLastError:=E.Message;
+            result[i].Value    := FSwitch[i].Min;
+            result[i].Checked  := False;
+          end;
+        end;
       end;
     end;
   except

@@ -154,6 +154,7 @@ begin
   sp.Parent.Caption:=sw.Nickname;
   sp.NumSwitch:=sw.NumSwitch;
   sp.Switch:=sw.Switch;
+  sp.LabelMsg.Caption:=sw.LastError;
   PageControl1.ShowTabs:=(PageControl1.PageCount>1)or(sw.DeviceName<>'');
 end;
 

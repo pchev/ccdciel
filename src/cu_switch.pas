@@ -49,7 +49,7 @@ T_switch = class(TComponent)
     FonMsg,FonDeviceMsg: TNotifyMsg;
     FonStatusChange, FonSwitchChange: TNotifyEvent;
     FTimeOut: integer;
-    Fdevice, FNickname: string;
+    Fdevice, FNickname,FLastError: string;
     FAutoLoadConfig: boolean;
     FNumSwitch: integer;
     FSwitch: TSwitchList;
@@ -67,6 +67,7 @@ T_switch = class(TComponent)
     property DeviceName: string read FDevice;
     property SwitchInterface: TDevInterface read FSwitchInterface;
     property Status: TDeviceStatus read FStatus;
+    property LastError: string read FLastError;
     property NumSwitch: integer read FNumSwitch;
     property Switch: TSwitchList read GetSwitch write SetSwitch;
     property Timeout: integer read FTimeout write SetTimeout;
@@ -86,6 +87,7 @@ begin
   inherited Create(AOwner);
   FStatus := devDisconnected;
   FNumSwitch:=0;
+  FLastError:='';
 end;
 
 destructor  T_switch.Destroy;

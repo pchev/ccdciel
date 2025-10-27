@@ -34,6 +34,7 @@ type
 
   Tf_switchpage = class(Tframe)
     BtnSet: TButton;
+    LabelMsg: TLabel;
     MenuItem1: TMenuItem;
     Panel1: TPanel;
     PopupMenu1: TPopupMenu;
@@ -80,6 +81,7 @@ begin
  inherited Create(aOwner);
  FConnected:=false;
  FNumSwitch:=0;
+ LabelMsg.Caption:='';
  initialized:=false;
  CtrlList:=TStringList.Create;
  ScaleDPI(Self);

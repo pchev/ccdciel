@@ -45,6 +45,16 @@ object f_switchpage: Tf_switchpage
       OnClick = BtnSetClick
       TabOrder = 0
     end
+    object LabelMsg: TLabel
+      AnchorSideTop.Control = BtnSet
+      AnchorSideTop.Side = asrCenter
+      Left = 4
+      Height = 18
+      Top = 6
+      Width = 59
+      Caption = 'LabelMsg'
+      ParentColor = False
+    end
   end
   object PopupMenu1: TPopupMenu
     OnPopup = PopupMenu1Popup
