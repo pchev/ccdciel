@@ -17721,6 +17721,13 @@ try
     buf:=f_scriptengine.cmd_setFocusXY(buf1,buf2);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
+  else if method='SETFOCUSXYHFD' then begin
+    CheckParamCount(2);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf2:=trim(value[attrib.IndexOf('params.1')]);
+    buf:=f_scriptengine.cmd_setFocusXYhfd(buf1,buf2);
+    result:=result+'"result":{"value": '+buf+'}';
+  end
   else if method='CCD_SETTEMPERATURE' then begin
     CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);

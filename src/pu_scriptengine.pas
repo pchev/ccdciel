@@ -268,6 +268,7 @@ type
     function cmd_AutoFocus:string;
     function cmd_AutomaticAutoFocus:string;
     function cmd_setFocusXY(x,y: string):string;
+    function cmd_setFocusXYhfd(x,y: string):string;
     function cmd_ListFiles(var lf:TStringList):string;
     function cmd_coverstatus: string;
     function cmd_coveropen: string;
@@ -2414,6 +2415,25 @@ begin
     result:=msgOK;
   except
     result:=msgFailed;
+  end;
+end;
+
+function Tf_scriptengine.cmd_setFocusXYhfd(x,y: string):string;
+var ix,iy,n:integer;
+begin
+  try
+    result:='-1.0';
+    if not Assigned(Fstarprofile) then exit;
+    if not Assigned(Ffits) then exit;
+    val(x,ix,n);
+    if n<>0 then exit;
+    val(y,iy,n);
+    if n<>0 then exit;
+    iy:=Ffits.HeaderInfo.naxis2-iy;
+    Fstarprofile.ShowProfile(Ffits,ix,iy,Starwindow,Ffits.HeaderInfo.focallen,Ffits.HeaderInfo.pixsz1);
+    result:=FormatFloat(f1,Fstarprofile.HFD);
+  except
+    result:='-1.0';
   end;
 end;
 

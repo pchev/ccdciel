@@ -870,6 +870,7 @@ var bg,bgdev,flux: double;
   xg,yg: double;
   xm,ym,ri: integer;
 begin
+Fhfd:=-1;
  if (x<0)or(y<0)or(s<0) then exit;
 
  try
