@@ -247,11 +247,11 @@ begin
             FimgMax:=min(FdataMax,FdataMin + 0.5*(FdataMax-FdataMin));
           end;
       2 : begin  // medium
-            FimgMin:=Fmean;
+            FimgMin:=FdataMin;
             FimgMax:=x[3];
           end;
       3 : begin  // high
-            FimgMin:=Fmean;
+            FimgMin:=min(Fmean,FdataMin+Fsd);
             FimgMax:=x[2];
           end;
       4 : begin  // very high
