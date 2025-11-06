@@ -329,7 +329,7 @@ begin
      result:=(i=0);  // open
    end
    else
-     result:=not GetPark;  // Use park status when shutter control is not implemented
+     result:= true; // manual shutter, expect open when observing
    except
     result:=false;
    end;
