@@ -39,7 +39,7 @@ object f_finder: Tf_finder
     object GroupBox1: TGroupBox
       Left = 0
       Height = 164
-      Top = 120
+      Top = 144
       Width = 280
       Align = alTop
       Caption = 'Target position in finder image'
@@ -108,12 +108,12 @@ object f_finder: Tf_finder
     end
     object Panel2: TPanel
       Left = 0
-      Height = 120
+      Height = 144
       Top = 0
       Width = 280
       Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 120
+      ClientHeight = 144
       ClientWidth = 280
       TabOrder = 1
       object BtnPreviewLoop: TButton
@@ -157,18 +157,37 @@ object f_finder: Tf_finder
         TabOrder = 2
       end
       object LabelInfo: TLabel
-        Left = 12
+        Left = 8
         Height = 18
         Top = 95
         Width = 58
         Caption = 'LabelInfo'
         ParentColor = False
       end
+      object ButtonDark: TButton
+        Left = 8
+        Height = 25
+        Top = 112
+        Width = 75
+        Caption = 'Dark'
+        OnMouseDown = ButtonDarkMouseDown
+        TabOrder = 3
+      end
+      object cbFilterNoise: TCheckBox
+        AnchorSideTop.Control = ButtonDark
+        AnchorSideTop.Side = asrCenter
+        Left = 110
+        Height = 22
+        Top = 113
+        Width = 92
+        Caption = 'Noise filter'
+        TabOrder = 4
+      end
     end
     object PanelTemperature: TPanel
       Left = 0
       Height = 60
-      Top = 386
+      Top = 410
       Width = 280
       Align = alTop
       BevelOuter = bvNone
@@ -236,7 +255,7 @@ object f_finder: Tf_finder
     object PanelGain: TPanel
       Left = 0
       Height = 34
-      Top = 318
+      Top = 342
       Width = 280
       Align = alTop
       BevelOuter = bvNone
@@ -269,7 +288,7 @@ object f_finder: Tf_finder
     object PanelOffset: TPanel
       Left = 0
       Height = 34
-      Top = 352
+      Top = 376
       Width = 280
       Align = alTop
       BevelOuter = bvNone
@@ -302,7 +321,7 @@ object f_finder: Tf_finder
     object PanelBinning: TPanel
       Left = 0
       Height = 34
-      Top = 284
+      Top = 308
       Width = 280
       Align = alTop
       BevelOuter = bvNone
@@ -335,12 +354,12 @@ object f_finder: Tf_finder
     end
     object Panel4: TPanel
       Left = 0
-      Height = 270
-      Top = 446
+      Height = 246
+      Top = 470
       Width = 280
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 270
+      ClientHeight = 246
       ClientWidth = 280
       TabOrder = 6
       object PanelVisu: TPanel
@@ -371,6 +390,26 @@ object f_finder: Tf_finder
       Caption = 'Please configure the finder'
       OnClick = Button1Click
       TabOrder = 0
+    end
+  end
+  object PopupMenuDark: TPopupMenu
+    Left = 232
+    Top = 24
+    object MenuItemDarkInfo: TMenuItem
+      Caption = 'MenuItemDarkInfo'
+      OnClick = MenuItemDarkInfoClick
+    end
+    object MenuItemCaptureDark: TMenuItem
+      Caption = 'MenuItemCaptureDark'
+      OnClick = MenuItemCaptureDarkClick
+    end
+    object MenuItemLoadDark: TMenuItem
+      Caption = 'MenuItemLoadDark'
+      OnClick = MenuItemLoadDarkClick
+    end
+    object MenuItemClearDark: TMenuItem
+      Caption = 'MenuItemClearDark'
+      OnClick = MenuItemClearDarkClick
     end
   end
 end

@@ -27,7 +27,7 @@ interface
 
 uses  UScaleDPI, u_global, u_utils, Graphics, Dialogs, u_translation, u_hints, cu_camera, indiapi,
       fu_visu, cu_astrometry, pu_findercalibration, math,
-  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls, SpinEx, Buttons;
+  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls, SpinEx, Buttons, Menus;
 
 type
 
@@ -38,8 +38,10 @@ type
     BtnPreviewLoop: TButton;
     Button1: TButton;
     ButtonCalibrate: TButton;
+    ButtonDark: TButton;
     ButtonMousePosition: TSpeedButton;
     ButtonSetTemp: TButton;
+    cbFilterNoise: TCheckBox;
     cbSaveImages: TCheckBox;
     Cooler: TCheckBox;
     Gain: TSpinEditEx;
@@ -49,6 +51,10 @@ type
     Label21: TLabel;
     LabelInfo: TLabel;
     LabelTemperature: TLabel;
+    MenuItemCaptureDark: TMenuItem;
+    MenuItemClearDark: TMenuItem;
+    MenuItemDarkInfo: TMenuItem;
+    MenuItemLoadDark: TMenuItem;
     Offset: TSpinEditEx;
     Panel3: TPanel;
     Panel4: TPanel;
@@ -56,6 +62,7 @@ type
     PanelGain: TPanel;
     PanelOffset: TPanel;
     PanelTemperature: TPanel;
+    PopupMenuDark: TPopupMenu;
     PreviewExp: TFloatSpinEditEx;
     GroupBox1: TGroupBox;
     Label3: TLabel;
@@ -72,10 +79,15 @@ type
     procedure BtnPreviewLoopClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure ButtonCalibrateClick(Sender: TObject);
+    procedure ButtonDarkMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ButtonMousePositionClick(Sender: TObject);
     procedure ButtonSetTempClick(Sender: TObject);
     procedure CoolerClick(Sender: TObject);
     procedure GainChange(Sender: TObject);
+    procedure MenuItemCaptureDarkClick(Sender: TObject);
+    procedure MenuItemClearDarkClick(Sender: TObject);
+    procedure MenuItemDarkInfoClick(Sender: TObject);
+    procedure MenuItemLoadDarkClick(Sender: TObject);
     procedure OffsetChange(Sender: TObject);
     procedure OffsetXChange(Sender: TObject);
     procedure OffsetYChange(Sender: TObject);
@@ -85,7 +97,7 @@ type
     FAstrometry: TAstrometry;
     FonShowMessage: TNotifyMsg;
     FonRedraw,FonSetTemperature,FonSetCooler: TNotifyEvent;
-    FonConfigureFinder: TNotifyEvent;
+    FonConfigureFinder, FonCaptureDark, FonLoadDark, FonClearDark,FonDarkInfo: TNotifyEvent;
     FDrawSettingChange: boolean;
     LoopExp:double;
     LoopBin,LoopGain,LoopOffset: integer;
@@ -93,6 +105,8 @@ type
     procedure ForceRedraw;
     Procedure Redraw(Sender: TObject);
     Procedure ZoomImage(Sender: TObject);
+    procedure SetFilterNoise(value:Boolean);
+    function GetFilterNoise:Boolean;
   public
     { public declarations }
     visu: Tf_visu;
@@ -105,14 +119,20 @@ type
     procedure StartLoop;
     procedure StopLoop;
     function Snapshot(exp: double; fn: string):boolean;
+    procedure CaptureDark;
     property Camera: T_camera read FCamera write FCamera;
     property Astrometry: TAstrometry read FAstrometry write FAstrometry;
     property DrawSettingChange: boolean read FDrawSettingChange write FDrawSettingChange;
+    property FilterNoise: boolean read GetFilterNoise write SetFilterNoise;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property onRedraw: TNotifyEvent read FonRedraw write FonRedraw;
     property onConfigureFinder: TNotifyEvent read FonConfigureFinder write FonConfigureFinder;
     property onSetTemperature: TNotifyEvent read FonSetTemperature write FonSetTemperature;
     property onSetCooler: TNotifyEvent read FonSetCooler write FonSetCooler;
+    property onCaptureDark: TNotifyEvent read FonCaptureDark write FonCaptureDark;
+    property onLoadDark: TNotifyEvent read FonLoadDark write FonLoadDark;
+    property onClearDark: TNotifyEvent read FonClearDark write FonClearDark;
+    property onDarkInfo: TNotifyEvent read FonDarkInfo write FonDarkInfo;
   end;
 
 implementation
@@ -145,6 +165,7 @@ begin
  {$endif}
  ScaleDPI(Self);
  SetLang;
+ FinderCapturingDark:=false;
  FinderPreviewLoop:=false;
  visu.BtnBullsEye.Down:=true;
  LabelInfo.Caption:='';
@@ -169,6 +190,12 @@ begin
   cbSaveImages.Caption:=rsSavePreviewI;
   ButtonMousePosition.Caption:=rsClickOnImage;
   ButtonCalibrate.Caption:=rsCalibrationM;
+  ButtonDark.Caption:=rsDark;
+  cbFilterNoise.Caption:=rsNoiseFilter;
+  MenuItemCaptureDark.Caption:=rsCreateFromCa;
+  MenuItemLoadDark.Caption:=rsLoadDarkFile;
+  MenuItemClearDark.Caption:=rsClearDarkFra;
+  MenuItemDarkInfo.Caption:=rsViewHeader;
   groupbox1.Caption:=rsTargetPositi2;
   label1.Caption:='X '+rsPixel;
   label2.Caption:='Y '+rsPixel;
@@ -192,11 +219,38 @@ begin
   FinderPreviewLoop:=true;
   BtnPreviewLoop.Caption:=rsStopPreviewL;
   msg(rsStartPreview,0);
+  if FinderCapturingDark then begin
+    FCamera.Fits.SetBPM(bpm,0,0,0,0);
+    FCamera.Fits.DarkOn:=false;
+    FCamera.Fits.FlatOn:=false;
+    FCamera.AddFrames:=true;
+    FCamera.StackNum:=12;
+    FCamera.SaveFrames:=false;
+    FCamera.AlignFrames:=false;
+    FCamera.StackOperation:=1;
+    FCamera.StackAllow8bit:=true;
+    FCamera.StackUseDark:=false;
+    FCamera.StackUseFlat:=false;
+    FCamera.StackDebayer:=false;
+    FCamera.FrameType:=DARK
+  end
+  else begin
+    FCamera.Fits.SetBPM(bpm,0,0,0,0);
+    FCamera.Fits.DarkOn:=true;
+    FCamera.Fits.FlatOn:=false;
+    FCamera.AddFrames:=false;
+    FCamera.StackNum:=-1;
+    FCamera.StackAllow8bit:=false;
+    FCamera.SaveFrames:=false;
+    FCamera.AlignFrames:=false;
+    FCamera.FrameType:=LIGHT;
+  end;
   Application.QueueAsyncCall(@StartExposureAsync,0);
 end;
 
 procedure Tf_finder.StopLoop;
 begin
+  FinderCapturingDark:=false;
   FinderPreviewLoop:=false;
   FCamera.AbortExposure;
   BtnPreviewLoop.Caption:=rsStartPreview;
@@ -220,8 +274,12 @@ begin
           FCamera.Offset:=LoopOffset;
      end;
    end;
-   if FCamera.FrameType<>LIGHT then
-     FCamera.FrameType:=LIGHT;
+   if FinderCapturingDark then begin
+     if FCamera.FrameType<>DARK then FCamera.FrameType:=DARK;
+   end
+   else begin
+     if FCamera.FrameType<>LIGHT then FCamera.FrameType:=LIGHT;
+   end;
    FCamera.ObjectName:=rsFinderCamera;
    FCamera.StartExposure(LoopExp);
  end
@@ -287,6 +345,15 @@ end
 else msg(rsSomeDefinedD,1);
 end;
 
+procedure Tf_finder.ButtonDarkMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var p: TPoint;
+begin
+  p.x:=0;
+  p.y:=ButtonDark.Height;
+  p:=ButtonDark.ClientToScreen(p);
+  PopupMenuDark.PopUp(p.x,p.y);
+end;
+
 procedure Tf_finder.ButtonMousePositionClick(Sender: TObject);
 begin
 ButtonMousePosition.Down:=true;
@@ -305,6 +372,26 @@ end;
 procedure Tf_finder.GainChange(Sender: TObject);
 begin
   config.SetValue('/PrecSlew/Gain',Gain.Value);
+end;
+
+procedure Tf_finder.MenuItemCaptureDarkClick(Sender: TObject);
+begin
+  if Assigned(FonCaptureDark) then FonCaptureDark(self);
+end;
+
+procedure Tf_finder.MenuItemClearDarkClick(Sender: TObject);
+begin
+  if Assigned(FonClearDark) then FonClearDark(self);
+end;
+
+procedure Tf_finder.MenuItemDarkInfoClick(Sender: TObject);
+begin
+  if Assigned(FonDarkInfo) then FonDarkInfo(self);
+end;
+
+procedure Tf_finder.MenuItemLoadDarkClick(Sender: TObject);
+begin
+  if Assigned(FonLoadDark) then FonLoadDark(self);
 end;
 
 procedure Tf_finder.OffsetChange(Sender: TObject);
@@ -405,6 +492,31 @@ try
 except
   result:=false;
 end;
+end;
+
+procedure Tf_finder.CaptureDark;
+begin
+  if FCamera.Status<>devConnected then
+  begin
+    msg('Finder: Finder camera not connected!',1);
+    exit;
+  end;
+  if FinderPreviewLoop then begin
+    StopLoop;
+    wait(5);
+  end;
+  FinderCapturingDark:=true;
+  StartLoop;
+end;
+
+procedure Tf_finder.SetFilterNoise(value:Boolean);
+begin
+  cbFilterNoise.Checked:=value;
+end;
+
+function Tf_finder.GetFilterNoise:Boolean;
+begin
+  result:=cbFilterNoise.Checked;
 end;
 
 end.

@@ -1083,6 +1083,11 @@ type
     procedure FinderCameraNewImageAsync(Data: PtrInt);
     procedure FinderCameraSetTemperature(Sender: TObject);
     procedure FinderCameraSetCooler(Sender: TObject);
+    procedure FinderCaptureDark(Sender: TObject);
+    procedure FinderLoadDark(Sender: TObject);
+    procedure FinderClearDark(Sender: TObject);
+    procedure FinderDarkInfo(Sender: TObject);
+    procedure ShowFinderDarkInfo;
     procedure FinderMeasureAtPos(x,y:integer);
     Procedure DrawFinderImage(display: boolean);
     Procedure PlotFinderImage;
@@ -1784,6 +1789,7 @@ begin
   ConfigDarkFile:=slash(ConfigDir)+'darkframe_'+profile+'.fits';
   ConfigGuiderDarkFile:=slash(ConfigDir)+'darkguider_'+profile+'.fits';
   ConfigGuiderReferenceFile:=slash(ConfigDir)+'guider_reference_'+profile+'.fits';
+  ConfigFinderDarkFile:=slash(ConfigDir)+'darkfinder_'+profile+'.fits';
 
   LogFileOpen:=false;
 
@@ -1861,6 +1867,9 @@ begin
   finderfits:=TFits.Create(self);
   finderfits.DisableBayer:=true;
   finderfits.onMsg:=@NewMessage;
+  if FileExists(ConfigFinderDarkFile) then begin
+     finderfits.LoadDark(ConfigFinderDarkFile);
+  end;
 
   f_switch:=Tf_switch.Create(self);
   f_switch.onSetSwitch:=@SetSwitch;
@@ -2021,6 +2030,10 @@ begin
   f_finder.onConfigureFinder:=@FinderConfigure;
   f_finder.onSetTemperature:=@FinderCameraSetTemperature;
   f_finder.onSetCooler:=@FinderCameraSetCooler;
+  f_finder.onCaptureDark:=@FinderCaptureDark;
+  f_finder.onLoadDark:=@FinderLoadDark;
+  f_finder.onClearDark:=@FinderClearDark;
+  f_finder.onDarkInfo:=@FinderDarkInfo;
 
   i:=config.GetValue('/Autoguider/Software',2);
   case TAutoguiderType(i) of
@@ -5372,6 +5385,7 @@ begin
   f_finder.visu.BtnClipRange.Down:=config.GetValue('/Finder/Visu/ClipRange',false);
   f_finder.visu.cbHistRange.ItemIndex:=config.GetValue('/Finder/Visu/HistRange',3);
   f_finder.Temperature.Value:=config.GetValue('/Finder/Temperature',0);
+  f_finder.FilterNoise:=config.GetValue('/Finder/FilterNoise',false);
 
   astrometryResolver:=config.GetValue('/Astrometry/Resolver',ResolverAstap);
   AstrometryTimeout:=config.GetValue('/Astrometry/Timeout',30.0);
@@ -6008,6 +6022,7 @@ begin
   config.SetValue('/Finder/Visu/ClipRange',f_finder.visu.BtnClipRange.Down);
   config.SetValue('/Finder/Visu/HistRange',f_finder.visu.cbHistRange.ItemIndex);
   config.SetValue('/Finder/Temperature',f_finder.Temperature.Value);
+  config.SetValue('/Finder/FilterNoise',f_finder.FilterNoise);
 
   // star autoexposure in sequence editor
   n:=f_autoexposurestep.cbRef.Items.Count;
@@ -9300,6 +9315,13 @@ begin
       end
       else begin
         guidefits.FreeDark;
+      end;
+      ConfigFinderDarkFile:=slash(ConfigDir)+'darkfinder_'+profile+'.fits';
+      if FileExists(ConfigFinderDarkFile) then begin
+        finderfits.LoadDark(ConfigFinderDarkFile);
+      end
+      else begin
+        finderfits.FreeDark;
       end;
       LoadBPM;
       FrameX:=config.GetValue('/CCDframe/FrameX',0);
@@ -18423,7 +18445,7 @@ begin
      guidefits.LoadStream;
   end;
 
-  if f_internalguider.FilterNoise then
+  if f_internalguider.FilterNoise and (not InternalguiderCapturingDark) then
     guidefits.MedianFilter;
 
   if StopInternalguider then begin
@@ -18451,8 +18473,8 @@ begin
     else if InternalguiderCalibratingBacklash then
       // process backlash calibration
       T_autoguider_internal(autoguider).BacklashCalibration
-      // process dark capture
     else if InternalguiderCapturingDark then begin
+      // process dark capture
       if (not guidecamera.AddFrames)or(guidecamera.StackNum<1)or(guidecamera.StackCount>=guidecamera.StackNum) then begin
         // Stack count reach, save dark and stop
         guidefits.SaveToFile(ConfigGuiderDarkFile);
@@ -19355,6 +19377,73 @@ begin
   end;
 end;
 
+
+Procedure Tf_main.FinderCaptureDark(Sender: TObject);
+begin
+ f_pause.Caption:='Dark frame';
+ f_pause.Text:='Cover the finder camera'+crlf+rsClickContinu;
+ if f_pause.Wait then begin
+   f_finder.CaptureDark;
+ end;
+end;
+
+procedure Tf_main.ShowFinderDarkInfo;
+begin
+  if (finderfits.DarkFrame<>nil)and(finderfits.DarkFrame.HeaderInfo.valid) then begin
+    f_finder.LabelInfo.Caption:='Dark ';
+    f_finder.LabelInfo.Caption:=f_finder.LabelInfo.Caption+' '+rsSize+': '+inttostr(finderfits.DarkFrame.HeaderInfo.naxis1)+'x'+inttostr(finderfits.DarkFrame.HeaderInfo.naxis2);
+    f_finder.LabelInfo.Caption:=f_finder.LabelInfo.Caption+', '+rsExposureTime2+': ';
+    if finderfits.DarkFrame.HeaderInfo.stackcount>0 then
+      f_finder.LabelInfo.Caption:=f_finder.LabelInfo.Caption+FormatFloat(f3,finderfits.DarkFrame.HeaderInfo.stackexp)
+    else
+      f_finder.LabelInfo.Caption:=f_finder.LabelInfo.Caption+FormatFloat(f3,finderfits.DarkFrame.HeaderInfo.exptime);
+    NewMessage(rsFinder+' '+f_finder.LabelInfo.Caption,3);
+  end
+  else begin
+    f_finder.LabelInfo.Caption:=rsNoDark;
+  end;
+end;
+
+procedure Tf_main.FinderLoadDark(Sender: TObject);
+var fn : string;
+begin
+  OpenDialog1.Title:=rsOpenDarkFile;
+  if OpenDialog1.Execute then begin
+    fn:=OpenDialog1.FileName;
+    finderfits.SetBPM(bpm,0,0,0,0);
+    finderfits.DarkOn:=false;
+    finderfits.LoadDark(fn);
+    if finderfits.DarkFrame.HeaderInfo.valid then begin
+      finderfits.DarkFrame.SaveToFile(ConfigFinderDarkFile);
+    end
+    else begin
+      finderfits.FreeDark;
+      NewMessage(Format(rsInvalidOrUns, [fn]),1);
+    end;
+  end;
+  ShowFinderDarkInfo;
+end;
+
+procedure Tf_main.FinderClearDark(Sender: TObject);
+begin
+  finderfits.FreeDark;
+  DeleteFile(ConfigFinderDarkFile);
+  ShowFinderDarkInfo;
+end;
+
+procedure Tf_main.FinderDarkInfo(Sender: TObject);
+var f: Tf_viewtext;
+begin
+ if (finderfits.DarkFrame<>nil) and finderfits.DarkFrame.HeaderInfo.valid then begin
+   f:=Tf_viewtext.Create(self);
+   f.FormStyle:=fsStayOnTop;
+   f.Caption:=rsFITSHeader;
+   f.Memo1.Lines:=finderfits.DarkFrame.Header.Rows;
+   FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
+   f.Show;
+ end;
+end;
+
 Procedure Tf_main.SetFinderCamera;
 var n: integer;
 begin
@@ -19462,7 +19551,22 @@ begin
   if (not finderfits.ImageValid) then begin
      finderfits.LoadStream;
   end;
-  if f_finder.cbSaveImages.Checked then begin
+
+  if f_finder.FilterNoise and (not FinderCapturingDark) then
+    finderfits.MedianFilter;
+
+  if FinderCapturingDark then begin
+    // process dark capture
+    if (not findercamera.AddFrames)or(findercamera.StackNum<1)or(findercamera.StackCount>=findercamera.StackNum) then begin
+      // Stack count reach, save dark and stop
+      finderfits.SaveToFile(ConfigFinderDarkFile);
+      finderfits.LoadDark(ConfigFinderDarkFile);
+      ShowFinderDarkInfo;
+      f_finder.StopLoop;
+      exit;
+    end;
+  end
+  else if f_finder.cbSaveImages.Checked then begin
     // save image
     fn:=LastCapturePath;
     ForceDirectories(fn);

@@ -429,7 +429,7 @@ var
   Appdir,ConfigDir,LogDir,TmpDir,DataDir,ScriptsDir,HomeDir,SequenceDir: UTF8String;
   defCapturePath, defPython, TCPIPConfigPort, TCPIPServerPort: string;
   CameraName,WheelName,FocuserName,RotatorName,MountName,DomeName,WatchdogName,WeatherName,SafetyName,SwitchName,CoverName,GuideCameraName,FinderCameraName: string;
-  ConfigFlatFile,ConfigDarkFile,ConfigGuiderDarkFile,ConfigGuiderReferenceFile,cdate: string;
+  ConfigFlatFile,ConfigDarkFile,ConfigGuiderDarkFile,ConfigFinderDarkFile,ConfigGuiderReferenceFile,cdate: string;
   LastCapturePath: string;
   isAdmin, UacEnabled, debug_msg: boolean;
   AllDevicesConnected: boolean;
@@ -474,6 +474,7 @@ var
   GuideImgScale0,GuideImgPixRatio,GuideImgZoom,GuideZoomMin: double;
   ScrWidth,ScrHeigth,ScrGuideWidth,ScrGuideHeigth,ScrFinderWidth,ScrFinderHeigth,SplitMargin: integer;
   FinderImgScale0,FinderImgPixRatio,FinderImgZoom,FinderZoomMin: double;
+  FinderCapturingDark: boolean;
   MaxADU, ClippingOverflow, ClippingUnderflow: double;
   MsgHandle: THandle;
   LastPixelSize: double;
