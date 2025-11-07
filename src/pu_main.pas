@@ -2034,6 +2034,7 @@ begin
   f_finder.onLoadDark:=@FinderLoadDark;
   f_finder.onClearDark:=@FinderClearDark;
   f_finder.onDarkInfo:=@FinderDarkInfo;
+  ShowFinderDarkInfo;
 
   i:=config.GetValue('/Autoguider/Software',2);
   case TAutoguiderType(i) of
@@ -9332,6 +9333,7 @@ begin
     end;
     ShowDarkInfo;
     ShowGuiderDarkInfo;
+    ShowFinderDarkInfo;
 
     config.SetValue('/Devices/Timeout',f_setup.IndiTimeout.Text);
     config.SetValue('/Indistarter/Config',f_setup.cbIndistarterConfig.Text);
