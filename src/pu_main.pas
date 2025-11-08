@@ -1351,7 +1351,7 @@ end;
 end;
 
 Procedure Tf_main.GetAppDir;
-var buf:string;
+var buf,testfile:string;
     {$ifdef darwin}
     i:integer;
     {$endif}
@@ -1360,10 +1360,11 @@ var buf:string;
     Folder: array[0..MAX_PATH] of char;
     {$endif}
 begin
+ testfile:=slash('data')+slash('language')+'ccdciel.en.po';
  {$ifdef darwin}
    //  try current path
    Appdir := getcurrentdir;
-   if not DirectoryExists(slash(Appdir)+slash('scripts')) then
+   if not FileExists(slash(Appdir)+testfile) then
    begin
      // try under app bundle
      Appdir := ExtractFilePath(ParamStr(0));
@@ -1372,7 +1373,7 @@ begin
      begin
        Appdir := ExtractFilePath(copy(Appdir, 1, i));
      end;
-     if not DirectoryExists(slash(Appdir)+slash('scripts')) then
+     if not FileExists(slash(Appdir)+testfile) then
      begin
         // try default location
        Appdir := '/Applications/CCDciel';
@@ -1380,7 +1381,7 @@ begin
    end;
  {$else}
  Appdir:=getcurrentdir;
- if not DirectoryExists(slash(Appdir)+slash('scripts')) then begin
+ if not FileExists(slash(Appdir)+testfile) then begin
      Appdir:=ExtractFilePath(ParamStr(0));
  end;
  {$endif}
@@ -1388,49 +1389,49 @@ begin
  Appdir:=expandfilename(Appdir);
  {$endif}
  // Be sur the script directory exists
- if (not directoryexists(slash(appdir)+slash('scripts'))) then begin
+ if (not FileExists(slash(appdir)+testfile)) then begin
    // try under the current directory
    buf:=GetCurrentDir;
-   if (directoryexists(slash(buf)+slash('scripts'))) then
+   if (FileExists(slash(buf)+testfile)) then
       appdir:=buf
    else begin
       // try under the program directory
       buf:=ExtractFilePath(ParamStr(0));
-      if (directoryexists(slash(buf)+slash('scripts'))) then
+      if (FileExists(slash(buf)+testfile)) then
          appdir:=buf
       else begin
           // try share directory under current location
           buf:=ExpandFileName(slash(GetCurrentDir)+SharedDir);
-          if (directoryexists(slash(buf)+slash('scripts'))) then
+          if (FileExists(slash(buf)+testfile)) then
              appdir:=buf
           else begin
              // try share directory at the same location as the program
              buf:=ExpandFileName(slash(ExtractFilePath(ParamStr(0)))+SharedDir);
-             if (directoryexists(slash(buf)+slash('scripts'))) then
+             if (FileExists(slash(buf)+testfile)) then
                 appdir:=buf
           else begin
              // try in /usr
              buf:=ExpandFileName(slash('/usr/bin')+SharedDir);
-             if (directoryexists(slash(buf)+slash('scripts'))) then
+             if (FileExists(slash(buf)+testfile)) then
                 appdir:=buf
           else begin
              // try /usr/local
              buf:=ExpandFileName(slash('/usr/local/bin')+SharedDir);
-             if (directoryexists(slash(buf)+slash('scripts'))) then
+             if (FileExists(slash(buf)+testfile)) then
                 appdir:=buf
           else begin
               // try in C:\Program Files
               buf:='C:\Program Files\CCDciel';
-              if (directoryexists(slash(buf)+slash('scripts'))) then
+              if (FileExists(slash(buf)+testfile)) then
                  appdir:=buf
           else begin
              // try in C:\Program Files (x86)
              buf:='C:\Program Files (x86)\CCDciel';
-             if (directoryexists(slash(buf)+slash('scripts'))) then
+             if (FileExists(slash(buf)+testfile)) then
                 appdir:=buf
 
              else begin
-                 Showmessage('Error: Can''t locate the scripts directory !!'+crlf+'Please try to reinstall the software');
+                 Showmessage('Error: Can''t locate the ccdciel directory !!'+crlf+'Please try to reinstall the software');
              end;
           end;
           end;
