@@ -17910,6 +17910,13 @@ try
     buf:=f_scriptengine.cmd_AutoguiderStoreLockPosition(buf1,buf2);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
+  else if method='SET_FINDERTARGETXY' then begin
+   CheckParamCount(2);
+   buf1:=trim(value[attrib.IndexOf('params.0')]);
+   buf2:=trim(value[attrib.IndexOf('params.1')]);
+   buf:=f_scriptengine.cmd_SetFinderTargetXY(buf1,buf2);
+   result:=result+'"result":{"status": "'+buf+'"}';
+  end
   else if method='FINDER_SAVEIMAGES' then begin
    CheckParamCount(1);
    buf1:=trim(value[attrib.IndexOf('params.0')]);

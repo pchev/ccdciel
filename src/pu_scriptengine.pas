@@ -224,6 +224,7 @@ type
     function cmd_FinderStopLoop:string;
     function cmd_FinderSaveImages(onoff:string):string;
     function cmd_FinderSnapshot(exp,basefn,count:string):string;
+    function cmd_SetFinderTargetXY(sx,sy: string):string;
     function cmd_InternalGuiderSnapshot(exp,basefn,count:string):string;
     function cmd_InternalGuiderSaveFitsFile(basefn:string):string;
     function cmd_Wheel_GetFilter:string;
@@ -1746,6 +1747,24 @@ begin
  result:=msgOK;
  if Autoguider=nil then exit;
  Autoguider.Shutdown;
+end;
+
+function Tf_scriptengine.cmd_SetFinderTargetXY(sx,sy: string):string;
+var x,y: double;
+    n:integer;
+begin
+  result:=msgFailed;
+  try
+  val(sx,x,n);
+  if n<>0 then exit;
+  val(sy,y,n);
+  if n<>0 then exit;
+  finder.OffsetX.Value:=x;
+  finder.OffsetY.Value:=y;
+  result:=msgOK;
+  except
+    result:=msgFailed;
+  end;
 end;
 
 function Tf_scriptengine.cmd_FinderStartLoop(exp:string):string;
