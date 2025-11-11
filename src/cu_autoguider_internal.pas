@@ -138,7 +138,7 @@ var
   oldtickcount: qword=0;
 
 
-procedure mad_median(list: array of double;leng :integer;out mad,median :double);{calculate mad and median without modifying the data}
+procedure mad_median(var list: array of double;leng :integer;out mad,median :double);{calculate mad and median without modifying the data}
 var  {idea from https://eurekastatistics.com/using-the-median-absolute-deviation-to-find-outliers/}
   i        : integer;
   list2: array of double;
@@ -152,7 +152,7 @@ begin
 end;
 
 
-procedure get_best_mean(list: array of double; leng : integer; out mean : double);{Remove outliers from population using MAD. }
+procedure get_best_mean(var list: array of double; leng : integer; out mean : double);{Remove outliers from population using MAD. }
 var  {idea from https://eurekastatistics.com/using-the-median-absolute-deviation-to-find-outliers/}
   i,count         : integer;
   median, mad     : double;

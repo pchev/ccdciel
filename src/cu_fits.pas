@@ -421,7 +421,7 @@ var header : THeaderBlock;
     P: PChar;
 const excl1:array[0..18] of string=('CTYPE','WCSAXES','EQUINOX','LONPOLE','LATPOLE','CRVAL','CRPIX','CUNIT','CD','CDELT','A_','B_','AP_','BP_','PV','CROTA','END','IMAGEW','IMAGEH');
       excl2:array[0..3] of string=('SIMPLE','BITPIX','EXTEND','NAXIS');
-  function IsKeywordIn(k:string; klist:array of string): boolean;
+  function IsKeywordIn(k:string; var klist:array of string): boolean;
   var j: integer;
   begin
     result:=false;

@@ -151,12 +151,12 @@ type
     function GetTrackingRates: ITrackingRates;
     function GetAxisRates(axis:string): IAxisRates;
     function GetImageArray: TImageArray;
-    procedure Put(method: string; params:array of string); overload;
+    procedure Put(method: string; var params:array of string); overload;
     procedure Put(method:string); overload;
     procedure Put(method,value:string); overload;
     procedure Put(method:string;value:double); overload;
     procedure Put(method:string;value:Boolean); overload;
-    function PutR(method: string; params:array of string):TAscomResult;
+    function PutR(method: string; params:var array of string):TAscomResult;
     property Host: string read Fhost write SetHost;
     property Port: string read Fport write SetPort;
     property Protocol: string read Fprotocol write SetProtocol;
@@ -805,7 +805,7 @@ begin
    end;
 end;
 
-function TAscomRest.PutR(method: string; params:array of string):TAscomResult;
+function TAscomRest.PutR(method: string; var params:array of string):TAscomResult;
 var url,data: string;
     ok: boolean;
     i,n: integer;
@@ -884,7 +884,7 @@ begin
 end;
 
 
-procedure TAscomRest.Put(method: string; params:array of string); overload;
+procedure TAscomRest.Put(method: string; params:var array of string); overload;
 var J: TAscomResult;
     url,data: string;
     ok: boolean;

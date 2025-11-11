@@ -113,7 +113,7 @@ procedure Screen2CCD(x,y: integer; FlipHorz,FlipVert: boolean; vflip:boolean; ou
 procedure CCD2Screen(x,y: integer; FlipHorz,FlipVert: boolean; vflip:boolean; out xx,yy:integer);
 procedure CircleIntersect(x0,y0,r,x1,y1: integer; out xr,yr: integer);
 procedure ResetTrackBar(tb:TTrackBar);
-procedure LeastSquares(data: array of TDouble2; out a,b,r: double);
+procedure LeastSquares(var data: array of TDouble2; out a,b,r: double);
 procedure Time_Alt(jd, ar, de, h: double; out hp1, hp2: double);
 function TwilightAstro(dt:TDateTime; h: double; out HMorning,HEvening:double):boolean;
 procedure SecondsToWait(tnow,dt: TDateTime; forcenextday: boolean; out wt: Integer; out nextday:boolean);
@@ -158,7 +158,7 @@ procedure LocalToMount(mountjd:double; var ra, de: double);
 procedure MountToJ2000(mountjd:double; var ra, de: double);
 procedure J2000ToMount(mountjd:double; var ra, de: double);
 procedure quicksort(var list: array of double; lo,hi: integer); inline;
-function SMedian(list: array of double; leng: integer; smooth: boolean=true): double;
+function SMedian(var list: array of double; leng: integer; smooth: boolean=true): double;
 procedure SortFilterListInc(var list: TStringList);
 procedure SortFilterListDec(var list: TStringList);
 function SystemInformation: string;
@@ -1972,7 +1972,7 @@ begin
   tb.max:=maxint;
 end;
 
-procedure LeastSquares(data: array of TDouble2; out a,b,r: double);
+procedure LeastSquares(var data: array of TDouble2; out a,b,r: double);
 // https://en.wikipedia.org/wiki/Simple_linear_regression
 // -> y = a*x + b
 var
@@ -3189,7 +3189,7 @@ begin {quicksort};
   sort(lo,hi);
 end;
 
-function SMedian(list: array of double; leng: integer; smooth: boolean=true): double;{get median of an array of double. Taken from CCDciel code but slightly modified}
+function SMedian(var list: array of double; leng: integer; smooth: boolean=true): double;{get median of an array of double. Taken from CCDciel code but slightly modified}
 var
   mid : integer;
 begin
