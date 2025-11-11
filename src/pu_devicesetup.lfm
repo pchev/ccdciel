@@ -129,7 +129,7 @@ object f_setup: Tf_setup
               Left = 8
               Height = 22
               Top = 8
-              Width = 127
+              Width = 123
               Caption = 'Start Indistarter'
               TabOrder = 1
             end
@@ -601,7 +601,7 @@ object f_setup: Tf_setup
                 Left = 9
                 Height = 22
                 Top = 154
-                Width = 211
+                Width = 207
                 Caption = 'Load configuration on startup'
                 ParentFont = False
                 TabOrder = 2
@@ -807,7 +807,7 @@ object f_setup: Tf_setup
                 Left = 13
                 Height = 22
                 Top = 125
-                Width = 176
+                Width = 172
                 Caption = 'Flip the image vertically '
                 ParentFont = False
                 TabOrder = 4
@@ -816,7 +816,7 @@ object f_setup: Tf_setup
                 Left = 13
                 Height = 22
                 Top = 160
-                Width = 211
+                Width = 207
                 Caption = 'DATE-OBS from camera driver'
                 ParentFont = False
                 TabOrder = 5
@@ -825,7 +825,7 @@ object f_setup: Tf_setup
                 Left = 13
                 Height = 22
                 Top = 192
-                Width = 358
+                Width = 354
                 Caption = 'Try to fix pixel range to match CMOS camera bit depth'
                 ParentFont = False
                 TabOrder = 6
@@ -852,7 +852,7 @@ object f_setup: Tf_setup
                 Left = 16
                 Height = 22
                 Top = 241
-                Width = 176
+                Width = 172
                 Caption = 'Flip the image vertically '
                 ParentFont = False
                 TabOrder = 0
@@ -1013,7 +1013,7 @@ object f_setup: Tf_setup
                 Left = 16
                 Height = 22
                 Top = 272
-                Width = 211
+                Width = 207
                 Caption = 'DATE-OBS from camera driver'
                 ParentFont = False
                 TabOrder = 8
@@ -1022,7 +1022,7 @@ object f_setup: Tf_setup
                 Left = 16
                 Height = 22
                 Top = 304
-                Width = 358
+                Width = 354
                 Caption = 'Try to fix pixel range to match CMOS camera bit depth'
                 ParentFont = False
                 TabOrder = 9
@@ -1186,7 +1186,7 @@ object f_setup: Tf_setup
                 Left = 9
                 Height = 22
                 Top = 154
-                Width = 211
+                Width = 207
                 Caption = 'Load configuration on startup'
                 ParentFont = False
                 TabOrder = 2
@@ -1220,6 +1220,7 @@ object f_setup: Tf_setup
                   Top = 0
                   Width = 121
                   Constraints.MaxHeight = 28
+                  OnChange = GuideCameraIndiServerChange
                   ParentFont = False
                   TabOrder = 0
                   Text = 'localhost'
@@ -1241,6 +1242,7 @@ object f_setup: Tf_setup
                   Top = 0
                   Width = 81
                   Constraints.MaxHeight = 28
+                  OnChange = GuideCameraIndiPortChange
                   ParentFont = False
                   TabOrder = 1
                   Text = '7624'
@@ -1306,6 +1308,7 @@ object f_setup: Tf_setup
                 Top = 14
                 Width = 210
                 Constraints.MaxHeight = 28
+                OnChange = AscomGuideCameraChange
                 ParentFont = False
                 TabOrder = 1
               end
@@ -1382,6 +1385,7 @@ object f_setup: Tf_setup
                 Top = 65
                 Width = 194
                 Constraints.MaxHeight = 28
+                OnChange = GuideCameraARestHostChange
                 ParentFont = False
                 TabOrder = 1
                 Text = '127.0.0.1'
@@ -1404,6 +1408,7 @@ object f_setup: Tf_setup
                 MaxLength = 0
                 ParentFont = False
                 TabOrder = 2
+                OnChange = GuideCameraARestPortChange
                 MaxValue = 65535
                 MinValue = 1
                 NullValue = 0
@@ -1427,6 +1432,7 @@ object f_setup: Tf_setup
                 MaxLength = 0
                 ParentFont = False
                 TabOrder = 3
+                OnChange = GuideCameraARestDeviceChange
                 MaxValue = 65535
                 NullValue = 0
                 Value = 0
@@ -1568,8 +1574,9 @@ object f_setup: Tf_setup
             Left = 16
             Height = 22
             Top = 8
-            Width = 138
+            Width = 134
             Caption = 'Use guide camera'
+            OnChange = DeviceGuideCameraChange
             ParentFont = False
             TabOrder = 0
           end
@@ -1584,10 +1591,161 @@ object f_setup: Tf_setup
           ClientHeight = 114
           ClientWidth = 490
           TabOrder = 2
+          object PanelGuiderROI: TPanel
+            Left = 0
+            Height = 72
+            Top = 0
+            Width = 490
+            Align = alTop
+            ClientHeight = 72
+            ClientWidth = 490
+            TabOrder = 0
+            object Label197: TLabel
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 18
+              Top = 12
+              Width = 68
+              Caption = 'Guider ROI'
+              ParentColor = False
+            end
+            object Label198: TLabel
+              AnchorSideLeft.Control = Label197
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = Label197
+              Left = 88
+              Height = 18
+              Top = 12
+              Width = 8
+              BorderSpacing.Left = 12
+              BorderSpacing.Right = 4
+              Caption = 'X'
+              ParentColor = False
+            end
+            object Label199: TLabel
+              AnchorSideLeft.Control = GuiderX
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = Label197
+              Left = 173
+              Height = 18
+              Top = 12
+              Width = 9
+              BorderSpacing.Left = 8
+              BorderSpacing.Right = 4
+              Caption = 'Y'
+              ParentColor = False
+            end
+            object Label200: TLabel
+              AnchorSideLeft.Control = GuiderY
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = Label197
+              Left = 259
+              Height = 18
+              Top = 12
+              Width = 37
+              BorderSpacing.Left = 8
+              BorderSpacing.Right = 4
+              Caption = 'Width'
+              ParentColor = False
+            end
+            object Label201: TLabel
+              AnchorSideLeft.Control = GuiderW
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = Label197
+              Left = 369
+              Height = 18
+              Top = 12
+              Width = 41
+              BorderSpacing.Left = 4
+              Caption = 'Height'
+              ParentColor = False
+            end
+            object GuiderX: TSpinEditEx
+              AnchorSideLeft.Control = Label198
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = Label197
+              AnchorSideTop.Side = asrCenter
+              Left = 100
+              Height = 32
+              Hint = 'X'
+              Top = 5
+              Width = 65
+              BorderSpacing.Left = 4
+              MaxLength = 0
+              TabOrder = 0
+              OnChange = GuiderXChange
+              MaxValue = 20000
+              NullValue = 0
+              Value = 0
+            end
+            object GuiderY: TSpinEditEx
+              AnchorSideLeft.Control = Label199
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = GuiderX
+              Left = 186
+              Height = 32
+              Hint = 'Y'
+              Top = 5
+              Width = 65
+              BorderSpacing.Left = 4
+              BorderSpacing.Right = 8
+              MaxLength = 0
+              TabOrder = 1
+              OnChange = GuiderYChange
+              MaxValue = 20000
+              NullValue = 0
+              Value = 0
+            end
+            object GuiderW: TSpinEditEx
+              AnchorSideLeft.Control = Label200
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = GuiderX
+              Left = 300
+              Height = 32
+              Hint = 'Width'
+              Top = 5
+              Width = 65
+              BorderSpacing.Left = 4
+              MaxLength = 0
+              TabOrder = 2
+              OnChange = GuiderWChange
+              MaxValue = 20000
+              NullValue = 0
+              Value = 0
+            end
+            object GuiderH: TSpinEditEx
+              AnchorSideLeft.Control = Label201
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = GuiderX
+              AnchorSideRight.Side = asrBottom
+              Left = 414
+              Height = 32
+              Hint = 'Height'
+              Top = 5
+              Width = 65
+              BorderSpacing.Left = 4
+              MaxLength = 0
+              TabOrder = 3
+              OnChange = GuiderHChange
+              MaxValue = 20000
+              NullValue = 0
+              Value = 0
+            end
+            object btnGuiderFullFrame: TButton
+              AnchorSideLeft.Control = GuiderX
+              Left = 100
+              Height = 25
+              Top = 40
+              Width = 150
+              Caption = 'Full frame'
+              OnClick = btnGuiderFullFrameClick
+              TabOrder = 4
+            end
+          end
           object Label144: TLabel
             Left = 0
-            Height = 114
-            Top = 0
+            Height = 42
+            Top = 72
             Width = 490
             Align = alClient
             AutoSize = False
@@ -1682,7 +1840,7 @@ object f_setup: Tf_setup
                 Left = 9
                 Height = 22
                 Top = 154
-                Width = 211
+                Width = 207
                 Caption = 'Load configuration on startup'
                 ParentFont = False
                 TabOrder = 2
@@ -1716,6 +1874,7 @@ object f_setup: Tf_setup
                   Top = 0
                   Width = 121
                   Constraints.MaxHeight = 28
+                  OnChange = FinderCameraIndiServerChange
                   ParentFont = False
                   TabOrder = 0
                   Text = 'localhost'
@@ -1737,6 +1896,7 @@ object f_setup: Tf_setup
                   Top = 0
                   Width = 81
                   Constraints.MaxHeight = 28
+                  OnChange = FinderCameraIndiPortChange
                   ParentFont = False
                   TabOrder = 1
                   Text = '7624'
@@ -1802,6 +1962,7 @@ object f_setup: Tf_setup
                 Top = 14
                 Width = 210
                 Constraints.MaxHeight = 28
+                OnChange = AscomFinderCameraChange
                 ParentFont = False
                 TabOrder = 1
               end
@@ -1878,6 +2039,7 @@ object f_setup: Tf_setup
                 Top = 65
                 Width = 194
                 Constraints.MaxHeight = 28
+                OnChange = FinderCameraARestHostChange
                 ParentFont = False
                 TabOrder = 1
                 Text = '127.0.0.1'
@@ -1900,6 +2062,7 @@ object f_setup: Tf_setup
                 MaxLength = 0
                 ParentFont = False
                 TabOrder = 2
+                OnChange = FinderCameraARestPortChange
                 MaxValue = 65535
                 MinValue = 1
                 NullValue = 0
@@ -1923,6 +2086,7 @@ object f_setup: Tf_setup
                 MaxLength = 0
                 ParentFont = False
                 TabOrder = 3
+                OnChange = FinderCameraARestDeviceChange
                 MaxValue = 65535
                 NullValue = 0
                 Value = 0
@@ -2064,8 +2228,9 @@ object f_setup: Tf_setup
             Left = 16
             Height = 22
             Top = 8
-            Width = 140
+            Width = 136
             Caption = 'Use finder camera'
+            OnChange = DeviceFinderCameraChange
             ParentFont = False
             TabOrder = 0
           end
@@ -2080,10 +2245,157 @@ object f_setup: Tf_setup
           ClientHeight = 114
           ClientWidth = 490
           TabOrder = 2
+          object PanelFinderROI: TPanel
+            Left = 0
+            Height = 72
+            Top = 0
+            Width = 490
+            Align = alTop
+            ClientHeight = 72
+            ClientWidth = 490
+            TabOrder = 0
+            object Label191: TLabel
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 18
+              Top = 12
+              Width = 65
+              Caption = 'Finder ROI'
+              ParentColor = False
+            end
+            object Label192: TLabel
+              AnchorSideLeft.Control = Label191
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = Label191
+              Left = 85
+              Height = 18
+              Top = 12
+              Width = 8
+              BorderSpacing.Left = 12
+              BorderSpacing.Right = 4
+              Caption = 'X'
+              ParentColor = False
+            end
+            object Label193: TLabel
+              AnchorSideLeft.Control = FinderX
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = Label191
+              Left = 170
+              Height = 18
+              Top = 12
+              Width = 9
+              BorderSpacing.Left = 8
+              BorderSpacing.Right = 4
+              Caption = 'Y'
+              ParentColor = False
+            end
+            object Label194: TLabel
+              AnchorSideLeft.Control = FinderY
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = Label191
+              Left = 256
+              Height = 18
+              Top = 12
+              Width = 37
+              BorderSpacing.Left = 8
+              BorderSpacing.Right = 4
+              Caption = 'Width'
+              ParentColor = False
+            end
+            object Label196: TLabel
+              AnchorSideLeft.Control = FinderW
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = Label191
+              Left = 366
+              Height = 18
+              Top = 12
+              Width = 41
+              BorderSpacing.Left = 4
+              Caption = 'Height'
+              ParentColor = False
+            end
+            object FinderX: TSpinEditEx
+              AnchorSideLeft.Control = Label192
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = Label191
+              AnchorSideTop.Side = asrCenter
+              Left = 97
+              Height = 32
+              Hint = 'X'
+              Top = 5
+              Width = 65
+              BorderSpacing.Left = 4
+              MaxLength = 0
+              TabOrder = 0
+              MaxValue = 20000
+              NullValue = 0
+              Value = 0
+            end
+            object FinderY: TSpinEditEx
+              AnchorSideLeft.Control = Label193
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = FinderX
+              Left = 183
+              Height = 32
+              Hint = 'Y'
+              Top = 5
+              Width = 65
+              BorderSpacing.Left = 4
+              BorderSpacing.Right = 8
+              MaxLength = 0
+              TabOrder = 1
+              MaxValue = 20000
+              NullValue = 0
+              Value = 0
+            end
+            object FinderW: TSpinEditEx
+              AnchorSideLeft.Control = Label194
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = FinderX
+              Left = 297
+              Height = 32
+              Hint = 'Width'
+              Top = 5
+              Width = 65
+              BorderSpacing.Left = 4
+              MaxLength = 0
+              TabOrder = 2
+              MaxValue = 20000
+              NullValue = 0
+              Value = 0
+            end
+            object FinderH: TSpinEditEx
+              AnchorSideLeft.Control = Label196
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = FinderX
+              AnchorSideRight.Side = asrBottom
+              Left = 411
+              Height = 32
+              Hint = 'Height'
+              Top = 5
+              Width = 65
+              BorderSpacing.Left = 4
+              MaxLength = 0
+              TabOrder = 3
+              MaxValue = 20000
+              NullValue = 0
+              Value = 0
+            end
+            object btnFinderFullFrame: TButton
+              AnchorSideLeft.Control = FinderX
+              Left = 97
+              Height = 25
+              Top = 40
+              Width = 150
+              Caption = 'Full frame'
+              OnClick = btnFinderFullFrameClick
+              TabOrder = 4
+            end
+          end
           object Label160: TLabel
             Left = 0
-            Height = 114
-            Top = 0
+            Height = 42
+            Top = 72
             Width = 490
             Align = alClient
             AutoSize = False
@@ -2151,7 +2463,7 @@ object f_setup: Tf_setup
                 Left = 8
                 Height = 22
                 Top = 154
-                Width = 211
+                Width = 207
                 Caption = 'Load configuration on startup'
                 ParentFont = False
                 TabOrder = 1
@@ -2616,7 +2928,7 @@ object f_setup: Tf_setup
             Left = 16
             Height = 22
             Top = 8
-            Width = 123
+            Width = 119
             Caption = 'Use filter wheel'
             ParentFont = False
             TabOrder = 0
@@ -2643,7 +2955,7 @@ object f_setup: Tf_setup
             Left = 16
             Height = 22
             Top = 8
-            Width = 104
+            Width = 100
             Caption = 'Use focuser '
             ParentFont = False
             TabOrder = 0
@@ -2664,7 +2976,7 @@ object f_setup: Tf_setup
             Left = 16
             Height = 22
             Top = 335
-            Width = 239
+            Width = 235
             Caption = 'Temperature from weather station'
             ParentFont = False
             TabOrder = 0
@@ -2722,7 +3034,7 @@ object f_setup: Tf_setup
                   Left = 8
                   Height = 22
                   Top = 154
-                  Width = 211
+                  Width = 207
                   Caption = 'Load configuration on startup'
                   ParentFont = False
                   TabOrder = 1
@@ -3178,7 +3490,7 @@ object f_setup: Tf_setup
                 Left = 8
                 Height = 22
                 Top = 154
-                Width = 211
+                Width = 207
                 Caption = 'Load configuration on startup'
                 ParentFont = False
                 TabOrder = 1
@@ -3560,7 +3872,7 @@ object f_setup: Tf_setup
             Left = 16
             Height = 22
             Top = 8
-            Width = 101
+            Width = 97
             Caption = 'Use rotator '
             ParentFont = False
             TabOrder = 0
@@ -3587,7 +3899,7 @@ object f_setup: Tf_setup
             Left = 16
             Height = 22
             Top = 8
-            Width = 99
+            Width = 95
             Caption = 'Use mount '
             ParentFont = False
             TabOrder = 0
@@ -3608,7 +3920,7 @@ object f_setup: Tf_setup
             Left = 16
             Height = 22
             Top = 272
-            Width = 219
+            Width = 215
             Caption = 'Set mount date from computer'
             ParentFont = False
             TabOrder = 0
@@ -3617,7 +3929,7 @@ object f_setup: Tf_setup
             Left = 16
             Height = 22
             Top = 302
-            Width = 286
+            Width = 282
             Caption = 'Set mount site long/lat from configuration'
             OnClick = MountSetObservatoryClick
             ParentFont = False
@@ -3627,7 +3939,7 @@ object f_setup: Tf_setup
             Left = 16
             Height = 22
             Top = 330
-            Width = 226
+            Width = 222
             Caption = 'Get site long/lat from the mount'
             OnClick = MountGetObservatoryClick
             ParentFont = False
@@ -3686,7 +3998,7 @@ object f_setup: Tf_setup
                   Left = 8
                   Height = 22
                   Top = 154
-                  Width = 211
+                  Width = 207
                   Caption = 'Load configuration on startup'
                   ParentFont = False
                   TabOrder = 1
@@ -4113,7 +4425,7 @@ object f_setup: Tf_setup
                 Left = 8
                 Height = 22
                 Top = 154
-                Width = 211
+                Width = 207
                 Caption = 'Load configuration on startup'
                 ParentFont = False
                 TabOrder = 1
@@ -4495,7 +4807,7 @@ object f_setup: Tf_setup
             Left = 16
             Height = 22
             Top = 8
-            Width = 90
+            Width = 86
             Caption = 'Use dome'
             ParentFont = False
             TabOrder = 0
@@ -4560,7 +4872,7 @@ object f_setup: Tf_setup
                 Left = 8
                 Height = 22
                 Top = 154
-                Width = 211
+                Width = 207
                 Caption = 'Load configuration on startup'
                 ParentFont = False
                 TabOrder = 1
@@ -4982,7 +5294,7 @@ object f_setup: Tf_setup
             Left = 16
             Height = 22
             Top = 8
-            Width = 159
+            Width = 155
             Caption = 'Use weather monitor'
             ParentFont = False
             TabOrder = 0
@@ -5047,7 +5359,7 @@ object f_setup: Tf_setup
                 Left = 8
                 Height = 22
                 Top = 154
-                Width = 211
+                Width = 207
                 Caption = 'Load configuration on startup'
                 ParentFont = False
                 TabOrder = 1
@@ -5429,7 +5741,7 @@ object f_setup: Tf_setup
             Left = 16
             Height = 22
             Top = 8
-            Width = 145
+            Width = 141
             Caption = 'Use safety monitor'
             ParentFont = False
             TabOrder = 0
@@ -5494,7 +5806,7 @@ object f_setup: Tf_setup
                 Left = 8
                 Height = 22
                 Top = 154
-                Width = 211
+                Width = 207
                 Caption = 'Load configuration on startup'
                 ParentFont = False
                 TabOrder = 1
@@ -5616,7 +5928,7 @@ object f_setup: Tf_setup
             Left = 16
             Height = 22
             Top = 8
-            Width = 115
+            Width = 111
             Caption = 'Use watchdog'
             ParentFont = False
             TabOrder = 0
@@ -5642,7 +5954,7 @@ object f_setup: Tf_setup
             Left = 16
             Height = 22
             Top = 8
-            Width = 94
+            Width = 90
             Caption = 'Use switch'
             ParentFont = False
             TabOrder = 0
@@ -5776,7 +6088,7 @@ object f_setup: Tf_setup
                 Left = 8
                 Height = 22
                 Top = 154
-                Width = 211
+                Width = 207
                 Caption = 'Load configuration on startup'
                 ParentFont = False
                 TabOrder = 1
@@ -6163,7 +6475,7 @@ object f_setup: Tf_setup
             Left = 16
             Height = 22
             Top = 8
-            Width = 151
+            Width = 147
             Caption = 'Use cover calibrator'
             ParentFont = False
             TabOrder = 0
@@ -6222,7 +6534,7 @@ object f_setup: Tf_setup
                 Left = 8
                 Height = 22
                 Top = 154
-                Width = 211
+                Width = 207
                 Caption = 'Load configuration on startup'
                 ParentFont = False
                 TabOrder = 1

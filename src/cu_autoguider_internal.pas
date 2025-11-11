@@ -708,7 +708,7 @@ begin
       mean_hfd:=mean_hfd/star_counter;
       CurrentHFD:=mean_hfd;
 
-      if ((frame_size<(ysize-1)) and (frame_size<(xsize-1)) and (not (InternalguiderCalibrating or InternalguiderCalibratingBacklash))) then //filter out stars available in the frame
+      if ((frame_size<(ysize-1)) and (frame_size<(xsize-1)) and (not (SameGuiderFinder or finternalguider.SpectroFunctions or InternalguiderCalibrating or InternalguiderCalibratingBacklash))) then //filter out stars available in the frame
       begin
         starx:=round(xy_array[maxSNRstar].x1); // brightest star position
         stary:=round(xy_array[maxSNRstar].y1);
@@ -892,7 +892,7 @@ begin
   begin
     msg('No stars detected!',0);
     initialize:=true;// Return initialize=true for fresh restart next call.
-    FCamera.ResetFrame;
+    if not (SameGuiderFinder or finternalguider.SpectroFunctions) then FCamera.ResetFrame;
     finternalguider.GuideLockNextX:=-1;
     finternalguider.GuideLockNextY:=-1;
     exit;
@@ -967,7 +967,7 @@ begin
     FCamera.AlignFrames:=false;
   end;
   Binning:=Finternalguider.Binning.Value;
-  Fcamera.ResetFrame;
+  if not (SameGuiderFinder or finternalguider.SpectroFunctions) then Fcamera.ResetFrame;
   FRecoveringCameraCount:=0;
   Application.QueueAsyncCall(@StartGuideExposureAsync,0);
 end;

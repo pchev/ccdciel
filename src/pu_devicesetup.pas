@@ -87,11 +87,13 @@ type
     BtnDiscover7: TButton;
     BtnDiscover8: TButton;
     BtnDiscover9: TButton;
+    btnFinderFullFrame: TButton;
     BtnScan: TButton;
     BtnSetupGuideCamera: TButton;
     BtnSetupFinderCamera: TButton;
     BtnSetupSwitch: TButton;
     BtnSetupCover: TButton;
+    btnGuiderFullFrame: TButton;
     ButtonHelp: TButton;
     cbIndistarterAutostart: TCheckBox;
     cbIndistarterConfig: TComboBox;
@@ -104,10 +106,28 @@ type
     DeviceFinderCamera: TCheckBox;
     DiscoverLed: TShape;
     DiscoverLed12: TShape;
+    FinderH: TSpinEditEx;
+    FinderW: TSpinEditEx;
+    FinderX: TSpinEditEx;
+    FinderY: TSpinEditEx;
     gbIndistarter: TGroupBox;
     gbIndiserver: TGroupBox;
+    GuiderH: TSpinEditEx;
+    GuiderW: TSpinEditEx;
+    GuiderX: TSpinEditEx;
+    GuiderY: TSpinEditEx;
     Label107: TLabel;
     Label108: TLabel;
+    Label191: TLabel;
+    Label192: TLabel;
+    Label193: TLabel;
+    Label194: TLabel;
+    Label196: TLabel;
+    Label197: TLabel;
+    Label198: TLabel;
+    Label199: TLabel;
+    Label200: TLabel;
+    Label201: TLabel;
     Label26: TLabel;
     Label29: TLabel;
     Label4: TLabel;
@@ -115,6 +135,8 @@ type
     Label71: TLabel;
     Label72: TLabel;
     Panel10: TGroupBox;
+    PanelFinderROI: TPanel;
+    PanelGuiderROI: TPanel;
     SwitchNickname: TEdit;
     GetIndi12: TButton;
     GuideCameraARestDevice: TSpinEditEx;
@@ -702,11 +724,15 @@ type
     procedure AlpacaWeatherListChange(Sender: TObject);
     procedure AlpacaWheelListChange(Sender: TObject);
     procedure ApplyIndiClick(Sender: TObject);
+    procedure AscomFinderCameraChange(Sender: TObject);
+    procedure AscomGuideCameraChange(Sender: TObject);
     procedure BtnAboutAscomClick(Sender: TObject);
     procedure BtnChooseClick(Sender: TObject);
     procedure BtnCopyProfileClick(Sender: TObject);
     procedure BtnDeleteProfileClick(Sender: TObject);
     procedure BtnDiscoverClick(Sender: TObject);
+    procedure btnFinderFullFrameClick(Sender: TObject);
+    procedure btnGuiderFullFrameClick(Sender: TObject);
     procedure BtnNewProfileClick(Sender: TObject);
     procedure BtnSetupAscomClick(Sender: TObject);
     procedure ApplyAscomRemoteClick(Sender: TObject);
@@ -718,17 +744,33 @@ type
     procedure CameraIndiTransfertClick(Sender: TObject);
     procedure CoverARestProtocolChange(Sender: TObject);
     procedure DefaultARestProtocolChange(Sender: TObject);
+    procedure DeviceFinderCameraChange(Sender: TObject);
+    procedure DeviceGuideCameraChange(Sender: TObject);
     procedure DomeARestProtocolChange(Sender: TObject);
+    procedure FinderCameraARestDeviceChange(Sender: TObject);
+    procedure FinderCameraARestHostChange(Sender: TObject);
+    procedure FinderCameraARestPortChange(Sender: TObject);
     procedure FinderCameraARestProtocolChange(Sender: TObject);
     procedure FinderCameraIndiDeviceChange(Sender: TObject);
+    procedure FinderCameraIndiPortChange(Sender: TObject);
+    procedure FinderCameraIndiServerChange(Sender: TObject);
     procedure FinderIndiSensorChange(Sender: TObject);
     procedure FocuserARestProtocolChange(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure GetIndiClick(Sender: TObject);
+    procedure GuideCameraARestDeviceChange(Sender: TObject);
+    procedure GuideCameraARestHostChange(Sender: TObject);
+    procedure GuideCameraARestPortChange(Sender: TObject);
     procedure GuideCameraARestProtocolChange(Sender: TObject);
     procedure GuideCameraIndiDeviceChange(Sender: TObject);
+    procedure GuideCameraIndiPortChange(Sender: TObject);
+    procedure GuideCameraIndiServerChange(Sender: TObject);
     procedure GuideIndiSensorChange(Sender: TObject);
+    procedure GuiderHChange(Sender: TObject);
+    procedure GuiderWChange(Sender: TObject);
+    procedure GuiderXChange(Sender: TObject);
+    procedure GuiderYChange(Sender: TObject);
     procedure IndiSensorChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure IndiTimerTimer(Sender: TObject);
@@ -807,6 +849,7 @@ type
     procedure CheckFinderDualChip;
     procedure ShowSwitch(n: integer);
     procedure StoreSwitch(n: integer);
+    procedure CheckSameFinderGuider;
   public
     { public declarations }
     DefaultCameraInterface, DefaultGuideCameraInterface, DefaultFinderCameraInterface, DefaultMountInterface, DefaultDomeInterface, DefaultWheelInterface, DefaultFocuserInterface,
@@ -817,6 +860,7 @@ type
     procedure LoadProfileList;
     procedure Loadconfig(conf,credentialconf: TCCDConfig);
     procedure SetActivePageButton;
+    function SameGuiderFinder: boolean;
     property CameraSensor: string read FCameraSensor write SetCameraSensor;
     property GuideCameraSensor: string read FGuideCameraSensor write SetGuideCameraSensor;
     property FinderCameraSensor: string read FFinderCameraSensor write SetFinderCameraSensor;
@@ -1453,6 +1497,10 @@ GuideCameraARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestguidecamera/Protoco
 GuideCameraARestHost.Text:=conf.GetValue('/ASCOMRestguidecamera/Host','127.0.0.1');
 GuideCameraARestPort.Value:=conf.GetValue('/ASCOMRestguidecamera/Port',11111);
 GuideCameraARestDevice.Value:=conf.GetValue('/ASCOMRestguidecamera/Device',0);
+GuiderX.Value:=config.GetValue('/InternalGuider/ROI/X',0);
+GuiderY.Value:=config.GetValue('/InternalGuider/ROI/Y',0);
+GuiderW.Value:=config.GetValue('/InternalGuider/ROI/W',0);
+GuiderH.Value:=config.GetValue('/InternalGuider/ROI/H',0);
 CheckGuideDualChip;
 
 FinderCameraConnection:=TDevInterface(conf.GetValue('/FinderCameraInterface',ord(DefaultFinderCameraInterface)));
@@ -1470,6 +1518,10 @@ FinderCameraARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestfindercamera/Proto
 FinderCameraARestHost.Text:=conf.GetValue('/ASCOMRestfindercamera/Host','127.0.0.1');
 FinderCameraARestPort.Value:=conf.GetValue('/ASCOMRestfindercamera/Port',11111);
 FinderCameraARestDevice.Value:=conf.GetValue('/ASCOMRestfindercamera/Device',0);
+FinderX.Value:=config.GetValue('/Finder/ROI/X',0);
+FinderY.Value:=config.GetValue('/Finder/ROI/Y',0);
+FinderW.Value:=config.GetValue('/Finder/ROI/W',0);
+FinderH.Value:=config.GetValue('/Finder/ROI/H',0);
 CheckFinderDualChip;
 
 WheelConnection:=TDevInterface(conf.GetValue('/FilterWheelInterface',ord(DefaultWheelInterface)));
@@ -1670,6 +1722,8 @@ GuideCameraARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRe
 FinderCameraARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestfindercamera/Pass','')), encryptpwd);
 DefaultARestUser.Text:=CameraARestUser.Text;
 DefaultARestPass.Text:=CameraARestPass.Text;
+
+CheckSameFinderGuider;
 
 end;
 
@@ -2081,11 +2135,33 @@ end;
 procedure Tf_setup.GuideCameraIndiDeviceChange(Sender: TObject);
 begin
   CheckGuideDualChip;
+  CheckSameFinderGuider;
+end;
+
+procedure Tf_setup.GuideCameraIndiPortChange(Sender: TObject);
+begin
+  CheckSameFinderGuider;
+end;
+
+procedure Tf_setup.GuideCameraIndiServerChange(Sender: TObject);
+begin
+  CheckSameFinderGuider;
 end;
 
 procedure Tf_setup.FinderCameraIndiDeviceChange(Sender: TObject);
 begin
   CheckFinderDualChip;
+  CheckSameFinderGuider;
+end;
+
+procedure Tf_setup.FinderCameraIndiPortChange(Sender: TObject);
+begin
+  CheckSameFinderGuider;
+end;
+
+procedure Tf_setup.FinderCameraIndiServerChange(Sender: TObject);
+begin
+  CheckSameFinderGuider;
 end;
 
 procedure Tf_setup.CheckDualChip;
@@ -2145,6 +2221,16 @@ begin
   WatchdogIndiPort.text:=IndiPort.text;
 end;
 
+procedure Tf_setup.AscomFinderCameraChange(Sender: TObject);
+begin
+  CheckSameFinderGuider;
+end;
+
+procedure Tf_setup.AscomGuideCameraChange(Sender: TObject);
+begin
+  CheckSameFinderGuider;
+end;
+
 procedure Tf_setup.CameraIndiTransfertClick(Sender: TObject);
 begin
   CameraDiskPanel.Visible:=CameraIndiTransfert.ItemIndex>0;
@@ -2158,12 +2244,79 @@ begin
   end;
 end;
 
+procedure Tf_setup.DeviceFinderCameraChange(Sender: TObject);
+begin
+  CheckSameFinderGuider;
+end;
+
+procedure Tf_setup.DeviceGuideCameraChange(Sender: TObject);
+begin
+ CheckSameFinderGuider;
+end;
+
+function Tf_setup.SameGuiderFinder: boolean;
+begin
+  if DeviceGuideCamera.Checked and DeviceFinderCamera.Checked and
+     (PageControlGuideCamera.ActivePageIndex = PageControlFinderCamera.ActivePageIndex)
+  then begin
+    case PageControlGuideCamera.ActivePageIndex of
+       0: begin // INDI
+            result:= (GuideCameraIndiServer.Text = FinderCameraIndiServer.Text) and
+                     (GuideCameraIndiPort.Text = FinderCameraIndiPort.Text) and
+                     (GuideCameraIndiDevice.Text = FinderCameraIndiDevice.Text);
+          end;
+       1: begin // ASCOM
+            result:= (AscomGuideCamera.Text = AscomFinderCamera.Text);
+          end;
+       2: begin // ALPACA
+            result:= (GuideCameraARestHost.Text = FinderCameraARestHost.Text) and
+                     (GuideCameraARestPort.Text = FinderCameraARestPort.Text) and
+                     (GuideCameraARestDevice.Text = FinderCameraARestDevice.Text);
+          end;
+       else result:=false;
+    end;
+  end
+  else
+    result:=false;
+end;
+
+procedure Tf_setup.CheckSameFinderGuider;
+begin
+  if SameGuiderFinder then begin
+    FinderX.Value:=GuiderX.Value;
+    FinderY.Value:=GuiderY.Value;
+    FinderW.Value:=GuiderW.Value;
+    FinderH.Value:=GuiderH.Value;
+    PanelFinderROI.Enabled:=false;
+    PanelFinderROI.Hint:='Set the ROI in the guide camera tab';
+  end
+  else begin
+    PanelFinderROI.Enabled:=true;
+    PanelFinderROI.Hint:='';
+  end;
+end;
+
 procedure Tf_setup.DomeARestProtocolChange(Sender: TObject);
 begin
   case DomeARestProtocol.ItemIndex of
     0: DomeARestPort.Value:=11111;
     1: DomeARestPort.Value:=443;
   end;
+end;
+
+procedure Tf_setup.FinderCameraARestDeviceChange(Sender: TObject);
+begin
+  CheckSameFinderGuider;
+end;
+
+procedure Tf_setup.FinderCameraARestHostChange(Sender: TObject);
+begin
+  CheckSameFinderGuider;
+end;
+
+procedure Tf_setup.FinderCameraARestPortChange(Sender: TObject);
+begin
+  CheckSameFinderGuider;
 end;
 
 procedure Tf_setup.FocuserARestProtocolChange(Sender: TObject);
@@ -2199,6 +2352,26 @@ case GuideIndiSensor.ItemIndex of
   0: FGuideCameraSensor:='CCD1';
   1: FGuideCameraSensor:='CCD2';
 end;
+end;
+
+procedure Tf_setup.GuiderHChange(Sender: TObject);
+begin
+  if SameGuiderFinder then FinderH.Value:=GuiderH.Value;
+end;
+
+procedure Tf_setup.GuiderWChange(Sender: TObject);
+begin
+  if SameGuiderFinder then FinderW.Value:=GuiderW.Value;
+end;
+
+procedure Tf_setup.GuiderXChange(Sender: TObject);
+begin
+  if SameGuiderFinder then FinderX.Value:=GuiderX.Value;
+end;
+
+procedure Tf_setup.GuiderYChange(Sender: TObject);
+begin
+  if SameGuiderFinder then FinderY.Value:=GuiderY.Value;
 end;
 
 procedure Tf_setup.FinderIndiSensorChange(Sender: TObject);
@@ -2244,6 +2417,21 @@ begin
   if IndiTimer.Enabled then exit;
   GetDeviceType:=TButton(Sender).tag;
   GetIndiDevicesStart;
+end;
+
+procedure Tf_setup.GuideCameraARestDeviceChange(Sender: TObject);
+begin
+  CheckSameFinderGuider;
+end;
+
+procedure Tf_setup.GuideCameraARestHostChange(Sender: TObject);
+begin
+  CheckSameFinderGuider;
+end;
+
+procedure Tf_setup.GuideCameraARestPortChange(Sender: TObject);
+begin
+  CheckSameFinderGuider;
 end;
 
 procedure Tf_setup.GetIndiDevicesStart;
@@ -2674,6 +2862,7 @@ begin
     2: FGuideCameraConnection:=ASCOMREST;
   end;
   DeviceGuideCamera.Caption:=rsGuideCamera+': '+DevInterfaceName[ord(FGuideCameraConnection)];
+  CheckSameFinderGuider;
 end;
 
 procedure Tf_setup.PageControlFinderCameraChange(Sender: TObject);
@@ -2684,6 +2873,7 @@ begin
     2: FFinderCameraConnection:=ASCOMREST;
   end;
   DeviceFinderCamera.Caption:=rsFinderCamera+': '+DevInterfaceName[ord(FFinderCameraConnection)];
+  CheckSameFinderGuider;
 end;
 
 procedure Tf_setup.PageControlDomeChange(Sender: TObject);
@@ -2976,6 +3166,22 @@ begin
   Screen.Cursor:=crHourGlass;
   Application.ProcessMessages;
   Application.QueueAsyncCall(@AlpacaDiscoverAsync,0);
+end;
+
+procedure Tf_setup.btnFinderFullFrameClick(Sender: TObject);
+begin
+  FinderX.Value:=0;
+  FinderY.Value:=0;
+  FinderW.Value:=0;
+  FinderH.Value:=0;
+end;
+
+procedure Tf_setup.btnGuiderFullFrameClick(Sender: TObject);
+begin
+  GuiderX.Value:=0;
+  GuiderY.Value:=0;
+  GuiderW.Value:=0;
+  GuiderH.Value:=0;
 end;
 
 procedure Tf_setup.AlpacaDiscoverAsync(data:PtrInt);

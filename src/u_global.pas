@@ -469,6 +469,7 @@ var
   ImgFrameX,ImgFrameY,ImgFrameW,ImgFrameH: integer;
   ImgScale0,ImgPixRatio: double;
   ImgZoom,ZoomMin,SplitZoom: double;
+  SameGuiderFinder: boolean;
   GuideImgCx,GuideImgCy,FinderImgCx,FinderImgCy: double;
   SplitImage: boolean;
   GuideImgScale0,GuideImgPixRatio,GuideImgZoom,GuideZoomMin: double;

@@ -1093,7 +1093,9 @@ type
     Procedure PlotFinderImage;
     procedure FinderRedraw(Sender: TObject);
     procedure FinderConfigure(Sender: TObject);
+    Procedure SetGuiderCameraFrame;
     Procedure SetGuiderCamera;
+    Procedure SetFinderCameraFrame;
     Procedure SetFinderCamera;
     Procedure SetMultipanel(onoff: boolean);
     Procedure SetVisibleImage;
@@ -2004,6 +2006,13 @@ begin
   f_cover.onChangeBrightness:=@BrightnessChange;
 
   f_internalguider:=Tf_internalguider.Create(self);
+  if SameGuiderFinder then begin
+    f_internalguider.framesize1.Enabled:=false;
+    f_internalguider.framesize1.ItemIndex:=0;
+  end
+  else begin
+    f_internalguider.framesize1.Enabled:=true;
+  end;
   f_internalguider.onConfigureGuider:=@InternalguiderConfigure;
   f_internalguider.onLoop:=@InternalguiderLoop;
   f_internalguider.onStart:=@InternalguiderStart;
@@ -2345,6 +2354,7 @@ begin
    findercamera.onTemperatureChange:=@FinderCameraTemperatureChange;
    findercamera.onCoolerChange:=@FinderCameraCoolerChange;
    findercamera.onExposureProgress:=@FinderCameraProgress;
+   SameGuiderFinder:=config.GetValue('/Finder/SameGuiderFinder',false);
 
    if config.GetValue('/Devices/Watchdog',false) then begin
      watchdog:=T_indiwatchdog.Create(nil);
@@ -5305,7 +5315,8 @@ begin
   f_internalguider.minHFD:=config.GetValue('/InternalGuider/MinHFD',1.5);
   f_internalguider.minSNR:=config.GetValue('/InternalGuider/MinSNR',15);
   f_internalguider.use_arcsec:=config.GetValue('/InternalGuider/UnitArcSec',false);
-  f_internalguider.FrameSize1.text:=config.GetValue('/InternalGuider/FrameSize',rsMax2);
+  if f_internalguider.FrameSize1.Enabled then
+    f_internalguider.FrameSize1.text:=config.GetValue('/InternalGuider/FrameSize',rsMax2);
   f_internalguider.measure_method2.checked:=config.GetValue('/InternalGuider/Method2',false);
   f_internalguider.InitialCalibrationStep.Value:=config.GetValue('/InternalGuider/InitialCalibrationStep',1000);
   f_internalguider.ForceGuideSpeed.Checked:=config.GetValue('/InternalGuider/ForceGuideSpeed',true);
@@ -6878,9 +6889,28 @@ case guidecamera.Status of
                       GuideCameraTemperatureChange(t);
                       cool:=guidecamera.Cooler;
                       guideCameraCoolerChange(cool);
+                      SetGuiderCameraFrame;
                    end;
 end;
 CheckConnectionStatus;
+end;
+
+Procedure Tf_main.SetGuiderCameraFrame;
+var x,y,w,h: integer;
+begin
+  if guidecamera<>findercamera then begin
+    x:=config.GetValue('/InternalGuider/ROI/X',0);
+    y:=config.GetValue('/InternalGuider/ROI/Y',0);
+    w:=config.GetValue('/InternalGuider/ROI/W',0);
+    h:=config.GetValue('/InternalGuider/ROI/H',0);
+    if (w<10)or(h<10) then begin
+      guidecamera.ResetFrame;
+    end
+    else begin
+      guidecamera.SetBinning(1,1);
+      guidecamera.SetFrame(x,y,w,h);
+    end;
+  end;
 end;
 
 Procedure Tf_main.GuideCameraExposureAborted(Sender: TObject);
@@ -6952,9 +6982,26 @@ case findercamera.Status of
                       FinderCameraTemperatureChange(t);
                       cool:=findercamera.Cooler;
                       FinderCameraCoolerChange(cool);
+                      SetFinderCameraFrame;
                    end;
 end;
 CheckConnectionStatus;
+end;
+
+Procedure Tf_main.SetFinderCameraFrame;
+var x,y,w,h: integer;
+begin
+  x:=config.GetValue('/Finder/ROI/X',0);
+  y:=config.GetValue('/Finder/ROI/Y',0);
+  w:=config.GetValue('/Finder/ROI/W',0);
+  h:=config.GetValue('/Finder/ROI/H',0);
+  if (w<10)or(h<10) then begin
+    findercamera.ResetFrame;
+  end
+  else begin
+    findercamera.SetBinning(1,1);
+    findercamera.SetFrame(x,y,w,h);
+  end;
 end;
 
 procedure Tf_main.FinderCameraExposureAborted(Sender: TObject);
@@ -9385,6 +9432,10 @@ begin
     config.SetValue('/ASCOMRestguidecamera/Host',f_setup.GuideCameraARestHost.Text);
     config.SetValue('/ASCOMRestguidecamera/Port',f_setup.GuideCameraARestPort.Value);
     config.SetValue('/ASCOMRestguidecamera/Device',f_setup.GuideCameraARestDevice.Value);
+    config.SetValue('/InternalGuider/ROI/X',f_setup.GuiderX.Value);
+    config.SetValue('/InternalGuider/ROI/Y',f_setup.GuiderY.Value);
+    config.SetValue('/InternalGuider/ROI/W',f_setup.GuiderW.Value);
+    config.SetValue('/InternalGuider/ROI/H',f_setup.GuiderH.Value);
 
     config.SetValue('/FinderCameraInterface',ord(f_setup.FinderCameraConnection));
     config.SetValue('/INDIfindercamera/Server',f_setup.FinderCameraIndiServer.Text);
@@ -9397,6 +9448,11 @@ begin
     config.SetValue('/ASCOMRestfindercamera/Host',f_setup.FinderCameraARestHost.Text);
     config.SetValue('/ASCOMRestfindercamera/Port',f_setup.FinderCameraARestPort.Value);
     config.SetValue('/ASCOMRestfindercamera/Device',f_setup.FinderCameraARestDevice.Value);
+    config.SetValue('/Finder/ROI/X',f_setup.FinderX.Value);
+    config.SetValue('/Finder/ROI/Y',f_setup.FinderY.Value);
+    config.SetValue('/Finder/ROI/W',f_setup.FinderW.Value);
+    config.SetValue('/Finder/ROI/H',f_setup.FinderH.Value);
+    config.SetValue('/Finder/SameGuiderFinder',f_setup.SameGuiderFinder);
 
     config.SetValue('/FilterWheelInterface',ord(f_setup.WheelConnection));
     config.SetValue('/INDIwheel/Server',f_setup.WheelIndiServer.Text);
@@ -9575,6 +9631,15 @@ begin
       f_option.PageControl1.ActivePageIndex:=1;
       MenuOptions.Click;
     end;
+
+    if SameGuiderFinder then begin
+      f_internalguider.framesize1.Enabled:=false;
+      f_internalguider.framesize1.ItemIndex:=0;
+    end
+    else begin
+      f_internalguider.framesize1.Enabled:=true;
+    end;
+
   end;
 end;
 
