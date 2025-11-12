@@ -2302,7 +2302,9 @@ var s:TStep;
 begin
 if StepsModified then begin
   t:=TTarget(TargetList.Objects[colseq,TargetList.Row]);
+  if t=nil then exit;
   p:=T_Plan(t.plan);
+  if p=nil then exit;
   p.Clear;
   p.PlanName:=PlanName.Caption;
   n:=StepList.RowCount-1;
@@ -2572,7 +2574,11 @@ var i,n,j:integer;
 begin
   if LockTarget or LoadingTarget then exit;
   // is table empty?
-  if TargetList.RowCount<=1 then exit;
+  if TargetList.RowCount<=1 then begin
+    PanelTools.Visible:=false;
+    PageControlPlan.ActivePageIndex:=pagenone;
+    exit;
+  end;
   n:=TargetList.Row;
   // is title row?
   if n < 1 then exit;
