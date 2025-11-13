@@ -16925,10 +16925,10 @@ begin
            f_photometry.Memo1.Lines.Add('');
            f_photometry.Memo1.Lines.Add(rsStar+' X/Y'+' : '+FormatFloat(f3, xc)+' / '+FormatFloat(f3, img_Height-yc));
            if fits.HeaderInfo.floatingpoint then
-             f_photometry.Memo1.Lines.Add(rsMaximumInten+' : '+FormatFloat(f3, (vmax+bg)))
+             f_photometry.Memo1.Lines.Add(rsMaximumInten+' : '+FormatFloat(f3, fits.imageMin+(vmax+bg)/fits.imageC))
            else
-             f_photometry.Memo1.Lines.Add(rsMaximumInten+' : '+FormatFloat(f0, (vmax+bg)));
-           f_photometry.Memo1.Lines.Add(rsBackground+' : '+FormatFloat(f3, bg)+', '+rsStdDev+blank+FormatFloat(f3, bgdev));
+             f_photometry.Memo1.Lines.Add(rsMaximumInten+' : '+FormatFloat(f0, fits.imageMin+(vmax+bg)/fits.imageC));
+           f_photometry.Memo1.Lines.Add(rsBackground+' : '+FormatFloat(f3, fits.imageMin+bg/fits.imageC)+', '+rsStdDev+blank+FormatFloat(f3, bgdev));
            if fits.HeaderInfo.floatingpoint then
              f_photometry.Memo1.Lines.Add(rsFlux+' : '+FormatFloat(f3, flux))
            else

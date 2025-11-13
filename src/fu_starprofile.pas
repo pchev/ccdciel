@@ -884,7 +884,7 @@ Fhfd:=-1;
  if FValMax=0 then exit;
 
  f.GetHFD2(xm,ym,2*ri,xg,yg,bg,bgdev,Fhfd,Ffwhm,FValMax,Fsnr,flux);
- FValMaxCalibrated:=FValMax+bg;
+ FValMaxCalibrated:=f.imageMin+(FValMax+bg)/f.imageC;
  Fbg:=bg;
  if (Ffwhm>0)and(focal>0)and(pxsize>0) then begin
    Ffwhmarcsec:=Ffwhm*3600*rad2deg*arctan(pxsize/1000/focal);
@@ -1126,7 +1126,7 @@ begin
     if FAutofocusResult then begin
       FAutofocusDone:=true;
       LastFocusMsg:=rsAutoFocusSuc+crlf+FormatDateTime('hh:nn:ss', now)+' HFD='+FormatFloat(f1, Fhfd);
-      FValMaxCalibrated:=FValMax+bg;
+      FValMaxCalibrated:=f.imageMin+(FValMax+bg)/f.imageC;
       PlotHistory;
       // adjust slippage offset with current result
       if AutofocusSlippageCorrection and (AutofocusMode=afVcurve) then begin
