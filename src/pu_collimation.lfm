@@ -116,11 +116,12 @@ object f_collimation: Tf_collimation
             Height = 32
             Top = 4
             Width = 76
+            MaxLength = 0
+            TabOrder = 0
+            OnChange = TriangleAngleChange
             DecimalPlaces = 0
             Increment = 10
             MaxValue = 120
-            OnChange = TriangleAngleChange
-            TabOrder = 0
           end
           object Label6: TLabel
             AnchorSideTop.Control = TriangleAngle
@@ -282,40 +283,6 @@ object f_collimation: Tf_collimation
         ParentFont = False
         WordWrap = True
       end
-      object GroupBox1: TGroupBox
-        Left = 0
-        Height = 49
-        Top = 177
-        Width = 346
-        Align = alBottom
-        ClientHeight = 45
-        ClientWidth = 342
-        ParentFont = False
-        TabOrder = 0
-        object Label1: TLabel
-          AnchorSideTop.Control = CircleNum
-          AnchorSideTop.Side = asrCenter
-          Left = 16
-          Height = 18
-          Top = 15
-          Width = 108
-          Caption = 'Number of circles'
-          ParentColor = False
-          ParentFont = False
-        end
-        object CircleNum: TSpinEditEx
-          Left = 176
-          Height = 32
-          Top = 8
-          Width = 75
-          MaxValue = 15
-          MinValue = 1
-          OnChange = CircleNumChange
-          ParentFont = False
-          TabOrder = 0
-          Value = 4
-        end
-      end
       object Panel1: TPanel
         Left = 0
         Height = 40
@@ -326,7 +293,7 @@ object f_collimation: Tf_collimation
         ClientHeight = 40
         ClientWidth = 346
         ParentFont = False
-        TabOrder = 1
+        TabOrder = 0
         object BtnStart: TButton
           Left = 93
           Height = 25
@@ -366,6 +333,42 @@ object f_collimation: Tf_collimation
         Align = alBottom
         AutoSize = False
         ParentColor = False
+      end
+      object PanelCircle: TPanel
+        Left = 0
+        Height = 49
+        Top = 177
+        Width = 346
+        Align = alBottom
+        ClientHeight = 49
+        ClientWidth = 346
+        ParentFont = False
+        TabOrder = 1
+        object Label1: TLabel
+          AnchorSideTop.Control = CircleNum
+          AnchorSideTop.Side = asrCenter
+          Left = 16
+          Height = 18
+          Top = 15
+          Width = 108
+          Caption = 'Number of circles'
+          ParentColor = False
+          ParentFont = False
+        end
+        object CircleNum: TSpinEditEx
+          Left = 176
+          Height = 32
+          Top = 8
+          Width = 75
+          MaxLength = 0
+          ParentFont = False
+          TabOrder = 0
+          OnChange = CircleNumChange
+          MaxValue = 15
+          MinValue = 1
+          NullValue = 0
+          Value = 4
+        end
       end
     end
   end

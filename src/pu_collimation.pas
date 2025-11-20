@@ -42,7 +42,7 @@ type
     BtnStopSplit: TButton;
     BtnStopInspection: TButton;
     CircleNum: TSpinEditEx;
-    GroupBox1: TGroupBox;
+    PanelCircle: TPanel;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
