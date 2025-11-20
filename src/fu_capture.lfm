@@ -536,13 +536,13 @@ object f_capture: Tf_capture
     end
     object Panel9: TPanel
       Left = 1
-      Height = 26
+      Height = 30
       Top = 461
       Width = 216
       Align = alTop
       BorderSpacing.Top = 4
       BevelOuter = bvNone
-      ClientHeight = 26
+      ClientHeight = 30
       ClientWidth = 216
       ParentFont = False
       TabOrder = 7
