@@ -63,7 +63,7 @@ type
   TIndiTransfert=(itNetwork,itDisk);
   TSubDirList=(sdSeq,sdFrt,sdObj,sdStep,sdExp,sdBin,sdDate,sdNight);
   TFilenameList=(fnObj,fnFilter,fnExp,fnBin,fnTemp,fnDate,fnGain,fnFocuspos,fnPierSide,fnOffset,fnStep,fnCtype,fnRota);
-  TSafetyAction=(safNothing,safShowPrompt,safAbortSequence,safStopTelescope,safParkTelescope,safStopDomeSlaving,safParkDome,safCloseDome,safWarmCamera,safAutoguiderShutdown,safPlanetariumShutdown,safExternalCommand,safExitProgram);
+  TSafetyAction=(safNothing,safShowPrompt,safAbortSequence,safStopTelescope,safParkTelescope,safStopDomeSlaving,safParkDome,safCloseDome,safWarmCamera,safAutoguiderShutdown,safPlanetariumShutdown,safExternalCommand,safExitProgram,safRunScript);
   TDomeOpenAction=(dopNothing,dopOpenDome,dopUnparkdome,dopUnparkTelescope,dopStartTelescope,dopStartdomeSlaving);
   TDomeCloseAction=(dclNothing,dclStopTelescope,dclParkTelescope,dclStopDomeSlaving,dclParkDome,dclCloseDome);
   TDomeOpenActions=array[0..DomeOpenActionNum-1] of TDomeOpenAction;
@@ -320,7 +320,7 @@ const
   ResolverPlateSolve3=5;
   ResolverName: array[0..5] of string =('Astrometry.Net','Elbrus','No resolver','PlateSolve','ASTAP','PlateSolve3');
   PlanetariumName: array[0..2] of string =('Cartes du Ciel', 'SAMP', 'HNSKY');
-  SafetyActionName: array[0..ord(high(TSafetyAction))] of string=('','','','','','','','','','','','','');
+  SafetyActionName: array[0..ord(high(TSafetyAction))] of string=('','','','','','','','','','','','','','');
   DomeOpenActionName: array[0..ord(high(TDomeOpenAction))] of string=('','','','','','');
   DomeCloseActionName: array[0..ord(high(TDomeCloseAction))] of string=('','','','','','');
   SpectroStrategyName: array[0..ord(high(TSpectroStrategy ))] of string= ('SingleStar', 'SingleOffset', 'SingleAstrometry', 'SingleMulti', 'MultiStar');

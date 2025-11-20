@@ -2551,7 +2551,8 @@ begin
                           delim + SafetyActionName[9] + delim + comma +
                           delim + SafetyActionName[10] + delim + comma +
                           delim + SafetyActionName[11] + delim + comma +
-                          delim + SafetyActionName[12] + delim;
+                          delim + SafetyActionName[12] + delim + comma +
+                          delim + SafetyActionName[13] + delim;
       end;
   end;
 end;

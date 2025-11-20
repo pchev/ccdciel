@@ -2726,6 +2726,7 @@ begin
    SafetyActionName[10]:=trim(rsPlanetariumS);
    SafetyActionName[11]:=trim(rsCallExternal);
    SafetyActionName[12]:=trim(rsExitProgram);
+   SafetyActionName[13]:=trim(rsRunScript);
    DevInterfaceName[2]:=rsInCamera;
    DevInterfaceName[3]:=rsInMount;
    DevInterfaceName[5]:=rsManual;
@@ -7389,7 +7390,7 @@ end;
 Procedure Tf_main.SafetySafeChange(Sender: TObject);
 var ok : boolean;
     i,n,k: integer;
-    param: string;
+    param,scname,scparam: string;
     output: TStringList;
 begin
   if f_safety.Connected then begin
@@ -7482,6 +7483,19 @@ begin
             safExitProgram: begin
                NewMessage(rsExitProgram);
                ShutdownProgram(self);
+            end;
+            safRunScript: begin
+               NewMessage(rsRunScript+': '+param);
+               k:=pos(' ',param);
+               if k>0 then begin
+                 scname:=trim(copy(param,1,k-1));
+                 scparam:=param;
+                 delete(scparam,1,k);
+               end else begin
+                 scname:=trim(param);
+                 scparam:='';
+               end;
+               RunScript(scname,ConfigDir,scparam);
             end;
           end;
           except
