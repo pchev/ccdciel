@@ -7740,6 +7740,7 @@ end;
 procedure Tf_main.NewMessage(msg: string; level: integer=1);
 var buf: string;
     ilevel:TIntList;
+    i: integer;
 begin
  if (msg<>'')and(f_msg<>nil) then begin
   if (GetCurrentThreadId<>MainThreadID) then begin
@@ -7753,7 +7754,7 @@ begin
   ilevel.value:=level;
   AllMsg.AddObject(buf,ilevel);
   if level<=LogLevel then begin
-    if f_msg.msg.Lines.Count>100 then f_msg.msg.Lines.Delete(0);
+    if f_msg.msg.Lines.Count>120 then for i:=0 to 20 do f_msg.msg.Lines.Delete(0);
     f_msg.msg.Lines.Add(buf);
     f_msg.msg.SelStart:=MaxInt;
   end;
