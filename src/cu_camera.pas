@@ -789,6 +789,8 @@ var origin,observer,telname,instrum,objname,siso,CType,roworder,buf: string;
     end;
 
 begin
+  if (FCameraInterface=INDI) and KeepIndiHeader then exit;
+
   // get header values from camera (set by INDI driver or libraw)
   if not f.Header.Valueof('BITPIX',hbitpix) then hbitpix:=f.HeaderInfo.bitpix;
   if not f.Header.Valueof('NAXIS',hnaxis)   then hnaxis:=f.HeaderInfo.naxis;

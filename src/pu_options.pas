@@ -37,6 +37,7 @@ type
     cbSlewSyncRotator: TCheckBox;
     cbAFmedianfilter: TCheckBox;
     cbHighlightColor: TComboBox;
+    KeepIndiHeader: TCheckBox;
     Label190: TLabel;
     PlateSolve3Cmd: TFileNameEdit;
     Label189: TLabel;
@@ -1084,6 +1085,7 @@ begin
   UseFileSequenceWidth.Caption:=rsFixedSequenc;
   Label173.Caption:=rsSequenceSepa;
   RemoveSpace.Caption:=rsRemoveSpaceI;
+  KeepIndiHeader.Caption:=rsDoNotModifyT;
   FilePack.Caption:=rsCompressTheF;
   Label156.Caption:=rsFITSFileExte;
   SaveFormat.Caption:=rsFileFormat;

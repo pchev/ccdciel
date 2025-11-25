@@ -746,6 +746,14 @@ object f_option: Tf_option
                 Caption = 'Remove space in object name'
                 TabOrder = 10
               end
+              object KeepIndiHeader: TCheckBox
+                Left = 8
+                Height = 22
+                Top = 224
+                Width = 214
+                Caption = 'Do not modify the INDI header'
+                TabOrder = 11
+              end
             end
             object Panel37: TPanel
               Left = 379

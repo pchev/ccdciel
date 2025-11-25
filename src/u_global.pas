@@ -522,6 +522,7 @@ var
   ExpectedStop: boolean;
   CameraProcessingImage: boolean;
   CameraProcessingNum: PtrInt;
+  KeepIndiHeader: boolean;
   MagnitudeCalibration: double;
   Undersampled: boolean;
   bpm: TBpm;

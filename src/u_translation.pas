@@ -1637,6 +1637,7 @@ resourcestring
   rsRefreshTheLi = 'Refresh the list';
   rsSyncTheRotat = 'Sync the rotator';
   rsHighlightCol = 'Highlight color';
+  rsDoNotModifyT = 'Do not modify the INDI header';
 
 implementation
 

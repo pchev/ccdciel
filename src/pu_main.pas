@@ -1653,6 +1653,7 @@ begin
   StackDebayer:=false;
   FileStackFloat:=false;
   SaveFormat:=ffFITS;
+  KeepIndiHeader:=false;
   AllMsg:=TStringList.Create;
   AllMsg.OwnsObjects:=true;
   refmask:=false;
@@ -5058,6 +5059,7 @@ begin
   {$endif}
   TCPIPConfigPort:=config.GetValue('/Files/TCPIPConfigPort','3277');
   SaveFormat:=TFileFormat(config.GetValue('/Files/SaveFormat',0));
+  KeepIndiHeader:=config.GetValue('/Files/KeepIndiHeader',false);
   SaveBitmap:=config.GetValue('/Files/SaveBitmap',false);
   SaveBitmapFormat:=config.GetValue('/Files/SaveBitmapFormat','png');
   OpenPictureDialog1.InitialDir:=config.GetValue('/Files/CapturePath',defCapturePath);
@@ -9757,6 +9759,13 @@ begin
    f_option.FilePack.checked:=config.GetValue('/Files/Pack',false);
    f_option.WantExif.Checked:=config.GetValue('/Files/Exif',WantExif);
    f_option.SaveFormat.ItemIndex:=config.GetValue('/Files/SaveFormat',0);
+   if camera.CameraInterface=INDI then begin
+     f_option.KeepIndiHeader.Visible:=true;
+     f_option.KeepIndiHeader.Checked:=config.GetValue('/Files/KeepIndiHeader',false);
+   end else begin
+     f_option.KeepIndiHeader.Visible:=false;
+     f_option.KeepIndiHeader.Checked:=false;
+   end;
    f_option.SaveBitmap.Checked:=config.GetValue('/Files/SaveBitmap',false);
    f_option.RemoveSpace.Checked:=config.GetValue('/Files/RemoveSpace',false);
    buf:=config.GetValue('/Files/SaveBitmapFormat','png');
@@ -10333,6 +10342,7 @@ begin
      config.SetValue('/StarAnalysis/AutoFocusDefocus',f_option.DefocusAmount.Value);
      config.SetValue('/Log/debug_msg',f_option.debug_msg.Checked);
      config.SetValue('/Files/SaveFormat',f_option.SaveFormat.ItemIndex);
+     config.SetValue('/Files/KeepIndiHeader',f_option.KeepIndiHeader.Checked);
      config.SetValue('/Files/SaveBitmap',f_option.SaveBitmap.Checked);
      case f_option.SaveBitmapFormat.ItemIndex of
        0: buf:='png';
