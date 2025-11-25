@@ -9224,11 +9224,16 @@ end;
 
 procedure Tf_main.MenuViewhdrClick(Sender: TObject);
 var f: Tf_viewtext;
+    i: integer;
 begin
  if fits.HeaderInfo.valid then begin
    f:=Tf_viewtext.Create(self);
    f.Caption:=rsFITSHeader;
-   f.Memo1.Lines:=fits.Header.Rows;
+   for i:=0 to fits.Header.Rows.Count-1 do begin
+      f.Memo1.Lines.Add(fits.Header.Rows[i]);
+      if trim(fits.Header.Rows[i])='END' then
+        f.Memo1.Lines.Add('');
+   end;
    FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
    f.Show;
  end;
