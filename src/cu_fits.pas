@@ -539,7 +539,10 @@ if ext=-1 then begin // First loading of primary HDU
 end
 else begin  // Read of another Image extension
   ClearHeader;
-  if FBaseHeader<>nil then Assign(FBaseHeader);
+  if FBaseHeader<>nil then
+    Assign(FBaseHeader)
+  else
+    Fvalid:=true;
   ext:=min(ext,FNumExtend);
   ff.Position:=ExtendPos[ext];
   FCurrentExtend:=ext;
@@ -620,8 +623,10 @@ if (ext=-1) and searchextend then begin  // search eventual extensions
     end;
   end;
   FNumExtend:=GetExtend(ff,ff.position,size,FNumExtend);
-  if FBaseHeader=nil then FBaseHeader:=TFitsHeader.Create;
-     FBaseHeader.Assign(self);
+  if (naxis=0) and (FNumExtend>0) then begin
+    if FBaseHeader=nil then FBaseHeader:=TFitsHeader.Create;
+       FBaseHeader.Assign(self);
+  end;
 end;
 if (naxis=0) and (FNumExtend>0) and (ext<>1) then // no primary array, try first extension
 begin
@@ -2152,6 +2157,7 @@ begin
     if (keyword='SIMPLE') then if (copy(buf,1,1)<>'T')
        then begin valid:=false;Break;end
        else begin valid:=true;end;
+    if (keyword='XTENSION') and (trim(buf)='IMAGE') then valid:=true;
     if (keyword='BITPIX') then bitpix:=strtoint(buf);
     if (keyword='NAXIS')  then naxis:=strtoint(buf);
     if (keyword='NAXIS1') then naxis1:=strtoint(buf);
