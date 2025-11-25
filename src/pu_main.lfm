@@ -193,10 +193,30 @@ object f_main: Tf_main
           Width = 1007
           Align = alClient
           Caption = 'mainimage'
+          ClientHeight = 680
+          ClientWidth = 1007
           Color = 3149070
           ParentBackground = False
           ParentColor = False
           TabOrder = 0
+          object updExtend: TUpDown
+            AnchorSideLeft.Control = mainimage
+            AnchorSideBottom.Control = mainimage
+            AnchorSideBottom.Side = asrBottom
+            Left = 5
+            Height = 22
+            Top = 653
+            Width = 40
+            Anchors = [akLeft, akBottom]
+            BorderSpacing.Left = 4
+            BorderSpacing.Bottom = 4
+            Min = 0
+            OnClick = updExtendClick
+            Orientation = udHorizontal
+            Position = 0
+            TabOrder = 0
+            Visible = False
+          end
         end
       end
     end

@@ -432,6 +432,7 @@ type
     TBVideo: TToolButton;
     TBInternalGuider: TToolButton;
     TBFinder: TToolButton;
+    updExtend: TUpDown;
     procedure AbortTimerTimer(Sender: TObject);
     procedure CameraConnectTimerTimer(Sender: TObject);
     procedure ConnectTimerTimer(Sender: TObject);
@@ -637,6 +638,7 @@ type
     procedure ButtonDragOver(Sender, Source: TObject; X, Y: Integer;
       State: TDragState; var Accept: Boolean);
     procedure TimerStampTimerTimer(Sender: TObject);
+    procedure updExtendClick(Sender: TObject; Button: TUDBtnType);
   private
     { private declarations }
     camera, guidecamera, findercamera: T_camera;
@@ -12478,6 +12480,15 @@ if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
   fits.MarkOverflow:=f_visu.Clipping;
   fits.Invert:=f_visu.Invert;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'FITS GetBGRABitmap');{$endif}
+  if fits.Header.MultiExtend then begin
+    updExtend.Visible:=true;
+    updExtend.Min:=0;
+    updExtend.Max:=fits.NumExtend;
+    updExtend.Position:=fits.CurrentExtend;
+  end
+  else begin
+    updExtend.Visible:=false;
+  end;
   if videoframe then
     fits.GetBGRABitmap(ImaBmp,1)
   else
@@ -12692,8 +12703,10 @@ if fits.HeaderInfo.solved and
 end;
 
 procedure Tf_main.Image1Paint(Sender: TObject);
-var x,y,x1,y1,x2,y2,x3,y3,xr1,yr1,xr2,yr2,xr3,yr3,xr4,yr4,xxc,yyc,s,r,rc: integer;
+var x,y,x1,y1,x2,y2,x3,y3,xr1,yr1,xr2,yr2,xr3,yr3,xr4,yr4,xxc,yyc,s,r,rc,xtxt: integer;
     i,j,k,size: integer;
+    txt: string;
+    ts: TSize;
     labeloverlap: array of array of Byte;
     labellimit,lox,loy,mlox,mloy: integer;
 
@@ -12724,6 +12737,19 @@ begin
 try
   if f_starprofile=nil then exit;
   ScrBmp.Draw(Image1.Canvas,0,0,true);
+  xtxt:=DoScaleX(4);
+  if fits.Header.MultiExtend then begin
+    xtxt:=updExtend.Left+updExtend.Width+DoScaleX(8);
+    Image1.Canvas.Brush.Color:=clBlack;
+    Image1.Canvas.Brush.Style:=bsSolid;
+    Image1.Canvas.Font.Color:=clSilver;
+    Image1.Canvas.Font.Size:=DoScaleX(16);
+    txt:=fits.HeaderInfo.extname;
+    if txt='' then txt:=IntToStr(fits.CurrentExtend);
+    ts:=Image1.Canvas.TextExtent(txt);
+    Image1.Canvas.TextOut(xtxt, Image1.Height-ts.cy, txt);
+    xtxt:=xtxt+ts.cx+DoScaleX(8);
+  end;
   if PolarAlignmentOverlay and (not UseFinder) then begin
      Fits2Screen(round(PolarAlignmentStartX+PolarAlignmentOverlayOffsetX),round(PolarAlignmentStartY+PolarAlignmentOverlayOffsetY),f_visu.FlipHorz,f_visu.FlipVert,x1,y1);
      Fits2Screen(round(PolarAlignmentEndX+PolarAlignmentOverlayOffsetX),round(PolarAlignmentEndY+PolarAlignmentOverlayOffsetY),f_visu.FlipHorz,f_visu.FlipVert,x2,y2);
@@ -12969,9 +12995,10 @@ try
     Image1.Canvas.Brush.Style:=bsSolid;
     Image1.Canvas.Font.Color:=clSilver;
     Image1.Canvas.Font.Size:=DoScaleX(10);
-    x:=1;
-    y:=Image1.Height-DoScaleX(17);
-    Image1.Canvas.TextOut(x, y, rsClippingIndi+': '+FormatFloat(f0, ClippingUnderflow)+'/'+FormatFloat(f0, ClippingOverflow));
+    txt:=rsClippingIndi+': '+FormatFloat(f0, ClippingUnderflow)+'/'+FormatFloat(f0, ClippingOverflow);
+    ts:=Image1.Canvas.TextExtent(txt);
+    Image1.Canvas.TextOut(xtxt, Image1.Height-ts.cy, txt);
+    xtxt:=xtxt+ts.cx+DoScaleX(8);
   end;
   if MouseRule then begin
     Image1.Canvas.Pen.Color:=clRed;
@@ -16239,6 +16266,13 @@ end;
 procedure Tf_main.TimerStampTimerTimer(Sender: TObject);
 begin
    StatusBar1.Panels[panelclock].Text:=TimeToStr(now);
+end;
+
+procedure Tf_main.updExtendClick(Sender: TObject; Button: TUDBtnType);
+begin
+ fits.CurrentExtend:=updExtend.Position;
+ Redraw(Sender);
+
 end;
 
 function Tf_main.CheckMeridianFlip(nextexposure:double; canwait:boolean; out waittime:integer):boolean;

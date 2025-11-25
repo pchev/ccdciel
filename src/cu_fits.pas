@@ -44,7 +44,7 @@ type
             equinox,ra,dec,crval1,crval2,wavemin,wavemax: double;
             pixsz1,pixsz2,pixratio,focallen,scale: double;
             exptime,stackexp,airmass: double;
-            objects,ctype1,ctype2 : string;
+            objects,ctype1,ctype2,extname : string;
             frametype: string;
             procedure Assign(Source:TFitsInfo);
             end;
@@ -72,12 +72,17 @@ type
       FValues: TStringList;
       FComments:TStringList;
       Fvalid : boolean;
+      FNumExtend, FCurrentExtend: integer;
+      FBaseHeader: TFitsHeader;
+      ExtendPos: array of integer;
+      function Getmultiextend: boolean;
+      function GetExtend(ff:TMemoryStream; startpos,startoffset,maxnum: integer): integer;
     public
       constructor Create;
       destructor  Destroy; override;
       procedure ClearHeader;
       procedure Assign(value: TFitsHeader);
-      function ReadHeader(ff:TMemoryStream): integer;
+      function ReadHeader(ff:TMemoryStream; ext:integer=-1): integer;
       function NewWCS(ff:TMemoryStream): boolean;
       function GetStream: TMemoryStream;
       function GetString: string;
@@ -107,6 +112,8 @@ type
       property Comments:TStringList read FComments;
       property AsString: string read GetString;
       property AsJSON: string read GetJSON;
+      property MultiExtend: boolean read Getmultiextend;
+      property CurrentExtend: integer read FCurrentExtend;
  end;
 
 const    maxl = 20000;
@@ -180,6 +187,9 @@ type
     function GetBayerMode: TBayerMode;
     procedure GetBayerBgColor(t:TBayerMode; rmult,gmult,bmult:double; out r,g,b: single);
     procedure SetMaxADU(value: double);
+    procedure SetCurrentExtend(value: integer);
+    function  GetCurrentExtend: integer;
+    function  GetNumExtend: integer;
   protected
     { Protected declarations }
   public
@@ -234,6 +244,8 @@ type
      property IntfImg: TLazIntfImage read FIntfImg;
      Property HeaderInfo : TFitsInfo read FFitsInfo;
      property Header: TFitsHeader read FHeader write FHeader;
+     property NumExtend: integer read GetNumExtend;
+     property CurrentExtend: integer read GetCurrentExtend write SetCurrentExtend;
      Property Stream : TMemoryStream read GetStream write SetStream;
      Property VideoStream : TMemoryStream write SetVideoStream;
      property Histogram : THistogram read FHistogram;
@@ -383,6 +395,7 @@ begin
   FValues:=TStringList.Create;
   FKeys:=TStringList.Create;
   Fvalid:=false;
+  FCurrentExtend:=0;
 end;
 
 destructor  TFitsHeader.Destroy;
@@ -391,6 +404,7 @@ begin
   FComments.Free;
   FValues.Free;
   FKeys.Free;
+  if FBaseHeader<>nil then FBaseHeader.Free;
   inherited Destroy;
 end;
 
@@ -503,16 +517,34 @@ begin
  end;
 end;
 
-function TFitsHeader.ReadHeader(ff:TMemoryStream): integer;
+function TFitsHeader.Getmultiextend;
+begin
+ result:=FNumExtend>0;
+end;
+
+function TFitsHeader.ReadHeader(ff:TMemoryStream; ext:integer=-1): integer;
 var   header : THeaderBlock;
-      i,p1,p2,n : integer;
-      eoh : boolean;
+      i,p1,p2,n,naxis,naxis1,naxis2,naxis3,bitpix,size: integer;
+      eoh,searchextend : boolean;
       row,keyword,value,comment,buf : string;
       P: PChar;
 begin
-ClearHeader;
+if ext=-1 then begin // First loading of primary HDU
+  FNumExtend:=0;
+  ClearHeader;
+  if FBaseHeader<>nil then FreeAndNil(FBaseHeader);
+  ff.Position:=0;
+  FCurrentExtend:=0;
+  searchextend:=false;
+end
+else begin  // Read of another Image extension
+  ClearHeader;
+  if FBaseHeader<>nil then Assign(FBaseHeader);
+  ext:=min(ext,FNumExtend);
+  ff.Position:=ExtendPos[ext];
+  FCurrentExtend:=ext;
+end;
 eoh:=false;
-ff.Position:=0;
 header[1,1]:=chr(0);
 repeat
    n:=ff.Read(header,sizeof(THeaderBlock));
@@ -539,6 +571,27 @@ repeat
            Fvalid:=false;
            Break;
          end;
+      if (keyword='EXTEND') then begin
+         searchextend:=copy(value,1,1)='T';
+      end;
+      if (keyword='NEXTEND') then begin
+         FNumExtend:=StrToIntDef(value,0);
+      end;
+      if (keyword='NAXIS') then begin
+         naxis:=StrToIntDef(value,0);
+      end;
+      if (keyword='NAXIS1') then begin
+         naxis1:=StrToIntDef(value,0);
+      end;
+      if (keyword='NAXIS2') then begin
+         naxis2:=StrToIntDef(value,0);
+      end;
+      if (keyword='NAXIS3') then begin
+         naxis3:=StrToIntDef(value,0);
+      end;
+      if (keyword='BITPIX') then begin
+         bitpix:=StrToIntDef(value,0);
+      end;
       if (keyword='END') then begin
          eoh:=true;
       end;
@@ -554,7 +607,132 @@ repeat
      Break;
    end;
 until eoh;
+if (ext=-1) and searchextend then begin  // search eventual extensions
+  SetLength(ExtendPos,1);
+  ExtendPos[0]:=0;
+  size:=0;
+  if naxis>0 then begin
+    size:=naxis1*abs(bitpix) div 8;
+    if naxis>1 then size:=size*naxis2;
+    if naxis>2 then size:=size*naxis3;
+    if size>0 then begin
+      size:=(trunc(size/2880)+1)*2880;
+    end;
+  end;
+  FNumExtend:=GetExtend(ff,ff.position,size,FNumExtend);
+  if FBaseHeader=nil then FBaseHeader:=TFitsHeader.Create;
+     FBaseHeader.Assign(self);
+end;
+if (naxis=0) and (FNumExtend>0) and (ext<>1) then // no primary array, try first extension
+begin
+  ReadHeader(ff,1);
+end;
 result:=ff.position;
+end;
+
+function TFitsHeader.GetExtend(ff:TMemoryStream; startpos,startoffset,maxnum: integer): integer;
+var   header : THeaderBlock;
+      i,p1,p2,n,naxis,naxis1,naxis2,naxis3,bitpix,extpos,extsize: integer;
+      eoh,eof,extok,imgok : boolean;
+      row,keyword,value,buf : string;
+      P: PChar;
+begin
+try
+  result:=0;
+  header[1,1]:=chr(0);
+  extok:=false;
+  imgok:=false;
+  eof:=false;
+  eoh:=false;
+  if maxnum=0 then maxnum:=10;
+  ff.position:=startpos+startoffset;
+  repeat
+    extpos:=ff.position;
+    n:=ff.Read(header,sizeof(THeaderBlock));
+    if n<>sizeof(THeaderBlock) then begin
+      eof:=true;
+      break;
+    end;
+    eoh:=false;
+    extok:=false;
+    imgok:=false;
+    buf:=copy(header[1],1,9);
+    if (buf='XTENSION=') then begin
+      naxis:=0;
+      naxis1:=0;
+      naxis2:=0;
+      naxis3:=0;
+      bitpix:=0;
+      extok:=true;
+      repeat
+        for i:=1 to 36 do begin
+           row:=header[i];
+           if trim(row)='' then continue;
+           p1:=9;
+           p2:=pos('/',row);
+           keyword:=trim(copy(row,1,p1-1));
+           if p2>0 then begin
+              value:=trim(copy(row,p1+1,p2-p1-1));
+           end else begin
+              value:=trim(copy(row,p1+1,99));
+           end;
+           P:=PChar(value);
+           buf:=AnsiExtractQuotedStr(P,'''');
+           if buf<>'' then value:=buf;
+           if (keyword='XTENSION') then begin
+             imgok:=trim(value)='IMAGE';
+           end;
+           if (keyword='NAXIS') then begin
+              naxis:=StrToIntDef(value,0);
+           end;
+           if (keyword='NAXIS1') then begin
+              naxis1:=StrToIntDef(value,0);
+           end;
+           if (keyword='NAXIS2') then begin
+              naxis2:=StrToIntDef(value,0);
+           end;
+           if (keyword='NAXIS3') then begin
+              naxis3:=StrToIntDef(value,0);
+           end;
+           if (keyword='BITPIX') then begin
+              bitpix:=StrToIntDef(value,0);
+           end;
+           if (keyword='END') then begin
+              eoh:=true;
+           end;
+        end;
+        if not eoh then begin
+          n:=ff.Read(header,sizeof(THeaderBlock));
+          if n<>sizeof(THeaderBlock) then
+            break;
+        end;
+      until eoh;
+    end;
+    if extok then begin
+       if imgok then begin
+         inc(result);
+         SetLength(ExtendPos,result+1);
+         ExtendPos[result]:=extpos;
+       end;
+       if result>=maxnum then begin
+          eof:=true;
+          break;
+       end else begin
+         if naxis>0 then begin
+           extsize:=naxis1*abs(bitpix) div 8;
+           if naxis>1 then extsize:=extsize*naxis2;
+           if naxis>2 then extsize:=extsize*naxis3;
+           if extsize>0 then begin
+             extsize:=(trunc(extsize/2880)+1)*2880;
+             ff.position:=ff.position+extsize;
+           end;
+         end;
+       end;
+    end;
+  until eof;
+finally
+  ff.position:=startpos;
+end;
 end;
 
 function TFitsHeader.GetStream: TMemoryStream;
@@ -876,6 +1054,7 @@ begin
   frametype := Source.frametype;
   stackexp := Source.stackexp;
   stackcount := Source.stackcount;
+  extname := Source.extname;
 end;
 
 //////////////////// TReadFits /////////////////////////
@@ -1523,6 +1702,24 @@ begin
   end;
 end;
 
+procedure TFits.SetCurrentExtend(value: integer);
+begin
+  if FStreamValid and Header.MultiExtend and (value>=0) and (value<=header.FNumExtend) then begin
+    Fhdr_end:=FHeader.ReadHeader(FStream,value);
+    LoadStream;
+  end;
+end;
+
+function TFits.GetCurrentExtend: integer;
+begin
+  result:=FHeader.FCurrentExtend;
+end;
+
+function TFits.GetNumExtend: integer;
+begin
+  result:=FHeader.FNumExtend;
+end;
+
 Procedure TFits.MeasureFlatLevel;
 begin
   GetFitsInfo;
@@ -1565,17 +1762,24 @@ end;
 Procedure TFits.UpdateStream;
 begin
   if not FStreamValid then begin
-    WriteFitsImage;
+    if not FHeader.MultiExtend then WriteFitsImage;    // ignore change to image array when using multiple image extend
     FStreamValid:=true;
   end;
 end;
 
 function TFits.GetStream: TMemoryStream;
 begin
-  UpdateStream;
-  result:=FHeader.GetStream;
-  FStream.Position:=Fhdr_end;
-  result.CopyFrom(FStream,FStream.Size-Fhdr_end);
+  if FHeader.MultiExtend then begin
+    result:=TMemoryStream.Create;
+    FStream.Position:=0;
+    result.CopyFrom(FStream,FStream.Size);
+  end
+  else begin
+    UpdateStream;
+    result:=FHeader.GetStream;
+    FStream.Position:=Fhdr_end;
+    result.CopyFrom(FStream,FStream.Size-Fhdr_end);
+  end;
 end;
 
 procedure TFits.SaveToFile(fn: string; pack: boolean=false; StackFloat:boolean=false; Async:boolean=false);
@@ -1929,7 +2133,7 @@ with FFitsInfo do begin
    pixsz1:=0; pixsz2:=0; pixratio:=1; focallen:=0; scale:=0;
    exptime:=0; stackexp:=0; airmass:=0;
    stackcount:=0;
-   objects:=''; ctype1:=''; ctype2:='';
+   objects:=''; ctype1:=''; ctype2:=''; extname:='';
    frametype:='LIGHT';
 end;
 end;
@@ -1981,6 +2185,7 @@ begin
     if (keyword='MULT_B') then bmult:=strtofloat(buf);
     if (keyword='AIRMASS') then airmass:=strtofloat(buf);
     if (keyword='OBJECT') then objects:=trim(buf);
+    if (keyword='EXTNAME') then extname:=trim(buf);
     if (keyword='RA') then begin
        ra:=StrToFloatDef(buf,NullCoord);
        if ra=NullCoord then begin
