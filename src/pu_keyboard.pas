@@ -42,7 +42,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses
+uses  UScaleDPI,
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
   u_annotation {for deepsky database search};
 
@@ -71,6 +71,7 @@ type
     procedure clear1Click(Sender: TObject);
     procedure enter1Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure FormCreate(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: char);
     procedure FormShow(Sender: TObject);
     procedure letter1Change(Sender: TObject);
@@ -120,6 +121,11 @@ begin
     if error2=0 then keyboard_text:=prefix1.text+keyboard_text; {add missing prefix}
     object_found:=find_object(keyboard_text ,ra_data,dec_data,length_data,width_data,pa_data);{keyboard_text with length less then 2 will be ignored}
   end;
+end;
+
+procedure Tkeyboard1.FormCreate(Sender: TObject);
+begin
+  ScaleDPI(Self);
 end;
 
 procedure Tkeyboard1.FormKeyPress(Sender: TObject; var Key: char);
