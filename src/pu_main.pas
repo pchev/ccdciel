@@ -8191,8 +8191,11 @@ CheckConnectionStatus;
 end;
 
 procedure Tf_main.FocuserPositionChange(n:double);
+var i: integer;
 begin
-  f_focuser.Position.Value:=round(n);
+  i:=round(n);
+  if i<>f_focuser.Position.Value then
+    f_focuser.Position.Value:=i;
 end;
 
 procedure Tf_main.FocuserSpeedChange(n:double);
