@@ -20317,6 +20317,7 @@ begin
     mainimage.Align:=alClient;
     finderimage.Align:=alLeft;
     guideimage.Align:=alClient;
+    f_internalguider.cbEnlargeImage.Checked:=true;
   end
   else begin
     PanelImage1.Visible:=true;
@@ -20328,6 +20329,7 @@ begin
     mainimage.Align:=alClient;
     guideimage.Align:=alClient;
     finderimage.Align:=alClient;
+    f_internalguider.cbEnlargeImage.Checked:=config.GetValue('/InternalGuider/EnlargeImage',PageControlRight.Height<f_internalguider.Height);
   end;
   SetVisibleImage;
 end;
