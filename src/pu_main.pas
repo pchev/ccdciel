@@ -17681,6 +17681,7 @@ try
      end
   else if method='WHEEL_CONNECTED' then result:=result+'"result": '+BoolToStr((wheel.Status=devConnected),tr,fa)
   else if method='FOCUSER_CONNECTED' then result:=result+'"result": '+BoolToStr((Focuser.Status=devConnected),tr,fa)
+  else if method='ROTATOR_CONNECTED' then result:=result+'"result": '+BoolToStr((rotator.Status=devConnected),tr,fa)
   else if method='CAMERA_CONNECTED' then result:=result+'"result": '+BoolToStr((Camera.Status=devConnected),tr,fa)
   else if method='PLANETARIUM_CONNECTED' then result:=result+'"result": '+BoolToStr(Planetarium.Connected,tr,fa)
   else if method='PREVIEW_GETEXPOSURE' then result:=result+'"result": '+f_Preview.ExpTime.Text
@@ -17705,6 +17706,7 @@ try
   else if method='CCDTEMP' then result:=result+'"result": '+FormatFloat(f2,f_ccdtemp.CurrentTemperature)
   else if method='CCDCOOLER_POWER' then result:=result+'"result": '+FormatFloat(f2,f_ccdtemp.CurrentCoolerPower)
   else if method='FOCUSERPOSITION' then result:=result+'"result": '+IntToStr(focuser.Position)
+  else if method='ROTATOR_ANGLE' then result:=result+'"result": '+FormatFloat(f2,rotator.Angle)
   else if method='TIMENOW' then result:=result+'"result": "'+FormatDateTime(dateiso,now)+'"'
   else if method='DIRECTORYSEPARATOR' then result:=result+'"result": "'+stringreplace(DirectorySeparator,'\','\\',[rfReplaceAll])+'"'
   else if method='APPDIR' then result:=result+'"result": "'+stringreplace(Appdir,'\','\\',[rfReplaceAll])+'"'
@@ -17893,6 +17895,18 @@ try
     buf2:=trim(value[attrib.IndexOf('params.1')]);
     buf:=f_scriptengine.cmd_setFocusXYhfd(buf1,buf2);
     result:=result+'"result":{"value": '+buf+'}';
+  end
+  else if method='ROTATOR_SYNC' then begin
+    CheckParamCount(1);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Rotator_Sync(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='ROTATOR_GOTO' then begin
+    CheckParamCount(1);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Rotator_Goto(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='CCD_SETTEMPERATURE' then begin
     CheckParamCount(1);

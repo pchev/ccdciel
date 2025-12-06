@@ -233,6 +233,8 @@ type
     function cmd_Wheel_SetFiltersName(fl:TStringList):string;
     function cmd_SetFilterOffset(f,o: string):string;
     function cmd_Focuser_SetPosition(p:string):string;
+    function cmd_Rotator_Sync(p:string):string;
+    function cmd_Rotator_Goto(p:string):string;
     function cmd_Ccd_SetTemperature(t:string):string;
     function cmd_Preview_SetExposure(exp:string):string;
     function cmd_Preview_SetBinning(bin:string):string;
@@ -1974,6 +1976,28 @@ begin
 try
 result:=msgFailed;
 FFocuser.Position:=StrToInt(p);
+result:=msgOK;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Rotator_Sync(p:string):string;
+begin
+try
+result:=msgFailed;
+Frotator.Sync(StrToFloat(p));
+result:=msgOK;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Rotator_Goto(p:string):string;
+begin
+try
+result:=msgFailed;
+Frotator.Angle:=StrToFloat(p);
 result:=msgOK;
 except
   result:=msgFailed;
