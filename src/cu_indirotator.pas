@@ -39,7 +39,7 @@ T_indirotator = class(T_rotator)
    RotatorDevice: Basedevice;
    connectprop: ISwitchVectorProperty;
    connecton,connectoff: ISwitch;
-   RotatorAngle, SyncAngle: INumberVectorProperty;
+   RotatorAngle, FSyncAngle: INumberVectorProperty;
    RotatorAbort: ISwitchVectorProperty;
    RotatorReverse: ISwitchVectorProperty;
    RotatorReverseEnable,RotatorReverseDisable: ISwitch;
@@ -68,7 +68,7 @@ T_indirotator = class(T_rotator)
  protected
    procedure SetAngle(p:double); override;
    function  GetAngle:double; override;
-   procedure Sync(p:double); override;
+   procedure SyncAngle(p:double); override;
    procedure SetTimeout(num:integer); override;
    function  GetDriverReverse:boolean; override;
    procedure SetDriverReverse(value:boolean); override;
@@ -140,7 +140,7 @@ procedure T_indirotator.ClearStatus;
 begin
     RotatorDevice:=nil;
     RotatorAngle:=nil;
-    SyncAngle:=nil;
+    FSyncAngle:=nil;
     RotatorAbort:=nil;
     RotatorReverse:=nil;
     connectprop:=nil;
@@ -316,8 +316,8 @@ begin
   else if (proptype=INDI_NUMBER)and(RotatorAngle=nil)and(propname='ABS_ROTATOR_ANGLE') then begin
      RotatorAngle:=indiProp.getNumber;
   end
-  else if (proptype=INDI_NUMBER)and(SyncAngle=nil)and(propname='SYNC_ROTATOR_ANGLE') then begin
-     SyncAngle:=indiProp.getNumber;
+  else if (proptype=INDI_NUMBER)and(FSyncAngle=nil)and(propname='SYNC_ROTATOR_ANGLE') then begin
+     FSyncAngle:=indiProp.getNumber;
   end
   else if (proptype=INDI_SWITCH)and(RotatorReverse=nil)and(propname='ROTATOR_REVERSE') then begin
      RotatorReverse:=indiProp.getSwitch;
@@ -376,12 +376,12 @@ end
 else result:=0;
 end;
 
-procedure T_indirotator.Sync(p:double);
+procedure T_indirotator.SyncAngle(p:double);
 begin
-if SyncAngle<>nil then begin
-  SyncAngle.np[0].value:=p;
-  indiclient.sendNewNumber(SyncAngle);
-  indiclient.WaitBusy(SyncAngle);
+if FSyncAngle<>nil then begin
+  FSyncAngle.np[0].value:=p;
+  indiclient.sendNewNumber(FSyncAngle);
+  indiclient.WaitBusy(FSyncAngle);
 end;
 end;
 

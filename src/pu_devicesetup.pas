@@ -97,6 +97,8 @@ type
     ButtonHelp: TButton;
     cbIndistarterAutostart: TCheckBox;
     cbIndistarterConfig: TComboBox;
+    cbRotatorSoftSync: TCheckBox;
+    cbRotatorSoftLimit: TCheckBox;
     DefaultARestHost: TEdit;
     DefaultARestPass: TEdit;
     DefaultARestPort: TSpinEditEx;
@@ -135,6 +137,7 @@ type
     Label71: TLabel;
     Label72: TLabel;
     Panel10: TGroupBox;
+    Panel48: TPanel;
     PanelFinderROI: TPanel;
     PanelGuiderROI: TPanel;
     SwitchNickname: TEdit;
@@ -742,6 +745,7 @@ type
     procedure CameraARestProtocolChange(Sender: TObject);
     procedure CameraIndiDeviceChange(Sender: TObject);
     procedure CameraIndiTransfertClick(Sender: TObject);
+    procedure cbRotatorSoftSyncChange(Sender: TObject);
     procedure CoverARestProtocolChange(Sender: TObject);
     procedure DefaultARestProtocolChange(Sender: TObject);
     procedure DeviceFinderCameraChange(Sender: TObject);
@@ -1178,6 +1182,8 @@ begin
   BtnSetupRotator.Caption:=rsSetup;
   Label11.Caption:=rsDevices;
   RotatorAutoLoadConfig.Caption:=rsLoadConfigur;
+  cbRotatorSoftSync.Caption:=rsUseSoftwareS;
+  cbRotatorSoftLimit.Caption:=rsLimitRotator;
   Mount.Caption:=rsMount;
   Label81.Caption:=rsServer;
   Label82.Caption:=rsPort;
@@ -1573,6 +1579,14 @@ RotatorARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestrotator/Protocol',0);
 RotatorARestHost.Text:=conf.GetValue('/ASCOMRestrotator/Host','127.0.0.1');
 RotatorARestPort.Value:=conf.GetValue('/ASCOMRestrotator/Port',11111);
 RotatorARestDevice.Value:=conf.GetValue('/ASCOMRestrotator/Device',0);
+cbRotatorSoftSync.Checked:=config.GetValue('/Rotator/SoftSync',false);
+if cbRotatorSoftSync.Checked then begin
+  cbRotatorSoftLimit.Enabled:=true;
+  cbRotatorSoftLimit.Checked:=config.GetValue('/Rotator/SoftLimit',false);
+end else begin
+  cbRotatorSoftLimit.Enabled:=false;
+  cbRotatorSoftLimit.Checked:=false;
+end;
 
 MountConnection:=TDevInterface(conf.GetValue('/MountInterface',ord(DefaultMountInterface)));
 MountIndiServer.Text:=conf.GetValue('/INDImount/Server',defautindiserver);
@@ -2234,6 +2248,12 @@ end;
 procedure Tf_setup.CameraIndiTransfertClick(Sender: TObject);
 begin
   CameraDiskPanel.Visible:=CameraIndiTransfert.ItemIndex>0;
+end;
+
+procedure Tf_setup.cbRotatorSoftSyncChange(Sender: TObject);
+begin
+  cbRotatorSoftLimit.Enabled:=cbRotatorSoftSync.Checked;
+  if not cbRotatorSoftSync.Checked then cbRotatorSoftLimit.Checked:=false;
 end;
 
 procedure Tf_setup.DefaultARestProtocolChange(Sender: TObject);

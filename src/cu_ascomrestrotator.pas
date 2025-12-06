@@ -43,17 +43,16 @@ T_ascomrestrotator = class(T_rotator)
  protected
    procedure SetAngle(p:double); override;
    function  GetAngle:double; override;
+   procedure SyncAngle(p:double); override;
    procedure SetTimeout(num:integer); override;
    function  GetDriverReverse:boolean; override;
    procedure SetDriverReverse(value:boolean); override;
-
    function  WaitRotatorMoving(maxtime:integer):boolean;
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');  override;
    procedure Disconnect; override;
-   procedure Sync(p:double); override;
    Procedure Halt; override;
 end;
 
@@ -266,7 +265,7 @@ begin
  end;
 end;
 
-procedure T_ascomrestrotator.Sync(p:double);
+procedure T_ascomrestrotator.SyncAngle(p:double);
 begin
  if FStatus<>devConnected then exit;
  try

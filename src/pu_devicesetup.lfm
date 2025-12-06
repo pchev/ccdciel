@@ -3439,28 +3439,28 @@ object f_setup: Tf_setup
         ParentFont = False
         object PageControlRotator: TPageControl
           Left = 0
-          Height = 410
+          Height = 300
           Top = 40
           Width = 490
           ActivePage = RotatorIndi
-          Align = alClient
+          Align = alTop
           ParentFont = False
           TabIndex = 0
           TabOrder = 0
           OnChange = PageControlRotatorChange
           object RotatorIndi: TTabSheet
             Caption = 'RotatorIndi'
-            ClientHeight = 375
+            ClientHeight = 265
             ClientWidth = 486
             ParentFont = False
             object PanelRotatorIndi: TPanel
               Left = 0
-              Height = 375
+              Height = 265
               Top = 0
               Width = 486
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 375
+              ClientHeight = 265
               ClientWidth = 486
               ParentFont = False
               TabOrder = 0
@@ -3578,7 +3578,7 @@ object f_setup: Tf_setup
           end
           object RotatorAscom: TTabSheet
             Caption = 'RotatorAscom'
-            ClientHeight = 375
+            ClientHeight = 265
             ClientWidth = 486
             ParentFont = False
             object PanelRotatorAscom: TPanel
@@ -3639,17 +3639,17 @@ object f_setup: Tf_setup
           end
           object RotatorAscomRest: TTabSheet
             Caption = 'RotatorAscomRest'
-            ClientHeight = 375
+            ClientHeight = 265
             ClientWidth = 486
             ParentFont = False
             object Panel5: TPanel
               Left = 0
-              Height = 375
+              Height = 265
               Top = 0
               Width = 486
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 375
+              ClientHeight = 265
               ClientWidth = 486
               ParentFont = False
               TabOrder = 0
@@ -3876,6 +3876,34 @@ object f_setup: Tf_setup
             Caption = 'Use rotator '
             ParentFont = False
             TabOrder = 0
+          end
+        end
+        object Panel48: TPanel
+          Left = 0
+          Height = 110
+          Top = 340
+          Width = 490
+          Align = alClient
+          BevelOuter = bvNone
+          ClientHeight = 110
+          ClientWidth = 490
+          TabOrder = 2
+          object cbRotatorSoftSync: TCheckBox
+            Left = 18
+            Height = 22
+            Top = 13
+            Width = 428
+            Caption = 'Use software Sync with sky PA (for use with non compliant rotator)'
+            OnChange = cbRotatorSoftSyncChange
+            TabOrder = 0
+          end
+          object cbRotatorSoftLimit: TCheckBox
+            Left = 18
+            Height = 22
+            Top = 44
+            Width = 277
+            Caption = 'Limit rotator angle to 0-180 degree range'
+            TabOrder = 1
           end
         end
       end

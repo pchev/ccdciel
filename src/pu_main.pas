@@ -1990,6 +1990,7 @@ begin
   f_dome.onStartSlaving:=@StartDomeSlaving;
 
   f_rotator:=Tf_rotator.Create(self);
+  f_rotator.PanelSoft.Visible:=false;
   f_rotator.onRotate:=@RotatorRotate;
   f_rotator.onHalt:=@RotatorHalt;
   f_rotator.onReverse:=@RotatorReverse;
@@ -2183,6 +2184,7 @@ begin
    rotator.onDeviceMsg:=@DeviceMessage;
    rotator.onAngleChange:=@RotatorAngleChange;
    rotator.onStatusChange:=@RotatorStatus;
+   rotator.CalibrationAngle:=config.GetValue('/Rotator/CalibrationAngle',0.0);
 
    aInt:=TDevInterface(config.GetValue('/WeatherInterface',ord(DefaultInterface)));
    case aInt of
@@ -5944,6 +5946,7 @@ begin
    config.SetValue('/Offset/OffsetMax',OffsetMax);
 
    config.SetValue('/Rotator/Reverse',f_rotator.Reverse.Checked);
+   config.SetValue('/Rotator/CalibrationAngle',rotator.CalibrationAngle);
 
    config.SetValue('/StarAnalysis/FocuserLastTemp',FocuserLastTemp);
    config.SetValue('/StarAnalysis/MagnitudeCalibration',MagnitudeCalibration);
@@ -7104,6 +7107,10 @@ end;
 
 Procedure Tf_main.ConnectRotator(Sender: TObject);
 begin
+  rotator.SoftSync:=config.GetValue('/Rotator/SoftSync',false);
+  rotator.SoftLimit:=config.GetValue('/Rotator/SoftLimit',false);
+  f_rotator.PanelSoft.Visible:=rotator.SoftSync;
+  f_rotator.PanelSoftlimit.Visible:=rotator.SoftLimit;
   case rotator.RotatorInterface of
     INDI : rotator.Connect(config.GetValue('/INDIrotator/Server',''),
                           config.GetValue('/INDIrotator/ServerPort',''),
@@ -8636,6 +8643,7 @@ case rotator.Status of
                       f_devicesconnection.LabelRotator.Font.Color:=clGreen;
                       NewMessage(Format(rsConnected, [rsRotator]),1);
                       f_rotator.SetReverse(config.GetValue('/Rotator/Reverse',false));
+                      rotator.CalibrationAngle:=config.GetValue('/Rotator/CalibrationAngle',0.0);
                       wait(1);
                       RotatorAngleChange(self);
                    end;
@@ -8646,6 +8654,8 @@ end;
 Procedure Tf_main.RotatorAngleChange(Sender: TObject);
 begin
  f_rotator.Angle.Value:=rotator.Angle;
+ if rotator.SoftLimit then f_rotator.Angle180.Caption:=FormatFloat(f2,rmod(f_rotator.Angle.Value+360+180,360));
+ if rotator.SoftSync then f_rotator.CalAngle.Caption:=FormatFloat(f2,rotator.CalibrationAngle);
 end;
 
 Procedure Tf_main.RotatorRotate(Sender: TObject);
@@ -9514,6 +9524,8 @@ begin
     config.SetValue('/ASCOMRestrotator/Host',f_setup.RotatorARestHost.Text);
     config.SetValue('/ASCOMRestrotator/Port',f_setup.RotatorARestPort.Value);
     config.SetValue('/ASCOMRestrotator/Device',f_setup.RotatorARestDevice.Value);
+    config.SetValue('/Rotator/SoftSync',f_setup.cbRotatorSoftSync.Checked);
+    config.SetValue('/Rotator/SoftLimit',f_setup.cbRotatorSoftLimit.Checked);
 
     config.SetValue('/MountInterface',ord(f_setup.MountConnection));
     config.SetValue('/INDImount/Server',f_setup.MountIndiServer.Text);

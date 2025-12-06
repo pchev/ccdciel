@@ -1,10 +1,10 @@
 object f_rotator: Tf_rotator
   Left = 0
-  Height = 81
+  Height = 145
   Top = 0
   Width = 194
   AutoSize = True
-  ClientHeight = 81
+  ClientHeight = 145
   ClientWidth = 194
   ParentFont = False
   TabOrder = 0
@@ -29,13 +29,14 @@ object f_rotator: Tf_rotator
   end
   object Panel1: TPanel
     Left = 0
-    Height = 59
+    Height = 113
     Top = 20
     Width = 194
     Align = alTop
+    AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 59
+    ClientHeight = 113
     ClientWidth = 194
     ParentFont = False
     TabOrder = 0
@@ -118,6 +119,75 @@ object f_rotator: Tf_rotator
         OnClick = BtnHaltClick
         ParentFont = False
         TabOrder = 1
+      end
+    end
+    object PanelSoft: TPanel
+      Left = 0
+      Height = 58
+      Top = 54
+      Width = 190
+      AutoSize = True
+      BevelOuter = bvNone
+      ClientHeight = 58
+      ClientWidth = 190
+      TabOrder = 2
+      object PanelSoftsync: TPanel
+        Left = 0
+        Height = 30
+        Top = 0
+        Width = 190
+        Align = alTop
+        BevelOuter = bvNone
+        ClientHeight = 30
+        ClientWidth = 190
+        TabOrder = 1
+        object Label2: TLabel
+          AnchorSideTop.Side = asrCenter
+          Left = 8
+          Height = 18
+          Top = 5
+          Width = 69
+          Caption = 'Sync Offset'
+          ParentColor = False
+        end
+        object CalAngle: TStaticText
+          Left = 120
+          Height = 24
+          Top = 0
+          Width = 60
+          Constraints.MaxHeight = 24
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+        end
+      end
+      object PanelSoftlimit: TPanel
+        Left = 0
+        Height = 28
+        Top = 30
+        Width = 190
+        Align = alTop
+        BevelOuter = bvNone
+        ClientHeight = 28
+        ClientWidth = 190
+        TabOrder = 0
+        object Label1: TLabel
+          AnchorSideTop.Side = asrCenter
+          Left = 8
+          Height = 18
+          Top = 5
+          Width = 46
+          Caption = 'PA+180'
+          ParentColor = False
+        end
+        object Angle180: TStaticText
+          Left = 120
+          Height = 24
+          Top = 0
+          Width = 60
+          Constraints.MaxHeight = 24
+          TabOrder = 0
+        end
       end
     end
   end

@@ -33,11 +33,18 @@ type
   { Tf_rotator }
 
   Tf_rotator = class(TFrame)
+    Angle180: TStaticText;
     BtnRotate: TButton;
     BtnHalt: TButton;
     Angle: TFloatSpinEditEx;
+    CalAngle: TStaticText;
+    Label1: TLabel;
+    Label2: TLabel;
     Panel2: TPanel;
     Panel3: TPanel;
+    PanelSoftsync: TPanel;
+    PanelSoftlimit: TPanel;
+    PanelSoft: TPanel;
     Reverse: TCheckBox;
     Label6: TLabel;
     Panel1: TPanel;
@@ -101,6 +108,8 @@ begin
   BtnRotate.Caption:=rsRotate;
   Reverse.Caption:=rsReverse;
   BtnHalt.Caption:=rsHalt;
+  Label2.Caption:=rsSyncOffset;
+  Label1.Caption:=rsPA+'+180'+sdeg;
 end;
 
 procedure Tf_rotator.SetReverse(onoff:boolean);

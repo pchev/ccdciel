@@ -32,6 +32,8 @@ type
 
 T_rotator = class(TComponent)
  private
+   function  GetAngleIntf:double;
+   procedure SetAngleIntf(p:double);
  protected
     FRotatorInterface: TDevInterface;
     FStatus: TDeviceStatus;
@@ -41,6 +43,9 @@ T_rotator = class(TComponent)
     FTimeOut: integer;
     Fdevice: string;
     FAutoLoadConfig: boolean;
+    FSoftSync, FSoftLimit: boolean;
+    FCalibrationAngle: double;
+    FReverse: Boolean;
     procedure msg(txt: string; level:integer=3);
     procedure SetReverse(value:boolean);
     function GetReverse:boolean;
@@ -48,6 +53,7 @@ T_rotator = class(TComponent)
     function GetDriverReverse:boolean; virtual; abstract;
     function  GetAngle:double; virtual; abstract;
     procedure SetAngle(p:double); virtual; abstract;
+    Procedure SyncAngle(angle:double); virtual; abstract;
     procedure SetTimeout(num:integer); virtual; abstract;
   public
     constructor Create(AOwner: TComponent);override;
@@ -55,14 +61,17 @@ T_rotator = class(TComponent)
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
     Procedure Halt; virtual; abstract;
-    Procedure Sync(angle:double); virtual; abstract;
     property DeviceName: string read FDevice;
     property RotatorInterface: TDevInterface read FRotatorInterface;
     property Status: TDeviceStatus read FStatus;
     property Timeout: integer read FTimeout write SetTimeout;
     property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
-    property Angle: double read GetAngle write SetAngle;
+    property Angle: double read GetAngleIntf write SetAngleIntf;
+    Procedure Sync(p:double);
+    property CalibrationAngle: double read FCalibrationAngle write FCalibrationAngle;
     property Reverse: Boolean read GetReverse write SetReverse;
+    property SoftSync: boolean read FSoftSync write FSoftSync;
+    property SoftLimit: boolean read FSoftLimit write FSoftLimit;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onAngleChange: TNotifyEvent read FonAngleChange write FonAngleChange;
@@ -75,6 +84,9 @@ constructor T_rotator.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FStatus := devDisconnected;
+  FSoftSync:=false;
+  FCalibrationAngle:=0;
+  FReverse:=False;
 end;
 
 destructor  T_rotator.Destroy;
@@ -84,18 +96,73 @@ end;
 
 procedure T_rotator.SetReverse(value:boolean);
 begin
-  SetDriverReverse(value);           // in driver
+  if FSoftSync then
+    FReverse:=value
+  else
+    SetDriverReverse(value);           // in driver
   if Assigned(FonAngleChange) then FonAngleChange(self);
 end;
 
 function T_rotator.GetReverse:boolean;
 begin
-  result:=GetDriverReverse;   // in driver
+ if FSoftSync then
+   result:=FReverse
+ else
+   result:=GetDriverReverse;   // in driver
 end;
 
 procedure T_rotator.msg(txt: string; level:integer=3);
 begin
   if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt,level);
+end;
+
+function  T_rotator.GetAngleIntf:double;
+begin
+if FSoftSync then begin
+  if FReverse then
+    result:=360-GetAngle-FCalibrationAngle
+  else
+    result:=GetAngle+FCalibrationAngle;
+  result:=Rmod(720+result,360);
+  if result>359 then result:=0;
+end
+else
+  result:=GetAngle;
+end;
+
+procedure T_rotator.SetAngleIntf(p:double);
+begin
+msg(Format(rsRotatorMoveT, [FormatFloat(f1, p)]));
+if FSoftSync then begin
+  if FReverse then
+    p:=360-p-FCalibrationAngle
+  else
+    p:=p-FCalibrationAngle;
+  p:=rmod(720+p,360);
+  if p>=360 then p:=0;
+  if FSoftLimit then begin
+    p:=rmod(180+p,180);
+  end;
+  SetAngle(p);
+end
+else
+  SetAngle(p);
+end;
+
+Procedure T_rotator.Sync(p:double);
+begin
+if FSoftSync then begin
+  if FReverse then
+    FCalibrationAngle:=360-p-GetAngle
+  else
+    FCalibrationAngle:=p-GetAngle;
+  FCalibrationAngle:=rmod(720+FCalibrationAngle,360);
+  if FCalibrationAngle>359 then FCalibrationAngle:=0;
+   msg(Format(rsRotatorSyncC, [FormatFloat(f1, FCalibrationAngle)]));
+  if Assigned(FonAngleChange) then FonAngleChange(self);
+end
+else
+  SyncAngle(p);
 end;
 
 end.

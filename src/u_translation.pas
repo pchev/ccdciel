@@ -1638,6 +1638,9 @@ resourcestring
   rsSyncTheRotat = 'Sync the rotator';
   rsHighlightCol = 'Highlight color';
   rsDoNotModifyT = 'Do not modify the INDI header';
+  rsUseSoftwareS = 'Use software Sync with sky PA (for use with not compliant rotator)';
+  rsLimitRotator = 'Limit rotator angle to 0-180 degree range';
+  rsSyncOffset = 'Sync Offset';
 
 implementation
 

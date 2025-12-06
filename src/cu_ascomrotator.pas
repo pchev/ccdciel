@@ -49,14 +49,13 @@ T_ascomrotator = class(T_rotator)
    procedure SetTimeout(num:integer); override;
    function  GetDriverReverse:boolean; override;
    procedure SetDriverReverse(value:boolean); override;
-
+   procedure SyncAngle(p:double); override;
    function  WaitRotatorMoving(maxtime:integer):boolean;
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');  override;
    procedure Disconnect; override;
-   procedure Sync(p:double); override;
    function GetV: variant;
    Procedure Halt; override;
 end;
@@ -288,7 +287,7 @@ begin
  {$endif}
 end;
 
-procedure T_ascomrotator.Sync(p:double);
+procedure T_ascomrotator.SyncAngle(p:double);
 begin
  {$ifdef mswindows}
  if not VarIsEmpty(V) then begin
