@@ -6003,6 +6003,7 @@ begin
   config.SetValue('/InternalGuider/Camera/Gain',f_internalguider.Gain.Value);
   config.SetValue('/InternalGuider/Camera/Offset',f_internalguider.Offset.Value);
   config.SetValue('/InternalGuider/Camera/Temperature',f_internalguider.Temperature.Value);
+  config.SetValue('/InternalGuider/EnlargeImage',f_internalguider.cbEnlargeImage.Checked);
   config.SetValue('/InternalGuider/FilterNoise',f_internalguider.FilterNoise);
   config.SetValue('/InternalGuider/Visu/Gamma',f_internalguider.visu.Gamma.Value);
   config.SetValue('/InternalGuider/Visu/ClipRange',f_internalguider.visu.BtnClipRange.Down);
