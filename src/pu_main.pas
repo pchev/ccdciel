@@ -5347,7 +5347,7 @@ begin
   f_internalguider.visu.Gamma.Value:=x;
   f_internalguider.visu.BtnClipRange.Down:=config.GetValue('/InternalGuider/Visu/ClipRange',false);
   f_internalguider.visu.cbHistRange.ItemIndex:=config.GetValue('/InternalGuider/Visu/HistRange',3);
-  f_internalguider.cbEnlargeImage.Checked:=config.GetValue('/InternalGuider/EnlargeImage',PageControlRight.Height<f_internalguider.Height);
+  f_internalguider.cbEnlargeImage.Checked:=config.GetValue('/InternalGuider/EnlargeImage',true);
   f_internalguider.SpectroFunctions:=config.GetValue('/InternalGuider/Spectro/SpectroFunctions',false);
   f_internalguider.SearchWinMin:=config.GetValue('/InternalGuider/Spectro/SearchWinMin',40);
   f_internalguider.SearchWinMax:=config.GetValue('/InternalGuider/Spectro/SearchWinMax',80);
@@ -20329,7 +20329,7 @@ begin
     mainimage.Align:=alClient;
     guideimage.Align:=alClient;
     finderimage.Align:=alClient;
-    f_internalguider.cbEnlargeImage.Checked:=config.GetValue('/InternalGuider/EnlargeImage',PageControlRight.Height<f_internalguider.Height);
+    f_internalguider.cbEnlargeImage.Checked:=config.GetValue('/InternalGuider/EnlargeImage',true);
   end;
   SetVisibleImage;
 end;
