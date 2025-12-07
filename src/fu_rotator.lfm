@@ -2,10 +2,10 @@ object f_rotator: Tf_rotator
   Left = 0
   Height = 145
   Top = 0
-  Width = 194
+  Width = 273
   AutoSize = True
   ClientHeight = 145
-  ClientWidth = 194
+  ClientWidth = 273
   ParentFont = False
   TabOrder = 0
   DesignLeft = -1
@@ -14,7 +14,7 @@ object f_rotator: Tf_rotator
     Left = 0
     Height = 20
     Top = 0
-    Width = 194
+    Width = 273
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -31,23 +31,23 @@ object f_rotator: Tf_rotator
     Left = 0
     Height = 113
     Top = 20
-    Width = 194
+    Width = 273
     Align = alTop
     AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
     ClientHeight = 113
-    ClientWidth = 194
+    ClientWidth = 273
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
       Height = 29
       Top = 0
-      Width = 190
+      Width = 231
       BevelOuter = bvNone
       ClientHeight = 29
-      ClientWidth = 190
+      ClientWidth = 231
       ParentFont = False
       TabOrder = 0
       object Label6: TLabel
@@ -91,10 +91,10 @@ object f_rotator: Tf_rotator
       Left = 0
       Height = 25
       Top = 29
-      Width = 190
+      Width = 231
       BevelOuter = bvNone
       ClientHeight = 25
-      ClientWidth = 190
+      ClientWidth = 231
       ParentFont = False
       TabOrder = 1
       object Reverse: TCheckBox
@@ -120,28 +120,39 @@ object f_rotator: Tf_rotator
         ParentFont = False
         TabOrder = 1
       end
+      object btnShowSync: TSpeedButton
+        Left = 208
+        Height = 22
+        Top = 0
+        Width = 23
+        AllowAllUp = True
+        GroupIndex = 1
+        OnClick = btnShowSyncClick
+      end
     end
     object PanelSoft: TPanel
       Left = 0
       Height = 58
       Top = 54
-      Width = 190
+      Width = 231
       AutoSize = True
       BevelOuter = bvNone
       ClientHeight = 58
-      ClientWidth = 190
+      ClientWidth = 231
       TabOrder = 2
+      Visible = False
       object PanelSoftsync: TPanel
         Left = 0
         Height = 30
         Top = 0
-        Width = 190
+        Width = 231
         Align = alTop
         BevelOuter = bvNone
         ClientHeight = 30
-        ClientWidth = 190
+        ClientWidth = 231
         TabOrder = 1
         object Label2: TLabel
+          AnchorSideTop.Control = CalAngle
           AnchorSideTop.Side = asrCenter
           Left = 8
           Height = 18
@@ -151,27 +162,40 @@ object f_rotator: Tf_rotator
           ParentColor = False
         end
         object CalAngle: TStaticText
-          Left = 120
+          Left = 108
           Height = 24
-          Top = 0
+          Top = 2
           Width = 60
           Constraints.MaxHeight = 24
           ParentShowHint = False
           ShowHint = True
           TabOrder = 0
         end
+        object BtnResetSync: TButton
+          AnchorSideTop.Control = CalAngle
+          AnchorSideTop.Side = asrCenter
+          Left = 166
+          Height = 25
+          Top = 2
+          Width = 65
+          Caption = 'Reset'
+          OnClick = BtnResetSyncClick
+          ParentFont = False
+          TabOrder = 1
+        end
       end
       object PanelSoftlimit: TPanel
         Left = 0
         Height = 28
         Top = 30
-        Width = 190
+        Width = 231
         Align = alTop
         BevelOuter = bvNone
         ClientHeight = 28
-        ClientWidth = 190
+        ClientWidth = 231
         TabOrder = 0
         object Label1: TLabel
+          AnchorSideTop.Control = Angle180
           AnchorSideTop.Side = asrCenter
           Left = 8
           Height = 18
@@ -181,9 +205,9 @@ object f_rotator: Tf_rotator
           ParentColor = False
         end
         object Angle180: TStaticText
-          Left = 120
+          Left = 108
           Height = 24
-          Top = 0
+          Top = 2
           Width = 60
           Constraints.MaxHeight = 24
           TabOrder = 0

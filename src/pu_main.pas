@@ -918,6 +918,7 @@ type
     Procedure RotatorRotate(Sender: TObject);
     Procedure RotatorHalt(Sender: TObject);
     Procedure RotatorReverse(Sender: TObject);
+    Procedure RotatorResetSync(Sender: TObject);
     Procedure MountStatus(Sender: TObject);
     Procedure MountCoordChange(Sender: TObject);
     Procedure MountPiersideChange(Sender: TObject);
@@ -1991,9 +1992,11 @@ begin
 
   f_rotator:=Tf_rotator.Create(self);
   f_rotator.PanelSoft.Visible:=false;
+  f_rotator.btnShowSync.Visible:=false;
   f_rotator.onRotate:=@RotatorRotate;
   f_rotator.onHalt:=@RotatorHalt;
   f_rotator.onReverse:=@RotatorReverse;
+  f_rotator.onResetSync:=@RotatorResetSync;
   if camera<>nil then camera.f_Rotator:=f_rotator;
 
   f_weather:=Tf_weather.Create(self);
@@ -7110,7 +7113,7 @@ Procedure Tf_main.ConnectRotator(Sender: TObject);
 begin
   rotator.SoftSync:=config.GetValue('/Rotator/SoftSync',false);
   rotator.SoftLimit:=config.GetValue('/Rotator/SoftLimit',false);
-  f_rotator.PanelSoft.Visible:=rotator.SoftSync;
+  f_rotator.btnShowSync.Visible:=rotator.SoftSync;
   f_rotator.PanelSoftlimit.Visible:=rotator.SoftLimit;
   case rotator.RotatorInterface of
     INDI : rotator.Connect(config.GetValue('/INDIrotator/Server',''),
@@ -8678,6 +8681,12 @@ end;
 Procedure Tf_main.RotatorReverse(Sender: TObject);
 begin
   rotator.Reverse:=f_rotator.Reverse.Checked;
+end;
+
+Procedure Tf_main.RotatorResetSync(Sender: TObject);
+begin
+  rotator.CalibrationAngle:=0;
+  RotatorAngleChange(Sender);
 end;
 
 Procedure Tf_main.MountStatus(Sender: TObject);

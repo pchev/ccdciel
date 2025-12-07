@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  UScaleDPI, u_global, Graphics, Dialogs, u_translation,
-  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, SpinEx;
+  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, Buttons, SpinEx;
 
 type
 
@@ -34,6 +34,7 @@ type
 
   Tf_rotator = class(TFrame)
     Angle180: TStaticText;
+    BtnResetSync: TButton;
     BtnRotate: TButton;
     BtnHalt: TButton;
     Angle: TFloatSpinEditEx;
@@ -48,15 +49,19 @@ type
     Reverse: TCheckBox;
     Label6: TLabel;
     Panel1: TPanel;
+    btnShowSync: TSpeedButton;
     Title: TLabel;
+    procedure BtnResetSyncClick(Sender: TObject);
     procedure BtnHaltClick(Sender: TObject);
     procedure BtnRotateClick(Sender: TObject);
     procedure ReverseChange(Sender: TObject);
+    procedure btnShowSyncClick(Sender: TObject);
   private
     { private declarations }
     FonRotate: TNotifyEvent;
     FonReverse: TNotifyEvent;
     FonHalt: TNotifyEvent;
+    FonResetSync: TNotifyEvent;
     lockreverse, noprompt: boolean;
   public
     { public declarations }
@@ -68,6 +73,7 @@ type
     property onRotate: TNotifyEvent read FonRotate write FonRotate;
     property onReverse: TNotifyEvent read FonReverse write FonReverse;
     property onHalt: TNotifyEvent read FonHalt write FonHalt;
+    property onResetSync: TNotifyEvent read FonResetSync write FonResetSync;
   end;
 
 implementation
@@ -108,8 +114,10 @@ begin
   BtnRotate.Caption:=rsRotate;
   Reverse.Caption:=rsReverse;
   BtnHalt.Caption:=rsHalt;
+  BtnResetSync.Caption:=rsReset;
   Label2.Caption:=rsSyncOffset;
   Label1.Caption:=rsPA+'+180'+sdeg;
+  btnShowSync.Caption:=ellipsis;
 end;
 
 procedure Tf_rotator.SetReverse(onoff:boolean);
@@ -129,10 +137,20 @@ begin
    if Assigned(FonHalt) then FonHalt(self);
 end;
 
+procedure Tf_rotator.BtnResetSyncClick(Sender: TObject);
+begin
+  if Assigned(FonResetSync) then FonResetSync(self);
+end;
+
 procedure Tf_rotator.ReverseChange(Sender: TObject);
 begin
    if lockreverse then exit;
    if Assigned(FonReverse) then FonReverse(self);
+end;
+
+procedure Tf_rotator.btnShowSyncClick(Sender: TObject);
+begin
+  PanelSoft.Visible:=btnShowSync.Down;
 end;
 
 end.
