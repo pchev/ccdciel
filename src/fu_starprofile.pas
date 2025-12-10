@@ -875,7 +875,7 @@ Fhfd:=-1;
 
  try
 
- s:=s div 2;
+ s:=s;
 
  if s>=(f.HeaderInfo.naxis1 div 2) then s:=f.HeaderInfo.naxis1 div 2;
  if s>=(f.HeaderInfo.naxis2 div 2) then s:=f.HeaderInfo.naxis2 div 2;

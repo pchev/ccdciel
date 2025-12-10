@@ -3756,10 +3756,6 @@ try
      buf:=trim(emailconfig.GetValue('/SMTP/Port',''));
      emailconfig.SetValue('/SMTP/SSLTLS',(buf<>'25'));
   end;
-  if oldver<'0.9.70' then begin
-     // reset default star detection window size
-     config.SetValue('/StarAnalysis/Window',60);     ;
-  end;
   if oldver<'0.9.73' then begin
     ok:=(not config.GetValue('/Sensor/GainFromCamera',true));
     config.SetValue('/Sensor/CanSetGain',ok);
@@ -4020,7 +4016,7 @@ if fits.HeaderInfo.valid and fits.ImageValid and (not f_starprofile.AutofocusRun
    end
    else if PolarAlignmentOverlay and (not PolarAlignmentLock) then begin
       Screen2fits(Mx,My,f_visu.FlipHorz,f_visu.FlipVert,px,py);
-      fits.FindStarPos(px,py,Starwindow div 2,xc,yc,ri,vmax,bg,sd);
+      fits.FindStarPos(px,py,Starwindow,xc,yc,ri,vmax,bg,sd);
       if vmax>0 then begin
         dx:=xc-(fits.HeaderInfo.naxis1 div 2);
         dy:=yc-(fits.HeaderInfo.naxis2 div 2);
@@ -5191,9 +5187,7 @@ begin
      f_autoexposurestep.cbRef.Items.AddObject(ref.refname,ref);
   end;
   if n>0 then f_autoexposurestep.cbRef.ItemIndex:=0;
-  Starwindow:=config.GetValue('/StarAnalysis/Window',60);
   Focuswindow:=config.GetValue('/StarAnalysis/Focus',400);
-  Focuswindow:=max(Focuswindow,4*Starwindow);
   Undersampled:=config.GetValue('/StarAnalysis/Undersampled',false);
   n:=config.GetValue('/Filters/Num',0);
   for i:=0 to MaxFilter do FilterOffset[i]:=0;
@@ -5352,6 +5346,10 @@ begin
   f_internalguider.visu.cbHistRange.ItemIndex:=config.GetValue('/InternalGuider/Visu/HistRange',3);
   f_internalguider.cbEnlargeImage.Checked:=config.GetValue('/InternalGuider/EnlargeImage',true);
   f_internalguider.SpectroFunctions:=config.GetValue('/InternalGuider/Spectro/SpectroFunctions',false);
+  if GuiderAutofocus or f_internalguider.SpectroFunctions then
+    Starwindow:=60
+  else
+    Starwindow:=30;
   f_internalguider.SearchWinMin:=config.GetValue('/InternalGuider/Spectro/SearchWinMin',40);
   f_internalguider.SearchWinMax:=config.GetValue('/InternalGuider/Spectro/SearchWinMax',80);
   f_internalguider.SpectroFastCentering:=config.GetValue('/InternalGuider/Spectro/FastCentering',false);
@@ -8486,7 +8484,7 @@ begin
    x:=fits.HeaderInfo.naxis1 div 2;
    y:=fits.HeaderInfo.naxis2 div 2;
    s:=2*min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 3;
-   fits.FindBrightestPixel(x,y,s,starwindow div 2,xc1,yc1,vmax);
+   fits.FindBrightestPixel(x,y,s,starwindow,xc1,yc1,vmax);
    f_starprofile.FindStar:=(vmax>0);
    f_starprofile.StarX:=xc1;
    f_starprofile.StarY:=yc1;
@@ -13891,15 +13889,13 @@ begin
   step:=f_focusercalibration.MinStep;
   hfdmax:=f_focusercalibration.MaxHfd;
   // check window size is enough to reach hfd=20
-  if (Starwindow)< (2.5*hfdmax) then
-    Starwindow:=max(20,round(2.5*hfdmax));
-  if Focuswindow < (4*Starwindow) then
-    Focuswindow:=4*Starwindow;
+  if Focuswindow < (4*max(20,round(2.5*hfdmax))) then
+    Focuswindow:=4*max(20,round(2.5*hfdmax));
   if (not f_starprofile.FindStar)and(fits.HeaderInfo.valid) then begin
     x:=fits.HeaderInfo.naxis1 div 2;
     y:=fits.HeaderInfo.naxis2 div 2;
     rs:=2*min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 3;
-    fits.FindBrightestPixel(x,y,rs,starwindow div 2,xc,yc,vmax);
+    fits.FindBrightestPixel(x,y,rs,starwindow,xc,yc,vmax);
     f_starprofile.FindStar:=(vmax>0);
     f_starprofile.StarX:=xc;
     f_starprofile.StarY:=yc;
@@ -14294,7 +14290,7 @@ else begin
     x:=fits.HeaderInfo.naxis1 div 2;
     y:=fits.HeaderInfo.naxis2 div 2;
     s:=2*min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 3;
-    fits.FindBrightestPixel(x,y,s,starwindow div 2,xc,yc,vmax);
+    fits.FindBrightestPixel(x,y,s,starwindow,xc,yc,vmax);
     f_starprofile.FindStar:=(vmax>0);
     f_starprofile.StarX:=xc;
     f_starprofile.StarY:=yc;
@@ -14875,7 +14871,7 @@ begin
   if InplaceAutofocus then begin  // use multiple stars
     if AutofocusMode<>afPlanet then begin
      // first measurement with a big window to find median star diameter
-     s:=starwindow; {use configured star window}
+     s:=starwindow;
      rx:=img_Width-6*s; {search area}
      ry:=img_Height-6*s;
      fits.GetStarList(rx,ry,s,AutofocusMinSNR,false); {search stars in fits image}
@@ -14929,7 +14925,7 @@ begin
     x:=fits.HeaderInfo.naxis1 div 2;
     y:=fits.HeaderInfo.naxis2 div 2;
     s:=2*min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 3;
-    fits.FindBrightestPixel(x,y,s,starwindow div 2,xc,yc,vmax);
+    fits.FindBrightestPixel(x,y,s,starwindow,xc,yc,vmax);
     f_starprofile.FindStar:=(vmax>0);
     f_starprofile.StarX:=xc;
     f_starprofile.StarY:=yc;
@@ -15137,7 +15133,7 @@ begin
   end;
 
    // first measurement with a big window to find median star diameter
-   s:=60; //starwindow; {use configured star window}
+   s:=starwindow;
    rx:=guidefits.HeaderInfo.naxis1-s; {search area}
    ry:=guidefits.HeaderInfo.naxis2-s;
    guidefits.GetStarList(rx,ry,s,AutofocusMinSNR,false); {search stars in fits image}
@@ -16975,6 +16971,7 @@ begin
  else sval:='';
  s:=Starwindow div 2;
  if (xx>s)and(xx<(fits.HeaderInfo.naxis1-s))and(yy>s)and(yy<(fits.HeaderInfo.naxis2-s)) then begin
+   s:=Starwindow;
    fits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
    if vmax>0 then begin
      fits.GetHFD2(xxc,yyc,2*rc,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
@@ -19197,7 +19194,7 @@ begin
           GuiderScreen2fits(GuideMx,GuideMy,true,xx,yy);
           GuideOffset1X:=xx;
           GuideOffset1Y:=h-yy;
-          s:=f_internalguider.SearchWinMin div 2;
+          s:=f_internalguider.SearchWinMin;
           guidefits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
           if vmax>0 then begin
             guidefits.GetHFD2(xxc,yyc,2*rc,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
@@ -19214,7 +19211,7 @@ begin
           GuiderScreen2fits(GuideMx,GuideMy,true,xx,yy);
           GuideOffset2X:=xx;
           GuideOffset2Y:=h-yy;
-          s:=f_internalguider.SearchWinMin div 2;
+          s:=f_internalguider.SearchWinMin;
           guidefits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
           if vmax>0 then begin
             guidefits.GetHFD2(xxc,yyc,2*rc,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
@@ -19488,7 +19485,7 @@ begin
       end;
     end
  else sval:='';
- s:=Starwindow div 2;
+ s:=Starwindow;
  if (xx>s)and(xx<(guidefits.HeaderInfo.naxis1-s))and(yy>s)and(yy<(guidefits.HeaderInfo.naxis2-s)) then begin
    guidefits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
    if vmax>0 then begin
@@ -19960,7 +19957,7 @@ begin
 if finderfits.HeaderInfo.valid and finderfits.ImageValid then begin
   if PolarAlignmentOverlay and (not PolarAlignmentLock) then begin
       FinderScreen2Fits(FinderMx,FinderMy,true,px,py);
-      finderfits.FindStarPos(px,py,Starwindow div 2,xc,yc,ri,vmax,bg,sd);
+      finderfits.FindStarPos(px,py,Starwindow,xc,yc,ri,vmax,bg,sd);
       if vmax>0 then begin
         dx:=xc-(finderfits.HeaderInfo.naxis1 div 2);
         dy:=yc-(finderfits.HeaderInfo.naxis2 div 2);
@@ -20128,7 +20125,7 @@ begin
       end;
     end
  else sval:='';
- s:=Starwindow div 2;
+ s:=Starwindow;
  if (xx>s)and(xx<(finderfits.HeaderInfo.naxis1-s))and(yy>s)and(yy<(finderfits.HeaderInfo.naxis2-s)) then begin
    finderfits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
    if vmax>0 then begin
