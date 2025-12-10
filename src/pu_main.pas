@@ -14911,7 +14911,7 @@ begin
      else begin  // no star, manual action is required
         SetLength(AutofocusStarList,0);
         f_starprofile.ChkAutofocusDown(false);
-        NewMessage(Format(rsAutofocusCan, [crlf]),1);
+        NewMessage(Format(rsAutofocusCan, [crlf]) + crlf + rsMakeSureTheS, 1);
         if LogToFile then begin
           buf:=slash(LogDir)+'focus_fail_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.fits';
           fits.SaveToFile(buf);
@@ -15173,7 +15173,7 @@ begin
    else begin  // no star, manual action is required
       SetLength(AutofocusStarList,0);
       f_starprofile.ChkAutofocusDown(false);
-      NewMessage(Format(rsAutofocusCan, [crlf]),1);
+      NewMessage(Format(rsAutofocusCan, [crlf]) + crlf + rsMakeSureTheS, 1);
       if LogToFile then begin
         buf:=slash(LogDir)+'focus_fail_guider'+FormatDateTime('yyyymmdd_hhnnss',now)+'.fits';
         guidefits.SaveToFile(buf);
