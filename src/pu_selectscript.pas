@@ -15,6 +15,7 @@ type
     BtnCancel: TButton;
     BtnOK: TButton;
     ComboBoxScript: TComboBox;
+    edParam: TEdit;
     Panel1: TPanel;
     Panel2: TPanel;
     Panel5: TPanel;
@@ -48,10 +49,21 @@ end;
 
 procedure Tf_selectscript.Setscript(scn: string);
 var i: integer;
+    sc,param: string;
 begin
+  i:=pos(' ',scn);
+  if i>0 then begin
+    sc:=trim(copy(scn,1,i));
+    param:=trim(copy(scn,i,999));
+  end
+  else begin
+    sc:=scn;
+    param:='';
+  end;
+  edParam.Text:=param;
   ComboBoxScript.ItemIndex:=0;
   for i:=0 to ComboBoxScript.Items.Count-1 do begin
-    if ComboBoxScript.Items[i]=scn then begin
+    if ComboBoxScript.Items[i]=sc then begin
        ComboBoxScript.ItemIndex:=i;
        break;
     end;

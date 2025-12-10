@@ -1204,6 +1204,7 @@ procedure T_Targets.Start;
 var hm,he,ccdtemp: double;
     twok,wtok,nd,scriptfound: boolean;
     i,j,stw:integer;
+    sc,param: string;
 begin
   try
   FWaitStarting:=true;
@@ -1297,13 +1298,22 @@ begin
     wait;
   end;
   if AtStartRunScript then begin
+    i:=pos(' ',AtStartScript);
+    if i>0 then begin
+      sc:=trim(copy(AtStartScript,1,i));
+      param:=trim(copy(AtStartScript,i,999));
+    end
+    else begin
+      sc:=AtStartScript;
+      param:='';
+    end;
     scriptfound:=false;
-    if FileExistsUTF8(slash(ConfigDir)+AtStartScript+'.script') then begin
+    if FileExistsUTF8(slash(ConfigDir)+sc+'.script') then begin
        scriptfound:=true;
-       f_scriptengine.RunScript(AtStartScript,ConfigDir,'');
+       f_scriptengine.RunScript(sc,ConfigDir,param);
     end;
     if not scriptfound then begin
-      msg(Format(rsFileNotFound,[AtStartScript+'.script']),1);
+      msg(Format(rsFileNotFound,[sc+'.script']),1);
     end;
   end;
   finally
@@ -3174,6 +3184,7 @@ end;
 procedure T_Targets.RunErrorAction;
 var scriptfound:boolean;
     i:integer;
+    sc,param: string;
 begin
   f_pause.Caption:=rsTerminationO;
   f_pause.Text := rsDoYouWantToR2;
@@ -3184,13 +3195,22 @@ begin
   msg(rsExecutingThe,1);
   RunEndAction(false);
   if OnErrorRunScript then begin
+    i:=pos(' ',OnErrorScript);
+    if i>0 then begin
+      sc:=trim(copy(OnErrorScript,1,i));
+      param:=trim(copy(OnErrorScript,i,999));
+    end
+    else begin
+      sc:=OnErrorScript;
+      param:='';
+    end;
     scriptfound:=false;
-    if FileExistsUTF8(slash(ConfigDir)+OnErrorScript+'.script') then begin
+    if FileExistsUTF8(slash(ConfigDir)+sc+'.script') then begin
        scriptfound:=true;
-       f_scriptengine.RunScript(OnErrorScript,ConfigDir,'');
+       f_scriptengine.RunScript(sc,ConfigDir,param);
     end;
     if not scriptfound then begin
-      msg(Format(rsFileNotFound,[OnErrorScript+'.script']),1);
+      msg(Format(rsFileNotFound,[sc+'.script']),1);
     end;
   end;
 end;
@@ -3198,6 +3218,7 @@ end;
 procedure T_Targets.RunEndAction(confirm: boolean=true);
 var i: integer;
     scriptfound: boolean;
+    sc,param: string;
 begin
 if AtEndStopTracking or AtEndPark or AtEndCloseDome or AtEndWarmCamera or AtEndRunScript or AtEndShutdown then begin
   if confirm then begin
@@ -3233,13 +3254,22 @@ if AtEndStopTracking or AtEndPark or AtEndCloseDome or AtEndWarmCamera or AtEndR
     Camera.Temperature:=20.0;
   end;
   if AtEndRunScript then begin
+    i:=pos(' ',AtEndScript);
+    if i>0 then begin
+      sc:=trim(copy(AtEndScript,1,i));
+      param:=trim(copy(AtEndScript,i,999));
+    end
+    else begin
+      sc:=AtEndScript;
+      param:='';
+    end;
     scriptfound:=false;
-    if FileExistsUTF8(slash(ConfigDir)+AtEndScript+'.script') then begin
+    if FileExistsUTF8(slash(ConfigDir)+sc+'.script') then begin
        scriptfound:=true;
-       f_scriptengine.RunScript(AtEndScript,ConfigDir,'');
+       f_scriptengine.RunScript(sc,ConfigDir,param);
     end;
     if not scriptfound then begin
-      msg(Format(rsFileNotFound,[AtEndScript+'.script']),1);
+      msg(Format(rsFileNotFound,[sc+'.script']),1);
     end;
   end;
   if AtEndShutdown then begin

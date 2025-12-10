@@ -88,6 +88,7 @@ type
     MenuMagnitude: TMenuItem;
     MenuOnlineCoord: TMenuItem;
     Panel10: TPanel;
+    PanelOptions: TPanel;
     Panel16: TPanel;
     PopupAddStep: TPopupMenu;
     ScriptList2: TComboBox;
@@ -285,6 +286,7 @@ type
     procedure MenuOnlineMagnClick(Sender: TObject);
     procedure MenuPlanetariumMagnClick(Sender: TObject);
     procedure MenuSwitchClick(Sender: TObject);
+    procedure PanelOptionsResize(Sender: TObject);
     procedure PointCoordChange(Sender: TObject);
     procedure RepeatCountListChange(Sender: TObject);
     procedure SeqStartChange(Sender: TObject);
@@ -1393,6 +1395,11 @@ begin
   TargetChange(nil);
 end;
 
+procedure Tf_EditTargets.PanelOptionsResize(Sender: TObject);
+begin
+  PanelStartOption.Width:=PanelOptions.ClientWidth div 2;
+end;
+
 
 procedure Tf_EditTargets.Btn_coord_internalClick(Sender: TObject);{Retrieve position from deepsky database}
 var n: integer;
@@ -1684,7 +1691,7 @@ begin
      f_selectscript.SetScript(StartScript);
      FormPos(f_selectscript,mouse.CursorPos.X,mouse.CursorPos.Y);
      if (f_selectscript.ShowModal=mrOK)and(f_selectscript.ComboBoxScript.ItemIndex>=0) then begin
-        StartScript:=f_selectscript.ComboBoxScript.Items[f_selectscript.ComboBoxScript.ItemIndex];
+        StartScript:=f_selectscript.ComboBoxScript.Items[f_selectscript.ComboBoxScript.ItemIndex]+' '+f_selectscript.edParam.Text;
      end;
   end;
   SetStartScriptName;
@@ -1727,14 +1734,14 @@ begin
      f_selectscript.SetScript(EndScript);
      FormPos(f_selectscript,mouse.CursorPos.X,mouse.CursorPos.Y);
      if (f_selectscript.ShowModal=mrOK)and(f_selectscript.ComboBoxScript.ItemIndex>=0) then begin
-        EndScript:=f_selectscript.ComboBoxScript.Items[f_selectscript.ComboBoxScript.ItemIndex];
+        EndScript:=f_selectscript.ComboBoxScript.Items[f_selectscript.ComboBoxScript.ItemIndex]+' '+f_selectscript.edParam.Text;
      end;
   end;
   if (Index=cbUnattended) and TermOpt.Checked[cbUnattended] then begin
      f_selectscript.SetScript(UnattendedScript);
      FormPos(f_selectscript,mouse.CursorPos.X,mouse.CursorPos.Y);
      if (f_selectscript.ShowModal=mrOK)and(f_selectscript.ComboBoxScript.ItemIndex>=0) then begin
-        UnattendedScript:=f_selectscript.ComboBoxScript.Items[f_selectscript.ComboBoxScript.ItemIndex];
+        UnattendedScript:=f_selectscript.ComboBoxScript.Items[f_selectscript.ComboBoxScript.ItemIndex]+' '+f_selectscript.edParam.Text;
      end;
   end;
   SetEndScriptName;

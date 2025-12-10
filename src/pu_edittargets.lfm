@@ -143,7 +143,7 @@ object f_EditTargets: Tf_EditTargets
         ClientHeight = 95
         ClientWidth = 248
         ParentFont = False
-        TabOrder = 3
+        TabOrder = 1
         object SeqStart: TCheckBox
           Left = 4
           Height = 22
@@ -243,88 +243,100 @@ object f_EditTargets: Tf_EditTargets
           ParentColor = False
         end
       end
-      object PanelStartOption: TPanel
+      object PanelOptions: TPanel
         Left = 552
         Height = 95
         Top = 1
-        Width = 220
-        Align = alLeft
-        BevelOuter = bvNone
-        ClientHeight = 95
-        ClientWidth = 220
-        ParentFont = False
-        TabOrder = 2
-        object Label7: TLabel
-          Left = 4
-          Height = 18
-          Top = 0
-          Width = 79
-          Caption = 'Start options'
-          ParentColor = False
-          ParentFont = False
-        end
-        object StartOpt: TCheckListBox
-          Left = 0
-          Height = 79
-          Top = 16
-          Width = 220
-          Align = alBottom
-          Items.Strings = (
-            'ccNone'
-            'ccCool'
-            'ccUnpark'
-            'ccScript'
-          )
-          ItemHeight = 26
-          OnItemClick = StartOptItemClick
-          TabOrder = 0
-          Data = {
-            0400000000000000
-          }
-        end
-      end
-      object PanelTermination: TPanel
-        Left = 772
-        Height = 95
-        Top = 1
-        Width = 251
+        Width = 471
         Align = alClient
         BevelOuter = bvNone
         ClientHeight = 95
-        ClientWidth = 251
-        Constraints.MaxWidth = 500
-        ParentFont = False
-        TabOrder = 1
-        object TermOpt: TCheckListBox
+        ClientWidth = 471
+        TabOrder = 2
+        OnResize = PanelOptionsResize
+        object PanelStartOption: TPanel
           Left = 0
-          Height = 79
-          Top = 16
-          Width = 251
-          Align = alBottom
-          Items.Strings = (
-            'cbNone'
-            'cbStopTracking'
-            'cbWarm'
-            'cbParkScope'
-            'cbParkDome'
-            'cdScript'
-            'cbUnatendedErrorScript'
-          )
-          ItemHeight = 26
-          OnItemClick = TermOptItemClick
-          TabOrder = 0
-          Data = {
-            0700000000000000000000
-          }
-        end
-        object Label3: TLabel
-          Left = 8
-          Height = 18
+          Height = 95
           Top = 0
-          Width = 124
-          Caption = 'Termination options'
-          ParentColor = False
+          Width = 220
+          Align = alLeft
+          BevelOuter = bvNone
+          ClientHeight = 95
+          ClientWidth = 220
           ParentFont = False
+          TabOrder = 0
+          object Label7: TLabel
+            Left = 4
+            Height = 18
+            Top = 0
+            Width = 79
+            Caption = 'Start options'
+            ParentColor = False
+            ParentFont = False
+          end
+          object StartOpt: TCheckListBox
+            Left = 0
+            Height = 79
+            Top = 16
+            Width = 220
+            Align = alBottom
+            Items.Strings = (
+              'ccNone'
+              'ccCool'
+              'ccUnpark'
+              'ccScript'
+            )
+            ItemHeight = 26
+            OnItemClick = StartOptItemClick
+            TabOrder = 0
+            Data = {
+              0400000000000000
+            }
+          end
+        end
+        object PanelTermination: TPanel
+          Left = 220
+          Height = 95
+          Top = 0
+          Width = 251
+          Align = alClient
+          BevelOuter = bvNone
+          ClientHeight = 95
+          ClientWidth = 251
+          Constraints.MaxWidth = 500
+          ParentFont = False
+          TabOrder = 1
+          object TermOpt: TCheckListBox
+            Left = 0
+            Height = 79
+            Top = 16
+            Width = 251
+            Align = alBottom
+            Items.Strings = (
+              'cbNone'
+              'cbStopTracking'
+              'cbWarm'
+              'cbParkScope'
+              'cbParkDome'
+              'cdScript'
+              'cbUnatendedErrorScript'
+            )
+            ItemHeight = 26
+            OnItemClick = TermOptItemClick
+            TabOrder = 0
+            Data = {
+              0700000000000000000000
+            }
+          end
+          object Label3: TLabel
+            Left = 8
+            Height = 18
+            Top = 0
+            Width = 124
+            Caption = 'Termination options'
+            ParentColor = False
+            ParentFont = False
+          end
         end
       end
     end
@@ -676,7 +688,7 @@ object f_EditTargets: Tf_EditTargets
           Height = 225
           Top = 26
           Width = 390
-          HorzScrollBar.Page = 338
+          HorzScrollBar.Page = 359
           VertScrollBar.Page = 225
           Align = alClient
           ClientHeight = 225
