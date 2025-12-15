@@ -5239,10 +5239,14 @@ begin
   AutofocusMoveDir:=config.GetValue('/StarAnalysis/AutofocusMoveDir',FocusDirIn);
   AutofocusNearNum:=config.GetValue('/StarAnalysis/AutofocusNearNum',3);
   AutofocusInPlace:=config.GetValue('/StarAnalysis/AutofocusInPlace',true);
-  if AutofocusInPlace then
-     AutofocusPauseGuider:=config.GetValue('/StarAnalysis/AutofocusPauseGuider',true)
-  else
-     AutofocusPauseGuider:=true;
+  if GuiderAutofocus then
+    AutofocusPauseGuider:=false
+  else begin
+    if AutofocusInPlace then
+       AutofocusPauseGuider:=config.GetValue('/StarAnalysis/AutofocusPauseGuider',true)
+    else
+       AutofocusPauseGuider:=true;
+  end;
   if not f_sequence.Running then InplaceAutofocus:=AutofocusInPlace;
   AutofocusMultiStarCenterPct:=config.GetValue('/StarAnalysis/AutofocusMultiStarCenterPct',30);
   AutofocusMultiStarCenterPct:=min(100,max(1,AutofocusMultiStarCenterPct));
