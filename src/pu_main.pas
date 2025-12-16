@@ -5488,6 +5488,7 @@ begin
   else if (TCPIPConfigPort<>TCPIPServerPort) then
      RestartServer;
   WeatherRestartDelay:=config.GetValue('/Weather/RestartDelay',5);
+  WeatherScript:=config.GetValue('/Weather/Script','');
   weather.UseCloudCover:=config.GetValue('/Weather/Use/CloudCover',false);
   weather.UseDewPoint:=config.GetValue('/Weather/Use/DewPoint',false);
   weather.UseHumidity:=config.GetValue('/Weather/Use/Humidity',false);
@@ -7340,6 +7341,7 @@ case weather.Status of
                       f_devicesconnection.LabelWeather.Font.Color:=clGreen;
                       NewMessage(Format(rsConnected, [rsWeatherStati]),1);
                       f_weather.Connected:=true;
+                      f_weather.Clear:=weather.Clear;
                    end;
 end;
 WeatherClearChange(Sender);
@@ -7355,6 +7357,7 @@ begin
       f_weather.Clear:=ok;
       NewMessage(Format(rsWeatherMonit, [BoolToStr(f_weather.Clear, rsGood, rsBad)]), 1);
       if not f_weather.Clear then NewMessage(Format(rsWeatherIssue, [weather.WeatherMessage]));
+      if WeatherScript<>'' then RunScript(WeatherScript,ConfigDir,BoolToStr(f_weather.Clear,'1','0'));
       f_sequence.WeatherChange(f_weather.Clear);
     end;
   end;
@@ -10187,6 +10190,17 @@ begin
    f_option.PanelRemoteCdc.Visible:=not f_option.CheckBoxLocalCdc.Checked;
    f_option.PanelLocalCdC.Visible:=not f_option.PanelRemoteCdc.Visible;
    f_option.WeatherRestartDelay.Value:=config.GetValue('/Weather/RestartDelay',5);
+   f_option.cbWeatherScript.Clear;
+   f_option.cbWeatherScript.Items.Assign(f_script.ComboBoxScript.Items);
+   f_option.cbWeatherScript.Items.Insert(0,'');
+   buf:=config.GetValue('/Weather/Script','');
+   if buf<>'' then begin
+     i:=f_option.cbWeatherScript.Items.IndexOf(buf);
+     if i>=0 then f_option.cbWeatherScript.ItemIndex:=i;
+   end
+   else begin
+     f_option.cbWeatherScript.Text:='';
+   end;
    f_option.ScrollBoxWeather.Visible:=(weather.Status=devConnected)and(not weather.hasStatus);
    if f_option.ScrollBoxWeather.Visible then begin
       f_option.PanelW1.Visible:=weather.hasCloudCover;
@@ -10621,6 +10635,7 @@ begin
      config.SetValue('/Planetarium/SAMPpath',f_option.SAMPPath.Text);
      config.SetValue('/Planetarium/SAMPparam',f_option.SAMPParam.Text);
      config.SetValue('/Weather/RestartDelay',f_option.WeatherRestartDelay.Value);
+     config.SetValue('/Weather/Script',f_option.cbWeatherScript.text);
      if f_option.ScrollBoxWeather.Visible then begin
         config.SetValue('/Weather/Use/CloudCover',f_option.UseW1.Checked);
         config.SetValue('/Weather/Use/DewPoint',f_option.UseW2.Checked);

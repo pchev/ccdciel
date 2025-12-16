@@ -1642,6 +1642,8 @@ resourcestring
   rsLimitRotator = 'Limit rotator angle to 0-180 degree range';
   rsSyncOffset = 'Sync Offset';
   rsMakeSureTheS = 'Make sure the stars are not saturated.';
+  rsRunScriptWhe = 'Run script when the weather change';
+  rsDuplicateAct = 'Duplicate action';
 
 implementation
 

@@ -6850,13 +6850,13 @@ object f_option: Tf_option
         ParentFont = False
         object ScrollBoxWeather: TScrollBox
           Left = 0
-          Height = 599
-          Top = 69
+          Height = 563
+          Top = 105
           Width = 555
           HorzScrollBar.Page = 501
           VertScrollBar.Page = 429
           Align = alClient
-          ClientHeight = 599
+          ClientHeight = 563
           ClientWidth = 555
           ParentFont = False
           TabOrder = 0
@@ -7784,6 +7784,36 @@ object f_option: Tf_option
             Caption = 'Pause sequence when the observing condition are out of the limits'
             ParentColor = False
             ParentFont = False
+          end
+        end
+        object Panel40: TPanel
+          Left = 0
+          Height = 36
+          Top = 69
+          Width = 555
+          Align = alTop
+          ClientHeight = 36
+          ClientWidth = 555
+          TabOrder = 3
+          object Label191: TLabel
+            AnchorSideTop.Control = cbWeatherScript
+            AnchorSideTop.Side = asrCenter
+            Left = 8
+            Height = 18
+            Top = 9
+            Width = 224
+            Caption = 'Run script when the weather change'
+            ParentColor = False
+          end
+          object cbWeatherScript: TComboBox
+            Left = 323
+            Height = 28
+            Top = 4
+            Width = 212
+            Constraints.MaxHeight = 28
+            ItemHeight = 18
+            Style = csDropDownList
+            TabOrder = 0
           end
         end
       end

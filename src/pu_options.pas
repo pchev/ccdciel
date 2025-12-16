@@ -37,8 +37,11 @@ type
     cbSlewSyncRotator: TCheckBox;
     cbAFmedianfilter: TCheckBox;
     cbHighlightColor: TComboBox;
+    cbWeatherScript: TComboBox;
     KeepIndiHeader: TCheckBox;
     Label190: TLabel;
+    Label191: TLabel;
+    Panel40: TPanel;
     PlateSolve3Cmd: TFileNameEdit;
     Label189: TLabel;
     Page6: TPage;
@@ -1482,6 +1485,7 @@ begin
   PageWeather.Caption := rsWeatherStati;
   Label118.Caption:=rsPauseSequenc;
   Label116.Caption:=rsRestartAfter2;
+  Label191.Caption:=rsRunScriptWhe;
   Label117.Caption:=rsMinutes;
   UseW1.Caption:=rsCloudCover;
   UseW2.Caption:=rsDewPoint;
@@ -2590,7 +2594,7 @@ begin
          dup:=true;
      end;
      if dup then begin
-       MessageDlg('Duplicate action: '+SafetyActionName[n],mtError,[mbOK],0);
+       MessageDlg(rsDuplicateAct+': '+SafetyActionName[n], mtError, [mbOK], 0);
        cb.ItemIndex:=OldActionIndex;
      end;
    end;

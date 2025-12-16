@@ -572,6 +572,7 @@ var
   CurrentStepNum,CurrentDoneCount: integer;
   WeatherPauseCapture,WeatherCapturePaused,WeatherPauseCanceled,WeatherCancelRestart: boolean;
   WeatherRestartDelay: integer;
+  WeatherScript: string;
   SaveFormat: TFileFormat;
   MeasureNewImage,SaveBitmap: boolean;
   SaveBitmapFormat:string;
