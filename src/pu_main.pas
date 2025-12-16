@@ -9740,6 +9740,7 @@ begin
      else if buf='es' then langname:='Español'
      else if buf='fr' then langname:='Français'
      else if buf='it' then langname:='Italiano'
+     else if buf='lo' then langname:='ພາສາລາວ Lao'
      else if buf='ru' then langname:='русский Russian'
      else if buf='zh_CN' then langname:='中文 Chinese (Simplified)'
      else langname:='';
