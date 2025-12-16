@@ -1,0 +1,6436 @@
+# Lao translation for ccdciel
+# Copyright (c) 2025 Rosetta Contributors and Canonical Ltd 2025
+# This file is distributed under the same license as the ccdciel package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+msgid ""
+msgstr ""
+"Project-Id-Version: ccdciel\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2025-12-16 16:33+0000\n"
+"PO-Revision-Date: 2025-10-21 04:57+0000\n"
+"Last-Translator: boneni <Unknown>\n"
+"Language-Team: Lao <lo@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2025-12-16 16:44+0000\n"
+"X-Generator: Launchpad (build 379e22b8475e3402088a4cdb4a6e7936a4d28414)\n"
+
+#: u_translation.rs2d
+msgid "2D"
+msgstr "2 ມິຕິ"
+
+#: u_translation.rs32bitdriver
+msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
+msgstr "ໄດຣເວີນີ້ໃຊ້ໄດ້ກັບ 32bit ເທົ່ານັ້ນ, ກະລຸນາຕິດຕັ້ງ CCDciel ເວີຊັນ 32bit."
+
+#: u_translation.rs9panelimage
+msgid "9 panel image"
+msgstr "ຮູບພາບ 9 ແຜງ"
+
+#: u_translation.rsabort
+msgid "Abort"
+msgstr "ຍົກເລີກ"
+
+#: u_translation.rsabortafter
+msgid "Abort after"
+msgstr "ຍົກເລີກຫຼັງຈາກ"
+
+#: u_translation.rsabortafterre
+msgid "Abort after restarting more than"
+msgstr "ຍົກເລີກຫຼັງຈາກເລີ່ມໃໝ່ຫຼາຍກວ່າ"
+
+#: u_translation.rsabortdome
+#, object-pascal-format
+msgid "Abort dome %s"
+msgstr "ຍົກເລີກໂດມ %s"
+
+#: u_translation.rsabortexposur
+msgid "Abort exposure"
+msgstr "ຍົກເລີກການເປີດໜ້າກ້ອງ"
+
+#: u_translation.rsabortmount
+#, object-pascal-format
+msgid "Abort mount%s"
+msgstr "ຍົກເລີກຖານຕິດຕັ້ງ%s"
+
+#: u_translation.rsabortthecurr
+msgid "Abort the current sequence"
+msgstr "ຍົກເລີກລຳດັບປັດຈຸບັນ"
+
+#: u_translation.rsabout
+msgid "About"
+msgstr "ກ່ຽວກັບ"
+
+#: u_translation.rsaction
+msgid "Action"
+msgstr "ການກະທຳ"
+
+#: u_translation.rsactivatesola
+msgid "Activate solar object tracking."
+msgstr "ເປີດໃຊ້ການຕິດຕາມວັດຖຸໃນລະບົບສຸລິຍະ."
+
+#: u_translation.rsactivatespec
+msgid "Activate spectroscopy functions"
+msgstr "ເປີດໃຊ້ຟັງຊັນການວັດແທກສະເປກຕຣັມ"
+
+#: u_translation.rsactivation
+msgid "Activation"
+msgstr "ການເປີດໃຊ້"
+
+#: u_translation.rsactivetarget
+msgid "Active target is replaced, restart the sequence"
+msgstr "ເປົ້າໝາຍທີ່ກຳລັງເຮັດວຽກຖືກແທນທີ່, ເລີ່ມລຳດັບໃໝ່"
+
+#: u_translation.rsactualfocall
+msgid "Actual focal length"
+msgstr "ຄວາມຍາວໂຟກັສຕົວຈິງ"
+
+#: u_translation.rsadd
+msgid "Add"
+msgstr "ເພີ່ມ"
+
+#: u_translation.rsaddfitskeywo
+msgid "Add FITS keyword for DSLR EXIF tags"
+msgstr "ເພີ່ມຄີເວີດ FITS ສໍາລັບແທັກ EXIF ຂອງ DSLR"
+
+#: u_translation.rsaddimages
+msgid "Add images"
+msgstr "ເພີ່ມຮູບພາບ"
+
+#: u_translation.rsadditionalop
+msgid "Additional options for"
+msgstr "ຕົວເລືອກເພີ່ມເຕີມສຳລັບ"
+
+#: u_translation.rsadditionalsc
+msgid "Additional script parameter"
+msgstr "ພາຣາມິເຕີສະຄຣິບເພີ່ມເຕີມ"
+
+#: u_translation.rsaddstep
+msgid "Add step"
+msgstr "ເພີ່ມຂັ້ນຕອນ"
+
+#: u_translation.rsadjustautofo
+#, object-pascal-format
+msgid "Adjust autofocus star magnitude:%s, exposure factor:%s"
+msgstr "ປັບຄວາມສະຫວ່າງດາວໂຟກັສອັດຕະໂນມັດ:%s, ໂຕຄູນການເປີດໜ້າກ້ອງ:%s"
+
+#: u_translation.rsadjustflatex
+#, object-pascal-format
+msgid "Adjust flat exposure time to %s and retry."
+msgstr "ປັບເວລາເປີດໜ້າກ້ອງແຟລັດເປັນ %s ແລະລອງໃໝ່."
+
+#: u_translation.rsadjustthecha
+msgid "Adjust the chart for the image or frame"
+msgstr "ປັບແຜນວາດໃຫ້ເຂົ້າກັບຮູບພາບ ຫຼືເຟຣມ"
+
+#: u_translation.rsadjustthemou
+msgid "Adjust the mount in azimuth and elevation such that the star moves from the green square to the pink circle."
+msgstr "ປັບຖານຕິດຕັ້ງໃນມຸມອາຊິມຸດ ແລະມຸມເງີຍເພື່ອໃຫ້ດາວຍ້າຍຈາກສີ່ຫຼ່ຽມສີຂຽວໄປຫາວົງມົນສີບົວ."
+
+#: u_translation.rsadjusttowind
+msgid "Adjust to window"
+msgstr "ປັບໃຫ້ພໍດີກັບໜ້າຕ່າງ"
+
+#: u_translation.rsadministrato
+msgid "administrator"
+msgstr "ຜູ້ເບິ່ງແຍງລະບົບ"
+
+#: u_translation.rsadvanced
+msgid "Advanced"
+msgstr "ຂັ້ນສູງ"
+
+#: u_translation.rsadvancedsett
+msgid "Advanced settings"
+msgstr "ການຕັ້ງຄ່າຂັ້ນສູງ"
+
+#: u_translation.rsaftertelesco
+#, object-pascal-format
+msgid "After telescope pointing to target the offset relative to requested position is %s arcminutes.%sDo you want to retry the slew?"
+msgstr "ຫຼັງຈາກກ້ອງສ່ອງທາງໄກຊີ້ໄປທີ່ເປົ້າໝາຍ ຄ່າຊົດເຊີຍທຽບກັບຕຳແໜ່ງທີ່ຮ້ອງຂໍແມ່ນ %s ອາກນາທີ.%sທ່ານຕ້ອງການລອງຫັນກ້ອງໃໝ່ບໍ່?"
+
+#: u_translation.rsairmass
+msgid "Airmass"
+msgstr "ມວນອາກາດ"
+
+#: u_translation.rsalignmenton
+msgid "Alignment on"
+msgstr "ການຕັ້ງແນວໃສ່"
+
+#: u_translation.rsalignmentsta
+msgid "Alignment star lost"
+msgstr "ເສຍດາວຈັດຕຳແໜ່ງ"
+
+#: u_translation.rsall
+msgid "All"
+msgstr "ທັງໝົດ"
+
+#: u_translation.rsallowtoopent
+msgid "Allow to open the dome when safety status is bad or unknown"
+msgstr "ອະນຸຍາດໃຫ້ເປີດໂດມເມື່ອສະຖານະຄວາມປອດໄພບໍ່ດີ ຫຼື ບໍ່ຮູ້ຈັກ"
+
+#: u_translation.rsallowtoselec
+msgid "Allow to select a brighter star for high filter exposure factor"
+msgstr "ອະນຸຍາດໃຫ້ເລືອກດາວທີ່ແຈ້ງກວ່າສຳລັບໂຕຄູນການເປີດໜ້າກ້ອງຂອງຟິວເຕີສູງ"
+
+#: u_translation.rsalt
+msgid "Alt"
+msgstr "ມຸມເງີຍ"
+
+#: u_translation.rsanotherscrip
+msgid "Another script is already running"
+msgstr "ມີສະຄຣິບອື່ນກຳລັງເຮັດວຽກຢູ່ແລ້ວ"
+
+#: u_translation.rsanytime
+msgid "Any time"
+msgstr "ເວລາໃດກໍ່ໄດ້"
+
+#: u_translation.rsapparentmoti
+msgid "Apparent motion"
+msgstr "ການເຄື່ອນທີ່ປາກົດ"
+
+#: u_translation.rsapparentmoti2
+msgid "Apparent motion PA"
+msgstr "ມຸມຕຳແໜ່ງການເຄື່ອນທີ່ປາກົດ"
+
+#: u_translation.rsapplydarkand
+msgid "Apply Dark and BPM"
+msgstr "ນຳໃຊ້ພາບມືດ ແລະ BPM"
+
+#: u_translation.rsapplyediting
+msgid "Apply editing to active sequence"
+msgstr "ນຳໃຊ້ການແກ້ໄຂກັບລຳດັບທີ່ກຳລັງເຮັດວຽກ"
+
+#: u_translation.rsapplyflat
+msgid "Apply Flat"
+msgstr "ນຳໃຊ້ພາບແຟລັດ"
+
+#: u_translation.rsapplytoallde
+msgid "Apply to all devices"
+msgstr "ນຳໃຊ້ກັບທຸກອຸປະກອນ"
+
+#: u_translation.rsapplytoallta
+msgid "Apply to all targets"
+msgstr "ນຳໃຊ້ກັບທຸກເປົ້າໝາຍ"
+
+#: u_translation.rsapplytocurre
+msgid "Apply to current image"
+msgstr "ນຳໃຊ້ກັບຮູບພາບປັດຈຸບັນ"
+
+#: u_translation.rsapproximatec
+msgid "Approximate coordinates and image scale"
+msgstr "ພິກັດປະມານ ແລະສະເກລຮູບພາບ"
+
+#: u_translation.rsarcmin
+msgid "[arcmin]"
+msgstr "[ອາກນາທີ]"
+
+#: u_translation.rsareyousureyo
+msgid "Are you sure you want to disconnect all the devices now?"
+msgstr "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການຕັດການເຊື່ອມຕໍ່ອຸປະກອນທັງໝົດດຽວນີ້?"
+
+#: u_translation.rsascominterfa
+msgid "ASCOM interface is only available on Windows."
+msgstr "ສ່ວນຕິດຕໍ່ ASCOM ມີໃຫ້ໃຊ້ສະເພາະໃນ Windows ເທົ່ານັ້ນ."
+
+#: u_translation.rsasequenceisa
+msgid "A sequence is already running, cannot load a new one."
+msgstr "ມີລຳດັບກຳລັງດຳເນີນການຢູ່ແລ້ວ, ບໍ່ສາມາດໂຫຼດອັນໃໝ່ໄດ້."
+
+#: u_translation.rsastrometry
+msgid "Astrometry"
+msgstr "ການວັດແທກຕຳແໜ່ງດາວ"
+
+#: u_translation.rsastrometryex
+msgid "Astrometry exposure time"
+msgstr "ເວລາເປີດໜ້າກ້ອງສຳລັບການວັດແທກຕຳແໜ່ງດາວ"
+
+#: u_translation.rsastrometryop
+msgid "Astrometry options"
+msgstr "ຕົວເລືອກການວັດແທກຕຳແໜ່ງດາວ"
+
+#: u_translation.rsastrometryre
+msgid "Astrometry resolver log"
+msgstr "ບັນທຶກໂຕແກ້ໄຂການວັດແທກຕຳແໜ່ງດາວ"
+
+#: u_translation.rsatdawn
+msgid "at dawn"
+msgstr "ຕອນເຊົ້າ"
+
+#: u_translation.rsatdusk
+msgid "at dusk"
+msgstr "ຕອນຄ່ຳ"
+
+#: u_translation.rsatmosphericr
+msgid "Atmospheric refraction"
+msgstr "ການຫັກເຫຂອງບັນຍາກາດ"
+
+#: u_translation.rsautofocus
+msgid "Autofocus"
+msgstr "ປັບຈຸດສຸມອັດຕະໂນມັດ"
+
+#: u_translation.rsautofocusaft
+msgid "Autofocus after meridian flip"
+msgstr "ປັບຈຸດສຸມອັດຕະໂນມັດຫຼັງການພິກຜ່ານເມຣິເດຍນ"
+
+#: u_translation.rsautofocusaft2
+msgid "Autofocus after temperature change"
+msgstr "ໂຟກັສອັດຕະໂນມັດຫຼັງຈາກອຸນຫະພູມປ່ຽນ"
+
+#: u_translation.rsautofocusalr
+msgid "Autofocus already running."
+msgstr "ການປັບຈຸດສຸມອັດຕະໂນມັດກຳລັງເຮັດວຽກຢູ່ແລ້ວ."
+
+#: u_translation.rsautofocusbef
+#, object-pascal-format
+msgid "Autofocus%sbefore to start"
+msgstr "ປັບຈຸດສຸມອັດຕະໂນມັດ%sກ່ອນເລີ່ມ"
+
+#: u_translation.rsautofocuscan
+#, object-pascal-format
+msgid "Autofocus cannot find a star!%sPlease adjust your parameters"
+msgstr "ການປັບຈຸດສຸມອັດຕະໂນມັດບໍ່ພົບດາວ!%sກະລຸນາປັບພາຣາມິເຕີຂອງທ່ານ"
+
+#: u_translation.rsautofocuscan2
+msgid "Autofocus canceled because no star was selected."
+msgstr "ການປັບຈຸດສຸມອັດຕະໂນມັດຖືກຍົກເລີກເພາະບໍ່ມີດາວໃດຖືກເລືອກ."
+
+#: u_translation.rsautofocuscan3
+msgid "Autofocus canceled because no star was found."
+msgstr "ການປັບຈຸດສຸມອັດຕະໂນມັດຖືກຍົກເລີກເພາະບໍ່ພົບດາວ."
+
+#: u_translation.rsautofocuscan4
+msgid "Autofocus canceled because the HFD cannot be measured"
+msgstr "ການປັບຈຸດສຸມອັດຕະໂນມັດຖືກຍົກເລີກເພາະບໍ່ສາມາດວັດແທກ HFD ໄດ້"
+
+#: u_translation.rsautofocuscan5
+#, object-pascal-format
+msgid "Autofocus canceled because of low SNR, POS=%s HFD=%s PEAK:%s SNR:%s"
+msgstr "ການປັບຈຸດສຸມອັດຕະໂນມັດຖືກຍົກເລີກເພາະ SNR ຕ່ຳ, POS=%s HFD=%s PEAK:%s SNR:%s"
+
+#: u_translation.rsautofocusdue
+msgid "Autofocus due in"
+msgstr "ຈະໂຟກັສອັດຕະໂນມັດໃນອີກ"
+
+#: u_translation.rsautofocuserr
+msgid "AutoFocus error"
+msgstr "ການປັບຈຸດສຸມອັດຕະໂນມັດຜິດພາດ"
+
+#: u_translation.rsautofocuserr2
+msgid "Autofocus error"
+msgstr "ຄວາມຜິດພາດຂອງໂຟກັສອັດຕະໂນມັດ"
+
+#: u_translation.rsautofocuseve
+#, object-pascal-format
+msgid "Autofocus%severy"
+msgstr "ປັບຈຸດສຸມອັດຕະໂນມັດ%sທຸກໆ"
+
+#: u_translation.rsautofocusfai
+msgid "Autofocus failed!"
+msgstr "ການປັບຈຸດສຸມອັດຕະໂນມັດລົ້ມເຫຼວ!"
+
+#: u_translation.rsautofocusfai2
+msgid "Autofocus failed, try with another star..."
+msgstr "ການປັບຈຸດສຸມອັດຕະໂນມັດລົ້ມເຫຼວ, ລອງກັບດາວອື່ນ..."
+
+#: u_translation.rsautofocusfai3
+#, object-pascal-format
+msgid "Autofocus failed after %s retries, continue without focusing."
+msgstr "ການປັບຈຸດສຸມອັດຕະໂນມັດລົ້ມເຫຼວຫຼັງຈາກລອງ %s ຄັ້ງ, ສືບຕໍ່ໂດຍບໍ່ປັບຈຸດສຸມ."
+
+#: u_translation.rsautofocusfin
+#, object-pascal-format
+msgid "Autofocus finished, POS=%s HFD=%s PEAK:%s SNR:%s TEMP:%s"
+msgstr "ການປັບຈຸດສຸມອັດຕະໂນມັດສຳເລັດ, POS=%s HFD=%s PEAK:%s SNR:%s TEMP:%s"
+
+#: u_translation.rsautofocusfin2
+#, object-pascal-format
+msgid "Autofocus final HFD is higher than %s"
+msgstr "HFD ສຸດທ້າຍຂອງການປັບຈຸດສຸມອັດຕະໂນມັດສູງກວ່າ %s"
+
+#: u_translation.rsautofocusfoc
+#, object-pascal-format
+msgid "Autofocus focus in by %s"
+msgstr "ການປັບຈຸດສຸມອັດຕະໂນມັດສຸມເຂົ້າໂດຍ %s"
+
+#: u_translation.rsautofocusfoc2
+#, object-pascal-format
+msgid "Autofocus focus out by %s"
+msgstr "ການປັບຈຸດສຸມອັດຕະໂນມັດສຸມອອກໂດຍ %s"
+
+#: u_translation.rsautofocusgra
+msgid "Autofocus graph"
+msgstr "ກຣາຟໂຟກັສອັດຕະໂນມັດ"
+
+#: u_translation.rsautofocushfd2
+msgid "Autofocus after % change HFD"
+msgstr "ໂຟກັສອັດຕະໂນມັດຫຼັງຈາກ HFD ປ່ຽນ %"
+
+#: u_translation.rsautofocusloc
+msgid "Autofocus location"
+msgstr "ຕຳແໜ່ງໂຟກັສອັດຕະໂນມັດ"
+
+#: u_translation.rsautofocusmea
+#, object-pascal-format
+msgid "Autofocus mean frame %s/%s, hfd=%s peak:%s snr:%s"
+msgstr "ຂອບຮູບສະເລ່ຍຂອງການປັບຈຸດສຸມອັດຕະໂນມັດ %s/%s, hfd=%s peak:%s snr:%s"
+
+#: u_translation.rsautofocusmea2
+#, object-pascal-format
+msgid "Autofocus measurement %s : HFD=%s position=%s"
+msgstr "ການວັດແທກຂອງການປັບຈຸດສຸມອັດຕະໂນມັດ %s : HFD=%s ຕຳແໜ່ງ=%s"
+
+#: u_translation.rsautofocusmet
+msgid "Autofocus method"
+msgstr "ວິທີການປັບຈຸດສຸມອັດຕະໂນມັດ"
+
+#: u_translation.rsautofocusmov
+#, object-pascal-format
+msgid "Autofocus move to start position %s"
+msgstr "ການປັບຈຸດສຸມອັດຕະໂນມັດຍ້າຍໄປຕຳແໜ່ງເລີ່ມຕົ້ນ %s"
+
+#: u_translation.rsautofocusmov2
+#, object-pascal-format
+msgid "Autofocus move to near focus %s"
+msgstr "ການປັບຈຸດສຸມອັດຕະໂນມັດຍ້າຍໄປຈຸດສຸມໃກ້ %s"
+
+#: u_translation.rsautofocusmov3
+#, object-pascal-format
+msgid "Autofocus move to focus position %s"
+msgstr "ການປັບຈຸດສຸມອັດຕະໂນມັດຍ້າຍໄປຕຳແໜ່ງຈຸດສຸມ %s"
+
+#: u_translation.rsautofocusnow
+msgid "Autofocus now"
+msgstr "ປັບຈຸດສຸມອັດຕະໂນມັດດຽວນີ້"
+
+#: u_translation.rsautofocusrun
+#, object-pascal-format
+msgid "Autofocus running, hfd=%s peak:%s snr:%s"
+msgstr "ການປັບຈຸດສຸມອັດຕະໂນມັດກຳລັງເຮັດວຽກ, hfd=%s peak:%s snr:%s"
+
+#: u_translation.rsautofocussta
+#, object-pascal-format
+msgid "AutoFocus started, initial position: %s"
+msgstr "ເລີ່ມການປັບຈຸດສຸມອັດຕະໂນມັດແລ້ວ, ຕຳແໜ່ງເລີ່ມຕົ້ນ: %s"
+
+#: u_translation.rsautofocussta2
+msgid "AutoFocus started"
+msgstr "ເລີ່ມການປັບຈຸດສຸມອັດຕະໂນມັດແລ້ວ"
+
+#: u_translation.rsautofocussta3
+msgid "Autofocus start Vcurve"
+msgstr "ເລີ່ມການປັບຈຸດສຸມອັດຕະໂນມັດ V-curve"
+
+#: u_translation.rsautofocussta4
+msgid "Autofocus start Dynamic curve"
+msgstr "ເລີ່ມການປັບຈຸດສຸມອັດຕະໂນມັດ Dynamic curve"
+
+#: u_translation.rsautofocussta5
+msgid "Autofocus start Iterative focus"
+msgstr "ເລີ່ມການປັບຈຸດສຸມອັດຕະໂນມັດ Iterative focus"
+
+#: u_translation.rsautofocussta6
+msgid "Autofocus start Planet focus"
+msgstr "ໂຟກັສອັດຕະໂນມັດເລີ່ມໂຟກັສດາວເຄາະ"
+
+#: u_translation.rsautofocussuc
+msgid "AutoFocus successful"
+msgstr "ການປັບຈຸດສຸມອັດຕະໂນມັດສຳເລັດ"
+
+#: u_translation.rsautofocustol
+msgid "Autofocus tolerance "
+msgstr "ຄ່າຜັນຜວນທີ່ຍອມຮັບໄດ້ຂອງການປັບຈຸດສຸມອັດຕະໂນມັດ "
+
+#: u_translation.rsautofocususi
+msgid "Autofocus using the OAG camera"
+msgstr "ໂຟກັສອັດຕະໂນມັດໂດຍໃຊ້ກ້ອງ OAG"
+
+#: u_translation.rsautofocuswil
+msgid "Autofocus will run before the next exposure"
+msgstr "ໂຟກັສອັດຕະໂນມັດຈະດຳເນີນການກ່ອນການເປີດໜ້າກ້ອງຄັ້ງຕໍ່ໄປ"
+
+#: u_translation.rsautoguider
+msgid "Autoguider"
+msgstr "ໂຕນຳທາງອັດຕະໂນມັດ"
+
+#: u_translation.rsautoguiderer
+msgid "Autoguider error"
+msgstr "ຄວາມຜິດພາດຂອງລະບົບນຳທາງອັດຕະໂນມັດ"
+
+#: u_translation.rsautoguiderno
+msgid "Autoguider not connected"
+msgstr "ໂຕນຳທາງອັດຕະໂນມັດບໍ່ໄດ້ເຊື່ອມຕໍ່"
+
+#: u_translation.rsautoguiderno2
+#, object-pascal-format
+msgid "Autoguider not guiding %s seconds after requested to start.%sDo you want to retry?"
+msgstr "ໂຕນຳທາງອັດຕະໂນມັດບໍ່ໄດ້ນຳທາງ %s ວິນາທີຫຼັງຈາກຖືກຮ້ອງຂໍໃຫ້ເລີ່ມ.%sທ່ານຕ້ອງການລອງໃໝ່ບໍ່?"
+
+#: u_translation.rsautoguidersh
+msgid "Autoguider shutdown"
+msgstr "ປິດລະບົບນຳທາງອັດຕະໂນມັດ"
+
+#: u_translation.rsautoguiderst2
+msgid "Autoguider Start"
+msgstr "ເລີ່ມໂຕນຳທາງອັດຕະໂນມັດ"
+
+#: u_translation.rsautoguiderwa
+#, object-pascal-format
+msgid "Autoguider was still not guiding after %s minutes."
+msgstr "ໂຕນຳທາງອັດຕະໂນມັດຍັງບໍ່ໄດ້ນຳທາງຫຼັງຈາກ %s ນາທີ."
+
+#: u_translation.rsautoguiding
+msgid "Auto-guiding"
+msgstr "ການນຳທາງອັດຕະໂນມັດ"
+
+#: u_translation.rsautoguidingr
+msgid "Autoguiding restarted."
+msgstr "ເລີ່ມການນຳທາງອັດຕະໂນມັດຄືນໃໝ່ແລ້ວ."
+
+#: u_translation.rsautoguidings
+#, object-pascal-format
+msgid "Autoguiding stopped for %s minutes, sequence timeout in %s minutes."
+msgstr "ການນຳທາງອັດຕະໂນມັດຢຸດເປັນເວລາ %s ນາທີ, ລຳດັບຈະໝົດເວລາໃນ %s ນາທີ."
+
+#: u_translation.rsautomatic
+msgid "Automatic"
+msgstr "ອັດຕະໂນມັດ"
+
+#: u_translation.rsautomaticall
+msgid "Automatically slave \"Dome Park\" to \"Mount Park\""
+msgstr "ຄວບຄຸມ \"ການຈອດໂດມ\" ຕາມ \"ການຈອດຖານຕິດຕັ້ງ\" ໂດຍອັດຕະໂນມັດ"
+
+#: u_translation.rsautomaticall2
+msgid "Automatically run auto-focus every"
+msgstr "ດຳເນີນການໂຟກັສອັດຕະໂນມັດທຸກໆ"
+
+#: u_translation.rsautomaticcoo
+msgid "Automatic cooling "
+msgstr "ການເຮັດຄວາມເຢັນອັດຕະໂນມັດ "
+
+#: u_translation.rsautomaticfla
+msgid "Automatic flat exposure is required for the twilight flat."
+msgstr "ການເປີດໜ້າກ້ອງອັດຕະໂນມັດສຳລັບ Flat ແມ່ນຈຳເປັນສຳລັບ twilight flat."
+
+#: u_translation.rsautomaticfli
+msgid "Automatic flip"
+msgstr "ພິກອັດຕະໂນມັດ"
+
+#: u_translation.rsautomatichfd
+msgid "Automatic HFD measurement for every sequence capture"
+msgstr "ການວັດແທກ HFD ອັດຕະໂນມັດສຳລັບທຸກການຖ່າຍພາບໃນລຳດັບ"
+
+#: u_translation.rsavailable
+msgid "available"
+msgstr "ໃຊ້ໄດ້"
+
+#: u_translation.rsaz
+msgid "Az"
+msgstr "ມຸມອາຊິມຸດ"
+
+#: u_translation.rsazimuth
+msgid "Azimuth"
+msgstr "ມຸມອາຊິມຸດ"
+
+#: u_translation.rsazimuthorigi
+msgid "Azimuth origin"
+msgstr "ຈຸດກຳເນີດອາຊິມຸດ"
+
+#: u_translation.rsback
+msgid "Back"
+msgstr "ກັບຄືນ"
+
+#: u_translation.rsbackground
+msgid "Background"
+msgstr "ພື້ນຫຼັງ"
+
+#: u_translation.rsbackgroundne
+msgid "Background neutralization"
+msgstr "ການເຮັດໃຫ້ພື້ນຫຼັງເປັນກາງ"
+
+#: u_translation.rsbacklashcali
+msgid "Backlash calibration"
+msgstr "ການປັບທຽບແບັກແລຊ"
+
+#: u_translation.rsbacklashcomp
+msgid "Backlash compensation"
+msgstr "ການຊົດເຊີຍໄລຍະຫວ່າງ"
+
+#: u_translation.rsbad
+msgid "Bad"
+msgstr "ບໍ່ດີ"
+
+#: u_translation.rsbadpixeldete
+#, object-pascal-format
+msgid "Bad pixel detection found %s hot pixels."
+msgstr "ການກວດສອບພິກເຊວທີ່ບໍ່ດີພົບ %s hot pixels."
+
+#: u_translation.rsbadpixelmap
+msgid "Bad pixel map"
+msgstr "ແຜນທີ່ພິກເຊວທີ່ບໍ່ດີ"
+
+#: u_translation.rsbadpixelmapc
+msgid "Bad pixel map cleared."
+msgstr "ລຶບແຜນທີ່ພິກເຊວທີ່ບໍ່ດີແລ້ວ."
+
+#: u_translation.rsbadpixelsdet
+msgid "Bad pixels detection"
+msgstr "ການກວດສອບພິກເຊວທີ່ບໍ່ດີ"
+
+#: u_translation.rsbadpixelthre
+msgid "Bad pixel threshold"
+msgstr "ເກນພິກເຊວທີ່ບໍ່ດີ"
+
+#: u_translation.rsband
+msgid "Band"
+msgstr "ແຖບ"
+
+#: u_translation.rsbayermatrixp
+msgid "Bayer matrix pattern"
+msgstr "ຮູບແບບແມ່ແບບ Bayer"
+
+#: u_translation.rsbecarefuloft
+msgid "Be careful of the longitude East/West setting."
+msgstr "ລະວັງການຕັ້ງຄ່າເສັ້ນແວງຕາເວັນອອກ/ຕາເວັນຕົກ."
+
+#: u_translation.rsbeforetouset
+msgid "Before to use this tool you must connect the camera, the mount and the planetarium"
+msgstr "ກ່ອນຈະໃຊ້ເຄື່ອງມືນີ້ ທ່ານຕ້ອງເຊື່ອມຕໍ່ກ້ອງ, ຂາກ້ອງ ແລະ ທ້ອງຟ້າຈຳລອງກ່ອນ"
+
+#: u_translation.rsbeforeyoucan
+#, object-pascal-format
+msgid "Before you can use this option the Elbrus program must be calibrated for your images. Then select File / E-Wait for message.%sAlso be sure to set the parameter: \"Add the WCS in the FITS header\"."
+msgstr "ກ່ອນທີ່ທ່ານຈະສາມາດໃຊ້ຕົວເລືອກນີ້ໄດ້ ໂປຣແກຣມ Elbrus ຕ້ອງຖືກປັບທຽບສຳລັບຮູບພາບຂອງທ່ານ. ຈາກນັ້ນເລືອກ ໄຟລ໌ / E-ລໍຖ້າຂໍ້ຄວາມ.%sໃຫ້ແນ່ໃຈວ່າໄດ້ຕັ້ງພາຣາມິເຕີ: \"ເພີ່ມ WCS ໃນຫົວຂໍ້ FITS\"."
+
+#: u_translation.rsbegin
+msgid "Begin"
+msgstr "ເລີ່ມຕົ້ນ"
+
+#: u_translation.rsbesurethecom
+msgid "Be sure the computer use the local timezone and the observatory location is configured in the program preferences."
+msgstr "ກວດສອບໃຫ້ແນ່ໃຈວ່າຄອມພິວເຕີໃຊ້ເຂດເວລາທ້ອງຖິ່ນ ແລະຕຳແໜ່ງຂອງຫໍສັງເກດການດາວຖືກຕັ້ງຄ່າໃນການຕັ້ງຄ່າຂອງໂປຣແກຣມ."
+
+#: u_translation.rsbesuretoconf
+msgid "Be sure to configure the camera connection."
+msgstr "ໃຫ້ແນ່ໃຈວ່າໄດ້ຕັ້ງຄ່າການເຊື່ອມຕໍ່ກ້ອງແລ້ວ."
+
+#: u_translation.rsbigcross
+msgid "Big cross"
+msgstr "ໄມ້ກາງແຂນໃຫຍ່"
+
+#: u_translation.rsbin
+msgid "Bin"
+msgstr "Bin"
+
+#: u_translation.rsbinning
+msgid "Binning"
+msgstr "Binning"
+
+#: u_translation.rsblue
+msgid "blue"
+msgstr "ສີຟ້າ"
+
+#: u_translation.rsbrightness
+msgid "Brightness"
+msgstr "ຄວາມສະຫວ່າງ"
+
+#: u_translation.rsbrowselogfil
+msgid "Browse log files"
+msgstr "ເບິ່ງໄຟລ໌ບັນທຶກ"
+
+#: u_translation.rscalibrate
+msgid "Calibrate"
+msgstr "ປັບທຽບ"
+
+#: u_translation.rscalibrateaut
+msgid "Calibrate autoguider after meridian flip"
+msgstr "ປັບທຽບໂຕນຳທາງອັດຕະໂນມັດຫຼັງການພິກຜ່ານເມຣິເດຍນ"
+
+#: u_translation.rscalibration
+msgid "Calibration"
+msgstr "ການປັບທຽບ"
+
+#: u_translation.rscalibration2
+msgid "Special calibration"
+msgstr "ການປັບທຽບພິເສດ"
+
+#: u_translation.rscalibrationd
+#, object-pascal-format
+msgid "Calibration %sdelay"
+msgstr "ການປັບທຽບ %sຊັກຊ້າ"
+
+#: u_translation.rscalibrationm
+msgid "Calibration measurement"
+msgstr "ການວັດແທກການປັບທຽບ"
+
+#: u_translation.rscalibrationo
+msgid "Calibration options"
+msgstr "ຕົວເລືອກການປັບທຽບ"
+
+#: u_translation.rscalibrationr
+msgid "Calibration results:"
+msgstr "ຜົນການປັບທຽບ:"
+
+#: u_translation.rscalibrator
+msgid "Calibrator"
+msgstr "ເຄື່ອງປັບທຽບ"
+
+#: u_translation.rscallexternal
+msgid "Call external command"
+msgstr "ເອີ້ນຄຳສັ່ງພາຍນອກ"
+
+#: u_translation.rscam
+msgid "Cam."
+msgstr "ກ້ອງ."
+
+#: u_translation.rscamera
+msgid "Camera"
+msgstr "ກ້ອງ"
+
+#: u_translation.rscameraandmou
+msgid "Camera and mount must be connected!"
+msgstr "ກ້ອງ ແລະ ຂາກ້ອງຕ້ອງເຊື່ອມຕໍ່ກັນ!"
+
+#: u_translation.rscameraandrot
+msgid "Camera and rotator must be connected!"
+msgstr "ກ້ອງ ແລະ ໂຕໝຸນຕ້ອງເຊື່ອມຕໍ່ກັນ!"
+
+#: u_translation.rscameraangle
+msgid "Camera angle"
+msgstr "ມຸມກ້ອງ"
+
+#: u_translation.rscameracooler
+#, object-pascal-format
+msgid "Camera cooler %s"
+msgstr "ໂຕເຮັດຄວາມເຢັນກ້ອງ %s"
+
+#: u_translation.rscameraframex
+#, object-pascal-format
+msgid "Camera frame x=%s y=%s width=%s height=%s"
+msgstr "ຂອບຮູບກ້ອງ x=%s y=%s ກວ້າງ=%s ສູງ=%s"
+
+#: u_translation.rscameranotcoo
+#, object-pascal-format
+msgid "Camera not cooling, set temperature to %s"
+msgstr "ກ້ອງບໍ່ໄດ້ເຮັດຄວາມເຢັນ, ຕັ້ງອຸນຫະພູມເປັນ %s"
+
+#: u_translation.rscameraorfocu
+msgid "Camera or focuser are not connected"
+msgstr "ກ້ອງ ຫຼື ໂຕປັບຈຸດສຸມບໍ່ໄດ້ເຊື່ອມຕໍ່"
+
+#: u_translation.rscancel
+msgid "Cancel"
+msgstr "ຍົກເລີກ"
+
+#: u_translation.rscancelandres
+msgid "Cancel and restart exposure"
+msgstr "ຍົກເລີກ ແລະເລີ່ມການເປີດໜ້າກ້ອງໃໝ່"
+
+#: u_translation.rscancelexposu
+msgid "Cancel exposure"
+msgstr "ຍົກເລີກການເປີດໜ້າກ້ອງ"
+
+#: u_translation.rscancelexposu2
+msgid "Cancel exposure after"
+msgstr "ຍົກເລີກການເປີດໜ້າກ້ອງຫຼັງຈາກ"
+
+#: u_translation.rscancelpolara
+msgid "Cancel polar alignment"
+msgstr "ຍົກເລີກການຕັ້ງຂົ້ວ"
+
+#: u_translation.rscannotchange
+msgid "Cannot change start time. Sequence will start in time for the dusk flat."
+msgstr "ບໍ່ສາມາດປ່ຽນເວລາເລີ່ມໄດ້. ລຳດັບຈະເລີ່ມຕາມເວລາສຳລັບແຟລັດຕອນຄ່ຳ."
+
+#: u_translation.rscannotchange2
+msgid "Cannot change stop time. Sequence will stop in time for the dawn flat."
+msgstr "ບໍ່ສາມາດປ່ຽນເວລາຢຸດໄດ້. ລຳດັບຈະຢຸດຕາມເວລາສຳລັບແຟລັດຕອນເຊົ້າ."
+
+#: u_translation.rscannotcomput
+msgid "Cannot compute rise or set time."
+msgstr "ບໍ່ສາມາດຄຳນວນເວລາຂຶ້ນ ຫຼືຕົກໄດ້."
+
+#: u_translation.rscannotcomput2
+msgid "Cannot compute meridian time"
+msgstr "ບໍ່ສາມາດຄຳນວນເວລາຜ່ານເສັ້ນເມຣິດ້ຽນໄດ້"
+
+#: u_translation.rscannotconnec
+#, object-pascal-format
+msgid "Cannot connect to autoguider, sequence will run without guiding! %sDo you want to continue anyway?"
+msgstr "ບໍ່ສາມາດເຊື່ອມຕໍ່ກັບໂຕນຳທາງອັດຕະໂນມັດ, ລຳດັບຈະແລ່ນໂດຍບໍ່ມີການນຳທາງ! %sທ່ານຕ້ອງການສືບຕໍ່ຢູ່ບໍ່?"
+
+#: u_translation.rscannotdelete
+msgid "Cannot delete the running sequence!"
+msgstr "ບໍ່ສາມາດລຶບລຳດັບທີ່ກຳລັງດຳເນີນການຢູ່!"
+
+#: u_translation.rscannotdetect
+msgid "Cannot detect star."
+msgstr "ບໍ່ສາມາດກວດພົບດາວ."
+
+#: u_translation.rscannoteditan
+msgid "Cannot edit an active sequence without completion status."
+msgstr "ບໍ່ສາມາດແກ້ໄຂລຳດັບທີ່ກຳລັງເຮັດວຽກໂດຍບໍ່ມີສະຖານະການສຳເລັດ."
+
+#: u_translation.rscannoteditth
+msgid "Cannot edit the active sequence during autofocus"
+msgstr "ບໍ່ສາມາດແກ້ໄຂລຳດັບທີ່ກຳລັງເຮັດວຽກໃນລະຫວ່າງໂຟກັສອັດຕະໂນມັດ"
+
+#: u_translation.rscannoteditth2
+msgid "Cannot edit the active sequence when slewing"
+msgstr "ບໍ່ສາມາດແກ້ໄຂລຳດັບທີ່ກຳລັງເຮັດວຽກເມື່ອກຳລັງຫັນກ້ອງ"
+
+#: u_translation.rscannotfindaf
+msgid "Cannot find a focus star."
+msgstr "ບໍ່ພົບດາວຈຸດສຸມ."
+
+#: u_translation.rscannotfindap
+#, object-pascal-format
+msgid "Cannot find approximate coordinates for this image.%sThe astrometry resolution may take a very long time."
+msgstr "ບໍ່ສາມາດຊອກຫາຈຸດປະສານໂດຍປະມານສຳລັບຮູບນີ້ໄດ້.%sການແກ້ໄຂການວັດແທກຕຳແໜ່ງດາວອາດໃຊ້ເວລາດົນຫຼາຍ."
+
+#: u_translation.rscannotfindas
+msgid "Cannot find a star at his position. Move to a bright star or increase the preview exposure time, or the autofocus binning."
+msgstr "ບໍ່ພົບດາວໃນຕຳແໜ່ງນີ້. ກະລຸນາຍ້າຍໄປຫາດາວທີ່ແຈ້ງກວ່າ ຫຼື ເພີ່ມເວລາເປີດໜ້າກ້ອງຕົວຢ່າງ, ຫຼື binning ຂອງການປັບຈຸດສຸມອັດຕະໂນມັດ."
+
+#: u_translation.rscannotgetfoc
+msgid "Cannot get focuser absolute position"
+msgstr "ບໍ່ສາມາດຮັບຕຳແໜ່ງສຳບູນຂອງໂຕປັບຈຸດສຸມໄດ້"
+
+#: u_translation.rscannotinterp
+#, object-pascal-format
+msgid "Cannot interpret the text \"%s\" as RA DEC values"
+msgstr "ບໍ່ສາມາດແປຄວາມໝາຍຂໍ້ຄວາມ \"%s\" ເປັນຄ່າ RA DEC ໄດ້"
+
+#: u_translation.rscannotoverwr
+msgid "Cannot overwrite the running sequence!"
+msgstr "ບໍ່ສາມາດຂຽນທັບລຳດັບທີ່ກຳລັງດຳເນີນການຢູ່!"
+
+#: u_translation.rscannotreachn
+msgid "Cannot reach near focus HFD, please increase Half Width or better center the curve."
+msgstr "ບໍ່ສາມາດບັນລຸ HFD ຈຸດສຸມໃກ້, ກະລຸນາເພີ່ມຄວາມກວ້າງເຄິ່ງໜຶ່ງ ຫຼື ຈັດເສັ້ນໂຄ້ງໃຫ້ຢູ່ໃຈກາງດີກວ່າ."
+
+#: u_translation.rscannotreachs
+msgid "Cannot reach start focus HFD, please increase Half Width or decrease the start HFD"
+msgstr "ບໍ່ສາມາດບັນລຸ HFD ຈຸດສຸມເລີ່ມຕົ້ນ, ກະລຸນາເພີ່ມຄວາມກວ້າງເຄິ່ງໜຶ່ງ ຫຼື ຫຼຸດ HFD ເລີ່ມຕົ້ນ"
+
+#: u_translation.rscannotruncal
+msgid "Cannot run calibration now, stop capture and retry"
+msgstr "ບໍ່ສາມາດປັບທຽບຕອນນີ້ໄດ້, ຢຸດການບັນທຶກພາບ ແລະ ລອງໃໝ່"
+
+#: u_translation.rscannotruncal2
+msgid "Cannot run calibration now, stop preview and retry"
+msgstr "ບໍ່ສາມາດປັບທຽບຕອນນີ້ໄດ້, ຢຸດສະແດງຕົວຢ່າງ ແລະ ລອງໃໝ່"
+
+#: u_translation.rscannotsolvec
+msgid "Cannot solve current image."
+msgstr "ບໍ່ສາມາດແກ້ໄຂຮູບພາບປັດຈຸບັນໄດ້."
+
+#: u_translation.rscannotstarta2
+msgid "Cannot start autofocus now, astrometry is running"
+msgstr "ບໍ່ສາມາດເລີ່ມການປັບຈຸດສຸມອັດຕະໂນມັດຕອນນີ້ໄດ້, ການວັດແທກຕຳແໜ່ງດາວກຳລັງເຮັດວຽກຢູ່"
+
+#: u_translation.rscannotstarta3
+msgid "Cannot start autofocus now, stop capture and retry"
+msgstr "ບໍ່ສາມາດເລີ່ມການປັບຈຸດສຸມອັດຕະໂນມັດຕອນນີ້ໄດ້, ຢຸດການບັນທຶກພາບ ແລະ ລອງໃໝ່"
+
+#: u_translation.rscannotstartc
+msgid "Cannot start capture now"
+msgstr "ບໍ່ສາມາດເລີ່ມບັນທຶກພາບຕອນນີ້ໄດ້"
+
+#: u_translation.rscannotstartm
+msgid "Cannot start manual focus now, stop capture and retry"
+msgstr "ບໍ່ສາມາດເລີ່ມການປັບຈຸດສຸມດ້ວຍມືຕອນນີ້ໄດ້, ຢຸດການບັນທຶກພາບ ແລະ ລອງໃໝ່"
+
+#: u_translation.rscannotstartp
+msgid "Cannot start preview now"
+msgstr "ບໍ່ສາມາດເລີ່ມສະແດງຕົວຢ່າງຕອນນີ້ໄດ້"
+
+#: u_translation.rscannotstartp2
+msgid "Cannot start preview loop now"
+msgstr "ບໍ່ສາມາດເລີ່ມການສະແດງຕົວຢ່າງແບບເຮັດຊ້ຳຕອນນີ້ໄດ້"
+
+#: u_translation.rscannotstarts
+#, object-pascal-format
+msgid "Cannot start %s now"
+msgstr "ບໍ່ສາມາດເລີ່ມ %s ຕອນນີ້ໄດ້"
+
+#: u_translation.rscannotstartw
+msgid "Cannot start when capture is running"
+msgstr "ບໍ່ສາມາດເລີ່ມໄດ້ເມື່ອການຖ່າຍພາບກຳລັງດຳເນີນການ"
+
+#: u_translation.rscannotsyncwh
+msgid "Cannot Sync when the mount is not tracking"
+msgstr "ບໍ່ສາມາດຊິງຄ໌ໄດ້ເມື່ອຂາກ້ອງບໍ່ໄດ້ຕິດຕາມ"
+
+#: u_translation.rscanonlyaddon
+msgid "Can only add one flat serie at dusk and one at dawn"
+msgstr "ສາມາດເພີ່ມໄດ້ພຽງຊຸດ flat ດຽວຕອນຄ່ຳ ແລະ ຕອນເຊົ້າເທົ່ານັ້ນ"
+
+#: u_translation.rscantrackpast
+msgid "Can track past meridian for"
+msgstr "ສາມາດຕິດຕາມຜ່ານເມຣິເດຍນໄດ້ເປັນເວລາ"
+
+#: u_translation.rscapture
+msgid "Capture"
+msgstr "ບັນທຶກພາບ"
+
+#: u_translation.rscapturealrea
+msgid "Capture already running! please stop it first if you want to start a new sequence."
+msgstr "ການບັນທຶກພາບກຳລັງເຮັດວຽກຢູ່ແລ້ວ! ກະລຸນາຢຸດມັນກ່ອນຖ້າທ່ານຕ້ອງການເລີ່ມລຳດັບໃໝ່."
+
+#: u_translation.rscapturefolde
+msgid "Capture folder"
+msgstr "ໂຟລເດີບັນທຶກພາບ"
+
+#: u_translation.rscapturesfini
+#, object-pascal-format
+msgid "Capture %s Finished"
+msgstr "ການຖ່າຍພາບ %s ສິ້ນສຸດລົງ"
+
+#: u_translation.rscapturestopp
+msgid "Capture stopped during autofocus"
+msgstr "ການບັນທຶກພາບຢຸດລົງລະຫວ່າງການປັບຈຸດສຸມອັດຕະໂນມັດ"
+
+#: u_translation.rscapturestopp2
+msgid "Capture stopped unexpectedly"
+msgstr "ການຖ່າຍພາບຢຸດລົງຢ່າງບໍ່ຄາດຄິດ"
+
+#: u_translation.rsccdcielstatu
+msgid "CCDciel status"
+msgstr "ສະຖານະ CCDciel"
+
+#: u_translation.rsccdframesent
+msgid "CCD frame sent to planetarium."
+msgstr "ສົ່ງຂອບຮູບ CCD ໄປຫາທ້ອງຟ້າຈຳລອງແລ້ວ."
+
+#: u_translation.rscelsius
+msgid "Celsius"
+msgstr "ເຊນຊຽສ"
+
+#: u_translation.rscenter
+msgid "Center"
+msgstr "ໃຈກາງ"
+
+#: u_translation.rscenterabrigh
+#, object-pascal-format
+msgid "Center a bright star. Defocus until the rings are clearly visible. Click the Start button. %s Slowly adjust the position of the star in the image field using the telescope fine movement until all the circles are concentric. %s Then move the star to the image center using the mirror adjustment screws."
+msgstr "ປັບດາວທີ່ແຈ້ງໃຫ້ຢູ່ກາງ. ຫຼຸດໂຟກັສຈົນເຫັນວົງແວນຢ່າງຊັດເຈນ. ກົດປຸ່ມເລີ່ມ. %s ຄ່ອຍໆປັບຕຳແໜ່ງຂອງດາວໃນຂອບເຂດຮູບພາບໂດຍໃຊ້ການເຄື່ອນທີ່ລະອຽດຂອງກ້ອງສ່ອງຈົນກວ່າວົງມົນທັງໝົດຈະມີຈຸດສູນກາງຮ່ວມກັນ. %s ຫຼັງຈາກນັ້ນ, ຍ້າຍດາວໄປທີ່ຈຸດກາງຂອງຮູບພາບໂດຍໃຊ້ສະກູປັບກະຈົກ."
+
+#: u_translation.rscenterappare
+#, object-pascal-format
+msgid "Center, apparent coord. RA=%s DEC=%s PA=%s"
+msgstr "ໃຈກາງ, ຈຸດປະສານປາກົດ RA=%s DEC=%s PA=%s"
+
+#: u_translation.rscenterdec
+msgid "Center Dec"
+msgstr "Dec ໃຈກາງ"
+
+#: u_translation.rscenteringand
+msgid "Centering and guiding strategy"
+msgstr "ກົນລະຍຸດການປັບກາງ ແລະການນຳທາງ"
+
+#: u_translation.rscenterra
+msgid "Center RA"
+msgstr "RA ໃຈກາງ"
+
+#: u_translation.rschangedto
+#, object-pascal-format
+msgid "%s changed to %s"
+msgstr "%s ປ່ຽນເປັນ %s"
+
+#: u_translation.rschangeinhfd
+msgid "% change in HFD"
+msgstr "% ການປ່ຽນແປງໃນ HFD"
+
+#: u_translation.rschangelog
+msgid "Change log"
+msgstr "ບັນທຶກການປ່ຽນແປງ"
+
+#: u_translation.rschoose
+msgid "Choose"
+msgstr "ເລືອກ"
+
+#: u_translation.rsclearbadpixe
+msgid "Clear bad pixel map"
+msgstr "ລຶບແຜນທີ່ພິກເຊວທີ່ບໍ່ດີ"
+
+#: u_translation.rsclearconditi
+msgid "Clear condition"
+msgstr "ສະພາບປົກກະຕິ"
+
+#: u_translation.rscleardarkfra
+msgid "Clear Dark frame"
+msgstr "ລ້າງເຟຣມມືດ"
+
+#: u_translation.rsclearflatfra
+msgid "Clear Flat frame"
+msgstr "ລ້າງເຟຣມແຟລັດ"
+
+#: u_translation.rsclearreferen
+msgid "Clear reference image"
+msgstr "ລຶບຮູບພາບອ້າງອີງ"
+
+#: u_translation.rsclearrestart
+msgid "Clear restart information on repeat"
+msgstr "ລ້າງຂໍ້ມູນການເລີ່ມໃໝ່ເມື່ອເຮັດຊ້ຳ"
+
+#: u_translation.rsclearthecomp
+msgid "Clear the completion status?"
+msgstr "ລ້າງສະຖານະການສຳເລັດບໍ່?"
+
+#: u_translation.rsclickatthegu
+msgid "Click at the guide star position"
+msgstr "ກົດທີ່ຕຳແໜ່ງດາວນຳທາງ"
+
+#: u_translation.rsclickattheta
+msgid "Click at the target object position"
+msgstr "ກົດທີ່ຕຳແໜ່ງວັດຖຸເປົ້າໝາຍ"
+
+#: u_translation.rsclickcancelt
+msgid "Click Cancel to abort the sequence."
+msgstr "ກົດ ຍົກເລີກ ເພື່ອຢຸດລຳດັບ."
+
+#: u_translation.rsclickcontinu
+msgid "Click Continue when ready."
+msgstr "ກົດ ສືບຕໍ່ ເມື່ອພ້ອມແລ້ວ."
+
+#: u_translation.rsclickcontinu2
+msgid "Click Continue when ready"
+msgstr "ກົດ ສືບຕໍ່ ເມື່ອພ້ອມແລ້ວ"
+
+#: u_translation.rsclicknexttos
+msgid "Click Next to start the measurement."
+msgstr "ກົດ ຕໍ່ໄປ ເພື່ອເລີ່ມການວັດແທກ."
+
+#: u_translation.rsclicknexttos2
+msgid "Click Next to save this values to the configuration for this profile."
+msgstr "ກົດ ຕໍ່ໄປ ເພື່ອບັນທຶກຄ່າເຫຼົ່ານີ້ເຂົ້າໃນການຕັ້ງຄ່າສຳລັບໂປຣໄຟລ໌ນີ້."
+
+#: u_translation.rsclickonimage
+msgid "Click on image to set"
+msgstr "ກົດເທິງຮູບພາບເພື່ອຕັ້ງ"
+
+#: u_translation.rsclickontheim
+msgid "Click on the image to set the offset and guide"
+msgstr "ກົດເທິງຮູບພາບເພື່ອຕັ້ງອັອບເຊັດ ແລະນຳທາງ"
+
+#: u_translation.rsclicktheobje
+msgid "Click the object in planetarium"
+msgstr "ກົດວັດຖຸໃນທ້ອງຟ້າຈຳລອງ"
+
+#: u_translation.rsclippingindi
+msgid "Clipping indicator"
+msgstr "ຕົວຊີ້ບອກການຕັດ"
+
+#: u_translation.rsclock
+msgid "Clock"
+msgstr "ໂມງ"
+
+#: u_translation.rsclose
+msgid "Close"
+msgstr "ປິດ"
+
+#: u_translation.rsclosedome
+msgid "Close the Dome shutter"
+msgstr "ປິດຊັດເຕີໂດມ"
+
+#: u_translation.rsclosedomeseq
+msgid "Close dome sequence when mount is asked to park"
+msgstr "ປິດລຳດັບໂດມເມື່ອຖານຕິດຕັ້ງຖືກສັ່ງໃຫ້ຈອດ"
+
+#: u_translation.rsclosethewind
+msgid "Close the window when ready."
+msgstr "ປິດໜ້າຕ່າງເມື່ອພ້ອມ."
+
+#: u_translation.rscloudcover
+msgid "Cloud cover"
+msgstr "ເມກປົກຄຸມ"
+
+#: u_translation.rscolorbalance
+msgid "Color balance"
+msgstr "ການດຸ່ນດ່ຽງສີ"
+
+#: u_translation.rscolorizespec
+msgid "Colorize spectra images"
+msgstr "ໃສ່ສີຮູບພາບສະເປກຕຣັມ"
+
+#: u_translation.rscolorpreview
+msgid "Color preview"
+msgstr "ສະແດງຕົວຢ່າງສີ"
+
+#: u_translation.rscolumn
+msgid "column"
+msgstr "ຖັນ"
+
+#: u_translation.rscommandpath
+msgid "Command path"
+msgstr "ເສັ້ນທາງຄຳສັ່ງ"
+
+#: u_translation.rscommands
+msgid "Commands"
+msgstr "ຄຳສັ່ງ"
+
+#: u_translation.rscompilatione
+#, object-pascal-format
+msgid "Compilation error: %s"
+msgstr "ການຄອມໄພລ໌ຜິດພາດ: %s"
+
+#: u_translation.rscompiledwith
+msgid "Compiled with"
+msgstr "ຄອມໄພລ໌ດ້ວຍ"
+
+#: u_translation.rscompressthef
+msgid "Compress the FITS files with fpack"
+msgstr "ບີບອັດໄຟລ໌ FITS ດ້ວຍ fpack"
+
+#: u_translation.rscomputationr
+msgid "Computation result:"
+msgstr "ຜົນການຄຳນວນ:"
+
+#: u_translation.rscompute
+msgid "Compute"
+msgstr "ຄຳນວນ"
+
+#: u_translation.rsconeinstructions
+msgid ""
+"This test will estimate the telescope cone error by measuring the slew error after a meridian flip\n"
+"\n"
+"It will automatically take two images east and west of the meridian near the zenith. The cone error will be reported in the log."
+msgstr ""
+"ການທົດສອບນີ້ຈະປະເມີນຄວາມຜິດພາດໂຄນຂອງກ້ອງສ່ອງໂດຍການວັດແທກຄວາມຜິດພາດໃນການຫັນກ້ອງຫຼັງຈາກການປີ້ນເມຣິດ້ຽນ\n"
+"\n"
+"ມັນຈະຖ່າຍຮູບສອງຮູບໂດຍອັດຕະໂນມັດທາງຕາເວັນອອກ ແລະຕາເວັນຕົກຂອງເມຣິດ້ຽນໃກ້ຈຸດສູງສຸດ. ຄວາມຜິດພາດໂຄນຈະຖືກລາຍງານໃນບັນທຶກ."
+
+#: u_translation.rsconemeasureeastwest
+msgid "Start measuring East to West"
+msgstr "ເລີ່ມວັດແທກຈາກຕາເວັນອອກຫາຕາເວັນຕົກ"
+
+#: u_translation.rsconemeasurewesteast
+msgid "Start measuring West to East"
+msgstr "ເລີ່ມວັດແທກຈາກຕາເວັນຕົກຫາຕາເວັນອອກ"
+
+#: u_translation.rsconetest
+msgid "Measure the cone error"
+msgstr "ວັດແທກຄວາມຜິດພາດໂຄນ"
+
+#: u_translation.rsconfiguratio
+msgid "Configuration saved"
+msgstr "ບັນທຶກການຕັ້ງຄ່າແລ້ວ"
+
+#: u_translation.rsconfigurethe
+msgid "Configure the distance in Preferences / Sequences"
+msgstr "ຕັ້ງຄ່າໄລຍະຫ່າງໃນ ການຕັ້ງຄ່າ / ລຳດັບ"
+
+#: u_translation.rsconnect
+msgid "Connect"
+msgstr "ເຊື່ອມຕໍ່"
+
+#: u_translation.rsconnected
+#, object-pascal-format
+msgid "%s connected"
+msgstr "ເຊື່ອມຕໍ່ %s ແລ້ວ"
+
+#: u_translation.rsconnected2
+#, object-pascal-format
+msgid "Connected %s"
+msgstr "ເຊື່ອມຕໍ່ %s ແລ້ວ"
+
+#: u_translation.rsconnected3
+msgid "Connected"
+msgstr "ເຊື່ອມຕໍ່ແລ້ວ"
+
+#: u_translation.rsconnecting
+#, object-pascal-format
+msgid "Connecting %s"
+msgstr "ກຳລັງເຊື່ອມຕໍ່ %s"
+
+#: u_translation.rsconnection
+msgid "Connection"
+msgstr "ການເຊື່ອມຕໍ່"
+
+#: u_translation.rsconnectioner
+#, object-pascal-format
+msgid "Connection error: %s"
+msgstr "ການເຊື່ອມຕໍ່ຜິດພາດ: %s"
+
+#: u_translation.rscontinue
+msgid "Continue"
+msgstr "ສືບຕໍ່"
+
+#: u_translation.rscontinueinse
+#, object-pascal-format
+msgid "Continue in %s seconds"
+msgstr "ສືບຕໍ່ໃນ %s ວິນາທີ"
+
+#: u_translation.rscontinuesequ
+msgid "Continue sequence execution"
+msgstr "ສືບຕໍ່ການດຳເນີນການລຳດັບ"
+
+#: u_translation.rscontinuethes
+msgid "Continue the sequence"
+msgstr "ສືບຕໍ່ລຳດັບ"
+
+#: u_translation.rscontrolexpos
+msgid "Control exposure"
+msgstr "ຄວບຄຸມການເປີດໜ້າກ້ອງ"
+
+#: u_translation.rscooldownwhen
+msgid "Cool down when camera is connected"
+msgstr "ເຮັດຄວາມເຢັນລົງເມື່ອກ້ອງເຊື່ອມຕໍ່"
+
+#: u_translation.rscooler
+msgid "Cooler"
+msgstr "ໂຕເຮັດຄວາມເຢັນ"
+
+#: u_translation.rscoolthecamer
+msgid "Cool the camera"
+msgstr "ເຮັດໃຫ້ກ້ອງເຢັນ"
+
+#: u_translation.rscoordinates
+msgid "Coordinates"
+msgstr "ພິກັດ"
+
+#: u_translation.rscopy
+msgid "Copy"
+msgstr "ສຳເນົາ"
+
+#: u_translation.rscopyasequenc
+msgid "Copy a sequence"
+msgstr "ສຳເນົາລຳດັບ"
+
+#: u_translation.rscopycurrentp
+msgid "Copy current profile to"
+msgstr "ສຳເນົາໂປຣໄຟລ໌ປັດຈຸບັນໄປທີ່"
+
+#: u_translation.rscopyfileerro
+#, object-pascal-format
+msgid "Copyfile error :%s"
+msgstr "ຄວາມຜິດພາດໃນການສຳເນົາໄຟລ໌ :%s"
+
+#: u_translation.rscopyfrom
+msgid "Copy from"
+msgstr "ສຳເນົາຈາກ"
+
+#: u_translation.rscopyto
+msgid "Copy to "
+msgstr "ສຳເນົາໄປທີ່ "
+
+#: u_translation.rscopytoclipbo
+#, object-pascal-format
+msgid "Copy to clipboard: %s"
+msgstr "ສຳເນົາໃສ່ຄລິບບອດ: %s"
+
+#: u_translation.rscorrectionme
+msgid "Correction method"
+msgstr "ວິທີການແກ້ໄຂ"
+
+#: u_translation.rscount
+msgid "Count"
+msgstr "ຈຳນວນ"
+
+#: u_translation.rscov
+msgid "Cov."
+msgstr "ຝປ."
+
+#: u_translation.rscover
+msgid "Cover"
+msgstr "ຝາປິດ"
+
+#: u_translation.rscovercalibra
+msgid "Cover calibrator"
+msgstr "ເຄື່ອງປັບທຽບແບບຝາປິດ"
+
+#: u_translation.rscoverthecame
+msgid "Cover the camera and set the exposure time and binning in the Preview pane now."
+msgstr "ກະລຸນາປິດໜ້າກ້ອງ ແລະ ຕັ້ງຄ່າເວລາເປີດໜ້າກ້ອງ ແລະ binning ໃນໜ້າຕ່າງສະແດງຕົວຢ່າງດຽວນີ້."
+
+#: u_translation.rscreatefromca
+msgid "Create from camera"
+msgstr "ສ້າງຈາກກ້ອງ"
+
+#: u_translation.rscreatefromda
+msgid "Create from dark file"
+msgstr "ສ້າງຈາກໄຟລ໌ມືດ"
+
+#: u_translation.rscreatenewemp
+msgid "Create new empty profile"
+msgstr "ສ້າງໂປຣໄຟລ໌ໃໝ່ວ່າງເປົ່າ"
+
+#: u_translation.rscrossmeridan
+msgid " Moving to the other side of the meridian"
+msgstr " ກໍາລັງຍ້າຍໄປອີກດ້ານໜຶ່ງຂອງເມຣິດ້ຽນ"
+
+#: u_translation.rscurrent
+msgid "Current"
+msgstr "ປັດຈຸບັນ"
+
+#: u_translation.rscurrentfocus
+msgid "Current focuser absolute position"
+msgstr "ຕຳແໜ່ງສຳບູນຂອງໂຕປັບຈຸດສຸມປັດຈຸບັນ"
+
+#: u_translation.rscurrentimage
+msgid "Current image"
+msgstr "ຮູບພາບປັດຈຸບັນ"
+
+#: u_translation.rscurrentplan
+msgid "Current plan"
+msgstr "ແຜນປັດຈຸບັນ"
+
+#: u_translation.rscustom
+msgid "Custom"
+msgstr "ກຳນົດເອງ"
+
+#: u_translation.rscustomheader
+msgid "Custom headers"
+msgstr "ຫົວຂໍ້ກຳນົດເອງ"
+
+#: u_translation.rscustompositi
+msgid "Custom position"
+msgstr "ຕຳແໜ່ງກຳນົດເອງ"
+
+#: u_translation.rscustomtype
+msgid "Custom image type"
+msgstr "ປະເພດຮູບພາບກຳນົດເອງ"
+
+#: u_translation.rscygwinpath
+msgid "Cygwin path"
+msgstr "ເສັ້ນທາງ Cygwin"
+
+#: u_translation.rsdark
+msgid "Dark"
+msgstr "ມືດ"
+
+#: u_translation.rsdarkfileload
+msgid "Dark file loaded"
+msgstr "ໂຫຼດໄຟລ໌ມືດແລ້ວ"
+
+#: u_translation.rsdarkframe
+msgid "Dark frame"
+msgstr "ເຟຣມມືດ"
+
+#: u_translation.rsdarknight
+#, object-pascal-format
+msgid "Dark%snight"
+msgstr "ກາງ%sຄືນມືດ"
+
+#: u_translation.rsdatarange
+msgid "Data range"
+msgstr "ຂອບເຂດຂໍ້ມູນ"
+
+#: u_translation.rsdate
+msgid "Date"
+msgstr "ວັນທີ"
+
+#: u_translation.rsdateobsfromc
+msgid "DATE-OBS from camera driver"
+msgstr "DATE-OBS ຈາກໄດຣເວີກ້ອງ"
+
+#: u_translation.rsdateutsequen
+msgid "Date (UT) / Sequence"
+msgstr "ວັນທີ (UT) / ລຳດັບ"
+
+#: u_translation.rsdawn
+msgid "dawn"
+msgstr "ເຊົ້າ"
+
+#: u_translation.rsdeactivation
+msgid "Deactivation"
+msgstr "ການປິດໃຊ້"
+
+#: u_translation.rsdebayer
+msgid "Debayer"
+msgstr "ດີເບເຢີ"
+
+#: u_translation.rsdebayerthepr
+msgid "Debayer the preview image"
+msgstr "Debayer ຮູບພາບຕົວຢ່າງ"
+
+#: u_translation.rsdec
+msgid "Dec"
+msgstr "Dec"
+
+#: u_translation.rsdeclination
+msgid "Declination"
+msgstr "ເດັກຄລີເນຊັນ"
+
+#: u_translation.rsdeclinationb
+msgid "Declination backlash"
+msgstr "ແບັກແລຊຂອງແກນເດັກຄລີເນຊັນ"
+
+#: u_translation.rsdefault
+msgid "Default"
+msgstr "ຄ່າເລີ່ມຕົ້ນ"
+
+#: u_translation.rsdefaultbehav
+msgid "Default behavior"
+msgstr "ພຶດຕິກຳເລີ່ມຕົ້ນ"
+
+#: u_translation.rsdefinespecia
+msgid "Define a specialized image type and how to enable it"
+msgstr "ກຳນົດປະເພດຮູບພາບພິເສດ ແລະວິທີເປີດໃຊ້ມັນ"
+
+#: u_translation.rsdefocusamoun
+msgid "Defocus amount"
+msgstr "ປະລິມານການຫຼຸດໂຟກັສ"
+
+#: u_translation.rsdegree
+msgid "degree"
+msgstr "ອົງສາ"
+
+#: u_translation.rsdegreespermi
+#, object-pascal-format
+msgid "Degrees %s per minute"
+msgstr "ອົງສາ %s ຕໍ່ນາທີ"
+
+#: u_translation.rsdelayafterte
+msgid "Delay after telescope slew [seconds] "
+msgstr "ການຊັກຊ້າຫຼັງການຫັນກ້ອງສ່ອງທາງໄກ [ວິນາທີ] "
+
+#: u_translation.rsdelete
+msgid "Delete"
+msgstr "ລຶບ"
+
+#: u_translation.rsdeleteaseque
+msgid "Delete a sequence"
+msgstr "ລຶບລຳດັບ"
+
+#: u_translation.rsdeletesequen
+#, object-pascal-format
+msgid "Delete sequence %s ?"
+msgstr "ລຶບລຳດັບ %s ບໍ່?"
+
+#: u_translation.rsdeletestep
+#, object-pascal-format
+msgid "Delete step %s ?"
+msgstr "ລຶບຂັ້ນຕອນ %s ບໍ່?"
+
+#: u_translation.rsdeletetempl
+msgid "Delete template"
+msgstr "ລຶບແມ່ແບບ"
+
+#: u_translation.rsdesc
+msgid "Desc."
+msgstr "ລາຍລະອຽດ."
+
+#: u_translation.rsdescription
+msgid "Description"
+msgstr "ລາຍລະອຽດ"
+
+#: u_translation.rsdesiredtempe
+msgid "Desired temperature"
+msgstr "ອຸນຫະພູມທີ່ຕ້ອງການ"
+
+#: u_translation.rsdestinatione
+msgid "Destination email address"
+msgstr "ທີ່ຢູ່ອີເມວປາຍທາງ"
+
+#: u_translation.rsdestroyallba
+msgid "Destroy all Bad Pixel Map data?"
+msgstr "ທຳລາຍຂໍ້ມູນແຜນທີ່ພິກເຊວທີ່ບໍ່ດີທັງໝົດບໍ່?"
+
+#: u_translation.rsdetails
+msgid "Details"
+msgstr "ລາຍລະອຽດ"
+
+#: u_translation.rsdetectmultip
+msgid "Detect multiple stars in the image"
+msgstr "ກວດພົບດາວຫຼາຍດວງໃນຮູບ"
+
+#: u_translation.rsdeviceisconn
+#, object-pascal-format
+msgid "Device %s is connected.%sDo you want to disconnect now to open the setup dialog?"
+msgstr "ອຸປະກອນ %s ເຊື່ອມຕໍ່ຢູ່.%sທ່ານຕ້ອງການຕັດການເຊື່ອມຕໍ່ດຽວນີ້ເພື່ອເປີດກ່ອງໂຕ້ຕອບການຕັ້ງຄ່າບໍ່?"
+
+#: u_translation.rsdevices
+msgid "Device"
+msgstr "ອຸປະກອນ"
+
+#: u_translation.rsdevicesconne
+msgid "Devices connection"
+msgstr "ການເຊື່ອມຕໍ່ອຸປະກອນ"
+
+#: u_translation.rsdevicessetup
+#, object-pascal-format
+msgid "Devices Setup%s"
+msgstr "ຕັ້ງຄ່າອຸປະກອນ%s"
+
+#: u_translation.rsdewpoint
+msgid "Dew point"
+msgstr "ຈຸດນ້ຳໝອກ"
+
+#: u_translation.rsdirectory
+msgid "Directory"
+msgstr "ໄດເຣັກທໍຣີ"
+
+#: u_translation.rsdisable
+msgid "Disable"
+msgstr "ປິດໃຊ້ງານ"
+
+#: u_translation.rsdisableguidi
+msgid "Disable guiding temporary"
+msgstr "ປິດການນຳທາງຊົ່ວຄາວ"
+
+#: u_translation.rsdisconnect
+msgid "Disconnect"
+msgstr "ຕັດການເຊື່ອມຕໍ່"
+
+#: u_translation.rsdisconnected
+#, object-pascal-format
+msgid "%s disconnected"
+msgstr "ຕັດການເຊື່ອມຕໍ່ %s ແລ້ວ"
+
+#: u_translation.rsdisconnected3
+msgid "Disconnected"
+msgstr "ຕັດການເຊື່ອມຕໍ່ແລ້ວ"
+
+#: u_translation.rsdisconnectin
+msgid "Disconnecting devices"
+msgstr "ກຳລັງຕັດການເຊື່ອມຕໍ່ອຸປະກອນ"
+
+#: u_translation.rsdisconnectio
+#, object-pascal-format
+msgid "Disconnection error: %s"
+msgstr "ການຕັດການເຊື່ອມຕໍ່ຜິດພາດ: %s"
+
+#: u_translation.rsdisconnectth
+msgid "Disconnect the camera before to change the configuration."
+msgstr "ກະລຸນາຕັດການເຊື່ອມຕໍ່ກ້ອງກ່ອນປ່ຽນການຕັ້ງຄ່າ."
+
+#: u_translation.rsdiscover
+msgid "Discover"
+msgstr "ຄົ້ນພົບ"
+
+#: u_translation.rsdiscovereds
+#, object-pascal-format
+msgid "Discovered %s ..."
+msgstr "ຄົ້ນພົບ %s ..."
+
+#: u_translation.rsdiscoverypor
+msgid "Discovery port"
+msgstr "ພອດຄົ້ນພົບ"
+
+#: u_translation.rsdisplay
+msgid "Display"
+msgstr "ການສະແດງຜົນ"
+
+#: u_translation.rsdisplayspeed
+msgid "Display speed"
+msgstr "ຄວາມໄວການສະແດງຜົນ"
+
+#: u_translation.rsdistancetota
+#, object-pascal-format
+msgid "Distance to target: %s arcmin"
+msgstr "ໄລຍະຫ່າງເຖິງເປົ້າໝາຍ: %s ອາກນາທີ"
+
+#: u_translation.rsdither
+msgid "Dither"
+msgstr "Dither"
+
+#: u_translation.rsditherevery
+msgid "Dither every"
+msgstr "Dither ທຸກໆ"
+
+#: u_translation.rsditherevery2
+#, object-pascal-format
+msgid "Dither%severy"
+msgstr "Dither%sທຸກໆ"
+
+#: u_translation.rsdithering
+msgid "Dithering"
+msgstr "ກຳລັງ Dithering"
+
+#: u_translation.rsdithermode
+msgid "Dither mode"
+msgstr "ໂໝດດິເທີ້"
+
+#: u_translation.rsditheronly
+msgid "Dither only"
+msgstr "ດິເທີ້ເທົ່ານັ້ນ"
+
+#: u_translation.rsditherwhiled
+msgid "Dither while downloading from the camera"
+msgstr "ດິເທີ້ໃນຂະນະທີ່ດາວໂຫຼດຈາກກ້ອງ"
+
+#: u_translation.rsdome
+msgid "Dome"
+msgstr "ໂດມ"
+
+#: u_translation.rsdomealready
+#, object-pascal-format
+msgid "Dome already %s"
+msgstr "ໂດມ %s ແລ້ວ"
+
+#: u_translation.rsdomenotafter
+#, object-pascal-format
+msgid "Dome not %s after request!"
+msgstr "ໂດມບໍ່ %s ຫຼັງຈາກການຮ້ອງຂໍ!"
+
+#: u_translation.rsdomepanel
+msgid "Dome/Panel"
+msgstr "ໂດມ/ແຜງ"
+
+#: u_translation.rsdomeshutter
+#, object-pascal-format
+msgid "Dome shutter: %s"
+msgstr "ຊັດເຕີໂດມ: %s"
+
+#: u_translation.rsdomeslaving
+#, object-pascal-format
+msgid "Dome slaving: %s"
+msgstr "ການຄວບຄຸມໂດມຕາມ: %s"
+
+#: u_translation.rsdone
+msgid "done"
+msgstr "ສຳເລັດ"
+
+#: u_translation.rsdonotdisplay
+msgid "Do not display images during capture"
+msgstr "ບໍ່ສະແດງຮູບພາບໃນລະຫວ່າງການຖ່າຍ"
+
+#: u_translation.rsdonothing
+msgid "Do nothing"
+msgstr "ບໍ່ເຮັດຫຍັງ"
+
+#: u_translation.rsdonotmodifyt
+msgid "Do not modify the INDI header"
+msgstr ""
+
+#: u_translation.rsdonotrunasad
+#, object-pascal-format
+msgid "Do not run %s as %s!"
+msgstr "ຢ່າເປີດ %s ໃນຖານະ %s!"
+
+#: u_translation.rsdonotstartau
+msgid "Do not start autoguiding"
+msgstr "ບໍ່ເລີ່ມການນຳທາງອັດຕະໂນມັດ"
+
+#: u_translation.rsdonotstartif
+msgid "Do not start if it cannot be done completely"
+msgstr "ຢ່າເລີ່ມ ຖ້າມັນບໍ່ສາມາດເຮັດໃຫ້ສຳເລັດໄດ້"
+
+#: u_translation.rsdontswait
+#, object-pascal-format
+msgid "Don't%swait"
+msgstr "ຢ່າ%sລໍຖ້າ"
+
+#: u_translation.rsdosimpleslew
+#, object-pascal-format
+msgid "Do simple slew to %s/%s"
+msgstr "ຫັນກ້ອງແບບງ່າຍດາຍໄປທີ່ %s/%s"
+
+#: u_translation.rsdown
+msgid "Down"
+msgstr "ລົງ"
+
+#: u_translation.rsdownload
+msgid "Download"
+msgstr "ດາວໂຫຼດ"
+
+#: u_translation.rsdownloading
+msgid "Downloading"
+msgstr "ກຳລັງດາວໂຫຼດ"
+
+#: u_translation.rsdownloadlate
+msgid "Download latest version"
+msgstr "ດາວໂຫຼດເວີຊັນລ່າສຸດ"
+
+#: u_translation.rsdownsample
+msgid "Downsample"
+msgstr "ຫຼຸດຕົວຢ່າງ"
+
+#: u_translation.rsdoyouwanttoc
+msgid "Do you want to cancel the polar alignment?"
+msgstr "ທ່ານຕ້ອງການຍົກເລີກການຕັ້ງຂົ້ວບໍ່?"
+
+#: u_translation.rsdoyouwanttod
+#, object-pascal-format
+msgid "Do you want to delete file %s ?"
+msgstr "ທ່ານຕ້ອງການລຶບໄຟລ໌ %s ບໍ່?"
+
+#: u_translation.rsdoyouwanttor
+msgid "Do you want to retry?"
+msgstr "ທ່ານຕ້ອງການລອງໃໝ່ບໍ່?"
+
+#: u_translation.rsdoyouwanttor2
+msgid "Do you want to run the termination action now?"
+msgstr "ທ່ານຕ້ອງການດຳເນີນການຢຸດດຽວນີ້ບໍ່?"
+
+#: u_translation.rsdrawslitarea
+msgid "Draw slit area on image"
+msgstr "ແຕ້ມພື້ນທີ່ສະລິດເທິງຮູບພາບ"
+
+#: u_translation.rsduplicateact
+msgid "Duplicate action"
+msgstr ""
+
+#: u_translation.rsduration
+msgid "Duration"
+msgstr "ໄລຍະເວລາ"
+
+#: u_translation.rsdusk
+msgid "dusk"
+msgstr "ຄ່ຳ"
+
+#: u_translation.rsdynamic
+msgid "Dynamic"
+msgstr "ເຄື່ອນໄຫວ"
+
+#: u_translation.rseast
+msgid "East"
+msgstr "ຕາເວັນອອກ"
+
+#: u_translation.rseastpointing
+msgid "East (Pointing West)"
+msgstr "ຕາເວັນອອກ (ຊີ້ໄປທາງຕາເວັນຕົກ)"
+
+#: u_translation.rsedit
+msgid "Edit"
+msgstr "ແກ້ໄຂ"
+
+#: u_translation.rseditasequenc
+msgid "Edit a sequence"
+msgstr "ແກ້ໄຂລຳດັບ"
+
+#: u_translation.rseditplan
+msgid "Edit plan"
+msgstr "ແກ້ໄຂແຜນ"
+
+#: u_translation.rsedittargetli
+msgid "Edit target list"
+msgstr "ແກ້ໄຂລາຍຊື່ເປົ້າໝາຍ"
+
+#: u_translation.rselbrusimages
+msgid "Elbrus Images folder "
+msgstr "ໂຟລເດີຮູບພາບ Elbrus "
+
+#: u_translation.rselevation
+msgid "Elevation"
+msgstr "ຄວາມສູງ"
+
+#: u_translation.rsemailconfigu
+msgid "Email configuration"
+msgstr "ການຕັ້ງຄ່າອີເມວ"
+
+#: u_translation.rsemailnotific
+msgid "Email notification text"
+msgstr "ຂໍ້ຄວາມແຈ້ງເຕືອນທາງອີເມວ"
+
+#: u_translation.rsemailon
+msgid "Email on :"
+msgstr "ສົ່ງອີເມວເມື່ອ:"
+
+#: u_translation.rsemailsentsuc
+msgid "Email sent successfully, please check your inbox"
+msgstr "ສົ່ງອີເມວສຳເລັດ, ກະລຸນາກວດສອບກ່ອງຈົດໝາຍຂອງທ່ານ"
+
+#: u_translation.rsencoder
+msgid "Encoder"
+msgstr "ເອັນໂຄດເດີ"
+
+#: u_translation.rsend
+msgid "End"
+msgstr "ສິ້ນສຸດ"
+
+#: u_translation.rsendpreview
+msgid "End preview"
+msgstr "ສິ້ນສຸດການສະແດງຕົວຢ່າງ"
+
+#: u_translation.rsendtime
+msgid "End time"
+msgstr "ເວລາສິ້ນສຸດ"
+
+#: u_translation.rsenlargeguide
+msgid "Enlarge guide image"
+msgstr "ຂະຫຍາຍຮູບພາບນຳທາງ"
+
+#: u_translation.rsenterthej200
+msgid "Enter the J2000 coordinates of the target where the main instrument is currently pointing."
+msgstr "ໃສ່ພິກັດ J2000 ຂອງເປົ້າໝາຍທີ່ເຄື່ອງມືຫຼັກກຳລັງຊີ້ໄປ."
+
+#: u_translation.rserror
+#, object-pascal-format
+msgid "Error: %s"
+msgstr "ຜິດພາດ: %s"
+
+#: u_translation.rserror2
+msgid "Error"
+msgstr "ຜິດພາດ"
+
+#: u_translation.rserrorduplica
+#, object-pascal-format
+msgid "Error, duplicate name %s for image type!"
+msgstr "ຜິດພາດ, ຊື່ %s ຊ້ຳກັນສຳລັບປະເພດຮູບພາບ!"
+
+#: u_translation.rserrormessage
+msgid "Error messages"
+msgstr "ຂໍ້ຄວາມຜິດພາດ"
+
+#: u_translation.rserrormountno
+msgid "Error! Mount not connected"
+msgstr "ຜິດພາດ! ຂາກ້ອງບໍ່ໄດ້ເຊື່ອມຕໍ່"
+
+#: u_translation.rserrorprocess
+#, object-pascal-format
+msgid "Error processing temporary file in %s"
+msgstr "ເກີດຂໍ້ຜິດພາດໃນການປະມວນຜົນໄຟລ໌ຊົ່ວຄາວໃນ %s"
+
+#: u_translation.rserrorresult
+#, object-pascal-format
+msgid "Error result = %s"
+msgstr "ຜົນຜິດພາດ = %s"
+
+#: u_translation.rserrorstartin
+#, object-pascal-format
+msgid "Error starting command: %s"
+msgstr "ຜິດພາດໃນການເລີ່ມຄຳສັ່ງ: %s"
+
+#: u_translation.rserrorunknown
+msgid "Error: Unknown finder focal length, set in PREFERENCE, SLEWING."
+msgstr "ຜິດພາດ: ບໍ່ຮູ້ຄວາມຍາວໂຟກັສຂອງກ້ອງຊອກຫາ, ຕັ້ງໃນ ການຕັ້ງຄ່າ, ການຫັນກ້ອງ."
+
+#: u_translation.rserrorunknowt
+msgid "Error: Unknown telescope focal length, set in telescope driver or in PREFERENCE, ASTROMETRY."
+msgstr "ຜິດພາດ: ບໍ່ຮູ້ຄວາມຍາວໂຟກັສຂອງກ້ອງສ່ອງທາງໄກ, ຕັ້ງໃນໄດຣເວີກ້ອງສ່ອງທາງໄກ ຫຼື ໃນ PREFERENCE, ASTROMETRY."
+
+#: u_translation.rserrorupdatin
+#, object-pascal-format
+msgid "Error updating the sequence:%s"
+msgstr "ຄວາມຜິດພາດໃນການອັບເດດລຳດັບ:%s"
+
+#: u_translation.rsestimatedsli
+msgid "Estimated slippage since last learning"
+msgstr "ການເລື່ອນທີ່ຄາດຄະເນຕັ້ງແຕ່ການຮຽນຮູ້ຄັ້ງລ່າສຸດ"
+
+#: u_translation.rsexampleandte
+msgid "Example and template"
+msgstr "ຕົວຢ່າງ ແລະແມ່ແບບ"
+
+#: u_translation.rsexecutingthe
+msgid "Executing the termination error actions."
+msgstr "ກຳລັງດຳເນີນການເມື່ອມີຂໍ້ຜິດພາດໃນການຢຸດ."
+
+#: u_translation.rsexecutingthe2
+msgid "Executing the termination actions."
+msgstr "ກຳລັງດຳເນີນການຢຸດ."
+
+#: u_translation.rsexitprogram
+msgid "Exit program"
+msgstr "ອອກຈາກໂປຣແກຣມ"
+
+#: u_translation.rsexp
+msgid "Exp:"
+msgstr "ເວລາເປີດໜ້າກ້ອງ:"
+
+#: u_translation.rsexp2
+msgid "Exp."
+msgstr "ເວລາເປີດ."
+
+#: u_translation.rsexperttrick
+msgid "Expert trick"
+msgstr "ເຄັດລັບຜູ້ຊ່ຽວຊານ"
+
+#: u_translation.rsexportcsv
+msgid "Export CSV"
+msgstr "ສົ່ງອອກ CSV"
+
+#: u_translation.rsexposure
+msgid "Exposure"
+msgstr "ການເປີດໜ້າກ້ອງ"
+
+#: u_translation.rsexposureabor
+msgid "Exposure aborted!"
+msgstr "ຍົກເລີກການເປີດໜ້າກ້ອງແລ້ວ!"
+
+#: u_translation.rsexposurefact
+msgid "Exposure factor"
+msgstr "ໂຕຄູນການເປີດໜ້າກ້ອງ"
+
+#: u_translation.rsexposurefail
+msgid "Exposure fail!"
+msgstr "ການເປີດໜ້າກ້ອງລົ້ມເຫຼວ!"
+
+#: u_translation.rsexposures
+#, object-pascal-format
+msgid "Exposure %s"
+msgstr "ການເປີດໜ້າກ້ອງ %s"
+
+#: u_translation.rsexposuretime
+msgid "Exposure time in secondes"
+msgstr "ເວລາເປີດໜ້າກ້ອງເປັນວິນາທີ"
+
+#: u_translation.rsexposuretime2
+msgid "Exposure time"
+msgstr "ເວລາເປີດໜ້າກ້ອງ"
+
+#: u_translation.rsexposuretime3
+msgid "Exposure time [seconds]"
+msgstr "ເວລາເປີດໜ້າກ້ອງ [ວິນາທີ]"
+
+#: u_translation.rsexposuretime4
+#, object-pascal-format
+msgid "Exposure time too short for measurement, need %d seconds."
+msgstr "ເວລາເປີດໜ້າກ້ອງສັ້ນເກີນໄປສຳລັບການວັດແທກ, ຕ້ອງການ %d ວິນາທີ."
+
+#: u_translation.rsextreme
+msgid "Extreme"
+msgstr "ສຸດຂີດ"
+
+#: u_translation.rsfahrenheit
+msgid "Fahrenheit"
+msgstr "ຟາເຣນໄຮ"
+
+#: u_translation.rsfailedtodele
+#, object-pascal-format
+msgid "Failed to delete file: %s"
+msgstr "ລຶບໄຟລ໌ລົ້ມເຫຼວ: %s"
+
+#: u_translation.rsfailedtostar
+msgid "Failed to start guiding!"
+msgstr "ເລີ່ມການນຳທາງລົ້ມເຫຼວ!"
+
+#: u_translation.rsfailtoresolv
+msgid "Fail to resolve control exposure"
+msgstr "ແກ້ໄຂການເປີດໜ້າກ້ອງຄວບຄຸມລົ້ມເຫຼວ"
+
+#: u_translation.rsfailtostopth
+msgid "Fail to stop the autoguider"
+msgstr "ລົ້ມເຫຼວໃນການຢຸດລະບົບນຳທາງອັດຕະໂນມັດ"
+
+#: u_translation.rsfalse
+msgid "False"
+msgstr "ບໍ່ແມ່ນ"
+
+#: u_translation.rsfastcenterin
+msgid "Fast centering on the slit"
+msgstr "ການປັບກາງໃສ່ສະລິດຢ່າງໄວ"
+
+#: u_translation.rsfil
+msgid "Fil."
+msgstr "ຟິວ."
+
+#: u_translation.rsfile
+msgid "File"
+msgstr "ໄຟລ໌"
+
+#: u_translation.rsfileformat
+msgid "File format"
+msgstr "ຮູບແບບໄຟລ໌"
+
+#: u_translation.rsfilenameopti
+msgid "File name options"
+msgstr "ຕົວເລືອກຊື່ໄຟລ໌"
+
+#: u_translation.rsfilenotfound
+#, object-pascal-format
+msgid "File not found %s"
+msgstr "ບໍ່ພົບໄຟລ໌ %s"
+
+#: u_translation.rsfiles
+msgid "Files"
+msgstr "ໄຟລ໌"
+
+#: u_translation.rsfilter
+msgid "Filter"
+msgstr "ຟິວເຕີ"
+
+#: u_translation.rsfilter0
+msgid "No change"
+msgstr "ບໍ່ມີການປ່ຽນແປງ"
+
+#: u_translation.rsfiltername
+msgid "Filter name"
+msgstr "ຊື່ຟິວເຕີ"
+
+#: u_translation.rsfilteroffset
+msgid "Filter offset"
+msgstr "ຄ່າຊົດເຊີຍຟິວເຕີ"
+
+#: u_translation.rsfilters
+msgid "Filters"
+msgstr "ໂຕກອງ"
+
+#: u_translation.rsfilterwheel
+msgid "Filter wheel"
+msgstr "ວົງລໍ້ຟິວເຕີ"
+
+#: u_translation.rsfinalmovemen
+msgid "Final movement (steps)"
+msgstr "ການເຄື່ອນທີ່ສຸດທ້າຍ (ຂັ້ນຕອນ)"
+
+#: u_translation.rsfind
+msgid "Find."
+msgstr "ຊອກຫາ."
+
+#: u_translation.rsfinder
+msgid "Finder"
+msgstr "ກ້ອງຊອກຫາ"
+
+#: u_translation.rsfindercamera
+msgid "Finder camera"
+msgstr "ກ້ອງຊອກຫາ"
+
+#: u_translation.rsfinderfocall
+msgid "Finder focal length"
+msgstr "ຄວາມຍາວໂຟກັສຂອງກ້ອງຊອກຫາ"
+
+#: u_translation.rsfit
+msgid "Fit"
+msgstr "ພໍດີ"
+
+#: u_translation.rsfitsfileexte
+msgid "FITS file extension"
+msgstr "ນາມສະກຸນໄຟລ໌ FITS"
+
+#: u_translation.rsfitsheader
+msgid "FITS header"
+msgstr "ຫົວຂໍ້ FITS"
+
+#: u_translation.rsfixedsequenc
+msgid "Fixed sequence length"
+msgstr "ຄວາມຍາວລຳດັບຄົງທີ່"
+
+#: u_translation.rsflat
+msgid "Flat"
+msgstr "Flat"
+
+#: u_translation.rsflatautoexpo
+msgid "Flat auto-exposure"
+msgstr "ການເປີດໜ້າກ້ອງອັດຕະໂນມັດສຳລັບ Flat"
+
+#: u_translation.rsflatfileload
+msgid "Flat file loaded"
+msgstr "ໂຫຼດໄຟລ໌ແຟລັດແລ້ວ"
+
+#: u_translation.rsflatframe
+msgid "Flat frame"
+msgstr "ເຟຣມແຟລັດ"
+
+#: u_translation.rsflatimagemea
+msgid "Flat image mean level"
+msgstr "ລະດັບສະເລ່ຍຂອງຮູບພາບ Flat"
+
+#: u_translation.rsflatlevel
+#, object-pascal-format
+msgid "Flat level=%s"
+msgstr "ລະດັບແຟລັດ=%s"
+
+#: u_translation.rsflattime
+msgid "Flat time"
+msgstr "ເວລາ Flat"
+
+#: u_translation.rsflipns
+msgid "Flip N/S"
+msgstr "ປີ້ນ ເໜືອ/ໃຕ້"
+
+#: u_translation.rsfliptheimageh
+msgid "Flip the image horizontally"
+msgstr "ປີ້ນຮູບຕາມແນວນອນ"
+
+#: u_translation.rsfliptheimagev
+msgid "Flip the image vertically"
+msgstr "ປີ້ນຮູບຕາມແນວຕັ້ງ"
+
+#: u_translation.rsfloatingpoin
+msgid "Floating point file"
+msgstr "ໄຟລ໌ເລກທົດສະນິຍົມ"
+
+#: u_translation.rsflux
+msgid "Flux"
+msgstr "ຟລັກຊ໌"
+
+#: u_translation.rsfoc
+msgid "Foc."
+msgstr "ຈຸດສຸມ."
+
+#: u_translation.rsfocalelength
+msgid "Focal length"
+msgstr "ຄວາມຍາວໂຟກັສ"
+
+#: u_translation.rsfocus
+msgid "Focus"
+msgstr "ຈຸດສຸມ"
+
+#: u_translation.rsfocusaid
+msgid "Focus aid"
+msgstr "ໂຕຊ່ວຍປັບຈຸດສຸມ"
+
+#: u_translation.rsfocusaidstar
+msgid "Focus aid started"
+msgstr "ເລີ່ມໂຕຊ່ວຍປັບຈຸດສຸມແລ້ວ"
+
+#: u_translation.rsfocusaidstop
+msgid "Focus aid stopped"
+msgstr "ຢຸດໂຕຊ່ວຍປັບຈຸດສຸມແລ້ວ"
+
+#: u_translation.rsfocusdirecti
+msgid "Focus direction"
+msgstr "ທິດທາງຈຸດສຸມ"
+
+#: u_translation.rsfocusdirecti2
+msgid "Focus direction: "
+msgstr "ທິດທາງຈຸດສຸມ: "
+
+#: u_translation.rsfocuser
+msgid "Focuser"
+msgstr "ໂຕປັບຈຸດສຸມ"
+
+#: u_translation.rsfocusercalib
+msgid "Focuser calibration"
+msgstr "ການປັບທຽບໂຕປັບຈຸດສຸມ"
+
+#: u_translation.rsfocusercalib2
+msgid "Focuser calibration started"
+msgstr "ເລີ່ມການປັບທຽບໂຕປັບຈຸດສຸມແລ້ວ"
+
+#: u_translation.rsfocusercalib3
+msgid "Focuser calibration started, please wait..."
+msgstr "ເລີ່ມການປັບທຽບໂຕປັບຈຸດສຸມແລ້ວ, ກະລຸນາລໍຖ້າ..."
+
+#: u_translation.rsfocusercalib4
+msgid "Focuser calibration completed, click Next to see the result."
+msgstr "ການປັບທຽບໂຕປັບຈຸດສຸມສຳເລັດແລ້ວ, ກົດ ຕໍ່ໄປ ເພື່ອເບິ່ງຜົນ."
+
+#: u_translation.rsfocusercorre
+msgid "Focuser correction"
+msgstr "ການແກ້ໄຂໂຕປັບຈຸດສຸມ"
+
+#: u_translation.rsfocusermoveb
+#, object-pascal-format
+msgid "Focuser move by %s"
+msgstr "ໂຕປັບຈຸດສຸມຍ້າຍໂດຍ %s"
+
+#: u_translation.rsfocusermovet
+#, object-pascal-format
+msgid "Focuser move to %s"
+msgstr "ໂຕປັບຈຸດສຸມຍ້າຍໄປທີ່ %s"
+
+#: u_translation.rsfocuseroffse
+msgid "Focuser offset"
+msgstr "ຄ່າຊົດເຊີຍໂຕປັບຈຸດສຸມ"
+
+#: u_translation.rsfocuserslipp
+#, object-pascal-format
+msgid "Focuser slippage offset set to %s"
+msgstr "ຕັ້ງຄ່າຊົດເຊີຍການເລື່ອນຂອງໂຕປັບຈຸດສຸມເປັນ %s"
+
+#: u_translation.rsfocusertempe
+#, object-pascal-format
+msgid "Focuser temperature: %s"
+msgstr "ອຸນຫະພູມໂຕປັບຈຸດສຸມ: %s"
+
+#: u_translation.rsfocusertempe2
+#, object-pascal-format
+msgid "Focuser temperature: %s , adjust position by %s"
+msgstr "ອຸນຫະພູມໂຕປັບຈຸດສຸມ: %s , ປັບຕຳແໜ່ງໂດຍ %s"
+
+#: u_translation.rsfocusertempe3
+msgid "Focuser temperature compensation"
+msgstr "ການຊົດເຊີຍອຸນຫະພູມຂອງໂຕປັບຈຸດສຸມ"
+
+#: u_translation.rsfocusevery
+msgid "Focus every"
+msgstr "ປັບຈຸດສຸມທຸກໆ"
+
+#: u_translation.rsfocuspositio
+msgid "Focus position"
+msgstr "ຕຳແໜ່ງຈຸດສຸມ"
+
+#: u_translation.rsfocusquality
+#, object-pascal-format
+msgid "Focus quality = %s"
+msgstr "ຄຸນນະພາບຈຸດສຸມ = %s"
+
+#: u_translation.rsfocusstarsel
+msgid "Focus star selection"
+msgstr "ການເລືອກດາວຈຸດສຸມ"
+
+#: u_translation.rsfocuswindows
+msgid "Focus window size"
+msgstr "ຂະໜາດໜ້າຕ່າງຈຸດສຸມ"
+
+#: u_translation.rsfoldernameop
+msgid "Folder name options"
+msgstr "ຕົວເລືອກຊື່ໂຟລເດີ"
+
+#: u_translation.rsforguidancea
+msgid "For guidance adjust the azimuth knob along the blue line and the altitude knob along the red line"
+msgstr "ສໍາລັບການນຳທາງ, ປັບປຸ່ມອາຊິມຸດຕາມເສັ້ນສີຟ້າ ແລະປຸ່ມຄວາມສູງຕາມເສັ້ນສີແດງ"
+
+#: u_translation.rsforreflector
+msgid "For reflector collimation."
+msgstr "ສຳລັບການປັບແນວກ້ອງສະທ້ອນແສງ."
+
+#: u_translation.rsfounddevices
+#, object-pascal-format
+msgid "Found %s devices"
+msgstr "ພົບ %s ອຸປະກອນ"
+
+#: u_translation.rsfounddstars
+#, object-pascal-format
+msgid "Found %d stars"
+msgstr "ພົບ %d ດາວ"
+
+#: u_translation.rsfoundservers
+#, object-pascal-format
+msgid "Found %s servers"
+msgstr "ພົບ %s ເຊີບເວີ"
+
+#: u_translation.rsfov
+msgid "FOV"
+msgstr "ຂອບເຂດການເບິ່ງ"
+
+#: u_translation.rsframe
+msgid "Frame"
+msgstr "ຂອບຮູບ"
+
+#: u_translation.rsframerate
+msgid "Frame rate"
+msgstr "ອັດຕາເຟຣມ"
+
+#: u_translation.rsframes
+msgid "Frames"
+msgstr "ເຟຣມ"
+
+#: u_translation.rsframesize
+msgid "Frame size"
+msgstr "ຂະໜາດເຟຣມ"
+
+#: u_translation.rsfromcameradr
+msgid "From camera driver"
+msgstr "ຈາກໄດຣເວີກ້ອງ"
+
+#: u_translation.rsfromcolorima
+msgid "From color image"
+msgstr "ຈາກຮູບພາບສີ"
+
+#: u_translation.rsfromemailadd
+msgid "From email address"
+msgstr "ທີ່ຢູ່ອີເມວຜູ້ສົ່ງ"
+
+#: u_translation.rsfromimage
+msgid "From image"
+msgstr "ຈາກຮູບພາບ"
+
+#: u_translation.rsfromplanetar
+msgid "From planetarium"
+msgstr "ຈາກດາລາຄະຕິຈຳລອງ"
+
+#: u_translation.rsfromplatesol
+msgid "From plate solving"
+msgstr "ຈາກການແກ້ໄຂພາບດາວ"
+
+#: u_translation.rsfromtelescop
+msgid "From telescope driver"
+msgstr "ຈາກໄດຣເວີກ້ອງສ່ອງທາງໄກ"
+
+#: u_translation.rsfromtoby
+#, object-pascal-format
+msgid "From: %s to %s by %s"
+msgstr "ຈາກ: %s ຫາ %s ໂດຍ %s"
+
+#: u_translation.rsfstop
+msgid "F-stop"
+msgstr "ຄ່າ F-stop"
+
+#: u_translation.rsfwhm
+msgid "FWHM"
+msgstr "FWHM"
+
+#: u_translation.rsgain
+msgid "Gain"
+msgstr "ເກນ"
+
+#: u_translation.rsgamma
+msgid "Gamma"
+msgstr "ແກມມາ"
+
+#: u_translation.rsget
+msgid "Get"
+msgstr "ເອົາ"
+
+#: u_translation.rsgetcurrent
+msgid "Get current"
+msgstr "ຮັບຄ່າປັດຈຸບັນ"
+
+#: u_translation.rsgetcurrentpo
+msgid "Get current position from current target"
+msgstr "ຮັບຕຳແໜ່ງປັດຈຸບັນຈາກເປົ້າໝາຍປັດຈຸບັນ"
+
+#: u_translation.rsgetcurrentpo2
+msgid "Get current position from last image"
+msgstr "ຮັບຕຳແໜ່ງປັດຈຸບັນຈາກຮູບພາບລ່າສຸດ"
+
+#: u_translation.rsgetcurrentpo3
+msgid "Get current position from telescope"
+msgstr "ຮັບຕຳແໜ່ງປັດຈຸບັນຈາກກ້ອງສ່ອງທາງໄກ"
+
+#: u_translation.rsgetsitelongl
+msgid "Get site long/lat from the mount"
+msgstr "ເອົາຂໍ້ມູນເສັ້ນແວງ/ເສັ້ນຂະໜານຈາກຖານຕິດຕັ້ງ"
+
+#: u_translation.rsgetvaluesfro
+msgid "Get values from the weather station"
+msgstr "ເອົາຄ່າຈາກສະຖານີອາກາດ"
+
+#: u_translation.rsglobalaction
+msgid "Global actions when a sequence is running"
+msgstr "ການກະທຳທົ່ວໄປເມື່ອລຳດັບກຳລັງດຳເນີນການ"
+
+#: u_translation.rsglobalfocuse
+#, object-pascal-format
+msgid "Global focuser parameters.%sSet the focuser direction IN or OUT to the one that give the best result for your setup. If you plan to use temperature compensation, set the direction it need to move when the temperature drop during the night."
+msgstr "ພາຣາມິເຕີຂອງໂຕປັບຈຸດສຸມທົ່ວໄປ.%sຕັ້ງທິດທາງຂອງໂຕປັບຈຸດສຸມເປັນ ເຂົ້າ ຫຼື ອອກ ໃຫ້ເປັນອັນທີ່ໃຫ້ຜົນດີທີ່ສຸດສຳລັບການຕິດຕັ້ງຂອງທ່ານ. ຖ້າທ່ານວາງແຜນຈະໃຊ້ການຊົດເຊີຍອຸນຫະພູມ, ໃຫ້ຕັ້ງທິດທາງທີ່ມັນຕ້ອງເຄື່ອນທີ່ເມື່ອອຸນຫະພູມຫຼຸດລົງໃນຕອນກາງຄືນ."
+
+#: u_translation.rsglobalrepeat
+msgid "Global repeat:"
+msgstr "ການເຮັດຊ້ຳທົ່ວໄປ:"
+
+#: u_translation.rsgood
+msgid "Good"
+msgstr "ດີ"
+
+#: u_translation.rsgoto
+msgid "Goto"
+msgstr "ໄປທີ່"
+
+#: u_translation.rsgotoinprogre
+msgid "GOTO in progress"
+msgstr "ກໍາລັງໄປທີ່..."
+
+#: u_translation.rsgreen
+msgid "green"
+msgstr "ສີຂຽວ"
+
+#: u_translation.rsgroup
+msgid "Group"
+msgstr "ກຸ່ມ"
+
+#: u_translation.rsguid
+msgid "Guid."
+msgstr "ນຳທ."
+
+#: u_translation.rsguide
+msgid "Guide"
+msgstr "ນຳທາງ"
+
+#: u_translation.rsguideboxsize
+msgid "Guide box size"
+msgstr "ຂະໜາດກ່ອງນຳທາງ"
+
+#: u_translation.rsguidecamera
+msgid "Guide camera"
+msgstr "ກ້ອງນຳທາງ"
+
+#: u_translation.rsguideoffset
+msgid "Guide offset"
+msgstr "ອັອບເຊັດການນຳທາງ"
+
+#: u_translation.rsguidepositio
+msgid "Guide position on the slit"
+msgstr "ຕຳແໜ່ງນຳທາງເທິງສະລິດ"
+
+#: u_translation.rsguidepositio2
+msgid "Guide position out of frame!"
+msgstr "ຕຳແໜ່ງນຳທາງຢູ່ນອກເຟຣມ!"
+
+#: u_translation.rsguider
+msgid "Guider"
+msgstr "ເຄື່ອງນຳທາງ"
+
+#: u_translation.rsguidercalibr
+msgid "Guider calibration"
+msgstr "ການປັບທຽບເຄື່ອງນຳທາງ"
+
+#: u_translation.rsguiderimage
+msgid "Guider image"
+msgstr "ຮູບພາບຈາກເຄື່ອງນຳທາງ"
+
+#: u_translation.rsguidersensor
+msgid "Guider sensor;"
+msgstr "ເຊັນເຊີໂຕນຳທາງ;"
+
+#: u_translation.rsguidestaroff
+msgid "Guide star offset"
+msgstr "ອັອບເຊັດດາວນຳທາງ"
+
+#: u_translation.rsguiding
+#, object-pascal-format
+msgid "%s guiding"
+msgstr "ກຳລັງນຳທາງ %s"
+
+#: u_translation.rsguidingdrift
+msgid "Guiding drift control"
+msgstr "ການຄວບຄຸມການເຄື່ອນທີ່ຂອງການນຳທາງ"
+
+#: u_translation.rshalt
+msgid "Halt"
+msgstr "ຢຸດ"
+
+#: u_translation.rshandpad
+msgid "Handpad"
+msgstr "ແຜງຄວບຄຸມດ້ວຍມື"
+
+#: u_translation.rsheartbeatthr
+msgid "Heart beat threshold [minutes]"
+msgstr "ເກນສັນຍານຊີບ [ນາທີ]"
+
+#: u_translation.rsheight
+msgid "Height"
+msgstr "ຄວາມສູງ"
+
+#: u_translation.rshelp
+msgid "Help"
+msgstr "ຊ່ວຍເຫຼືອ"
+
+#: u_translation.rshfd
+msgid "HFD"
+msgstr "HFD"
+
+#: u_translation.rshfdactive
+#, object-pascal-format
+msgid "HFD Focus Monitor: Active. Threshold: %s%%, Reference HFD: %s"
+msgstr "ໂຕຕິດຕາມຈຸດສຸມ HFD: ເຮັດວຽກຢູ່. ຄ່າເກນ: %s%%, HFD ອ້າງອີງ: %s"
+
+#: u_translation.rshfdmeasuring
+#, object-pascal-format
+msgid "HFD Focus Monitor: Measuring. %d of %d HFD measurements completed."
+msgstr "ໂຕຕິດຕາມຈຸດສຸມ HFD: ກຳລັງວັດແທກ. ສຳເລັດການວັດແທກ HFD %d ຈາກທັງໝົດ %d."
+
+#: u_translation.rshfdreset
+msgid "HFD Focus Monitor: Reset. Clearing reference HFD and measurements."
+msgstr "ໂຕຕິດຕາມຈຸດສຸມ HFD: ຕັ້ງຄ່າຄືນ. ກຳລັງລຶບ HFD ອ້າງອີງ ແລະ ຄ່າວັດແທກ."
+
+#: u_translation.rshfmtriggered
+#, object-pascal-format
+msgid "HFD Focus Monitor: Threshold: %s%%, Ref: %s, %s-Image Avg: %s, HFD Delta: %s%%"
+msgstr "ໂຕຕິດຕາມຈຸດສຸມ HFD: ຄ່າເກນ: %s%%, ອ້າງອີງ: %s, ສະເລ່ຍ %s-ຮູບ: %s, HFD Delta: %s%%"
+
+#: u_translation.rshigh
+msgid "High"
+msgstr "ສູງ"
+
+#: u_translation.rshighlightadu
+msgid "Highlight ADU"
+msgstr "ADU ໄຮໄລຕ໌"
+
+#: u_translation.rshighlightcol
+msgid "Highlight color"
+msgstr ""
+
+#: u_translation.rshistogram
+msgid "Histogram"
+msgstr "ຮິສໂຕແກຣມ"
+
+#: u_translation.rshistory
+msgid "History"
+msgstr "ປະຫວັດ"
+
+#: u_translation.rshorizonprofi
+msgid "Horizon profile"
+msgstr "ໂປຣໄຟລ໌ຂອບຟ້າ"
+
+#: u_translation.rshorizontalco
+msgid "Horizontal correction :"
+msgstr "ການແກ້ໄຂຕາມແນວນອນ:"
+
+#: u_translation.rshumidity
+msgid "Humidity"
+msgstr "ຄວາມຊຸ່ມ"
+
+#: u_translation.rshumidity2
+msgid "Humidity %"
+msgstr "ຄວາມຊຸ່ມ %"
+
+#: u_translation.rshyperbolacur
+#, object-pascal-format
+msgid "HYPERBOLA curve fitting focus at %s,  remaining curve fit error %s,  iteration cycles %s"
+msgstr "ໂຟກັສດ້ວຍການປັບເສັ້ນໂຄ້ງ HYPERBOLA ຢູ່ທີ່ %s, ຄວາມຜິດພາດທີ່ຍັງເຫຼືອ %s, ຮອບການຄຳນວນ %s"
+
+#: u_translation.rshysteresis
+msgid "Hysteresis"
+msgstr "ຮິສເຕີຣິຊິສ"
+
+#: u_translation.rsidle
+msgid "Idle"
+msgstr "ວ່າງ"
+
+#: u_translation.rsifabrightsta
+msgid "If a bright star is visible click NEXT."
+msgstr "ຖ້າເຫັນດາວທີ່ແຈ້ງ ໃຫ້ກົດ ຕໍ່ໄປ."
+
+#: u_translation.rsifnobrightst
+msgid "If no bright star is visible click MOVE."
+msgstr "ຖ້າບໍ່ເຫັນດາວທີ່ແຈ້ງ ໃຫ້ກົດ ຍ້າຍ."
+
+#: u_translation.rsifyourfocuse
+msgid "If your focuser driver do not offer this option, set here the number of steps necessary to clean the backlash when the direction change. This not need to be a precise value, it is better to set it higher than the actual backlash."
+msgstr "ຖ້າໄດຣເວີໂຕປັບຈຸດສຸມຂອງທ່ານບໍ່ມີຕົວເລືອກນີ້, ໃຫ້ຕັ້ງຈຳນວນຂັ້ນຕອນທີ່ຈຳເປັນເພື່ອລ້າງໄລຍະຫວ່າງເມື່ອທິດທາງປ່ຽນແປງ. ນີ້ບໍ່ຈຳເປັນຕ້ອງເປັນຄ່າທີ່ແມ່ນຍຳ, ຄວນຕັ້ງໃຫ້ສູງກວ່າໄລຍະຫວ່າງຕົວຈິງ."
+
+#: u_translation.rsignoreweathe
+#, object-pascal-format
+msgid "Ignore weather condition for image type=%s"
+msgstr "ບໍ່ສົນໃຈສະພາບອາກາດສຳລັບຮູບພາບປະເພດ=%s"
+
+#: u_translation.rsimage
+msgid "Image"
+msgstr "ຮູບພາບ"
+
+#: u_translation.rsimagecleanup
+msgid "Image cleanup"
+msgstr "ການທຳຄວາມສະອາດຮູບພາບ"
+
+#: u_translation.rsimagecursor
+msgid "Image cursor"
+msgstr "ເຄີເຊີຮູບພາບ"
+
+#: u_translation.rsimagedebayer
+msgid "Image Debayered"
+msgstr "ຮູບພາບຖືກ Debayered ແລ້ວ"
+
+#: u_translation.rsimageinspect
+msgid "Image inspection"
+msgstr "ການກວດສອບຮູບພາບ"
+
+#: u_translation.rsimagemedianh
+#, object-pascal-format
+msgid "Image median hfd=%s"
+msgstr "ຄ່າມັດທະຍະຖານ hfd ຂອງຮູບພາບ=%s"
+
+#: u_translation.rsimages
+msgid "images"
+msgstr "ຮູບ"
+
+#: u_translation.rsimagescale
+msgid "Image scale"
+msgstr "ສະເກລຮູບພາບ"
+
+#: u_translation.rsimagesfolder
+msgid "Images folder Unix path"
+msgstr "ເສັ້ນທາງ Unix ຂອງໂຟລເດີຮູບພາບ"
+
+#: u_translation.rsimagesharpne
+#, object-pascal-format
+msgid "Image sharpness %s"
+msgstr "ຄວາມຄົມຊັດຂອງຮູບພາບ %s"
+
+#: u_translation.rsimagestatist
+msgid "Image statistic"
+msgstr "ສະຖິຕິຮູບພາບ"
+
+#: u_translation.rsimagetransfe
+msgid "Image transfer"
+msgstr "ການໂອນຍ້າຍຮູບພາບ"
+
+#: u_translation.rsimageundebay
+msgid "Image Un-debayered"
+msgstr "ຮູບພາບຖືກ Un-debayered ແລ້ວ"
+
+#: u_translation.rsimagewindow
+msgid "Image window"
+msgstr "ໜ້າຕ່າງຮູບພາບ"
+
+#: u_translation.rsimportcdcmos
+msgid "Import mosaic"
+msgstr "ນຳເຂົ້າໂມເສກ"
+
+#: u_translation.rsimportcdcobs
+msgid "Import observing list"
+msgstr "ນຳເຂົ້າລາຍການສັງເກດການ"
+
+#: u_translation.rsimportcsv
+msgid "Import CSV"
+msgstr "ນຳເຂົ້າ CSV"
+
+#: u_translation.rsin
+msgid "In"
+msgstr "ເຂົ້າ"
+
+#: u_translation.rsincamera
+msgid "In camera"
+msgstr "ໃນກ້ອງ"
+
+#: u_translation.rsincr
+msgid "Incr."
+msgstr "ເພີ່ມ."
+
+#: u_translation.rsindisettings
+msgid "INDI settings"
+msgstr "ການຕັ້ງຄ່າ INDI"
+
+#: u_translation.rsinformation
+msgid "Information"
+msgstr "ຂໍ້ມູນ"
+
+#: u_translation.rsinitialcalib
+msgid "Initial calibration step"
+msgstr "ຂັ້ນຕອນການປັບທຽບເບື້ອງຕົ້ນ"
+
+#: u_translation.rsinitializeta
+#, object-pascal-format
+msgid "Initialize target %s"
+msgstr "ເລີ່ມຕົ້ນເປົ້າໝາຍ %s"
+
+#: u_translation.rsinitialmovem
+msgid "Initial movement (steps)"
+msgstr "ການເຄື່ອນທີ່ເລີ່ມຕົ້ນ (ຂັ້ນຕອນ)"
+
+#: u_translation.rsinmount
+msgid "In mount"
+msgstr "ໃນຖານຕິດຕັ້ງ"
+
+#: u_translation.rsinplaceautof
+msgid "In place autofocus failed!"
+msgstr "ການປັບຈຸດສຸມອັດຕະໂນມັດໃນຈຸດລົ້ມເຫຼວ!"
+
+#: u_translation.rsinsertblankr
+msgid "Insert blank row"
+msgstr "ແຊກແຖວວ່າງ"
+
+#: u_translation.rsinsertrows
+msgid "Insert rows"
+msgstr "ແຊກແຖວ"
+
+#: u_translation.rsinspect
+msgid "Inspect"
+msgstr "ກວດສອບ"
+
+#: u_translation.rsinspectionan
+msgid "Inspection and collimation"
+msgstr "ການກວດສອບ ແລະການປັບແນວ"
+
+#: u_translation.rsinspectthere
+msgid "Inspect the distribution of the HFD value across the image to help with coma corrector spacing and tilt adjust."
+msgstr "ກວດສອບການກະຈາຍຂອງຄ່າ HFD ທົ່ວຮູບພາບເພື່ອຊ່ວຍໃນການປັບໄລຍະຫ່າງ ແລະ ຄວາມອຽງຂອງຕົວແກ້ໂຄມາ."
+
+#: u_translation.rsinsseconds
+#, object-pascal-format
+msgid "in %s seconds"
+msgstr "ໃນ %s ວິນາທີ"
+
+#: u_translation.rsinstallscrip
+msgid "Install script"
+msgstr "ຕິດຕັ້ງສະຄຣິບ"
+
+#: u_translation.rsinstrumentna
+msgid "Instrument name"
+msgstr "ຊື່ເຄື່ອງມື"
+
+#: u_translation.rsintensity
+msgid "Intensity"
+msgstr "ຄວາມເຂັ້ມ"
+
+#: u_translation.rsinteractiond
+msgid "Interaction dialog"
+msgstr "ກ່ອງໂຕ້ຕອບ"
+
+#: u_translation.rsinterface
+msgid "Interface"
+msgstr "ສ່ວນຕິດຕໍ່"
+
+#: u_translation.rsinterfacetyp
+msgid "Interface type"
+msgstr "ປະເພດການເຊື່ອມຕໍ່"
+
+#: u_translation.rsinternal
+msgid "Internal"
+msgstr "ພາຍໃນ"
+
+#: u_translation.rsinternalguid
+msgid "Internal guider"
+msgstr "ເຄື່ອງນຳທາງພາຍໃນ"
+
+#: u_translation.rsinterval
+msgid "Interval"
+msgstr "ໄລຍະຫ່າງ"
+
+#: u_translation.rsinthenextscr
+msgid "In the next screen you have to move the triangle such that the green square is marking a bright star or object."
+msgstr "ໃນໜ້າຈໍຕໍ່ໄປ ທ່ານຕ້ອງຍ້າຍຮູບສາມຫຼ່ຽມເພື່ອໃຫ້ສີ່ຫຼ່ຽມສີຂຽວໝາຍໃສ່ດາວ ຫຼືວັດຖຸທີ່ແຈ້ງ."
+
+#: u_translation.rsinvalid
+msgid "Invalid"
+msgstr "ບໍ່ຖືກຕ້ອງ"
+
+#: u_translation.rsinvalidbinni
+#, object-pascal-format
+msgid "Invalid binning %s"
+msgstr "Binning ບໍ່ຖືກຕ້ອງ %s"
+
+#: u_translation.rsinvalidcoord
+msgid "Invalid coordinates"
+msgstr "ຈຸດປະສານບໍ່ຖືກຕ້ອງ"
+
+#: u_translation.rsinvalidexpos
+#, object-pascal-format
+msgid "Invalid exposure time %s"
+msgstr "ເວລາເປີດໜ້າກ້ອງບໍ່ຖືກຕ້ອງ %s"
+
+#: u_translation.rsinvalidnumer
+msgid "Invalid numeric value"
+msgstr "ຄ່າຕົວເລກບໍ່ຖືກຕ້ອງ"
+
+#: u_translation.rsinvalidobjec
+msgid "Invalid object coordinates!"
+msgstr "ຈຸດປະສານຂອງວັດຖຸບໍ່ຖືກຕ້ອງ!"
+
+#: u_translation.rsinvalidoruns
+#, object-pascal-format
+msgid "Invalid or unsupported FITS file %s"
+msgstr "ໄຟລ໌ FITS ບໍ່ຖືກຕ້ອງ ຫຼື ບໍ່ຮອງຮັບ %s"
+
+#: u_translation.rsinversedsola
+msgid "Inversed solar guide control"
+msgstr "ການຄວບຄຸມການນຳທາງຕາເວັນແບບປີ້ນກັບ"
+
+#: u_translation.rsissue
+msgid "Issue"
+msgstr "ບັນຫາ"
+
+#: u_translation.rsiterative
+msgid "Iterative"
+msgstr "ເຮັດຊ້ຳ"
+
+#: u_translation.rsitissuggestt
+msgid "It is suggest to slew to focus star when using Vcurve"
+msgstr "ແນະນຳໃຫ້ຫັນກ້ອງໄປຫາດາວໂຟກັສເມື່ອໃຊ້ Vcurve"
+
+#: u_translation.rsitwillcontin
+msgid "It will continue after the last checkpoint."
+msgstr "ຈະສືບຕໍ່ຫຼັງຈາກຈຸດກວດກາສຸດທ້າຍ."
+
+#: u_translation.rskey
+msgid "Key"
+msgstr "ຄີ"
+
+#: u_translation.rslanguage
+msgid "Language"
+msgstr "ພາສາ"
+
+#: u_translation.rslastcalibrat
+msgid "Last calibration:"
+msgstr "ການປັບທຽບຄັ້ງຫຼ້າສຸດ:"
+
+#: u_translation.rslatitude
+msgid "Latitude"
+msgstr "ເສັ້ນຂະໜານ"
+
+#: u_translation.rslearn
+msgid "Learn"
+msgstr "ຮຽນຮູ້"
+
+#: u_translation.rslength
+msgid "Length"
+msgstr "ຄວາມຍາວ"
+
+#: u_translation.rslicenseagree
+msgid "License agreement"
+msgstr "ຂໍ້ຕົກລົງໃບອະນຸຍາດ"
+
+#: u_translation.rslight
+msgid "Light"
+msgstr "ແສງ"
+
+#: u_translation.rslightoff
+msgid "Light OFF"
+msgstr "ປິດໄຟ"
+
+#: u_translation.rslighton
+msgid "Light ON"
+msgstr "ເປີດໄຟ"
+
+#: u_translation.rslimitedto15x
+msgid "(limited to 1.5x the slew precision)"
+msgstr "(ຈຳກັດຢູ່ທີ່ 1.5 ເທົ່າຂອງຄວາມແມ່ນຍຳໃນການຫັນກ້ອງ)"
+
+#: u_translation.rslimitrotator
+msgid "Limit rotator angle to 0-180 degree range"
+msgstr ""
+
+#: u_translation.rslimittempera
+msgid "Limit temperature change"
+msgstr "ຈຳກັດການປ່ຽນແປງອຸນຫະພູມ"
+
+#: u_translation.rsload
+msgid "Load"
+msgstr "ໂຫຼດ"
+
+#: u_translation.rsloadconfigur
+msgid "Load configuration on startup"
+msgstr "ໂຫຼດການຕັ້ງຄ່າເມື່ອເລີ່ມຕົ້ນ"
+
+#: u_translation.rsloaddarkfile
+msgid "Load dark file"
+msgstr "ໂຫຼດໄຟລ໌ມືດ"
+
+#: u_translation.rsloadflatfile
+msgid "Load flat file"
+msgstr "ໂຫຼດໄຟລ໌ແຟລັດ"
+
+#: u_translation.rslockoverlay
+msgid "Lock overlay"
+msgstr "ລັອກພາບຊ້ອນ"
+
+#: u_translation.rslogfolder
+msgid "Log folder"
+msgstr "ໂຟເດີບັນທຶກ"
+
+#: u_translation.rslongestguide
+msgid "Longest guide pulse"
+msgstr "ສັນຍານນຳທາງຍາວສຸດ"
+
+#: u_translation.rslongitude
+msgid "Longitude"
+msgstr "ເສັ້ນແວງ"
+
+#: u_translation.rsloop
+msgid "Loop"
+msgstr "ເຮັດຊ້ຳ"
+
+#: u_translation.rslow
+msgid "Low"
+msgstr "ຕ່ຳ"
+
+#: u_translation.rslowqualityim
+msgid "Low quality image scaling"
+msgstr "ການປັບຂະໜາດຮູບພາບຄຸນນະພາບຕ່ຳ"
+
+#: u_translation.rsluminosity
+msgid "Luminosity"
+msgstr "ຄວາມສະຫວ່າງ"
+
+#: u_translation.rsmagn
+msgid "Magn."
+msgstr "ຄວາມສະຫວ່າງ."
+
+#: u_translation.rsmagnifyer
+msgid "Magnifier"
+msgstr "ແວ່ນຂະຫຍາຍ"
+
+#: u_translation.rsmagnitude
+msgid "Magnitude"
+msgstr "ຄວາມສະຫວ່າງ"
+
+#: u_translation.rsmaincamera
+msgid "Main camera"
+msgstr "ກ້ອງຫຼັກ"
+
+#: u_translation.rsmainimagecen
+#, object-pascal-format
+msgid "Main image center is at finder image X=%s, Y=%s"
+msgstr "ຈຸດກາງຂອງຮູບພາບຫຼັກຢູ່ທີ່ X=%s, Y=%s ຂອງຮູບພາບກ້ອງຊອກຫາ"
+
+#: u_translation.rsmainsensor
+msgid "Main sensor"
+msgstr "ເຊັນເຊີຫຼັກ"
+
+#: u_translation.rsmakeafirstpo
+#, object-pascal-format
+msgid "In mode automatic the telescope will slew to the test positions near the pole automatically.%sIn mode manual you have to slew the mount to the position by the keypad. See documentation."
+msgstr "ໃນໂໝດອັດຕະໂນມັດ ກ້ອງສ່ອງຈະຫັນໄປຫາຕຳແໜ່ງທົດສອບໃກ້ຂົ້ວໂດຍອັດຕະໂນມັດ.%sໃນໂໝດກຳນົດເອງ ທ່ານຕ້ອງຫັນກ້ອງສ່ອງໄປຕຳແໜ່ງດ້ວຍປຸ່ມກົດ. ເບິ່ງເອກະສານປະກອບ."
+
+#: u_translation.rsmakesurethes
+msgid "Make sure the stars are not saturated."
+msgstr ""
+
+#: u_translation.rsmanage
+msgid "Manage"
+msgstr "ຈັດການ"
+
+#: u_translation.rsmanagethegai
+msgid "Manage the Gain and Offset if available."
+msgstr "ຈັດການເກນ ແລະອັອບເຊັດ ຖ້າມີ."
+
+#: u_translation.rsmandatorysta
+msgid "Mandatory start time"
+msgstr "ເວລາເລີ່ມທີ່ບັງຄັບ"
+
+#: u_translation.rsmanual
+msgid "Manual"
+msgstr "ກຳນົດເອງ"
+
+#: u_translation.rsmanualfilter
+msgid "Manual filter change canceled"
+msgstr "ການປ່ຽນຟິວເຕີດ້ວຍມືຖືກຍົກເລີກ"
+
+#: u_translation.rsmanualfocusa
+msgid "Manual focus aid"
+msgstr "ໂຕຊ່ວຍປັບຈຸດສຸມດ້ວຍມື"
+
+#: u_translation.rsmanyfunction
+msgid "Many functions will not work reliably without an astrometry software."
+msgstr "ຫຼາຍໜ້າທີ່ອາດຈະເຮັດວຽກບໍ່ໜ້າເຊື່ອຖືໂດຍບໍ່ມີຊອບແວການວັດແທກຕຳແໜ່ງດາວ."
+
+#: u_translation.rsmarginoffset
+msgid "Margin offset"
+msgstr "ອັອບເຊັດຂອບ"
+
+#: u_translation.rsmax
+msgid "Max:"
+msgstr "ສູງສຸດ:"
+
+#: u_translation.rsmax2
+msgid "Max"
+msgstr "ສູງສຸດ"
+
+#: u_translation.rsmaxexposure
+msgid "Max exposure"
+msgstr "ການເປີດໜ້າກ້ອງສູງສຸດ"
+
+#: u_translation.rsmaximum
+msgid "maximum"
+msgstr "ສູງສຸດ"
+
+#: u_translation.rsmaximumadu
+msgid "Maximum ADU"
+msgstr "ADU ສູງສຸດ"
+
+#: u_translation.rsmaximumdefoc
+msgid "Maximum defocused HFD the focuser can safely reach"
+msgstr "HFD ທີ່ບໍ່ມີຈຸດສຸມສູງສຸດທີ່ໂຕປັບຈຸດສຸມສາມາດບັນລຸໄດ້ຢ່າງປອດໄພ"
+
+#: u_translation.rsmaximumdrift
+msgid "Maximum drift"
+msgstr "ການເຄື່ອນທີ່ສູງສຸດ"
+
+#: u_translation.rsmaximuminten
+msgid "Maximum intensity"
+msgstr "ຄວາມເຂັ້ມສູງສຸດ"
+
+#: u_translation.rsmaximumnumbe
+msgid "Maximum number of retry"
+msgstr "ຈຳນວນການລອງໃໝ່ສູງສຸດ"
+
+#: u_translation.rsmaximumsearc
+msgid "Maximum search radius"
+msgstr "ລັດສະໝີການຄົ້ນຫາສູງສຸດ"
+
+#: u_translation.rsmaximumsearc2
+msgid "Maximum search box"
+msgstr "ກ່ອງຄົ້ນຫາສູງສຸດ"
+
+#: u_translation.rsmaximumsourc
+msgid "Maximum sources"
+msgstr "ແຫຼ່ງຂໍ້ມູນສູງສຸດ"
+
+#: u_translation.rsmaximumtempe
+msgid "Maximum temperature change "
+msgstr "ການປ່ຽນແປງອຸນຫະພູມສູງສຸດ "
+
+#: u_translation.rsmaxoffset
+msgid "Max offset"
+msgstr "ຄ່າຊົດເຊີຍສູງສຸດ"
+
+#: u_translation.rsmean
+msgid "Mean:"
+msgstr "ຄ່າສະເລ່ຍ:"
+
+#: u_translation.rsmeanofimages
+msgid "Mean of images"
+msgstr "ຄ່າສະເລ່ຍຂອງຮູບພາບ"
+
+#: u_translation.rsmeasuredatew
+msgid "Measured at [E/W]"
+msgstr "ວັດແທກທີ່ [ຕາເວັນອອກ/ຕາເວັນຕົກ]"
+
+#: u_translation.rsmeasureen
+msgid "Measure in the East and North"
+msgstr "ວັດແທກທາງຕາເວັນອອກ ແລະເໜືອ"
+
+#: u_translation.rsmeasurees
+msgid "Measure in the East and South"
+msgstr "ວັດແທກທາງຕາເວັນອອກ ແລະໃຕ້"
+
+#: u_translation.rsmeasurement
+msgid "Measurement"
+msgstr "ການວັດແທກ"
+
+#: u_translation.rsmeasurementh
+#, object-pascal-format
+msgid "Measurement %s hfd:%s peak:%s snr:%s"
+msgstr "ການວັດແທກ %s hfd:%s peak:%s snr:%s"
+
+#: u_translation.rsmeasuremento
+msgid "Measurement on new images"
+msgstr "ການວັດແທກເທິງຮູບພາບໃໝ່"
+
+#: u_translation.rsmeasurementp
+#, object-pascal-format
+msgid "Measurement %s pos:%s step:%s hfd:%s peak:%s snr:%s"
+msgstr "ການວັດແທກ %s pos:%s step:%s hfd:%s peak:%s snr:%s"
+
+#: u_translation.rsmeasurepixel
+msgid "Measure pixel scale by stop tracking"
+msgstr "ວັດແທກສະເກລພິກເຊວໂດຍການຢຸດຕິດຕາມ"
+
+#: u_translation.rsmeasureteles
+msgid "Measure telescope cone error"
+msgstr "ວັດແທກຄວາມຜິດພາດໂຄນຂອງກ້ອງສ່ອງ"
+
+#: u_translation.rsmeasurewn
+msgid "Measure in the West and North"
+msgstr "ວັດແທກທາງຕາເວັນຕົກ ແລະເໜືອ"
+
+#: u_translation.rsmeasurews
+msgid "Measure in the West and South"
+msgstr "ວັດແທກທາງຕາເວັນຕົກ ແລະໃຕ້"
+
+#: u_translation.rsmeasuringfir
+msgid "Measuring first position"
+msgstr "ກຳລັງວັດແທກຕຳແໜ່ງທຳອິດ"
+
+#: u_translation.rsmeasuringsec
+msgid "Measuring second position"
+msgstr "ກຳລັງວັດແທກຕຳແໜ່ງທີສອງ"
+
+#: u_translation.rsmeasuringthe
+msgid "Measuring the new position"
+msgstr "ກຳລັງວັດແທກຕຳແໜ່ງໃໝ່"
+
+#: u_translation.rsmedian
+#, object-pascal-format
+msgid "%sMedian:%s"
+msgstr "%sຄ່າກາງ:%s"
+
+#: u_translation.rsmedium
+msgid "Medium"
+msgstr "ກາງ"
+
+#: u_translation.rsmeridian
+msgid "Meridian"
+msgstr "ເມຣິເດຍນ"
+
+#: u_translation.rsmeridianflip
+msgid "Meridian flip aborted!"
+msgstr "ການພິກຜ່ານເສັ້ນເມຣິເດຍນຖືກຍົກເລີກ!"
+
+#: u_translation.rsmeridianflip10
+msgid "Meridian flip completed"
+msgstr "ການພິກຜ່ານເມຣິເດຍນສຳເລັດສົມບູນ"
+
+#: u_translation.rsmeridianflip11
+#, object-pascal-format
+msgid "Meridian flip aborted after %d retries"
+msgstr "ການປີ້ນເມຣິດ້ຽນຖືກຍົກເລີກຫຼັງຈາກພະຍາຍາມ %d ຄັ້ງ"
+
+#: u_translation.rsmeridianflip2
+msgid "Meridian flip will occur now."
+msgstr "ການພິກຜ່ານເມຣິເດຍນຈະເກີດຂຶ້ນດຽວນີ້."
+
+#: u_translation.rsmeridianflip3
+msgid "Meridian flip canceled before flip"
+msgstr "ການພິກຜ່ານເມຣິເດຍນຖືກຍົກເລີກກ່ອນການພິກ"
+
+#: u_translation.rsmeridianflip4
+msgid "Meridian flip now"
+msgstr "ພິກຜ່ານເມຣິເດຍນດຽວນີ້"
+
+#: u_translation.rsmeridianflip5
+msgid "Meridian flip"
+msgstr "ການພິກຜ່ານເມຣິເດຍນ"
+
+#: u_translation.rsmeridianflip6
+msgid "Meridian flip error!"
+msgstr "ການພິກຜ່ານເມຣິເດຍນຜິດພາດ!"
+
+#: u_translation.rsmeridianflip7
+msgid "Meridian flip done"
+msgstr "ການພິກຜ່ານເມຣິເດຍນສຳເລັດແລ້ວ"
+
+#: u_translation.rsmeridianflip8
+msgid "Meridian flip error"
+msgstr "ຄວາມຜິດພາດຂອງການປີ້ນເມຣິດ້ຽນ"
+
+#: u_translation.rsmeridianflip9
+msgid "Meridian flip canceled after flip"
+msgstr "ການພິກຜ່ານເມຣິເດຍນຖືກຍົກເລີກຫຼັງການພິກ"
+
+#: u_translation.rsmeridianin
+msgid "Meridian in"
+msgstr "ເມຣິເດຍນໃນ"
+
+#: u_translation.rsmeridiansinc
+msgid "Meridian since"
+msgstr "ເມຣິເດຍນຕັ້ງແຕ່"
+
+#: u_translation.rsmessages
+msgid "Messages"
+msgstr "ຂໍ້ຄວາມ"
+
+#: u_translation.rsmin
+msgid "min."
+msgstr "ນທ."
+
+#: u_translation.rsmin2
+msgid "Min:"
+msgstr "ຕ່ຳສຸດ:"
+
+#: u_translation.rsminimum
+msgid "minimum"
+msgstr "ຕ່ຳສຸດ"
+
+#: u_translation.rsminimum2
+msgid "Minimum"
+msgstr "ຕ່ຳສຸດ"
+
+#: u_translation.rsminimumdista
+msgid "Minimum distance to the Moon"
+msgstr "ໄລຍະຫ່າງຕ່ຳສຸດຈາກດວງຈັນ"
+
+#: u_translation.rsminimummove
+msgid "Minimum move"
+msgstr "ການເຄື່ອນທີ່ຕ່ຳສຸດ"
+
+#: u_translation.rsminimumobser
+msgid "Minimum observing elevation "
+msgstr "ມຸມສູງຕ່ຳສຸດໃນການສັງເກດ "
+
+#: u_translation.rsminimumstart
+msgid "Minimum, starting point,  focuser movement"
+msgstr "ການເຄື່ອນທີ່ຂອງໂຕປັບຈຸດສຸມຂັ້ນຕ່ຳ, ຈຸດເລີ່ມຕົ້ນ"
+
+#: u_translation.rsminsnr
+msgid "min.SNR"
+msgstr "sNR ຕ່ຳສຸດ"
+
+#: u_translation.rsmintime
+msgid "Min. time"
+msgstr "ເວລາຕ່ຳສຸດ"
+
+#: u_translation.rsminutes
+msgid "minutes"
+msgstr "ນາທີ"
+
+#: u_translation.rsmissingtarge
+msgid "Missing target or guide star coordinates"
+msgstr "ຂາດພິກັດເປົ້າໝາຍ ຫຼືດາວນຳທາງ"
+
+#: u_translation.rsmissingtarge2
+msgid "Missing target coordinates"
+msgstr "ຂາດພິກັດເປົ້າໝາຍ"
+
+#: u_translation.rsmnt
+msgid "Mnt."
+msgstr "ຂາກ."
+
+#: u_translation.rsmode
+msgid "Mode:"
+msgstr "ໂໝດ:"
+
+#: u_translation.rsmodify
+msgid "Modify"
+msgstr "ແກ້ໄຂ"
+
+#: u_translation.rsmoonavoidanc
+msgid "Moon avoidance"
+msgstr "ການຫຼີກລ້ຽງດວງຈັນ"
+
+#: u_translation.rsmoresettings
+msgid "More settings"
+msgstr "ການຕັ້ງຄ່າເພີ່ມເຕີມ"
+
+#: u_translation.rsmount
+msgid "Mount"
+msgstr "ຂາກ້ອງ"
+
+#: u_translation.rsmountcapabil
+#, object-pascal-format
+msgid "Mount capabilities: %s"
+msgstr "ຄວາມສາມາດຂອງຂາກ້ອງ: %s"
+
+#: u_translation.rsmountdonotsu
+msgid "Mount do not support to set SideOfPier, it is not possible to flip before the meridian!"
+msgstr "ຖານຕິດຕັ້ງບໍ່ຮອງຮັບການຕັ້ງ SideOfPier, ບໍ່ສາມາດປີ້ນກ່ອນເມຣິດ້ຽນໄດ້!"
+
+#: u_translation.rsmountisnotpa
+#, object-pascal-format
+msgid "Mount is not parked.%sPark the dome anyway?"
+msgstr "ຖານຕິດຕັ້ງບໍ່ໄດ້ຈອດ.%sຕ້ອງການຈອດໂດມຕໍ່ບໍ່?"
+
+#: u_translation.rsmountisnotre
+msgid "Mount is not reporting pier side, meridian flip can be unreliable."
+msgstr "ຂາກ້ອງບໍ່ໄດ້ລາຍງານດ້ານຂອງເສົາ, ການພິກຜ່ານເມຣິເດຍນອາດບໍ່ໜ້າເຊື່ອຖື."
+
+#: u_translation.rsmountrotatio
+msgid "Mount rotation center"
+msgstr "ຈຸດສູນກາງການໝຸນຂອງຖານຕິດຕັ້ງ"
+
+#: u_translation.rsmountrotatio2
+msgid "Mount rotation direction"
+msgstr "ທິດທາງການໝຸນຂອງຖານຕິດຕັ້ງ"
+
+#: u_translation.rsmountsync
+msgid "Mount sync"
+msgstr "ຊິງຄ໌ຂາກ້ອງ"
+
+#: u_translation.rsmounttrackin
+msgid "Mount tracking restarted"
+msgstr "ການຕິດຕາມຂອງຖານຕິດຕັ້ງເລີ່ມໃໝ່ແລ້ວ"
+
+#: u_translation.rsmounttrackin2
+#, object-pascal-format
+msgid "Mount tracking stopped! sequence timeout in %s minutes."
+msgstr "ການຕິດຕາມຂອງຖານຕິດຕັ້ງຢຸດແລ້ວ! ລຳດັບຈະໝົດເວລາໃນ %s ນາທີ."
+
+#: u_translation.rsmountwasstil
+#, object-pascal-format
+msgid "Mount was still not tracking after %s minutes."
+msgstr "ຖານຕິດຕັ້ງຍັງບໍ່ໄດ້ຕິດຕາມຫຼັງຈາກຜ່ານໄປ %s ນາທີ."
+
+#: u_translation.rsmove
+msgid "Move"
+msgstr "ຍ້າຍ"
+
+#: u_translation.rsmovedirectio
+msgid "Move direction"
+msgstr "ທິດທາງການເຄື່ອນທີ່"
+
+#: u_translation.rsmovedownby
+msgid "move Down by "
+msgstr "ຍ້າຍລົງ ໂດຍ "
+
+#: u_translation.rsmoveeastby
+msgid "move East by "
+msgstr "ຍ້າຍໄປທາງຕາເວັນອອກ ໂດຍ "
+
+#: u_translation.rsmoveinward
+msgid "Move inward"
+msgstr "ເລື່ອນເຂົ້າ"
+
+#: u_translation.rsmovementbetw
+msgid "Movement between points"
+msgstr "ການເຄື່ອນທີ່ລະຫວ່າງຈຸດ"
+
+#: u_translation.rsmoveoutward
+msgid "Move outward"
+msgstr "ເລື່ອນອອກ"
+
+#: u_translation.rsmovethemount
+msgid "Move the mount manually in RA, click Continue when ready"
+msgstr "ຍ້າຍຖານຕິດຕັ້ງດ້ວຍມືໃນແກນ RA, ກົດ ສືບຕໍ່ ເມື່ອພ້ອມ"
+
+#: u_translation.rsmovetheteles
+msgid "Slew the telescope to the nearby position with a bright star."
+msgstr "ຫັນກ້ອງສ່ອງໄປຕຳແໜ່ງໃກ້ຄຽງທີ່ມີດາວແຈ້ງ."
+
+#: u_translation.rsmovethetrian
+msgid "Move the triangle with the mouse (left button down) such that the green square is marking a bright star."
+msgstr "ຍ້າຍຮູບສາມຫຼ່ຽມດ້ວຍເມົ້າ (ກົດປຸ່ມຊ້າຍຄ້າງໄວ້) ເພື່ອໃຫ້ສີ່ຫຼ່ຽມສີຂຽວໝາຍໃສ່ດາວທີ່ແຈ້ງ."
+
+#: u_translation.rsmovetobright
+msgid "Move to bright focus star now?"
+msgstr "ຍ້າຍໄປຫາດາວໂຟກັສທີ່ແຈ້ງດຽວນີ້ບໍ່?"
+
+#: u_translation.rsmovetonewpla
+#, object-pascal-format
+msgid "Move to new planetarium object %s"
+msgstr "ຍ້າຍໄປຫາວັດຖຸທ້ອງຟ້າຈຳລອງໃໝ່ %s"
+
+#: u_translation.rsmovetostartp
+msgid "Move to start position"
+msgstr "ຍ້າຍໄປຕຳແໜ່ງເລີ່ມຕົ້ນ"
+
+#: u_translation.rsmoveupby
+msgid "move Up by "
+msgstr "ຍ້າຍຂຶ້ນ ໂດຍ "
+
+#: u_translation.rsmovewestby
+msgid "move West by "
+msgstr "ຍ້າຍໄປທາງຕາເວັນຕົກ ໂດຍ "
+
+#: u_translation.rsmovingmount
+msgid "Moving mount"
+msgstr "ກໍາລັງຍ້າຍຖານຕິດຕັ້ງ"
+
+#: u_translation.rsmovingto
+msgid "Moving to"
+msgstr "ກຳລັງຍ້າຍໄປທີ່"
+
+#: u_translation.rsmovingtofirs
+msgid "Moving to first position"
+msgstr "ກຳລັງຍ້າຍໄປຕຳແໜ່ງທຳອິດ"
+
+#: u_translation.rsmovingtoseco
+msgid "Moving to second position"
+msgstr "ກຳລັງຍ້າຍໄປຕຳແໜ່ງທີສອງ"
+
+#: u_translation.rsmultipanel
+msgid "Multi panel"
+msgstr "ຫຼາຍແຜງ"
+
+#: u_translation.rsmultistargui
+msgid "Multi-star guide offset"
+msgstr "ອັອບເຊັດການນຳທາງຫຼາຍດາວ"
+
+#: u_translation.rsmultistarwit
+msgid "Multistar with guider astrometry"
+msgstr "ຫຼາຍດາວພ້ອມການວັດແທກຕຳແໜ່ງດາວຂອງເຄື່ອງນຳທາງ"
+
+#: u_translation.rsname
+msgid "Name"
+msgstr "ຊື່"
+
+#: u_translation.rsnearfocus
+msgid "Near focus"
+msgstr "ຈຸດສຸມໃກ້"
+
+#: u_translation.rsnearhfdmustb
+msgid "Near HFD must be smaller than Start HFD!"
+msgstr "HFD ໃກ້ຕ້ອງນ້ອຍກວ່າ HFD ເລີ່ມຕົ້ນ!"
+
+#: u_translation.rsnearthepole
+msgid "near the pole"
+msgstr "ໃກ້ຂົ້ວ"
+
+#: u_translation.rsneedtowaitun
+#, object-pascal-format
+msgid "Need to wait until %s"
+msgstr "ຕ້ອງລໍຖ້າຈົນຮອດ %s"
+
+#: u_translation.rsnetwork
+msgid "Network"
+msgstr "ເຄືອຂ່າຍ"
+
+#: u_translation.rsnew
+msgid "New"
+msgstr "ໃໝ່"
+
+#: u_translation.rsnewcoordinat
+#, object-pascal-format
+msgid "New coordinates from planetarium: %s %s"
+msgstr "ຈຸດປະສານໃໝ່ຈາກທ້ອງຟ້າຈຳລອງ: %s %s"
+
+#: u_translation.rsnewfindercal
+msgid "New finder calibration is successful"
+msgstr "ການປັບທຽບກ້ອງຊອກຫາໃໝ່ສຳເລັດ"
+
+#: u_translation.rsnewobject
+msgid "New object"
+msgstr "ວັດຖຸໃໝ່"
+
+#: u_translation.rsnewscript
+msgid "New script"
+msgstr "ສະຄຣິບໃໝ່"
+
+#: u_translation.rsnext
+msgid "Next"
+msgstr "ຕໍ່ໄປ"
+
+#: u_translation.rsnexttarget
+msgid "Next target"
+msgstr "ເປົ້າໝາຍຕໍ່ໄປ"
+
+#: u_translation.rsno
+msgid "No"
+msgstr "ບໍ່"
+
+#: u_translation.rsnoalignments
+msgid "No alignment star found for stacking"
+msgstr "ບໍ່ພົບດາວຈັດຕຳແໜ່ງສຳລັບການຊ້ອນພາບ"
+
+#: u_translation.rsnoalpacaserv
+msgid "No Alpaca server found"
+msgstr "ບໍ່ພົບເຊີບເວີ Alpaca"
+
+#: u_translation.rsnoastronomic
+msgid "No astronomical twilight at this location today"
+msgstr "ມື້ນີ້ບໍ່ມີຊ່ວງເວລາແສງອາລຸນທາງດາລາສາດທີ່ຕຳແໜ່ງນີ້"
+
+#: u_translation.rsnoautoguidin
+msgid "No auto-guiding, only dither by sending pulse guide directly to the mount."
+msgstr "ບໍ່ມີການນຳທາງອັດຕະໂນມັດ, ພຽງແຕ່ດິເທີ້ໂດຍການສົ່ງສັນຍານໂດຍກົງຫາຖານຕິດຕັ້ງ."
+
+#: u_translation.rsnobacklash
+msgid "No backlash"
+msgstr "ບໍ່ມີໄລຍະຫວ່າງ"
+
+#: u_translation.rsnobadpixelma
+msgid "No bad pixel map"
+msgstr "ບໍ່ມີແຜນທີ່ພິກເຊວເສຍ"
+
+#: u_translation.rsnocenteringm
+msgid "No centering measurement, exposure time shorter than astrometry timeout."
+msgstr "ບໍ່ມີການວັດແທກການປັບກາງ, ເວລາເປີດໜ້າກ້ອງສັ້ນກວ່າເວລາໝົດກຳນົດຂອງການວັດແທກຕຳແໜ່ງດາວ."
+
+#: u_translation.rsnocenteringm3
+msgid "No centering measurement, astrometry not configured."
+msgstr "ບໍ່ມີການວັດແທກການປັບກາງ, ບໍ່ໄດ້ຕັ້ງຄ່າການວັດແທກຕຳແໜ່ງດາວ."
+
+#: u_translation.rsnodark
+msgid "No dark"
+msgstr "ບໍ່ມີພາບມືດ"
+
+#: u_translation.rsnodawntoday
+msgid "No dawn today"
+msgstr "ມື້ນີ້ບໍ່ມີຊ່ວງເຊົ້າ"
+
+#: u_translation.rsnodevice
+msgid "No device"
+msgstr "ບໍ່ມີອຸປະກອນ"
+
+#: u_translation.rsnodevicefoun
+msgid "No device found"
+msgstr "ບໍ່ພົບອຸປະກອນ"
+
+#: u_translation.rsnodusktoday
+msgid "No dusk today"
+msgstr "ມື້ນີ້ບໍ່ມີຊ່ວງຄ່ຳ"
+
+#: u_translation.rsnoflat
+msgid "No flat"
+msgstr "ບໍ່ມີພາບແຟລັດ"
+
+#: u_translation.rsnoflipuntilp
+msgid "No flip until past meridian for"
+msgstr "ບໍ່ພິກຈົນກວ່າຈະຜ່ານເມຣິເດຍນເປັນເວລາ"
+
+#: u_translation.rsnoisefilter
+msgid "Noise filter"
+msgstr "ຟິວເຕີສຽງລົບກວນ"
+
+#: u_translation.rsnone2
+msgid "None"
+msgstr "ບໍ່ມີ"
+
+#: u_translation.rsnoresolverco
+msgid "No resolver configured!"
+msgstr "ບໍ່ມີໂຕແກ້ໄຂຖືກຕັ້ງຄ່າ!"
+
+#: u_translation.rsnoresponsefr
+msgid "No response from server"
+msgstr "ບໍ່ມີການຕອບສະໜອງຈາກເຊີບເວີ"
+
+#: u_translation.rsnoresponsefr2
+msgid "No response from camera!"
+msgstr "ບໍ່ມີການຕອບສະໜອງຈາກກ້ອງ!"
+
+#: u_translation.rsnorth
+msgid "North"
+msgstr "ເໜືອ"
+
+#: u_translation.rsnoscriptarer
+msgid "No script are running."
+msgstr "ບໍ່ມີສະຄຣິບໃດກຳລັງເຮັດວຽກ."
+
+#: u_translation.rsnostardetect
+msgid "No star detected. Is the image focused and sufficiently exposed?"
+msgstr "ບໍ່ກວດພົບດາວ. ຮູບພາບມີຈຸດສຸມດີ ແລະ ໄດ້ຮັບແສງພຽງພໍແລ້ວບໍ່?"
+
+#: u_translation.rsnostarfound
+msgid "No star found"
+msgstr "ບໍ່ພົບດາວ"
+
+#: u_translation.rsnosuitableda
+msgid "No suitable dawn for automatic flat today"
+msgstr "ບໍ່ມີຊ່ວງເຊົ້າທີ່ເໝາະສົມສຳລັບ flat ອັດຕະໂນມັດມື້ນີ້"
+
+#: u_translation.rsnosuitabledu
+msgid "No suitable dusk for automatic flat today"
+msgstr "ບໍ່ມີຊ່ວງຄ່ຳທີ່ເໝາະສົມສຳລັບ flat ອັດຕະໂນມັດມື້ນີ້"
+
+#: u_translation.rsnotaneqmodmo
+#, object-pascal-format
+msgid "%s not an eqmod mount"
+msgstr "%s ບໍ່ແມ່ນຂາກ້ອງ eqmod"
+
+#: u_translation.rsnotautoguidi
+msgid "Not autoguiding! dithering ignored."
+msgstr "ບໍ່ໄດ້ນຳທາງອັດຕະໂນມັດ! ບໍ່ສົນໃຈ dithering."
+
+#: u_translation.rsnotconnected
+#, object-pascal-format
+msgid "%s not connected!"
+msgstr "%s ບໍ່ໄດ້ເຊື່ອມຕໍ່!"
+
+#: u_translation.rsnotenoughmea
+msgid "Not enough measurement points! Try to increase the maximum HFD or decrease the minimum start movement"
+msgstr "ຈຸດວັດແທກບໍ່ພຽງພໍ! ລອງເພີ່ມ HFD ສູງສຸດ ຫຼື ຫຼຸດການເຄື່ອນທີ່ເລີ່ມຕົ້ນຂັ້ນຕ່ຳ"
+
+#: u_translation.rsnotenoughpoi
+msgid "Not enough points in or out of focus position after two try. Start with a better focus position and run the focuser calibration tool."
+msgstr "ມີຈຸດບໍ່ພຽງພໍໃນ ຫຼື ນອກຕຳແໜ່ງຈຸດສຸມຫຼັງຈາກລອງສອງຄັ້ງ. ເລີ່ມດ້ວຍຕຳແໜ່ງຈຸດສຸມທີ່ດີກວ່າ ແລະ ແລ່ນເຄື່ອງມືປັບທຽບໂຕປັບຈຸດສຸມ."
+
+#: u_translation.rsnotenoughpoi2
+msgid "Not enough points in or out of focus position, retrying now."
+msgstr "ມີຈຸດບໍ່ພຽງພໍໃນ ຫຼື ນອກຕຳແໜ່ງຈຸດສຸມ, ກຳລັງລອງໃໝ່."
+
+#: u_translation.rsnotenoughtim
+#, object-pascal-format
+msgid "not enough time to complete the %s plan before end time at %s"
+msgstr "ເວລາບໍ່ພຽງພໍທີ່ຈະເຮັດແຜນ %s ໃຫ້ສຳເລັດກ່ອນເວລາສິ້ນສຸດທີ່ %s"
+
+#: u_translation.rsnoterminatio
+msgid "No termination actions configured."
+msgstr "ບໍ່ມີການຕັ້ງຄ່າການຢຸດ."
+
+#: u_translation.rsnotification
+msgid "Notifications"
+msgstr "ການແຈ້ງເຕືອນ"
+
+#: u_translation.rsnotimplement
+msgid "Not implemented!"
+msgstr "ຍັງບໍ່ໄດ້ຈັດຕັ້ງປະຕິບັດ!"
+
+#: u_translation.rsnotrunningno
+msgid "Not running, nothing to do."
+msgstr "ບໍ່ໄດ້ເຮັດວຽກ, ບໍ່ມີຫຍັງໃຫ້ເຮັດ."
+
+#: u_translation.rsnottracking
+msgid "not tracking"
+msgstr "ບໍ່ໄດ້ຕິດຕາມ"
+
+#: u_translation.rsnumberofcirc
+msgid "Number of circles"
+msgstr "ຈຳນວນວົງມົນ"
+
+#: u_translation.rsnumberofdyna
+msgid "Number of dynamic points"
+msgstr "ຈຳນວນຈຸດເຄື່ອນໄຫວ"
+
+#: u_translation.rsnumberofexpo
+msgid "Number of exposure per point"
+msgstr "ຈຳນວນການເປີດໜ້າກ້ອງຕໍ່ຈຸດ"
+
+#: u_translation.rsnumberofslot
+msgid "Number of slot"
+msgstr "ຈຳນວນຊ່ອງ"
+
+#: u_translation.rsnumberofstep
+msgid "Number of steps"
+msgstr "ຈຳນວນຂັ້ນຕອນ"
+
+#: u_translation.rsobject
+msgid "Object"
+msgstr "ວັດຖຸ"
+
+#: u_translation.rsobjectname
+msgid "Object name"
+msgstr "ຊື່ວັດຖຸ"
+
+#: u_translation.rsobjectplanfi
+#, object-pascal-format
+msgid "Object %s, plan %s finished."
+msgstr "ວັດຖຸ %s, ແຜນ %s ສຳເລັດແລ້ວ."
+
+#: u_translation.rsobjectsetsat
+#, object-pascal-format
+msgid "Object sets at %s. In %s hour(s)"
+msgstr "ວັດຖຸຕົກເວລາ %s. ໃນອີກ %s ຊົ່ວໂມງ"
+
+#: u_translation.rsobjectstartp
+#, object-pascal-format
+msgid "Object %s, start plan %s"
+msgstr "ວັດຖຸ %s, ເລີ່ມແຜນ %s"
+
+#: u_translation.rsobservatory
+msgid "Observatory"
+msgstr "ຫໍສັງເກດການ"
+
+#: u_translation.rsobservatoryn
+msgid "Observatory name"
+msgstr "ຊື່ຫໍສັງເກດການ"
+
+#: u_translation.rsobservername
+msgid "Observer name"
+msgstr "ຊື່ຜູ້ສັງເກດການ"
+
+#: u_translation.rsobservingcon
+msgid "Observing condition"
+msgstr "ສະພາບການສັງເກດການ"
+
+#: u_translation.rsoctagon
+msgid "Octagon"
+msgstr "ຮູບແປດແຈ"
+
+#: u_translation.rsoff
+msgid "Off"
+msgstr "ປິດ"
+
+#: u_translation.rsoffaxisaberr
+#, object-pascal-format
+msgid "Off-axis aberration[hfd]=%s"
+msgstr "ຄວາມຜິດປົກກະຕິນອກແກນ[hfd]=%s"
+
+#: u_translation.rsoffset
+msgid "offset"
+msgstr "ອັອບເຊັດ"
+
+#: u_translation.rsoffset2
+msgid "Offset"
+msgstr "ອັອບເຊັດ"
+
+#: u_translation.rsok
+msgid "OK"
+msgstr "ຕົກລົງ"
+
+#: u_translation.rson
+msgid "On"
+msgstr "ເປີດ"
+
+#: u_translation.rsonlinedocume
+msgid "Online documentation"
+msgstr "ເອກະສານອອນລາຍ"
+
+#: u_translation.rsonlineforall
+msgid "Online for all targets"
+msgstr "ອອນລາຍສຳລັບທຸກເປົ້າໝາຍ"
+
+#: u_translation.rsonmeridiancr
+msgid "On Meridian crossing"
+msgstr "ເມື່ອຂ້າມເມຣິເດຍນ"
+
+#: u_translation.rsopen
+msgid "Open"
+msgstr "ເປີດ"
+
+#: u_translation.rsopendarkfile
+msgid "Open Dark file"
+msgstr "ເປີດໄຟລ໌ມືດ"
+
+#: u_translation.rsopendomesequ
+msgid "Open dome sequence when mount is asked to unpark"
+msgstr "ເປີດລຳດັບໂດມເມື່ອຖານຕິດຕັ້ງຖືກສັ່ງໃຫ້ຍົກເລີກການຈອດ"
+
+#: u_translation.rsopenfile
+#, object-pascal-format
+msgid "Open file %s"
+msgstr "ເປີດໄຟລ໌ %s"
+
+#: u_translation.rsopenfitsfile
+#, object-pascal-format
+msgid "Open FITS file%s"
+msgstr "ເປີດໄຟລ໌ FITS%s"
+
+#: u_translation.rsopenflatfile
+msgid "Open Flat file"
+msgstr "ເປີດໄຟລ໌ແຟລັດ"
+
+#: u_translation.rsopenpicturef
+#, object-pascal-format
+msgid "Open FITS or picture file%s"
+msgstr "ເປີດໄຟລ໌ FITS ຫຼື ໄຟລ໌ຮູບພາບ%s"
+
+#: u_translation.rsopenreferenc
+msgid "Open reference image"
+msgstr "ເປີດຮູບພາບອ້າງອີງ"
+
+#: u_translation.rsopenthedomes
+msgid "Open the Dome shutter"
+msgstr "ເປີດຊັດເຕີໂດມ"
+
+#: u_translation.rsoptions
+#, object-pascal-format
+msgid "Options :%s"
+msgstr "ຕົວເລືອກ :%s"
+
+#: u_translation.rsoptions2
+msgid "Options"
+msgstr "ຕົວເລືອກ"
+
+#: u_translation.rsor
+msgid "or"
+msgstr "ຫຼື"
+
+#: u_translation.rsordoubleclic
+msgid "Or double click on the bright star."
+msgstr "ຫຼືດັບເບິ້ນຄລິກໃສ່ດາວທີ່ແຈ້ງ."
+
+#: u_translation.rsotheroptions
+msgid "Other options "
+msgstr "ຕົວເລືອກອື່ນໆ "
+
+#: u_translation.rsout
+msgid "Out"
+msgstr "ອອກ"
+
+#: u_translation.rsoutofrange
+#, object-pascal-format
+msgid "%s out of range"
+msgstr "%s ຢູ່ນອກຂອບເຂດ"
+
+#: u_translation.rspa
+msgid "PA"
+msgstr "PA"
+
+#: u_translation.rsparameter
+msgid "Parameter"
+msgstr "ພາຣາມິເຕີ"
+
+#: u_translation.rspark
+msgid "Park"
+msgstr "ຈອດ"
+
+#: u_translation.rsparkandclose
+msgid "Park and close the dome"
+msgstr "ຈອດ ແລະ ປິດໂດມ"
+
+#: u_translation.rsparkdome
+msgid "Park the Dome"
+msgstr "ຈອດໂດມ"
+
+#: u_translation.rsparked
+msgid "Parked"
+msgstr "ຈອດແລ້ວ"
+
+#: u_translation.rsparktheteles
+msgid "Park the telescope now?"
+msgstr "ຈອດກ້ອງສ່ອງທາງໄກດຽວນີ້ບໍ່?"
+
+#: u_translation.rsparktheteles2
+msgid "Park the telescope"
+msgstr "ຈອດກ້ອງສ່ອງ"
+
+#: u_translation.rsparktheteles3
+msgid "Park the telescope and the dome"
+msgstr "ຈອດກ້ອງສ່ອງ ແລະ ໂດມ"
+
+#: u_translation.rspassword
+msgid "Password"
+msgstr "ລະຫັດຜ່ານ"
+
+#: u_translation.rspastfromclip
+msgid "Past from clipboard"
+msgstr "ວາງຈາກຄລິບບອດ"
+
+#: u_translation.rspause
+msgid "Pause"
+msgstr "ຢຸດຊົ່ວຄາວ"
+
+#: u_translation.rspauseafterme
+msgid "Pause after meridian flip "
+msgstr "ຢຸດຊົ່ວຄາວຫຼັງການພິກຜ່ານເມຣິເດຍນ "
+
+#: u_translation.rspauseautogui
+msgid "Pause autoguider"
+msgstr "ຢຸດໂຕນຳທາງອັດຕະໂນມັດຊົ່ວຄາວ"
+
+#: u_translation.rspausebeforem
+msgid "Pause before meridian flip "
+msgstr "ຢຸດຊົ່ວຄາວກ່ອນການພິກຜ່ານເມຣິເດຍນ "
+
+#: u_translation.rspauseguiding
+msgid "Pause guiding during autofocus"
+msgstr "ຢຸດການນຳທາງຊົ່ວຄາວລະຫວ່າງໂຟກັສອັດຕະໂນມັດ"
+
+#: u_translation.rspausesequenc
+msgid "Pause sequence when the observing condition are out of the limits"
+msgstr "ຢຸດລຳດັບຊົ່ວຄາວ ເມື່ອສະພາບການສັງເກດການນອກຂອບເຂດກຳນົດ"
+
+#: u_translation.rspausesequenc2
+msgid "Pause sequence"
+msgstr "ຢຸດລຳດັບຊົ່ວຄາວ"
+
+#: u_translation.rspausesequenc3
+msgid "Pause sequence request canceled."
+msgstr "ການຮ້ອງຂໍຢຸດລຳດັບຊົ່ວຄາວຖືກຍົກເລີກ."
+
+#: u_translation.rspdfdocumenta
+msgid "PDF documentation"
+msgstr "ເອກະສານ PDF"
+
+#: u_translation.rspercent
+msgid "percent"
+msgstr "ເປີເຊັນ"
+
+#: u_translation.rsperformance
+msgid "Performance"
+msgstr "ປະສິດທິພາບ"
+
+#: u_translation.rsperiodicauto
+msgid "Periodic auto-focus"
+msgstr "ໂຟກັສອັດຕະໂນມັດຕາມໄລຍະ"
+
+#: u_translation.rsperslitoffse
+msgid "Per slit offset"
+msgstr "ອັອບເຊັດຕໍ່ສະລິດ"
+
+#: u_translation.rsphotometry
+msgid "Photometry"
+msgstr "ການວັດແທກແສງ"
+
+#: u_translation.rspixel
+msgid "pixel"
+msgstr "ພິກເຊວ"
+
+#: u_translation.rspixelcount
+#, object-pascal-format
+msgid "%sPixel count:%s"
+msgstr "%sຈຳນວນພິກເຊວ:%s"
+
+#: u_translation.rspixels
+msgid "Pixels"
+msgstr "ພິກເຊວ"
+
+#: u_translation.rspixelscale
+msgid "Pixel scale"
+msgstr "ສະເກລພິກເຊວ"
+
+#: u_translation.rspixelsize
+msgid "Pixel size"
+msgstr "ຂະໜາດພິກເຊວ"
+
+#: u_translation.rsplan
+msgid "Plan"
+msgstr "ແຜນ"
+
+#: u_translation.rsplanalreadye
+#, object-pascal-format
+msgid "Plan %s already exist. Do you want to replace this file?"
+msgstr "ແຜນ %s ມີຢູ່ແລ້ວ. ທ່ານຕ້ອງການແທນທີ່ໄຟລ໌ນີ້ບໍ່?"
+
+#: u_translation.rsplanalreadye2
+#, object-pascal-format
+msgid "Plan %s already exist. Do you want to edit this plan?"
+msgstr "ແຜນ %s ມີຢູ່ແລ້ວ. ທ່ານຕ້ອງການແກ້ໄຂແຜນນີ້ບໍ່?"
+
+#: u_translation.rsplanet
+msgid "Planet"
+msgstr "ດາວເຄາະ"
+
+#: u_translation.rsplanetarium
+msgid "Planetarium"
+msgstr "ທ້ອງຟ້າຈຳລອງ"
+
+#: u_translation.rsplanetariume
+msgid "Planetarium error."
+msgstr "ທ້ອງຟ້າຈຳລອງຜິດພາດ."
+
+#: u_translation.rsplanetariumf
+msgid "Planetarium for all targets"
+msgstr "ດາລາຄະຕິຈຳລອງສຳລັບທຸກເປົ້າໝາຍ"
+
+#: u_translation.rsplanetariumi
+msgid "Planetarium is not connected"
+msgstr "ທ້ອງຟ້າຈຳລອງບໍ່ໄດ້ເຊື່ອມຕໍ່"
+
+#: u_translation.rsplanetariump
+msgid "Planetarium position"
+msgstr "ຕຳແໜ່ງທ້ອງຟ້າຈຳລອງ"
+
+#: u_translation.rsplanetariums
+msgid "Planetarium shutdown"
+msgstr "ປິດລະບົບດາລາຄະຕິຈຳລອງ"
+
+#: u_translation.rsplanetariumt
+#, object-pascal-format
+msgid "Planetarium target set to %s"
+msgstr "ຕັ້ງເປົ້າໝາຍທ້ອງຟ້າຈຳລອງເປັນ %s ແລ້ວ"
+
+#: u_translation.rsplanetariumt2
+msgid "Planetarium target slew fail"
+msgstr "ການຫັນກ້ອງໄປຫາເປົ້າໝາຍທ້ອງຟ້າຈຳລອງລົ້ມເຫຼວ"
+
+#: u_translation.rsplanfinished
+#, object-pascal-format
+msgid "Plan %s finished."
+msgstr "ແຜນ %s ສຳເລັດແລ້ວ."
+
+#: u_translation.rsplanstep
+msgid "Plan step"
+msgstr "ຂັ້ນຕອນຂອງແຜນ"
+
+#: u_translation.rsplanstopped
+#, object-pascal-format
+msgid "Plan %s stopped."
+msgstr "ແຜນ %s ຢຸດແລ້ວ."
+
+#: u_translation.rsplatesolveex
+#, object-pascal-format
+msgid "Plate solve exposure %s"
+msgstr "ການເປີດໜ້າກ້ອງເພື່ອແກ້ໄຂພາບດາວ %s"
+
+#: u_translation.rsplatesolveto
+msgid "Plate solve to update the correction"
+msgstr "ແກ້ໄຂພາບດາວເພື່ອອັບເດດການແກ້ໄຂ"
+
+#: u_translation.rspleaseactiva
+msgid "Please activate the log file in the preference."
+msgstr "ກະລຸນາເປີດໃຊ້ໄຟລ໌ບັນທຶກໃນການຕັ້ງຄ່າ."
+
+#: u_translation.rspleasebecare
+msgid "Please be careful to review and set the value for the Gain and Offset"
+msgstr "ກະລຸນາລະມັດລະວັງໃນການກວດສອບ ແລະຕັ້ງຄ່າສຳລັບເກນ ແລະອັອບເຊັດ"
+
+#: u_translation.rspleaseconfig
+msgid "Please configure your"
+msgstr "ກະລຸນາຕັ້ງຄ່າ"
+
+#: u_translation.rspleaseconfig2
+msgid "Please configure the Autofocus options."
+msgstr "ກະລຸນາຕັ້ງຄ່າຕົວເລືອກການປັບຈຸດສຸມອັດຕະໂນມັດ."
+
+#: u_translation.rspleaseconfig3
+msgid "Please configure the observatory location."
+msgstr "ກະລຸນາຕັ້ງຄ່າຕຳແໜ່ງຫໍສັງເກດການດາວ."
+
+#: u_translation.rspleaseconfir
+#, object-pascal-format
+msgid "Please confirm you want to slew the telescope to %s at coordinates %s/%s"
+msgstr "ກະລຸນາຍືນຍັນວ່າທ່ານຕ້ອງການຫັນກ້ອງສ່ອງທາງໄກໄປຫາ %s ທີ່ຈຸດປະສານ %s/%s"
+
+#: u_translation.rspleaseconnec
+msgid "Please connect the planetarium first"
+msgstr "ກະລຸນາເຊື່ອມຕໍ່ທ້ອງຟ້າຈຳລອງກ່ອນ"
+
+#: u_translation.rspleasecreate
+msgid "Please create a new bad pixel map or select a brighter star"
+msgstr "ກະລຸນາສ້າງແຜນທີ່ພິກເຊວເສຍໃໝ່ ຫຼືເລືອກດາວທີ່ແຈ້ງກວ່າ"
+
+#: u_translation.rspleaseincrea
+msgid "Please increase the threshold."
+msgstr "ກະລຸນາເພີ່ມຄ່າເກນ."
+
+#: u_translation.rspleaseloador
+msgid "Please load or create a target list first."
+msgstr "ກະລຸນາໂຫຼດ ຫຼື ສ້າງລາຍຊື່ເປົ້າໝາຍກ່ອນ."
+
+#: u_translation.rspleaserunthe
+msgid "Please run the V-curve learning for this focuser direction first. Button V-learn."
+msgstr "ກະລຸນາແລ່ນການຮຽນຮູ້ V-curve ສຳລັບທິດທາງຂອງໂຕປັບຈຸດສຸມນີ້ກ່ອນ. ປຸ່ມ V-learn."
+
+#: u_translation.rspleaserunthe2
+msgid "Please run the Focuser Calibration procedure first"
+msgstr "ກະລຸນາດຳເນີນການປັບທຽບໂຟກັສເຊີກ່ອນ"
+
+#: u_translation.rspleaserunvcu
+#, object-pascal-format
+msgid "Please run Vcurve learning for binning %s"
+msgstr "ກະລຸນາແລ່ນການຮຽນຮູ້ V-curve ສຳລັບ binning %s"
+
+#: u_translation.rspleaseseethe
+msgid "Please see the documentation for important security information"
+msgstr "ກະລຸນາເບິ່ງເອກະສານປະກອບສຳລັບຂໍ້ມູນຄວາມປອດໄພທີ່ສຳຄັນ"
+
+#: u_translation.rspleaseselect
+msgid "Please select a script!"
+msgstr "ກະລຸນາເລືອກສະຄຣິບ!"
+
+#: u_translation.rspleaseselect2
+msgid "Please select a temporary folder without space in the path name."
+msgstr "ກະລຸນາເລືອກໂຟເດີຊົ່ວຄາວທີ່ບໍ່ມີຍະຫວ່າງໃນຊື່ເສັ້ນທາງ."
+
+#: u_translation.rspleasesetthe
+#, object-pascal-format
+msgid "Please set the format to %s before to start the sequence."
+msgstr "ກະລຸນາຕັ້ງຮູບແບບເປັນ %s ກ່ອນເລີ່ມລຳດັບ."
+
+#: u_translation.rspleasestopth
+msgid "Please stop the sequence first!"
+msgstr "ກະລຸນາຢຸດລຳດັບກ່ອນ!"
+
+#: u_translation.rspleasewait
+msgid "please wait"
+msgstr "ກະລຸນາລໍຖ້າ"
+
+#: u_translation.rspleasewaitun
+msgid "Please wait until the measurements are complete"
+msgstr "ກະລຸນາລໍຖ້າຈົນກວ່າການວັດແທກຈະສຳເລັດ"
+
+#: u_translation.rspointingoffs
+msgid "Pointing offset"
+msgstr "ຄ່າຊົດເຊີຍການຊີ້"
+
+#: u_translation.rspolaralignme
+msgid "Polar alignment"
+msgstr "ການຕັ້ງຂົ້ວ"
+
+#: u_translation.rspolaralignme2
+msgid "Polar alignment instruction"
+msgstr "ຄຳແນະນຳການຕັ້ງຂົ້ວ"
+
+#: u_translation.rsport
+msgid "Port"
+msgstr "ພອດ"
+
+#: u_translation.rspos
+msgid "Pos."
+msgstr "ຕຳແໜ່ງ."
+
+#: u_translation.rsposition
+msgid "Position"
+msgstr "ຕຳແໜ່ງ"
+
+#: u_translation.rspower
+msgid "Power"
+msgstr "ພະລັງງານ"
+
+#: u_translation.rsprecisionsle
+msgid "Precision slewing options"
+msgstr "ຕົວເລືອກການຫັນກ້ອງດ້ວຍຄວາມແມ່ນຍຳ"
+
+#: u_translation.rsprecisionsle2
+msgid "Precision slew finished."
+msgstr "ການຫັນກ້ອງດ້ວຍຄວາມແມ່ນຍຳສຳເລັດແລ້ວ."
+
+#: u_translation.rsprecisionsle3
+msgid "Precision slew failed!"
+msgstr "ການຫັນກ້ອງດ້ວຍຄວາມແມ່ນຍຳລົ້ມເຫຼວ!"
+
+#: u_translation.rspredefined
+msgid "Predefined (recommended)"
+msgstr "ກຳນົດໄວ້ລ່ວງໜ້າ (ແນະນຳ)"
+
+#: u_translation.rspredefinedro
+msgid "Predefined ROI"
+msgstr "ROI ທີ່ກຳນົດໄວ້ລ່ວງໜ້າ"
+
+#: u_translation.rspreferedfocu
+msgid "Prefered focuser direction"
+msgstr "ທິດທາງທີ່ຕ້ອງການຂອງໂຕປັບຈຸດສຸມ"
+
+#: u_translation.rspreferences
+#, object-pascal-format
+msgid "Preferences%s"
+msgstr "ການຕັ້ງຄ່າ%s"
+
+#: u_translation.rspreprocessin
+msgid "Preprocessing"
+msgstr "ການປະມວນຜົນເບື້ອງຕົ້ນ"
+
+#: u_translation.rspresetlist
+msgid "Preset list"
+msgstr "ລາຍການທີ່ຕັ້ງໄວ້ລ່ວງໜ້າ"
+
+#: u_translation.rspressthebutt
+msgid "Press the button \"Calibration\" to start the automatic calibration of the guider at the current position."
+msgstr "ກົດປຸ່ມ \"ການປັບທຽບ\" ເພື່ອເລີ່ມການປັບທຽບອັດຕະໂນມັດຂອງເຄື່ອງນຳທາງທີ່ຕຳແໜ່ງປັດຈຸບັນ."
+
+#: u_translation.rspressthebutt2
+msgid "Press the button \"Backlash calibration\" to measure the declination backlash and store the measured value in tab options."
+msgstr "ກົດປຸ່ມ \"ການປັບທຽບແບັກແລຊ\" ເພື່ອວັດແທກແບັກແລຊຂອງແກນເດັກຄລີເນຊັນ ແລະເກັບຄ່າທີ່ວັດແທກໄດ້ໃນແຖບຕົວເລືອກ."
+
+#: u_translation.rspressure
+msgid "Pressure"
+msgstr "ຄວາມກົດດັນ"
+
+#: u_translation.rspressuremill
+msgid "Pressure (millibar)"
+msgstr "ຄວາມກົດດັນ (ມິນລິບາ)"
+
+#: u_translation.rspreview
+msgid "Preview"
+msgstr "ສະແດງຕົວຢ່າງ"
+
+#: u_translation.rspreviewdebay
+msgid "Preview debayer"
+msgstr "Debayer ຕົວຢ່າງ"
+
+#: u_translation.rspreviewprepr
+msgid "Preview preprocessing"
+msgstr "ການປະມວນຜົນເບື້ອງຕົ້ນຂອງຕົວຢ່າງ"
+
+#: u_translation.rsprofile
+#, object-pascal-format
+msgid "Profile: %s"
+msgstr "ໂປຣໄຟລ໌: %s"
+
+#: u_translation.rsprofile2
+msgid "Profile"
+msgstr "ໂປຣໄຟລ໌"
+
+#: u_translation.rsprogramfolde
+msgid "Program folder "
+msgstr "ໂຟລເດີໂປຣແກຣມ "
+
+#: u_translation.rsprogrampath
+msgid "Program path"
+msgstr "ເສັ້ນທາງໂປຣແກຣມ"
+
+#: u_translation.rsprotocol
+msgid "Protocol"
+msgstr "ໂປຣໂຕຄໍ"
+
+#: u_translation.rspulseduratio
+msgid "Pulse duration"
+msgstr "ໄລຍະເວລາສັນຍານ"
+
+#: u_translation.rspulsegain
+msgid "pulse gain"
+msgstr "ເກນສັນຍານ"
+
+#: u_translation.rspulseguiding
+#, object-pascal-format
+msgid "Pulse guiding %s is reversed after meridian flip"
+msgstr "ການນຳທາງດ້ວຍສັນຍານ %s ຖືກປີ້ນກັບຫຼັງຈາກການປີ້ນເມຣິດ້ຽນ"
+
+#: u_translation.rspythoncomman
+msgid "Python command"
+msgstr "ຄຳສັ່ງ Python"
+
+#: u_translation.rsquality
+msgid "Quality:"
+msgstr "ຄຸນນະພາບ:"
+
+#: u_translation.rsquit
+msgid "Quit"
+msgstr "ອອກ"
+
+#: u_translation.rsra
+msgid "RA"
+msgstr "RA"
+
+#: u_translation.rsrainrate
+msgid "Rain rate"
+msgstr "ອັດຕາຝົນ"
+
+#: u_translation.rsramdisk
+msgid "RAM Disk"
+msgstr "RAM Disk"
+
+#: u_translation.rsrandom
+msgid "Random"
+msgstr "ສຸ່ມ"
+
+#: u_translation.rsraonly
+msgid "RA only"
+msgstr "ສະເພາະ RA"
+
+#: u_translation.rsreachconfigu
+msgid "Reach configured minimum flat exposure time!"
+msgstr "ຮອດເວລາເປີດໜ້າກ້ອງຕ່ຳສຸດຂອງແຟລັດທີ່ຕັ້ງໄວ້ແລ້ວ!"
+
+#: u_translation.rsreachconfigu2
+msgid "Reach configured maximum flat exposure time!"
+msgstr "ຮອດເວລາເປີດໜ້າກ້ອງສູງສຸດຂອງແຟລັດທີ່ຕັ້ງໄວ້ແລ້ວ!"
+
+#: u_translation.rsreachfocuser
+msgid "Reach focuser range limit! please better position the focuser half way on it's mechanical travel or decrease the maximum HFD"
+msgstr "ຮອດຂີດຈຳກັດຂອງໄລຍະໂຕປັບຈຸດສຸມແລ້ວ! ກະລຸນາຈັດຕຳແໜ່ງໂຕປັບຈຸດສຸມໃຫ້ຢູ່ເຄິ່ງທາງຂອງການເດີນທາງກົນຈັກ ຫຼື ຫຼຸດຄ່າ HFD ສູງສຸດ"
+
+#: u_translation.rsreadccd
+msgid "Read CCD"
+msgstr "ອ່ານ CCD"
+
+#: u_translation.rsreadimage
+msgid "Read image"
+msgstr "ອ່ານຮູບພາບ"
+
+#: u_translation.rsreadoutmodes
+msgid "Readout modes"
+msgstr "ໂໝດການອ່ານ"
+
+#: u_translation.rsreceiveunkno
+#, object-pascal-format
+msgid "Receive unknown message: %s"
+msgstr "ໄດ້ຮັບຂໍ້ຄວາມທີ່ບໍ່ຮູ້ຈັກ: %s"
+
+#: u_translation.rsrecenterifth
+msgid "Recenter if the drift is more than"
+msgstr "ປັບໃຫ້ຢູ່ກາງໃໝ່ ຖ້າການເຄື່ອນທີ່ຫຼາຍກວ່າ"
+
+#: u_translation.rsrecenterimag
+#, object-pascal-format
+msgid "Recenter image error!%sdistance: %s"
+msgstr "ການຈັດກາງຮູບພາບຜິດພາດ!%sໄລຍະຫ່າງ: %s"
+
+#: u_translation.rsrecenteronla
+msgid "Recenter on last position"
+msgstr "ຈັດກາງຄືນໃໝ່ທີ່ຕຳແໜ່ງລ່າສຸດ"
+
+#: u_translation.rsrecenteronla2
+msgid "Recenter on last image"
+msgstr "ຈັດກາງຄືນໃໝ່ທີ່ຮູບພາບລ່າສຸດ"
+
+#: u_translation.rsrecentersequ
+msgid "Recenter sequence target that drift"
+msgstr "ປັບເປົ້າໝາຍລຳດັບທີ່ເຄື່ອນທີ່ໃຫ້ຢູ່ກາງໃໝ່"
+
+#: u_translation.rsrecentertarg
+msgid "Recenter target now"
+msgstr "ປັບເປົ້າໝາຍໃຫ້ຢູ່ກາງໃໝ່ດຽວນີ້"
+
+#: u_translation.rsrecording
+msgid "Recording"
+msgstr "ກໍາລັງບັນທຶກ"
+
+#: u_translation.rsrecordrestar
+msgid "Record restart information"
+msgstr "ບັນທຶກຂໍ້ມູນການເລີ່ມໃໝ່"
+
+#: u_translation.rsred
+msgid "red"
+msgstr "ສີແດງ"
+
+#: u_translation.rsreferenceexp
+msgid "Reference exposure"
+msgstr "ການເປີດໜ້າກ້ອງອ້າງອີງ"
+
+#: u_translation.rsreferenceima
+msgid "Reference image"
+msgstr "ຮູບພາບອ້າງອີງ"
+
+#: u_translation.rsrefractedpol
+msgid "Refracted pole"
+msgstr "ຂົ້ວຫັກເຫ"
+
+#: u_translation.rsrefreshtheli
+msgid "Refresh the list"
+msgstr "ໂຫຼດລາຍການໃໝ່"
+
+#: u_translation.rsrelativeincr
+msgid "Relative increment for the inward or outward movement"
+msgstr "ຄ່າເພີ່ມສຳພັດສຳລັບການເລື່ອນເຂົ້າ ຫຼື ອອກ"
+
+#: u_translation.rsremotedevice
+msgid "Remote device number"
+msgstr "ໝາຍເລກອຸປະກອນທາງໄກ"
+
+#: u_translation.rsremoveallbre
+msgid "Remove all breakpoints"
+msgstr "ລຶບຈຸດຢຸດທັງໝົດ"
+
+#: u_translation.rsremoverow
+msgid "Remove row"
+msgstr "ລຶບແຖວ"
+
+#: u_translation.rsremovespacei
+msgid "Remove space in object name"
+msgstr "ລຶບຍະຫວ່າງໃນຊື່ວັດຖຸ"
+
+#: u_translation.rsremovestep
+msgid "Remove step"
+msgstr "ລຶບຂັ້ນຕອນ"
+
+#: u_translation.rsrepeat
+msgid "Repeat"
+msgstr "ເຮັດຊ້ຳ"
+
+#: u_translation.rsrepeatstep
+#, object-pascal-format
+msgid "Repeat step %s/%s %s"
+msgstr "ເຮັດຊ້ຳຂັ້ນຕອນ %s/%s %s"
+
+#: u_translation.rsrepeattarget
+#, object-pascal-format
+msgid "Repeat target%s/%s %s"
+msgstr "ເຮັດຊ້ຳເປົ້າໝາຍ%s/%s %s"
+
+#: u_translation.rsrepeatthewho
+msgid "Repeat the whole list"
+msgstr "ເຮັດຊ້ຳທັງໝົດລາຍຊື່"
+
+#: u_translation.rsrepeatthisst
+msgid "Repeat this step"
+msgstr "ເຮັດຊ້ຳຂັ້ນຕອນນີ້"
+
+#: u_translation.rsreportaprobl
+msgid "Report a problem"
+msgstr "ລາຍງານບັນຫາ"
+
+#: u_translation.rsrequestedton
+msgid "Requested to not run the termination action"
+msgstr "ຖືກຮ້ອງຂໍບໍ່ໃຫ້ດຳເນີນການຢຸດ"
+
+#: u_translation.rsrequesttosto
+msgid "Request to stop focuser calibration"
+msgstr "ຮ້ອງຂໍໃຫ້ຢຸດການປັບທຽບໂຕປັບຈຸດສຸມ"
+
+#: u_translation.rsrequesttosto2
+msgid "Request to stop the current sequence"
+msgstr "ຮ້ອງຂໍໃຫ້ຢຸດລຳດັບປັດຈຸບັນ"
+
+#: u_translation.rsrequesttosto3
+msgid "Request to stop autofocus ..."
+msgstr "ຮ້ອງຂໍໃຫ້ຢຸດການປັບຈຸດສຸມອັດຕະໂນມັດ ..."
+
+#: u_translation.rsreset
+msgid "Reset"
+msgstr "ຕັ້ງຄ່າຄືນ"
+
+#: u_translation.rsresettodefau
+msgid "Reset to default"
+msgstr "ຕັ້ງຄ່າຄືນໃໝ່"
+
+#: u_translation.rsresolve
+msgid "Resolve"
+msgstr "ແກ້ໄຂ"
+
+#: u_translation.rsresolveandpl
+msgid "Resolve and annotate DSO"
+msgstr "ແກ້ໄຂ ແລະໃສ່ຄຳອະທິບາຍ DSO"
+
+#: u_translation.rsresolveandpl2
+msgid "Resolve and annotate galaxies (Hyperleda)"
+msgstr "ແກ້ໄຂ ແລະໃສ່ຄຳອະທິບາຍດາລາຈັກ (Hyperleda)"
+
+#: u_translation.rsresolveandro
+msgid "Resolve and Rotate"
+msgstr "ແກ້ໄຂ ແລະ ໝຸນ"
+
+#: u_translation.rsresolveandsh
+msgid "Resolve and show image in planetarium"
+msgstr "ແກ້ໄຂ ແລະ ສະແດງຮູບໃນທ້ອງຟ້າຈຳລອງ"
+
+#: u_translation.rsresolveandsh2
+msgid "Resolve and show image frame in planetarium"
+msgstr "ແກ້ໄຂ ແລະ ສະແດງຂອບຮູບໃນທ້ອງຟ້າຈຳລອງ"
+
+#: u_translation.rsresolveandsl
+msgid "Resolve and Slew to image center"
+msgstr "ແກ້ໄຂ ແລະ ຫັນກ້ອງໄປໃຈກາງຮູບ"
+
+#: u_translation.rsresolveandsl2
+msgid "Resolve and Slew to cursor"
+msgstr "ແກ້ໄຂ ແລະ ຫັນກ້ອງໄປທີ່ເຄີເຊີ"
+
+#: u_translation.rsresolveandsy
+msgid "Resolve and Sync the mount"
+msgstr "ແກ້ໄຂ ແລະ ຊິງຄ໌ຂາກ້ອງ"
+
+#: u_translation.rsresolveandsy2
+msgid "Resolve and Sync the rotator"
+msgstr "ແກ້ໄຂ ແລະ ຊິງຄ໌ໂຕໝຸນ"
+
+#: u_translation.rsresolvecontr
+msgid "Resolve control exposure"
+msgstr "ແກ້ໄຂການເປີດໜ້າກ້ອງຄວບຄຸມ"
+
+#: u_translation.rsresolveerror
+#, object-pascal-format
+msgid "%s resolve error."
+msgstr "ການແກ້ໄຂ %s ຜິດພາດ."
+
+#: u_translation.rsresolveralre
+msgid "Resolver already running, cannot start astrometry now!"
+msgstr "ໂຕແກ້ໄຂກຳລັງເຮັດວຽກຢູ່ແລ້ວ, ບໍ່ສາມາດເລີ່ມການວັດແທກຕຳແໜ່ງດາວຕອນນີ້ໄດ້!"
+
+#: u_translation.rsresolvesucce
+#, object-pascal-format
+msgid "%s resolve successful."
+msgstr "ການແກ້ໄຂ %s ສຳເລັດ."
+
+#: u_translation.rsresolvingusi
+#, object-pascal-format
+msgid "Resolving using %s ..."
+msgstr "ກຳລັງແກ້ໄຂໂດຍໃຊ້ %s ..."
+
+#: u_translation.rsrestartafter
+msgid "Restart after"
+msgstr "ເລີ່ມຄືນໃໝ່ຫຼັງຈາກ"
+
+#: u_translation.rsrestartafter2
+msgid "Restart after weather is good for"
+msgstr "ເລີ່ມໃໝ່ຫຼັງຈາກອາກາດດີເປັນເວລາ"
+
+#: u_translation.rsrestartautog
+msgid "Restart autoguider"
+msgstr "ເລີ່ມໂຕນຳທາງອັດຕະໂນມັດຄືນໃໝ່"
+
+#: u_translation.rsrestartdelay
+msgid "Restart delay"
+msgstr "ການເລີ່ມໃໝ່ຊ້າ"
+
+#: u_translation.rsrestartexpos
+msgid "Restart exposure"
+msgstr "ເລີ່ມການເປີດໜ້າກ້ອງໃໝ່"
+
+#: u_translation.rsrestartingse
+#, object-pascal-format
+msgid "Restarting sequence %s ..."
+msgstr "ກໍາລັງເລີ່ມລຳດັບ %s ໃໝ່..."
+
+#: u_translation.rsrestartthese
+msgid "Restart the sequence"
+msgstr "ເລີ່ມລຳດັບໃໝ່"
+
+#: u_translation.rsresumeautogu
+msgid "Resume autoguider"
+msgstr "ສືບຕໍ່ໂຕນຳທາງອັດຕະໂນມັດ"
+
+#: u_translation.rsretrieveposi
+msgid "Retrieve position from deepsky database"
+msgstr "ເອົາຕຳແໜ່ງຈາກຖານຂໍ້ມູນວັດຖຸທ້ອງຟ້າເລິກ"
+
+#: u_translation.rsretry
+msgid "Retry"
+msgstr "ລອງໃໝ່"
+
+#: u_translation.rsretrywithast
+msgid "Retry with astrometry.net"
+msgstr "ລອງໃໝ່ດ້ວຍ astrometry.net"
+
+#: u_translation.rsreturnthefoc
+#, object-pascal-format
+msgid "Return the focuser to previous position %s"
+msgstr "ກັບຄືນໂຕປັບຈຸດສຸມໄປຕຳແໜ່ງກ່ອນໜ້າ %s"
+
+#: u_translation.rsreturntotarg
+msgid "Return to target position"
+msgstr "ກັບຄືນສູ່ຕຳແໜ່ງເປົ້າໝາຍ"
+
+#: u_translation.rsreverse
+msgid "Reverse"
+msgstr "ປີ້ນກັບ"
+
+#: u_translation.rsrise
+msgid "rise"
+msgstr "ຂຶ້ນ"
+
+#: u_translation.rsrisesetcondi
+msgid "Rise/Set condition"
+msgstr "ເງື່ອນໄຂການຂຶ້ນ/ຕົກ"
+
+#: u_translation.rsrot
+msgid "Rot."
+msgstr "ໝຸນ."
+
+#: u_translation.rsrotate
+msgid "Rotate"
+msgstr "ໝຸນ"
+
+#: u_translation.rsrotateby
+msgid "rotate by"
+msgstr "ໝຸນໄປ"
+
+#: u_translation.rsrotatetelesc
+msgid "Rotate the telescope"
+msgstr "ໝຸນກ້ອງສ່ອງ"
+
+#: u_translation.rsrotating
+msgid "Rotating"
+msgstr "ກໍາລັງໝຸນ"
+
+#: u_translation.rsrotation
+msgid "Rotation angle"
+msgstr "ມຸມໝຸນ"
+
+#: u_translation.rsrotator
+msgid "Rotator"
+msgstr "ໂຕໝຸນ"
+
+#: u_translation.rsrotatorisnot
+msgid "Rotator is not connected"
+msgstr "ໂຕໝຸນບໍ່ໄດ້ເຊື່ອມຕໍ່"
+
+#: u_translation.rsrotatormovet
+#, object-pascal-format
+msgid "Rotator move to PA %s"
+msgstr "ໂຕໝຸນຍ້າຍໄປ PA %s"
+
+#: u_translation.rsrotatorsyncc
+#, object-pascal-format
+msgid "Rotator sync calibration = %s"
+msgstr "ການປັບທຽບການຊິງຄ໌ໂຕໝຸນ = %s"
+
+#: u_translation.rsrun
+msgid "Run"
+msgstr "ແລ່ນ"
+
+#: u_translation.rsrunaninitial
+msgid "Run an initialization script"
+msgstr "ດຳເນີນການສະຄຣິບເລີ່ມຕົ້ນ"
+
+#: u_translation.rsrunascript
+msgid "Run a script"
+msgstr "ເຮັດວຽກສະຄຣິບ"
+
+#: u_translation.rsrunastrometr
+msgid "Run astrometry on every image to search for drift"
+msgstr "ດຳເນີນການວັດແທກຕຳແໜ່ງດາວທຸກຮູບເພື່ອຊອກຫາການເຄື່ອນທີ່"
+
+#: u_translation.rsrunautofocus
+#, object-pascal-format
+msgid "Auto-focus if temp. change by more than %s"
+msgstr "ໂຟກັສອັດຕະໂນມັດ ຖ້າອຸນຫະພູມປ່ຽນແປງຫຼາຍກວ່າ %s"
+
+#: u_translation.rsrunautofocus2
+msgid "Run auto-focus if change is more than % HFD"
+msgstr "ດຳເນີນການໂຟກັສອັດຕະໂນມັດ ຖ້າການປ່ຽນແປງຫຼາຍກວ່າ % HFD"
+
+#: u_translation.rsrunscript
+msgid "Run script"
+msgstr "ແລ່ນສະຄຣິບ"
+
+#: u_translation.rsrunscript2
+#, object-pascal-format
+msgid "Run script %s"
+msgstr "ແລ່ນສະຄຣິບ %s"
+
+#: u_translation.rsrunscriptwhe
+msgid "Run script when the weather change"
+msgstr ""
+
+#: u_translation.rsrununattende
+msgid "Run unattended"
+msgstr "ແລ່ນແບບບໍ່ມີຜູ້ເບິ່ງແຍງ"
+
+#: u_translation.rss
+msgid "s"
+msgstr "ວ"
+
+#: u_translation.rssaf
+msgid "Saf."
+msgstr "ປພ."
+
+#: u_translation.rssafe
+msgid "Safe"
+msgstr "ປອດໄພ"
+
+#: u_translation.rssafeforopera
+msgid "Safe for operation"
+msgstr "ປອດໄພສຳລັບການເຮັດວຽກ"
+
+#: u_translation.rssafetymonito
+msgid "Safety monitor"
+msgstr "ເຄື່ອງກວດສອບຄວາມປອດໄພ"
+
+#: u_translation.rssaturated
+msgid "saturated"
+msgstr "ອີ່ມຕົວ"
+
+#: u_translation.rssave
+msgid "Save"
+msgstr "ບັນທຶກ"
+
+#: u_translation.rssaveandapply
+msgid "Save and apply to targets"
+msgstr "ບັນທຶກ ແລະນຳໃຊ້ກັບເປົ້າໝາຍ"
+
+#: u_translation.rssaveapngfile
+msgid "Save a bitmap file additionally to the standard FITS file"
+msgstr "ບັນທຶກໄຟລ໌ບິດແມັບເພີ່ມເຕີມຈາກໄຟລ໌ FITS ມາດຕະຖານ"
+
+#: u_translation.rssaveas
+msgid "Save as..."
+msgstr "ບັນທຶກເປັນ..."
+
+#: u_translation.rssaveconfigur
+msgid "Save configuration now"
+msgstr "ບັນທຶກການຕັ້ງຄ່າດຽວນີ້"
+
+#: u_translation.rssaved
+#, object-pascal-format
+msgid "Saved %s"
+msgstr "ບັນທຶກ %s ແລ້ວ"
+
+#: u_translation.rssavedfile
+#, object-pascal-format
+msgid "Saved file %s"
+msgstr "ບັນທຶກໄຟລ໌ %s ແລ້ວ"
+
+#: u_translation.rssavefitsfile
+#, object-pascal-format
+msgid "Save FITS file%s"
+msgstr "ບັນທຶກໄຟລ໌ FITS%s"
+
+#: u_translation.rssavepictures
+#, object-pascal-format
+msgid "Save picture%s"
+msgstr "ບັນທຶກຮູບ%s"
+
+#: u_translation.rssavepreviewi
+msgid "Save preview images"
+msgstr "ບັນທຶກຮູບພາບຕົວຢ່າງ"
+
+#: u_translation.rssavetempl
+msgid "Save template"
+msgstr "ບັນທຶກແມ່ແບບ"
+
+#: u_translation.rssavetemplas
+msgid "Save template as..."
+msgstr "ບັນທຶກແມ່ແບບເປັນ..."
+
+#: u_translation.rsscaletoleran
+msgid "Scale tolerance"
+msgstr "ຄ່າຜັນຜວນທີ່ຍອມຮັບໄດ້ຂອງຂະໜາດ"
+
+#: u_translation.rsscanthisserv
+msgid "Scan this server"
+msgstr "ສະແກນເຊີບເວີນີ້"
+
+#: u_translation.rsscript
+msgid "Script"
+msgstr "ສະຄຣິບ"
+
+#: u_translation.rsscriptalread
+#, object-pascal-format
+msgid "Script %s already exist. Do you want to replace this file?"
+msgstr "ສະຄຣິບ %s ມີຢູ່ແລ້ວ. ທ່ານຕ້ອງການແທນທີ່ໄຟລ໌ນີ້ບໍ່?"
+
+#: u_translation.rsscriptalread2
+#, object-pascal-format
+msgid "Script %s already exist. Do you want to edit this script?"
+msgstr "ສະຄຣິບ %s ມີຢູ່ແລ້ວ. ທ່ານຕ້ອງການແກ້ໄຂສະຄຣິບນີ້ບໍ່?"
+
+#: u_translation.rsscriptalread3
+#, object-pascal-format
+msgid "Script %s already exist. Do you want to replace this custom script by the template?"
+msgstr "ສະຄຣິບ %s ມີຢູ່ແລ້ວ. ທ່ານຕ້ອງການແທນທີ່ສະຄຣິບກຳນົດເອງນີ້ດ້ວຍແມ່ແບບບໍ່?"
+
+#: u_translation.rsscriptargume
+msgid "Script arguments"
+msgstr "ໂຕປ້ອນຂອງສະຄຣິບ"
+
+#: u_translation.rsscripteditor
+msgid "Script editor"
+msgstr "ໂຕແກ້ໄຂສະຄຣິບ"
+
+#: u_translation.rsscripterror
+#, object-pascal-format
+msgid "Script error: %s"
+msgstr "ສະຄຣິບຜິດພາດ: %s"
+
+#: u_translation.rsscriptexecut
+#, object-pascal-format
+msgid "Script execution error, row %s: %s"
+msgstr "ການປະມວນຜົນສະຄຣິບຜິດພາດ, ແຖວ %s: %s"
+
+#: u_translation.rsscriptfailed
+#, object-pascal-format
+msgid "Script %s failed!"
+msgstr "ສະຄຣິບ %s ລົ້ມເຫຼວ!"
+
+#: u_translation.rsscriptfinish
+#, object-pascal-format
+msgid "Script %s finished"
+msgstr "ສະຄຣິບ %s ສຳເລັດແລ້ວ"
+
+#: u_translation.rsscriptlangua
+msgid "Script language"
+msgstr "ພາສາສະຄຣິບ"
+
+#: u_translation.rsscripttermin
+msgid "Script terminating..."
+msgstr "ກຳລັງຢຸດສະຄຣິບ..."
+
+#: u_translation.rssdriverdonot
+#, object-pascal-format
+msgid "%s driver do not support %s"
+msgstr "ໄດຣເວີ %s ບໍ່ຮອງຮັບ %s"
+
+#: u_translation.rssearch
+msgid "Search"
+msgstr "ຄົ້ນຫາ"
+
+#: u_translation.rssearchonline
+msgid "Search online"
+msgstr "ຄົ້ນຫາອອນລາຍ"
+
+#: u_translation.rssec
+msgid "sec."
+msgstr "ວິ."
+
+#: u_translation.rsseconds
+msgid "seconds"
+msgstr "ວິນາທີ"
+
+#: u_translation.rsseconds2
+msgid "[seconds]"
+msgstr "[ວິນາທີ]"
+
+#: u_translation.rssecuressltls
+msgid "Secure SSL/TLS connection"
+msgstr "ການເຊື່ອມຕໍ່ SSL/TLS ທີ່ປອດໄພ"
+
+#: u_translation.rsselectarea
+msgid "Select area"
+msgstr "ເລືອກພື້ນທີ່"
+
+#: u_translation.rsselectastarf
+msgid "Select a star first!"
+msgstr "ກະລຸນາເລືອກດາວກ່ອນ!"
+
+#: u_translation.rsselectcamera
+msgid "Select camera"
+msgstr "ເລືອກກ້ອງ"
+
+#: u_translation.rsselectguides
+msgid "Select guide star"
+msgstr "ເລືອກດາວນຳທາງ"
+
+#: u_translation.rsselectoneoft
+msgid "Select one of the measurement options:"
+msgstr "ເລືອກໜຶ່ງໃນຕົວເລືອກການວັດແທກ:"
+
+#: u_translation.rsselectthecam
+msgid "Select the camera to use for the cone measurement"
+msgstr "ເລືອກກ້ອງທີ່ຈະໃຊ້ສຳລັບການວັດແທກໂຄນ"
+
+#: u_translation.rsselectthecur
+msgid "Select the cursor to use "
+msgstr "ເລືອກເຄີເຊີທີ່ຈະໃຊ້ "
+
+#: u_translation.rsselectthefil
+msgid "Select the file to delete"
+msgstr "ເລືອກໄຟລ໌ທີ່ຈະລຶບ"
+
+#: u_translation.rsselectthefil2
+msgid "Select the file to edit"
+msgstr "ເລືອກໄຟລ໌ທີ່ຈະແກ້ໄຂ"
+
+#: u_translation.rsselectthefil3
+msgid "Select the file to load"
+msgstr "ເລືອກໄຟລ໌ທີ່ຈະໂຫຼດ"
+
+#: u_translation.rsselectthescr
+msgid "Select the script to download"
+msgstr "ເລືອກສະຄຣິບທີ່ຈະດາວໂຫຼດ"
+
+#: u_translation.rssendimagetop
+msgid "Send image to planetarium"
+msgstr "ສົ່ງຮູບພາບໄປຫາທ້ອງຟ້າຈຳລອງ"
+
+#: u_translation.rssendtestemai
+msgid "Send test email"
+msgstr "ສົ່ງອີເມວທົດສອບ"
+
+#: u_translation.rssensor
+msgid "Sensor"
+msgstr "ເຊັນເຊີ"
+
+#: u_translation.rssensoranalys
+msgid "Sensor analysis"
+msgstr "ການວິເຄາະເຊັນເຊີ"
+
+#: u_translation.rssensorareaus
+msgid "Sensor area used for focusing"
+msgstr "ພື້ນທີ່ເຊັນເຊີທີ່ໃຊ້ສຳລັບການໂຟກັສ"
+
+#: u_translation.rssensorsprope
+msgid "Sensors properties"
+msgstr "ຄຸນສົມບັດຂອງເຊັນເຊີ"
+
+#: u_translation.rssensortemperatu
+msgid "Sensor temperature"
+msgstr "ອຸນຫະພູມເຊັນເຊີ"
+
+#: u_translation.rsseparator
+msgid "Separator"
+msgstr "ຕົວຂັ້ນ"
+
+#: u_translation.rssequence
+msgid "Sequence"
+msgstr "ລຳດັບ"
+
+#: u_translation.rssequenceabno
+msgid "Sequence abnormal end"
+msgstr "ລຳດັບສິ້ນສຸດຜິດປົກກະຕິ"
+
+#: u_translation.rssequenceabor
+msgid "Sequence aborted."
+msgstr "ລຳດັບຖືກຍົກເລີກ."
+
+#: u_translation.rssequenceabor2
+#, object-pascal-format
+msgid "Sequence aborted because the autoguider was not reconnected after %s minutes."
+msgstr "ລຳດັບຖືກຍົກເລີກເພາະໂຕນຳທາງອັດຕະໂນມັດບໍ່ໄດ້ເຊື່ອມຕໍ່ຄືນໃໝ່ຫຼັງຈາກ %s ນາທີ."
+
+#: u_translation.rssequencealre
+#, object-pascal-format
+msgid "Sequence %s already exist. Do you want to replace this file?"
+msgstr "ລຳດັບ %s ມີຢູ່ແລ້ວ. ທ່ານຕ້ອງການແທນທີ່ໄຟລ໌ນີ້ບໍ່?"
+
+#: u_translation.rssequenceauto
+msgid "Sequence automatic flat"
+msgstr "Flat ອັດຕະໂນມັດຕາມລຳດັບ"
+
+#: u_translation.rssequencecanc
+#, object-pascal-format
+msgid "Sequence %s canceled before start"
+msgstr "ລຳດັບ %s ຖືກຍົກເລີກກ່ອນເລີ່ມ"
+
+#: u_translation.rssequencefini
+#, object-pascal-format
+msgid "Sequence %s finished."
+msgstr "ລຳດັບ %s ສຳເລັດແລ້ວ."
+
+#: u_translation.rssequencefold
+msgid "Sequence folder"
+msgstr "ໂຟເດີລຳດັບ"
+
+#: u_translation.rssequenceigno
+#, object-pascal-format
+msgid "Sequence %s ignore stop at dawn"
+msgstr "ລຳດັບ %s ບໍ່ສົນໃຈການຢຸດຕອນເຊົ້າ"
+
+#: u_translation.rssequencenorm
+msgid "Sequence normal end"
+msgstr "ລຳດັບສິ້ນສຸດປົກກະຕິ"
+
+#: u_translation.rssequencepaus
+msgid "Sequence paused for bad weather ..."
+msgstr "ລຳດັບຖືກຢຸດຊົ່ວຄາວ ເນື່ອງຈາກສະພາບອາກາດບໍ່ດີ..."
+
+#: u_translation.rssequencesepa
+msgid "Sequence separator"
+msgstr "ຕົວຂັ້ນລຳດັບ"
+
+#: u_translation.rssequencestar
+#, object-pascal-format
+msgid "Sequence %s start immediately"
+msgstr "ລຳດັບ %s ເລີ່ມທັນທີ"
+
+#: u_translation.rssequencestar2
+msgid "Sequence start / stop time"
+msgstr "ເວລາເລີ່ມ / ຢຸດຂອງລຳດັບ"
+
+#: u_translation.rssequencestep
+msgid "Sequence steps"
+msgstr "ຂັ້ນຕອນຂອງລຳດັບ"
+
+#: u_translation.rssequencestop
+msgid "Sequence stopped by user request, no termination script will be run."
+msgstr "ລຳດັບຢຸດໂດຍຄຳຮ້ອງຂໍຂອງຜູ້ໃຊ້, ຈະບໍ່ມີສະຄຣິບສິ້ນສຸດການເຮັດວຽກໃດຖືກແລ່ນ."
+
+#: u_translation.rssequencestop2
+#, object-pascal-format
+msgid "Sequence %s stopped."
+msgstr "ລຳດັບ %s ຢຸດແລ້ວ."
+
+#: u_translation.rssequencewil2
+msgid "Sequence will be paused after current exposure is complete."
+msgstr "ລຳດັບຈະຖືກຢຸດຊົ່ວຄາວຫຼັງຈາກການເປີດໜ້າກ້ອງປັດຈຸບັນສຳເລັດ."
+
+#: u_translation.rssequencewill
+msgid "Sequence will continue with the current focuser position."
+msgstr "ລຳດັບຈະສືບຕໍ່ດ້ວຍຕຳແໜ່ງຂອງໂຕປັບຈຸດສຸມປັດຈຸບັນ."
+
+#: u_translation.rssequencewill2
+msgid "Sequence will run without guiding!"
+msgstr "ລຳດັບຈະແລ່ນໂດຍບໍ່ມີການນຳທາງ!"
+
+#: u_translation.rsserver
+msgid "Server"
+msgstr "ເຊີບເວີ"
+
+#: u_translation.rsset
+msgid "Set"
+msgstr "ຕັ້ງຄ່າ"
+
+#: u_translation.rsset2
+msgid "set"
+msgstr "ຕົກ"
+
+#: u_translation.rssetbinning
+msgid "Set Binning"
+msgstr "ຕັ້ງຄ່າ Binning"
+
+#: u_translation.rssetbinningx
+#, object-pascal-format
+msgid "Set binning %sx%s"
+msgstr "ຕັ້ງ binning %sx%s"
+
+#: u_translation.rssetcooler
+#, object-pascal-format
+msgid "Set cooler %s"
+msgstr "ຕັ້ງໂຕເຮັດຄວາມເຢັນ %s"
+
+#: u_translation.rssetfilterpos
+#, object-pascal-format
+msgid "Set filter position %s"
+msgstr "ຕັ້ງຕຳແໜ່ງຟິວເຕີ %s"
+
+#: u_translation.rssetfocusdire
+msgid "Set focus direction inward"
+msgstr "ຕັ້ງທິດທາງຈຸດສຸມເຂົ້າ"
+
+#: u_translation.rssetfocusdire2
+msgid "Set focus direction outward"
+msgstr "ຕັ້ງທິດທາງຈຸດສຸມອອກ"
+
+#: u_translation.rssetframetype
+#, object-pascal-format
+msgid "Set frame type %s"
+msgstr "ຕັ້ງປະເພດຂອບຮູບ %s"
+
+#: u_translation.rssetguidespee
+msgid "Set guide speed [x sidereal]"
+msgstr "ຕັ້ງຄວາມໄວການນຳທາງ [x ໄຊດີຣຽວ]"
+
+#: u_translation.rssetlockposit
+msgid "Set lock position"
+msgstr "ຕັ້ງຕຳແໜ່ງລັອກ"
+
+#: u_translation.rssetmagnitude
+msgid "Set magnitude"
+msgstr "ຕັ້ງຄ່າຄວາມສະຫວ່າງ"
+
+#: u_translation.rssetmountsite
+msgid "Set mount site long/lat from configuration"
+msgstr "ຕັ້ງຕຳແໜ່ງເສັ້ນແວງ/ເສັ້ນຂະໜານຂອງຖານຕິດຕັ້ງຈາກການຕັ້ງຄ່າ"
+
+#: u_translation.rssetmounttime
+msgid "Set mount time from computer"
+msgstr "ຕັ້ງເວລາຂອງຖານຕິດຕັ້ງຈາກຄອມພິວເຕີ"
+
+#: u_translation.rssetpoint
+msgid "Setpoint"
+msgstr "ຈຸດຕັ້ງຄ່າ"
+
+#: u_translation.rssetrotatoran
+msgid "Set rotator angle"
+msgstr "ຕັ້ງມຸມໂຕໝຸນ"
+
+#: u_translation.rssettemperatu
+#, object-pascal-format
+msgid "Set temperature %s"
+msgstr "ຕັ້ງອຸນຫະພູມ %s"
+
+#: u_translation.rssettemperatu2
+#, object-pascal-format
+msgid "Set temperature ramp to %s started"
+msgstr "ເລີ່ມການປັບອຸນຫະພູມເປັນ %s ແລ້ວ"
+
+#: u_translation.rssettemperatu3
+msgid "Set temperature ramp finished"
+msgstr "ການປັບອຸນຫະພູມສຳເລັດແລ້ວ"
+
+#: u_translation.rssetthemeandi
+msgid "Set the mean dithering pulse duration in seconds."
+msgstr "ຕັ້ງຄ່າໄລຍະເວລາສັນຍານດິເທີ້ສະເລ່ຍເປັນວິນາທີ."
+
+#: u_translation.rssettletolera
+msgid "Settle tolerance"
+msgstr "ຄ່າຜັນຜວນທີ່ຍອມຮັບໄດ້ຂອງການຄົງທີ່"
+
+#: u_translation.rssettlingfor
+msgid "Settling for"
+msgstr "ການຕັ້ງຕົວເປັນເວລາ"
+
+#: u_translation.rssetup
+msgid "Setup"
+msgstr "ຕັ້ງຄ່າ"
+
+#: u_translation.rsshadowadu
+msgid "Shadow ADU"
+msgstr "ADU ເງົາ"
+
+#: u_translation.rssharpness
+msgid "Sharpness"
+msgstr "ຄວາມຄົມຊັດ"
+
+#: u_translation.rsshortestguid
+msgid "Shortest guide pulse"
+msgstr "ສັນຍານນຳທາງສັ້ນສຸດ"
+
+#: u_translation.rsshortexposur
+msgid "Short exposure stacking"
+msgstr "ການຊ້ອນພາບເປີດໜ້າກ້ອງສັ້ນ"
+
+#: u_translation.rsshowcurrentl
+msgid "Show current log"
+msgstr "ສະແດງບັນທຶກປັດຈຸບັນ"
+
+#: u_translation.rsshowhints
+msgid "Show hints"
+msgstr "ສະແດງຄຳແນະນຳ"
+
+#: u_translation.rsshowindilog
+msgid "Show INDI log"
+msgstr "ສະແດງບັນທຶກ INDI"
+
+#: u_translation.rsshowprompt
+msgid "Show prompt"
+msgstr "ສະແດງຂໍ້ຄວາມເຕືອນ"
+
+#: u_translation.rsshowstacking
+msgid "Show stacking option for Preview/Capture/Sequence"
+msgstr "ສະແດງຕົວເລືອກການຊ້ອນພາບສຳລັບ ເບິ່ງຕົວຢ່າງ/ຖ່າຍພາບ/ລຳດັບ"
+
+#: u_translation.rsshowvideocap
+msgid "Show video capture tab"
+msgstr "ສະແດງແຖບຖ່າຍວິດີໂອ"
+
+#: u_translation.rssideofpier
+msgid "Side of pier"
+msgstr "ດ້ານຂອງຂາຕັ້ງ"
+
+#: u_translation.rssigma
+msgid "sigma"
+msgstr "sigma"
+
+#: u_translation.rssimplifiedph
+msgid "Simplified photometry taking account for calibration, exposure time and airmass"
+msgstr "ການວັດແທກແສງແບບງ່າຍ ໂດຍຄຳນຶງເຖິງການປັບທຽບ, ເວລາເປີດໜ້າກ້ອງ ແລະມວນອາກາດ"
+
+#: u_translation.rssimplifiedph2
+msgid "Simplified photometry, uncalibrated"
+msgstr "ການວັດແທກແສງແບບງ່າຍ, ບໍ່ໄດ້ປັບທຽບ"
+
+#: u_translation.rssimplifiedph3
+msgid "Simplified photometry taking account for only the calibration"
+msgstr "ການວັດແທກແສງແບບງ່າຍ ໂດຍຄຳນຶງເຖິງການປັບທຽບເທົ່ານັ້ນ"
+
+#: u_translation.rssinglepanel
+msgid "Single panel"
+msgstr "ແຜງດຽວ"
+
+#: u_translation.rssinglestar
+msgid "Single star"
+msgstr "ດາວດວງດຽວ"
+
+#: u_translation.rssinglestarbr
+msgid "Single star, with offset"
+msgstr "ດາວດວງດຽວ, ພ້ອມອັອບເຊັດ"
+
+#: u_translation.rssinglestarwi
+msgid "Single star, with guider astrometry"
+msgstr "ດາວດວງດຽວ, ພ້ອມການວັດແທກຕຳແໜ່ງດາວຂອງເຄື່ອງນຳທາງ"
+
+#: u_translation.rssinglestarwi2
+msgid "Single star with astrometry, then multistar"
+msgstr "ດາວດວງດຽວພ້ອມການວັດແທກຕຳແໜ່ງດາວ, ຫຼັງຈາກນັ້ນຫຼາຍດາວ"
+
+#: u_translation.rssitesendtote
+msgid "Site send to telescope."
+msgstr "ຕຳແໜ່ງຖືກສົ່ງໄປທີ່ກ້ອງສ່ອງແລ້ວ."
+
+#: u_translation.rssitesetfromt
+msgid "Site set from the telescope."
+msgstr "ຕຳແໜ່ງຖືກຕັ້ງຈາກກ້ອງສ່ອງ."
+
+#: u_translation.rssize
+msgid "size"
+msgstr "ຂະໜາດ"
+
+#: u_translation.rssize2
+msgid "Size"
+msgstr "ຂະໜາດ"
+
+#: u_translation.rsskiptarget
+#, object-pascal-format
+msgid "Skip target %s"
+msgstr "ຂ້າມເປົ້າໝາຍ %s"
+
+#: u_translation.rsskybrightnes
+msgid "Sky brightness"
+msgstr "ຄວາມສະຫວ່າງຂອງທ້ອງຟ້າ"
+
+#: u_translation.rsskychartonlo
+msgid "Skychart on local computer"
+msgstr "Skychart ໃນຄອມພິວເຕີທ້ອງຖິ່ນ"
+
+#: u_translation.rsskyflat
+msgid "Sky Flat"
+msgstr "Sky Flat"
+
+#: u_translation.rsskyisstillto
+msgid "Sky is still too bright, waiting for dusk"
+msgstr "ທ້ອງຟ້າຍັງແຈ້ງເກີນໄປ, ກໍາລັງລໍຖ້າໃຫ້ຄໍ່າ"
+
+#: u_translation.rsskyisstillto2
+msgid "Sky is still too dark, waiting for dawn"
+msgstr "ທ້ອງຟ້າຍັງມືດເກີນໄປ, ກໍາລັງລໍຖ້າໃຫ້ຮຸ່ງເຊົ້າ"
+
+#: u_translation.rsskyquality
+msgid "Sky quality"
+msgstr "ຄຸນນະພາບທ້ອງຟ້າ"
+
+#: u_translation.rsskytemperatu
+msgid "Sky temperature"
+msgstr "ອຸນຫະພູມທ້ອງຟ້າ"
+
+#: u_translation.rsslave
+msgid "Slave"
+msgstr "ຄວບຄຸມຕາມ"
+
+#: u_translation.rsslaved
+msgid "Slaved"
+msgstr "ຄວບຄຸມຕາມ"
+
+#: u_translation.rsslavethedome
+msgid "Slave the Dome"
+msgstr "ຄວບຄຸມໂດມຕາມ"
+
+#: u_translation.rsslewaborteda
+msgid "Slew aborted after 3 retries!"
+msgstr "ການຫັນກ້ອງຖືກຍົກເລີກຫຼັງຈາກລອງ 3 ຄັ້ງ!"
+
+#: u_translation.rsslewcomplete
+msgid "Slew is complete"
+msgstr "ການຫັນກ້ອງສຳເລັດແລ້ວ"
+
+#: u_translation.rsslewing
+msgid "Slewing"
+msgstr "ກຳລັງຫັນກ້ອງ"
+
+#: u_translation.rsslewtelescop2
+msgid "Slew telescope to flat panel position"
+msgstr "ຫັນກ້ອງສ່ອງໄປຕຳແໜ່ງແຜງແຟລັດ"
+
+#: u_translation.rsslewtoanears
+msgid "Slew to a near star of magnitude"
+msgstr "ຫັນກ້ອງໄປຫາດາວໃກ້ຄຽງທີ່ມີຄວາມສະຫວ່າງ"
+
+#: u_translation.rsslewtoeq
+#, object-pascal-format
+msgid "Slewing to %s %s/%s"
+msgstr "ກຳລັງຫັນກ້ອງໄປທີ່ %s %s/%s"
+
+#: u_translation.rsslewtofocuss
+#, object-pascal-format
+msgid "Slew to focus star %s"
+msgstr "ຫັນກ້ອງໄປຫາດາວຈຸດສຸມ %s"
+
+#: u_translation.rsslewtofocuss2
+msgid "Slew to focus star"
+msgstr "ຫັນກ້ອງໄປຫາດາວຈຸດສຸມ"
+
+#: u_translation.rsslewwithapre
+msgid "Slew with a precision of "
+msgstr "ຫັນກ້ອງດ້ວຍຄວາມແມ່ນຍຳ "
+
+#: u_translation.rsslewwithoffs
+#, object-pascal-format
+msgid "Slew with offset %s/%s"
+msgstr "ຫັນກ້ອງດ້ວຍຄ່າຊົດເຊີຍ %s/%s"
+
+#: u_translation.rsslippagecorr
+msgid "Slippage correction "
+msgstr "ການແກ້ໄຂການເລື່ອນ "
+
+#: u_translation.rsslit
+msgid "Slit"
+msgstr "ສະລິດ"
+
+#: u_translation.rsslitdrawing
+msgid "Slit drawing"
+msgstr "ການແຕ້ມສະລິດ"
+
+#: u_translation.rsslope
+msgid "Slope"
+msgstr "ຄວາມຊັນ"
+
+#: u_translation.rsslot
+msgid "Slot"
+msgstr "ຊ່ອງ"
+
+#: u_translation.rssmallcross
+msgid "Small cross"
+msgstr "ໄມ້ກາງແຂນນ້ອຍ"
+
+#: u_translation.rssmtpserverad
+msgid "SMTP server address"
+msgstr "ທີ່ຢູ່ເຊີບເວີ SMTP"
+
+#: u_translation.rssmtpserverpo
+msgid "SMTP server port"
+msgstr "ພອດເຊີບເວີ SMTP"
+
+#: u_translation.rssocketerrors
+#, object-pascal-format
+msgid "Socket error %s.  %s"
+msgstr "Socket ຜິດພາດ %s. %s"
+
+#: u_translation.rssoftware
+msgid "Software"
+msgstr "ຊອບແວ"
+
+#: u_translation.rssolvedimage
+msgid "Solved image"
+msgstr "ຮູບພາບທີ່ແກ້ໄຂແລ້ວ"
+
+#: u_translation.rssolvedinseco
+#, object-pascal-format
+msgid "Solved in %s seconds"
+msgstr "ແກ້ໄຂສຳເລັດໃນ %s ວິນາທີ"
+
+#: u_translation.rssolvemaincam
+msgid "Solve main camera image"
+msgstr "ແກ້ໄຂຮູບພາບກ້ອງຫຼັກ"
+
+#: u_translation.rssomedefinedd
+msgid "Some defined devices are not connected"
+msgstr "ອຸປະກອນທີ່ກຳນົດບາງອັນບໍ່ໄດ້ເຊື່ອມຕໍ່"
+
+#: u_translation.rssouth
+msgid "South"
+msgstr "ໃຕ້"
+
+#: u_translation.rsspectralprof
+msgid "Spectral profile"
+msgstr "ໂປຣໄຟລ໌ສະເປກຕຣັມ"
+
+#: u_translation.rsspectroscopy
+msgid "Spectroscopy"
+msgstr "ການວັດແທກສະເປກຕຣັມ"
+
+#: u_translation.rsspeed
+msgid "Speed"
+msgstr "ຄວາມໄວ"
+
+#: u_translation.rsspiral
+msgid "Spiral"
+msgstr "ກ້ຽວວຽນ"
+
+#: u_translation.rssplittheimag
+#, object-pascal-format
+msgid "Split the image in 9 panel to better show the aberration in each corner. %s You can change the zoom level and the margin offset from the image edge."
+msgstr "ແບ່ງຮູບພາບອອກເປັນ 9 ແຜງ ເພື່ອສະແດງຄວາມຜິດປົກກະຕິໃນແຕ່ລະມຸມໄດ້ດີຂຶ້ນ. %s ທ່ານສາມາດປ່ຽນລະດັບການຊູມ ແລະອັອບເຊັດຂອບຈາກຂອບຮູບພາບໄດ້."
+
+#: u_translation.rsssltlsnotsup
+msgid "SSL/TLS not supported, try to uncheck the corresponding box."
+msgstr "ບໍ່ຮອງຮັບ SSL/TLS, ລອງຍົກເລີກການເລືອກກ່ອງທີ່ກ່ຽວຂ້ອງ."
+
+#: u_translation.rsstabilizatio
+msgid "Stabilization delay after move"
+msgstr "ການຊັກຊ້າເພື່ອຄວາມຄົງທີ່ຫຼັງການເຄື່ອນທີ່"
+
+#: u_translation.rsstack
+msgid "Stack"
+msgstr "ຊ້ອນພາບ"
+
+#: u_translation.rsstackingcoun
+msgid "Stacking count"
+msgstr "ຈຳນວນການຊ້ອນພາບ"
+
+#: u_translation.rsstackingwith
+#, object-pascal-format
+msgid "Stacking with alignment star at %s/%s"
+msgstr "ກຳລັງຊ້ອນພາບດ້ວຍດາວຈັດຕຳແໜ່ງທີ່ %s/%s"
+
+#: u_translation.rsstackofframe
+#, object-pascal-format
+msgid "stack of %s frames"
+msgstr "ຊ້ອນພາບ %s ຂອບ"
+
+#: u_translation.rsstar
+msgid "Star"
+msgstr "ດາວ"
+
+#: u_translation.rsstaralignmen
+msgid "Star alignment"
+msgstr "ການຕັ້ງແນວດາວ"
+
+#: u_translation.rsstarautoexpo
+#, object-pascal-format
+msgid "Star%sauto-exposure"
+msgstr "ການເປີດໜ້າກ້ອງ%sອັດຕະໂນມັດຂອງດາວ"
+
+#: u_translation.rsstardatabase
+msgid "Star database is empty, check path to star database files!!"
+msgstr "ຖານຂໍ້ມູນດາວວ່າງເປົ່າ, ກວດສອບເສັ້ນທາງໄປຫາໄຟລ໌ຖານຂໍ້ມູນດາວ!!"
+
+#: u_translation.rsstardetectio
+msgid "Star detection window size "
+msgstr "ຂະໜາດໜ້າຕ່າງການກວດສອບດາວ "
+
+#: u_translation.rsstarfwhm
+msgid "Star FWHM"
+msgstr "FWHM ຂອງດາວ"
+
+#: u_translation.rsstarlostreco
+msgid "Star lost recovery"
+msgstr "ການກູ້ຄືນເມື່ອເສຍດາວ"
+
+#: u_translation.rsstarprofile
+msgid "Star profile"
+msgstr "ໂປຣໄຟລ໌ດາວ"
+
+#: u_translation.rsstarsearchar
+msgid "Star search area"
+msgstr "ພື້ນທີ່ຄົ້ນຫາດາວ"
+
+#: u_translation.rsstart
+msgid "Start"
+msgstr "ເລີ່ມ"
+
+#: u_translation.rsstartat
+msgid "Start at "
+msgstr "ເລີ່ມທີ່ "
+
+#: u_translation.rsstartautogui
+msgid "Start autoguider"
+msgstr "ເລີ່ມໂຕນຳທາງອັດຕະໂນມັດ"
+
+#: u_translation.rsstartcapture
+msgid "Start capture"
+msgstr "ເລີ່ມບັນທຶກພາບ"
+
+#: u_translation.rsstartexposur
+#, object-pascal-format
+msgid "Start exposure error: %s"
+msgstr "ຜິດພາດໃນການເລີ່ມເປີດໜ້າກ້ອງ: %s"
+
+#: u_translation.rsstartfocus
+msgid "Start focus"
+msgstr "ເລີ່ມຈຸດສຸມ"
+
+#: u_translation.rsstartfocushf
+msgid "Start focus HFD is outside of current V curve, please decrease the start HFD value"
+msgstr "HFD ຈຸດສຸມເລີ່ມຕົ້ນຢູ່ນອກ V-curve ປັດຈຸບັນ, ກະລຸນາຫຼຸດຄ່າ HFD ເລີ່ມຕົ້ນ"
+
+#: u_translation.rsstartingexpo
+#, object-pascal-format
+msgid "Starting %s exposure %s for %s seconds"
+msgstr "ກຳລັງເລີ່ມເປີດໜ້າກ້ອງ %s ພາບ %s ເປັນເວລາ %s ວິນາທີ"
+
+#: u_translation.rsstartingsequ
+#, object-pascal-format
+msgid "Starting sequence %s"
+msgstr "ກຳລັງເລີ່ມລຳດັບ %s"
+
+#: u_translation.rsstartingsequ2
+#, object-pascal-format
+msgid "Starting sequence %s repeat %s/%s"
+msgstr "ກຳລັງເລີ່ມລຳດັບ %s ເຮັດຊ້ຳ %s/%s"
+
+#: u_translation.rsstartlearnin
+msgid "Start learning V curve"
+msgstr "ເລີ່ມການຮຽນຮູ້ V-curve"
+
+#: u_translation.rsstartnewexpo
+msgid "Start new exposure as early as possible"
+msgstr "ເລີ່ມການເປີດໜ້າກ້ອງໃໝ່ໃຫ້ໄວທີ່ສຸດ"
+
+#: u_translation.rsstartnewlog
+msgid "Start new log"
+msgstr "ເລີ່ມບັນທຶກໃໝ່"
+
+#: u_translation.rsstartoptions
+msgid "Start options"
+msgstr "ຕົວເລືອກການເລີ່ມ"
+
+#: u_translation.rsstartplan
+#, object-pascal-format
+msgid "Start plan %s"
+msgstr "ເລີ່ມແຜນ %s"
+
+#: u_translation.rsstartpositio
+#, object-pascal-format
+msgid "Start position  pos:%s hfd:%s peak:%s snr:%s"
+msgstr "ຕຳແໜ່ງເລີ່ມຕົ້ນ pos:%s hfd:%s peak:%s snr:%s"
+
+#: u_translation.rsstartpreview
+msgid "Start preview loop"
+msgstr "ເລີ່ມການສະແດງຕົວຢ່າງແບບເຮັດຊ້ຳ"
+
+#: u_translation.rsstartrecord
+msgid "Start record"
+msgstr "ເລີ່ມບັນທຶກ"
+
+#: u_translation.rsstarts
+#, object-pascal-format
+msgid "Start %s"
+msgstr "ເລີ່ມ %s"
+
+#: u_translation.rsstartsinglep
+msgid "Start single preview"
+msgstr "ເລີ່ມສະແດງຕົວຢ່າງດຽວ"
+
+#: u_translation.rsstartspectro
+msgid "Start spectroscope guiding"
+msgstr "ເລີ່ມການນຳທາງດ້ວຍສະເປກໂຕຣສະໂກບ"
+
+#: u_translation.rsstartstep
+#, object-pascal-format
+msgid "Start step %s"
+msgstr "ເລີ່ມຂັ້ນຕອນ %s"
+
+#: u_translation.rsstarttelesco
+msgid "Start Telescope tracking"
+msgstr "ເລີ່ມການຕິດຕາມຂອງກ້ອງສ່ອງ"
+
+#: u_translation.rsstarttime
+msgid "Start time"
+msgstr "ເວລາເລີ່ມຕົ້ນ"
+
+#: u_translation.rsstarttoeditt
+msgid "Start to edit the active sequence"
+msgstr "ເລີ່ມແກ້ໄຂລຳດັບທີ່ກຳລັງເຮັດວຽກ"
+
+#: u_translation.rsstarttracking
+msgid "start tracking"
+msgstr "ເລີ່ມຕິດຕາມ"
+
+#: u_translation.rsstatus
+#, object-pascal-format
+msgid "%s status"
+msgstr "ສະຖານະ %s"
+
+#: u_translation.rsstatus2
+msgid "Status"
+msgstr "ສະຖານະ"
+
+#: u_translation.rsstayatthecur
+msgid "Stay at the current position for autofocus"
+msgstr "ຢູ່ທີ່ຕຳແໜ່ງປັດຈຸບັນເພື່ອປັບຈຸດສຸມອັດຕະໂນມັດ"
+
+#: u_translation.rsstayinplace
+msgid "Stay in place"
+msgstr "ຢູ່ທີ່ເດີມ"
+
+#: u_translation.rsstayinplace2
+#, object-pascal-format
+msgid "Stay in place%sfor autofocus"
+msgstr "ຢູ່ທີ່ເດີມ%sເພື່ອປັບຈຸດສຸມອັດຕະໂນມັດ"
+
+#: u_translation.rsstddev
+msgid "Std.Dev:"
+msgstr "ຄ່າຜັນແປມາດຕະຖານ:"
+
+#: u_translation.rsstep
+msgid "Step"
+msgstr "ຂັ້ນຕອນ"
+
+#: u_translation.rsstepcomplete
+#, object-pascal-format
+msgid "Step %s complete"
+msgstr "ຂັ້ນຕອນ %s ສຳເລັດ"
+
+#: u_translation.rsstepdescript
+msgid "Step description"
+msgstr "ລາຍລະອຽດຂັ້ນຕອນ"
+
+#: u_translation.rsstepinto
+msgid "Step Into"
+msgstr "ເຂົ້າໄປໃນຂັ້ນຕອນ"
+
+#: u_translation.rsstepover
+msgid "Step Over"
+msgstr "ຂ້າມຂັ້ນຕອນ"
+
+#: u_translation.rsstop
+msgid "Stop"
+msgstr "ຢຸດ"
+
+#: u_translation.rsstopastromet
+msgid "Stop astrometry resolver"
+msgstr "ຢຸດໂຕແກ້ໄຂການວັດແທກຕຳແໜ່ງດາວ"
+
+#: u_translation.rsstopastromet2
+msgid "Stop astrometry resolver."
+msgstr "ຢຸດໂຕແກ້ໄຂການວັດແທກຕຳແໜ່ງດາວ."
+
+#: u_translation.rsstopat
+msgid "Stop at"
+msgstr "ຢຸດທີ່"
+
+#: u_translation.rsstopautoguid
+msgid "Stop autoguider"
+msgstr "ຢຸດໂຕນຳທາງອັດຕະໂນມັດ"
+
+#: u_translation.rsstopcapture
+msgid "Stop capture"
+msgstr "ຢຸດການບັນທຶກພາບ"
+
+#: u_translation.rsstopdomeslav
+msgid "Stop Dome slaving"
+msgstr "ຢຸດການຄວບຄຸມໂດມຕາມ"
+
+#: u_translation.rsstopflatcapt
+msgid "Stop flat capture"
+msgstr "ຢຸດການຖ່າຍພາບແຟລັດ"
+
+#: u_translation.rsstopguiding
+msgid "Stop guiding"
+msgstr "ຢຸດການນຳທາງ"
+
+#: u_translation.rsstoploop
+msgid "Stop Loop"
+msgstr "ຢຸດການເຮັດຊ້ຳ"
+
+#: u_translation.rsstopplan
+#, object-pascal-format
+msgid "Stop plan %s"
+msgstr "ຢຸດແຜນ %s"
+
+#: u_translation.rsstoppreview
+msgid "Stop preview"
+msgstr "ຢຸດສະແດງຕົວຢ່າງ"
+
+#: u_translation.rsstoppreviewl
+msgid "Stop preview loop"
+msgstr "ຢຸດການສະແດງຕົວຢ່າງແບບເຮັດຊ້ຳ"
+
+#: u_translation.rsstoprecord
+msgid "Stop record"
+msgstr "ຢຸດບັນທຶກ"
+
+#: u_translation.rsstoptelescop
+msgid "Stop telescope motion."
+msgstr "ຢຸດການເຄື່ອນທີ່ຂອງກ້ອງສ່ອງທາງໄກ."
+
+#: u_translation.rsstoptelescop2
+msgid "Stop telescope tracking"
+msgstr "ຢຸດການຕິດຕາມຂອງກ້ອງສ່ອງ"
+
+#: u_translation.rsstopthecurre
+#, object-pascal-format
+msgid "Stop the current sequence at %s"
+msgstr "ຢຸດລຳດັບປັດຈຸບັນທີ່ %s"
+
+#: u_translation.rsstopthecurre2
+#, object-pascal-format
+msgid "Stop the current target at %s"
+msgstr "ຢຸດເປົ້າໝາຍປັດຈຸບັນທີ່ %s"
+
+#: u_translation.rsstoptimealre
+#, object-pascal-format
+msgid "Stop time %s already passed"
+msgstr "ເວລາຢຸດ %s ຜ່ານໄປແລ້ວ"
+
+#: u_translation.rsstopvcurvele
+msgid "Stop Vcurve learning"
+msgstr "ຢຸດການຮຽນຮູ້ V-curve"
+
+#: u_translation.rssubfolderbyb
+msgid "Subfolder by binning"
+msgstr "ໂຟລເດີຍ່ອຍຕາມ binning"
+
+#: u_translation.rssubfolderbyd
+msgid "Subfolder by date (UT)"
+msgstr "ໂຟລເດີຍ່ອຍຕາມວັນທີ (UT)"
+
+#: u_translation.rssubfolderbyd2
+msgid "Subfolder by date (local time, change at noon)"
+msgstr "ໂຟລເດີຍ່ອຍຕາມວັນທີ (ເວລາທ້ອງຖິ່ນ, ປ່ຽນຕອນທ່ຽງ)"
+
+#: u_translation.rssubfolderbye
+msgid "Subfolder by exposure time"
+msgstr "ໂຟລເດີຍ່ອຍຕາມເວລາເປີດໜ້າກ້ອງ"
+
+#: u_translation.rssubfolderbyf
+msgid "Subfolder by frame type"
+msgstr "ໂຟລເດີຍ່ອຍຕາມປະເພດຂອບຮູບ"
+
+#: u_translation.rssubfolderbyo
+msgid "Subfolder by object name"
+msgstr "ໂຟລເດີຍ່ອຍຕາມຊື່ວັດຖຸ"
+
+#: u_translation.rssubfolderbyp
+msgid "Subfolder by plan step"
+msgstr "ໂຟລເດີຍ່ອຍຕາມຂັ້ນຕອນຂອງແຜນ"
+
+#: u_translation.rssubfolderbys
+msgid "Subfolder by sequence name"
+msgstr "ໂຟລເດີຍ່ອຍຕາມຊື່ລຳດັບ"
+
+#: u_translation.rssummary
+msgid "Summary"
+msgstr "ສະຫຼຸບ"
+
+#: u_translation.rssuspenddomes
+msgid "Suspend dome slaving"
+msgstr "ລະງັບການຄວບຄຸມໂດມຕາມ"
+
+#: u_translation.rssw
+msgid "Sw."
+msgstr "ສວ."
+
+#: u_translation.rsswitch
+msgid "Switch"
+msgstr "ສະວິດ"
+
+#: u_translation.rsswitchconnec
+msgid "Switch connection"
+msgstr "ການເຊື່ອມຕໍ່ສະວິດ"
+
+#: u_translation.rsswitchfailed
+#, object-pascal-format
+msgid "Setting switch %s failed!"
+msgstr "ການຕັ້ງຄ່າສະວິດ %s ລົ້ມເຫຼວ!"
+
+#: u_translation.rssyncoffset
+msgid "Sync Offset"
+msgstr ""
+
+#: u_translation.rssynctherotat
+msgid "Sync the rotator"
+msgstr ""
+
+#: u_translation.rssynctoeq
+#, object-pascal-format
+msgid "Sync to %s %s/%s"
+msgstr "ຊິງຄ໌ໄປທີ່ %s %s/%s"
+
+#: u_translation.rssystemcross
+msgid "System cross"
+msgstr "ໄມ້ກາງແຂນຂອງລະບົບ"
+
+#: u_translation.rssystemisunde
+msgid "System is undersampled, accept 1 pixel star"
+msgstr "ລະບົບມີຕົວຢ່າງບໍ່ພຽງພໍ, ຍອມຮັບດາວຂະໜາດ 1 ພິກເຊວ"
+
+#: u_translation.rstakecontrole
+#, object-pascal-format
+msgid "Take control exposure for %s seconds"
+msgstr "ຖ່າຍຮູບຄວບຄຸມເປັນເວລາ %s ວິນາທີ"
+
+#: u_translation.rstarget
+msgid "Target"
+msgstr "ເປົ້າໝາຍ"
+
+#: u_translation.rstargetcancel
+#, object-pascal-format
+msgid "Target %s canceled before start"
+msgstr "ເປົ້າໝາຍ %s ຖືກຍົກເລີກກ່ອນເລີ່ມ"
+
+#: u_translation.rstargetinitia
+msgid "Target initialisation failed!"
+msgstr "ການເລີ່ມຕົ້ນເປົ້າໝາຍລົ້ມເຫຼວ!"
+
+#: u_translation.rstargetinitia2
+msgid "Target initialisation error"
+msgstr "ຄວາມຜິດພາດໃນການກຽມເປົ້າໝາຍ"
+
+#: u_translation.rstargetname
+#, object-pascal-format
+msgid "Target%sname"
+msgstr "ຊື່%sເປົ້າໝາຍ"
+
+#: u_translation.rstargetpositi2
+msgid "Target position in finder image"
+msgstr "ຕຳແໜ່ງເປົ້າໝາຍໃນຮູບພາບກ້ອງຊອກຫາ"
+
+#: u_translation.rstargetprecis
+msgid "Target precision [arcmin] "
+msgstr "ຄວາມແມ່ນຍຳຂອງເປົ້າໝາຍ [ອາກນາທີ] "
+
+#: u_translation.rstargets
+msgid "Targets"
+msgstr "ເປົ້າໝາຍ"
+
+#: u_translation.rstargetscoord
+#, object-pascal-format
+msgid "Target %s coordinates not updated"
+msgstr "ພິກັດເປົ້າໝາຍ %s ບໍ່ໄດ້ຮັບການອັບເດດ"
+
+#: u_translation.rstargetwillbe2
+msgid "Target will be recentered before next image"
+msgstr "ເປົ້າໝາຍຈະຖືກປັບໃຫ້ຢູ່ກາງໃໝ່ກ່ອນຮູບຕໍ່ໄປ"
+
+#: u_translation.rstcpipserverl
+#, object-pascal-format
+msgid "TCP/IP server listen on port: %s"
+msgstr "ເຊີບເວີ TCP/IP ກຳລັງຟັງຢູ່ພອດ: %s"
+
+#: u_translation.rstcpipserverp
+msgid "TCP/IP server port"
+msgstr "ພອດເຊີບເວີ TCP/IP"
+
+#: u_translation.rstcpipservers
+msgid "TCP/IP server stopped"
+msgstr "ເຊີບເວີ TCP/IP ຢຸດເຮັດວຽກແລ້ວ"
+
+#: u_translation.rstelescopeand
+msgid "Telescope and dome are now parked"
+msgstr "ກ້ອງສ່ອງ ແລະ ໂດມຈອດແລ້ວຕອນນີ້"
+
+#: u_translation.rstelescopeand2
+msgid "Telescope and dome are now unparked"
+msgstr "ກ້ອງສ່ອງ ແລະ ໂດມຍົກເລີກການຈອດແລ້ວຕອນນີ້"
+
+#: u_translation.rstelescopeazi
+msgid "Telescope azimuth"
+msgstr "ມຸມອາຊິມຸດຂອງກ້ອງສ່ອງ"
+
+#: u_translation.rstelescopeele
+msgid "Telescope elevation"
+msgstr "ມຸມເງີຍຂອງກ້ອງສ່ອງ"
+
+#: u_translation.rstelescopemou
+msgid "Telescope mount"
+msgstr "ຂາກ້ອງສ່ອງທາງໄກ"
+
+#: u_translation.rstelescopenam
+msgid "Telescope name"
+msgstr "ຊື່ກ້ອງສ່ອງທາງໄກ"
+
+#: u_translation.rstelescopenot
+#, object-pascal-format
+msgid "Telescope not %s after request!"
+msgstr "ກ້ອງສ່ອງບໍ່ %s ຫຼັງຈາກການຮ້ອງຂໍ!"
+
+#: u_translation.rstelescopepos
+msgid "Telescope position"
+msgstr "ຕຳແໜ່ງກ້ອງສ່ອງທາງໄກ"
+
+#: u_translation.rstelescopesle
+#, object-pascal-format
+msgid "Telescope slew error: %s arcminutes."
+msgstr "ການຫັນກ້ອງສ່ອງທາງໄກຜິດພາດ: %s ອາກນາທີ."
+
+#: u_translation.rstelescopesle2
+msgid "Telescope slew"
+msgstr "ການຫັນກ້ອງສ່ອງທາງໄກ"
+
+#: u_translation.rstelescopesle3
+msgid "Telescope slew failed"
+msgstr "ການຫັນກ້ອງສ່ອງລົ້ມເຫຼວ"
+
+#: u_translation.rstemp
+msgid "Temp."
+msgstr "ອຸນ."
+
+#: u_translation.rstemperature
+msgid "Temperature"
+msgstr "ອຸນຫະພູມ"
+
+#: u_translation.rstemperaturec
+#, object-pascal-format
+msgid "Temperature coefficient in steps/%s"
+msgstr "ສຳປະສິດອຸນຫະພູມເປັນຂັ້ນຕອນ/%s"
+
+#: u_translation.rstemperaturec2
+msgid "Temperature (C)"
+msgstr "ອຸນຫະພູມ (C)"
+
+#: u_translation.rstemperaturef
+msgid "Temperature from weather station"
+msgstr "ອຸນຫະພູມຈາກສະຖານີອາກາດ"
+
+#: u_translation.rstemperaturer
+msgid "Temperature ramp requested to stop"
+msgstr "ຮ້ອງຂໍໃຫ້ຢຸດການປັບອຸນຫະພູມ"
+
+#: u_translation.rstemperaturer2
+msgid "Temperature ramp canceled"
+msgstr "ຍົກເລີກການປັບອຸນຫະພູມແລ້ວ"
+
+#: u_translation.rstemperatures
+msgid "Temperature scale"
+msgstr "ສະເກລອຸນຫະພູມ"
+
+#: u_translation.rstemplate
+msgid "Template"
+msgstr "ແມ່ແບບ"
+
+#: u_translation.rstemporaryfol
+msgid "Temporary folder"
+msgstr "ໂຟລເດີຊົ່ວຄາວ"
+
+#: u_translation.rstemporaryfol2
+msgid "Temporary folder must contain only ASCII characters"
+msgstr "ໂຟເດີຊົ່ວຄາວຕ້ອງມີແຕ່ຕົວອັກສອນ ASCII ເທົ່ານັ້ນ"
+
+#: u_translation.rsterminationo
+msgid "Termination options"
+msgstr "ທາງເລືອກໃນການຢຸດ"
+
+#: u_translation.rstest
+msgid "Test"
+msgstr "ທົດສອບ"
+
+#: u_translation.rstestemailfro
+msgid "Test email from CCDciel"
+msgstr "ອີເມວທົດສອບຈາກ CCDciel"
+
+#: u_translation.rsthecameraima
+msgid "The camera image format is"
+msgstr "ຮູບແບບຮູບພາບຂອງກ້ອງແມ່ນ"
+
+#: u_translation.rsthecameraisc
+msgid "The camera is connected. Do you want to exit the program now?"
+msgstr "ກ້ອງເຊື່ອມຕໍ່ຢູ່. ທ່ານຕ້ອງການອອກຈາກໂປຣແກຣມດຽວນີ້ບໍ່?"
+
+#: u_translation.rsthecomputert
+#, object-pascal-format
+msgid "The computer timezone %s and the observatory longitude %s are not compatible."
+msgstr "ເຂດເວລາຂອງຄອມພິວເຕີ %s ແລະເສັ້ນແວງຂອງຫໍສັງເກດການດາວ %s ບໍ່ເຂົ້າກັນ."
+
+#: u_translation.rstheconeerror
+#, object-pascal-format
+msgid "The cone error results in a slew error of: %s arcmin at zenith. If error is positive then move telescope light inlet closer to the mount. If negative move telescope light inlet away from the mount,"
+msgstr "ຄວາມຜິດພາດໂຄນສົ່ງຜົນໃຫ້ເກີດຄວາມຜິດພາດໃນການຫັນກ້ອງ: %s ອາກມິນິດທີ່ຈຸດສູງສຸດ. ຖ້າຜິດພາດເປັນບວກ ໃຫ້ຍ້າຍທາງເຂົ້າແສງຂອງກ້ອງສ່ອງເຂົ້າໃກ້ຖານຕິດຕັ້ງ. ຖ້າເປັນລົບ ໃຫ້ຍ້າຍທາງເຂົ້າແສງຂອງກ້ອງສ່ອງອອກຫ່າງຈາກຖານຕິດຕັ້ງ,"
+
+#: u_translation.rsthedataare2
+#, object-pascal-format
+msgid "The data are now recorded in the profile.%sYou can review the other auto-focus options using the menu %sEdit / Preferences / Autofocus"
+msgstr "ຂໍ້ມູນຖືກບັນທຶກໃນໂປຣໄຟລ໌ແລ້ວ.%sທ່ານສາມາດກວດສອບຕົວເລືອກການປັບຈຸດສຸມອັດຕະໂນມັດອື່ນໆໄດ້ໂດຍໃຊ້ເມນູ %sແກ້ໄຂ / ການຕັ້ງຄ່າ / ປັບຈຸດສຸມອັດຕະໂນມັດ"
+
+#: u_translation.rsthefocuserdo
+msgid "The focuser do not support Absolute or Relative movement, autofocus calibration is not possible."
+msgstr "ໂຕປັບຈຸດສຸມບໍ່ຮອງຮັບການເຄື່ອນທີ່ແບບສຳບູນ ຫຼື ສຳພັດ, ບໍ່ສາມາດປັບທຽບຈຸດສຸມອັດຕະໂນມັດໄດ້."
+
+#: u_translation.rsthefocuserdo2
+msgid "The focuser do not move enough after 30 steps! please check if the focuser is moving at all or increase the minimum movement"
+msgstr "ໂຕປັບຈຸດສຸມບໍ່ເຄື່ອນທີ່ພຽງພໍຫຼັງຈາກ 30 ຂັ້ນຕອນ! ກະລຸນາກວດສອບວ່າໂຕປັບຈຸດສຸມເຄື່ອນທີ່ຢູ່ບໍ່ ຫຼື ເພີ່ມການເຄື່ອນທີ່ຂັ້ນຕ່ຳ"
+
+#: u_translation.rsthefocuserdo3
+msgid "The focuser do not move enough after 30 steps! please check if the focuser is moving at all or decrease the maximum HFD"
+msgstr "ໂຕປັບຈຸດສຸມບໍ່ເຄື່ອນທີ່ພຽງພໍຫຼັງຈາກ 30 ຂັ້ນຕອນ! ກະລຸນາກວດສອບວ່າໂຕປັບຈຸດສຸມເຄື່ອນທີ່ຢູ່ບໍ່ ຫຼື ຫຼຸດຄ່າ HFD ສູງສຸດ"
+
+#: u_translation.rsthefocuseris
+msgid "The focuser is now positioned at the best observed HFD position."
+msgstr "ໂຕປັບຈຸດສຸມຖືກຈັດຕຳແໜ່ງທີ່ດີທີ່ສຸດຂອງ HFD ທີ່ສັງເກດໄດ້ແລ້ວ."
+
+#: u_translation.rsthefollowing
+msgid "The following actions are run if the safety monitor report dangerous condition"
+msgstr "ການກະທຳຕໍ່ໄປນີ້ຈະຖືກດຳເນີນການ ຖ້າເຄື່ອງກວດສອບຄວາມປອດໄພລາຍງານສະພາບທີ່ອັນຕະລາຍ"
+
+#: u_translation.rsthemenufilef
+msgid "The menu \"Tools/Focuser calibration\" help to fill this values."
+msgstr "ເມນູ \"ເຄື່ອງມື/ການປັບທຽບໂຕປັບຈຸດສຸມ\" ຊ່ວຍຕື່ມຄ່າເຫຼົ່ານີ້."
+
+#: u_translation.rsthemountdono
+msgid "The mount do not move enough!"
+msgstr "ຖານຕິດຕັ້ງເຄື່ອນທີ່ບໍ່ພຽງພໍ!"
+
+#: u_translation.rsthemountindi
+#, object-pascal-format
+msgid "the mount indicate %s"
+msgstr "ຖານຕິດຕັ້ງຊີ້ບອກວ່າ %s"
+
+#: u_translation.rstheobjectnam2
+msgid "The object name is not defined, do you want to continue?"
+msgstr "ຊື່ວັດຖຸບໍ່ໄດ້ກຳນົດ, ທ່ານຕ້ອງການສືບຕໍ່ບໍ່?"
+
+#: u_translation.rstheplanismod
+#, object-pascal-format
+msgid "The plan %s is modified. Do you want to save the change ?"
+msgstr "ແຜນ %s ມີການແກ້ໄຂ. ທ່ານຕ້ອງການບັນທຶກການປ່ຽນແປງບໍ່?"
+
+#: u_translation.rstheprogramne
+msgid "The program need to be restarted"
+msgstr "ໂປຣແກຣມຕ້ອງຖືກເລີ່ມຄືນໃໝ່"
+
+#: u_translation.rsthereisalrea
+msgid "There is already a dusk flat plan"
+msgstr "ມີແຜນ flat ຕອນຄ່ຳຢູ່ແລ້ວ"
+
+#: u_translation.rsthereisalrea2
+msgid "There is already a dawn flat plan"
+msgstr "ມີແຜນ flat ຕອນເຊົ້າຢູ່ແລ້ວ"
+
+#: u_translation.rsthesafetymon
+#, object-pascal-format
+msgid "The safety monitor report unsafe condition.%sSelect %s to run the safety actions now, or %s to ignore them."
+msgstr "ເຄື່ອງກວດສອບຄວາມປອດໄພລາຍງານສະພາບທີ່ບໍ່ປອດໄພ.%sເລືອກ %s ເພື່ອດຳເນີນການດ້ານຄວາມປອດໄພດຽວນີ້, ຫຼື %s ເພື່ອບໍ່ສົນໃຈ."
+
+#: u_translation.rsthesequencei
+msgid "The sequence is now in pause."
+msgstr "ລຳດັບຕອນນີ້ຢູ່ໃນສະຖານະຢຸດຊົ່ວຄາວ."
+
+#: u_translation.rsthesequencew
+#, object-pascal-format
+msgid "The sequence %s will be stopped at %s, in %s seconds."
+msgstr "ລຳດັບ %s ຈະຖືກຢຸດໃນເວລາ %s, ໃນອີກ %s ວິນາທີ."
+
+#: u_translation.rsthetelescope
+msgid "The telescope is parked!"
+msgstr "ກ້ອງສ່ອງຈອດແລ້ວ!"
+
+#: u_translation.rsthismessagec
+msgid "This message confirm the email configuration is working."
+msgstr "ຂໍ້ຄວາມນີ້ຢືນຢັນວ່າການຕັ້ງຄ່າອີເມວໃຊ້ງານໄດ້."
+
+#: u_translation.rsthisobjectis
+msgid "This object is never below the requested elevation"
+msgstr "ວັດຖຸນີ້ບໍ່ເຄີຍຢູ່ຕ່ຳກວ່າມຸມສູງທີ່ຮ້ອງຂໍ"
+
+#: u_translation.rsthisobjectis2
+msgid "This object is never above the requested elevation"
+msgstr "ວັດຖຸນີ້ບໍ່ເຄີຍຢູ່ສູງກວ່າມຸມສູງທີ່ຮ້ອງຂໍ"
+
+#: u_translation.rsthisoptionsa
+msgid "This options are in addition to the autofocus frequency available in the Plan definition"
+msgstr "ຕົວເລືອກເຫຼົ່ານີ້ແມ່ນເພີ່ມເຕີມຈາກຄວາມຖີ່ຂອງໂຟກັສອັດຕະໂນມັດທີ່ມີຢູ່ໃນການກຳນົດແຜນ"
+
+#: u_translation.rsthisprocedur
+#, object-pascal-format
+msgid "This procedure will help you to  find the focuser parameters for auto-focus.%sYou only need to run it once to set this parameters.%sCenter a star with a high elevation and do a manual focusing to be as close as possible of the focus point. Use the Manual focus tool for that.%sUse the Star profile tool to check the star peak intensity is about three fourth of the camera maximum ADU but not saturated. %sAfter focusing, your focuser must be positioned about half way of it's mechanical travel. If this is not the case please adjust it now.%sThe binning you set in the Preview now will be used for the autofocusing operation. If you want to change the focusing binning later you have to run this procedure again."
+msgstr "ຂັ້ນຕອນນີ້ຈະຊ່ວຍທ່ານຊອກຫາພາຣາມິເຕີຂອງໂຕປັບຈຸດສຸມສຳລັບການປັບຈຸດສຸມອັດຕະໂນມັດ.%sທ່ານພຽງແຕ່ຕ້ອງແລ່ນມັນຄັ້ງດຽວເພື່ອຕັ້ງພາຣາມິເຕີເຫຼົ່ານີ້.%sຈັດດາວທີ່ມີມຸມສູງໃຫ້ຢູ່ໃຈກາງ ແລະ ປັບຈຸດສຸມດ້ວຍມືໃຫ້ໃກ້ກັບຈຸດສຸມທີ່ສຸດ. ໃຊ້ເຄື່ອງມື Manual focus ສຳລັບສິ່ງນີ້.%sໃຊ້ເຄື່ອງມື Star profile ເພື່ອກວດສອບວ່າຄວາມເຂັ້ມສູງສຸດຂອງດາວຢູ່ປະມານສາມສ່ວນສີ່ຂອງ ADU ສູງສຸດຂອງກ້ອງ ແຕ່ບໍ່ອີ່ມຕົວ. %sຫຼັງຈາກປັບຈຸດສຸມ, ໂຕປັບຈຸດສຸມຂອງທ່ານຕ້ອງຖືກຈັດຕຳແໜ່ງປະມານເຄິ່ງທາງຂອງການເດີນທາງກົນຈັກ. ຖ້າບໍ່ແມ່ນ ກະລຸນາປັບມັນດຽວນີ້.%sbinning ທີ່ທ່ານຕັ້ງໃນ Preview ຕອນນີ້ຈະຖືກໃຊ້ສຳລັບການປັບຈຸດສຸມອັດຕະໂນມັດ. ຖ້າທ່ານຕ້ອງການປ່ຽນ binning ຂອງການປັບຈຸດສຸມໃນພາຍຫຼັງ ທ່ານຕ້ອງແລ່ນຂັ້ນຕອນນີ້ອີກຄັ້ງ."
+
+#: u_translation.rsthisprocedur2
+msgid "This procedure measure the position of the main instrument target in the finder camera image."
+msgstr "ຂັ້ນຕອນນີ້ວັດແທກຕຳແໜ່ງຂອງເປົ້າໝາຍຂອງເຄື່ອງມືຫຼັກໃນຮູບພາບຂອງກ້ອງຊອກຫາ."
+
+#: u_translation.rsthissequence
+#, object-pascal-format
+msgid "This sequence %s contain completion status."
+msgstr "ລຳດັບ %s ນີ້ມີສະຖານະການສຳເລັດແລ້ວ."
+
+#: u_translation.rsthissequence2
+#, object-pascal-format
+msgid "This sequence contain information about the steps already completed.%sNow you can continue after the last checkpoint.%sDo you want to clear the completion status to restart from the beginning?"
+msgstr "ລຳດັບນີ້ມີຂໍ້ມູນກ່ຽວກັບຂັ້ນຕອນທີ່ສຳເລັດແລ້ວ.%sຕອນນີ້ທ່ານສາມາດສືບຕໍ່ຫຼັງຈາກຈຸດກວດກາສຸດທ້າຍ.%sທ່ານຕ້ອງການລ້າງສະຖານະການສຳເລັດເພື່ອເລີ່ມຕົ້ນໃໝ່ຈາກຕົ້ນບໍ່?"
+
+#: u_translation.rstiffwithfits
+msgid "TIFF with FITS header"
+msgstr "TIFF ພ້ອມຫົວຂໍ້ FITS"
+
+#: u_translation.rstiltindicati2
+#, object-pascal-format
+msgid "Tilt indication[hfd]=%s"
+msgstr "ຕົວຊີ້ບອກການອຽງ[hfd]=%s"
+
+#: u_translation.rstime
+msgid "Time"
+msgstr "ເວລາ"
+
+#: u_translation.rstimealreadyp
+#, object-pascal-format
+msgid "Time already passed %s"
+msgstr "ເວລາຜ່ານໄປແລ້ວ %s"
+
+#: u_translation.rstimeinarow
+msgid "time in a row"
+msgstr "ຄັ້ງຕິດຕໍ່ກັນ"
+
+#: u_translation.rstimeout
+msgid "Timeout"
+msgstr "ໝົດເວລາ"
+
+#: u_translation.rstimer
+msgid "Timer"
+msgstr "ໂຕຈັບເວລາ"
+
+#: u_translation.rstimesendtote
+msgid "Time send to telescope."
+msgstr "ເວລາຖືກສົ່ງໄປທີ່ກ້ອງສ່ອງແລ້ວ."
+
+#: u_translation.rstimingestima
+msgid "Timing estimate"
+msgstr "ການປະເມີນເວລາ"
+
+#: u_translation.rstomorrow
+msgid "tomorrow"
+msgstr "ມື້ອື່ນ"
+
+#: u_translation.rstooclosetoth
+msgid "too close to the Moon"
+msgstr "ໃກ້ດວງຈັນເກີນໄປ"
+
+#: u_translation.rstools
+msgid "Tools"
+msgstr "ເຄື່ອງມື"
+
+#: u_translation.rstoomanyhotpi
+msgid "Too many hot pixel found!"
+msgstr "ພົບ hot pixel ຫຼາຍເກີນໄປ!"
+
+#: u_translation.rstoosmallhfdd
+msgid "Too small HFD difference, try to increase the number of point or the movement, or run the focuser calibration tool to measure this parameters."
+msgstr "ຄວາມແຕກຕ່າງຂອງ HFD ນ້ອຍເກີນໄປ, ລອງເພີ່ມຈຳນວນຈຸດ ຫຼື ການເຄື່ອນທີ່, ຫຼື ແລ່ນເຄື່ອງມືປັບທຽບໂຕປັບຈຸດສຸມເພື່ອວັດແທກພາຣາມິເຕີເຫຼົ່ານີ້."
+
+#: u_translation.rstoosmallhfdd2
+msgid "Too small HFD difference."
+msgstr "ຄວາມແຕກຕ່າງຂອງ HFD ນ້ອຍເກີນໄປ."
+
+#: u_translation.rstotalpolarer
+msgid "Total polar error:"
+msgstr "ຄວາມຜິດພາດຂົ້ວທັງໝົດ:"
+
+#: u_translation.rstousetheinte
+msgid "To use the Internal autoguider you need to configure a Mount and a Guide camera in the profile Devices setup"
+msgstr "ເພື່ອໃຊ້ເຄື່ອງນຳທາງອັດຕະໂນມັດພາຍໃນ ທ່ານຕ້ອງຕັ້ງຄ່າຖານຕິດຕັ້ງ ແລະກ້ອງນຳທາງໃນການຕັ້ງຄ່າອຸປະກອນຂອງໂປຣໄຟລ໌"
+
+#: u_translation.rstousethisdev
+msgid "To use this device, be sure to also configure the Internal Guider in Preferences/Auto-guiding"
+msgstr "ເພື່ອໃຊ້ອຸປະກອນນີ້, ໃຫ້ແນ່ໃຈວ່າໄດ້ຕັ້ງຄ່າເຄື່ອງນຳທາງພາຍໃນໃນ ການຕັ້ງຄ່າ/ການນຳທາງອັດຕະໂນມັດ ດ້ວຍ"
+
+#: u_translation.rstrack
+msgid "Track"
+msgstr "ຕິດຕາມ"
+
+#: u_translation.rstracking
+msgid "tracking"
+msgstr "ກໍາລັງຕິດຕາມ"
+
+#: u_translation.rstrend
+msgid "Trend"
+msgstr "ແນວໂນ້ມ"
+
+#: u_translation.rstreshold
+msgid "Treshold :"
+msgstr "ເກນ :"
+
+#: u_translation.rstriangle
+msgid "Triangle"
+msgstr "ຮູບສາມຫຼ່ຽມ"
+
+#: u_translation.rstrianglerota
+msgid "Triangle rotation angle"
+msgstr "ມຸມໝຸນຂອງຮູບສາມຫຼ່ຽມ"
+
+#: u_translation.rstropospherer
+msgid "Troposphere rate (K/km)"
+msgstr "ອັດຕາໂທຣໂປສະເຟຍ (K/km)"
+
+#: u_translation.rstrue
+msgid "True"
+msgstr "ແມ່ນ"
+
+#: u_translation.rstruepole
+msgid "True pole"
+msgstr "ຂົ້ວແທ້"
+
+#: u_translation.rstrynexttarge
+msgid "Try next target in sequence."
+msgstr "ລອງເປົ້າໝາຍຕໍ່ໄປໃນລຳດັບ."
+
+#: u_translation.rstrynexttarge2
+msgid "Try next target"
+msgstr "ລອງເປົ້າໝາຍຕໍ່ໄປ"
+
+#: u_translation.rstrytoconnect
+msgid "Try to connect to autoguider"
+msgstr "ພະຍາຍາມເຊື່ອມຕໍ່ກັບໂຕນຳທາງອັດຕະໂນມັດ"
+
+#: u_translation.rstrytofixpixe
+msgid "Try to fix pixel range to match CMOS camera bit depth"
+msgstr "ພະຍາຍາມແກ້ໄຂຂອບເຂດພິກເຊວໃຫ້ກົງກັບຄວາມເລິກບິດຂອງກ້ອງ CMOS"
+
+#: u_translation.rstwilightisat
+msgid "Twilight is at Sun elevation of"
+msgstr "ແສງອາລຸນແມ່ນຢູ່ທີ່ຄວາມສູງຂອງດວງອາທິດ"
+
+#: u_translation.rstwilightsequ
+msgid "Sequence Start/Stop at twilight "
+msgstr "ເລີ່ມ/ຢຸດລຳດັບຕອນແສງອາລຸນ "
+
+#: u_translation.rstwilightskyf
+msgid "Twilight sky flat"
+msgstr "Twilight sky flat"
+
+#: u_translation.rstype
+msgid "Type"
+msgstr "ປະເພດ"
+
+#: u_translation.rsunabletofind
+msgid "Unable to find resolve data!"
+msgstr "ບໍ່ສາມາດຊອກຫາຂໍ້ມູນການແກ້ໄຂໄດ້!"
+
+#: u_translation.rsunattendeder
+msgid "Unattended error script"
+msgstr "ສະຄຣິບແກ້ໄຂຂໍ້ຜິດພາດແບບບໍ່ມີຜູ້ເບິ່ງແຍງ"
+
+#: u_translation.rsunavailable
+msgid "unavailable"
+msgstr "ໃຊ້ບໍ່ໄດ້"
+
+#: u_translation.rsunknownstatu
+msgid "Unknown status"
+msgstr "ສະຖານະບໍ່ຮູ້ຈັກ"
+
+#: u_translation.rsunknowpiersi
+msgid "Unknown pier side"
+msgstr "ບໍ່ຮູ້ດ້ານຂອງຂາກ້ອງ"
+
+#: u_translation.rsunpark
+msgid "Unpark"
+msgstr "ຍົກເລີກການຈອດ"
+
+#: u_translation.rsunparked
+msgid "Unparked"
+msgstr "ຍົກເລີກການຈອດແລ້ວ"
+
+#: u_translation.rsunparkthedom
+msgid "Unpark the Dome"
+msgstr "ຍົກເລີກການຈອດໂດມ"
+
+#: u_translation.rsunparkthetel
+msgid "Unpark the telescope"
+msgstr "ຍົກເລີກການຈອດກ້ອງສ່ອງ"
+
+#: u_translation.rsunparkthetel2
+msgid "Unpark the telescope and the dome"
+msgstr "ຍົກເລີກການຈອດກ້ອງສ່ອງ ແລະ ໂດມ"
+
+#: u_translation.rsunsafe
+msgid "Unsafe"
+msgstr "ບໍ່ປອດໄພ"
+
+#: u_translation.rsunsafecondit
+msgid "Unsafe condition detected!"
+msgstr "ກວດພົບສະພາບທີ່ບໍ່ປອດໄພ!"
+
+#: u_translation.rsunsafecondit2
+msgid "Unsafe condition ignored by user"
+msgstr "ຜູ້ໃຊ້ບໍ່ສົນໃຈສະພາບທີ່ບໍ່ປອດໄພ"
+
+#: u_translation.rsunselectstar
+msgid "Unselect star"
+msgstr "ຍົກເລີກການເລືອກດາວ"
+
+#: u_translation.rsunslaved
+msgid "Unslaved"
+msgstr "ຍົກເລີກການຄວບຄຸມຕາມ"
+
+#: u_translation.rsup
+msgid "Up"
+msgstr "ຂຶ້ນ"
+
+#: u_translation.rsupdateactive
+msgid "Update active sequence"
+msgstr "ອັບເດດລຳດັບທີ່ກຳລັງເຮັດວຽກ"
+
+#: u_translation.rsupdatechartw
+msgid "Update chart with any astrometry result"
+msgstr "ອັບເດດແຜນວາດດ້ວຍຜົນການວັດແທກຕຳແໜ່ງດາວໃດໆ"
+
+#: u_translation.rsupdatefullse
+msgid "Update full sequence"
+msgstr "ອັບເດດລຳດັບທັງໝົດ"
+
+#: u_translation.rsupdateradec2
+#, object-pascal-format
+msgid "Update RA+Dec%sfrom Planetarium"
+msgstr "ອັບເດດ RA+Dec%sຈາກທ້ອງຟ້າຈຳລອງ"
+
+#: u_translation.rsupdatesequen
+msgid "Update sequence without interruption"
+msgstr "ອັບເດດລຳດັບໂດຍບໍ່ຂັດຈັງຫວະ"
+
+#: u_translation.rsusealternati
+msgid "Use alternative solver"
+msgstr "ໃຊ້ຕົວແກ້ໄຂທາງເລືອກ"
+
+#: u_translation.rsuseasfallbac
+msgid "Use as fallback if other software fail"
+msgstr "ໃຊ້ເປັນຕົວສຳຮອງຖ້າຊອບແວອື່ນລົ້ມເຫຼວ"
+
+#: u_translation.rsuseasreferen
+msgid "Use as reference star"
+msgstr "ໃຊ້ເປັນດາວອ້າງອີງ"
+
+#: u_translation.rsuseastromet2
+#, object-pascal-format
+msgid "Use astrometry to%srefine the position"
+msgstr "ໃຊ້ການວັດແທກຕຳແໜ່ງດາວເພື່ອ%sປັບປຸງຕຳແໜ່ງ"
+
+#: u_translation.rsuseastrometr
+msgid "Use astrometry to refine the position"
+msgstr "ໃຊ້ການວັດແທກຕຳແໜ່ງດາວເພື່ອປັບຕຳແໜ່ງໃຫ້ລະອຽດຂຶ້ນ"
+
+#: u_translation.rsusebacklashc
+msgid "Use backlash compensation"
+msgstr "ໃຊ້ການຊົດເຊີຍແບັກແລຊ"
+
+#: u_translation.rsusecovercali
+msgid "Use Cover calibrator"
+msgstr "ໃຊ້ເຄື່ອງປັບທຽບແບບຝາປິດ"
+
+#: u_translation.rsusecustomscr
+msgid "Use custom script"
+msgstr "ໃຊ້ສະຄຣິບກຳນົດເອງ"
+
+#: u_translation.rsusedome
+msgid "Use dome"
+msgstr "ໃຊ້ໂດມ"
+
+#: u_translation.rsusedslrcolor
+msgid "Use DSLR color balance"
+msgstr "ໃຊ້ການດຸ່ນດ່ຽງສີຂອງ DSLR"
+
+#: u_translation.rsuseexternalc
+msgid "Use external command to light the panel on/off"
+msgstr "ໃຊ້ຄຳສັ່ງພາຍນອກເພື່ອເປີດ/ປິດໄຟແຜງ"
+
+#: u_translation.rsusefilterwhe
+msgid "Use filter wheel"
+msgstr "ໃຊ້ວົງລໍ້ຟິວເຕີ"
+
+#: u_translation.rsusefindercam
+msgid "Use finder camera"
+msgstr "ໃຊ້ກ້ອງຊອກຫາ"
+
+#: u_translation.rsuseflatautom
+msgid "Use flat automatic exposure"
+msgstr "ໃຊ້ການເປີດໜ້າກ້ອງອັດຕະໂນມັດສຳລັບ Flat"
+
+#: u_translation.rsusefocuser
+msgid "Use focuser"
+msgstr "ໃຊ້ໂຕປັບຈຸດສຸມ"
+
+#: u_translation.rsuseguidecamera
+msgid "Use guide camera"
+msgstr "ໃຊ້ກ້ອງນຳທາງ"
+
+#: u_translation.rsusemount
+msgid "Use mount"
+msgstr "ໃຊ້ຂາກ້ອງ"
+
+#: u_translation.rsusergroup
+msgid "User group"
+msgstr "ກຸ່ມຜູ້ໃຊ້"
+
+#: u_translation.rsusername
+msgid "User name"
+msgstr "ຊື່ຜູ້ໃຊ້"
+
+#: u_translation.rsuserotator
+msgid "Use rotator"
+msgstr "ໃຊ້ໂຕໝຸນ"
+
+#: u_translation.rsusesafetymon
+msgid "Use safety monitor"
+msgstr "ໃຊ້ເຄື່ອງກວດສອບຄວາມປອດໄພ"
+
+#: u_translation.rsusesoftwares
+msgid "Use software Sync with sky PA (for use with not compliant rotator)"
+msgstr ""
+
+#: u_translation.rsusespecificr
+msgid "Use specific Readout mode for different actions"
+msgstr "ໃຊ້ໂໝດການອ່ານສະເພາະສຳລັບການກະທຳທີ່ຕ່າງກັນ"
+
+#: u_translation.rsuseswitch
+msgid "Use switch"
+msgstr "ໃຊ້ສະວິດ"
+
+#: u_translation.rsusethisdevic
+msgid "Use this device if the main camera cannot be used for plate solving. Also configure the camera to use in Preferences/Slewing"
+msgstr "ໃຊ້ອຸປະກອນນີ້ ຖ້າກ້ອງຫຼັກບໍ່ສາມາດໃຊ້ໃນການແກ້ໄຂພາບດາວໄດ້. ພ້ອມທັງຕັ້ງຄ່າກ້ອງທີ່ຈະໃຊ້ໃນ ການຕັ້ງຄ່າ/ການຫັນກ້ອງ"
+
+#: u_translation.rsusewatchdog
+msgid "Use watchdog"
+msgstr "ໃຊ້ watchdog"
+
+#: u_translation.rsuseweatherst
+msgid "Use weather station"
+msgstr "ໃຊ້ສະຖານີອາກາດ"
+
+#: u_translation.rsusingabright
+msgid "Using a bright star near the lock position"
+msgstr "ກໍາລັງໃຊ້ດາວທີ່ແຈ້ງໃກ້ຕຳແໜ່ງລັອກ"
+
+#: u_translation.rsusingconfigu
+#, object-pascal-format
+msgid "Using configuration file %s"
+msgstr "ກຳລັງໃຊ້ໄຟລ໌ການຕັ້ງຄ່າ %s"
+
+#: u_translation.rsusingmanuall
+msgid "Using manually selected star"
+msgstr "ກໍາລັງໃຊ້ດາວທີ່ເລືອກດ້ວຍມື"
+
+#: u_translation.rsusingmediano
+#, object-pascal-format
+msgid "Using median of %s stars"
+msgstr "ໃຊ້ຄ່າກາງຂອງດາວ %s ດວງ"
+
+#: u_translation.rsvalue
+msgid "Value"
+msgstr "ຄ່າ"
+
+#: u_translation.rsvcurve
+msgid "V curve"
+msgstr "V curve"
+
+#: u_translation.rsvcurvequalit
+msgid "V curve quality is low. Do you really want to save this curve?"
+msgstr "ຄຸນນະພາບຂອງ V-curve ຕ່ຳ. ທ່ານຕ້ອງການບັນທຶກເສັ້ນໂຄ້ງນີ້ແທ້ບໍ່?"
+
+#: u_translation.rsverbosedevic
+msgid "Verbose device log"
+msgstr "ບັນທຶກອຸປະກອນແບບລະອຽດ"
+
+#: u_translation.rsverticalcorr
+msgid "Vertical correction :"
+msgstr "ການແກ້ໄຂຕາມແນວຕັ້ງ:"
+
+#: u_translation.rsveryhigh
+msgid "Very High"
+msgstr "ສູງຫຼາຍ"
+
+#: u_translation.rsvideo
+msgid "Video"
+msgstr "ວິດີໂອ"
+
+#: u_translation.rsvideopreview
+msgid "Video preview frame rate "
+msgstr "ອັດຕາເຟຣມຂອງວິດີໂອຕົວຢ່າງ "
+
+#: u_translation.rsviewheader
+msgid "View header"
+msgstr "ເບິ່ງຫົວຂໍ້"
+
+#: u_translation.rsviewlastauto
+msgid "View last autofocus"
+msgstr "ເບິ່ງໂຟກັສອັດຕະໂນມັດຄັ້ງຫຼ້າສຸດ"
+
+#: u_translation.rsviewlastreso
+msgid "View last resolver log"
+msgstr "ເບິ່ງບັນທຶກໂຕແກ້ໄຂລ່າສຸດ"
+
+#: u_translation.rsvisualisatio
+msgid "Visualisation"
+msgstr "ການສະແດງຜົນ"
+
+#: u_translation.rsvlearn
+msgid "V-learn"
+msgstr "V-learn"
+
+#: u_translation.rsvoiceconfigu
+msgid "Voice configuration"
+msgstr "ການຕັ້ງຄ່າສຽງ"
+
+#: u_translation.rswait1minute
+msgid "Wait 1 minute ..."
+msgstr "ລໍຖ້າ 1 ນາທີ ..."
+
+#: u_translation.rswaitaftersol
+msgid "Wait after solve"
+msgstr "ລໍຖ້າຫຼັງການແກ້ໄຂ"
+
+#: u_translation.rswaitdseconds
+#, object-pascal-format
+msgid "Wait %d seconds and retry"
+msgstr "ລໍຖ້າ %d ວິນາທີ ແລະລອງໃໝ່"
+
+#: u_translation.rswaitingdseco
+#, object-pascal-format
+msgid "Waiting %d seconds before to restart the exposure"
+msgstr "ລໍຖ້າ %d ວິນາທີກ່ອນຈະເລີ່ມການເປີດໜ້າກ້ອງໃໝ່"
+
+#: u_translation.rswaitingforda
+msgid "Waiting for dawn"
+msgstr "ກໍາລັງລໍຖ້າໃຫ້ຮຸ່ງເຊົ້າ"
+
+#: u_translation.rswaitingforda2
+msgid "Waiting for dark night"
+msgstr "ກໍາລັງລໍຖ້າກາງຄືນມືດ"
+
+#: u_translation.rswaitingfordu
+msgid "Waiting for dusk"
+msgstr "ກໍາລັງລໍຖ້າໃຫ້ຄໍ່າ"
+
+#: u_translation.rswaitingformi
+#, object-pascal-format
+msgid "Waiting for %s minutes of good weather before to restart the sequence"
+msgstr "ກໍາລັງລໍຖ້າ %s ນາທີທີ່ສະພາບອາກາດດີ ກ່ອນຈະເລີ່ມລຳດັບໃໝ່"
+
+#: u_translation.rswaitingfortw
+#, object-pascal-format
+msgid "Waiting for twilight at %s"
+msgstr "ກຳລັງລໍຖ້າຊ່ວງແສງອະຣຸນທີ່ %s"
+
+#: u_translation.rswaitmeridian
+#, object-pascal-format
+msgid "Wait meridian flip for %s minutes"
+msgstr "ລໍຖ້າການພິກຜ່ານເມຣິເດຍນເປັນເວລາ %s ນາທີ"
+
+#: u_translation.rswaitmeridian2
+msgid "Wait meridian flip"
+msgstr "ລໍຖ້າການພິກຜ່ານເມຣິເດຍນ"
+
+#: u_translation.rswaitsecondsb
+#, object-pascal-format
+msgid "Wait %s seconds before repeated target %s"
+msgstr "ລໍຖ້າ %s ວິນາທີກ່ອນເຮັດຊ້ຳເປົ້າໝາຍ %s"
+
+#: u_translation.rswaitsecondsb2
+#, object-pascal-format
+msgid "Wait %s seconds before repeated sequence %s"
+msgstr "ລໍຖ້າ %s ວິນາທີກ່ອນເຮັດຊ້ຳລຳດັບ %s"
+
+#: u_translation.rswaitstart
+msgid "Wait start"
+msgstr "ລໍຖ້າເລີ່ມ"
+
+#: u_translation.rswaittime
+msgid "Wait time"
+msgstr "ເວລາລໍຖ້າ"
+
+#: u_translation.rswaittimebetw
+msgid "Wait time between actions"
+msgstr "ເວລາລໍຖ້າລະຫວ່າງການກະທຳ"
+
+#: u_translation.rswaittostarta
+#, object-pascal-format
+msgid "Wait to start at %s"
+msgstr "ລໍຖ້າເພື່ອເລີ່ມທີ່ %s"
+
+#: u_translation.rswaittostarts
+#, object-pascal-format
+msgid "Wait to start sequence %s at %s"
+msgstr "ລໍຖ້າເພື່ອເລີ່ມລຳດັບ %s ທີ່ %s"
+
+#: u_translation.rswarmthecamer
+msgid "Warm the camera"
+msgstr "ອຸ່ນກ້ອງ"
+
+#: u_translation.rswarningdonot
+msgid "Warning! to use a negative value, be sure the mount driver allow to set SideOfPier before the meridian."
+msgstr "ຄຳເຕືອນ! ເພື່ອໃຊ້ຄ່າລົບ, ໃຫ້ແນ່ໃຈວ່າໄດຣເວີຂອງຖານຕິດຕັ້ງອະນຸຍາດໃຫ້ຕັ້ງ SideOfPier ກ່ອນເມຣິດ້ຽນ."
+
+#: u_translation.rswarningimage
+#, object-pascal-format
+msgid "Warning! %s image received"
+msgstr "ຄຳເຕືອນ! ໄດ້ຮັບຮູບພາບ %s"
+
+#: u_translation.rswarningthemo
+msgid "Warning! the mount will be parked every time a flat capture is started."
+msgstr "ຄຳເຕືອນ! ຖານຕິດຕັ້ງຈະຖືກຈອດທຸກຄັ້ງທີ່ເລີ່ມການຖ່າຍພາບແຟລັດ."
+
+#: u_translation.rswatchdog
+msgid "Watchdog"
+msgstr "Watchdog"
+
+#: u_translation.rswch
+msgid "Wch."
+msgstr "Wch."
+
+#: u_translation.rsweareprobabl
+msgid "We are probably trying to focus on a hot pixel!"
+msgstr "ເຮົາອາດຈະກຳລັງພະຍາຍາມໂຟກັສໃສ່ຈຸດພິກເຊວຮ້ອນ!"
+
+#: u_translation.rsweathercondi
+msgid "Weather condition are bad, it is best if you stop the running capture now."
+msgstr "ສະພາບອາກາດບໍ່ດີ, ຄວນຢຸດການຖ່າຍພາບທີ່ກຳລັງດຳເນີນຢູ່ດຽວນີ້."
+
+#: u_translation.rsweatherissue
+#, object-pascal-format
+msgid "Weather issue: %s"
+msgstr "ບັນຫາສະພາບອາກາດ: %s"
+
+#: u_translation.rsweathermonit
+#, object-pascal-format
+msgid "Weather monitor report: %s"
+msgstr "ລາຍງານຈາກເຄື່ອງກວດສອບສະພາບອາກາດ: %s"
+
+#: u_translation.rsweatherstati
+msgid "Weather station"
+msgstr "ສະຖານີອາກາດ"
+
+#: u_translation.rswest
+msgid "West"
+msgstr "ຕາເວັນຕົກ"
+
+#: u_translation.rswestpointing
+msgid "West (Pointing East)"
+msgstr "ຕາເວັນຕົກ (ຊີ້ໄປທາງຕາເວັນອອກ)"
+
+#: u_translation.rswhenaskedmov
+msgid "When asked, move the mount manually only along the RA axis, always in the same direction, by about 15 to 45 degrees each time."
+msgstr "ເມື່ອຖືກຮ້ອງຂໍ, ໃຫ້ຍ້າຍຖານຕິດຕັ້ງດ້ວຍມືສະເພາະຕາມແກນ RA, ໄປໃນທິດທາງດຽວກັນສະເໝີ, ປະມານ 15 ຫາ 45 ອົງສາໃນແຕ່ລະຄັ້ງ."
+
+#: u_translation.rswhenperformi
+msgid "When performing autofocus from a sequence"
+msgstr "ເມື່ອດຳເນີນການໂຟກັສອັດຕະໂນມັດຈາກລຳດັບ"
+
+#: u_translation.rswhenreadycli
+msgid "When ready click"
+msgstr "ເມື່ອພ້ອມແລ້ວ ໃຫ້ກົດ"
+
+#: u_translation.rswidth
+msgid "Width"
+msgstr "ຄວາມກວ້າງ"
+
+#: u_translation.rswinddirectio
+msgid "Wind direction"
+msgstr "ທິດທາງລົມ"
+
+#: u_translation.rswindgust
+msgid "Wind gust"
+msgstr "ລົມພັດແຮງ"
+
+#: u_translation.rswindspeed
+msgid "Wind speed"
+msgstr "ຄວາມໄວລົມ"
+
+#: u_translation.rswithoutpolev
+msgid "without pole visibility"
+msgstr "ໂດຍບໍ່ເຫັນຂົ້ວ"
+
+#: u_translation.rswth
+msgid "Wth."
+msgstr "ອາກ."
+
+#: u_translation.rsyes
+msgid "Yes"
+msgstr "ແມ່ນ"
+
+#: u_translation.rsyoucansetthe
+#, object-pascal-format
+msgid "You can set the parameters to define how the focuser will move.%sTry first with the default values and adjust them only if you receive an error message on the next step."
+msgstr "ທ່ານສາມາດຕັ້ງພາຣາມິເຕີເພື່ອກຳນົດວ່າໂຕປັບຈຸດສຸມຈະເຄື່ອນທີ່ແນວໃດ.%sລອງໃຊ້ຄ່າເລີ່ມຕົ້ນກ່ອນ ແລະ ປັບມັນພຽງແຕ່ຖ້າທ່ານໄດ້ຮັບຂໍ້ຄວາມຜິດພາດໃນຂັ້ນຕອນຕໍ່ໄປ."
+
+#: u_translation.rsyoumustconfi
+msgid "You must configure your flat preference."
+msgstr "ທ່ານຕ້ອງຕັ້ງຄ່າ flat ຂອງທ່ານ."
+
+#: u_translation.rszoom
+msgid "Zoom"
+msgstr "ຊູມ"
+

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2025-08-21 16:57+0000\n"
-"PO-Revision-Date: 2025-04-21 18:43+0000\n"
+"POT-Creation-Date: 2025-12-16 16:33+0000\n"
+"PO-Revision-Date: 2025-10-22 19:24+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-08-21 17:04+0000\n"
-"X-Generator: Launchpad (build 919009172d854f2b8e4e8262db447f12f11d25eb)\n"
+"X-Launchpad-Export-Date: 2025-12-16 16:44+0000\n"
+"X-Generator: Launchpad (build 379e22b8475e3402088a4cdb4a6e7936a4d28414)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -1591,6 +1591,10 @@ msgstr "Не показывать изображения во время съё�
 msgid "Do nothing"
 msgstr "Ничего не делать"
 
+#: u_translation.rsdonotmodifyt
+msgid "Do not modify the INDI header"
+msgstr ""
+
 #: u_translation.rsdonotrunasad
 #, object-pascal-format
 msgid "Do not run %s as %s!"
@@ -1654,6 +1658,10 @@ msgstr "Вы хотите запустить действие для завер�
 #: u_translation.rsdrawslitarea
 msgid "Draw slit area on image"
 msgstr "Показать щель на изображении"
+
+#: u_translation.rsduplicateact
+msgid "Duplicate action"
+msgstr ""
 
 #: u_translation.rsduration
 msgid "Duration"
@@ -2323,7 +2331,7 @@ msgstr ""
 
 #: u_translation.rsguidepositio2
 msgid "Guide position out of frame!"
-msgstr ""
+msgstr "Точка гидирования вне кадра!"
 
 #: u_translation.rsguider
 msgid "Guider"
@@ -2405,6 +2413,10 @@ msgstr ""
 msgid "Highlight ADU"
 msgstr "Света ADU"
 
+#: u_translation.rshighlightcol
+msgid "Highlight color"
+msgstr ""
+
 #: u_translation.rshistogram
 msgid "Histogram"
 msgstr ""
@@ -2462,10 +2474,6 @@ msgstr "Игнорировать погодные условия для типа
 #: u_translation.rsimage
 msgid "Image"
 msgstr "Изображение"
-
-#: u_translation.rsimagecenter
-msgid "Image center"
-msgstr "Центр изображения"
 
 #: u_translation.rsimagecleanup
 msgid "Image cleanup"
@@ -2734,6 +2742,10 @@ msgstr "Включить подсветку"
 msgid "(limited to 1.5x the slew precision)"
 msgstr "(ограничено 1,5х точностью наведения)"
 
+#: u_translation.rslimitrotator
+msgid "Limit rotator angle to 0-180 degree range"
+msgstr ""
+
 #: u_translation.rslimittempera
 msgid "Limit temperature change"
 msgstr "Использовать лимит"
@@ -2815,6 +2827,10 @@ msgstr "Главный сенсор"
 #, object-pascal-format
 msgid "In mode automatic the telescope will slew to the test positions near the pole automatically.%sIn mode manual you have to slew the mount to the position by the keypad. See documentation."
 msgstr "В автоматическом режиме телескоп автоматически поворачивается в тестовое положение около полюса.%sВ ручном режиме вам необходимо повернуть монтировку  с помощью клавиатуры. См. документацию."
+
+#: u_translation.rsmakesurethes
+msgid "Make sure the stars are not saturated."
+msgstr ""
 
 #: u_translation.rsmanage
 msgid "Manage"
@@ -3369,7 +3385,7 @@ msgstr "Не перекладывать после пересечения"
 
 #: u_translation.rsnoisefilter
 msgid "Noise filter"
-msgstr ""
+msgstr "Фильтр шума"
 
 #: u_translation.rsnone2
 msgid "None"
@@ -4428,6 +4444,10 @@ msgstr "Запуск скрипта"
 #, object-pascal-format
 msgid "Run script %s"
 msgstr "Запущен скрипт %s"
+
+#: u_translation.rsrunscriptwhe
+msgid "Run script when the weather change"
+msgstr ""
 
 #: u_translation.rsrununattende
 msgid "Run unattended"
@@ -5500,6 +5520,14 @@ msgstr ""
 msgid "Setting switch %s failed!"
 msgstr "Ошибка настройки переключателя %s!"
 
+#: u_translation.rssyncoffset
+msgid "Sync Offset"
+msgstr ""
+
+#: u_translation.rssynctherotat
+msgid "Sync the rotator"
+msgstr ""
+
 #: u_translation.rssynctoeq
 #, object-pascal-format
 msgid "Sync to %s %s/%s"
@@ -5735,7 +5763,7 @@ msgstr "монтировка показывает %s"
 
 #: u_translation.rstheobjectnam2
 msgid "The object name is not defined, do you want to continue?"
-msgstr ""
+msgstr "Имя объекта не определено. Продолжить?"
 
 #: u_translation.rstheplanismod
 #, object-pascal-format
@@ -6118,6 +6146,10 @@ msgstr "Использовать ротатор"
 #: u_translation.rsusesafetymon
 msgid "Use safety monitor"
 msgstr "Использовать монитор безопасности"
+
+#: u_translation.rsusesoftwares
+msgid "Use software Sync with sky PA (for use with not compliant rotator)"
+msgstr ""
 
 #: u_translation.rsusespecificr
 msgid "Use specific Readout mode for different actions"

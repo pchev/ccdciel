@@ -1,0 +1,620 @@
+# Lao translation for ccdciel
+# Copyright (c) 2025 Rosetta Contributors and Canonical Ltd 2025
+# This file is distributed under the same license as the ccdciel package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+msgid ""
+msgstr ""
+"Project-Id-Version: ccdciel\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2025-12-16 16:33+0000\n"
+"PO-Revision-Date: 2025-10-21 04:59+0000\n"
+"Last-Translator: boneni <Unknown>\n"
+"Language-Team: Lao <lo@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2025-12-16 16:44+0000\n"
+"X-Generator: Launchpad (build 379e22b8475e3402088a4cdb4a6e7936a4d28414)\n"
+
+#: u_hints.rsactivateback
+#, object-pascal-format
+msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
+msgstr "ເປີດໃຊ້ການຊົດເຊີຍໄລຍະຫ່າງເກຍ.%sປ່ອຍໃຫ້ຕົວເລືອກນີ້ປິດໄວ້ ຫາກໄດຣເວີໂຟກັສຂອງທ່ານມີການຊົດເຊີຍໄລຍະຫ່າງເກຍຢູ່ແລ້ວ."
+
+#: u_hints.rsactivatethes
+msgid "Activate the start time"
+msgstr "ເປີດໃຊ້ເວລາເລີ່ມຕົ້ນ"
+
+#: u_hints.rsactivatethes2
+msgid "Activate the stop time"
+msgstr "ເປີດໃຊ້ເວລາຢຸດ"
+
+#: u_hints.rsactiveonlyif
+#, object-pascal-format
+msgid "Active only if the target use astrometry positioning%sand the exposure time is longer than the astrometry timeout"
+msgstr "ເປີດໃຊ້ງານສະເພາະຫາກເປົ້າໝາຍໃຊ້ການກຳນົດຕຳແໜ່ງດ້ວຍດາລາສາດ%sແລະເວລາເປີດໜ້າກ້ອງດົນກວ່າເວລາໝົດກຳນົດຂອງດາລາສາດ"
+
+#: u_hints.rsadescription
+msgid "A description for this step"
+msgstr "ຄຳອະທິບາຍສຳລັບຂັ້ນຕອນນີ້"
+
+#: u_hints.rsafterlearnin
+#, object-pascal-format
+msgid "After learning is completed you can use this cursor to better adjust to the linear part of the curve.%sThe fit must be particularly good near the horizontal blue line position."
+msgstr "ຫຼັງຈາກການຮຽນຮູ້ສຳເລັດ, ທ່ານສາມາດໃຊ້ເຄີເຊີນີ້ເພື່ອປັບໃຫ້ເຂົ້າກັບສ່ວນທີ່ເປັນເສັ້ນຊື່ຂອງເສັ້ນໂຄ້ງໄດ້ດີຂຶ້ນ.%sການປັບໃຫ້ພໍດີຕ້ອງດີເປັນພິເສດໃກ້ກັບຕຳແໜ່ງເສັ້ນສີຟ້າແນວນອນ."
+
+#: u_hints.rsatemporarydi
+msgid "A temporary directory for work files. Be sure it contain only ASCII character and no space"
+msgstr "ໄດເຣັກທໍຣີຊົ່ວຄາວສຳລັບໄຟລ໌ວຽກ. ໃຫ້ແນ່ໃຈວ່າມັນມີແຕ່ຕົວອັກສອນ ASCII ແລະ ບໍ່ມີຍະຫວ່າງ"
+
+#: u_hints.rsautofocusatt
+msgid "Autofocus at the start of this step"
+msgstr "ໂຟກັສອັດຕະໂນມັດໃນຕອນເລີ່ມຕົ້ນຂອງຂັ້ນຕອນນີ້"
+
+#: u_hints.rsautofocusifhfd
+msgid "Autofocus if the HFD % change is greater than the configured value"
+msgstr "ໂຟກັສອັດຕະໂນມັດຫາກການປ່ຽນແປງຂອງ HFD % ຫຼາຍກວ່າຄ່າທີ່ຕັ້ງໄວ້"
+
+#: u_hints.rsautofocusift
+msgid "Autofocus if the temperature change is greater than the configured value"
+msgstr "ໂຟກັສອັດຕະໂນມັດຫາກອຸນຫະພູມປ່ຽນແປງຫຼາຍກວ່າຄ່າທີ່ຕັ້ງໄວ້"
+
+#: u_hints.rsautoguiderst
+msgid "Autoguider status"
+msgstr "ສະຖານະໂຕນຳດາວອັດຕະໂນມັດ"
+
+#: u_hints.rsbesuretopaus
+msgid "Be sure to pause guiding when using a OAG. You can continue guiding when using a separate guide scope."
+msgstr "ໃຫ້ແນ່ໃຈວ່າໄດ້ຢຸດການນຳດາວຊົ່ວຄາວເມື່ອໃຊ້ OAG. ທ່ານສາມາດສືບຕໍ່ນຳດາວໄດ້ເມື່ອໃຊ້ກ້ອງນຳດາວແຍກຕ່າງຫາກ."
+
+#: u_hints.rsbewarethisma
+msgid "Beware this may result in the selection of a wrong star if the mount guiding is not ideal"
+msgstr "ລະວັງ, ອັນນີ້ອາດຈະສົ່ງຜົນໃຫ້ມີການເລືອກດາວທີ່ຜິດພາດຫາກການນຳດາວຂອງຖານຕັ້ງກ້ອງບໍ່ດີພໍ"
+
+#: u_hints.rscamerabinnin
+msgid "Camera binning"
+msgstr "ການຈັດກຸ່ມພິກເຊລກ້ອງ"
+
+#: u_hints.rscameragain
+msgid "Camera gain"
+msgstr "ເກນກ້ອງ"
+
+#: u_hints.rscameraiso
+msgid "Camera ISO"
+msgstr "ISO ກ້ອງ"
+
+#: u_hints.rscameraoffset
+msgid "Camera offset"
+msgstr "ອັອຟເຊັດກ້ອງ"
+
+#: u_hints.rscamerapositi
+msgid "Camera position angle"
+msgstr "ມຸມຕຳແໜ່ງກ້ອງ"
+
+#: u_hints.rsclearthesequ
+msgid "Clear the sequence completion status"
+msgstr "ລຶບສະຖານະການສຳເລັດລຳດັບ"
+
+#: u_hints.rsclickandmove
+msgid "Click and move to adjust the histogram truncation"
+msgstr "ກົດ ແລະ ເລື່ອນເພື່ອປັບການຕັດຮິສໂຕແກຣມ"
+
+#: u_hints.rsclicktosetva
+msgid "Click to set value for all the targets"
+msgstr "ກົດເພື່ອຕັ້ງຄ່າສຳລັບເປົ້າໝາຍທັງໝົດ"
+
+#: u_hints.rsclicktosortb
+#, object-pascal-format
+msgid "Click to sort by %s"
+msgstr "ກົດເພື່ອຮຽງລຳດັບຕາມ %s"
+
+#: u_hints.rsconnectallde
+msgid "Connect all devices"
+msgstr "ເຊື່ອມຕໍ່ອຸປະກອນທັງໝົດ"
+
+#: u_hints.rscontrolhowco
+msgid "Control how complete target are managed when the whole list is repeated"
+msgstr "ຄວບຄຸມວິທີການຈັດການເປົ້າໝາຍທີ່ສົມບູນເມື່ອລາຍການທັງໝົດຖືກເຮັດຊ້ຳ"
+
+#: u_hints.rscopythecurre
+#, object-pascal-format
+msgid "Copy the current profile to a new one.%sThis also copy every program preference to the new profile."
+msgstr "ຄັດລອກໂປຣໄຟລ໌ປັດຈຸບັນໄປຍັງໂປຣໄຟລ໌ໃໝ່.%sການກະທຳນີ້ຍັງຄັດລອກການຕັ້ງຄ່າໂປຣແກຣມທັງໝົດໄປຍັງໂປຣໄຟລ໌ໃໝ່."
+
+#: u_hints.rscreateanewem
+#, object-pascal-format
+msgid "Create a new empty profile.%sWarning this also clear every program preference for this new profile.%sUse the Copy button if you want to configure a different equipment but keep the program options."
+msgstr "ສ້າງໂປຣໄຟລ໌ໃໝ່ວ່າງເປົ່າ.%sຄຳເຕືອນ: ການກະທຳນີ້ຈະລຶບການຕັ້ງຄ່າໂປຣແກຣມທັງໝົດສຳລັບໂປຣໄຟລ໌ໃໝ່ນີ້.%sໃຊ້ປຸ່ມຄັດລອກຖ້າທ່ານຕ້ອງການຕັ້ງຄ່າອຸປະກອນທີ່ຕ່າງກັນ ແຕ່ຍັງຄົງຮັກສາຕົວເລືອກໂປຣແກຣມໄວ້."
+
+#: u_hints.rscreateanewse
+msgid "Create a new sequence"
+msgstr "ສ້າງລຳດັບໃໝ່"
+
+#: u_hints.rscurrentteles
+msgid "Current telescope Right Ascension"
+msgstr "ມຸມຂວາຂຶ້ນປັດຈຸບັນຂອງກ້ອງສ່ອງ"
+
+#: u_hints.rscurrentteles2
+msgid "Current telescope Declination"
+msgstr "ມຸມເໜີຍປັດຈຸບັນຂອງກ້ອງສ່ອງ"
+
+#: u_hints.rscurrentteles3
+msgid "Current telescope side of pier"
+msgstr "ດ້ານຂ້າງເສົາຂອງກ້ອງສ່ອງປັດຈຸບັນ"
+
+#: u_hints.rsdeletethesel
+msgid "Delete the selected row from the list."
+msgstr "ລຶບແຖວທີ່ເລືອກອອກຈາກລາຍການ."
+
+#: u_hints.rsdeletethispr
+msgid "Delete this profile and associated program preference."
+msgstr "ລຶບໂປຣໄຟລ໌ນີ້ ແລະ ການຕັ້ງຄ່າໂປຣແກຣມທີ່ກ່ຽວຂ້ອງ."
+
+#: u_hints.rsdetachthegra
+msgid "Detach the graph"
+msgstr "ແຍກກຣາຟອອກ"
+
+#: u_hints.rsditheraftert
+msgid "Dither on the specified frame interval"
+msgstr "ດິເທີຕາມຊ່ວງເວລາຂອງເຟຣມທີ່ລະບຸ"
+
+#: u_hints.rsdonotsetthis
+msgid "Do not set this option if you don't know exactly what you do and without careful testing"
+msgstr "ຢ່າຕັ້ງຄ່າຕົວເລືອກນີ້ຫາກທ່ານບໍ່ຮູ້ແນ່ນອນວ່າທ່ານກຳລັງເຮັດຫຍັງ ແລະ ໂດຍບໍ່ມີການທົດສອບຢ່າງລະມັດລະວັງ"
+
+#: u_hints.rsdontwaitfort
+msgid "Process the other targets in the list instead of waiting for the start condition(s) to be met. To be used with option \"Repeat the whole list\""
+msgstr "ປະມວນຜົນເປົ້າໝາຍອື່ນໆໃນລາຍການແທນທີ່ຈະລໍຖ້າໃຫ້ເງື່ອນໄຂເລີ່ມຕົ້ນຄົບຖ້ວນ. ເພື່ອໃຊ້ກັບຕົວເລືອກ \"ເຮັດຊ້ຳລາຍການທັງໝົດ\""
+
+#: u_hints.rsdragdroptoch
+msgid "Drag&drop to change order"
+msgstr "ລາກ ແລະ ວາງ ເພື່ອປ່ຽນລຳດັບ"
+
+#: u_hints.rseditthecurre
+msgid "Edit the current sequence"
+msgstr "ແກ້ໄຂລຳດັບປັດຈຸບັນ"
+
+#: u_hints.rsflatprocessi
+msgid "Flat processing also require a Dark"
+msgstr "ການປະມວນຜົນເຟຣມແຟລດຍັງຕ້ອງການເຟຣມດາກ"
+
+#: u_hints.rsgammaoftheim
+msgid "Gamma of the image display"
+msgstr "ແກມມາຂອງການສະແດງຜົນຮູບ"
+
+#: u_hints.rsglobalalpaca
+msgid "Global ALPACA server parameters"
+msgstr "ພາຣາມິເຕີເຊີບເວີ ALPACA ທົ່ວໄປ"
+
+#: u_hints.rsglobalindise
+msgid "Global INDI server parameters"
+msgstr "ພາຣາມິເຕີເຊີບເວີ INDI ທົ່ວໄປ"
+
+#: u_hints.rsguidinghisto
+#, object-pascal-format
+msgid "Guiding history in arcsecond %s - blue: RA error %s - red: Dec error %s - yellow: Star mass"
+msgstr "ປະຫວັດການນຳດາວເປັນອາກວິນາທີ %s - ສີຟ້າ: ຄວາມຜິດພາດ RA %s - ສີແດງ: ຄວາມຜິດພາດ Dec %s - ສີເຫຼືອງ: ມວນສານດາວ"
+
+#: u_hints.rshistogramful
+msgid "Histogram full range or clipped to available data"
+msgstr "ຮິສໂຕແກຣມເຕັມຊ່ວງ ຫຼື ຕັດໃຫ້ພໍດີກັບຂໍ້ມູນທີ່ມີຢູ່"
+
+#: u_hints.rshistogramoft
+msgid "Histogram of the current image"
+msgstr "ຮິສໂຕແກຣມຂອງຮູບປັດຈຸບັນ"
+
+#: u_hints.rshistoryofthe
+msgid "History of the last FWHM and Intensity measurement"
+msgstr "ປະຫວັດການວັດແທກ FWHM ແລະ ຄວາມເຂັ້ມຄັ້ງລ່າສຸດ"
+
+#: u_hints.rsifcheckednoc
+msgid "If checked no confirmation dialog will be presented and failed operation will abort the current step."
+msgstr "ຖ້າຕິກ, ຈະບໍ່ມີກ່ອງໂຕ້ຕອບຢືນຢັນສະແດງຂຶ້ນ ແລະ ການດຳເນີນການທີ່ລົ້ມເຫຼວຈະຍົກເລີກຂັ້ນຕອນປັດຈຸບັນ."
+
+#: u_hints.rsifnotchecked
+msgid "If not checked the program will never change the gain/offset value set in the driver setup"
+msgstr "ຖ້າບໍ່ໄດ້ຕິກ, ໂປຣແກຣມຈະບໍ່ປ່ຽນຄ່າເກນ/ອັອຟເຊັດທີ່ຕັ້ງໄວ້ໃນການຕັ້ງຄ່າໄດຣເວີ"
+
+#: u_hints.rsiftheimageis
+msgid "If the image is now focused, click this button to get the current focuser position"
+msgstr "ຖ້າຮູບພາບຖືກໂຟກັສແລ້ວ, ກົດປຸ່ມນີ້ເພື່ອເອົາຕຳແໜ່ງໂຟກັສປັດຈຸບັນ"
+
+#: u_hints.rsincrementste
+msgid "Increment step for the inward or outward movement"
+msgstr "ຂັ້ນຕອນການເພີ່ມສຳລັບການເຄື່ອນທີ່ເຂົ້າ ຫຼື ອອກ"
+
+#: u_hints.rsinfinitenumb
+msgid "Infinite number of repetition"
+msgstr "ຈຳນວນການເຮັດຊ້ຳບໍ່ຈຳກັດ"
+
+#: u_hints.rsinvertimaged
+msgid "Invert image display"
+msgstr "ປີ້ນການສະແດງຜົນຮູບ"
+
+#: u_hints.rskeepthegraph
+msgid "Keep the graph visible after autofocus is completed"
+msgstr "ຮັກສາກຣາຟໃຫ້ເຫັນໄດ້ຫຼັງຈາກໂຟກັສອັດຕະໂນມັດສຳເລັດ"
+
+#: u_hints.rsletblankford
+msgid "Let blank for default system search path"
+msgstr "ປະວ່າງໄວ້ສຳລັບເສັ້ນທາງຄົ້ນຫາເລີ່ມຕົ້ນຂອງລະບົບ"
+
+#: u_hints.rslistofprofil
+msgid "List of profile for every different equipment configuration"
+msgstr "ລາຍຊື່ໂປຣໄຟລ໌ສຳລັບທຸກການຕັ້ງຄ່າອຸປະກອນທີ່ແຕກຕ່າງກັນ"
+
+#: u_hints.rsloadasequenc
+msgid "Load a sequence file"
+msgstr "ໂຫຼດໄຟລ໌ລຳດັບ"
+
+#: u_hints.rslooppreviewe
+msgid "Loop preview exposures"
+msgstr "ເປີດໜ້າກ້ອງເບິ່ງກ່ອນແບບຕໍ່ເນື່ອງ"
+
+#: u_hints.rsmaketesttode
+#, object-pascal-format
+msgid "Make test to determine the most performant option depending on your computer.%s(Network is mandatory if the camera is connected to a remote Indi server)"
+msgstr "ທົດສອບເພື່ອຊອກຫາຕົວເລືອກທີ່ມີປະສິດທິພາບສູງສຸດຂຶ້ນຢູ່ກັບຄອມພິວເຕີຂອງທ່ານ.%s(ເຄືອຂ່າຍແມ່ນຈຳເປັນຖ້າກ້ອງເຊື່ອມຕໍ່ກັບເຊີບເວີ Indi ທີ່ຢູ່ຫ່າງໄກ)"
+
+#: u_hints.rsmovefocuseri
+msgid "Move focuser inward"
+msgstr "ຍ້າຍໂຟກັສເຂົ້າ"
+
+#: u_hints.rsmovefocusero
+msgid "Move focuser outward"
+msgstr "ຍ້າຍໂຟກັສອອກ"
+
+#: u_hints.rspausethesequ
+msgid "Pause the sequence after the current exposure is complete"
+msgstr "ຢຸດລຳດັບຊົ່ວຄາວຫຼັງຈາກການເປີດໜ້າກ້ອງປັດຈຸບັນສຳເລັດ"
+
+#: u_hints.rspixelbinning
+msgid "Pixel binning"
+msgstr "ການຈັດກຸ່ມພິກເຊລ"
+
+#: u_hints.rsplanetariums2
+msgid "Planetarium status"
+msgstr "ສະຖານະໂຄງການຈຳລອງດາວ"
+
+#: u_hints.rspredefinedhi
+msgid "Predefined histogram truncation"
+msgstr "ການຕັດຮິສໂຕແກຣມທີ່ກຳນົດໄວ້ລ່ວງໜ້າ"
+
+#: u_hints.rspriortoslewi
+#, object-pascal-format
+msgid "Prior to slewing retrieve actual comet or asteroid coordinates from planetarium program.%sPlanetarium program should be connected and following system time.%sTarget name should be searchable within the planetarium."
+msgstr "ກ່ອນທີ່ຈະຫັນກ້ອງ, ໃຫ້ດຶງເອົາຈຸດປະສານຂອງດາວຫາງ ຫຼື ດາວເຄາະນ້ອຍຕົວຈິງຈາກໂຄງການຈຳລອງດາວ.%sໂຄງການຈຳລອງດາວຄວນເຊື່ອມຕໍ່ ແລະ ຕິດຕາມເວລາຂອງລະບົບ.%sຊື່ເປົ້າໝາຍຄວນຈະສາມາດຄົ້ນຫາໄດ້ພາຍໃນໂຄງການຈຳລອງດາວ."
+
+#: u_hints.rsredoautofocu
+msgid "Redo autofocus after a number of frames"
+msgstr "ໂຟກັສອັດຕະໂນມັດຄືນໃໝ່ຫຼັງຈາກຈຳນວນເຟຣມທີ່ກຳນົດ"
+
+#: u_hints.rsrepeatthepla
+#, object-pascal-format
+msgid "Repeat the plan for this object.%sSet to zero to not process this target."
+msgstr "ເຮັດຊ້ຳແຜນການສຳລັບວັດຖຸນີ້.%sຕັ້ງເປັນສູນເພື່ອບໍ່ປະມວນຜົນເປົ້າໝາຍນີ້."
+
+#: u_hints.rsrepeatthewho2
+msgid "Repeat the whole list a number of time."
+msgstr "ເຮັດຊ້ຳລາຍການທັງໝົດຕາມຈຳນວນຄັ້ງທີ່ກຳນົດ."
+
+#: u_hints.rssaveindividu
+msgid "Save individual images before stacking"
+msgstr "ບັນທຶກຮູບແຕ່ລະຮູບກ່ອນການຊ້ອນກັນ"
+
+#: u_hints.rssavethelista
+msgid "Save the list and close this window."
+msgstr "ບັນທຶກລາຍການ ແລະ ປິດໜ້າຕ່າງນີ້."
+
+#: u_hints.rssavethelistw
+msgid "Save the list with a new name and close this window."
+msgstr "ບັນທຶກລາຍການດ້ວຍຊື່ໃໝ່ ແລະ ປິດໜ້າຕ່າງນີ້."
+
+#: u_hints.rsselecttheinf
+msgid "Select the information used to make the image file name"
+msgstr "ເລືອກຂໍ້ມູນທີ່ໃຊ້ເພື່ອສ້າງຊື່ໄຟລ໌ຮູບພາບ"
+
+#: u_hints.rsselecttheinf2
+msgid "Select the information used to make the image directory name"
+msgstr "ເລືອກຂໍ້ມູນທີ່ໃຊ້ເພື່ອສ້າງຊື່ໄດເຣັກທໍຣີຮູບພາບ"
+
+#: u_hints.rssetabsolutef
+msgid "Set absolute focuser position"
+msgstr "ຕັ້ງຄ່າຕຳແໜ່ງໂຟກັສແບບສຳບູນ"
+
+#: u_hints.rssetheretheac
+msgid "Set here the action to take after the sequence is terminated"
+msgstr "ຕັ້ງຄ່າການກະທຳທີ່ຈະເຮັດຫຼັງຈາກລຳດັບສິ້ນສຸດລົງທີ່ນີ້"
+
+#: u_hints.rssetthehfd
+msgid "Set the HFD % change threshold in the Preferences. Measurements must also be enabled."
+msgstr "ຕັ້ງຄ່າເກນການປ່ຽນແປງຂອງ HFD % ໃນການຕັ້ງຄ່າ. ການວັດແທກຕ້ອງຖືກເປີດໃຊ້ງານດ້ວຍ."
+
+#: u_hints.rssetthestartt
+msgid "Set the start time at astronomical dusk, recomputed for the date you run the sequence."
+msgstr "ຕັ້ງເວລາເລີ່ມຕົ້ນໃນຊ່ວງຄ່ຳທາງດາລາສາດ, ຄິດໄລ່ໃໝ່ສຳລັບວັນທີທີ່ທ່ານດຳເນີນການລຳດັບ."
+
+#: u_hints.rssetthestopti
+msgid "Set the stop time at astronomical dawn, recomputed for the date you run the sequence."
+msgstr "ຕັ້ງເວລາຢຸດໃນຊ່ວງເຊົ້າທາງດາລາສາດ, ຄິດໄລ່ໃໝ່ສຳລັບວັນທີທີ່ທ່ານດຳເນີນການລຳດັບ."
+
+#: u_hints.rssetthetemper
+msgid "Set the temperature threshold in the Preferences"
+msgstr "ຕັ້ງຄ່າເກນອຸນຫະພູມໃນການຕັ້ງຄ່າ"
+
+#: u_hints.rsshowbullseye
+msgid "Show crosshairs"
+msgstr "ສະແດງເສັ້ນກາກະບາດ"
+
+#: u_hints.rsshowcompleti
+msgid "Show completion status"
+msgstr "ສະແດງສະຖານະການສຳເລັດ"
+
+#: u_hints.rsshowguidings
+msgid "Show guiding statistics"
+msgstr "ສະແດງສະຖິຕິການນຳດາວ"
+
+#: u_hints.rsshowhighligh
+msgid "Show highlight and shadow clipping"
+msgstr "ສະແດງສ່ວນທີ່ສະຫວ່າງເກີນ ແລະ ມືດເກີນ"
+
+#: u_hints.rsshowlastcapt
+msgid "Show captured image"
+msgstr "ສະແດງຮູບທີ່ຖ່າຍໄດ້"
+
+#: u_hints.rsskipthistarg
+msgid "Skip this target if there is not enough time to do all the steps before the end time"
+msgstr "ຂ້າມເປົ້າໝາຍນີ້ຫາກມີເວລາບໍ່ພຽງພໍທີ່ຈະເຮັດທຸກຂັ້ນຕອນກ່ອນເວລາສິ້ນສຸດ"
+
+#: u_hints.rsstacktheprev
+#, object-pascal-format
+msgid "Stack the preview frames to a single image.%sA new stack is started when you start a loop or if you uncheck this button."
+msgstr "ຊ້ອນເຟຣມຕົວຢ່າງເປັນຮູບດຽວ.%sການຊ້ອນໃໝ່ຈະເລີ່ມຂຶ້ນເມື່ອທ່ານເລີ່ມການເບິ່ງຕໍ່ເນື່ອງ ຫຼື ເມື່ອທ່ານຕິກເອົາປຸ່ມນີ້ອອກ."
+
+#: u_hints.rsstartaprevie
+msgid "Start a preview loop when waiting for the delay to expire."
+msgstr "ເລີ່ມການເບິ່ງຕົວຢ່າງຕໍ່ເນື່ອງໃນຂະນະທີ່ລໍຖ້າການໜ່ວງເວລາໝົດ."
+
+#: u_hints.rsstartimagelo
+msgid "Start image loop centered on selected star"
+msgstr "ເລີ່ມການຖ່າຍພາບຕໍ່ເນື່ອງໂດຍມີຈຸດສູນກາງຢູ່ດາວທີ່ເລືອກ"
+
+#: u_hints.rsstartoneprev
+msgid "Start one preview exposure"
+msgstr "ເລີ່ມເປີດໜ້າກ້ອງເບິ່ງກ່ອນໜຶ່ງຄັ້ງ"
+
+#: u_hints.rsstarttheauto
+msgid "Start the auto-focus procedure"
+msgstr "ເລີ່ມຂັ້ນຕອນການໂຟກັສອັດຕະໂນມັດ"
+
+#: u_hints.rsstartthecapt
+msgid "Start the capture sequence"
+msgstr "ເລີ່ມລຳດັບການຖ່າຍພາບ"
+
+#: u_hints.rsstartthesequ
+msgid "Start the sequence execution"
+msgstr "ເລີ່ມການປະຕິບັດລຳດັບ"
+
+#: u_hints.rsstartthevcur
+msgid "Start the Vcurve learning process"
+msgstr "ເລີ່ມຂະບວນການຮຽນຮູ້ເສັ້ນໂຄ້ງ V"
+
+#: u_hints.rsstarttimecap
+msgid "Start time capturing (MC=Meridian crossing)"
+msgstr "ເວລາເລີ່ມການຖ່າຍພາບ (MC=ການຂ້າມຜ່ານເສັ້ນເມຣິດຽນ)"
+
+#: u_hints.rsstartx
+msgid "Start X"
+msgstr "ເລີ່ມ X"
+
+#: u_hints.rsstarty
+msgid "Start Y"
+msgstr "ເລີ່ມ Y"
+
+#: u_hints.rsstayatthetar
+#, object-pascal-format
+msgid "Stay at the target position for autofocus.%sA medium bright star should be visible.%sElse slew to a bright database star."
+msgstr "ຄົງຢູ່ທີ່ຕຳແໜ່ງເປົ້າໝາຍເພື່ອໂຟກັສອັດຕະໂນມັດ.%sຄວນຈະເຫັນດາວທີ່ສະຫວ່າງປານກາງ.%sຖ້າບໍ່ດັ່ງນັ້ນ, ໃຫ້ຫັນໄປຫາດາວທີ່ສະຫວ່າງໃນຖານຂໍ້ມູນ."
+
+#: u_hints.rsstepplanfor
+#, object-pascal-format
+msgid "Step plan for capturing the images.%sThe step plan details are specified in the list below"
+msgstr "ແຜນຂັ້ນຕອນສຳລັບການຖ່າຍພາບ.%sລາຍລະອຽດແຜນຂັ້ນຕອນແມ່ນລະບຸໄວ້ໃນລາຍການດ້ານລຸ່ມ"
+
+#: u_hints.rsstopatthisti
+msgid "Stop at this time even if the processing is not finished."
+msgstr "ຢຸດໃນເວລານີ້ເຖິງແມ່ນວ່າການປະມວນຜົນຍັງບໍ່ສຳເລັດ."
+
+#: u_hints.rsstoptheseque
+msgid "Stop the sequence execution"
+msgstr "ຢຸດການປະຕິບັດລຳດັບ"
+
+#: u_hints.rsstoptimecapt
+msgid "Stop time capturing (MC=Meridian crossing)"
+msgstr "ເວລາຢຸດການຖ່າຍພາບ (MC=ການຂ້າມຜ່ານເສັ້ນເມຣິດຽນ)"
+
+#: u_hints.rstargetpositi
+msgid "Target position (J2000)"
+msgstr "ຕຳແໜ່ງເປົ້າໝາຍ (J2000)"
+
+#: u_hints.rsthebasefolde
+msgid "The base folder where the images are recorded"
+msgstr "ໂຟລເດີພື້ນຖານທີ່ຮູບພາບຖືກບັນທຶກ"
+
+#: u_hints.rsthedirection
+#, object-pascal-format
+msgid "The direction the focuser will always finish to move.%sIf using auto-focus set the same move direction."
+msgstr "ທິດທາງທີ່ໂຟກັສຈະເຄື່ອນທີ່ສຳເລັດສະເໝີ.%sຖ້າໃຊ້ໂຟກັສອັດຕະໂນມັດ, ໃຫ້ຕັ້ງທິດທາງການເຄື່ອນທີ່ດຽວກັນ."
+
+#: u_hints.rstheelbrusima
+msgid "The Elbrus Images folder as set in the Elbrus parameters."
+msgstr "ໂຟລເດີຮູບພາບ Elbrus ຕາມທີ່ຕັ້ງຄ່າໄວ້ໃນພາຣາມິເຕີ Elbrus."
+
+#: u_hints.rsthefullwidth
+msgid "The Full Width at Half Maximum value in pixels / arc seconds"
+msgstr "ຄ່າຄວາມກວ້າງເຕັມທີ່ເຄິ່ງໜຶ່ງຂອງຄ່າສູງສຸດ ເປັນພິກເຊລ / ອາກວິນາທີ"
+
+#: u_hints.rsthehalffluxd
+msgid "The Half Flux Diameter value in pixels"
+msgstr "ຄ່າເສັ້ນຜ່າສູນກາງຮາຟຟລັກຊ໌ ເປັນພິກເຊລ"
+
+#: u_hints.rsthehorizonpr
+msgid "The horizon profile used to compute object visibility. This file is the same as used in Cartes du Ciel"
+msgstr "ໂປຣໄຟລ໌ຂອບຟ້າທີ່ໃຊ້ເພື່ອຄຳນວນການເບິ່ງເຫັນວັດຖຸ. ໄຟລ໌ນີ້ແມ່ນອັນດຽວກັນກັບທີ່ໃຊ້ໃນ Cartes du Ciel"
+
+#: u_hints.rsthelistoftar
+msgid "The list of target to process in sequence."
+msgstr "ລາຍການເປົ້າໝາຍທີ່ຈະປະມວນຜົນຕາມລຳດັບ."
+
+#: u_hints.rsthelowerlimi
+msgid "The lower limit of histogram truncation"
+msgstr "ຂີດຈຳກັດລຸ່ມຂອງການຕັດຮິສໂຕແກຣມ"
+
+#: u_hints.rsthemagnitude
+#, object-pascal-format
+msgid "The magnitude of the star used to run the autofocus.%sUsing a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars."
+msgstr "ຄວາມສະຫວ່າງຂອງດາວທີ່ໃຊ້ໃນການໂຟກັສອັດຕະໂນມັດ.%sການໃຊ້ດາວທີ່ມືດສາມາດຫຼຸດຜ່ອນການເຄື່ອນທີ່ຂອງກ້ອງສ່ອງໄດ້ ແຕ່ຄວນເລືອກດາວທີ່ສະຫວ່າງທີ່ສຸດເພື່ອຫຼີກລ້ຽງບັນຫາກັບດາວທີ່ຢູ່ໃກ້ຄຽງ."
+
+#: u_hints.rsthemaximumin
+msgid "The maximum intensity value"
+msgstr "ຄ່າຄວາມເຂັ້ມສູງສຸດ"
+
+#: u_hints.rstheminimalob
+msgid "The minimal object elevation to start or end observing"
+msgstr "ລະດັບຄວາມສູງຂັ້ນຕ່ຳຂອງວັດຖຸເພື່ອເລີ່ມ ຫຼື ສິ້ນສຸດການສັງເກດການ"
+
+#: u_hints.rsthenumberofi
+msgid "The number of images to take"
+msgstr "ຈຳນວນຮູບທີ່ຈະຖ່າຍ"
+
+#: u_hints.rsthenumberofi2
+msgid "The number of image to take before dither"
+msgstr "ຈຳນວນຮູບທີ່ຈະຖ່າຍກ່ອນການດິເທີ"
+
+#: u_hints.rsthenumberofi3
+msgid "The number of image to take before autofocus"
+msgstr "ຈຳນວນຮູບທີ່ຈະຖ່າຍກ່ອນການໂຟກັສອັດຕະໂນມັດ"
+
+#: u_hints.rsthenumberofi4
+msgid "The number of image for this step"
+msgstr "ຈຳນວນຮູບສຳລັບຂັ້ນຕອນນີ້"
+
+#: u_hints.rstheobjectmag
+msgid "The object magnitude"
+msgstr "ຄວາມສະຫວ່າງຂອງວັດຖຸ"
+
+#: u_hints.rstheobjectnam
+msgid "The object name for use in FITS header and file name"
+msgstr "ຊື່ວັດຖຸເພື່ອໃຊ້ໃນຫົວຂໍ້ FITS ແລະ ຊື່ໄຟລ໌"
+
+#: u_hints.rstheobservato
+msgid "The observatory name for inclusion in the FITS header"
+msgstr "ຊື່ຫໍສັງເກດການດາວເພື່ອລວມເຂົ້າໃນຫົວຂໍ້ FITS"
+
+#: u_hints.rstheobservern
+msgid "The observer name for inclusion in the FITS header"
+msgstr "ຊື່ຜູ້ສັງເກດການເພື່ອລວມເຂົ້າໃນຫົວຂໍ້ FITS"
+
+#: u_hints.rsthepreferedf
+msgid "The preferred focuser direction for autofocus."
+msgstr "ທິດທາງໂຟກັສທີ່ແນະນຳສຳລັບການໂຟກັສອັດຕະໂນມັດ."
+
+#: u_hints.rstheselecteds
+msgid "The selected star luminosity profile"
+msgstr "ໂປຣໄຟລ໌ຄວາມສະຫວ່າງຂອງດາວທີ່ເລືອກ"
+
+#: u_hints.rsthesignalnoi
+msgid "The Signal/Noise ratio"
+msgstr "ອັດຕາສ່ວນ ສັນຍານ/ສິ່ງລົບກວນ"
+
+#: u_hints.rsthetargetnam
+msgid "The target name to be used for capturing the images"
+msgstr "ຊື່ເປົ້າໝາຍທີ່ຈະໃຊ້ສຳລັບການຖ່າຍພາບ"
+
+#: u_hints.rsthetelescopenamefori
+msgid "The telescope name for inclusion in the FITS header"
+msgstr "ຊື່ກ້ອງສ່ອງເພື່ອລວມເຂົ້າໃນຫົວຂໍ້ FITS"
+
+#: u_hints.rsthetemporary
+msgid "The temporary RAM disk used to transfer the images from the Indi server"
+msgstr "ດິສກ໌ RAM ຊົ່ວຄາວທີ່ໃຊ້ເພື່ອໂອນຮູບຈາກເຊີບເວີ Indi"
+
+#: u_hints.rsthetypeoffra
+msgid "The type of frame"
+msgstr "ປະເພດຂອງເຟຣມ"
+
+#: u_hints.rstheunixpathe
+msgid "The Unix path equivalent to the Elbrus Images folder."
+msgstr "ເສັ້ນທາງ Unix ທີ່ທຽບເທົ່າກັບໂຟລເດີຮູບພາບ Elbrus."
+
+#: u_hints.rstheupperlimi
+msgid "The upper limit of histogram truncation"
+msgstr "ຂີດຈຳກັດເທິງຂອງການຕັດຮິສໂຕແກຣມ"
+
+#: u_hints.rsthisallowtor
+msgid "This allow to restart an interrupted sequence at the point it was stopped"
+msgstr "ອັນນີ້ອະນຸຍາດໃຫ້ເລີ່ມລຳດັບທີ່ຖືກຂັດຈັງຫວະຄືນໃໝ່ຈາກຈຸດທີ່ມັນຢຸດ"
+
+#: u_hints.rsthisoptionis
+msgid "This option is normally unchecked, use it only if you manage the pointing and autoguiding by script."
+msgstr "ໂດຍປົກກະຕິຕົວເລືອກນີ້ຈະບໍ່ຖືກຕິກ, ໃຫ້ໃຊ້ມັນສະເພາະຫາກທ່ານຈັດການການຊີ້ ແລະ ການນຳດາວອັດຕະໂນມັດດ້ວຍສະຄຣິບ."
+
+#: u_hints.rstimefrommeri
+msgid "Time from meridian transit (hour angle)"
+msgstr "ເວລານັບຈາກເສັ້ນເມຣິດຽນຜ່ານ (ມຸມຊົ່ວໂມງ)"
+
+#: u_hints.rstrytocorrect
+#, object-pascal-format
+msgid "Try to correct for focuser slippage since the last Vcurve learning.%sBeware you must set the focuser temperature correction and the filters offset before to use this option."
+msgstr "ພະຍາຍາມແກ້ໄຂການເລື່ອນຂອງໂຟກັສນັບຕັ້ງແຕ່ການຮຽນຮູ້ເສັ້ນໂຄ້ງ V ຄັ້ງລ່າສຸດ.%sລະວັງ, ທ່ານຕ້ອງຕັ້ງຄ່າການແກ້ໄຂອຸນຫະພູມຂອງໂຟກັສ ແລະ ໄລຍະຫ່າງຟິລເຕີກ່ອນທີ່ຈະໃຊ້ຕົວເລືອກນີ້."
+
+#: u_hints.rsusedynamic2
+#, object-pascal-format
+msgid "Dynamic can be use with an absolute or relative position focuser,%s this method require the starting position is near the focus position.%s This is the preferred method."
+msgstr "ແບບເຄື່ອນໄຫວສາມາດໃຊ້ກັບໂຟກັສແບບຕຳແໜ່ງສຳບູນ ຫຼື ສຳພັດໄດ້,%s ວິທີນີ້ຮຽກຮ້ອງໃຫ້ຕຳແໜ່ງເລີ່ມຕົ້ນຢູ່ໃກ້ກັບຕຳແໜ່ງໂຟກັສ.%s ນີ້ແມ່ນວິທີທີ່ແນະນຳ."
+
+#: u_hints.rsuseiterati2
+#, object-pascal-format
+msgid "Use Iterative if the first two options do not work for you or if you start with really bad focus.%s This is the slowest and less precise method."
+msgstr "ໃຊ້ແບບເຮັດຊ້ຳ ຫາກສອງຕົວເລືອກທຳອິດບໍ່ໄດ້ຜົນສຳລັບທ່ານ ຫຼື ຫາກທ່ານເລີ່ມຕົ້ນດ້ວຍໂຟກັສທີ່ບໍ່ດີແທ້ໆ.%s ນີ້ແມ່ນວິທີທີ່ຊ້າທີ່ສຸດ ແລະ ມີຄວາມແມ່ນຍຳໜ້ອຍທີ່ສຸດ."
+
+#: u_hints.rsuseplatesolv
+msgid "Use astrometric (plate) solving to improve telescope pointing accuracy"
+msgstr "ໃຊ້ການແກ້ໄຂພາບດາວ (astrometric solving) ເພື່ອປັບປຸງຄວາມແມ່ນຍຳໃນການຊີ້ຂອງກ້ອງສ່ອງ"
+
+#: u_hints.rsusevcurvewi2
+msgid "Vcurve can only work with an absolute position focuser, it require to learn the curve."
+msgstr "ເສັ້ນໂຄ້ງ V ສາມາດເຮັດວຽກໄດ້ກັບໂຟກັສແບບຕຳແໜ່ງສຳບູນເທົ່ານັ້ນ, ມັນຮຽກຮ້ອງໃຫ້ມີການຮຽນຮູ້ເສັ້ນໂຄ້ງ."
+
+#: u_hints.rsvcurvelearni
+msgid "V curve learning"
+msgstr "ການຮຽນຮູ້ເສັ້ນໂຄ້ງ V"
+
+#: u_hints.rswaitforfulld
+msgid "Wait for a moonless night"
+msgstr "ລໍຖ້າຄືນທີ່ບໍ່ມີດວງເດືອນ"
+
+#: u_hints.rswaittothisti
+msgid "Wait to this time before to start to process the list."
+msgstr "ລໍຖ້າຈົນຮອດເວລານີ້ກ່ອນທີ່ຈະເລີ່ມປະມວນຜົນລາຍການ."
+
+#: u_hints.rszoomthehisto
+msgid "Zoom the histogram to the current selection"
+msgstr "ຊູມຮິສໂຕແກຣມໄປທີ່ສ່ວນທີ່ເລືອກປັດຈຸບັນ"
+
+#: u_hints.rszoomtoadjust
+msgid "Zoom to adjust in window"
+msgstr "ຊູມໃຫ້ພໍດີກັບໜ້າຕ່າງ"
+
+#: u_hints.rszoomtohalfsi
+msgid "Zoom to half size"
+msgstr "ຊູມເປັນເຄິ່ງຂະໜາດ"
+
+#: u_hints.rszoomtoorigin
+msgid "Zoom to original scale"
+msgstr "ຊູມກັບຂະໜາດເດີມ"
+
+#: u_hints.rszoomtwotime
+msgid "Zoom two time"
+msgstr "ຊູມສອງເທົ່າ"
+

@@ -5598,10 +5598,6 @@ msgstr ""
 msgid "Cannot interpret the text \"%s\" as RA DEC values"
 msgstr ""
 
-#: u_translation:rsimagecenter
-msgid "Image center"
-msgstr ""
-
 #: u_translation:rscalibrationm
 msgid "Calibration measurement"
 msgstr ""
@@ -6139,5 +6135,41 @@ msgstr ""
 
 #: u_translation:rsrefreshtheli
 msgid "Refresh the list"
+msgstr ""
+
+#: u_translation:rssynctherotat
+msgid "Sync the rotator"
+msgstr ""
+
+#: u_translation:rshighlightcol
+msgid "Highlight color"
+msgstr ""
+
+#: u_translation:rsdonotmodifyt
+msgid "Do not modify the INDI header"
+msgstr ""
+
+#: u_translation:rsusesoftwares
+msgid "Use software Sync with sky PA (for use with not compliant rotator)"
+msgstr ""
+
+#: u_translation:rslimitrotator
+msgid "Limit rotator angle to 0-180 degree range"
+msgstr ""
+
+#: u_translation:rssyncoffset
+msgid "Sync Offset"
+msgstr ""
+
+#: u_translation:rsmakesurethes
+msgid "Make sure the stars are not saturated."
+msgstr ""
+
+#: u_translation:rsrunscriptwhe
+msgid "Run script when the weather change"
+msgstr ""
+
+#: u_translation:rsduplicateact
+msgid "Duplicate action"
 msgstr ""
 

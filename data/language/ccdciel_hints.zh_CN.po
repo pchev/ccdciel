@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2025-08-21 16:57+0000\n"
-"PO-Revision-Date: 2025-01-22 14:44+0000\n"
+"POT-Creation-Date: 2025-12-16 16:33+0000\n"
+"PO-Revision-Date: 2025-10-30 04:32+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-08-21 17:04+0000\n"
-"X-Generator: Launchpad (build 919009172d854f2b8e4e8262db447f12f11d25eb)\n"
+"X-Launchpad-Export-Date: 2025-12-16 16:44+0000\n"
+"X-Generator: Launchpad (build 379e22b8475e3402088a4cdb4a6e7936a4d28414)\n"
 
 #: u_hints.rsactivateback
 #, object-pascal-format
@@ -69,7 +69,7 @@ msgstr "使用OAG时请务必暂停导星。使用单独的导星镜时，您可
 
 #: u_hints.rsbewarethisma
 msgid "Beware this may result in the selection of a wrong star if the mount guiding is not ideal"
-msgstr ""
+msgstr "请注意，如果导星镜安装不理想，这可能会导致选择错误的星"
 
 #: u_hints.rscamerabinnin
 msgid "Camera binning"
@@ -97,7 +97,7 @@ msgstr "清楚序列完成状态"
 
 #: u_hints.rsclickandmove
 msgid "Click and move to adjust the histogram truncation"
-msgstr ""
+msgstr "单击并移动以调整直方图截断"
 
 #: u_hints.rsclicktosetva
 msgid "Click to set value for all the targets"
@@ -152,7 +152,7 @@ msgstr "删除此配置文件和关联的程序首选项。"
 
 #: u_hints.rsdetachthegra
 msgid "Detach the graph"
-msgstr ""
+msgstr "分离图表"
 
 #: u_hints.rsditheraftert
 msgid "Dither on the specified frame interval"
@@ -201,7 +201,7 @@ msgstr "直方图全范围或裁剪到可用数据"
 
 #: u_hints.rshistogramoft
 msgid "Histogram of the current image"
-msgstr ""
+msgstr "当前图像的直方图"
 
 #: u_hints.rshistoryofthe
 msgid "History of the last FWHM and Intensity measurement"
@@ -278,7 +278,7 @@ msgstr "星图状态"
 
 #: u_hints.rspredefinedhi
 msgid "Predefined histogram truncation"
-msgstr ""
+msgstr "预定义的直方图截断"
 
 #: u_hints.rspriortoslewi
 #, object-pascal-format
@@ -468,7 +468,7 @@ msgstr "要按顺序处理的目标列表。"
 
 #: u_hints.rsthelowerlimi
 msgid "The lower limit of histogram truncation"
-msgstr ""
+msgstr "直方图截断的下限"
 
 #: u_hints.rsthemagnitude
 #, object-pascal-format
@@ -549,7 +549,7 @@ msgstr "等同于Elbrus图像目录的Unix路径。"
 
 #: u_hints.rstheupperlimi
 msgid "The upper limit of histogram truncation"
-msgstr ""
+msgstr "直方图截断的上限"
 
 #: u_hints.rsthisallowtor
 msgid "This allow to restart an interrupted sequence at the point it was stopped"
@@ -600,7 +600,7 @@ msgstr "等到这个时间再开始处理列表。"
 
 #: u_hints.rszoomthehisto
 msgid "Zoom the histogram to the current selection"
-msgstr ""
+msgstr "将直方图缩放到当前选框"
 
 #: u_hints.rszoomtoadjust
 msgid "Zoom to adjust in window"

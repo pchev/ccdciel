@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2025-08-21 16:57+0000\n"
-"PO-Revision-Date: 2025-07-30 13:48+0000\n"
+"POT-Creation-Date: 2025-12-16 16:33+0000\n"
+"PO-Revision-Date: 2025-10-30 04:28+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-08-21 17:04+0000\n"
-"X-Generator: Launchpad (build 919009172d854f2b8e4e8262db447f12f11d25eb)\n"
+"X-Launchpad-Export-Date: 2025-12-16 16:44+0000\n"
+"X-Generator: Launchpad (build 379e22b8475e3402088a4cdb4a6e7936a4d28414)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -980,11 +980,11 @@ msgstr "清除完成状态？"
 
 #: u_translation.rsclickatthegu
 msgid "Click at the guide star position"
-msgstr ""
+msgstr "单击导星位置"
 
 #: u_translation.rsclickattheta
 msgid "Click at the target object position"
-msgstr ""
+msgstr "单击目标天体位置"
 
 #: u_translation.rsclickcancelt
 msgid "Click Cancel to abort the sequence."
@@ -1012,7 +1012,7 @@ msgstr "点击图像进行设置"
 
 #: u_translation.rsclickontheim
 msgid "Click on the image to set the offset and guide"
-msgstr ""
+msgstr "单击图像以设置偏移量和导星"
 
 #: u_translation.rsclicktheobje
 msgid "Click the object in planetarium"
@@ -1591,6 +1591,10 @@ msgstr "拍摄中不显示图像"
 msgid "Do nothing"
 msgstr "无动作"
 
+#: u_translation.rsdonotmodifyt
+msgid "Do not modify the INDI header"
+msgstr ""
+
 #: u_translation.rsdonotrunasad
 #, object-pascal-format
 msgid "Do not run %s as %s!"
@@ -1654,6 +1658,10 @@ msgstr "您现在要运行终止动作？"
 #: u_translation.rsdrawslitarea
 msgid "Draw slit area on image"
 msgstr "在图像上绘制狭缝区域"
+
+#: u_translation.rsduplicateact
+msgid "Duplicate action"
+msgstr ""
 
 #: u_translation.rsduration
 msgid "Duration"
@@ -1894,7 +1902,7 @@ msgstr "False"
 
 #: u_translation.rsfastcenterin
 msgid "Fast centering on the slit"
-msgstr ""
+msgstr "快速将狭缝居中"
 
 #: u_translation.rsfil
 msgid "Fil."
@@ -2323,7 +2331,7 @@ msgstr "狭缝上的导星位置"
 
 #: u_translation.rsguidepositio2
 msgid "Guide position out of frame!"
-msgstr ""
+msgstr "画面中导星的位置"
 
 #: u_translation.rsguider
 msgid "Guider"
@@ -2405,6 +2413,10 @@ msgstr "高"
 msgid "Highlight ADU"
 msgstr "高光ADU"
 
+#: u_translation.rshighlightcol
+msgid "Highlight color"
+msgstr ""
+
 #: u_translation.rshistogram
 msgid "Histogram"
 msgstr "直方图"
@@ -2462,10 +2474,6 @@ msgstr "忽略天气条件由于图像类型=%s"
 #: u_translation.rsimage
 msgid "Image"
 msgstr "图像"
-
-#: u_translation.rsimagecenter
-msgid "Image center"
-msgstr "图像中心"
 
 #: u_translation.rsimagecleanup
 msgid "Image cleanup"
@@ -2734,6 +2742,10 @@ msgstr "点亮"
 msgid "(limited to 1.5x the slew precision)"
 msgstr "（限制到1.5倍回转精度）"
 
+#: u_translation.rslimitrotator
+msgid "Limit rotator angle to 0-180 degree range"
+msgstr ""
+
 #: u_translation.rslimittempera
 msgid "Limit temperature change"
 msgstr "限定温度变化"
@@ -2815,6 +2827,10 @@ msgstr "主传感器"
 #, object-pascal-format
 msgid "In mode automatic the telescope will slew to the test positions near the pole automatically.%sIn mode manual you have to slew the mount to the position by the keypad. See documentation."
 msgstr "在自动模式下，望远镜将自动旋转到极轴附近的测试位置。%s在手动模式下，您必须通过键盘将赤道仪旋转到该位置。请参阅文档。"
+
+#: u_translation.rsmakesurethes
+msgid "Make sure the stars are not saturated."
+msgstr ""
 
 #: u_translation.rsmanage
 msgid "Manage"
@@ -3369,7 +3385,7 @@ msgstr "过中天后不翻转，直到"
 
 #: u_translation.rsnoisefilter
 msgid "Noise filter"
-msgstr ""
+msgstr "噪声过滤器"
 
 #: u_translation.rsnone2
 msgid "None"
@@ -3976,11 +3992,11 @@ msgstr "预设列表"
 
 #: u_translation.rspressthebutt
 msgid "Press the button \"Calibration\" to start the automatic calibration of the guider at the current position."
-msgstr ""
+msgstr "按下“校准”按钮，在当前位置开始自动校准导星。"
 
 #: u_translation.rspressthebutt2
 msgid "Press the button \"Backlash calibration\" to measure the declination backlash and store the measured value in tab options."
-msgstr ""
+msgstr "按下“回差校准”按钮以测量赤纬回差并将测量值存储在选项卡选项中。"
 
 #: u_translation.rspressure
 msgid "Pressure"
@@ -4148,7 +4164,7 @@ msgstr "折射的天极"
 
 #: u_translation.rsrefreshtheli
 msgid "Refresh the list"
-msgstr ""
+msgstr "刷新列表"
 
 #: u_translation.rsrelativeincr
 msgid "Relative increment for the inward or outward movement"
@@ -4428,6 +4444,10 @@ msgstr "运行脚本"
 #, object-pascal-format
 msgid "Run script %s"
 msgstr "运行脚本%s"
+
+#: u_translation.rsrunscriptwhe
+msgid "Run script when the weather change"
+msgstr ""
 
 #: u_translation.rsrununattende
 msgid "Run unattended"
@@ -4940,7 +4960,7 @@ msgstr "单星"
 
 #: u_translation.rssinglestarbr
 msgid "Single star, with offset"
-msgstr ""
+msgstr "单星带偏移"
 
 #: u_translation.rssinglestarwi
 msgid "Single star, with guider astrometry"
@@ -5289,7 +5309,7 @@ msgstr "启动单帧预览"
 
 #: u_translation.rsstartspectro
 msgid "Start spectroscope guiding"
-msgstr ""
+msgstr "开始光谱仪导星"
 
 #: u_translation.rsstartstep
 #, object-pascal-format
@@ -5499,6 +5519,14 @@ msgstr "开关连接"
 #, object-pascal-format
 msgid "Setting switch %s failed!"
 msgstr "设置开关%s失败！"
+
+#: u_translation.rssyncoffset
+msgid "Sync Offset"
+msgstr ""
+
+#: u_translation.rssynctherotat
+msgid "Sync the rotator"
+msgstr ""
 
 #: u_translation.rssynctoeq
 #, object-pascal-format
@@ -5735,7 +5763,7 @@ msgstr "赤道仪表明%S"
 
 #: u_translation.rstheobjectnam2
 msgid "The object name is not defined, do you want to continue?"
-msgstr ""
+msgstr "天体名称未定义，要不要继续？"
 
 #: u_translation.rstheplanismod
 #, object-pascal-format
@@ -5935,11 +5963,11 @@ msgstr "尝试修复像素范围以匹配 CMOS 相机位深"
 
 #: u_translation.rstwilightisat
 msgid "Twilight is at Sun elevation of"
-msgstr ""
+msgstr "暮光处于太阳高度"
 
 #: u_translation.rstwilightsequ
 msgid "Sequence Start/Stop at twilight "
-msgstr ""
+msgstr "序列在暮光时开始/停止 "
 
 #: u_translation.rstwilightskyf
 msgid "Twilight sky flat"
@@ -6118,6 +6146,10 @@ msgstr "使用旋转器"
 #: u_translation.rsusesafetymon
 msgid "Use safety monitor"
 msgstr "使用安全监视器"
+
+#: u_translation.rsusesoftwares
+msgid "Use software Sync with sky PA (for use with not compliant rotator)"
+msgstr ""
 
 #: u_translation.rsusespecificr
 msgid "Use specific Readout mode for different actions"
