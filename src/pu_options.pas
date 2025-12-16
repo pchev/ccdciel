@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses u_utils, u_global, UScaleDPI, u_hints, u_translation, u_speech, u_ccdconfig,
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, LCLType,
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, LCLType, math,
   StdCtrls, ExtCtrls, ComCtrls, Grids, EditBtn, CheckLst, Buttons, SpinEx, enhedits, Types;
 
 type
@@ -863,6 +863,7 @@ type
     procedure PixelSizeFromCameraChange(Sender: TObject);
     procedure PlanetariumBoxClick(Sender: TObject);
     procedure RoiListChange(Sender: TObject);
+    procedure SafetyActionsPickListSelect(Sender: TObject);
     procedure SeqDirDefaultClick(Sender: TObject);
     procedure sgCustomTypeEditingDone(Sender: TObject);
     procedure StackAlignChange(Sender: TObject);
@@ -877,7 +878,6 @@ type
     procedure BalanceChange(Sender: TObject);
     procedure ResolverBoxClick(Sender: TObject);
     procedure SafetyActionsSelectEditor(Sender: TObject; aCol, aRow: Integer; var Editor: TWinControl);
-    procedure SafetyActionsValidateEntry(sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
     procedure SlewPrecChange(Sender: TObject);
     procedure BtnShowPassClick(Sender: TObject);
     procedure TempDirChange(Sender: TObject);
@@ -894,7 +894,8 @@ type
     FAutofocusExposure: double;
     Lockchange: boolean;
     SaveTemperatureSlope: double;
-    CurrentRoi: integer;
+    CurrentRoi, OldActionIndex: integer;
+    OldAction: string;
     procedure msg(txt:string);
     function GetResolver: integer;
     procedure SetResolver(value:integer);
@@ -2536,42 +2537,63 @@ begin
 end;
 
 procedure Tf_option.SafetyActionsSelectEditor(Sender: TObject; aCol, aRow: Integer; var Editor: TWinControl);
+var i: integer;
 const delim='"'; comma=',';
 begin
   if aCol=1 then begin
+    OldAction:=SafetyActions.Cells[aCol,aRow];
     if (Editor is TCustomComboBox) then
       with Editor as TCustomComboBox do begin
-        Items.CommaText:= delim + SafetyActionName[0] + delim + comma +
-                          delim + SafetyActionName[1] + delim + comma +
-                          delim + SafetyActionName[2] + delim + comma +
-                          delim + SafetyActionName[3] + delim + comma +
-                          delim + SafetyActionName[4] + delim + comma +
-                          delim + SafetyActionName[5] + delim + comma +
-                          delim + SafetyActionName[6] + delim + comma +
-                          delim + SafetyActionName[7] + delim + comma +
-                          delim + SafetyActionName[8] + delim + comma +
-                          delim + SafetyActionName[9] + delim + comma +
-                          delim + SafetyActionName[10] + delim + comma +
-                          delim + SafetyActionName[11] + delim + comma +
-                          delim + SafetyActionName[12] + delim + comma +
-                          delim + SafetyActionName[13] + delim;
+        Style:=csDropDownList;
+        if OldAction=SafetyActionName[2] then begin
+          // mandatory action, do not modify
+          Items.CommaText:= delim + SafetyActionName[2] + delim;
+          ItemIndex:=0;
+        end
+        else begin
+          Items.CommaText:= delim + SafetyActionName[0] + delim + comma +
+                            delim + SafetyActionName[1] + delim + comma +
+                            delim + SafetyActionName[2] + delim + comma +
+                            delim + SafetyActionName[3] + delim + comma +
+                            delim + SafetyActionName[4] + delim + comma +
+                            delim + SafetyActionName[5] + delim + comma +
+                            delim + SafetyActionName[6] + delim + comma +
+                            delim + SafetyActionName[7] + delim + comma +
+                            delim + SafetyActionName[8] + delim + comma +
+                            delim + SafetyActionName[9] + delim + comma +
+                            delim + SafetyActionName[10] + delim + comma +
+                            delim + SafetyActionName[11] + delim + comma +
+                            delim + SafetyActionName[12] + delim + comma +
+                            delim + SafetyActionName[13] + delim;
+          i:=max(0,Items.IndexOf(OldAction));
+          ItemIndex:=i;
+        end;
+        OldActionIndex:=ItemIndex;
       end;
   end;
 end;
 
-procedure Tf_option.SafetyActionsValidateEntry(sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
-var i: integer;
-    ok: boolean;
+procedure Tf_option.SafetyActionsPickListSelect(Sender: TObject);
+var i,n: integer;
+    dup: boolean;
+    cb: TCustomComboBox;
 begin
- if aCol=1 then begin
-   ok:=false;
-   for i:=0 to ord(high(TSafetyAction)) do begin
-     if SafetyActionName[i]=NewValue then begin
-        ok:=true;
-        break;
+ if sender=SafetyActions then begin
+   // check for duplicate
+   cb:=TCustomComboBox(SafetyActions.Editor);
+   n:=cb.ItemIndex;
+   dup:=false;
+   if (n<>0)and(n<>1)and(n<>11)and(n<>13) then begin
+     for i:=1 to SafetyActions.RowCount-1 do begin
+       if i=SafetyActions.Row then continue;
+       if SafetyActions.Cells[1,i]=SafetyActionName[n] then
+         dup:=true;
+     end;
+     if dup then begin
+       MessageDlg('Duplicate action: '+SafetyActionName[n],mtError,[mbOK],0);
+       cb.ItemIndex:=OldActionIndex;
      end;
    end;
-   if not ok then NewValue:=OldValue;
  end;
 end;
 

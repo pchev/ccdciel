@@ -3862,6 +3862,20 @@ try
   if oldver<'0.9.92' then begin
     screenconfig.SetValue('/Tools/Spectraprofile/Visible',config.GetValue('/InternalGuider/Spectro/SpectroFunctions',false));
   end;
+  if oldver<'0.9.93' then begin
+    ok:=false;
+    for i:=0 to SafetyActionNum-1 do
+       if round(config.GetValue('/Safety/Actions/Action'+inttostr(i),0))=2 then ok:=true;
+    if not ok then begin
+      for i:=0 to SafetyActionNum-1 do
+         if round(config.GetValue('/Safety/Actions/Action'+inttostr(i),0))=0 then begin
+           config.SetValue('/Safety/Actions/Action'+inttostr(i),2);
+           if config.GetValue('/Devices/Safety',false) then
+             MessageDlg(caption,'Warning! '+crlf+'Adding "'+rsAbortTheCurr+'" to safety monitor actions',mtWarning,[mbOK],0);
+           break;
+         end;
+    end;
+  end;
   if config.Modified then begin
      config.SetValue('/Configuration/Version',ccdcielver);
      SaveConfig;
@@ -10228,7 +10242,10 @@ begin
       f_option.FloatSpinEditMa12.value:=config.GetValue('/Weather/Max/WindGust',0);
       f_option.FloatSpinEditMa13.value:=config.GetValue('/Weather/Max/WindSpeed',0);
    end;
-   for i:=0 to SafetyActionNum-1 do begin
+   i:=0;
+   f_option.SafetyActions.Cells[1,i+1]:=SafetyActionName[round(config.GetValue('/Safety/Actions/Action'+inttostr(i),2))];
+   f_option.SafetyActions.Cells[2,i+1]:=config.GetValue('/Safety/Actions/Parameter'+inttostr(i),'');
+   for i:=1 to SafetyActionNum-1 do begin
       f_option.SafetyActions.Cells[1,i+1]:=SafetyActionName[round(config.GetValue('/Safety/Actions/Action'+inttostr(i),0))];
       f_option.SafetyActions.Cells[2,i+1]:=config.GetValue('/Safety/Actions/Parameter'+inttostr(i),'');
    end;
