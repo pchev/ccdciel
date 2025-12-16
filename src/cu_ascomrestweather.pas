@@ -132,6 +132,7 @@ begin
      msg(rsConnected3);
      FStatus := devConnected;
      GetCapabilities;
+     stClear:=GetClear;
      if Assigned(FonStatusChange) then FonStatusChange(self);
      StatusTimer.Interval:=statusinterval;
      StatusTimer.Enabled:=true;

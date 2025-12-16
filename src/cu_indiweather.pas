@@ -325,6 +325,7 @@ begin
   end
   else if (proptype=INDI_LIGHT)and(WeatherStatusProp=nil)and(propname='WEATHER_STATUS') then begin
      WeatherStatusProp:=indiProp.getLight;
+     stClear:=WeatherStatusProp.s=IPS_OK;
   end
   else if (proptype=INDI_NUMBER)and(WeatherParamProp=nil)and(propname='WEATHER_PARAMETERS') then begin
      WeatherParamProp:=indiProp.getNumber;
