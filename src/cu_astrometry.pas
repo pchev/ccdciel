@@ -892,6 +892,7 @@ begin
       end
       else begin
         // Use finder camera
+        FFinderFits.DarkOn:=true;
         if not FFinderCamera.ControlExposure(exp,binx,biny,LIGHT,ReadoutModeAstrometry,sgain,soffset) then begin
           msg(rsExposureFail,0);
           exit;
