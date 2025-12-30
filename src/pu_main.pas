@@ -17119,7 +17119,7 @@ begin
      StatusBar1.Panels[panelstatus].Text:='J2000: '+ARToStr3(ra)+' '+DEToStr(de);
    end;
  end
- else
+ else if copy(StatusBar1.Panels[panelstatus].Text,1,6)='J2000:' then
    StatusBar1.Panels[panelstatus].Text:='';
  yy:=img_Height-yy;
  xx:=xx+1;
@@ -19429,7 +19429,8 @@ end;
 
 procedure Tf_main.ImageExit(Sender: TObject);
 begin
-  StatusBar1.Panels[panelstatus].Text:='';
+  if copy(StatusBar1.Panels[panelstatus].Text,1,6)='J2000:' then
+    StatusBar1.Panels[panelstatus].Text:='';
 end;
 
 procedure Tf_main.MeasureConeError1Click(Sender: TObject);
@@ -19638,7 +19639,7 @@ begin
      end;
    end;
  end
- else
+ else if copy(StatusBar1.Panels[panelstatus].Text,1,6)='J2000:' then
    StatusBar1.Panels[panelstatus].Text:='';
  yy:=guideimg_Height-yy;
  StatusBar1.Panels[panelcursor].Text:=rsGuider+': '+inttostr(xx)+'/'+inttostr(yy)+': '+sval;
@@ -20352,7 +20353,7 @@ begin
      end;
    end;
  end
- else
+ else if copy(StatusBar1.Panels[panelstatus].Text,1,6)='J2000:' then
    StatusBar1.Panels[panelstatus].Text:='';
  yy:=finderimg_Height-yy;
  StatusBar1.Panels[panelcursor].Text:=rsFinder+': '+inttostr(xx)+'/'+inttostr(yy)+': '+sval;
