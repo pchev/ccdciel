@@ -140,6 +140,7 @@ object f_main: Tf_main
           ParentBackground = False
           ParentColor = False
           TabOrder = 0
+          OnExit = ImageExit
         end
         object GuideImage: TPanel
           Left = 276
@@ -152,6 +153,7 @@ object f_main: Tf_main
           ParentBackground = False
           ParentColor = False
           TabOrder = 1
+          OnExit = ImageExit
         end
         object Splitter3: TSplitter
           Left = 273
@@ -199,6 +201,7 @@ object f_main: Tf_main
           ParentBackground = False
           ParentColor = False
           TabOrder = 0
+          OnExit = ImageExit
           object updExtend: TUpDown
             AnchorSideLeft.Control = mainimage
             AnchorSideBottom.Control = mainimage

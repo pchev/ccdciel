@@ -50,7 +50,7 @@ uses
   cu_ascomrestrotator, cu_ascomrestsafety, cu_ascomrestweather, cu_ascomrestwheel, pu_polaralign, pu_polaralign2, pu_collimation,
   cu_switch, cu_ascomswitch, cu_ascomrestswitch, cu_indiswitch, cu_cover, cu_ascomcover, cu_ascomrestcover, cu_indicover,
   u_annotation, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase, lclplatformdef, Grids,
-  LazUTF8, Classes, dynlibs, LCLType, LMessages, IniFiles, IntfGraphics, FPImage, GraphType,
+  LazUTF8, Classes, dynlibs, LCLType, LMessages, IniFiles, IntfGraphics, FPImage, GraphType, LCLIntf,
   SysUtils, FileUtil, LazFileUtils, LazSysUtils, Forms, Controls, Math, Graphics, Dialogs, u_speech,
   StdCtrls, ExtCtrls, Menus, ComCtrls, Buttons, Types, u_translation;
 
@@ -453,6 +453,7 @@ type
     procedure GuidePlotTimerTimer(Sender: TObject);
     procedure GuiderMeasureTimerTimer(Sender: TObject);
     procedure GuiderPopUpmenu1Popup(Sender: TObject);
+    procedure ImageExit(Sender: TObject);
     procedure MeasureConeError1Click(Sender: TObject);
     procedure MenuAscomSwitchSetupClick(Sender: TObject);
     procedure MenuAlpacaSwitchSetupClick(Sender: TObject);
@@ -1081,6 +1082,8 @@ type
     procedure GuideCameraSetCooler(Sender: TObject);
     procedure GuiderMeasureAtPos(x,y:integer);
     procedure ShowGuideImage(Sender: TObject);
+    procedure Guider_north;
+    procedure Finder_north;
     procedure FinderCameraProgress(n:double);
     procedure FinderCameraNewImage(Sender: TObject);
     procedure FinderCameraNewImageAsync(Data: PtrInt);
@@ -1703,6 +1706,7 @@ begin
   Image1.OnMouseWheel := @Image1MouseWheel;
   Image1.OnResize := @ImageResize;
   Image1.OnPaint := @Image1Paint;
+  Image1.OnExit := @ImageExit;
   Image1.PopupMenu := ImagePopupMenu;
   ScrGuideBmp := TBGRABitmap.Create;
   ImaGuideBmp:=TBGRABitmap.Create(1,1);
@@ -1715,6 +1719,7 @@ begin
   ImageGuide.PopupMenu := GuiderPopUpmenu1;
   ImageGuide.OnResize := @ImageResize;
   ImageGuide.OnPaint := @ImageGuidePaint;
+  ImageGuide.OnExit := @ImageExit;
   ImageGuide.OnMouseDown := @ImageGuideMouseDown;
   ImageGuide.OnMouseMove := @ImageGuideMouseMove;
   ImageGuide.OnMouseUp := @ImageGuideMouseUp;
@@ -1736,6 +1741,7 @@ begin
   ImageFinder.PopupMenu := FinderPopUpmenu;
   ImageFinder.OnResize := @ImageResize;
   ImageFinder.OnPaint := @ImageFinderPaint;
+  ImageFinder.OnExit := @ImageExit;
   ImageFinder.OnDblClick := @ImageFinderDblClick;
   ImageFinder.OnMouseDown := @ImageFinderMouseDown;
   ImageFinder.OnMouseMove := @ImageFinderMouseMove;
@@ -15396,6 +15402,7 @@ begin
     if astrometry.LastResult then begin
        finderfits.LoadFromFile(astrometry.ResultFile);
        NewMessage(Format(rsResolveSucce, [rsFinderCamera]),3);
+       PostMessage(MsgHandle, LM_CCDCIEL, M_RedrawFinderImage, 0);
     end else begin
       NewMessage(Format(rsResolveError, [rsFinderCamera])+' '+astrometry.LastError,1);
       if LogToFile then begin
@@ -15410,6 +15417,7 @@ begin
     if astrometry.LastResult then begin
        guidefits.LoadFromFile(astrometry.ResultFile);
        NewMessage(Format(rsResolveSucce, [rsGuideCamera]),3);
+       PostMessage(MsgHandle, LM_CCDCIEL, M_RedrawGuideImage, 0);
     end else begin
       NewMessage(Format(rsResolveError, [rsGuideCamera])+' '+astrometry.LastError,1);
       if LogToFile then begin
@@ -16290,6 +16298,14 @@ begin
                       end;
                       if buf<>'' then NewMessage(buf,1);
                       end;
+    M_RedrawGuideImage: begin
+                      f_internalguider.DrawSettingChange:=true;
+                      GuidePlotTimer.Enabled:=true;
+                     end;
+    M_RedrawFinderImage: begin
+                      f_finder.DrawSettingChange:=true;
+                      FinderPlotTimer.Enabled:=true;
+                     end;
     M_Message:       begin
                       try
                       buf:=PChar(Message.LParam);
@@ -17102,7 +17118,9 @@ begin
      de:=c.dec;
      StatusBar1.Panels[panelstatus].Text:='J2000: '+ARToStr3(ra)+' '+DEToStr(de);
    end;
- end;
+ end
+ else
+   StatusBar1.Panels[panelstatus].Text:='';
  yy:=img_Height-yy;
  xx:=xx+1;
  if fits.HeaderInfo.naxis=1 then
@@ -18904,8 +18922,10 @@ else begin
    str.Free;
    tmpbmp.Free;
 end;
-
 ScrGuideBmp.VerticalFlip; // "Windows orientation"
+if guidefits.HeaderInfo.solved then begin
+  Guider_north;
+end;
 if guidefits.HeaderInfo.solved and AnnotateGuider then begin
   plot_deepsky(ScrGuideBmp.Canvas,ScrGuideBmp.Width,ScrGuideBmp.Height,false,true,2);
 end;
@@ -18935,6 +18955,60 @@ begin
      f_internalguider.PanelImage.Parent:=f_internalguider.Panel3;
   end;
   SetVisibleImage;
+end;
+
+procedure Tf_main.Guider_north;
+var scale,si,co: double;
+    xpos,ypos,Nleng,Eleng: single;
+    n: integer;
+    i: TcdcWCSinfo;
+    c: TcdcWCScoord;
+    x1,y1,x2,y2,ulra,uldec,erot,nrot: double;
+begin
+if guidefits.HeaderInfo.solved then begin
+  n:=cdcwcs_getinfo(addr(i),wcsguide);
+  if (n=0)and(i.secpix<>0)and (abs(i.cdec)<89.99) then begin
+    // rotation from upper right corner
+    c.x:=i.wp;
+    c.y:=i.hp;
+    n:=cdcwcs_xy2sky(@c,wcsguide);
+    ulra:=c.ra;
+    uldec:=c.dec;
+    n:=cdcwcs_sky2xy(@c,wcsguide);
+    x1:=c.x;
+    y1:=c.y;
+    c.ra:=ulra;
+    c.dec:=uldec+0.01;
+    n:=cdcwcs_sky2xy(@c,wcsguide);
+    x2:=c.x;
+    y2:=c.y;
+    nrot := arctan2((x2 - x1), (y1 - y2));
+    c.ra:=ulra+0.01;
+    c.dec:=uldec;
+    n:=cdcwcs_sky2xy(@c,wcsguide);
+    x2:=c.x;
+    y2:=c.y;
+    erot := arctan2((x2 - x1), (y1 - y2));
+    scale:=1;
+    // draw arrow to north pole
+    xpos:=ScrGuideBmp.Width-54*scale;
+    ypos:=27*scale;
+    Nleng:=24*scale;
+    Eleng:=6*scale;
+
+    sincos(nrot,si,co);
+    co:=-co;
+    ScrGuideBmp.ArrowEndAsClassic(false,false,3);
+    ScrGuideBmp.DrawLineAntialias(xpos,ypos,xpos+Nleng*si,ypos+Nleng*co,ColorToBGRA(clOrange),scale);
+    ScrGuideBmp.ArrowEndAsNone;
+    sincos(erot,si,co);
+    co:=-co;
+    ScrGuideBmp.DrawLineAntialias(xpos,ypos,xpos+Eleng*si,ypos+Eleng*co,ColorToBGRA(clOrange),scale);
+
+    ScrGuideBmp.FontHeight:=round(12*scale);
+    ScrGuideBmp.TextOut(xpos,ypos,'  '+FormatFloat(f1,Rmod(i.rot+360,360)),clOrange);
+ end;
+end;
 end;
 
 procedure Tf_main.ImageGuidePaint(Sender: TObject);
@@ -19353,6 +19427,11 @@ begin
   MenuItemSelectGuideStar.Visible:=f_internalguider.GuideLock and (not f_internalguider.ForceMultistar);
 end;
 
+procedure Tf_main.ImageExit(Sender: TObject);
+begin
+  StatusBar1.Panels[panelstatus].Text:='';
+end;
+
 procedure Tf_main.MeasureConeError1Click(Sender: TObject);
 var
   n,nc,ncam: integer;
@@ -19479,10 +19558,12 @@ end;
 
 
 procedure Tf_main.GuiderMeasureAtPos(x,y:integer);
-var xx,yy: integer;
+var xx,yy,n: integer;
     val,xxc,yyc,rc,s:integer;
     sval:string;
-    bg,bgdev,xc,yc,hfd,fwhm,vmax,dval,snr,flux: double;
+    bg,bgdev,xc,yc,hfd,fwhm,vmax,dval,snr,flux,ra,de: double;
+    i: TcdcWCSinfo;
+    c: TcdcWCScoord;
 begin
  GuiderScreen2fits(x,y,true,xx,yy); // always flipped vertically
  if (xx>0)and(xx<guidefits.HeaderInfo.naxis1)and(yy>0)and(yy<guidefits.HeaderInfo.naxis2) then
@@ -19544,6 +19625,21 @@ begin
  else begin
    //
  end;
+ if guidefits.HeaderInfo.solved then begin
+   n:=cdcwcs_getinfo(addr(i),wcsguide);
+   if (n=0)and(i.secpix<>0) then begin
+     c.x:=xx;
+     c.y:=i.hp-yy;
+     n:=cdcwcs_xy2sky(@c,wcsguide);
+     if n=0 then begin
+       ra:=c.ra/15;
+       de:=c.dec;
+       StatusBar1.Panels[panelstatus].Text:='J2000: '+ARToStr3(ra)+' '+DEToStr(de);
+     end;
+   end;
+ end
+ else
+   StatusBar1.Panels[panelstatus].Text:='';
  yy:=guideimg_Height-yy;
  StatusBar1.Panels[panelcursor].Text:=rsGuider+': '+inttostr(xx)+'/'+inttostr(yy)+': '+sval;
 end;
@@ -19934,10 +20030,67 @@ else begin
    tmpbmp.Free;
 end;
 ScrFinderBmp.VerticalFlip; // same as guider
+if finderfits.HeaderInfo.solved then begin
+  Finder_north;
+end;
 if finderfits.HeaderInfo.solved and AnnotateFinder then begin
   plot_deepsky(ScrFinderBmp.Canvas,ScrFinderBmp.Width,ScrFinderBmp.Height,false,true,1);
 end;
 ImageFinder.Invalidate;
+end;
+
+procedure Tf_main.Finder_north;
+var scale,si,co: double;
+    xpos,ypos,Nleng,Eleng: single;
+    n: integer;
+    i: TcdcWCSinfo;
+    c: TcdcWCScoord;
+    x1,y1,x2,y2,ulra,uldec,erot,nrot: double;
+begin
+if finderfits.HeaderInfo.solved then begin
+  n:=cdcwcs_getinfo(addr(i),wcsfind);
+  if (n=0)and(i.secpix<>0)and (abs(i.cdec)<89.99) then begin
+    // rotation from upper right corner
+    c.x:=i.wp;
+    c.y:=i.hp;
+    n:=cdcwcs_xy2sky(@c,wcsfind);
+    ulra:=c.ra;
+    uldec:=c.dec;
+    n:=cdcwcs_sky2xy(@c,wcsfind);
+    x1:=c.x;
+    y1:=c.y;
+    c.ra:=ulra;
+    c.dec:=uldec+0.01;
+    n:=cdcwcs_sky2xy(@c,wcsfind);
+    x2:=c.x;
+    y2:=c.y;
+    nrot := arctan2((x2 - x1), (y1 - y2));
+    c.ra:=ulra+0.01;
+    c.dec:=uldec;
+    n:=cdcwcs_sky2xy(@c,wcsfind);
+    x2:=c.x;
+    y2:=c.y;
+    erot := arctan2((x2 - x1), (y1 - y2));
+    scale:=1;
+    // draw arrow to north pole
+    xpos:=ScrFinderBmp.Width-54*scale;
+    ypos:=27*scale;
+    Nleng:=24*scale;
+    Eleng:=6*scale;
+
+    sincos(nrot,si,co);
+    co:=-co;
+    ScrFinderBmp.ArrowEndAsClassic(false,false,3);
+    ScrFinderBmp.DrawLineAntialias(xpos,ypos,xpos+Nleng*si,ypos+Nleng*co,ColorToBGRA(clOrange),scale);
+    ScrFinderBmp.ArrowEndAsNone;
+    sincos(erot,si,co);
+    co:=-co;
+    ScrFinderBmp.DrawLineAntialias(xpos,ypos,xpos+Eleng*si,ypos+Eleng*co,ColorToBGRA(clOrange),scale);
+
+    ScrFinderBmp.FontHeight:=round(12*scale);
+    ScrFinderBmp.TextOut(xpos,ypos,'  '+FormatFloat(f1,Rmod(i.rot+360,360)),clOrange);
+ end;
+end;
 end;
 
 procedure Tf_main.ImageFinderPaint(Sender: TObject);
@@ -20119,10 +20272,12 @@ begin
 end;
 
 procedure Tf_main.FinderMeasureAtPos(x,y:integer);
-var xx,yy: integer;
+var xx,yy,n: integer;
     val,xxc,yyc,rc,s:integer;
     sval:string;
-    bg,bgdev,xc,yc,hfd,fwhm,vmax,dval,snr,flux: double;
+    bg,bgdev,xc,yc,hfd,fwhm,vmax,dval,snr,flux,ra,de: double;
+    i: TcdcWCSinfo;
+    c: TcdcWCScoord;
 begin
  FinderScreen2fits(x,y,true,xx,yy); // always flipped vertically
  if (xx>0)and(xx<finderfits.HeaderInfo.naxis1)and(yy>0)and(yy<finderfits.HeaderInfo.naxis2) then
@@ -20184,6 +20339,21 @@ begin
  else begin
    //
  end;
+ if finderfits.HeaderInfo.solved then begin
+   n:=cdcwcs_getinfo(addr(i),wcsfind);
+   if (n=0)and(i.secpix<>0) then begin
+     c.x:=xx;
+     c.y:=i.hp-yy;
+     n:=cdcwcs_xy2sky(@c,wcsfind);
+     if n=0 then begin
+       ra:=c.ra/15;
+       de:=c.dec;
+       StatusBar1.Panels[panelstatus].Text:='J2000: '+ARToStr3(ra)+' '+DEToStr(de);
+     end;
+   end;
+ end
+ else
+   StatusBar1.Panels[panelstatus].Text:='';
  yy:=finderimg_Height-yy;
  StatusBar1.Panels[panelcursor].Text:=rsFinder+': '+inttostr(xx)+'/'+inttostr(yy)+': '+sval;
 end;

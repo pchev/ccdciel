@@ -555,6 +555,7 @@ begin
         msg(rsFinderCamera+': '+rsFOV+blank+FormatFloat(f2, i.wp*i.secpix/60)+'x'+FormatFloat(f2, i.hp*i.secpix/60)+smin+', '+rsPixelScale+': '+FormatFloat(f2,i.secpix)+ssec+'/'+rsPixel,3);
         msg(rsFinderCamera+': '+Format(rsCenterAppare, [RAToStr(ra), DEToStr(de), FormatFloat(f1, pa)])+', J2000 '+rsRA+'='+RAToStr(ra2000)+' '+rsDec+'='+DEToStr(de2000),3);
         MarkPlanetarium(ra2000,de2000);
+        PostMessage(MsgHandle, LM_CCDCIEL, M_RedrawFinderImage, 0);
       end;
     end;
     finally
@@ -596,6 +597,7 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
        J2000ToMount(mount.EquinoxJD,ra,de);
        mount.Sync(ra,de);
    end;
+   PostMessage(MsgHandle, LM_CCDCIEL, M_RedrawFinderImage, 0);
 end;
 end;
 
@@ -650,6 +652,7 @@ if cdcwcs_xy2sky<>nil then begin
       de:=rad2deg*de;
       msg(rsGuideCamera+': '+rsFOV+blank+FormatFloat(f2, i.wp*i.secpix/60)+'x'+FormatFloat(f2, i.hp*i.secpix/60)+smin+', '+rsPixelScale+': '+FormatFloat(f2,i.secpix)+ssec+'/'+rsPixel,3);
       msg(rsGuideCamera+': '+Format(rsCenterAppare, [RAToStr(ra), DEToStr(de), FormatFloat(f1, pa)])+', J2000 '+rsRA+'='+RAToStr(ra2000)+' '+rsDec+'='+DEToStr(de2000),3);
+      PostMessage(MsgHandle, LM_CCDCIEL, M_RedrawGuideImage, 0);
     end;
   end;
 end
@@ -689,6 +692,7 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
        J2000ToMount(mount.EquinoxJD,ra,de);
        mount.Sync(ra,de);
    end;
+   PostMessage(MsgHandle, LM_CCDCIEL, M_RedrawGuideImage, 0);
 end;
 end;
 
