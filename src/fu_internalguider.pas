@@ -535,6 +535,8 @@ implementation
 constructor Tf_internalguider.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
+ ScaleDPI(Self);
+ SetLang;
  visu:=Tf_visu.Create(self);
  visu.BtnFlipHorz.Visible:=false;
  visu.BtnFlipVert.Visible:=false;
@@ -561,8 +563,6 @@ begin
  {$endif}
  pcInternalguider.ActivePageIndex:=0;
  pcTabs.ActivePageIndex:=0;
- ScaleDPI(Self);
- SetLang;
  LabelStatusRA.Caption:='';
  LabelStatusDec.Caption:='';
  LabelInfo.Caption:='';
@@ -1370,10 +1370,10 @@ const
     len=2;
    procedure draw_plussign(canvas :tcanvas; x,y :integer);
    begin
-     canvas.MoveTo(x-2,y);
-     canvas.LineTo(x+2,y);
-     canvas.MoveTo(x,y-2);
-     canvas.LineTo(x,y+2);
+     canvas.MoveTo(x-DoScaleX(2),y);
+     canvas.LineTo(x+DoScaleX(2),y);
+     canvas.MoveTo(x,y-DoScaleX(2));
+     canvas.LineTo(x,y+DoScaleX(2));
    end;
 
 begin
@@ -1395,11 +1395,11 @@ begin
     canvas.moveto(w2,0);{cross}
     canvas.lineto(w2,height);
 
-    diameter:=round(20);
+    diameter:=round(DoScaleX(20));
     canvas.Ellipse(w2-diameter, h2-diameter, w2+diameter, h2+diameter);
-    diameter:=round(40);
+    diameter:=round(DoScaleX(40));
     canvas.Ellipse(w2-diameter, h2-diameter, w2+diameter, h2+diameter);
-    diameter:=round(60);
+    diameter:=round(DoScaleX(60));
     canvas.Ellipse(w2-diameter, h2-diameter, w2+diameter, h2+diameter);
 
 
@@ -1415,9 +1415,9 @@ begin
       scale2:=pixel_size;
       scaleunit:=' "';
    end;
-   canvas.textout(w2,h2+20-10,FormatFloat(f1v,2*scale));
-   canvas.textout(w2,h2+40-10,FormatFloat(f1v,4*scale));
-   canvas.textout(w2,h2+60-10,FormatFloat(f1v,6*scale)+scaleunit);
+   canvas.textout(w2,h2+DoScaleX(20-10),FormatFloat(f1v,2*scale));
+   canvas.textout(w2,h2+DoScaleX(40-10),FormatFloat(f1v,4*scale));
+   canvas.textout(w2,h2+DoScaleX(60-10),FormatFloat(f1v,6*scale)+scaleunit);
 
    //draw xy graph
    lenb:=length(xy_trend)-1;
@@ -1430,8 +1430,8 @@ begin
    begin
      if ((xy_trend[i].ra<1E99) and (xy_trend[i].settling=false)) then //valid trend data
      begin
-       x:=w2+round(xy_trend[i].ra*10*thescale) ;
-       y:=h2-round(xy_trend[i].dec*10*thescale);
+       x:=w2+DoScaleX(round(xy_trend[i].ra*10*thescale)) ;
+       y:=h2-DoScaleX(round(xy_trend[i].dec*10*thescale));
 
        x:=min(max(0,x),width);
        y:=min(max(0,y),height);
@@ -1460,8 +1460,8 @@ begin
       rms_ra:=sqrt(rms_ra/counter);
       rms_dec:=sqrt(rms_dec/counter);
 
-      canvas.textout(1,h2,'α  '+FormatFloat(f1v,scale2*rms_ra));
-      canvas.textout(w2+2,2,'δ  '+FormatFloat(f1v,scale2*rms_dec));
+      canvas.textout(DoScaleX(1),h2,'α  '+FormatFloat(f1v,scale2*rms_ra));
+      canvas.textout(w2+DoScaleX(2),DoScaleX(2),'δ  '+FormatFloat(f1v,scale2*rms_dec));
     end;
 
     //show dithering
@@ -1470,8 +1470,8 @@ begin
     begin
       if dither_position[i].raposition<1E99 then //valid data
       begin
-        x:=w2+round(dither_position[i].raposition*10*thescale) ;
-        y:=h2-round(dither_position[i].decposition*10*thescale);
+        x:=w2+DoScaleX(round(dither_position[i].raposition*10*thescale)) ;
+        y:=h2-DoScaleX(round(dither_position[i].decposition*10*thescale));
 
         x:=min(max(0,x),width);
         y:=min(max(0,y),height);
@@ -1488,9 +1488,9 @@ begin
    canvas.brush.color:=colorBg;
    canvas.rectangle(0,0, width,height);
    canvas.font.color:=colorText;
-   canvas.textout(5,10,message1);
-   canvas.textout(5,35,message2);
-   canvas.textout(5,60,message3);
+   canvas.textout(DoScaleX(5),DoScaleX(10),message1);
+   canvas.textout(DoScaleX(5),DoScaleX(35),message2);
+   canvas.textout(DoScaleX(5),DoScaleX(60),message3);
  end;
 end;
 
@@ -1516,7 +1516,7 @@ begin
 
    //mark dither phase as grey background
    Canvas.pen.color:= colorLightGray;
-   Canvas.Pen.width :=6;{thickness lines}
+   Canvas.Pen.width :=DoScaleX(6);{thickness lines}
    Canvas.pen.style:=psSolid;
    lenb:=length(xy_trend)-1;
    counter:=lenb;
@@ -1524,24 +1524,24 @@ begin
    begin
      if xy_trend[i].ra<1E99 then //valid data
      begin
-       x:=width-counter*((width-5) div lenb)-15;
+       x:=width-counter*((width-DoScaleX(5)) div lenb)-DoScaleX(15);
        dec(counter);
 
        if xy_trend[i].settling then
        begin
-         canvas.moveto(x-2,0);
-         canvas.lineto(x-2,height);
+         canvas.moveto(x-DoScaleX(2),0);
+         canvas.lineto(x-DoScaleX(2),height);
        end;
      end;
    end;
 
 
-   Canvas.Pen.width :=1;{thickness lines}
+   Canvas.Pen.width :=DoScaleX(1);{thickness lines}
 
    for i:=-2 to 2 do
    begin
-     canvas.moveto(0,h2+I*20);{lines}
-     canvas.lineto(width,h2+i*20);{lines}
+     canvas.moveto(0,h2+I*DoScaleX(20));{lines}
+     canvas.lineto(width,h2+i*DoScaleX(20));{lines}
    end;
 
    if ((use_arcsec=false) or (pixel_size=0)) then
@@ -1554,32 +1554,32 @@ begin
       scale:=pixel_size/thescale;
       scaleunit:=' "';
    end;
-   canvas.textout(0,h2+20-10,FormatFloat(f1v,-2*scale));
-   canvas.textout(0,h2+40-10,FormatFloat(f1v,-4*scale));
-   canvas.textout(0,h2-20-10,'+'+FormatFloat(f1v,+2*scale));
-   canvas.textout(0,h2-40-10,'+'+FormatFloat(f1v,+4*scale)+scaleunit);
+   canvas.textout(0,h2+DoScaleX(20-10),FormatFloat(f1v,-2*scale));
+   canvas.textout(0,h2+DoScaleX(40-10),FormatFloat(f1v,-4*scale));
+   canvas.textout(0,h2-DoScaleX(20-10),'+'+FormatFloat(f1v,+2*scale));
+   canvas.textout(0,h2-DoScaleX(40-10),'+'+FormatFloat(f1v,+4*scale)+scaleunit);
 
 
 
-   Canvas.Pen.width :=2;{thickness lines}
+   Canvas.Pen.width :=DoScaleX(2);{thickness lines}
    lenb:=length(xy_trend)-1;
    Canvas.pen.color:=colorBlue;
    canvas.font.color:=colorBlue;
-   canvas.textout(5,0,'α');
+   canvas.textout(DoScaleX(5),0,'α');
 
 
    //draw DEC trend
    Canvas.pen.color:=colorRed;
    canvas.font.color:=colorRed;
-   canvas.textout(15,0,'δ');
+   canvas.textout(DoScaleX(15),0,'δ');
    counter:=lenb;
    for i:=lenb downto 0  do
    begin
      if xy_trend[i].ra<1E99 then //valid data
      begin
-       y:=h2-round(xy_trend[i].dec*10*thescale);
+       y:=h2-DoScaleX(round(xy_trend[i].dec*10*thescale));
        y:=min(max(0,y),height);
-       x:=width-counter*((width-5) div lenb)-15;
+       x:=width-counter*((width-DoScaleX(5)) div lenb)-DoScaleX(15);
        if counter<>lenb then canvas.lineto(x,y) else canvas.moveto(x,y);
        dec(counter);
      end;
@@ -1593,9 +1593,9 @@ begin
    begin
      if xy_trend[i].ra<1E99 then //valid data
      begin
-       y:=h2-round(xy_trend[i].deccorr*10*thescale) ;
+       y:=h2-DoScaleX(round(xy_trend[i].deccorr*10*thescale)) ;
        y:=min(max(0,y),height);
-       x:=width-counter*((width-5) div lenb)-15;
+       x:=width-counter*((width-DoScaleX(5)) div lenb)-DoScaleX(15);
        canvas.moveto(x-1,h2);{one pixel behind to allow both RA and DEC action to be drawn}
        canvas.lineto(x-1,y);
        dec(counter);
@@ -1603,16 +1603,16 @@ begin
    end;
 
    //draw RA trend
-   Canvas.Pen.width :=2;{thickness lines}
+   Canvas.Pen.width :=DoScaleX(2);{thickness lines}
    Canvas.pen.color:=colorBlue;
    counter:=lenb;
    for i:=lenb downto 0  do
    begin
      if xy_trend[i].ra<1E99 then //valid data
      begin
-       y:=h2-round(xy_trend[i].ra*10*thescale) ;
+       y:=h2-DoScaleX(round(xy_trend[i].ra*10*thescale)) ;
        y:=min(max(0,y),height);
-       x:=width-counter*((width-5) div lenb)-15;
+       x:=width-counter*((width-DoScaleX(5)) div lenb)-DoScaleX(15);
        if counter<>lenb then canvas.lineto(x,y) else canvas.moveto(x,y);
        dec(counter);
      end;
@@ -1624,9 +1624,9 @@ begin
    begin
      if xy_trend[i].ra<1E99 then //valid data
      begin
-       y:=h2-round(xy_trend[i].racorr*10*thescale) ;
+       y:=h2-DoScaleX(round(xy_trend[i].racorr*10*thescale)) ;
        y:=min(max(0,y),height);
-       x:=width-counter*((width-5) div lenb)-15;
+       x:=width-counter*((width-DoScaleX(5)) div lenb)-DoScaleX(15);
        canvas.moveto(x+1,h2);{one pixel before to allow both RA and DEC action to be drawn}
        canvas.lineto(x+1,y);
        dec(counter);

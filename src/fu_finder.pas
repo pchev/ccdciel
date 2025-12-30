@@ -144,6 +144,8 @@ implementation
 constructor Tf_finder.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
+ ScaleDPI(Self);
+ SetLang;
  visu:=Tf_visu.Create(self);
  visu.BtnFlipHorz.Visible:=false;
  visu.BtnFlipVert.Visible:=false;
@@ -163,8 +165,6 @@ begin
  Panel1.ChildSizing.LeftRightSpacing:=8;
  Panel1.ChildSizing.VerticalSpacing:=4;
  {$endif}
- ScaleDPI(Self);
- SetLang;
  FinderCapturingDark:=false;
  FinderPreviewLoop:=false;
  visu.BtnBullsEye.Down:=true;
