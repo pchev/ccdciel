@@ -7103,7 +7103,7 @@ begin
   else begin
      f_focuser.Notebook1.PageIndex:=0;
   end;
-  f_focuser.Position.Value:=focuser.Position;
+  f_focuser.FocusPosition:=focuser.Position;
   FocuserPositionMin:=0;
   FocuserPositionMax:=MAXWORD;
   r:=focuser.PositionRange;
@@ -8214,11 +8214,8 @@ CheckConnectionStatus;
 end;
 
 procedure Tf_main.FocuserPositionChange(n:double);
-var i: integer;
 begin
-  i:=round(n);
-  if i<>f_focuser.Position.Value then
-    f_focuser.Position.Value:=i;
+  f_focuser.FocusPosition:=round(n);
 end;
 
 procedure Tf_main.FocuserSpeedChange(n:double);
@@ -8274,7 +8271,7 @@ begin
  if focuser.hasAbsolutePosition then begin
     val(f_focuser.PosIncr.Text,p,n);
     if n=0 then begin
-       focuser.Position:=f_focuser.Position.Value-p;
+       focuser.Position:=f_focuser.FocusPosition-p;
     end;
  end
  else if focuser.hasRelativePosition then begin
@@ -8301,7 +8298,7 @@ begin
  if focuser.hasAbsolutePosition then begin
     val(f_focuser.PosIncr.Text,p,n);
     if n=0 then begin
-       focuser.Position:=f_focuser.Position.Value+p;
+       focuser.Position:=f_focuser.FocusPosition+p;
     end;
  end
  else if focuser.hasRelativePosition then begin
@@ -8325,7 +8322,7 @@ procedure Tf_main.FocusSetAbsolutePosition(Sender: TObject);
 var p: integer;
 begin
  if focuser.hasAbsolutePosition then begin
-   p:=f_focuser.Position.Value;
+   p:=f_focuser.FocusPosition;
    focuser.Position:=p;
  end
 end;

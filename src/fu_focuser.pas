@@ -70,6 +70,7 @@ type
     { private declarations }
     FonFocusIN, FonFocusOUT, FonSetAbsPos,FonVcurveLearning: TNotifyEvent;
     FBacklashActive: boolean;
+    LastAbsolutePosition: integer;
     procedure SetSpeed(value:integer);
     function GetSpeed:integer;
     procedure SetPosition(value:integer);
@@ -148,6 +149,7 @@ end;
 
 procedure Tf_focuser.BtnSetAbsPosClick(Sender: TObject);
 begin
+  LastAbsolutePosition:=Position.Value;
   if Assigned(FonSetAbsPos) then FonSetAbsPos(self);
 end;
 
@@ -183,7 +185,12 @@ procedure Tf_focuser.SetPosition(value:integer);
 begin
  begin
    case Notebook1.PageIndex of
-     2: Position.Value:=value;// Absolute
+     2: begin
+         if LastAbsolutePosition<>value then begin
+           LastAbsolutePosition:=value;
+           Position.Value:=value;// Absolute
+         end;
+        end;
    end;
  end;
 end;
@@ -191,7 +198,7 @@ end;
 function Tf_focuser.GetPosition:integer;
 begin
  case Notebook1.PageIndex of
-   2: result:=Position.Value;// Absolute
+   2: result:=LastAbsolutePosition;// Absolute
    else result:=-1;
  end;
 end;

@@ -23,21 +23,21 @@ object f_focuser: Tf_focuser
     TabOrder = 0
     object PanelParam: TPanel
       Left = 1
-      Height = 55
+      Height = 60
       Top = 1
-      Width = 145
+      Width = 208
       AutoSize = True
       BevelOuter = bvNone
-      ClientHeight = 55
-      ClientWidth = 145
+      ClientHeight = 60
+      ClientWidth = 208
       ParentFont = False
       TabOrder = 1
       object Notebook1: TNotebook
         Left = 0
-        Height = 55
+        Height = 60
         Top = 0
-        Width = 145
-        PageIndex = 0
+        Width = 208
+        PageIndex = 2
         Align = alClient
         AutoSize = True
         TabOrder = 0
@@ -78,9 +78,12 @@ object f_focuser: Tf_focuser
               Top = 0
               Width = 81
               Constraints.MaxHeight = 28
-              MaxValue = 999999999
+              MaxLength = 0
               ParentFont = False
               TabOrder = 0
+              MaxValue = 999999999
+              NullValue = 0
+              Value = 0
             end
             object timer: TSpinEditEx
               Left = 64
@@ -88,9 +91,12 @@ object f_focuser: Tf_focuser
               Top = 27
               Width = 81
               Constraints.MaxHeight = 28
-              MaxValue = 999999999
+              MaxLength = 0
               ParentFont = False
               TabOrder = 1
+              MaxValue = 999999999
+              NullValue = 0
+              Value = 0
             end
           end
         end
@@ -226,10 +232,13 @@ object f_focuser: Tf_focuser
               Height = 32
               Top = 0
               Width = 92
-              MaxValue = 9999999
-              MinValue = -999999
+              MaxLength = 0
               ParentFont = False
               TabOrder = 3
+              MaxValue = 9999999
+              MinValue = -999999
+              NullValue = 0
+              Value = 0
             end
           end
         end
@@ -240,7 +249,7 @@ object f_focuser: Tf_focuser
       AnchorSideTop.Side = asrBottom
       Left = 137
       Height = 32
-      Top = 56
+      Top = 61
       Width = 80
       BevelOuter = bvNone
       ClientHeight = 32
@@ -279,7 +288,7 @@ object f_focuser: Tf_focuser
       AnchorSideTop.Side = asrBottom
       Left = 1
       Height = 28
-      Top = 56
+      Top = 61
       Width = 137
       BevelOuter = bvNone
       ClientHeight = 28
