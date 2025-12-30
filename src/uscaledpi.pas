@@ -201,7 +201,7 @@ begin
     end;
   end;
 
-  if Control is TWinControl then
+  if (Control is TWinControl) and (not(Control is TUpDown)) then
   begin
     WinControl := TWinControl(Control);
     if WinControl.ControlCount > 0 then
