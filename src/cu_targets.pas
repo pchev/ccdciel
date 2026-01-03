@@ -1340,12 +1340,12 @@ begin
         else
            p:=nil;
         if (p<>nil) and p.Running then p.Stop;
+        FStopping:=true;
         wait(15);
         // run sky flat
         FSeqLockTwilight:=false;
         FCurrentTarget:=j-1;
         FDawnFlatNow:=true;
-        FStopping:=true;
         msg('Nexttarget 1254',9);
         NextTarget;
         exit;
@@ -3161,6 +3161,7 @@ begin
  if FRunning then begin
     TargetRepeatTimer.Enabled:=false;
     ShowDelayMsg('');
+    if FStopping then exit;
     t:=Targets[FCurrentTarget];
     if t<>nil then begin
       Msg(Format(rsRepeatTarget, [blank+inttostr(t.repeatdone+1),t.repeatcount_str, t.objectname]),1);
