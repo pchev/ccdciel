@@ -120,10 +120,10 @@ function  T_rotator.GetAngleIntf:double;
 begin
 if FSoftSync then begin
   if FReverse then
-    result:=360-GetAngle-FCalibrationAngle
+    result:=(360-GetAngle)-FCalibrationAngle
   else
-    result:=GetAngle+FCalibrationAngle;
-  result:=Rmod(720+result,360);
+    result:=GetAngle-FCalibrationAngle;
+  result:=Rmod(7200+result,360);
   if result>359 then result:=0;
 end
 else
@@ -137,8 +137,8 @@ if FSoftSync then begin
   if FReverse then
     p:=360-p-FCalibrationAngle
   else
-    p:=p-FCalibrationAngle;
-  p:=rmod(720+p,360);
+    p:=p+FCalibrationAngle;
+  p:=rmod(7200+p,360);
   if p>=360 then p:=0;
   if FSoftLimit then begin
     p:=rmod(180+p,180);
@@ -153,10 +153,10 @@ Procedure T_rotator.Sync(p:double);
 begin
 if FSoftSync then begin
   if FReverse then
-    FCalibrationAngle:=360-p-GetAngle
+    FCalibrationAngle:=360-GetAngle-p
   else
-    FCalibrationAngle:=p-GetAngle;
-  FCalibrationAngle:=rmod(720+FCalibrationAngle,360);
+    FCalibrationAngle:=GetAngle-p;
+  FCalibrationAngle:=rmod(7200+FCalibrationAngle,360);
   if FCalibrationAngle>359 then FCalibrationAngle:=0;
    msg(Format(rsRotatorSyncC, [FormatFloat(f1, FCalibrationAngle)]));
   if Assigned(FonAngleChange) then FonAngleChange(self);
