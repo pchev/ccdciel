@@ -46,6 +46,7 @@ type
     procedure Connect(cp1,cp2,cp3,cp4: string; cb1:boolean=False); override;
     procedure Disconnect; override;
     procedure Shutdown; override;
+    procedure Show; override;
     function Cmd(const Value: string):string; override;
     function ShowImage(fn: string; fovdeg:double=0):boolean; override;
     function DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean; override;
@@ -106,6 +107,11 @@ end;
 procedure TPlanetarium_cdc.Shutdown;
 begin
  Cmd('SHUTDOWN');
+end;
+
+procedure TPlanetarium_cdc.Show;
+begin
+ Cmd('SHOW');
 end;
 
 function TPlanetarium_cdc.GetEqSys: double;
@@ -214,7 +220,7 @@ if FRecvData<>'' then begin
   p:=Tstringlist.Create;
   SplitRec(FRecvData,#9,p);
   if (p[0]='>')and(copy(p[2],1,4)<>'From') then begin
-    if (p.Count>=4) then begin
+    if (p.Count>5) then begin
       Fra:=StrToAR(p[2]);
       Fde:=StrToDE(p[3]);
       if (FplanetariumEquinox<>2000)and(FplanetariumJD>0) then begin

@@ -6,6 +6,7 @@ object f_goto: Tf_goto
   Caption = 'f_goto'
   ClientHeight = 357
   ClientWidth = 337
+  FormStyle = fsSystemStayOnTop
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow

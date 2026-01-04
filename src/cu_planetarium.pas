@@ -64,6 +64,7 @@ public
   Procedure Connect(cp1,cp2,cp3,cp4: string; cb1:boolean=False); virtual; abstract;
   procedure Disconnect; virtual; abstract;
   procedure Shutdown; virtual; abstract;
+  procedure Show; virtual; abstract;
   function Cmd(const Value: string):string; virtual; abstract;
   function ShowImage(fn: string; fovdeg:double=0):boolean; virtual; abstract;
   function DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean; virtual; abstract;

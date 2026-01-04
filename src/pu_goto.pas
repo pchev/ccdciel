@@ -124,6 +124,7 @@ begin
   Obj.SetFocus;
   if (planetarium<>nil) and (planetarium.Connected) then begin
     LastMsg:='';
+    planetarium.show;
     planetarium.onReceiveData:=@recvdata;
     recvdata('');
   end;

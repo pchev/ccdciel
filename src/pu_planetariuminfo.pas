@@ -80,6 +80,7 @@ begin
   end
   else begin
     LastMsg:='';
+    planetarium.Show;
     planetarium.ClearData;
     planetarium.onReceiveData:=@recvdata;
      if Assigned(FNewTarget) then begin

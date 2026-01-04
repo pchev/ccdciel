@@ -44,6 +44,7 @@ type
     procedure Connect(cp1,cp2,cp3,cp4: string; cb1:boolean=False); override;
     procedure Disconnect; override;
     procedure Shutdown; override;
+    procedure Show; override;
     function Cmd(const Value: string):string; override;
     function ShowImage(fn: string; fovdeg:double=0):boolean; override;
     function DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean; override;
@@ -78,6 +79,10 @@ end;
 
 
 procedure TPlanetarium_none.Shutdown;
+begin
+end;
+
+procedure TPlanetarium_none.Show;
 begin
 end;
 
