@@ -154,6 +154,7 @@ end;
 
 Procedure T_rotator.Sync(p:double);
 begin
+msg(Format(rsSyncToS, [FormatFloat(f1, FCalibrationAngle)]));
 if FSoftSync then begin
   if FReverse then
     FCalibrationAngle:=360-GetMechAngle-p

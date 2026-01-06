@@ -676,6 +676,7 @@ begin
   rgDitherMode.Caption:=rsDitherMode;
   rgDitherMode.Items[0]:=rsSpiral;
   rgDitherMode.Items[1]:=rsRandom;
+  cbRotator.Caption:=rsUseTheRotato;
   TabSheetSpectro.Caption:=rsSpectroscopy;
   cbSpectro.Caption:=rsActivateSpec;
   rgSpectroStrategy.Caption:=rsCenteringAnd;

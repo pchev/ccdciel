@@ -1645,6 +1645,8 @@ resourcestring
   rsRunScriptWhe = 'Run script when the weather change';
   rsDuplicateAct = 'Duplicate action';
   rsMechanical = 'Mechanical';
+  rsSyncToS = 'Sync to %s';
+  rsUseTheRotato = 'Use the rotator angle';
 
 implementation
 
