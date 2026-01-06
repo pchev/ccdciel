@@ -53,6 +53,8 @@ T_rotator = class(TComponent)
     function GetDriverReverse:boolean; virtual; abstract;
     function  GetAngle:double; virtual; abstract;
     procedure SetAngle(p:double); virtual; abstract;
+    function  GetMechAngle:double; virtual; abstract;
+    procedure SetMechAngle(p:double); virtual; abstract;
     Procedure SyncAngle(angle:double); virtual; abstract;
     procedure SetTimeout(num:integer); virtual; abstract;
   public
@@ -67,6 +69,7 @@ T_rotator = class(TComponent)
     property Timeout: integer read FTimeout write SetTimeout;
     property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
     property Angle: double read GetAngleIntf write SetAngleIntf;
+    property MechAngle: double read GetMechAngle write SetMechAngle;
     Procedure Sync(p:double);
     property CalibrationAngle: double read FCalibrationAngle write FCalibrationAngle;
     property Reverse: Boolean read GetReverse write SetReverse;
@@ -120,9 +123,9 @@ function  T_rotator.GetAngleIntf:double;
 begin
 if FSoftSync then begin
   if FReverse then
-    result:=(360-GetAngle)-FCalibrationAngle
+    result:=(360-GetMechAngle)-FCalibrationAngle
   else
-    result:=GetAngle-FCalibrationAngle;
+    result:=GetMechAngle-FCalibrationAngle;
   result:=Rmod(7200+result,360);
   if result>359 then result:=0;
 end
@@ -143,7 +146,7 @@ if FSoftSync then begin
   if FSoftLimit then begin
     p:=rmod(180+p,180);
   end;
-  SetAngle(p);
+  SetMechAngle(p);
 end
 else
   SetAngle(p);
@@ -153,12 +156,12 @@ Procedure T_rotator.Sync(p:double);
 begin
 if FSoftSync then begin
   if FReverse then
-    FCalibrationAngle:=360-GetAngle-p
+    FCalibrationAngle:=360-GetMechAngle-p
   else
-    FCalibrationAngle:=GetAngle-p;
+    FCalibrationAngle:=GetMechAngle-p;
   FCalibrationAngle:=rmod(7200+FCalibrationAngle,360);
   if FCalibrationAngle>359 then FCalibrationAngle:=0;
-   msg(Format(rsRotatorSyncC, [FormatFloat(f1, FCalibrationAngle)]));
+  msg(Format(rsRotatorSyncC, [FormatFloat(f1, FCalibrationAngle)]));
   if Assigned(FonAngleChange) then FonAngleChange(self);
 end
 else

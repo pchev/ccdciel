@@ -43,6 +43,8 @@ T_ascomrestrotator = class(T_rotator)
  protected
    procedure SetAngle(p:double); override;
    function  GetAngle:double; override;
+   procedure SetMechAngle(p:double); override;
+   function  GetMechAngle:double; override;
    procedure SyncAngle(p:double); override;
    procedure SetTimeout(num:integer); override;
    function  GetDriverReverse:boolean; override;
@@ -260,6 +262,29 @@ begin
  if FStatus<>devConnected then exit;
  try
    result:=V.Get('position').AsFloat;
+ except
+    on E: Exception do msg('Get position error: ' + E.Message,0);
+ end;
+end;
+
+procedure T_ascomrestrotator.SetMechAngle(p:double);
+begin
+ if FStatus<>devConnected then exit;
+ try
+   V.Put('movemechanical',['Position',FormatFloat(f2,p)]);
+   WaitRotatorMoving(120000);
+
+   except
+    on E: Exception do msg('Error, can''t move to. ' + E.Message,0);
+   end;
+end;
+
+function  T_ascomrestrotator.GetMechAngle:double;
+begin
+ result:=0;
+ if FStatus<>devConnected then exit;
+ try
+   result:=V.Get('mechanicalposition').AsFloat;
  except
     on E: Exception do msg('Get position error: ' + E.Message,0);
  end;

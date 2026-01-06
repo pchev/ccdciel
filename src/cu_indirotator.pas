@@ -68,6 +68,8 @@ T_indirotator = class(T_rotator)
  protected
    procedure SetAngle(p:double); override;
    function  GetAngle:double; override;
+   procedure SetMechAngle(p:double); override;
+   function  GetMechAngle:double; override;
    procedure SyncAngle(p:double); override;
    procedure SetTimeout(num:integer); override;
    function  GetDriverReverse:boolean; override;
@@ -374,6 +376,18 @@ if RotatorAngle<>nil then begin;
   result:=RotatorAngle.np[0].value;
 end
 else result:=0;
+end;
+
+procedure T_indirotator.SetMechAngle(p:double);
+begin
+  // INDI do not distinguish mechanical and absolute ?
+  SetAngle(p);
+end;
+
+function  T_indirotator.GetMechAngle:double;
+begin
+  // INDI do not distinguish mechanical and absolute ?
+  result:=GetAngle;
 end;
 
 procedure T_indirotator.SyncAngle(p:double);

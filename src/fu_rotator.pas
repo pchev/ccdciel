@@ -41,21 +41,24 @@ type
     CalAngle: TStaticText;
     Label1: TLabel;
     Label2: TLabel;
+    Label3: TLabel;
     Panel2: TPanel;
     Panel3: TPanel;
+    PanelDetails: TPanel;
     PanelSoftsync: TPanel;
     PanelSoftlimit: TPanel;
     PanelSoft: TPanel;
     Reverse: TCheckBox;
     Label6: TLabel;
     Panel1: TPanel;
-    btnShowSync: TSpeedButton;
+    btnShowDetails: TSpeedButton;
+    MechAngle: TStaticText;
     Title: TLabel;
     procedure BtnResetSyncClick(Sender: TObject);
     procedure BtnHaltClick(Sender: TObject);
     procedure BtnRotateClick(Sender: TObject);
     procedure ReverseChange(Sender: TObject);
-    procedure btnShowSyncClick(Sender: TObject);
+    procedure btnShowDetailsClick(Sender: TObject);
   private
     { private declarations }
     FonRotate: TNotifyEvent;
@@ -117,7 +120,8 @@ begin
   BtnResetSync.Caption:=rsReset;
   Label2.Caption:=rsSyncOffset;
   Label1.Caption:=rsPA+'+180'+sdeg;
-  btnShowSync.Caption:=ellipsis;
+  Label3.Caption:=rsMechanical;
+  btnShowDetails.Caption:=ellipsis;
 end;
 
 procedure Tf_rotator.SetReverse(onoff:boolean);
@@ -148,9 +152,9 @@ begin
    if Assigned(FonReverse) then FonReverse(self);
 end;
 
-procedure Tf_rotator.btnShowSyncClick(Sender: TObject);
+procedure Tf_rotator.btnShowDetailsClick(Sender: TObject);
 begin
-  PanelSoft.Visible:=btnShowSync.Down;
+  PanelDetails.Visible:=btnShowDetails.Down;
 end;
 
 end.

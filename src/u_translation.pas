@@ -1644,6 +1644,7 @@ resourcestring
   rsMakeSureTheS = 'Make sure the stars are not saturated.';
   rsRunScriptWhe = 'Run script when the weather change';
   rsDuplicateAct = 'Duplicate action';
+  rsMechanical = 'Mechanical';
 
 implementation
 

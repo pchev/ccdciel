@@ -46,6 +46,8 @@ T_ascomrotator = class(T_rotator)
  protected
    procedure SetAngle(p:double); override;
    function  GetAngle:double; override;
+   procedure SetMechAngle(p:double); override;
+   function  GetMechAngle:double; override;
    procedure SetTimeout(num:integer); override;
    function  GetDriverReverse:boolean; override;
    procedure SetDriverReverse(value:boolean); override;
@@ -280,6 +282,35 @@ begin
  if not VarIsEmpty(V) then begin
  try
    result:=V.Position;
+   except
+    on E: Exception do msg('Get position error: ' + E.Message,0);
+   end;
+ end;
+ {$endif}
+end;
+
+procedure T_ascomrotator.SetMechAngle(p:double);
+begin
+{$ifdef mswindows}
+if not VarIsEmpty(V) then begin
+try
+  V.MoveMechanical(p);
+  WaitRotatorMoving(120000);
+
+  except
+   on E: Exception do msg('Error, can''t move to. ' + E.Message,0);
+  end;
+end;
+{$endif}
+end;
+
+function  T_ascomrotator.GetMechAngle:double;
+begin
+ result:=0;
+ {$ifdef mswindows}
+ if not VarIsEmpty(V) then begin
+ try
+   result:=V.MechanicalPosition;
    except
     on E: Exception do msg('Get position error: ' + E.Message,0);
    end;

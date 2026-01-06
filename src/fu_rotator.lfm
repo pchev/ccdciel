@@ -1,10 +1,10 @@
 object f_rotator: Tf_rotator
   Left = 0
-  Height = 145
+  Height = 210
   Top = 0
   Width = 273
   AutoSize = True
-  ClientHeight = 145
+  ClientHeight = 210
   ClientWidth = 273
   ParentFont = False
   TabOrder = 0
@@ -29,14 +29,14 @@ object f_rotator: Tf_rotator
   end
   object Panel1: TPanel
     Left = 0
-    Height = 113
+    Height = 175
     Top = 20
     Width = 273
     Align = alTop
     AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 113
+    ClientHeight = 175
     ClientWidth = 273
     ParentFont = False
     TabOrder = 0
@@ -44,10 +44,10 @@ object f_rotator: Tf_rotator
       Left = 0
       Height = 29
       Top = 0
-      Width = 231
+      Width = 241
       BevelOuter = bvNone
       ClientHeight = 29
-      ClientWidth = 231
+      ClientWidth = 241
       ParentFont = False
       TabOrder = 0
       object Label6: TLabel
@@ -91,25 +91,12 @@ object f_rotator: Tf_rotator
       Left = 0
       Height = 25
       Top = 29
-      Width = 231
+      Width = 241
       BevelOuter = bvNone
       ClientHeight = 25
-      ClientWidth = 231
+      ClientWidth = 241
       ParentFont = False
       TabOrder = 1
-      object Reverse: TCheckBox
-        AnchorSideTop.Control = BtnHalt
-        AnchorSideTop.Side = asrCenter
-        Left = 4
-        Height = 21
-        Top = 2
-        Width = 109
-        AutoSize = False
-        Caption = 'Reverse'
-        OnChange = ReverseChange
-        ParentFont = False
-        TabOrder = 0
-      end
       object BtnHalt: TButton
         Left = 120
         Height = 25
@@ -118,100 +105,139 @@ object f_rotator: Tf_rotator
         Caption = 'Halt'
         OnClick = BtnHaltClick
         ParentFont = False
-        TabOrder = 1
+        TabOrder = 0
       end
-      object btnShowSync: TSpeedButton
+      object btnShowDetails: TSpeedButton
         Left = 208
         Height = 22
-        Top = 0
+        Top = 3
         Width = 23
         AllowAllUp = True
         GroupIndex = 1
-        OnClick = btnShowSyncClick
+        OnClick = btnShowDetailsClick
       end
     end
-    object PanelSoft: TPanel
+    object PanelDetails: TPanel
       Left = 0
-      Height = 58
+      Height = 120
       Top = 54
-      Width = 231
-      AutoSize = True
+      Width = 241
       BevelOuter = bvNone
-      ClientHeight = 58
-      ClientWidth = 231
+      ClientHeight = 120
+      ClientWidth = 241
       TabOrder = 2
-      Visible = False
-      object PanelSoftsync: TPanel
+      object PanelSoft: TPanel
         Left = 0
-        Height = 30
-        Top = 0
-        Width = 231
-        Align = alTop
+        Height = 92
+        Top = 28
+        Width = 241
+        AutoSize = True
         BevelOuter = bvNone
-        ClientHeight = 30
-        ClientWidth = 231
-        TabOrder = 1
-        object Label2: TLabel
-          AnchorSideTop.Control = CalAngle
-          AnchorSideTop.Side = asrCenter
-          Left = 8
-          Height = 18
-          Top = 5
-          Width = 69
-          Caption = 'Sync Offset'
-          ParentColor = False
-        end
-        object CalAngle: TStaticText
-          Left = 108
-          Height = 24
-          Top = 2
-          Width = 60
-          Constraints.MaxHeight = 24
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 0
-        end
-        object BtnResetSync: TButton
-          AnchorSideTop.Control = CalAngle
-          AnchorSideTop.Side = asrCenter
-          Left = 166
-          Height = 25
-          Top = 2
-          Width = 65
-          Caption = 'Reset'
-          OnClick = BtnResetSyncClick
-          ParentFont = False
+        ClientHeight = 92
+        ClientWidth = 241
+        TabOrder = 0
+        Visible = False
+        object PanelSoftsync: TPanel
+          Left = 0
+          Height = 64
+          Top = 0
+          Width = 241
+          Align = alTop
+          BevelOuter = bvNone
+          ClientHeight = 64
+          ClientWidth = 241
           TabOrder = 1
+          object Label2: TLabel
+            AnchorSideTop.Control = CalAngle
+            AnchorSideTop.Side = asrCenter
+            Left = 8
+            Height = 18
+            Top = 3
+            Width = 69
+            Caption = 'Sync Offset'
+            ParentColor = False
+          end
+          object CalAngle: TStaticText
+            Left = 100
+            Height = 24
+            Top = 0
+            Width = 60
+            Constraints.MaxHeight = 24
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 0
+          end
+          object BtnResetSync: TButton
+            AnchorSideTop.Control = CalAngle
+            AnchorSideTop.Side = asrCenter
+            Left = 168
+            Height = 25
+            Top = 0
+            Width = 73
+            Caption = 'Reset'
+            OnClick = BtnResetSyncClick
+            ParentFont = False
+            TabOrder = 1
+          end
+          object Label3: TLabel
+            AnchorSideTop.Control = MechAngle
+            AnchorSideTop.Side = asrCenter
+            Left = 8
+            Height = 18
+            Top = 38
+            Width = 69
+            Caption = 'Mechanical'
+            ParentColor = False
+          end
+          object MechAngle: TStaticText
+            Left = 100
+            Height = 24
+            Top = 35
+            Width = 60
+            TabOrder = 2
+          end
+        end
+        object PanelSoftlimit: TPanel
+          Left = 0
+          Height = 28
+          Top = 64
+          Width = 241
+          Align = alTop
+          BevelOuter = bvNone
+          ClientHeight = 28
+          ClientWidth = 241
+          TabOrder = 0
+          object Label1: TLabel
+            AnchorSideTop.Control = Angle180
+            AnchorSideTop.Side = asrCenter
+            Left = 8
+            Height = 18
+            Top = 5
+            Width = 46
+            Caption = 'PA+180'
+            ParentColor = False
+          end
+          object Angle180: TStaticText
+            Left = 100
+            Height = 24
+            Top = 2
+            Width = 60
+            Constraints.MaxHeight = 24
+            TabOrder = 0
+          end
         end
       end
-      object PanelSoftlimit: TPanel
-        Left = 0
-        Height = 28
-        Top = 30
-        Width = 231
-        Align = alTop
-        BevelOuter = bvNone
-        ClientHeight = 28
-        ClientWidth = 231
-        TabOrder = 0
-        object Label1: TLabel
-          AnchorSideTop.Control = Angle180
-          AnchorSideTop.Side = asrCenter
-          Left = 8
-          Height = 18
-          Top = 5
-          Width = 46
-          Caption = 'PA+180'
-          ParentColor = False
-        end
-        object Angle180: TStaticText
-          Left = 108
-          Height = 24
-          Top = 2
-          Width = 60
-          Constraints.MaxHeight = 24
-          TabOrder = 0
-        end
+      object Reverse: TCheckBox
+        AnchorSideTop.Side = asrCenter
+        Left = 8
+        Height = 21
+        Top = 2
+        Width = 109
+        AutoSize = False
+        Caption = 'Reverse'
+        OnChange = ReverseChange
+        ParentFont = False
+        TabOrder = 1
       end
     end
   end

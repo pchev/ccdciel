@@ -1998,7 +1998,7 @@ begin
 
   f_rotator:=Tf_rotator.Create(self);
   f_rotator.PanelSoft.Visible:=false;
-  f_rotator.btnShowSync.Visible:=false;
+  f_rotator.PanelDetails.Visible:=false;
   f_rotator.onRotate:=@RotatorRotate;
   f_rotator.onHalt:=@RotatorHalt;
   f_rotator.onReverse:=@RotatorReverse;
@@ -7146,7 +7146,7 @@ Procedure Tf_main.ConnectRotator(Sender: TObject);
 begin
   rotator.SoftSync:=config.GetValue('/Rotator/SoftSync',false);
   rotator.SoftLimit:=config.GetValue('/Rotator/SoftLimit',false);
-  f_rotator.btnShowSync.Visible:=rotator.SoftSync;
+  f_rotator.PanelSoft.Visible:=rotator.SoftSync;
   f_rotator.PanelSoftlimit.Visible:=rotator.SoftLimit;
   case rotator.RotatorInterface of
     INDI : rotator.Connect(config.GetValue('/INDIrotator/Server',''),
@@ -8693,8 +8693,12 @@ end;
 Procedure Tf_main.RotatorAngleChange(Sender: TObject);
 begin
  f_rotator.Angle.Value:=rotator.Angle;
+ f_rotator.MechAngle.Caption:=FormatFloat(f2,rotator.MechAngle);
  if rotator.SoftLimit then f_rotator.Angle180.Caption:=FormatFloat(f2,rmod(f_rotator.Angle.Value+360+180,360));
- if rotator.SoftSync then f_rotator.CalAngle.Caption:=FormatFloat(f2,rotator.CalibrationAngle);
+ if rotator.SoftSync then begin
+   f_rotator.CalAngle.Caption:=FormatFloat(f2,rotator.CalibrationAngle);
+   f_rotator.MechAngle.Caption:=FormatFloat(f2,rotator.MechAngle);
+ end;
 end;
 
 Procedure Tf_main.RotatorRotate(Sender: TObject);
