@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, LCLIntf, u_translation, cu_mount, cu_camera, BGRABitmap, cu_fits, fu_internalguider, cu_astrometry,
+uses u_global, LCLIntf, u_translation, cu_mount, cu_camera, cu_rotator,  BGRABitmap, cu_fits, fu_internalguider, cu_astrometry,
   Forms, Classes, SysUtils, ExtCtrls;
 
 type
@@ -57,6 +57,7 @@ type
     FonGuideStat: TNotifyEvent;
     StarLostTimer: TTimer;
     FMount: T_mount;
+    FRotator: T_rotator;
     FCamera: T_camera;
     FGuideBmp: TBGRABitmap;
     FGuideFits: Tfits;
@@ -97,6 +98,7 @@ type
     property AutoguiderType: TAutoguiderType read FAutoguiderType;
     property Terminated;
     property Mount: T_mount read FMount write FMount;
+    property Rotator: T_rotator read FRotator write FRotator;
     property Camera: T_camera read FCamera write FCamera;
     property Running: boolean read FRunning;
     property Recovering: boolean read FRecovering;

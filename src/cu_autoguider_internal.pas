@@ -1208,10 +1208,15 @@ begin
   WriteLog('RA Guide Speed = '+FormatFloat(f1,Finternalguider.GuideSpeedRA.Value*15)+' a-s/s, '+
            'Dec Guide Speed = '+FormatFloat(f1,Finternalguider.GuideSpeedDEC.Value*15)+' a-s/s, '+
            'Cal Dec = '+Finternalguider.CalDeclination.Text+', '+
+           'Cal Rot = '+Finternalguider.CalRotatorAngle.Text+', '+
            'Last Cal Issue = '+Finternalguider.CalIssue.Text+', '+
            'Timestamp = '+Finternalguider.CalDate.Text);
+  if (Finternalguider.cbRotator.Enabled)and(Finternalguider.cbRotator.Checked)and(rotator<>nil)and(rotator.Status=devConnected) then
+    txt:= FormatFloat(f1,Rotator.Angle)
+  else
+    txt:= 'N/A';
   WriteLog('RA = '+FormatFloat(f2,mount.Ra)+' hr, Dec = '+FormatFloat(f2,mount.Dec)+' deg, Hour angle = '+FormatFloat(f2,lha)+
-           ' hr, Pier side = '+pier+', Alt = '+FormatFloat(f1,alt)+' deg, Az = '+FormatFloat(f1,az));
+           ' hr, Pier side = '+pier+', Rotator pos = '+txt+', Alt = '+FormatFloat(f1,alt)+' deg, Az = '+FormatFloat(f1,az));
   if finternalguider.SolarTracking then
     WriteLog('SolarTracking = true, Rate = '+FormatFloat(f3,Finternalguider.v_solar)+', PA = '+FormatFloat(f2,Finternalguider.vpa_solar))
   else
@@ -2260,6 +2265,10 @@ begin
 
         Finternalguider.CalDate.Text:=FormatDateTime(dateisoshort,now);
         Finternalguider.CalDeclination.Text:=FormatFloat(f1,CalNorthDec1);
+        if (Finternalguider.cbRotator.Enabled)and(Finternalguider.cbRotator.Checked)and(rotator<>nil)and(rotator.Status=devConnected) then
+          Finternalguider.CalRotatorAngle.Text:=FormatFloat(f1,rotator.Angle)
+        else
+          Finternalguider.CalRotatorAngle.Text:='';
         Finternalguider.CalBinning.Text:=IntToStr(Finternalguider.Binning.Value);
         Finternalguider.CalRAspeed.Text:=FormatFloat(f1,Finternalguider.GuideSpeedRA.Value);
         Finternalguider.CalDECspeed.Text:=FormatFloat(f1,Finternalguider.GuideSpeedDEC.Value);

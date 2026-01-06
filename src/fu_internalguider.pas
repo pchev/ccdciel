@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses   UScaleDPI, Dialogs, u_hints, u_translation, u_global, cu_camera, indiapi, fu_visu,
+uses   UScaleDPI, Dialogs, u_hints, u_translation, u_global, u_utils, cu_camera, cu_rotator, indiapi, fu_visu,
   Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls, SpinEx,
   math,LCLintf, ComCtrls, Buttons, Menus;
 
@@ -52,6 +52,7 @@ type
     ButtonCalibrate: TButton;
     ButtonGuide: TButton;
     ButtonStop: TButton;
+    CalRotatorAngle: TEdit;
     cbDrawSlit: TCheckBox;
     cbFilterNoise: TCheckBox;
     cbSpectro: TCheckBox;
@@ -63,10 +64,12 @@ type
     CalIssue: TEdit;
     cbEnlargeImage: TCheckBox;
     cbFastCentering: TCheckBox;
+    cbRotator: TCheckBox;
     CheckBoxBacklash: TCheckBox;
     CheckBoxTrackSolar1: TCheckBox;
     cbSlitList: TComboBox;
     disable_guiding1: TCheckBox;
+    Label17: TLabel;
     LabelSetOffset: TLabel;
     Label55: TLabel;
     Label56: TLabel;
@@ -312,6 +315,7 @@ type
     FGuideLockNextX, FGuideLockNextY, FStarOffsetStep, BinningRef: integer;
     FonShowMessage: TNotifyMsg;
     Fcamera: T_camera;
+    FRotator: T_rotator;
     CurrentSlit: integer;
 
     procedure msg(txt:string; level: integer);
@@ -445,6 +449,7 @@ type
     procedure CheckGuiderReferenceFile;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property Camera: T_camera read Fcamera write Fcamera;
+    property Rotator: T_rotator read FRotator write FRotator;
     property onLoop: TNotifyEvent read FonLoop write FonLoop;
     property onStart: TNotifyEvent read FonStart write FonStart;
     property onStop: TNotifyEvent read FonStop write FonStop;
@@ -886,8 +891,17 @@ begin
 end;
 
 function Tf_internalguider.GetPAsetting:double;
+var calrot: double;
+    n: integer;
 begin
   result:=strtofloat(PA1.text);
+  if (cbRotator.Enabled)and(cbRotator.Checked)and(rotator<>nil)and(rotator.Status=devConnected) then begin
+     val(CalRotatorAngle.Text,calrot,n);
+     if n=0 then begin
+        result:=result+(calrot-Rotator.Angle);
+        result:=rmod(result+360,360);
+     end;
+  end;
 end;
 
 procedure Tf_internalguider.SetPAsetting(value:double);
@@ -1084,6 +1098,13 @@ end;
 procedure Tf_internalguider.cbSpectroChange(Sender: TObject);
 begin
   PanelSpectro.Enabled:=cbSpectro.Checked;
+  if cbSpectro.Checked or SameGuiderFinder then begin
+    framesize1.Enabled:=false;
+    framesize1.ItemIndex:=0;
+  end
+  else begin
+    framesize1.Enabled:=true;
+  end;
 end;
 
 

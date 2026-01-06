@@ -968,7 +968,7 @@ object f_internalguider: Tf_internalguider
               Left = 8
               Height = 22
               Hint = 'Use alternative method for measuring pixel scale in arc seconds during calibration. '
-              Top = 104
+              Top = 132
               Width = 281
               Caption = 'Measure pixel scale ["/px] by stop tracking'
               ParentFont = False
@@ -979,7 +979,7 @@ object f_internalguider: Tf_internalguider
               AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 18
-              Top = 7
+              Top = 35
               Width = 166
               Caption = 'Initial calibration step [ms] '
               ParentColor = False
@@ -987,7 +987,7 @@ object f_internalguider: Tf_internalguider
             object InitialCalibrationStep: TSpinEditEx
               Left = 200
               Height = 32
-              Top = 0
+              Top = 28
               Width = 72
               MaxLength = 0
               TabOrder = 1
@@ -1000,7 +1000,7 @@ object f_internalguider: Tf_internalguider
             object ForceGuideSpeed: TCheckBox
               Left = 8
               Height = 22
-              Top = 32
+              Top = 60
               Width = 192
               Caption = 'Set guide speed [x sidereal]'
               OnChange = ForceGuideSpeedChange
@@ -1009,7 +1009,7 @@ object f_internalguider: Tf_internalguider
             object PanelGuideSpeed: TPanel
               Left = 0
               Height = 42
-              Top = 56
+              Top = 84
               Width = 330
               BevelOuter = bvNone
               ClientHeight = 42
@@ -1058,6 +1058,14 @@ object f_internalguider: Tf_internalguider
                 MinValue = 0.1
                 Value = 0.1
               end
+            end
+            object cbRotator: TCheckBox
+              Left = 8
+              Height = 22
+              Top = 4
+              Width = 196
+              Caption = 'Use rotator angle correction'
+              TabOrder = 4
             end
           end
         end
@@ -1951,7 +1959,7 @@ object f_internalguider: Tf_internalguider
               AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 18
-              Top = 375
+              Top = 407
               Width = 48
               Caption = 'Binning'
               ParentColor = False
@@ -1961,7 +1969,7 @@ object f_internalguider: Tf_internalguider
               AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 18
-              Top = 407
+              Top = 439
               Width = 57
               Caption = 'RA speed'
               ParentColor = False
@@ -1971,7 +1979,7 @@ object f_internalguider: Tf_internalguider
               AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 18
-              Top = 439
+              Top = 471
               Width = 66
               Caption = 'DEC speed'
               ParentColor = False
@@ -1987,7 +1995,7 @@ object f_internalguider: Tf_internalguider
             object CalBinning: TEdit
               Left = 208
               Height = 32
-              Top = 368
+              Top = 400
               Width = 82
               Enabled = False
               TabOrder = 8
@@ -1995,7 +2003,7 @@ object f_internalguider: Tf_internalguider
             object CalRAspeed: TEdit
               Left = 208
               Height = 32
-              Top = 400
+              Top = 432
               Width = 82
               Enabled = False
               TabOrder = 9
@@ -2003,7 +2011,7 @@ object f_internalguider: Tf_internalguider
             object CalDECspeed: TEdit
               Left = 208
               Height = 32
-              Top = 432
+              Top = 464
               Width = 82
               Enabled = False
               TabOrder = 10
@@ -2037,7 +2045,7 @@ object f_internalguider: Tf_internalguider
             object Label50: TLabel
               Left = 10
               Height = 18
-              Top = 472
+              Top = 504
               Width = 33
               Caption = 'Issue'
               ParentColor = False
@@ -2045,7 +2053,7 @@ object f_internalguider: Tf_internalguider
             object CalIssue: TEdit
               Left = 112
               Height = 32
-              Top = 464
+              Top = 496
               Width = 178
               Enabled = False
               TabOrder = 12
@@ -2077,6 +2085,24 @@ object f_internalguider: Tf_internalguider
               ParentFont = False
               TabOrder = 14
               Text = '?'
+            end
+            object Label17: TLabel
+              AnchorSideTop.Control = CalRotatorAngle
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 18
+              Top = 375
+              Width = 84
+              Caption = 'Rotator angle'
+              ParentColor = False
+            end
+            object CalRotatorAngle: TEdit
+              Left = 208
+              Height = 32
+              Top = 368
+              Width = 82
+              Enabled = False
+              TabOrder = 15
             end
           end
         end

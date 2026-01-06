@@ -2019,7 +2019,7 @@ begin
   f_cover.onChangeBrightness:=@BrightnessChange;
 
   f_internalguider:=Tf_internalguider.Create(self);
-  if SameGuiderFinder then begin
+  if SameGuiderFinder or f_internalguider.SpectroFunctions then begin
     f_internalguider.framesize1.Enabled:=false;
     f_internalguider.framesize1.ItemIndex:=0;
   end
@@ -2426,6 +2426,7 @@ begin
  end;
  if autoguider<>nil then begin
    autoguider.Mount:=mount;
+   autoguider.Rotator:=rotator;
    autoguider.Camera:=guidecamera;
  end;
  if f_finder<>nil then begin
@@ -2433,6 +2434,11 @@ begin
  end;
  if f_internalguider<>nil then begin
    f_internalguider.Camera:=guidecamera;
+   f_internalguider.Rotator:=rotator;
+   if rotator=nil then begin
+     f_internalguider.cbRotator.Checked:=false;
+     f_internalguider.cbRotator.Enabled:=false;
+   end;
  end;
 end;
 
@@ -5337,6 +5343,7 @@ begin
   f_internalguider.CalRAspeed.Text:=config.GetValue('/InternalGuider/CalRAspeed','');
   f_internalguider.CalDECspeed.Text:=config.GetValue('/InternalGuider/CalDECspeed','');
   f_internalguider.CalDeclination.Text:=config.GetValue('/InternalGuider/CalDeclination','');
+  f_internalguider.CalRotatorAngle.Text:=config.GetValue('/InternalGuider/CalRotatorAngle','');
   f_internalguider.CalIssue.Text:=config.GetValue('/InternalGuider/CalIssue','');
   f_internalguider.ShortestPulse:=config.GetValue('/InternalGuider/ShortestPulse',40);
   f_internalguider.LongestPulse:=config.GetValue('/InternalGuider/LongestPulse',2500);
@@ -5347,6 +5354,7 @@ begin
     f_internalguider.FrameSize1.text:=config.GetValue('/InternalGuider/FrameSize',rsMax2);
   f_internalguider.measure_method2.checked:=config.GetValue('/InternalGuider/Method2',false);
   f_internalguider.InitialCalibrationStep.Value:=config.GetValue('/InternalGuider/InitialCalibrationStep',1000);
+  f_internalguider.cbRotator.Checked:=config.GetValue('/InternalGuider/UseRotator',false);
   f_internalguider.ForceGuideSpeed.Checked:=config.GetValue('/InternalGuider/ForceGuideSpeed',true);
   f_internalguider.GuideSpeedRA.Value:=config.GetValue('/InternalGuider/GuideSpeedRA',0.5);
   f_internalguider.GuideSpeedDEC.Value:=config.GetValue('/InternalGuider/GuideSpeedDEC',0.5);
@@ -5991,7 +5999,7 @@ begin
   config.SetValue('/InternalGuider/DecGain',f_internalguider.decgain);
   config.SetValue('/InternalGuider/RaHysteresis',f_internalguider.ra_hysteresis);
   config.SetValue('/InternalGuider/DecHysteresis',f_internalguider.dec_hysteresis);
-  config.SetValue('/InternalGuider/Pa',f_internalguider.pa);
+  config.SetValue('/InternalGuider/Pa',f_internalguider.pa1.Text); // calibration value, without current rotator correction
   config.SetValue('/InternalGuider/PulseGainEast',f_internalguider.pulseGainEast1.Text);  // store calibration value not affected by current binning
   config.SetValue('/InternalGuider/PulseGainWest',f_internalguider.pulseGainWest1.Text);
   config.SetValue('/InternalGuider/PulseGainNorth',f_internalguider.pulseGainNorth1.Text);
@@ -6005,6 +6013,7 @@ begin
   config.SetValue('/InternalGuider/CalRAspeed',f_internalguider.CalRAspeed.Text);
   config.SetValue('/InternalGuider/CalDECspeed',f_internalguider.CalDECspeed.Text);
   config.SetValue('/InternalGuider/CalDeclination',f_internalguider.CalDeclination.Text);
+  config.SetValue('/InternalGuider/CalRotatorAngle',f_internalguider.CalRotatorAngle.Text);
   config.SetValue('/InternalGuider/CalIssue',f_internalguider.CalIssue.Text);
 
   config.SetValue('/InternalGuider/PierSide',f_internalguider.pier_side);
@@ -6019,6 +6028,7 @@ begin
   config.SetValue('/InternalGuider/Scale',f_internalguider.trend_scale);
   config.SetValue('/InternalGuider/Method2',f_internalguider.measure_method2.Checked);
   config.SetValue('/InternalGuider/InitialCalibrationStep',f_internalguider.InitialCalibrationStep.Value);
+  config.SetValue('/InternalGuider/UseRotator',f_internalguider.cbRotator.Enabled and f_internalguider.cbRotator.Checked);
   config.SetValue('/InternalGuider/ForceGuideSpeed',f_internalguider.ForceGuideSpeed.Checked);
   config.SetValue('/InternalGuider/GuideSpeedRA',f_internalguider.GuideSpeedRA.Value);
   config.SetValue('/InternalGuider/GuideSpeedDEC',f_internalguider.GuideSpeedDEC.Value);
@@ -9703,7 +9713,7 @@ begin
       MenuOptions.Click;
     end;
 
-    if SameGuiderFinder then begin
+    if SameGuiderFinder or f_internalguider.SpectroFunctions then begin
       f_internalguider.framesize1.Enabled:=false;
       f_internalguider.framesize1.ItemIndex:=0;
     end
