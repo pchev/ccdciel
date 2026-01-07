@@ -2334,7 +2334,7 @@ var t: TTarget;
     p: T_Plan;
     ok,wtok,nd:boolean;
     stw,i,intime: integer;
-    st,newra,newde,newV,newPA,enddelay,chkendtime: double;
+    st,newra,newde,newV,newPA,enddelay,chkendtime,ra,de,q: double;
     moonra,moonde,moonphase,moonillum,moondist: double;
     autofocusstart, astrometrypointing, isCalibrationTarget: boolean;
     skipmsg, buf: string;
@@ -2641,8 +2641,25 @@ begin
       else if ((t.ra=NullCoord)or(t.de=NullCoord))and(not mount.Tracking) then
          mount.Track;
       // set rotator position
-      if (t.pa<>NullCoord)and(Frotator.Status=devConnected) then begin
-        Frotator.Angle:=t.pa;
+      if Frotator.Status=devConnected then begin
+        if (t.pa<>NullCoord) then begin // use specified PA first
+          Frotator.Angle:=t.pa;
+        end
+        else if (autoguider.AutoguiderType=agINTERNAL) and finternalguider.SpectroFunctions and finternalguider.cbParallactic.Checked then begin
+          // parallactic angle at current mount position
+          ra:=mount.RA;
+          de:=mount.Dec;
+          MountToLocal(mount.EquinoxJD,ra,de);
+          ra:=deg2rad*ra*15;
+          de:=deg2rad*de;
+          // the parallactic angle now
+          q:=rad2deg*ParallacticAngle(ra,de);
+          // rotate 90° more if the slit is horizontal in the camera field
+          if finternalguider.SlitHorizontal.Checked then
+            q:=rmod(q+90,360);
+          // rotate
+          Frotator.Angle:=q;
+        end;
       end;
       // start guiding
       if autoguider is T_autoguider_internal then begin

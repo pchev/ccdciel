@@ -29,12 +29,12 @@ object f_internalguider: Tf_internalguider
   end
   object Panel1: TPanel
     Left = 0
-    Height = 936
+    Height = 951
     Top = 20
     Width = 346
     Align = alTop
     AutoSize = True
-    ClientHeight = 936
+    ClientHeight = 951
     ClientWidth = 346
     ParentFont = False
     TabOrder = 0
@@ -123,7 +123,7 @@ object f_internalguider: Tf_internalguider
     end
     object pcInternalguider: TPageControl
       Left = 1
-      Height = 869
+      Height = 884
       Top = 66
       Width = 344
       ActivePage = TabSheetGuider
@@ -136,17 +136,17 @@ object f_internalguider: Tf_internalguider
       OnChange = pcInternalguiderChange
       object TabSheetGuider: TTabSheet
         Caption = 'Guider'
-        ClientHeight = 865
+        ClientHeight = 880
         ClientWidth = 340
         ParentFont = False
         object Panel3: TPanel
           Left = 0
-          Height = 865
+          Height = 880
           Top = 0
           Width = 340
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 865
+          ClientHeight = 880
           ClientWidth = 340
           Color = clMenu
           ParentBackground = False
@@ -386,16 +386,16 @@ object f_internalguider: Tf_internalguider
       end
       object TabSheetCamera: TTabSheet
         Caption = 'Camera'
-        ClientHeight = 865
+        ClientHeight = 880
         ClientWidth = 340
         object Panel4: TPanel
           Left = 0
-          Height = 865
+          Height = 880
           Top = 0
           Width = 340
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 865
+          ClientHeight = 880
           ClientWidth = 340
           Color = clMenu
           ParentBackground = False
@@ -648,12 +648,12 @@ object f_internalguider: Tf_internalguider
           end
           object Panel8: TPanel
             Left = 0
-            Height = 568
+            Height = 583
             Top = 297
             Width = 340
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 568
+            ClientHeight = 583
             ClientWidth = 340
             TabOrder = 5
             object PanelVisu: TPanel
@@ -670,16 +670,16 @@ object f_internalguider: Tf_internalguider
       end
       object TabSheetOptions: TTabSheet
         Caption = 'Options'
-        ClientHeight = 865
+        ClientHeight = 880
         ClientWidth = 340
         object Panel5: TPanel
           Left = 0
-          Height = 865
+          Height = 880
           Top = 0
           Width = 340
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 865
+          ClientHeight = 880
           ClientWidth = 340
           Color = clMenu
           ParentBackground = False
@@ -955,12 +955,12 @@ object f_internalguider: Tf_internalguider
           end
           object GroupBox3: TGroupBox
             Left = 0
-            Height = 408
+            Height = 423
             Top = 457
             Width = 340
             Align = alClient
             Caption = 'Calibration options'
-            ClientHeight = 378
+            ClientHeight = 393
             ClientWidth = 336
             ParentBackground = False
             TabOrder = 0
@@ -1065,6 +1065,7 @@ object f_internalguider: Tf_internalguider
               Top = 4
               Width = 196
               Caption = 'Use rotator angle correction'
+              OnChange = cbRotatorChange
               TabOrder = 4
             end
           end
@@ -1072,7 +1073,7 @@ object f_internalguider: Tf_internalguider
       end
       object TabSheetSpectro: TTabSheet
         Caption = 'Spectro'
-        ClientHeight = 865
+        ClientHeight = 880
         ClientWidth = 340
         object Panel9: TPanel
           Left = 0
@@ -1099,12 +1100,12 @@ object f_internalguider: Tf_internalguider
         end
         object PanelSpectro: TPanel
           Left = 0
-          Height = 835
+          Height = 850
           Top = 30
           Width = 340
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 835
+          ClientHeight = 850
           ClientWidth = 340
           Color = clMenu
           ParentBackground = False
@@ -1112,12 +1113,12 @@ object f_internalguider: Tf_internalguider
           TabOrder = 0
           object Panel14: TPanel
             Left = 0
-            Height = 313
+            Height = 296
             Top = 0
             Width = 340
             Align = alTop
             AutoSize = True
-            ClientHeight = 313
+            ClientHeight = 296
             ClientWidth = 340
             TabOrder = 3
             object rgSpectroStrategy: TRadioGroup
@@ -1185,11 +1186,11 @@ object f_internalguider: Tf_internalguider
             object PanelGuideStarOffset: TPanel
               AnchorSideTop.Side = asrBottom
               Left = 1
-              Height = 137
+              Height = 120
               Top = 175
               Width = 338
               Align = alTop
-              ClientHeight = 137
+              ClientHeight = 120
               ClientWidth = 338
               TabOrder = 2
               object Label55: TLabel
@@ -1305,8 +1306,8 @@ object f_internalguider: Tf_internalguider
           end
           object PageControl2: TPageControl
             Left = 0
-            Height = 132
-            Top = 313
+            Height = 120
+            Top = 296
             Width = 340
             ActivePage = TabSheet1
             Align = alTop
@@ -1315,16 +1316,16 @@ object f_internalguider: Tf_internalguider
             TabOrder = 2
             object TabSheet1: TTabSheet
               Caption = 'TabSheet1'
-              ClientHeight = 128
+              ClientHeight = 116
               ClientWidth = 336
               object GroupBoxSearchArea: TGroupBox
                 Left = 0
-                Height = 128
+                Height = 116
                 Top = 0
                 Width = 336
                 Align = alClient
                 Caption = 'Star search area'
-                ClientHeight = 98
+                ClientHeight = 86
                 ClientWidth = 332
                 ParentBackground = False
                 TabOrder = 0
@@ -1375,7 +1376,7 @@ object f_internalguider: Tf_internalguider
                   Left = 8
                   Height = 22
                   Hint = 'Beware this may result in the selection of a wrong star if the mount is not ideal'
-                  Top = 72
+                  Top = 64
                   Width = 175
                   Caption = ' Fast centering to the slit'
                   ParentBidiMode = False
@@ -1385,16 +1386,16 @@ object f_internalguider: Tf_internalguider
             end
             object TabSheet2: TTabSheet
               Caption = 'TabSheet2'
-              ClientHeight = 128
+              ClientHeight = 116
               ClientWidth = 336
               object GroupBoxOffset: TGroupBox
                 Left = 0
-                Height = 128
+                Height = 116
                 Top = 0
                 Width = 336
                 Align = alClient
                 Caption = 'Multi-star guide offset'
-                ClientHeight = 98
+                ClientHeight = 86
                 ClientWidth = 332
                 ParentBackground = False
                 TabOrder = 0
@@ -1439,19 +1440,20 @@ object f_internalguider: Tf_internalguider
           end
           object GroupBoxLock: TGroupBox
             Left = 0
-            Height = 208
-            Top = 445
+            Height = 252
+            Top = 416
             Width = 340
             Align = alTop
+            AutoSize = True
             Caption = 'Guide position on the slit'
-            ClientHeight = 178
+            ClientHeight = 222
             ClientWidth = 336
             ParentBackground = False
             TabOrder = 0
             object Panel12: TPanel
               Left = 0
               Height = 104
-              Top = 72
+              Top = 118
               Width = 336
               Align = alTop
               ClientHeight = 104
@@ -1552,17 +1554,18 @@ object f_internalguider: Tf_internalguider
             end
             object Panel13: TPanel
               Left = 0
-              Height = 72
+              Height = 118
               Top = 0
               Width = 336
               Align = alTop
-              ClientHeight = 72
+              AutoSize = True
+              ClientHeight = 118
               ClientWidth = 336
               TabOrder = 1
               object edRefX: TFloatSpinEditEx
-                Left = 64
+                Left = 65
                 Height = 32
-                Top = 4
+                Top = 1
                 Width = 84
                 MaxLength = 0
                 TabOrder = 0
@@ -1572,9 +1575,9 @@ object f_internalguider: Tf_internalguider
               end
               object Label28: TLabel
                 AnchorSideTop.Side = asrCenter
-                Left = 8
+                Left = 9
                 Height = 18
-                Top = 11
+                Top = 8
                 Width = 8
                 Caption = 'X'
                 ParentColor = False
@@ -1582,17 +1585,17 @@ object f_internalguider: Tf_internalguider
               object Label29: TLabel
                 AnchorSideTop.Control = edRefY
                 AnchorSideTop.Side = asrCenter
-                Left = 184
+                Left = 185
                 Height = 18
-                Top = 11
+                Top = 8
                 Width = 9
                 Caption = 'Y'
                 ParentColor = False
               end
               object edRefY: TFloatSpinEditEx
-                Left = 216
+                Left = 217
                 Height = 32
-                Top = 4
+                Top = 1
                 Width = 84
                 MaxLength = 0
                 TabOrder = 1
@@ -1601,21 +1604,78 @@ object f_internalguider: Tf_internalguider
                 Value = 100
               end
               object ButtonSetLock: TSpeedButton
-                Left = 8
+                Left = 9
                 Height = 25
-                Top = 40
+                Top = 37
                 Width = 293
                 AllowAllUp = True
                 Caption = 'Click on image to set'
                 GroupIndex = 1
                 OnClick = ButtonSetLockClick
               end
+              object cbParallactic: TCheckBox
+                Left = 10
+                Height = 22
+                Top = 66
+                Width = 207
+                Caption = 'Rotate to the parallactic angle'
+                Enabled = False
+                OnChange = cbParallacticChange
+                TabOrder = 2
+              end
+              object PanelParallactic: TPanel
+                Left = 1
+                Height = 28
+                Top = 89
+                Width = 327
+                BevelOuter = bvNone
+                ClientHeight = 28
+                ClientWidth = 327
+                Enabled = False
+                TabOrder = 3
+                object Label18: TLabel
+                  Left = 10
+                  Height = 18
+                  Top = 4
+                  Width = 100
+                  AutoSize = False
+                  Caption = 'Slit orientation : '
+                  ParentColor = False
+                end
+                object SlitVertical: TRadioButton
+                  AnchorSideLeft.Control = Label18
+                  AnchorSideLeft.Side = asrBottom
+                  AnchorSideTop.Control = Label18
+                  AnchorSideTop.Side = asrCenter
+                  Left = 118
+                  Height = 22
+                  Top = 2
+                  Width = 70
+                  BorderSpacing.Left = 8
+                  Caption = 'Vertical'
+                  Checked = True
+                  TabOrder = 1
+                  TabStop = True
+                end
+                object SlitHorizontal: TRadioButton
+                  AnchorSideLeft.Control = SlitVertical
+                  AnchorSideLeft.Side = asrBottom
+                  AnchorSideTop.Control = SlitVertical
+                  Left = 196
+                  Height = 22
+                  Top = 2
+                  Width = 88
+                  BorderSpacing.Left = 8
+                  Caption = 'Horizontal'
+                  TabOrder = 0
+                end
+              end
             end
           end
           object GroupBoxSlit: TGroupBox
             Left = 0
             Height = 182
-            Top = 653
+            Top = 668
             Width = 340
             Align = alTop
             Caption = 'Slit drawing'
@@ -1759,17 +1819,17 @@ object f_internalguider: Tf_internalguider
       end
       object TabSheetAdvanced: TTabSheet
         Caption = 'Advanced'
-        ClientHeight = 865
+        ClientHeight = 880
         ClientWidth = 340
         ParentFont = False
         object Panel2: TPanel
           Left = 0
-          Height = 865
+          Height = 880
           Top = 0
           Width = 340
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 865
+          ClientHeight = 880
           ClientWidth = 340
           Color = clMenu
           ParentBackground = False
@@ -1778,12 +1838,12 @@ object f_internalguider: Tf_internalguider
           TabOrder = 0
           object GroupBox2: TGroupBox
             Left = 0
-            Height = 865
+            Height = 880
             Top = 0
             Width = 340
             Align = alClient
             Caption = 'Calibration results:'
-            ClientHeight = 835
+            ClientHeight = 850
             ClientWidth = 336
             ParentBackground = False
             TabOrder = 0

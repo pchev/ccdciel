@@ -99,6 +99,7 @@ PROCEDURE Eq2Hz(HH,DE : double ; out A,h : double; method: smallint = 2);
 Procedure Hz2Eq(A,h : double; out hh,de : double; method: smallint = 2);
 procedure ApparentToObserved(ra,de: double; out obsra,obsde: double);
 procedure ObservedToApparent(obsra,obsde: double; out ra,de: double);
+function ParallacticAngle(ra,de: double; st:double=-1):double;
 function AirMass(h: double): double;
 function atmospheric_absorption(airmass: double):double;
 Procedure cmdEq2Hz(ra,de : double ; out a,h : double);
@@ -1690,6 +1691,20 @@ begin
   Eq2HZ(ha, obsde, a, h, 0);  // geometric
   Hz2Eq(a, h, ha, de, 2);     // with refraction
   ra:=rmod(st - ha + pi2, pi2);
+end;
+
+function ParallacticAngle(ra,de: double; st:double=-1):double;
+var ha: double;
+begin
+try
+  if st<0 then
+    st:=CurrentSidTim;
+  ha:=st - ra;
+  result:=ArcTan2(sin(ha),(tan(deg2rad*ObsLatitude)*cos(de))-(sin(de)*cos(ha)));
+  if IsNan(result) then result:=0;
+except
+  result:=0;
+end;
 end;
 
 Function CurrentSidTim: double;

@@ -5392,6 +5392,9 @@ begin
   f_internalguider.SlitL:=config.GetValue('/InternalGuider/Spectro/SlitL',0);
   f_internalguider.SlitPA:=config.GetValue('/InternalGuider/Spectro/SlitPA',0);
   f_internalguider.SpectroAstrometryExposure:=config.GetValue('/InternalGuider/Spectro/AstrometryExposure',10.0);
+  f_internalguider.cbParallactic.Checked:=config.GetValue('/InternalGuider/Spector/Parallactic',false);
+  f_internalguider.SlitVertical.Checked:=config.GetValue('/InternalGuider/Spector/SlitVertical',true);
+  f_internalguider.SlitHorizontal.Checked:=not f_internalguider.SlitVertical.Checked;
   f_internalguider.SpiralDither:=config.GetValue('/InternalGuider/SpiralDither',true);
   f_internalguider.ChangeSpectro;
   f_internalguider.ChangeSpectroStrategy;
@@ -6070,6 +6073,8 @@ begin
   config.SetValue('/InternalGuider/Spectro/SlitL',f_internalguider.SlitL);
   config.SetValue('/InternalGuider/Spectro/SlitPA',f_internalguider.SlitPA);
   config.SetValue('/InternalGuider/Spectro/AstrometryExposure',f_internalguider.SpectroAstrometryExposure);
+  config.SetValue('/InternalGuider/Spector/Parallactic',f_internalguider.cbParallactic.Checked);
+  config.SetValue('/InternalGuider/Spector/SlitVertical',f_internalguider.SlitVertical.Checked);
   config.SetValue('/InternalGuider/SpiralDither',f_internalguider.SpiralDither);
 
   // finder offset need to be saved at the same time
@@ -11338,7 +11343,7 @@ begin
 end;
 
 function Tf_main.PrepareCaptureExposure(canwait:boolean):boolean;
-var e,x: double;
+var e,x,ra,de,st,q: double;
     buf,txt,r: string;
     waittime,i: integer;
     ftype:TFrameType;
@@ -11627,6 +11632,37 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
   if not f_capture.Running then begin
     NewMessage(rsCaptureStopp2, 0);
     exit;
+  end;
+  // rotate the slit to the parallactic angle at the time of middle exposure
+  if (ftype=LIGHT) and (autoguider.AutoguiderType=agINTERNAL) and f_internalguider.SpectroFunctions and f_internalguider.cbParallactic.Checked and
+     (mount<>nil) and (mount.Status=devConnected) and
+     (rotator<>nil) and (rotator.Status=devConnected) then
+  begin
+    if canwait then begin
+      // parallactic angle at current mount position
+      ra:=mount.RA;
+      de:=mount.Dec;
+      MountToLocal(mount.EquinoxJD,ra,de);
+      ra:=deg2rad*ra*15;
+      de:=deg2rad*de;
+      // at the time of mid-exposure
+      e:=StrToFloatDef(f_capture.ExpTime.Text,0);
+      st:=SidTimT(now+e/2/secperday);
+      // the parallactic angle
+      q:=rad2deg*ParallacticAngle(ra,de,st);
+      NewMessage('Rotate slit to parallactic angle '+FormatFloat(f1,q));
+      // rotate 90° more if the slit is horizontal in the camera field
+      if f_internalguider.SlitHorizontal.Checked then
+        q:=rmod(q+90,360);
+      // rotate and settle, this is a small displacement because it already rotate on initial slew and with previous exposure.
+      autoguider.Pause(true);
+      rotator.Angle:=q;
+      autoguider.Pause(false);
+      autoguider.WaitGuiding(SettleMaxTime);
+    end
+    else begin
+      exit; // cannot start now
+    end;
   end;
   if not f_capture.Running then begin
     NewMessage(rsCaptureStopp2, 0);

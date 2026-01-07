@@ -1073,7 +1073,7 @@ begin
    end;
    // process autoguider problem during sequence
    if AutoguiderAlert then begin
-    if (Autoguider<>nil)and(Autoguider.State=GUIDER_GUIDING) then begin
+    if (Autoguider<>nil)and((Autoguider.State=GUIDER_GUIDING)or(Autoguider.Settling)) then begin
       // autoguiding restarted, clear alert
       AutoguiderAlert:=false;
       msg(rsAutoguidingR,1);
@@ -1176,7 +1176,7 @@ try
     (T_Plan(Targets.Targets[Targets.CurrentTarget].plan).CurrentStep>=0) and
     (T_Plan(Targets.Targets[Targets.CurrentTarget].plan).Steps[T_Plan(Targets.Targets[Targets.CurrentTarget].plan).CurrentStep].steptype=0) and
     (Targets.Targets[Targets.CurrentTarget].autoguiding) and
-    (not Fautoguider.Recovering)
+    (not Fautoguider.Recovering) and (not FAutoguider.Settling) and (not FAutoguider.Paused)
     then begin
     if not AutoguiderAlert then begin
       AutoguiderAlert:=true;

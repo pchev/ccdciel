@@ -65,11 +65,13 @@ type
     cbEnlargeImage: TCheckBox;
     cbFastCentering: TCheckBox;
     cbRotator: TCheckBox;
+    cbParallactic: TCheckBox;
     CheckBoxBacklash: TCheckBox;
     CheckBoxTrackSolar1: TCheckBox;
     cbSlitList: TComboBox;
     disable_guiding1: TCheckBox;
     Label17: TLabel;
+    Label18: TLabel;
     LabelSetOffset: TLabel;
     Label55: TLabel;
     Label56: TLabel;
@@ -78,6 +80,7 @@ type
     MenuItemAddSlit: TMenuItem;
     MenuItemDelSlit: TMenuItem;
     MenuSlitOffset: TButton;
+    PanelParallactic: TPanel;
     pcTabs: TPageControl;
     Panel12: TPanel;
     Panel13: TPanel;
@@ -88,6 +91,8 @@ type
     PanelAstrometryExposure: TPanel;
     PanelGuideStarOffset: TPanel;
     PopupMenuSlit: TPopupMenu;
+    SlitVertical: TRadioButton;
+    SlitHorizontal: TRadioButton;
     rgSpectroStrategy: TRadioGroup;
     Shape1: TShape;
     SlitOffsetX: TFloatSpinEditEx;
@@ -260,9 +265,11 @@ type
     procedure ButtonSetTempClick(Sender: TObject);
     procedure ButtonStopClick(Sender: TObject);
     procedure cbDrawSlitChange(Sender: TObject);
+    procedure cbRotatorChange(Sender: TObject);
     procedure cbSlitListChange(Sender: TObject);
     procedure cbSpectroChange(Sender: TObject);
     procedure cbEnlargeImageChange(Sender: TObject);
+    procedure cbParallacticChange(Sender: TObject);
     procedure CheckBoxBacklashChange(Sender: TObject);
     procedure CheckBoxTrackSolar1Change(Sender: TObject);
     procedure CoolerClick(Sender: TObject);
@@ -1112,6 +1119,22 @@ end;
 procedure Tf_internalguider.cbEnlargeImageChange(Sender: TObject);
 begin
   if assigned(FonShowImage) then FonShowImage(self);
+end;
+
+procedure Tf_internalguider.cbRotatorChange(Sender: TObject);
+begin
+  if cbRotator.Checked then begin
+    cbParallactic.Enabled:=true;
+  end
+  else begin
+    cbParallactic.Checked:=false;
+    cbParallactic.Enabled:=false;
+  end;
+end;
+
+procedure Tf_internalguider.cbParallacticChange(Sender: TObject);
+begin
+  PanelParallactic.Enabled:=cbParallactic.Checked;
 end;
 
 procedure Tf_internalguider.CheckBoxBacklashChange(Sender: TObject);
