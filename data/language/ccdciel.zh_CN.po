@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2025-12-16 16:33+0000\n"
+"POT-Creation-Date: 2026-01-07 17:30+0000\n"
 "PO-Revision-Date: 2025-10-30 04:28+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-12-16 16:44+0000\n"
-"X-Generator: Launchpad (build 379e22b8475e3402088a4cdb4a6e7936a4d28414)\n"
+"X-Launchpad-Export-Date: 2026-01-07 17:40+0000\n"
+"X-Generator: Launchpad (build 99c00f518760bdd50fc6e353e7736d2fff8fba4a)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -2429,6 +2429,10 @@ msgstr "历史记录"
 msgid "Horizon profile"
 msgstr "地平线配置"
 
+#: u_translation.rshorizontal
+msgid "Horizontal"
+msgstr ""
+
 #: u_translation.rshorizontalco
 msgid "Horizontal correction :"
 msgstr "水平修正："
@@ -2985,6 +2989,10 @@ msgstr "测量第二个位置"
 #: u_translation.rsmeasuringthe
 msgid "Measuring the new position"
 msgstr "测量新位置"
+
+#: u_translation.rsmechanical
+msgid "Mechanical"
+msgstr ""
 
 #: u_translation.rsmedian
 #, object-pascal-format
@@ -4385,6 +4393,10 @@ msgstr "旋转"
 msgid "Rotate the telescope"
 msgstr "旋转望远镜"
 
+#: u_translation.rsrotatetothep
+msgid "Rotate to the parallactic angle"
+msgstr ""
+
 #: u_translation.rsrotating
 msgid "Rotating"
 msgstr "旋转中"
@@ -4396,6 +4408,10 @@ msgstr "旋转角度"
 #: u_translation.rsrotator
 msgid "Rotator"
 msgstr "旋转器"
+
+#: u_translation.rsrotatorangle
+msgid "Rotator angle"
+msgstr ""
 
 #: u_translation.rsrotatorisnot
 msgid "Rotator is not connected"
@@ -5086,6 +5102,10 @@ msgstr "狭缝"
 msgid "Slit drawing"
 msgstr "绘制狭缝"
 
+#: u_translation.rsslitorientat
+msgid "Slit orientation"
+msgstr ""
+
 #: u_translation.rsslope
 msgid "Slope"
 msgstr "斜率"
@@ -5532,6 +5552,11 @@ msgstr ""
 #, object-pascal-format
 msgid "Sync to %s %s/%s"
 msgstr "同步到%s %s/%s"
+
+#: u_translation.rssynctos
+#, object-pascal-format
+msgid "Sync to %s"
+msgstr ""
 
 #: u_translation.rssystemcross
 msgid "System cross"
@@ -6159,6 +6184,10 @@ msgstr "为不同的动作使用特定的读出模式"
 msgid "Use switch"
 msgstr "使用电源开关"
 
+#: u_translation.rsusetherotato
+msgid "Use the rotator angle"
+msgstr ""
+
 #: u_translation.rsusethisdevic
 msgid "Use this device if the main camera cannot be used for plate solving. Also configure the camera to use in Preferences/Slewing"
 msgstr "如果主相机不能用于解析，请使用此设备。同时在首选项/回转中配置所使用的像机"
@@ -6204,6 +6233,10 @@ msgstr "V曲线品质过低。是否确定要保存该曲线？"
 #: u_translation.rsverbosedevic
 msgid "Verbose device log"
 msgstr "详尽的设备日志"
+
+#: u_translation.rsvertical
+msgid "Vertical"
+msgstr ""
 
 #: u_translation.rsverticalcorr
 msgid "Vertical correction :"

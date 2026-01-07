@@ -6173,3 +6173,35 @@ msgstr ""
 msgid "Duplicate action"
 msgstr ""
 
+#: u_translation:rsmechanical
+msgid "Mechanical"
+msgstr ""
+
+#: u_translation:rssynctos
+msgid "Sync to %s"
+msgstr ""
+
+#: u_translation:rsusetherotato
+msgid "Use the rotator angle"
+msgstr ""
+
+#: u_translation:rsrotatorangle
+msgid "Rotator angle"
+msgstr ""
+
+#: u_translation:rsrotatetothep
+msgid "Rotate to the parallactic angle"
+msgstr ""
+
+#: u_translation:rsslitorientat
+msgid "Slit orientation"
+msgstr ""
+
+#: u_translation:rsvertical
+msgid "Vertical"
+msgstr ""
+
+#: u_translation:rshorizontal
+msgid "Horizontal"
+msgstr ""
+

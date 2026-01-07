@@ -1627,10 +1627,10 @@ object f_internalguider: Tf_internalguider
                 Left = 1
                 Height = 28
                 Top = 89
-                Width = 327
+                Width = 360
                 BevelOuter = bvNone
                 ClientHeight = 28
-                ClientWidth = 327
+                ClientWidth = 360
                 Enabled = False
                 TabOrder = 3
                 object Label18: TLabel
@@ -1638,7 +1638,6 @@ object f_internalguider: Tf_internalguider
                   Height = 18
                   Top = 4
                   Width = 100
-                  AutoSize = False
                   Caption = 'Slit orientation : '
                   ParentColor = False
                 end

@@ -1647,6 +1647,11 @@ resourcestring
   rsMechanical = 'Mechanical';
   rsSyncToS = 'Sync to %s';
   rsUseTheRotato = 'Use the rotator angle';
+  rsRotatorAngle = 'Rotator angle';
+  rsRotateToTheP = 'Rotate to the parallactic angle';
+  rsSlitOrientat = 'Slit orientation';
+  rsVertical = 'Vertical';
+  rsHorizontal = 'Horizontal';
 
 implementation
 

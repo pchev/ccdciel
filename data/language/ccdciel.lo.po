@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2025-12-16 16:33+0000\n"
+"POT-Creation-Date: 2026-01-07 17:30+0000\n"
 "PO-Revision-Date: 2025-10-21 04:57+0000\n"
 "Last-Translator: boneni <Unknown>\n"
 "Language-Team: Lao <lo@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-12-16 16:44+0000\n"
-"X-Generator: Launchpad (build 379e22b8475e3402088a4cdb4a6e7936a4d28414)\n"
+"X-Launchpad-Export-Date: 2026-01-07 17:40+0000\n"
+"X-Generator: Launchpad (build 99c00f518760bdd50fc6e353e7736d2fff8fba4a)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -2429,6 +2429,10 @@ msgstr "ປະຫວັດ"
 msgid "Horizon profile"
 msgstr "ໂປຣໄຟລ໌ຂອບຟ້າ"
 
+#: u_translation.rshorizontal
+msgid "Horizontal"
+msgstr ""
+
 #: u_translation.rshorizontalco
 msgid "Horizontal correction :"
 msgstr "ການແກ້ໄຂຕາມແນວນອນ:"
@@ -2985,6 +2989,10 @@ msgstr "ກຳລັງວັດແທກຕຳແໜ່ງທີສອງ"
 #: u_translation.rsmeasuringthe
 msgid "Measuring the new position"
 msgstr "ກຳລັງວັດແທກຕຳແໜ່ງໃໝ່"
+
+#: u_translation.rsmechanical
+msgid "Mechanical"
+msgstr ""
 
 #: u_translation.rsmedian
 #, object-pascal-format
@@ -4385,6 +4393,10 @@ msgstr "ໝຸນໄປ"
 msgid "Rotate the telescope"
 msgstr "ໝຸນກ້ອງສ່ອງ"
 
+#: u_translation.rsrotatetothep
+msgid "Rotate to the parallactic angle"
+msgstr ""
+
 #: u_translation.rsrotating
 msgid "Rotating"
 msgstr "ກໍາລັງໝຸນ"
@@ -4396,6 +4408,10 @@ msgstr "ມຸມໝຸນ"
 #: u_translation.rsrotator
 msgid "Rotator"
 msgstr "ໂຕໝຸນ"
+
+#: u_translation.rsrotatorangle
+msgid "Rotator angle"
+msgstr ""
 
 #: u_translation.rsrotatorisnot
 msgid "Rotator is not connected"
@@ -5086,6 +5102,10 @@ msgstr "ສະລິດ"
 msgid "Slit drawing"
 msgstr "ການແຕ້ມສະລິດ"
 
+#: u_translation.rsslitorientat
+msgid "Slit orientation"
+msgstr ""
+
 #: u_translation.rsslope
 msgid "Slope"
 msgstr "ຄວາມຊັນ"
@@ -5532,6 +5552,11 @@ msgstr ""
 #, object-pascal-format
 msgid "Sync to %s %s/%s"
 msgstr "ຊິງຄ໌ໄປທີ່ %s %s/%s"
+
+#: u_translation.rssynctos
+#, object-pascal-format
+msgid "Sync to %s"
+msgstr ""
 
 #: u_translation.rssystemcross
 msgid "System cross"
@@ -6159,6 +6184,10 @@ msgstr "ໃຊ້ໂໝດການອ່ານສະເພາະສຳລັບ
 msgid "Use switch"
 msgstr "ໃຊ້ສະວິດ"
 
+#: u_translation.rsusetherotato
+msgid "Use the rotator angle"
+msgstr ""
+
 #: u_translation.rsusethisdevic
 msgid "Use this device if the main camera cannot be used for plate solving. Also configure the camera to use in Preferences/Slewing"
 msgstr "ໃຊ້ອຸປະກອນນີ້ ຖ້າກ້ອງຫຼັກບໍ່ສາມາດໃຊ້ໃນການແກ້ໄຂພາບດາວໄດ້. ພ້ອມທັງຕັ້ງຄ່າກ້ອງທີ່ຈະໃຊ້ໃນ ການຕັ້ງຄ່າ/ການຫັນກ້ອງ"
@@ -6204,6 +6233,10 @@ msgstr "ຄຸນນະພາບຂອງ V-curve ຕ່ຳ. ທ່ານຕ້�
 #: u_translation.rsverbosedevic
 msgid "Verbose device log"
 msgstr "ບັນທຶກອຸປະກອນແບບລະອຽດ"
+
+#: u_translation.rsvertical
+msgid "Vertical"
+msgstr ""
 
 #: u_translation.rsverticalcorr
 msgid "Vertical correction :"

@@ -698,6 +698,10 @@ begin
   cbFastCentering.Caption:=rsFastCenterin;
   cbFastCentering.Hint:=rsBewareThisMa;
   ButtonSetLock.Caption:=rsClickOnImage;
+  cbParallactic.Caption:=rsRotateToTheP;
+  Label18.Caption:=rsSlitOrientat+' :' ;
+  SlitVertical.Caption:=rsVertical;
+  SlitHorizontal.Caption:=rsHorizontal;
   Label54.Caption:=rsPerSlitOffse;
   Label53.Caption:=rsSlit;
   Label51.Caption:=rsOffset+' X';
@@ -734,6 +738,7 @@ begin
   Label47.Caption:=rsLastCalibrat;
   Label43.Caption:=rsDate;
   Label44.Caption:=rsBinning;
+  Label17.Caption:=rsRotatorAngle;
   Label45.Caption:=rsRA+' '+rsSpeed;
   Label46.Caption:=rsDec+' '+rsSpeed;
   Label49.Caption:=rsDeclination;

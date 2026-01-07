@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-16 16:33+0000\n"
-"PO-Revision-Date: 2025-10-05 12:06+0000\n"
+"POT-Creation-Date: 2026-01-07 17:30+0000\n"
+"PO-Revision-Date: 2025-12-16 18:44+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-12-16 16:44+0000\n"
-"X-Generator: Launchpad (build 379e22b8475e3402088a4cdb4a6e7936a4d28414)\n"
+"X-Launchpad-Export-Date: 2026-01-07 17:40+0000\n"
+"X-Generator: Launchpad (build 99c00f518760bdd50fc6e353e7736d2fff8fba4a)\n"
 "Language: cs\n"
 
 #: u_translation.rs2d
@@ -1590,7 +1590,7 @@ msgstr "Nedělat nic"
 
 #: u_translation.rsdonotmodifyt
 msgid "Do not modify the INDI header"
-msgstr ""
+msgstr "Neměňte záhlaví INDI."
 
 #: u_translation.rsdonotrunasad
 #, object-pascal-format
@@ -1658,7 +1658,7 @@ msgstr "Nakreslete oblast štěrbiny na snímku"
 
 #: u_translation.rsduplicateact
 msgid "Duplicate action"
-msgstr ""
+msgstr "Duplicitní akce"
 
 #: u_translation.rsduration
 msgid "Duration"
@@ -2412,7 +2412,7 @@ msgstr "ADU pro vyvážení bílé"
 
 #: u_translation.rshighlightcol
 msgid "Highlight color"
-msgstr ""
+msgstr "Zvýrazňovací barva"
 
 #: u_translation.rshistogram
 msgid "Histogram"
@@ -2425,6 +2425,10 @@ msgstr "Historie"
 #: u_translation.rshorizonprofi
 msgid "Horizon profile"
 msgstr "Profil horizontu"
+
+#: u_translation.rshorizontal
+msgid "Horizontal"
+msgstr ""
 
 #: u_translation.rshorizontalco
 msgid "Horizontal correction :"
@@ -2741,7 +2745,7 @@ msgstr "(omezeno na 1,5 násobek přesnosti otočení)"
 
 #: u_translation.rslimitrotator
 msgid "Limit rotator angle to 0-180 degree range"
-msgstr ""
+msgstr "Rozsah otáčení je omezen na 0–180 stupňů."
 
 #: u_translation.rslimittempera
 msgid "Limit temperature change"
@@ -2827,7 +2831,7 @@ msgstr "V automatickém režimu se dalekohled automaticky natočí do testovací
 
 #: u_translation.rsmakesurethes
 msgid "Make sure the stars are not saturated."
-msgstr ""
+msgstr "Ujistěte se, že hvězdy nejsou přesycené."
 
 #: u_translation.rsmanage
 msgid "Manage"
@@ -2982,6 +2986,10 @@ msgstr "Měření druhé pozice"
 #: u_translation.rsmeasuringthe
 msgid "Measuring the new position"
 msgstr "Měření nové polohy"
+
+#: u_translation.rsmechanical
+msgid "Mechanical"
+msgstr ""
 
 #: u_translation.rsmedian
 #, object-pascal-format
@@ -4382,6 +4390,10 @@ msgstr "otočit o"
 msgid "Rotate the telescope"
 msgstr "Otočit dalekohled"
 
+#: u_translation.rsrotatetothep
+msgid "Rotate to the parallactic angle"
+msgstr ""
+
 #: u_translation.rsrotating
 msgid "Rotating"
 msgstr "Otáčení"
@@ -4393,6 +4405,10 @@ msgstr "Úhel otočení"
 #: u_translation.rsrotator
 msgid "Rotator"
 msgstr "Rotátor"
+
+#: u_translation.rsrotatorangle
+msgid "Rotator angle"
+msgstr ""
 
 #: u_translation.rsrotatorisnot
 msgid "Rotator is not connected"
@@ -4444,7 +4460,7 @@ msgstr "Spuštění skriptu %s"
 
 #: u_translation.rsrunscriptwhe
 msgid "Run script when the weather change"
-msgstr ""
+msgstr "Spustit skript při změně počasí"
 
 #: u_translation.rsrununattende
 msgid "Run unattended"
@@ -5083,6 +5099,10 @@ msgstr "Štěrbina"
 msgid "Slit drawing"
 msgstr "Nákres štěrbiny"
 
+#: u_translation.rsslitorientat
+msgid "Slit orientation"
+msgstr ""
+
 #: u_translation.rsslope
 msgid "Slope"
 msgstr "Sklon"
@@ -5523,12 +5543,17 @@ msgstr ""
 
 #: u_translation.rssynctherotat
 msgid "Sync the rotator"
-msgstr ""
+msgstr "Synchronizujte rotátor"
 
 #: u_translation.rssynctoeq
 #, object-pascal-format
 msgid "Sync to %s %s/%s"
 msgstr "Synchronizovat s %s %s/%s"
+
+#: u_translation.rssynctos
+#, object-pascal-format
+msgid "Sync to %s"
+msgstr ""
 
 #: u_translation.rssystemcross
 msgid "System cross"
@@ -6146,7 +6171,7 @@ msgstr "Použít bezpečnostní monitor"
 
 #: u_translation.rsusesoftwares
 msgid "Use software Sync with sky PA (for use with not compliant rotator)"
-msgstr ""
+msgstr "Použijte software Sync with sky PA (pro použití s nekompatibilním rotátorem)"
 
 #: u_translation.rsusespecificr
 msgid "Use specific Readout mode for different actions"
@@ -6155,6 +6180,10 @@ msgstr "Použít specifický režim čtení pro různé akce"
 #: u_translation.rsuseswitch
 msgid "Use switch"
 msgstr "Použít přepínač"
+
+#: u_translation.rsusetherotato
+msgid "Use the rotator angle"
+msgstr ""
 
 #: u_translation.rsusethisdevic
 msgid "Use this device if the main camera cannot be used for plate solving. Also configure the camera to use in Preferences/Slewing"
@@ -6201,6 +6230,10 @@ msgstr "Kvalita křivky V je nízká. Opravdu chcete tuto křivku uložit?"
 #: u_translation.rsverbosedevic
 msgid "Verbose device log"
 msgstr "Podrobný protokol zařízení"
+
+#: u_translation.rsvertical
+msgid "Vertical"
+msgstr ""
 
 #: u_translation.rsverticalcorr
 msgid "Vertical correction :"
