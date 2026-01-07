@@ -1989,6 +1989,7 @@ try
         FCamera.GuideLockY:=-1;
       end;
       msg(format(rsExposureS,[FormatFloat(f3,exp)])+blank+rsSeconds,3);
+      Fcamera.Fits.DarkOn:=true;
       if not Fcamera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeCapture,sgain,soffset,true) then begin
         msg(rsExposureFail,0);
         result:=false;

@@ -1027,8 +1027,11 @@ if (FCamera.Status=devConnected) then begin
     if (FCamera.FrameType<>DARK) then
       FCamera.FrameType:=DARK
   end
-  else if FCamera.FrameType<>LIGHT then
-    FCamera.FrameType:=LIGHT;
+  else begin
+    if FCamera.FrameType<>LIGHT then
+      FCamera.FrameType:=LIGHT;
+    FGuideFits.DarkOn:=true;
+  end;
   FCamera.ObjectName:=rsGuide;
   FCamera.GuidePixelScale:=Finternalguider.pixel_size;
   if Finternalguider.SpectroFunctions then begin

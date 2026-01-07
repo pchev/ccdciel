@@ -15212,6 +15212,7 @@ begin
   f_internalguider.Binning.Value:=AutofocusBinning;
   f_internalguider.Gain.Value:=AutofocusGain;
   f_internalguider.Offset.Value:=AutofocusOffset;
+  guidecamera.Fits.DarkOn:=true;
   if not guidecamera.ControlExposure(f_internalguider.Exposure.Value,f_internalguider.Binning.Value,f_internalguider.Binning.Value,LIGHT,ReadoutModeCapture,f_internalguider.Gain.Value,f_internalguider.Offset.Value) then begin
     NewMessage(rsExposureFail,1);
     f_starprofile.ChkAutofocusDown(false);

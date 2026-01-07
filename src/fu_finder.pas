@@ -279,6 +279,7 @@ begin
    end
    else begin
      if FCamera.FrameType<>LIGHT then FCamera.FrameType:=LIGHT;
+     FCamera.Fits.DarkOn:=true;
    end;
    FCamera.ObjectName:=rsFinderCamera;
    FCamera.StartExposure(LoopExp);
@@ -476,6 +477,7 @@ try
     soffset:=config.GetValue('/PrecSlew/Offset',NullInt);
     bin:=config.GetValue('/PrecSlew/Binning',1);
     msg(format(rsExposureS,[FormatFloat(f3,exp)])+blank+rsSeconds,3);
+    FCamera.Fits.DarkOn:=true;
     if not Fcamera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeCapture,sgain,soffset,true) then begin
       msg(rsExposureFail,0);
       result:=false;
