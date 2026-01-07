@@ -36,6 +36,8 @@ type
     procedure Execute; override;
     procedure Terminate;
     procedure StarLostTimerTimer(Sender: TObject); override;
+    function GetSettling: boolean; override;
+    function GetPaused: boolean; override;
   public
     Constructor Create;
     Destructor Destroy; override;
@@ -148,6 +150,16 @@ end;
 
 procedure T_autoguider_none.StarLostTimerTimer(Sender: TObject);
 begin
+end;
+
+function T_autoguider_none.GetSettling: boolean;
+begin
+  result:=false;
+end;
+
+function T_autoguider_none.GetPaused: boolean;
+begin
+  result:=false;
 end;
 
 function T_autoguider_none.SpectroSetGuideStar(GuideRa,GuideDec:double): Boolean;

@@ -46,6 +46,8 @@ type
     Procedure ProcessEvent(txt:string); override;
     procedure Execute; override;
     procedure StarLostTimerTimer(Sender: TObject); override;
+    function GetSettling: boolean; override;
+    function GetPaused: boolean; override;
     procedure GetInfo;
   public
     Constructor Create;
@@ -790,6 +792,16 @@ begin
        StarLostTimer.Enabled:=true;
     end;
  end;
+end;
+
+function T_autoguider_phd.GetSettling: boolean;
+begin
+  result:=(FStatus='Settling');
+end;
+
+function T_autoguider_phd.GetPaused: boolean;
+begin
+  result:=(FStatus='Paused');
 end;
 
 function T_autoguider_phd.SpectroSetGuideStar(GuideRa,GuideDec:double): Boolean;

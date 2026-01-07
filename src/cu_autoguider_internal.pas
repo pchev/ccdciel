@@ -91,6 +91,8 @@ type
     procedure Terminate;
     procedure StarLostTimerTimer(Sender: TObject); override;
     procedure StartSettle;
+    function GetSettling: boolean; override;
+    function GetPaused: boolean; override;
   public
     Constructor Create;
     Destructor Destroy; override;
@@ -370,6 +372,16 @@ begin
     SetStatus('Settling',GUIDER_BUSY);
     WriteLog('INFO: SETTLING STATE CHANGE, Settling started');
   end;
+end;
+
+function T_autoguider_internal.GetSettling: boolean;
+begin
+  result:=FSettling;
+end;
+
+function T_autoguider_internal.GetPaused: boolean;
+begin
+  result:=FPaused;
 end;
 
 procedure T_autoguider_internal.Pause(onoff:boolean; settle:boolean=true);

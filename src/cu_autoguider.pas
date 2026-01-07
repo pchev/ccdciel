@@ -72,6 +72,8 @@ type
     procedure DisplayMessage(txt:string);
     procedure ProcessEvent(txt:string); virtual; abstract;
     procedure StarLostTimerTimer(Sender: TObject); virtual; abstract;
+    function GetSettling: boolean; virtual; abstract;
+    function GetPaused: boolean; virtual; abstract;
     procedure CancelExposure;
     procedure AbortTarget;
     procedure GuideStat(dra,dde,sm:double);
@@ -110,6 +112,8 @@ type
     property ErrorDesc : string read FErrorDesc write FErrorDesc;
     property Status : string read FStatus;
     property State : TAutoguiderState read FState;
+    property Settling: boolean read GetSettling;
+    property Paused: boolean read GetPaused;
     property RestartDelay : integer read FRestartDelay;
     property RAdistance: double read FRAdistance;
     property Decdistance: double read FDecdistance;
