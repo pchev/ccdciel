@@ -11367,37 +11367,24 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
 
   ftype:=camera.InitFrameType(f_capture.FrameType);
 
-  // wait if paused
+  // wait for weather
   if WeatherPauseCapture then begin
     if canwait then begin
     if f_sequence.Running then begin
      if (ftype=LIGHT) then begin
+       if not WeatherCapturePaused then begin
+         f_sequence.StatusMsg.Caption:=rsSequencePaus;
+         NewMessage(f_sequence.StatusMsg.Caption);
+         // stop guiding and mount tracking now
+         if (autoguider<>nil)and(autoguider.Running) then begin
+            NewMessage(rsStopAutoguid,2);
+            autoguider.Guide(false);
+         end;
+         mount.AbortMotion;
+       end;
        WeatherCapturePaused:=true;
-       f_sequence.StatusMsg.Caption:=rsSequencePaus;
-       NewMessage(f_sequence.StatusMsg.Caption);
-       // stop guiding and mount tracking now
-       if (autoguider<>nil)and(autoguider.Running) then begin
-          NewMessage(rsStopAutoguid,2);
-          autoguider.Guide(false);
-       end;
-       mount.AbortMotion;
-       while WeatherPauseCapture and f_capture.Running do begin
-          Wait(5);
-       end;
-       // tracking and guiding is restarted by the sequence before we go here
-       WeatherCapturePaused:=false;
-       // continue if not aborted
-       if WeatherPauseCanceled then exit;
-       // check if autofocus before start, we must redo it now to also recenter the target
-       try
-       if f_sequence.Running and (f_sequence.CurrentPlan<>nil) then begin
-          f_capture.FocusNow:=f_sequence.CurrentPlan.Steps[f_sequence.CurrentPlan.CurrentStep].autofocusstart;
-          NeedRecenterTarget:=(astrometryResolver<>ResolverNone)and(Mount.Status=devConnected)and(f_sequence.TargetCoord)
-                               and(f_sequence.TargetRA<>NullCoord)and(f_sequence.TargetDE<>NullCoord);
-       end;
-       except
-       end;
-       NewMessage(rsContinueSequ);
+       WaitExecute(1000,@StartCaptureExposureAsync,0);
+       exit; // will be restarted after weather is good
      end
      else
        NewMessage(Format(rsIgnoreWeathe, [FrameName[ord(ftype)]]));
@@ -11410,7 +11397,28 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
     else begin
       exit; // cannot start now
     end;
+  end
+  else begin
+    // weather good
+    if WeatherCapturePaused then begin
+      // we pause for bad weather, continue now
+      // tracking and guiding is restarted by the sequence before we go here
+      WeatherCapturePaused:=false;
+      // continue if not aborted
+      if WeatherPauseCanceled then exit;
+      // check if autofocus before start, we must redo it now to also recenter the target
+      try
+      if f_sequence.Running and (f_sequence.CurrentPlan<>nil) then begin
+         f_capture.FocusNow:=f_sequence.CurrentPlan.Steps[f_sequence.CurrentPlan.CurrentStep].autofocusstart;
+         NeedRecenterTarget:=(astrometryResolver<>ResolverNone)and(Mount.Status=devConnected)and(f_sequence.TargetCoord)
+                              and(f_sequence.TargetRA<>NullCoord)and(f_sequence.TargetDE<>NullCoord);
+      end;
+      except
+      end;
+      NewMessage(rsContinueSequ);
+    end;
   end;
+
   if not f_capture.Running then begin
     NewMessage(rsCaptureStopp2, 0);
     exit;
@@ -11826,7 +11834,10 @@ begin
   if PrepareCaptureExposure(true) then // do all requirement and check it's OK
      StartCaptureExposureNow
   else begin
-     if (f_sequence.Running and (f_sequence.EditingTarget or f_sequence.Restarting))or((autoguider.AutoguiderType=agINTERNAL)and(autoguider.Dithering)) then exit;
+     if (f_sequence.Running and (f_sequence.EditingTarget or f_sequence.Restarting))
+         or(WeatherPauseCapture)
+         or((autoguider.AutoguiderType=agINTERNAL)and(autoguider.Dithering))
+         then exit;
      // not ready to start now
      NewMessage(rsCannotStartC+', '+rsAbort,9);
      f_capture.Stop;

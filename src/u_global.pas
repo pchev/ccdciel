@@ -572,7 +572,7 @@ var
   FilenameName: array[0..FileNameCount-1] of string;
   CurrentSeqName, CurrentTargetName, CurrentStepName: string;
   CurrentStepNum,CurrentDoneCount: integer;
-  WeatherPauseCapture,WeatherCapturePaused,WeatherPauseCanceled,WeatherCancelRestart: boolean;
+  WeatherPauseTarget,WeatherPauseCapture,WeatherCapturePaused,WeatherPauseCanceled,WeatherCancelRestart: boolean;
   WeatherRestartDelay: integer;
   WeatherScript: string;
   SaveFormat: TFileFormat;

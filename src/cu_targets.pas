@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, cu_plan, u_utils, indiapi, pu_scriptengine, pu_pause, cu_rotator, cu_planetarium, u_ephem,
+uses u_global, cu_plan, u_utils, indiapi, pu_scriptengine, pu_pause, cu_rotator, cu_planetarium, u_ephem, cu_waitthread,
   fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider, cu_autoguider_internal, cu_astrometry,
   fu_safety, fu_weather, cu_dome, u_ccdconfig, cu_sequencefile, fu_internalguider, math,
   u_translation, LazFileUtils, Controls, Dialogs, ExtCtrls,Classes, Forms, SysUtils;
@@ -126,7 +126,7 @@ type
       procedure NextTargetAsync(Data: PtrInt);
       procedure NextTarget;
       function SetTargetTime(t:TTarget; middletime:double; out pivot:double):boolean;
-      function InitTarget(restart:boolean=false):boolean;
+      function InitTarget:boolean;
       function InitSkyFlat: boolean;
       procedure StartPlan;
       procedure RunErrorAction;
@@ -1216,6 +1216,7 @@ begin
   FTargetDE:=NullCoord;
   CancelAutofocus:=false;
   WeatherCancelRestart:=false;
+  WeatherPauseTarget:=false;
   FSeqLockTwilight:=false;
   FRunning:=true;
   FWaiting:=true;
@@ -1394,15 +1395,25 @@ end;
 
 procedure T_Targets.WeatherRestartTimerTimer(Sender: TObject);
 var initok: boolean;
+    t: TTarget;
+    p: T_Plan;
 begin
   WeatherRestartTimer.Enabled:=false;
   if FRunning then begin
     // try to recenter, restart mount and guiding.
     WeatherPauseCanceled:=false;
-    initok:=InitTarget(true);
+    initok:=InitTarget;
     if (not initok)and(not WeatherCancelRestart) then begin
        WeatherPauseCanceled:=true;
        if FRunning then NextTarget;
+    end
+    else begin
+      t:=Targets[FCurrentTarget];
+      if t<>nil then begin
+        p:=t_plan(t.plan);
+        if (p<>nil)and p.autostartguider then
+           StartGuider;
+      end;
     end;
   end
   else begin
@@ -1990,6 +2001,8 @@ begin
  if FRunning then begin
    t:=Targets[FCurrentTarget];
    p:=t_plan(t.plan);
+   WeatherCapturePaused:=false;
+   WeatherCancelRestart:=false;
    TargetForceNext:=true;
    if Autofocusing then begin
      CancelAutofocus:=true;
@@ -2045,7 +2058,6 @@ begin
     autoguider.SpectroSetTarget(NullCoord, NullCoord);
     autoguider.SpectroSetGuideStar(NullCoord, NullCoord);
   end;
-
   // save current state
   SaveDoneCount;
   // refresh alldone count
@@ -2055,6 +2067,27 @@ begin
     Fcapture.FrameType:=ord(LIGHT);
     Fcapture.CheckLight(self);
   end;
+
+  // check weather
+  if FRunning and (FWeather.Connected) then begin
+    if(not FWeather.Clear) then begin
+      if not WeatherPauseTarget then begin
+        // stop guiding and mount tracking now
+        StopGuider;
+        mount.AbortMotion;
+        msg(rsSequencePaus,1);
+      end;
+      WeatherPauseTarget:=true;
+      WaitExecute(1000,@NextTargetAsync,0);
+      exit; // will be restarted after weather is good
+    end
+    else begin
+       if WeatherPauseTarget then
+         msg(rsContinueSequ, 1);
+    end;
+  end;
+  WeatherPauseTarget:=false;
+
   // try next target
   inc(FCurrentTarget);
   if FRunning and (FCurrentTarget<NumTargets) then begin
@@ -2329,7 +2362,7 @@ begin
   result:=true;
 end;
 
-function T_Targets.InitTarget(restart:boolean=false):boolean;
+function T_Targets.InitTarget:boolean;
 var t: TTarget;
     p: T_Plan;
     ok,wtok,nd:boolean;
@@ -2545,139 +2578,137 @@ begin
       FScriptRunning:=false;
     end;
 
-    if (not restart) then begin
-      if  ((t.ra<>NullCoord)and(t.de<>NullCoord))or(t.pa<>NullCoord) then begin
-        // prepare for slewing to target
-        if (Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE)and(Autoguider.AutoguiderType<>agDITHER) then begin
-          // stop guiding
-          if Autoguider.State<>GUIDER_DISCONNECTED then begin
-            if not StopGuider then begin
-              InitTargetError:=rsFailToStopTh;
-              exit;
-            end;
-            Wait(2);
-            if not FRunning then exit;
-            if WeatherCancelRestart then exit;
-          end;
-        end;
-
-        // Set internal guider solar object motion
-        if (Autoguider<>nil)and(Autoguider.AutoguiderType=agINTERNAL) then begin
-           if (t.solartracking)and(t.solarV<>NullCoord)and(t.solarPA<>NullCoord) then begin
-             finternalguider.SolarTracking:=t.solartracking;
-             finternalguider.v_solar:=t.solarV;
-             finternalguider.vpa_solar:=t.solarPA;
-            end
-            else begin
-             finternalguider.SolarTracking:=false;
-            end;
-        end;
-        // set coordinates
-        if ((t.ra<>NullCoord)and(t.de<>NullCoord)) then begin
-          // Check dome open and slaving
-          if (dome.Status=devConnected) and (mount.SlaveDome) and
-            ((not dome.Shutter)or(dome.hasSlaving and(not dome.Slave)))
-            then begin
-             buf:='Dome is: ';
-             if not dome.Shutter then buf:=buf+'closed, ';
-             if dome.hasSlaving and(not dome.Slave) then buf:=buf+'not slaved ';
-             InitTargetError:='Dome is not ready: '+buf;
-             msg(InitTargetError,1);
-             StopSequence(true);
-             exit;
-          end;
-          // check mount not parked
-          if mount.Park then begin
-             InitTargetError:=rsTheTelescope;
-             msg(InitTargetError, 1);
-             StopSequence(true);
-             exit;
-          end;
-          // disable astrometrypointing and autoguiding if first step is to move to focus star
-          astrometrypointing:=t.astrometrypointing and (not (autofocusstart and (not InplaceAutofocus))) ;
-          // must track before to slew
-          if not mount.Tracking then mount.Track;
-          // slew to coordinates
-          FSlewRetry:=1;
-          ok:=Slew(t.ra,t.de,astrometrypointing,t.astrometrypointing);
-          if not ok then begin
-            InitTargetError:=rsTelescopeSle3;
+    if  ((t.ra<>NullCoord)and(t.de<>NullCoord))or(t.pa<>NullCoord) then begin
+      // prepare for slewing to target
+      if (Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE)and(Autoguider.AutoguiderType<>agDITHER) then begin
+        // stop guiding
+        if Autoguider.State<>GUIDER_DISCONNECTED then begin
+          if not StopGuider then begin
+            InitTargetError:=rsFailToStopTh;
             exit;
           end;
-          Wait;
+          Wait(2);
+          if not FRunning then exit;
+          if WeatherCancelRestart then exit;
         end;
-        if not FRunning then exit;
-        if WeatherCancelRestart then exit;
       end;
 
-      // check if the plans contain only calibration
-      isCalibrationTarget:=not astrometrypointing; // astrometry done, do not stop tracking
-      if (p<>nil) then begin
-        if p.Count>0 then begin
-          for i:=0 to p.Count-1 do begin
-             if (p.Steps[i].frtype=ord(LIGHT))or(p.Steps[i].frtype>ord(high(TFrameType))) then begin
-                isCalibrationTarget:=false;
-                break;
-             end;
+      // Set internal guider solar object motion
+      if (Autoguider<>nil)and(Autoguider.AutoguiderType=agINTERNAL) then begin
+         if (t.solartracking)and(t.solarV<>NullCoord)and(t.solarPA<>NullCoord) then begin
+           finternalguider.SolarTracking:=t.solartracking;
+           finternalguider.v_solar:=t.solarV;
+           finternalguider.vpa_solar:=t.solarPA;
+          end
+          else begin
+           finternalguider.SolarTracking:=false;
           end;
-        end
-        else begin
-          isCalibrationTarget:=false; // no exposure here, this only position target, do not stop tracking
+      end;
+      // set coordinates
+      if ((t.ra<>NullCoord)and(t.de<>NullCoord)) then begin
+        // Check dome open and slaving
+        if (dome.Status=devConnected) and (mount.SlaveDome) and
+          ((not dome.Shutter)or(dome.hasSlaving and(not dome.Slave)))
+          then begin
+           buf:='Dome is: ';
+           if not dome.Shutter then buf:=buf+'closed, ';
+           if dome.hasSlaving and(not dome.Slave) then buf:=buf+'not slaved ';
+           InitTargetError:='Dome is not ready: '+buf;
+           msg(InitTargetError,1);
+           StopSequence(true);
+           exit;
         end;
-      end;
-      if not isCalibrationTarget then begin
-        // set autofocus on temperature change
-         Fcapture.CheckBoxFocusTemp.Checked:=t.autofocustemp;
-
-         // enable/disable HFM - if enabled, monitor HFD %change and trigger
-         // an autofocus if it exceeds the HFM threshold (preferences/sequence)
-         Fcapture.CheckBoxFocusHFD.Checked:=t.autofocushfd;
-      end;
-      // start mount tracking
-      if isCalibrationTarget then begin
-        StopGuider;
-        mount.AbortMotion;
-      end
-      else if ((t.ra=NullCoord)or(t.de=NullCoord))and(not mount.Tracking) then
-         mount.Track;
-      // set rotator position
-      if Frotator.Status=devConnected then begin
-        if (t.pa<>NullCoord) then begin // use specified PA first
-          Frotator.Angle:=t.pa;
-        end
-        else if (autoguider.AutoguiderType=agINTERNAL) and finternalguider.SpectroFunctions and finternalguider.cbParallactic.Checked then begin
-          // parallactic angle at current mount position
-          ra:=mount.RA;
-          de:=mount.Dec;
-          MountToLocal(mount.EquinoxJD,ra,de);
-          ra:=deg2rad*ra*15;
-          de:=deg2rad*de;
-          // the parallactic angle now
-          q:=rad2deg*ParallacticAngle(ra,de);
-          // rotate 90° more if the slit is horizontal in the camera field
-          if finternalguider.SlitHorizontal.Checked then
-            q:=rmod(q+90,360);
-          // rotate
-          Frotator.Angle:=q;
+        // check mount not parked
+        if mount.Park then begin
+           InitTargetError:=rsTheTelescope;
+           msg(InitTargetError, 1);
+           StopSequence(true);
+           exit;
         end;
-      end;
-      // start guiding
-      if autoguider is T_autoguider_internal then begin
-        // set the target position if the spectroscopy function is activated, do nothing otherwise.
-        // implemented only for the internal guider.
-        autoguider.SpectroSetTarget(t.ra,t.de);
-      end;
-      if p <> nil then begin
-        // autoguiding is started later from a Light plan step
-        p.autostartguider:=(Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE)and
-                       (Autoguider.AutoguiderType<>agDITHER) and (Autoguider.State<>GUIDER_DISCONNECTED)and
-                       (Autoguider.State<>GUIDER_GUIDING)and(not t.noautoguidingchange)and
-                       ((not autofocusstart)or (InplaceAutofocus and (not AutofocusPauseGuider))) and
-                       (not isCalibrationTarget);
+        // disable astrometrypointing and autoguiding if first step is to move to focus star
+        astrometrypointing:=t.astrometrypointing and (not (autofocusstart and (not InplaceAutofocus))) ;
+        // must track before to slew
+        if not mount.Tracking then mount.Track;
+        // slew to coordinates
+        FSlewRetry:=1;
+        ok:=Slew(t.ra,t.de,astrometrypointing,t.astrometrypointing);
+        if not ok then begin
+          InitTargetError:=rsTelescopeSle3;
+          exit;
+        end;
+        Wait;
       end;
       if not FRunning then exit;
       if WeatherCancelRestart then exit;
     end;
+
+    // check if the plans contain only calibration
+    isCalibrationTarget:=not astrometrypointing; // astrometry done, do not stop tracking
+    if (p<>nil) then begin
+      if p.Count>0 then begin
+        for i:=0 to p.Count-1 do begin
+           if (p.Steps[i].frtype=ord(LIGHT))or(p.Steps[i].frtype>ord(high(TFrameType))) then begin
+              isCalibrationTarget:=false;
+              break;
+           end;
+        end;
+      end
+      else begin
+        isCalibrationTarget:=false; // no exposure here, this only position target, do not stop tracking
+      end;
+    end;
+    if not isCalibrationTarget then begin
+      // set autofocus on temperature change
+       Fcapture.CheckBoxFocusTemp.Checked:=t.autofocustemp;
+
+       // enable/disable HFM - if enabled, monitor HFD %change and trigger
+       // an autofocus if it exceeds the HFM threshold (preferences/sequence)
+       Fcapture.CheckBoxFocusHFD.Checked:=t.autofocushfd;
+    end;
+    // start mount tracking
+    if isCalibrationTarget then begin
+      StopGuider;
+      mount.AbortMotion;
+    end
+    else if ((t.ra=NullCoord)or(t.de=NullCoord))and(not mount.Tracking) then
+       mount.Track;
+    // set rotator position
+    if Frotator.Status=devConnected then begin
+      if (t.pa<>NullCoord) then begin // use specified PA first
+        Frotator.Angle:=t.pa;
+      end
+      else if (autoguider.AutoguiderType=agINTERNAL) and finternalguider.SpectroFunctions and finternalguider.cbParallactic.Checked then begin
+        // parallactic angle at current mount position
+        ra:=mount.RA;
+        de:=mount.Dec;
+        MountToLocal(mount.EquinoxJD,ra,de);
+        ra:=deg2rad*ra*15;
+        de:=deg2rad*de;
+        // the parallactic angle now
+        q:=rad2deg*ParallacticAngle(ra,de);
+        // rotate 90° more if the slit is horizontal in the camera field
+        if finternalguider.SlitHorizontal.Checked then
+          q:=rmod(q+90,360);
+        // rotate
+        Frotator.Angle:=q;
+      end;
+    end;
+    // start guiding
+    if autoguider is T_autoguider_internal then begin
+      // set the target position if the spectroscopy function is activated, do nothing otherwise.
+      // implemented only for the internal guider.
+      autoguider.SpectroSetTarget(t.ra,t.de);
+    end;
+    if p <> nil then begin
+      // autoguiding is started later from a Light plan step
+      p.autostartguider:=(Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE)and
+                     (Autoguider.AutoguiderType<>agDITHER) and (Autoguider.State<>GUIDER_DISCONNECTED)and
+                     (Autoguider.State<>GUIDER_GUIDING)and(not t.noautoguidingchange)and
+                     ((not autofocusstart)or (InplaceAutofocus and (not AutofocusPauseGuider))) and
+                     (not isCalibrationTarget);
+    end;
+    if not FRunning then exit;
+    if WeatherCancelRestart then exit;
     result:=true;
   end;
   finally
