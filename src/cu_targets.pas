@@ -1331,6 +1331,8 @@ begin
   StopTimer.Enabled:=false;
   msg(Format(rsStopTheCurre, [TimeToStr(FSeqStopAt)]),1);
   if FSeqStopTwilight then begin
+    // prevent to repeat the current target
+    TargetRepeatTimer.Enabled:=false;
     // look for a dawn sky flat
     for j:=0 to NumTargets-1 do begin
      if (Targets[j].objectname=SkyFlatTxt)and(Targets[j].planname=FlatTimeName[1]) then begin
