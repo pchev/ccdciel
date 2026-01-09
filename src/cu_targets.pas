@@ -2676,10 +2676,7 @@ begin
        mount.Track;
     // set rotator position
     if Frotator.Status=devConnected then begin
-      if (t.pa<>NullCoord) then begin // use specified PA first
-        Frotator.Angle:=t.pa;
-      end
-      else if (autoguider.AutoguiderType=agINTERNAL) and finternalguider.SpectroFunctions and finternalguider.cbParallactic.Checked then begin
+      if (autoguider.AutoguiderType=agINTERNAL) and finternalguider.SpectroFunctions and finternalguider.cbParallactic.Checked then begin
         // parallactic angle at current mount position
         ra:=mount.RA;
         de:=mount.Dec;
@@ -2693,7 +2690,10 @@ begin
           q:=rmod(q+90,360);
         // rotate
         Frotator.Angle:=q;
-      end;
+      end
+      else if (t.pa<>NullCoord) then begin // use specified PA
+        Frotator.Angle:=t.pa;
+      end
     end;
     // start guiding
     if autoguider is T_autoguider_internal then begin
