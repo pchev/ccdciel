@@ -302,6 +302,8 @@ type
     function cmd_Internalguider_SetSpectroGuidestarRaDec(ra,de:string):string;
     function cmd_Internalguider_ClearSpectroGuidestarRaDec: string;
     function cmd_Internalguider_SetSpectroMultistaroffset(x,y:string):string;
+    function cmd_Spectro_Rotate_Parallactic: string;
+    function cmd_Internalguider_SetSpectroRotateParallactic(onoff:string):string;
     function ScriptType(fn: string): TScriptType;
     function  RunScript(sname,path,args: string):boolean;
     function ScriptRunning: boolean;
@@ -2994,6 +2996,40 @@ except
 end;
 end;
 
+function Tf_scriptengine.cmd_Internalguider_SetSpectroRotateParallactic(onoff:string):string;
+begin
+result:=msgFailed;
+try
+ if (Frotator.Status=devConnected) and
+    (Fautoguider.AutoguiderType=agINTERNAL) and finternalguider.SpectroFunctions and
+     finternalguider.cbRotator.Checked and finternalguider.cbParallactic.Enabled
+ then begin
+   finternalguider.cbParallactic.Checked:=(onoff='ON');
+   result:=msgOK;
+ end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Spectro_Rotate_Parallactic: string;
+var q: double;
+begin
+result:=msgFailed;
+try
+  if (Frotator.Status=devConnected) and (Fmount.RA<>NullCoord) and
+     (Fautoguider.AutoguiderType=agINTERNAL) and finternalguider.SpectroFunctions and finternalguider.cbParallactic.Checked
+  then begin
+     // parallactic angle at current mount position
+     q:=ParallacticAngle(Fmount.EquinoxJD, Fmount.RA, Fmount.Dec, finternalguider.SlitHorizontal.Checked);
+     msg(Format(rsRotateSlitTo, [FormatFloat(f1, q)]));
+     Frotator.Angle:=q;
+     result:=msgOK;
+  end;
+except
+  result:=msgFailed;
+end;
+end;
 
 ///// Python scripts ///////
 

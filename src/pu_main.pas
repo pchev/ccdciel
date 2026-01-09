@@ -17869,6 +17869,7 @@ try
   else if method='INTERNALGUIDER_GETSPECTROSLITNAME' then result:=result+'"result": "'+f_internalguider.cbSlitList.text+'"'
   else if method='INTERNALGUIDER_GETSPECTROGUIDESTAROFFSET' then result:=result+'"result": ['+StringReplace(f_internalguider.StarOffsetX.text,',','.',[])+','+StringReplace(f_internalguider.StarOffsetY.text,',','.',[])+']'
   else if method='INTERNALGUIDER_GETSPECTROMULTISTAROFFSET' then result:=result+'"result": ['+StringReplace(f_internalguider.edOffsetX.text,',','.',[])+','+StringReplace(f_internalguider.edOffsetY.text,',','.',[])+']'
+  else if method='INTERNALGUIDER_GETSPECTROROTATEPARALLACTIC' then result:=result+'"result": '+BoolToStr(f_internalguider.cbParallactic.Checked,tr,fa)
   // execute command without parameter
   else if method='TELESCOPE_ABORTMOTION' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_MountAbortMotion+'"}'
   else if method='TELESCOPE_TRACK' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_MountTrack+'"}'
@@ -17893,6 +17894,7 @@ try
   else if method='PREVIEW_STOP' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_Preview_Stop+'"}'
   else if method='CAPTURE_START' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_Capture_Start+'"}'
   else if method='CAPTURE_STOP' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_Capture_Stop+'"}'
+  else if method='SPECTRO_ROTATE_PARALLACTIC' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_Spectro_Rotate_Parallactic+'"}'
   else if method='ASTROMETRY_GOTO_RUNNING' then result:=result+'"result": '+BoolToStr(f_scriptengine.AstrometryGotoRunning,tr,fa)
   else if method='ASTROMETRY_GOTO_RESULT' then result:=result+'"result": '+BoolToStr(f_scriptengine.AstrometryGotoResult,tr,fa)
   else if method='ASTROMETRY_SOLVE' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AstrometrySolve+'"}'
@@ -18337,6 +18339,12 @@ try
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf2:=trim(value[attrib.IndexOf('params.1')]);
     buf:=f_scriptengine.cmd_Internalguider_SetSpectroMultistaroffset(buf1,buf2);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SETSPECTROROTATEPARALLACTIC' then begin
+    CheckParamCount(1);
+    if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf1:='ON' else buf1:='OFF';
+    buf:=f_scriptengine.cmd_Internalguider_SetSpectroRotateParallactic(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='J2000_TO_APPARENT' then begin
