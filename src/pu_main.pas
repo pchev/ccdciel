@@ -8879,7 +8879,7 @@ begin
 end;
 
 procedure Tf_main.MountGoto(Sender: TObject);
-var ra,de,ra2000,de2000,err:double;
+var ra,de,ra2000,de2000,err,q:double;
     tra,tde,objn: string;
     restartguiding: boolean;
 begin
@@ -8940,6 +8940,13 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
        J2000ToMount(mount.EquinoxJD,ra,de);
        if f_goto.GotoAstrometry.Checked then begin
          if astrometry.PrecisionSlew(ra,de,err) then begin
+           if (rotator.Status=devConnected)and(autoguider.AutoguiderType=agINTERNAL)and(f_internalguider.SpectroFunctions)and(f_internalguider.cbParallactic.Checked) then
+           begin
+             // parallactic angle at current mount position
+             q:=ParallacticAngle(mount.EquinoxJD, mount.RA, mount.Dec, f_internalguider.SlitHorizontal.Checked);
+             NewMessage(Format(rsRotateSlitTo, [FormatFloat(f1, q)]));
+             rotator.Angle:=q;
+           end;
            f_capture.Fname.Text:=objn;
            if f_goto.SpectroGuiding.Visible and f_goto.SpectroGuiding.Enabled and f_goto.SpectroGuiding.Checked then begin
               NewMessage('Start guiding to complete the centering on the slit',3);
@@ -8957,6 +8964,13 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
          GotoStart(nil);
          try
          if mount.Slew(ra,de) then begin
+           if (rotator.Status=devConnected)and(autoguider.AutoguiderType=agINTERNAL)and(f_internalguider.SpectroFunctions)and(f_internalguider.cbParallactic.Checked) then
+           begin
+             // parallactic angle at current mount position
+             q:=ParallacticAngle(mount.EquinoxJD, mount.RA, mount.Dec, f_internalguider.SlitHorizontal.Checked);
+             NewMessage(Format(rsRotateSlitTo, [FormatFloat(f1, q)]));
+             rotator.Angle:=q;
+           end;
            f_capture.Fname.Text:=objn;
            if (not f_goto.SpectroGuiding.Visible) and restartguiding then
               autoguider.Guide(true);
@@ -11647,21 +11661,12 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
      (rotator<>nil) and (rotator.Status=devConnected) then
   begin
     if canwait then begin
-      // parallactic angle at current mount position
-      ra:=mount.RA;
-      de:=mount.Dec;
-      MountToLocal(mount.EquinoxJD,ra,de);
-      ra:=deg2rad*ra*15;
-      de:=deg2rad*de;
       // at the time of mid-exposure
       e:=StrToFloatDef(f_capture.ExpTime.Text,0);
       st:=SidTimT(now+e/2/secperday);
-      // the parallactic angle
-      q:=rad2deg*ParallacticAngle(ra,de,st);
-      NewMessage('Rotate slit to parallactic angle '+FormatFloat(f1,q));
-      // rotate 90° more if the slit is horizontal in the camera field
-      if f_internalguider.SlitHorizontal.Checked then
-        q:=rmod(q+90,360);
+      // parallactic angle at current mount position
+      q:=ParallacticAngle(mount.EquinoxJD, mount.RA, mount.Dec, f_internalguider.SlitHorizontal.Checked,st);
+      NewMessage(Format(rsRotateSlitTo, [FormatFloat(f1, q)]));
       // rotate and settle, this is a small displacement because it already rotate on initial slew and with previous exposure.
       autoguider.Pause(true);
       rotator.Angle:=q;

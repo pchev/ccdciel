@@ -1652,6 +1652,7 @@ resourcestring
   rsSlitOrientat = 'Slit orientation';
   rsVertical = 'Vertical';
   rsHorizontal = 'Horizontal';
+  rsRotateSlitTo = 'Rotate slit to parallactic angle %s';
 
 implementation
 

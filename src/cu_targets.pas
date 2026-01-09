@@ -2369,7 +2369,7 @@ var t: TTarget;
     p: T_Plan;
     ok,wtok,nd:boolean;
     stw,i,intime: integer;
-    st,newra,newde,newV,newPA,enddelay,chkendtime,ra,de,q: double;
+    st,newra,newde,newV,newPA,enddelay,chkendtime,q: double;
     moonra,moonde,moonphase,moonillum,moondist: double;
     autofocusstart, astrometrypointing, isCalibrationTarget: boolean;
     skipmsg, buf: string;
@@ -2674,21 +2674,11 @@ begin
     end
     else if ((t.ra=NullCoord)or(t.de=NullCoord))and(not mount.Tracking) then
        mount.Track;
-    // set rotator position
+    // set rotator position, after slew and before to start guiding
     if Frotator.Status=devConnected then begin
       if (autoguider.AutoguiderType=agINTERNAL) and finternalguider.SpectroFunctions and finternalguider.cbParallactic.Checked then begin
         // parallactic angle at current mount position
-        ra:=mount.RA;
-        de:=mount.Dec;
-        MountToLocal(mount.EquinoxJD,ra,de);
-        ra:=deg2rad*ra*15;
-        de:=deg2rad*de;
-        // the parallactic angle now
-        q:=rad2deg*ParallacticAngle(ra,de);
-        // rotate 90° more if the slit is horizontal in the camera field
-        if finternalguider.SlitHorizontal.Checked then
-          q:=rmod(q+90,360);
-        // rotate
+        q:=ParallacticAngle(mount.EquinoxJD, mount.RA, mount.Dec, finternalguider.SlitHorizontal.Checked);
         Frotator.Angle:=q;
       end
       else if (t.pa<>NullCoord) then begin // use specified PA

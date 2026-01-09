@@ -99,7 +99,8 @@ PROCEDURE Eq2Hz(HH,DE : double ; out A,h : double; method: smallint = 2);
 Procedure Hz2Eq(A,h : double; out hh,de : double; method: smallint = 2);
 procedure ApparentToObserved(ra,de: double; out obsra,obsde: double);
 procedure ObservedToApparent(obsra,obsde: double; out ra,de: double);
-function ParallacticAngle(ra,de: double; st:double=-1):double;
+function ParallacticAngle(ra,de: double; st: double=-1):double; overload;
+function ParallacticAngle(mountjd,rah,ded: double; rot90: boolean; st:double=-1):double; overload;
 function AirMass(h: double): double;
 function atmospheric_absorption(airmass: double):double;
 Procedure cmdEq2Hz(ra,de : double ; out a,h : double);
@@ -1693,7 +1694,7 @@ begin
   ra:=rmod(st - ha + pi2, pi2);
 end;
 
-function ParallacticAngle(ra,de: double; st:double=-1):double;
+function ParallacticAngle(ra,de: double; st: double=-1):double;
 var ha: double;
 begin
 try
@@ -1705,6 +1706,18 @@ try
 except
   result:=0;
 end;
+end;
+
+function ParallacticAngle(mountjd,rah,ded: double; rot90: boolean; st:double=-1):double;
+var ra,de: double;
+begin
+  // with direct mount coordinates, rotate 90° more if the slit is horizontal in the camera field
+  MountToLocal(mountjd,rah,ded);
+  ra:=deg2rad*rah*15;
+  de:=deg2rad*ded;
+  result:=rad2deg*ParallacticAngle(ra,de,st);
+  if rot90 then
+    result:=rmod(result+90,360);
 end;
 
 Function CurrentSidTim: double;
