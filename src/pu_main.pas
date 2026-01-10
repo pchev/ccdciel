@@ -1621,6 +1621,8 @@ begin
   CheckRecenterBusy:=false;
   CheckRecenterTarget:=false;
   RecenteringTarget:=false;
+  AstrometryNewImage:=false;
+  SaveAstrometryNewImage:=false;
   SlewPrecision:=0.5;
   RecenterTargetDistance:=1.0;
   MinimumMoonDistance:=30.0;
@@ -3887,6 +3889,10 @@ try
            break;
          end;
     end;
+    ok:=config.GetValue('/PrecSlew/CheckRecenterTarget',false);
+    if ok then begin
+       config.SetValue('/PrecSlew/AstrometryNewImage',true);
+    end;
   end;
   if config.Modified then begin
      config.SetValue('/Configuration/Version',ccdcielver);
@@ -5146,6 +5152,8 @@ begin
   LowQualityDisplay:=config.GetValue('/Visu/LowQualityDisplay',LowQualityDisplay);
   ConfigExpEarlyStart:=config.GetValue('/Sensor/ExpEarlyStart',ConfigExpEarlyStart);
   MeasureNewImage:=config.GetValue('/Files/MeasureNewImage',false);
+  AstrometryNewImage:=config.GetValue('/PrecSlew/AstrometryNewImage',false);
+  SaveAstrometryNewImage:=config.GetValue('/PrecSlew/SaveAstrometryNewImage',false);
   CheckRecenterTarget:=config.GetValue('/PrecSlew/CheckRecenterTarget',false);
   reftreshold:=config.GetValue('/RefImage/Treshold',128);
   refcolor:=config.GetValue('/RefImage/Color',0);
@@ -10063,6 +10071,8 @@ begin
    f_option.LowQualityDisplay.Checked:=config.GetValue('/Visu/LowQualityDisplay',LowQualityDisplay);
    f_option.ExpEarlyStart.Checked:=config.GetValue('/Sensor/ExpEarlyStart',ConfigExpEarlyStart);
    f_option.MeasureNewImage.Checked:=config.GetValue('/Files/MeasureNewImage',false);
+   f_option.cbAstrometryNewImage.Checked:=config.GetValue('/PrecSlew/AstrometryNewImage',false);
+   f_option.cbSaveAstrometryNewImage.Checked:=config.GetValue('/PrecSlew/SaveAstrometryNewImage',false);
    f_option.CheckRecenterTarget.Checked:=config.GetValue('/PrecSlew/CheckRecenterTarget',false);
    f_option.PixelSize.Value:=config.GetValue('/Astrometry/PixelSize',0.0);
    f_option.Focale.Value:=config.GetValue('/Astrometry/FocaleLength',0.0);
@@ -10553,6 +10563,8 @@ begin
      config.SetValue('/Visu/DisplayCapture',not f_option.NotDisplayCapture.Checked);
      config.SetValue('/Visu/LowQualityDisplay',f_option.LowQualityDisplay.Checked);
      config.SetValue('/Files/MeasureNewImage',f_option.MeasureNewImage.Checked);
+     config.SetValue('/PrecSlew/AstrometryNewImage',f_option.cbAstrometryNewImage.Checked);
+     config.SetValue('/PrecSlew/SaveAstrometryNewImage',f_option.cbSaveAstrometryNewImage.Checked);
      config.SetValue('/PrecSlew/CheckRecenterTarget',f_option.CheckRecenterTarget.Checked);
      config.SetValue('/Astrometry/Resolver',f_option.Resolver);
      config.SetValue('/Astrometry/PixelSizeFromCamera',f_option.PixelSizeFromCamera.Checked);
@@ -12511,37 +12523,44 @@ try
      end;
    end;
  end;
- // check if target need to be recentered
- if CheckRecenterTarget and(camera.FrameType=LIGHT)and
-    (not NeedRecenterTarget)and(not CheckRecenterBusy)and(not astrometry.Busy)
-    then begin
-      if (astrometryResolver<>ResolverNone) then begin
-        if (f_sequence.Running)and(f_sequence.TargetCoord)and(f_sequence.TargetRA<>NullCoord)and(f_sequence.TargetDE<>NullCoord) then begin
-          if (not EarlyNextExposure) or (camera.LastExposureTime>(AstrometryTimeout+5))
-            then begin
-            try
-            CheckRecenterBusy:=true;
-            astrometry.SolveCurrentImage(true);
-            if (not astrometry.Busy)and astrometry.LastResult then begin
-               if astrometry.CurrentCoord(cra,cde,eq,pa) then begin
-                 cra:=cra*15*deg2rad;
-                 cde:=cde*deg2rad;
-                 J2000ToApparent(cra,cde);
-                 dist:=60*rad2deg*rmod(AngularDistance(f_sequence.TargetRA,f_sequence.TargetDE,cra,cde)+pi2,pi2);
-                 NewMessage(Format(rsDistanceToTa, [FormatFloat(f2, dist)]),3);
-                 NeedRecenterTarget:=dist>max(RecenterTargetDistance,1.5*SlewPrecision);
-                 if NeedRecenterTarget then NewMessage(rsTargetWillBe2,2);
-                 LastDrift:=dist;
-               end;
-            end;
-            finally
-            CheckRecenterBusy:=false;
-            end;
-          end
-          else NewMessage(rsNoCenteringM, 3);
-        end;
-      end
-      else NewMessage(rsNoCenteringM3, 3);
+ // Do astrometry
+ if AstrometryNewImage and(camera.FrameType=LIGHT)and(not CheckRecenterBusy)and(not astrometry.Busy)
+ then begin
+   if (astrometryResolver<>ResolverNone) then begin
+     if (f_sequence.Running) then begin
+       if (not EarlyNextExposure) or (camera.LastExposureTime>(AstrometryTimeout+5))
+       then begin
+         try
+         CheckRecenterBusy:=true;
+         astrometry.SolveCurrentImage(true);
+         if (not astrometry.Busy)and astrometry.LastResult then begin
+           // save with astrometry
+           if SaveAstrometryNewImage and (LastCaptureFile<>'') then begin
+             SaveFitsFile(LastCaptureFile);
+             NewMessage(rsSaveImageWit+' '+LastCaptureFile,1);
+           end;
+           // check if target need to be recentered
+           if CheckRecenterTarget and (not NeedRecenterTarget) and(f_sequence.TargetCoord)and
+              (f_sequence.TargetRA<>NullCoord)and(f_sequence.TargetDE<>NullCoord) and astrometry.CurrentCoord(cra,cde,eq,pa)
+           then begin
+              cra:=cra*15*deg2rad;
+              cde:=cde*deg2rad;
+              J2000ToApparent(cra,cde);
+              dist:=60*rad2deg*rmod(AngularDistance(f_sequence.TargetRA,f_sequence.TargetDE,cra,cde)+pi2,pi2);
+              NewMessage(Format(rsDistanceToTa, [FormatFloat(f2, dist)]),3);
+              NeedRecenterTarget:=dist>max(RecenterTargetDistance,1.5*SlewPrecision);
+              if NeedRecenterTarget then NewMessage(rsTargetWillBe2,2);
+              LastDrift:=dist;
+           end;
+         end;
+         finally
+         CheckRecenterBusy:=false;
+         end;
+       end
+       else NewMessage(rsNoCenteringM, 3);
+     end;
+   end
+   else NewMessage(rsNoCenteringM3, 3);
  end;
  except
    on E: Exception do NewMessage('CameraMeasureNewImage :'+ E.Message,1);

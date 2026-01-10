@@ -38,6 +38,14 @@ type
     cbAFmedianfilter: TCheckBox;
     cbHighlightColor: TComboBox;
     cbWeatherScript: TComboBox;
+    cbAstrometryNewImage: TCheckBox;
+    CheckRecenterTarget: TCheckBox;
+    PanelRecenter: TPanel;
+    Label130: TLabel;
+    Label131: TLabel;
+    Label149: TLabel;
+    RecenterTargetDistance: TFloatSpinEditEx;
+    cbSaveAstrometryNewImage: TCheckBox;
     KeepIndiHeader: TCheckBox;
     Label190: TLabel;
     Label191: TLabel;
@@ -285,7 +293,6 @@ type
     Label146: TLabel;
     Label147: TLabel;
     Label148: TLabel;
-    Label149: TLabel;
     Label920: TLabel;
     BtnDisableAutofocusTemp: TButton;
     AutofocusTemp: TFloatSpinEditEx;
@@ -341,14 +348,9 @@ type
     SaveBitmap: TCheckBox;
     MeasureNewImage: TCheckBox;
     FocusStarMagAdjust: TCheckBox;
-    CheckRecenterTarget: TCheckBox;
-    Label130: TLabel;
-    Label131: TLabel;
     Label132: TLabel;
     Label133: TLabel;
-    RecenterTargetDistance: TFloatSpinEditEx;
     GroupBox22: TGroupBox;
-    GroupBox23: TGroupBox;
     Label127: TLabel;
     Label128: TLabel;
     AutofocusPeriod: TSpinEditEx;
@@ -798,6 +800,7 @@ type
     RefTreshold: TTrackBar;
     procedure ASTAPadvancedClick(Sender: TObject);
     procedure AstrometryCameraChange(Sender: TObject);
+    procedure cbAstrometryNewImageChange(Sender: TObject);
     procedure AstUseOnlineClick(Sender: TObject);
     procedure AstUseScriptClick(Sender: TObject);
     procedure AutofocusExpTimeChange(Sender: TObject);
@@ -1222,8 +1225,9 @@ begin
   GroupBoxMeasurement.Caption:=rsMeasurementO;
   MeasureNewImage.Caption:=rsAutomaticHFD;
   Label184.Caption:=rsRunAutoFocus2;
-  GroupBox23.Caption:=rsRecenterSequ;
-  CheckRecenterTarget.Caption:=rsRunAstrometr;
+  cbAstrometryNewImage.Caption:=rsRunAstrometr;
+  cbSaveAstrometryNewImage.Caption:=rsSaveImageWit;
+  CheckRecenterTarget.Caption:=rsRecenterSequ;
   Label130.Caption:=rsRecenterIfTh;
   Label131.Caption:=rsArcmin;
   Label149.Caption:=rsLimitedTo15x;
@@ -2204,6 +2208,16 @@ begin
   SlewFilter.Enabled:=AstrometryCamera.ItemIndex=0;
   PanelFinder.Visible:=AstrometryCamera.ItemIndex=1;
   PanelRotator.Visible:=WantRotator and (AstrometryCamera.ItemIndex=0);
+end;
+
+procedure Tf_option.cbAstrometryNewImageChange(Sender: TObject);
+begin
+  cbSaveAstrometryNewImage.Enabled:=cbAstrometryNewImage.Checked;
+  PanelRecenter.Enabled:=cbAstrometryNewImage.Checked;
+  if not cbAstrometryNewImage.Checked then begin
+    cbSaveAstrometryNewImage.Checked:=false;
+    CheckRecenterTarget.Checked:=false;
+  end;
 end;
 
 procedure Tf_option.AutofocusExpTimeChange(Sender: TObject);

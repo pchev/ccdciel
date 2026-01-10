@@ -1099,7 +1099,7 @@ resourcestring
   rsPixelCount = '%sPixel count:%s';
   rsMedian = '%sMedian:%s';
   rsRecenterSequ = 'Recenter sequence target that drift';
-  rsRunAstrometr = 'Run astrometry on every image to search for drift';
+  rsRunAstrometr = 'Run astrometry on every image';
   rsRecenterIfTh = 'Recenter if the drift is more than';
   rsTargetWillBe2 = 'Target will be recentered before next image';
   rsRecenterTarg = 'Recenter target now';
@@ -1653,6 +1653,7 @@ resourcestring
   rsVertical = 'Vertical';
   rsHorizontal = 'Horizontal';
   rsRotateSlitTo = 'Rotate slit to parallactic angle %s';
+  rsSaveImageWit = 'Save image with astrometry';
 
 implementation
 

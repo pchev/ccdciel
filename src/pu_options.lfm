@@ -7909,70 +7909,6 @@ object f_option: Tf_option
             ParentFont = False
             TabOrder = 0
           end
-          object GroupBox23: TGroupBox
-            Left = 0
-            Height = 120
-            Top = 72
-            Width = 551
-            Align = alBottom
-            Caption = 'Recenter sequence target that drift'
-            ClientHeight = 90
-            ClientWidth = 547
-            ParentFont = False
-            TabOrder = 1
-            object CheckRecenterTarget: TCheckBox
-              Left = 12
-              Height = 22
-              Top = 8
-              Width = 326
-              Caption = 'Run astrometry on every image to search for drift'
-              ParentFont = False
-              TabOrder = 0
-            end
-            object RecenterTargetDistance: TFloatSpinEditEx
-              Left = 344
-              Height = 28
-              Top = 40
-              Width = 74
-              Constraints.MaxHeight = 28
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 1
-              Increment = 0.1
-            end
-            object Label130: TLabel
-              Left = 12
-              Height = 18
-              Top = 45
-              Width = 199
-              Caption = 'Recenter if the drift is more than'
-              ParentColor = False
-              ParentFont = False
-            end
-            object Label131: TLabel
-              AnchorSideLeft.Control = RecenterTargetDistance
-              AnchorSideLeft.Side = asrBottom
-              AnchorSideTop.Control = RecenterTargetDistance
-              AnchorSideTop.Side = asrCenter
-              Left = 426
-              Height = 18
-              Top = 45
-              Width = 50
-              BorderSpacing.Left = 8
-              Caption = 'minutes'
-              ParentColor = False
-              ParentFont = False
-            end
-            object Label149: TLabel
-              Left = 12
-              Height = 18
-              Top = 70
-              Width = 207
-              Caption = '(limited to 1.5x the slew precision)'
-              ParentColor = False
-              ParentFont = False
-            end
-          end
           object Label184: TLabel
             Left = 12
             Height = 18
@@ -7990,7 +7926,7 @@ object f_option: Tf_option
             Caption = 'Disable'
             Enabled = False
             OnClick = BtnDisableAutofocusHFDClick
-            TabOrder = 2
+            TabOrder = 1
           end
           object SpinAutoFocusHFD: TFloatSpinEditEx
             Left = 344
@@ -8000,10 +7936,93 @@ object f_option: Tf_option
             Constraints.MaxHeight = 28
             Enabled = False
             MaxLength = 0
-            TabOrder = 3
+            TabOrder = 2
             DecimalPlaces = 1
             Increment = 0.1
             MaxValue = 100
+          end
+          object cbAstrometryNewImage: TCheckBox
+            Left = 12
+            Height = 22
+            Top = 64
+            Width = 216
+            Caption = 'Run astrometry on every image'
+            OnChange = cbAstrometryNewImageChange
+            TabOrder = 3
+          end
+          object cbSaveAstrometryNewImage: TCheckBox
+            Left = 12
+            Height = 22
+            Top = 88
+            Width = 195
+            Caption = 'Save image with astrometry'
+            Enabled = False
+            TabOrder = 4
+          end
+          object PanelRecenter: TPanel
+            Left = 0
+            Height = 80
+            Top = 112
+            Width = 551
+            Align = alBottom
+            BevelOuter = bvNone
+            ClientHeight = 80
+            ClientWidth = 551
+            Enabled = False
+            ParentFont = False
+            TabOrder = 5
+            object CheckRecenterTarget: TCheckBox
+              Left = 12
+              Height = 22
+              Top = 4
+              Width = 239
+              Caption = 'Recenter sequence target that drift'
+              ParentFont = False
+              TabOrder = 0
+            end
+            object RecenterTargetDistance: TFloatSpinEditEx
+              Left = 344
+              Height = 28
+              Top = 24
+              Width = 74
+              Constraints.MaxHeight = 28
+              MaxLength = 0
+              ParentFont = False
+              TabOrder = 1
+              Increment = 0.1
+            end
+            object Label130: TLabel
+              Left = 32
+              Height = 18
+              Top = 32
+              Width = 199
+              Caption = 'Recenter if the drift is more than'
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label131: TLabel
+              AnchorSideLeft.Control = RecenterTargetDistance
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = RecenterTargetDistance
+              AnchorSideTop.Side = asrCenter
+              Left = 426
+              Height = 18
+              Top = 29
+              Width = 50
+              BorderSpacing.Left = 8
+              Caption = 'minutes'
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label149: TLabel
+              Left = 32
+              Height = 18
+              Top = 56
+              Width = 207
+              Caption = '(limited to 1.5x the slew precision)'
+              ParentColor = False
+              ParentFont = False
+            end
           end
         end
         object GroupBoxFocus: TGroupBox
