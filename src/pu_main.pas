@@ -11369,7 +11369,7 @@ begin
 end;
 
 function Tf_main.PrepareCaptureExposure(canwait:boolean):boolean;
-var e,x,ra,de,st,q: double;
+var e,x,ra,de,st,q,deltaq: double;
     buf,txt,r: string;
     waittime,i: integer;
     ftype:TFrameType;
@@ -11680,12 +11680,20 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
       st:=SidTimT(now+e/2/secperday);
       // parallactic angle at current mount position
       q:=ParallacticAngle(mount.EquinoxJD, mount.RA, mount.Dec, f_internalguider.SlitHorizontal.Checked,st);
+      q:=rmod(q+360,360);
       NewMessage(Format(rsRotateSlitTo, [FormatFloat(f1, q)]));
-      // rotate and settle, this is a small displacement because it already rotate on initial slew and with previous exposure.
-      autoguider.Pause(true);
-      rotator.Angle:=q;
-      autoguider.Pause(false);
-      autoguider.WaitGuiding(SettleMaxTime);
+      deltaq:=abs(rmod(rotator.angle+360,360)-q);
+      if (deltaq>1) then begin
+        // rotate and settle, this is a small displacement because it already rotate on initial slew and with previous exposure.
+        autoguider.Pause(true);
+        rotator.Angle:=q;
+        autoguider.Pause(false);
+        autoguider.WaitGuiding(SettleMaxTime);
+      end
+      else begin
+        // no need to settle for very small rotation
+        rotator.Angle:=q;
+      end;
     end
     else begin
       exit; // cannot start now
