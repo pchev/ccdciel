@@ -15945,7 +15945,7 @@ end;
 
 if (n=0) and (rotator.Status=devConnected) then begin
 
-  rot:=wcsinfo.rot;
+  rot:=rmod(wcsinfo.rot+360,360);
 
   rotator.Sync(rot);
 

@@ -988,6 +988,7 @@ begin
   result:=(dist<=prec);
 
   if result and SlewSyncRotator and (FFinderCamera=nil) and (Frotator.Status=devConnected) and (pa<>NullCoord) then begin
+    pa:=rmod(pa+360,360);
     msg('Sync the rotator: '+FormatFloat(f2,pa)+' '+rsDegree,3);
     Frotator.Sync(pa);
   end;
