@@ -11373,6 +11373,7 @@ var e,x,ra,de,st,q: double;
     buf,txt,r: string;
     waittime,i: integer;
     ftype:TFrameType;
+    customtype: boolean;
 begin
 // If called with canwait=false this function only check for operation
 // that can prevent an immediate start of the exposure. In this case it
@@ -11392,6 +11393,7 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
   end;
 
   ftype:=camera.InitFrameType(f_capture.FrameType);
+  customtype:=f_capture.FrameType>ord(High(TFrameType));
 
   // wait for weather
   if WeatherPauseCapture then begin
@@ -11575,7 +11577,7 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
    end;
   end;
   // check if refocusing is required
-  if (ftype=LIGHT) and ( // only for light frame
+  if (ftype=LIGHT) and (not customtype) and ( // only for light frame
      f_capture.FocusNow  // start of step
      or (f_capture.CheckBoxFocus.Checked and (f_capture.FocusNum>=f_capture.FocusCount.Value)) // every n frame
      or ((AutofocusPeriod>0) and (AutoFocusLastTime<>NullCoord) and                            // every n minutes
@@ -11616,7 +11618,7 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
    end;
   end
   else
-   if (ftype=LIGHT) and (f_capture.CheckBoxFocus.Checked or (AutofocusPeriod>0)or
+   if (ftype=LIGHT) and (not customtype) and (f_capture.CheckBoxFocus.Checked or (AutofocusPeriod>0)or
       (AutofocusTempChange>0.0)or HFM_IsActive) then begin
       // Show message when next autofocus is due
       txt:='';
@@ -11668,7 +11670,7 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
     exit;
   end;
   // rotate the slit to the parallactic angle at the time of middle exposure
-  if (ftype=LIGHT) and (autoguider.AutoguiderType=agINTERNAL) and f_internalguider.SpectroFunctions and f_internalguider.cbParallactic.Checked and
+  if (ftype=LIGHT) and (not customtype) and (autoguider.AutoguiderType=agINTERNAL) and f_internalguider.SpectroFunctions and f_internalguider.cbParallactic.Checked and
      (mount<>nil) and (mount.Status=devConnected) and
      (rotator<>nil) and (rotator.Status=devConnected) then
   begin
