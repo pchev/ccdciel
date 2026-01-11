@@ -2006,6 +2006,7 @@ begin
   f_rotator.onReverse:=@RotatorReverse;
   f_rotator.onResetSync:=@RotatorResetSync;
   if camera<>nil then camera.f_Rotator:=f_rotator;
+  if guidecamera<>nil then guidecamera.f_Rotator:=f_rotator;
 
   f_weather:=Tf_weather.Create(self);
   f_weather.onDetail:=@WeatherDetail;
@@ -2328,6 +2329,7 @@ begin
    guidecamera.GuideCamera:=true;
    guidecamera.CameraTimeout:=15;
    guidecamera.Mount:=mount;
+   guidecamera.Rotator:=rotator;
    guidecamera.Fits:=guidefits;
    guidecamera.onMsg:=@NewMessage;
    guidecamera.onDeviceMsg:=@DeviceMessage;
