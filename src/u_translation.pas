@@ -759,7 +759,6 @@ resourcestring
   rsFocuserMoveT = 'Focuser move to %s';
   rsFocuserMoveB = 'Focuser move by %s';
   rsRotatorMoveT = 'Rotator move to PA %s';
-  rsRotatorSyncC = 'Rotator sync calibration = %s';
   rsConnected3 = 'Connected';
   rsConnectionEr = 'Connection error: %s';
   rsDisconnectio = 'Disconnection error: %s';

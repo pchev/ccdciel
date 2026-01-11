@@ -162,7 +162,7 @@ if FSoftSync then begin
     FCalibrationAngle:=GetMechAngle-p;
   FCalibrationAngle:=rmod(7200+FCalibrationAngle,360);
   if FCalibrationAngle>359 then FCalibrationAngle:=0;
-  msg(Format(rsRotatorSyncC, [FormatFloat(f1, FCalibrationAngle)]));
+  msg(rsSyncOffset+': '+FormatFloat(f1, FCalibrationAngle));
   if Assigned(FonAngleChange) then FonAngleChange(self);
 end
 else
