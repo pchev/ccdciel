@@ -8952,6 +8952,7 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
            begin
              // parallactic angle at current mount position
              q:=ParallacticAngle(mount.EquinoxJD, mount.RA, mount.Dec, f_internalguider.SlitHorizontal.Checked);
+             q:=rmod(q+360,360);
              NewMessage(Format(rsRotateSlitTo, [FormatFloat(f1, q)]));
              rotator.Angle:=q;
            end;
@@ -8976,6 +8977,7 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
            begin
              // parallactic angle at current mount position
              q:=ParallacticAngle(mount.EquinoxJD, mount.RA, mount.Dec, f_internalguider.SlitHorizontal.Checked);
+             q:=rmod(q+360,360);
              NewMessage(Format(rsRotateSlitTo, [FormatFloat(f1, q)]));
              rotator.Angle:=q;
            end;
@@ -15668,6 +15670,7 @@ begin
  if fits.HeaderInfo.valid and fits.ImageValid then begin
    astrometry.SolveCurrentImage(true);
    if astrometry.CurrentCoord(ra,de,eq,pa) then begin
+     pa:=rmod(pa+360,360);
      rotator.Angle:=pa;
    end;
  end;

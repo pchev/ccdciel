@@ -2679,6 +2679,7 @@ begin
       if (autoguider.AutoguiderType=agINTERNAL) and finternalguider.SpectroFunctions and finternalguider.cbParallactic.Checked then begin
         // parallactic angle at current mount position
         q:=ParallacticAngle(mount.EquinoxJD, mount.RA, mount.Dec, finternalguider.SlitHorizontal.Checked);
+        q:=rmod(q+360,360);
         Frotator.Angle:=q;
       end
       else if (t.pa<>NullCoord) then begin // use specified PA

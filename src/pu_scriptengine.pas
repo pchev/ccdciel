@@ -3022,6 +3022,7 @@ try
   then begin
      // parallactic angle at current mount position
      q:=ParallacticAngle(Fmount.EquinoxJD, Fmount.RA, Fmount.Dec, finternalguider.SlitHorizontal.Checked);
+     q:=rmod(q+360,360);
      msg(Format(rsRotateSlitTo, [FormatFloat(f1, q)]));
      Frotator.Angle:=q;
      result:=msgOK;
