@@ -1539,7 +1539,7 @@ begin
           // restart with astrometry
           msg('Make a new astrometry near the target now',3);
           InternalguiderStop(false);
-          InternalguiderStart(false);
+          WaitExecute(1000, @InternalguiderStartAsync,0); // exit current image loop before to restart
           exit;
        end;
   end;

@@ -18800,9 +18800,11 @@ begin
     // signal an image is available
     T_autoguider_internal(autoguider).NewImageReceived;
     // process depending on current state
-    if InternalguiderGuiding then
+    if InternalguiderGuiding then begin
       // process autoguiding
-      T_autoguider_internal(autoguider).InternalAutoguiding
+      T_autoguider_internal(autoguider).InternalAutoguiding;
+      if StopInternalguider then exit; // in case of new astrometry request
+    end
     else if InternalguiderCalibrating then
       // process calibration
       T_autoguider_internal(autoguider).InternalCalibration
