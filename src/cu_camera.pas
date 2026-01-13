@@ -561,7 +561,8 @@ const datefmt = 'yyyy"-"mm"-"dd"T"hh"-"nn"-"ss';
 begin
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'NewImage');{$endif}
 if FAddFrames then begin  // stack preview frames
-  if (FStackNum>0)and(FStackCount>=FStackNum) then FFits.ClearImage;
+  if (FStackCount=0)or((FStackNum>0)and(FStackCount>=FStackNum)) then
+     FFits.ClearImage;
   if FSaveFrames then begin
     // save original image
     mem:=TMemoryStream.Create;

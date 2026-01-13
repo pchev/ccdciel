@@ -11599,6 +11599,8 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
 
        // Reset HFD history and vars for new measurements, if enabled
        HFM_ResetMeasurements(self);
+       // reset image size for stacking
+       fits.ClearImage;
 
        if f_capture.Running then begin
          // ok, continue
