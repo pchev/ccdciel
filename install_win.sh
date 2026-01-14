@@ -33,7 +33,7 @@ if [ $OS_TARGET = win32 ]; then
   unzip -d $destdir system_integration/Windows/data/zlib-win32.zip
   unzip -d $destdir system_integration/Windows/data/cfitsio-win32.zip
   unzip -d $destdir system_integration/Windows/data/exiv2-win32.zip
-  unzip -d $destdir/scripts/python system_integration/Windows/data/python-3.8.10-embed-win32.zip
+  unzip -d $destdir/scripts/python system_integration/Windows/data/python-3.14.2-embed-win32.zip
 fi
 if [ $OS_TARGET = win64 ]; then
   strip -v -o $destdir/ccdciel.exe src/ccdciel.exe 
@@ -43,9 +43,10 @@ if [ $OS_TARGET = win64 ]; then
   unzip -d $destdir system_integration/Windows/data/zlib-win64.zip
   unzip -d $destdir system_integration/Windows/data/cfitsio-win64.zip
   unzip -d $destdir system_integration/Windows/data/exiv2-win64.zip
-  unzip -d $destdir/scripts/python system_integration/Windows/data/python-3.8.10-embed-amd64.zip
+  unzip -d $destdir/scripts/python system_integration/Windows/data/python-3.14.2-embed-amd64.zip
 fi
 unzip -d $destdir/scripts/python system_integration/Windows/data/python-pyserial.zip
+unzip -d $destdir/scripts/python system_integration/Windows/data/python-alpaca_with_dependencies.zip
 
 install -v -m 644 scripts/ccdciel.py  $destdir/scripts/ccdciel.py
 install -v -m 644 scripts/ccdciel.winembed  $destdir/scripts/python/ccdciel.py
