@@ -443,7 +443,7 @@ end;
 
 procedure T_indiswitch.SetSwitch(value: TSwitchList);
 var i,j: integer;
-    modified: boolean;
+    modified,ok: boolean;
     t: INDI_TYPE;
 begin
  if (NumSwitchProp=0)or(FNumSwitch=0) then exit;
@@ -463,7 +463,10 @@ begin
    t:=FSwitch[i].IndiType;
    case t of
      INDI_SWITCH: begin
-         modified:=modified or ( value[i].Checked <> (ISwitchVectorProperty(SwitchPropList[FSwitch[i].IndiProp]).sp[FSwitch[i].IndiIndex].s=ISS_ON) );
+         ok := ( value[i].Checked <> (ISwitchVectorProperty(SwitchPropList[FSwitch[i].IndiProp]).sp[FSwitch[i].IndiIndex].s=ISS_ON) );
+         modified:=modified or ok;
+         if ok then
+           msg('Set switch '+value[i].Name+'='+BoolToStr(value[i].Checked,true),3);
          if value[i].Checked then begin
            if value[i].IndiGroup>=0 then
              IUResetSwitch(ISwitchVectorProperty(SwitchPropList[FSwitch[i].IndiProp]));
@@ -473,7 +476,10 @@ begin
            ISwitchVectorProperty(SwitchPropList[FSwitch[i].IndiProp]).sp[FSwitch[i].IndiIndex].s:=ISS_OFF;
      end;
      INDI_NUMBER: begin
-         modified:=modified or ( value[i].Value <> (INumberVectorProperty(SwitchPropList[FSwitch[i].IndiProp]).np[FSwitch[i].IndiIndex].Value) );
+         ok := ( value[i].Value <> (INumberVectorProperty(SwitchPropList[FSwitch[i].IndiProp]).np[FSwitch[i].IndiIndex].Value) );
+         modified:=modified or ok;
+         if ok then
+           msg('Set switch '+value[i].Name+'='+FloatToStr(value[i].Value),3);
          INumberVectorProperty(SwitchPropList[FSwitch[i].IndiProp]).np[FSwitch[i].IndiIndex].Value := value[i].Value;
      end;
    end;

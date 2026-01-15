@@ -309,9 +309,11 @@ begin
    for i:=0 to FNumSwitch-1 do begin
      if value[i].CanWrite and ((value[i].Value<>FSwitch[i].Value)or(value[i].Checked<>FSwitch[i].Checked)) then begin
        if FSwitch[i].MultiState then begin
+         msg('Set switch '+value[i].Name+'='+FloatToStr(value[i].Value),3);
          V.SetSwitchValue(i,value[i].Value);
        end
        else begin
+         msg('Set switch '+value[i].Name+'='+BoolToStr(value[i].Checked,true),3);
          V.SetSwitch(i,value[i].Checked);
        end;
      end;

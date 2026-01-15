@@ -99,7 +99,12 @@ end;
 
 procedure T_switch.msg(txt: string; level:integer=3);
 begin
-  if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt,level);
+  if Assigned(FonMsg) then begin
+    if FNickname='' then
+      FonMsg(Fdevice+': '+txt,level)
+    else
+      FonMsg(FNickname+': '+txt,level);
+  end;
 end;
 
 function T_switch.GetNickName: string;

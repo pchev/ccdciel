@@ -323,11 +323,13 @@ begin
        if FSwitch[i].MultiState then begin
          p[2]:='Value';
          p[3]:=FloatToStr(value[i].Value);
+         msg('Set switch '+value[i].Name+'='+p[3],3);
          V.Put('setswitchvalue',p);
        end
        else begin
          p[2]:='State';
          p[3]:=BoolToStr(value[i].Checked,true);
+         msg('Set switch '+value[i].Name+'='+p[3],3);
          V.Put('setswitch',p);
        end;
      end;
