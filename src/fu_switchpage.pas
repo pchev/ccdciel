@@ -262,7 +262,7 @@ end;
 procedure Tf_switchpage.BtnSetClick(Sender: TObject);
 var i:integer;
     s: TFloatSpinEditEx;
-    swchanged: boolean;
+    swchanged,ok: boolean;
 begin
   if (not initialized)or(FNumSwitch=0) then exit;
   swchanged:=false;
@@ -279,8 +279,10 @@ begin
       if CtrlList.Objects[i] is TPanel then begin
         s:=TFloatSpinEditEx(FindComponent('Switch_'+IntToStr(i)));
         if s<>nil then begin
-          swchanged:=swchanged or (s.Value<>FSwitch[i].Value);
-          FSwitch[i].Value:=s.Value;
+          ok:=(abs(s.Value-FSwitch[i].Value)>=FSwitch[i].Step);
+          if ok then
+            FSwitch[i].Value:=s.Value;
+          swchanged:=swchanged or ok;
         end;
       end;
     end;
