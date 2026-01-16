@@ -928,7 +928,7 @@ begin
      sleep(5);
      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
   end;
-  if method='Connected' then
+  if (method='Connected')or(method='Connect') then
     FRemoteIP:=RESTRequest.http.Sock.GetRemoteSinIP;
   ok := RESTRequest.ok;
   if ok then begin
