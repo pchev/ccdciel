@@ -75,6 +75,11 @@ type
     Name,ScriptOn,ScriptOff,ParamOn,ParamOff: string;
   end;
 
+  TAscomDeviceState = record
+    Name, Value: string;
+  end;
+  TAscomDeviceStateList = array of TAscomDeviceState;
+
   coordvector = array[1..3] of double;
   rotmatrix = array[1..3, 1..3] of double;
 

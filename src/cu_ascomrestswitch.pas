@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_switch, cu_ascomrest, u_global, u_utils,
+uses cu_switch, cu_ascomrest, fpjson, jsonparser, u_global, u_utils,
     u_translation, indiapi,
     Forms, ExtCtrls,Classes, SysUtils;
 
@@ -36,7 +36,10 @@ T_ascomrestswitch = class(T_switch)
    FInterfaceVersion: integer;
    StatusTimer: TTimer;
    statusinterval, waitpoll: integer;
+   hasDevicestate: boolean;
    procedure StatusTimerTimer(sender: TObject);
+   function  GetDevicestate:TAscomDeviceStateList;
+   function  GetStateValue(state: TAscomDeviceStateList; n: string):string;
    function  Connected: boolean;
    function WaitConnecting(maxtime:integer):boolean;
  protected
@@ -59,6 +62,7 @@ begin
  V.ClientId:=3208;
  FSwitchInterface:=ASCOMREST;
  FInterfaceVersion:=1;
+ hasDevicestate:=false;
  statusinterval:=2000;
  waitpoll:=500;
  StatusTimer:=TTimer.Create(nil);
@@ -157,10 +161,26 @@ begin
          FSwitch[i].IndiGroup:=-1;
        end;
      end;
-     if isLocalIP(V.RemoteIP) then
-       statusinterval:=5000
-     else
-       statusinterval:=10000;
+     if FInterfaceVersion>=3 then begin
+       try
+         V.Get('devicestate');
+         hasDevicestate:=true;
+       except
+         hasDevicestate:=false;
+       end;
+     end;
+     if isLocalIP(V.RemoteIP) then begin
+       if hasDevicestate then
+         statusinterval:=2000
+       else
+         statusinterval:=5000;
+     end
+     else begin
+       if hasDevicestate then
+         statusinterval:=5000
+       else
+         statusinterval:=10000;
+     end;
      msg(rsConnected3);
      FStatus := devConnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -263,13 +283,50 @@ begin
   end;
 end;
 
+function  T_ascomrestswitch.GetDevicestate:TAscomDeviceStateList;
+var J: TAscomResult;
+    d: TJSONArray;
+    i,n: integer;
+begin
+ J:=V.Get('devicestate');
+ try
+   d:=TJSONArray(J.GetName('Value'));
+   n:=d.Count;
+   SetLength(Result,n);
+   for i:=0 to n-1 do begin
+     Result[i].Name:=d.Objects[i].GetPath('Name').AsString;
+     Result[i].Value:=d.Objects[i].GetPath('Value').AsString;
+   end;
+ finally
+   J.Free;
+ end;
+end;
+
+function  T_ascomrestswitch.GetStateValue(state: TAscomDeviceStateList; n: string):string;
+var i: integer;
+begin
+  result:='';
+  for i:=0 to length(state)-1 do begin
+    if state[i].Name=n then begin
+      Result:=state[i].Value;
+      Break;
+    end;
+  end;
+end;
+
 function  T_ascomrestswitch.GetSwitch:TSwitchList;
 var i: integer;
+    statelist:TAscomDeviceStateList;
+    buf: string;
 begin
   FLastError:='';
   if (FStatus<>devConnected)or(FNumSwitch=0) then exit;
   try
     SetLength(result,FNumSwitch);
+    if hasDevicestate then begin
+       statelist:=GetDevicestate;
+       if length(statelist)<FNumSwitch then hasDevicestate:=false;
+    end;
     for i:=0 to FNumSwitch-1 do begin
       result[i].Name       := FSwitch[i].Name;
       result[i].CanWrite   := FSwitch[i].CanWrite;
@@ -280,7 +337,10 @@ begin
       result[i].IndiGroup  := -1;
       if result[i].MultiState then begin
         try
-        result[i].Value    := V.Get('getswitchvalue','Id='+IntToStr(i)).AsFloat;
+        if hasDevicestate then
+          result[i].Value := StrToFloatDef(GetStateValue(statelist,'GetSwitchValue'+IntToStr(i)),FSwitch[i].Min)
+        else
+          result[i].Value    := V.Get('getswitchvalue','Id='+IntToStr(i)).AsFloat;
         if (FStatus<>devConnected)or(FNumSwitch=0) then exit;
         result[i].Checked  := (result[i].Value = result[i].Max);
         except
@@ -293,8 +353,22 @@ begin
       end
       else begin
         try
-        result[i].Value    := FSwitch[i].Value;
-        result[i].Checked  := V.Get('getswitch','Id='+IntToStr(i)).AsBool;
+        if hasDevicestate then begin
+          buf := GetStateValue(statelist,'GetSwitch'+IntToStr(i));
+          if buf<>'' then
+            result[i].Checked := UpperCase(buf)='TRUE'
+          else begin
+            buf := GetStateValue(statelist,'GetSwitchValue'+IntToStr(i));
+            result[i].Checked := buf<>'0';
+          end;
+        end
+        else begin
+          result[i].Checked  := V.Get('getswitch','Id='+IntToStr(i)).AsBool;
+        end;
+        if result[i].Checked then
+          result[i].Value := FSwitch[i].Max
+        else
+          result[i].Value := FSwitch[i].Min;
         if (FStatus<>devConnected)or(FNumSwitch=0) then exit;
         except
           on E: Exception do begin
