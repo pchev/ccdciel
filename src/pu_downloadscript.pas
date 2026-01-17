@@ -167,10 +167,8 @@ begin
       end;
       FscriptName:=trim(basefn)+'_config';
       if not FileExists(slash(ConfigDir)+FscriptName+'.script') then  begin
-        if FUnZipper.Entries.Count>0 then
-          FscriptName:=ExtractFileNameWithoutExt(FUnZipper.Entries[0].DiskFileName)
-        else
           FscriptName:='';
+          ShowMessage('Installation of '+basefn+' scripts completed successfully');
       end;
       ModalResult:=mrOK;
       except
