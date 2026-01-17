@@ -12,7 +12,7 @@ import os
 scriptdir = os.path.dirname(os.path.abspath(sys.argv[0]))
 
 # connect to UVEX4 using information in the config file
-uvex = UVEX4(os.path.join(scriptdir,'UVEX4_config.script'))
+uvex = UVEX4(os.path.join(scriptdir,'UVEX4-serial_config.script'))
 
 print('Version_Arduino='+uvex.Version_Arduino)
 
