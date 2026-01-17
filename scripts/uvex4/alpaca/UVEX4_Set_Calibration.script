@@ -1,0 +1,67 @@
+# Python program for CCDciel
+# see: https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference
+#
+# UVEX4 change calibration light on or off
+#
+
+from ccdciel import ccdciel
+from uvex4alpaca import *
+import configparser
+import sys
+import os
+import time
+
+# process parameters
+try:
+  if len(sys.argv) < 3 :
+    raise Exception('Missing parameters')
+  cname = sys.argv[1]
+  state = int(sys.argv[2])
+  if (state<0) or (state>1) :
+     raise Exception('Incorrect calibration switch state')
+except Exception as ex:
+  print('Invalid parameters: ',ex)
+  sys.exit(1)
+
+# current script directory
+scriptdir = os.path.dirname(os.path.abspath(sys.argv[0]))
+# read server IP:port from config
+try:
+  config = configparser.ConfigParser()
+  config.read(os.path.join(scriptdir,'UVEX4_Server.config'))
+  uvex4server=config['Default']['Server']
+except Exception as ex:
+  print('Server configuration not found. Please run UVEX4_Discovery')
+  sys.exit(1)
+  
+def findswitch(swn) :
+    sw=-1
+    for i in range(uvex4.MaxSwitch):
+      name=uvex4.GetSwitchName(i)
+      if (name==swn):
+        sw=i
+        break
+    return sw    
+
+  
+try :
+    uvex4 = UVEX4(uvex4server,0)
+    uvex4.Connected=True
+
+    sw=findswitch('Calibration:'+cname)
+    if sw>=0 :
+      uvex4.SetSwitchValue(sw,state)
+      time.sleep(1) # let time for calibrex to reply
+      if uvex4.GetSwitchValue(sw) == state :
+         print('Calibration '+cname+'='+f"{state}")
+      else:
+         print('Error, Calibration not modified.')
+         sys.exit(1)
+    else:     
+      print('Error, Calibration not found '+cname)
+      sys.exit(1)  
+
+
+except Exception as ex:
+    print('Error: '+type(ex).__name__,'-',ex)
+    sys.exit(1)

@@ -1,0 +1,38 @@
+# Python program for CCDciel
+# see: https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference
+#
+# Alpaca discovery of the UVEX4 in the local network
+#
+
+from alpaca import discovery
+from alpaca import management
+import os
+import sys
+import configparser
+
+scriptdir = os.path.dirname(os.path.abspath(sys.argv[0]))
+found=False
+
+svrs = discovery.search_ipv4(numquery=1)
+
+for svr in svrs:
+  if management.apiversions(svr)[0]==1 :
+     desc=management.description(svr)
+     if desc['ServerName']=='UVEX4' :
+       print(svr)
+       print('Name: '+ desc['ServerName'])
+       print('Manufacturer: '+ desc['Manufacturer'])
+       print('Version: '+ desc['ManufacturerVersion'])
+       config = configparser.ConfigParser()
+       config['Default'] = {'Server': svr}
+       with open(os.path.join(scriptdir,'UVEX4_Server.config'), 'w') as configfile:
+         config.write(configfile)
+       print('UVEX4 IP address and port updated in the config file')
+       found=True
+       break
+
+if not found :
+  print('No UVEX4 found, config file not modified')
+
+
+

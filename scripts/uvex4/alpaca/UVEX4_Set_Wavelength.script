@@ -1,0 +1,69 @@
+# Python program for CCDciel
+# see: https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference
+#
+# UVEX4 change central wavelength
+
+from ccdciel import ccdciel
+from uvex4alpaca import *
+import configparser
+import sys
+import os
+
+# process parameters
+try: 
+  if len(sys.argv) < 2 :
+    raise Exception('Missing parameters')
+  wavelength = int(sys.argv[1])
+  if wavelength<3000 or wavelength>10000 : 
+     raise Exception('Incorrect wavelength, must be between 3000 and 10000')
+except Exception as ex:
+  print('Invalid parameters: ',ex)
+  sys.exit(1)
+
+# current script directory
+scriptdir = os.path.dirname(os.path.abspath(sys.argv[0]))
+# read server IP:port from config
+try:
+  config = configparser.ConfigParser()
+  config.read(os.path.join(scriptdir,'UVEX4_Server.config'))
+  uvex4server=config['Default']['Server']
+except Exception as ex:
+  print('Server configuration not found. Please run UVEX4_Discovery')
+  sys.exit(1)
+  
+def findswitch(swn) :
+    sw=-1
+    for i in range(uvex4.MaxSwitch):
+      name=uvex4.GetSwitchName(i)
+      if (name==swn):
+        sw=i
+        break
+    return sw    
+  
+  
+try :
+    uvex4 = UVEX4(uvex4server,0)
+    uvex4.Connected=True
+    
+    sw=findswitch('Central wavelength')
+    if sw>=0 :
+      uvex4.SetSwitchValue(sw,wavelength)
+      w1=f"{uvex4.GetSwitchValue(sw):.1f}"
+      w2=f"{uvex4.GetSwitchValue(sw+1):.1f}"
+      w3=f"{uvex4.GetSwitchValue(sw+2):.1f}"
+      print("WAVELNTH="+w1)
+      print("WAVEMIN="+w2)
+      print("WAVEMAX="+w3)
+      ccdciel("CustomHeader_add",["WAVELNTH",w1])
+      ccdciel("CustomHeader_add",["WAVEMIN",w2])
+      ccdciel("CustomHeader_add",["WAVEMAX",w3])
+    else:     
+      print('Error, Central wavelength switch not found')
+      sys.exit(1)
+
+
+except Exception as ex:
+    print('Error: '+type(ex).__name__,'-',ex)
+    sys.exit(1)
+
+
