@@ -19,58 +19,46 @@ try:
 except Exception as ex:
   print('Server configuration not found. Please run UVEX4_Discovery')
   sys.exit(1)
-  
-def findswitch(swn) :
-    sw=-1
-    for i in range(uvex4.MaxSwitch):
-      name=uvex4.GetSwitchName(i)
-      if (name==swn):
-        sw=i
-        break
-    return sw    
-  
+
+
 try :
     uvex4 = UVEX4(uvex4server,0)
     uvex4.Connected=True
     
-    sw=findswitch('Grating resolution')
-    if sw>=0 :
-      gr=f"{uvex4.GetSwitchValue(sw)}"
-      print('GRATING='+gr)                        # print for a trace in the log
-      ccdciel("CustomHeader_add",["GRATING",gr])  # update FITS header
-      
-    sw=findswitch('Central wavelength')
-    if sw>=0 :
-      w1=f"{uvex4.GetSwitchValue(sw):.1f}"
-      w2=f"{uvex4.GetSwitchValue(sw+1):.1f}"
-      w3=f"{uvex4.GetSwitchValue(sw+2):.1f}"
-      print("WAVELNTH="+w1)
-      print("WAVEMIN="+w2)
-      print("WAVEMAX="+w3)
-      ccdciel("CustomHeader_add",["WAVELNTH",w1])
-      ccdciel("CustomHeader_add",["WAVEMIN",w2])
-      ccdciel("CustomHeader_add",["WAVEMAX",w3])      
-      
     for i in range(uvex4.MaxSwitch):
-      slit=uvex4.GetSwitchName(i).split(':')
-      if len(slit)>1 :
-        if slit[0]=='Slit' :
-          if uvex4.GetSwitchValue(i)==1 :
-             print('SLIT='+slit[1])
-             ccdciel("CustomHeader_add",["SLIT",slit[1]])
-             
-    sw=findswitch('Focus position')
-    if sw>=0 :
-      p=f"{uvex4.GetSwitchValue(sw)}"
-      print('SPECFOC='+ str(p))
-      ccdciel("CustomHeader_add",["SPECFOC",p])           
+       name=uvex4.GetSwitchName(i)
+       val=f"{uvex4.GetSwitchValue(i)}"
 
-    sw=findswitch('Temperature')
-    if sw>=0 :
-      t=f"{uvex4.GetSwitchValue(sw):.1f}"
-      print('SPECTEMP='+ str(t))
-      ccdciel("CustomHeader_add",["SPECTEMP",t])
-      
+       if name=='Grating resolution':
+          print('GRATING='+val)                        # print for a trace in the log
+          ccdciel("CustomHeader_add",["GRATING",val])  # update FITS header
+
+       elif name=='Central wavelength':
+          print("WAVELNTH="+val)
+          ccdciel("CustomHeader_add",["WAVELNTH",val])
+       elif name=='Min. wavelength':
+          print("WAVEMIN="+val)
+          ccdciel("CustomHeader_add",["WAVEMIN",val])
+       elif name=='Max. wavelength':
+          print("WAVEMAX="+val)
+          ccdciel("CustomHeader_add",["WAVEMAX",val])
+
+       elif name=='Focus position':
+          print("SPECFOC="+val)
+          ccdciel("CustomHeader_add",["SPECFOC",val])
+
+       elif name=='Temperature':
+          print("SPECTEMP="+val)
+          ccdciel("CustomHeader_add",["SPECTEMP",val])
+
+       else:
+          prefix=name.split(':')
+          if len(prefix)>1 :
+             if (prefix[0]=='Slit' and val=='1') :
+               print('SLIT='+prefix[1])
+               ccdciel("CustomHeader_add",["SLIT",prefix[1]])
+
+
 except Exception as ex:
     print('Error: '+type(ex).__name__,'-',ex)
     sys.exit(1)
