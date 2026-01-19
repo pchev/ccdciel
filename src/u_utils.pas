@@ -2363,7 +2363,7 @@ end;
 
 function ObjRise(ra,de: double; out hr: double; out i:integer):boolean;
 var jd0,azr,hhr,hht,a,h,ch,st: double;
-    aa: integer;
+    aa,it: integer;
 begin
   result:=false;
   jd0:=DateTimetoJD0(now);
@@ -2371,16 +2371,18 @@ begin
   RiseTime(jd0,ra*15*deg2rad,de*deg2rad,h,hhr,azr,i);
   if i=1 then begin
     // circumpolar, look for minimal altitude
-    TransitTime(jd0,ra*15*deg2rad,de*deg2rad,hht,i);
+    TransitTime(jd0,ra*15*deg2rad,de*deg2rad,hht,it);
     hhr:=rmod(hht+12,24);
     azr:=pi;
-    i:=0;
+    st:=SidTim(jd0,hhr-ObsTimeZone,ObsLongitude);
+    Eq2Hz(st-ra*15*deg2rad,de*deg2rad,a,h);
   end;
-  if i=0 then begin
+  if (i=0)or(i=1) then begin
     aa:=round(rmod(azr + pi, pi2)*rad2deg);
     if (aa<0)or(aa>360) then exit;
     ch:=horizonlist[aa];
     while h<ch do begin
+     i:=0;   // minimal circumpolar altitude is below local horizon
      hhr:=hhr+(1/60);
      st:=SidTim(jd0,hhr-ObsTimeZone,ObsLongitude);
      Eq2Hz(st-ra*15*deg2rad,de*deg2rad,a,h);
@@ -2396,7 +2398,7 @@ end;
 
 function ObjSet(ra,de: double; out hs:double; out i:integer):boolean;
 var jd0,azs,hhs,hht,a,h,ch,st: double;
-    aa: integer;
+    aa,it: integer;
 begin
   result:=false;
   jd0:=DateTimetoJD0(now);
@@ -2404,16 +2406,18 @@ begin
   SetTime(jd0,ra*15*deg2rad,de*deg2rad,h,hhs,azs,i);
   if i=1 then begin
     // circumpolar, look for minimal altitude
-    TransitTime(jd0,ra*15*deg2rad,de*deg2rad,hht,i);
+    TransitTime(jd0,ra*15*deg2rad,de*deg2rad,hht,it);
     hhs:=rmod(hht+12,24);
     azs:=pi;
-    i:=0;
+    st:=SidTim(jd0,hhs-ObsTimeZone,ObsLongitude);
+    Eq2Hz(st-ra*15*deg2rad,de*deg2rad,a,h);
   end;
-  if i=0 then begin
+  if (i=0)or(i=1) then begin
     aa:=round(rmod(azs + pi, pi2)*rad2deg);
     if (aa<0)or(aa>360) then exit;
     ch:=horizonlist[aa];
     while h<ch do begin
+     i:=0;  // minimal circumpolar altitude is below local horizon
      hhs:=hhs-(1/60);
      st:=SidTim(jd0,hhs-ObsTimeZone,ObsLongitude);
      Eq2Hz(st-ra*15*deg2rad,de*deg2rad,a,h);

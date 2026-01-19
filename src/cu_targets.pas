@@ -2331,11 +2331,19 @@ begin
      pivot:=rmod(ht+12+24,24); // pivot time 12h from transit
      // adjust rise/set time
      // begin at rise
-     if t.startrise and (ri=0) then
-        t.starttime:=hr/24;
+     if t.startrise then begin
+       if ri=1 then
+         t.starttime:=-2      // really circumpolar, including local horizon
+       else
+         t.starttime:=hr/24;
+     end;
      // end at set
-     if t.endset and (si=0) then
-        t.endtime:=hs/24;
+     if t.endset then begin
+       if si=1 then
+         t.endtime:=2
+       else
+         t.endtime:=hs/24;
+     end;
      // start from meridian
      if (t.startmeridian<>NullCoord) and (ti<2) then begin
         if abs(t.startmeridian)>5 then t.startmeridian:=sgn(t.startmeridian)*5;
@@ -2464,81 +2472,103 @@ begin
       end;
     end;
 
-    // let time for the first exposure to run
-    chkendtime:=rmod(t.endtime-enddelay+1,1);
-    // test if in time interval
-    intime:=InTimeInterval(frac(now),t.starttime,chkendtime,st/24);
-    // test if skipped
-    if t.skip then begin
-      skipmsg:='';
-      if (intime<0) and (t.starttime>=0) then begin
-        SecondsToWait(now,t.starttime,true,stw,nd);
-        if (stw>60) then begin
-          SkipTarget:=true;
-          skipmsg:=skipmsg+', '+Format(rsWaitToStartA, [TimeToStr(t.starttime)]);
+    if t.starttime=-2 then begin   // really circumpolar on local horizon
+      // test if skipped
+      if t.skip then begin
+        skipmsg:='';
+        if t.darknight then begin
+          if (not DarkNight(now)) then begin
+            SkipTarget:=true;
+            skipmsg:=skipmsg+', '+rsWaitingForDa2;
+          end;
+        end;
+        if SkipTarget then begin
+          InitTargetError:=Format(rsSkipTarget, [t.objectname])+skipmsg;
+          msg(InitTargetError, 3);
+          result:=false;
+          exit;
         end;
       end;
-      if (intime<=0) and (t.endtime>=0) then begin
-        SecondsToWait(now,chkendtime,true,stw,nd);
-        if stw<60 then begin
+      StopTargetTimer.Enabled:=false;
+    end
+    else begin                   // target rise and set on local horizon
+      // let time for the first exposure to run
+      chkendtime:=rmod(t.endtime-enddelay+1,1);
+      // test if in time interval
+      intime:=InTimeInterval(frac(now),t.starttime,chkendtime,st/24);
+      // test if skipped
+      if t.skip then begin
+        skipmsg:='';
+        if (intime<0) and (t.starttime>=0) then begin
+          SecondsToWait(now,t.starttime,true,stw,nd);
+          if (stw>60) then begin
+            SkipTarget:=true;
+            skipmsg:=skipmsg+', '+Format(rsWaitToStartA, [TimeToStr(t.starttime)]);
+          end;
+        end;
+        if (intime<=0) and (t.endtime>=0) then begin
+          SecondsToWait(now,chkendtime,true,stw,nd);
+          if stw<60 then begin
+            SkipTarget:=true;
+            skipmsg:=skipmsg+', '+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]);
+          end;
+        end;
+        if (intime>0) then begin
           SkipTarget:=true;
           skipmsg:=skipmsg+', '+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]);
         end;
-      end;
-      if (intime>0) then begin
-        SkipTarget:=true;
-        skipmsg:=skipmsg+', '+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]);
-      end;
-      if t.darknight then begin
-        if (not DarkNight(now)) then begin
-          SkipTarget:=true;
-          skipmsg:=skipmsg+', '+rsWaitingForDa2;
+        if t.darknight then begin
+          if (not DarkNight(now)) then begin
+            SkipTarget:=true;
+            skipmsg:=skipmsg+', '+rsWaitingForDa2;
+          end;
+        end;
+        if SkipTarget then begin
+          InitTargetError:=Format(rsSkipTarget, [t.objectname])+skipmsg;
+          msg(InitTargetError, 3);
+          result:=false;
+          exit;
         end;
       end;
-      if SkipTarget then begin
-        InitTargetError:=Format(rsSkipTarget, [t.objectname])+skipmsg;
-        msg(InitTargetError, 3);
+      // start / stop timer
+      if (intime>0) then begin
+        if t.fullonly then
+          InitTargetError:=Format(rsCannotStartS, [t.objectname])+', '+Format(rsNotEnoughTim, [TimeToStr(enddelay), TimeToStr(t.endtime)])
+        else
+          InitTargetError:=Format(rsCannotStartS, [t.objectname])+', '+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]);
+        msg(InitTargetError,3);
         result:=false;
         exit;
       end;
-    end;
-    // start / stop timer
-    if (intime>0) then begin
-      if t.fullonly then
-        InitTargetError:=Format(rsCannotStartS, [t.objectname])+', '+Format(rsNotEnoughTim, [TimeToStr(enddelay), TimeToStr(t.endtime)])
-      else
-        InitTargetError:=Format(rsCannotStartS, [t.objectname])+', '+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]);
-      msg(InitTargetError,3);
-      result:=false;
-      exit;
-    end;
-    if (intime<0) and (t.starttime>=0) then begin
-      StopGuider;
-      Mount.AbortMotion;
-      msg(Format(rsWaitToStartA, [TimeToStr(t.starttime)]),1);
-      wtok:=WaitTill(TimeToStr(t.starttime),true);
-      if not wtok then begin
-         InitTargetError:=Format(rsTargetCancel, [t.objectname]);
-         msg(InitTargetError,1);
-         result:=false;
-         exit;
+      if (intime<0) and (t.starttime>=0) then begin
+        StopGuider;
+        Mount.AbortMotion;
+        msg(Format(rsWaitToStartA, [TimeToStr(t.starttime)]),1);
+        wtok:=WaitTill(TimeToStr(t.starttime),true);
+        if not wtok then begin
+           InitTargetError:=Format(rsTargetCancel, [t.objectname]);
+           msg(InitTargetError,1);
+           result:=false;
+           exit;
+        end;
       end;
-    end;
-    if (intime<=0) and (t.endtime>=0) then begin
-       SecondsToWait(now,chkendtime,true,stw,nd);
-       if stw>60 then begin
-          SecondsToWait(now,t.endtime,true,stw,nd);
-          msg(Format(rsObjectSetsAt, [FormatDateTime('hh:nn', t.endtime),
-            FormatFloat(f1, stw/3600)]), 3);
-          StopTargetTimer.Interval:=1000*stw;
-          StopTargetTimer.Enabled:=true;
-       end else begin
-         InitTargetError:=Format(rsTargetCancel, [t.objectname])+', '+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]);
-         msg(InitTargetError,3);
-         result:=false;
-         exit;
-       end;
-    end;
+      if (intime<=0) and (t.endtime>=0) then begin
+         SecondsToWait(now,chkendtime,true,stw,nd);
+         if stw>60 then begin
+            SecondsToWait(now,t.endtime,true,stw,nd);
+            msg(Format(rsObjectSetsAt, [FormatDateTime('hh:nn', t.endtime),
+              FormatFloat(f1, stw/3600)]), 3);
+            StopTargetTimer.Interval:=1000*stw;
+            StopTargetTimer.Enabled:=true;
+         end else begin
+           InitTargetError:=Format(rsTargetCancel, [t.objectname])+', '+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]);
+           msg(InitTargetError,3);
+           result:=false;
+           exit;
+         end;
+      end;
+    end; // circumpolar
+
     // detect autofocus
     if (p<>nil)and (p.Count>0) then
        autofocusstart:=p.Steps[0].autofocusstart
