@@ -16455,7 +16455,7 @@ function Tf_main.CheckMeridianFlip(nextexposure:double; canwait:boolean; out wai
 var ra,de,hh,a,h,tra,tde,mra,mde,err: double;
     CurSt: double;
     MeridianDelay1,MeridianDelay2,NextDelay,hhmin,waittimeout,nretry: integer;
-    slewtopos,slewtoimg, restartguider, SaveCapture, ok: boolean;
+    slewtopos,slewtoimg, restartguider, SaveCapture, ok, circumpolar, belowpole, wrongside: boolean;
   procedure DoAbort;
   begin
     NewMessage(rsMeridianFlip,1);
@@ -16468,6 +16468,9 @@ var ra,de,hh,a,h,tra,tde,mra,mde,err: double;
 begin
   waittime:=-1;
   result:=false;
+  circumpolar:=false;
+  belowpole:=false;
+  wrongside:=false;
   if (mount.Status=devConnected) and
   (mount.Park=false) and
   (mount.Tracking) and
@@ -16477,6 +16480,7 @@ begin
     CurST:=CurrentSidTim;
     ra:=mount.RA;
     de:=mount.Dec;
+    circumpolar:=(sgn(de)=sgn(ObsLatitude))and(abs(de)>=abs(ObsLatitude));
     MountToLocal(mount.EquinoxJD,ra,de);
     ra:=deg2rad*15*ra;
     hh:=CurSt-ra;
@@ -16486,6 +16490,16 @@ begin
     if hh>pi then hh:=hh-pi2;
     if hh<-pi then hh:=hh+pi2;
     hhmin:=round(rad2deg*60*hh/15);
+    if circumpolar then begin
+      if (hhmin>360) then begin
+         hhmin:=hhmin-720;
+         belowpole:=true;
+      end
+      else if (hhmin<-360) then begin
+         hhmin:=hhmin+720;
+         belowpole:=true;
+      end;
+    end;
     f_mount.TimeToMeridian.Caption:=inttostr(abs(hhmin));
     if AzimuthOrigin=azSouth then a:=rmod(180+a,360);
     f_mount.AZ.Caption:=FormatFloat(f2,a);
@@ -16494,7 +16508,8 @@ begin
                 else f_mount.LabelMeridian.Caption:=rsMeridianSinc;
     // check condition to not flip
     if MeridianOption=0 then exit; // fork mount
-    if mount.PierSide=pierEast then exit; // already on the right side
+    wrongside:=((not belowpole)and(mount.PierSide=pierWest))or((belowpole)and(mount.PierSide=pierEast));
+    if not wrongside then exit; // already on the right side
     if ((f_capture.Running  or f_sequence.Busy) and (nextexposure=0)) or  // flip synced with exposure
        (f_sequence.Running and f_sequence.EditingTarget)
        then exit;
@@ -16535,7 +16550,7 @@ begin
        end;
       end;
     end;
-    if ((MeridianDelay1<=0)and(mount.PierSide=pierWest)) or (MeridianDelay1=0) then begin
+    if ((MeridianDelay1<=0)and(wrongside)) or (MeridianDelay1=0) then begin
      result:=true;
      if canwait then begin
       // Do meridian action
@@ -16593,9 +16608,10 @@ begin
         NewMessage(rsMeridianFlip4,1);
         StatusBar1.Panels[panelstatus].Text := rsMeridianFlip5;
         mount.UseSetPierSide:=MeridianFlipUseSetPierSide;
-        mount.FlipMeridian;
+        mount.FlipMeridian(belowpole);
         wait(2);
-        while (mount.PierSide=pierWest) do begin
+        wrongside:=((not belowpole)and(mount.PierSide=pierWest))or((belowpole)and(mount.PierSide=pierEast));
+        while wrongside do begin
           // if still on wrong side wait the target move further and retry
           if MeridianDelay2<=0 then
              mount.AbortMotion;  // maximum safe time reach
@@ -16611,8 +16627,9 @@ begin
           if f_pause.Wait(300,true,rsRetry,rsAbort) then begin
             NewMessage(rsMeridianFlip4,1);
             StatusBar1.Panels[panelstatus].Text := rsMeridianFlip5;
-            mount.FlipMeridian;
+            mount.FlipMeridian(belowpole);
             wait(2);
+            wrongside:=((not belowpole)and(mount.PierSide=pierWest))or((belowpole)and(mount.PierSide=pierEast));
           end else begin
             DoAbort;
             exit;

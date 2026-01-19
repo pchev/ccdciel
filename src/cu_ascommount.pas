@@ -98,7 +98,7 @@ public
    function GetV: variant;
    function Slew(sra,sde: double):boolean; override;
    function SlewAsync(sra,sde: double):boolean; override;
-   function FlipMeridian: boolean; override;
+   function FlipMeridian(belowthepole:boolean): boolean; override;
    function Sync(sra,sde: double):boolean; override;
    function Track:boolean; override;
    procedure AbortMotion; override;
@@ -687,10 +687,11 @@ begin
  {$endif}
 end;
 
-function T_ascommount.FlipMeridian:boolean;
+function T_ascommount.FlipMeridian(belowthepole:boolean):boolean;
 {$ifdef mswindows}
 var sra,sde,ra1,ra2: double;
-    pierside1,pierside2:TPierSide;
+    pierside1,pierside2,destside:TPierSide;
+    rightside: boolean;
 {$endif}
 begin
   result:=false;
@@ -700,19 +701,27 @@ begin
     sra:=GetRA;
     sde:=GetDec;
     pierside1:=GetPierSide;
-    if pierside1=pierEast then exit; // already right side
+    rightside:=((not belowthepole)and(pierside1=pierEast))or((belowthepole)and(pierside1=pierWest));
+    if rightside then exit; // already right side
     if (sra=NullCoord)or(sde=NullCoord) then exit;
     msg(rsMeridianFlip5);
     if FUseSetPierSide and CanSetPierSide and CanSlewAsync then begin
+       if belowthepole then
+         destside:=pierWest
+       else
+         destside:=pierEast;
        // do the flip
-       SetPierSide(pierEast);
+       SetPierSide(destside);
        // check result
        pierside2:=GetPierSide;
        result:=(pierside2<>pierside1);
     end
     else begin
       // point one hour to the east of meridian
-      ra1:=rmod(24+1+rad2deg*CurrentSidTim/15,24);
+      if belowthepole then
+        ra1:=rmod(36+1+rad2deg*CurrentSidTim/15,24)
+      else
+        ra1:=rmod(24+1+rad2deg*CurrentSidTim/15,24);
       slew(ra1,sde);
       // point one hour to the west of target to force the flip
       ra2:=sra-1;
