@@ -2521,6 +2521,8 @@ end;
 procedure Tf_option.GuiderAutofocusClick(Sender: TObject);
 begin
   PanelFocusStar.Visible:=not GuiderAutofocus.Checked;
+  AutofocusBinning.Visible:=not GuiderAutofocus.Checked;
+  Label50.Visible:=not GuiderAutofocus.Checked;
 end;
 
 procedure Tf_option.ButtonHelpClick(Sender: TObject);
