@@ -17896,9 +17896,9 @@ try
   else if method='DARKDIR' then result:=result+'"result": "'+trim(FrameName[2])+'"'
   else if method='FLATDIR' then result:=result+'"result": "'+trim(FrameName[3])+'"'
   else if method='HOSTOS' then result:=result+'"result": "'+hostOS+'"'
-  else if method='COVERSTATUS' then result:=f_scriptengine.cmd_coverstatus
-  else if method='CALIBRATORSTATUS' then result:=f_scriptengine.cmd_calibratorstatus
-  else if method='CALIBRATORBRIGHTNESS' then result:=InttoStr(f_scriptengine.cmd_getcalibratorbrightness)
+  else if method='COVERSTATUS' then result:=result+'"result": "'+f_scriptengine.cmd_coverstatus+'"'
+  else if method='CALIBRATORSTATUS' then result:=result+'"result": "'+f_scriptengine.cmd_calibratorstatus+'"'
+  else if method='CALIBRATORBRIGHTNESS' then result:=result+'"result": "'+InttoStr(f_scriptengine.cmd_getcalibratorbrightness)+'"'
   else if method='WHEEL_GETFILTERSNAME' then begin
     sl:=Tstringlist.Create;
     if f_scriptengine.cmd_Wheel_GetFiltersName(sl)<>msgOK then raise(Exception.Create(msgFailed));

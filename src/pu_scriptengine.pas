@@ -1305,9 +1305,9 @@ else if cname='FINDER_STARTLOOP' then result:=cmd_FinderStartLoop(arg[0])
 else if cname='FINDER_SNAPSHOT' then result:=cmd_FinderSnapshot(arg[0],arg[1],arg[2])
 else if cname='INTERNALGUIDER_SNAPSHOT' then result:=cmd_InternalGuiderSnapshot(arg[0],arg[1],arg[2])
 else if cname='INTERNALGUIDER_SAVE_FITS_FILE' then result:=cmd_InternalGuiderSaveFitsFile(arg[0])
-else if cname='GET_SWITCH' then result:=f_scriptengine.cmd_getswitch(arg[0],arg[1])
-else if cname='SET_SWITCH' then result:=f_scriptengine.cmd_setswitch(arg[0],arg[1],arg[2])
-else if cname='CAMERA_SETFRAME' then result:=f_scriptengine.cmd_camerasetframe(arg[0],arg[1],arg[2],arg[3])
+else if cname='GET_SWITCH' then result:=cmd_getswitch(arg[0],arg[1])
+else if cname='SET_SWITCH' then result:=cmd_setswitch(arg[0],arg[1],arg[2])
+else if cname='CAMERA_SETFRAME' then result:=cmd_camerasetframe(arg[0],arg[1],arg[2],arg[3])
 ;
 LastErr:='cmdarg('+cname+'): '+result;
 end;
