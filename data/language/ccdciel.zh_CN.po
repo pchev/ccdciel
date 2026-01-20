@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-01-07 17:30+0000\n"
-"PO-Revision-Date: 2025-10-30 04:28+0000\n"
+"POT-Creation-Date: 2026-01-20 13:12+0000\n"
+"PO-Revision-Date: 2026-01-16 12:32+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-01-07 17:40+0000\n"
-"X-Generator: Launchpad (build 99c00f518760bdd50fc6e353e7736d2fff8fba4a)\n"
+"X-Launchpad-Export-Date: 2026-01-20 13:32+0000\n"
+"X-Generator: Launchpad (build 9fcfff1971229ac997140f06b41a902ac8ec69f4)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -1593,7 +1593,7 @@ msgstr "无动作"
 
 #: u_translation.rsdonotmodifyt
 msgid "Do not modify the INDI header"
-msgstr ""
+msgstr "不要更改INDI头"
 
 #: u_translation.rsdonotrunasad
 #, object-pascal-format
@@ -1661,7 +1661,7 @@ msgstr "在图像上绘制狭缝区域"
 
 #: u_translation.rsduplicateact
 msgid "Duplicate action"
-msgstr ""
+msgstr "复制动作"
 
 #: u_translation.rsduration
 msgid "Duration"
@@ -2232,6 +2232,10 @@ msgstr "由：%s到%s由%s"
 msgid "F-stop"
 msgstr "光圈"
 
+#: u_translation.rsfullframe
+msgid "Full frame"
+msgstr ""
+
 #: u_translation.rsfwhm
 msgid "FWHM"
 msgstr "FWHM"
@@ -2415,7 +2419,7 @@ msgstr "高光ADU"
 
 #: u_translation.rshighlightcol
 msgid "Highlight color"
-msgstr ""
+msgstr "高亮颜色"
 
 #: u_translation.rshistogram
 msgid "Histogram"
@@ -2431,7 +2435,7 @@ msgstr "地平线配置"
 
 #: u_translation.rshorizontal
 msgid "Horizontal"
-msgstr ""
+msgstr "水平"
 
 #: u_translation.rshorizontalco
 msgid "Horizontal correction :"
@@ -2748,7 +2752,7 @@ msgstr "（限制到1.5倍回转精度）"
 
 #: u_translation.rslimitrotator
 msgid "Limit rotator angle to 0-180 degree range"
-msgstr ""
+msgstr "将旋转器角度限制在0-180度范围内"
 
 #: u_translation.rslimittempera
 msgid "Limit temperature change"
@@ -2834,7 +2838,7 @@ msgstr "在自动模式下，望远镜将自动旋转到极轴附近的测试位
 
 #: u_translation.rsmakesurethes
 msgid "Make sure the stars are not saturated."
-msgstr ""
+msgstr "确保星点没有饱和。"
 
 #: u_translation.rsmanage
 msgid "Manage"
@@ -2992,7 +2996,7 @@ msgstr "测量新位置"
 
 #: u_translation.rsmechanical
 msgid "Mechanical"
-msgstr ""
+msgstr "机械"
 
 #: u_translation.rsmedian
 #, object-pascal-format
@@ -3505,6 +3509,10 @@ msgstr "槽数"
 #: u_translation.rsnumberofstep
 msgid "Number of steps"
 msgstr "步数"
+
+#: u_translation.rsnumberofswit
+msgid "Number of switches"
+msgstr ""
 
 #: u_translation.rsobject
 msgid "Object"
@@ -4377,6 +4385,10 @@ msgstr "升起"
 msgid "Rise/Set condition"
 msgstr "升起/落下条件"
 
+#: u_translation.rsroi
+msgid "ROI"
+msgstr ""
+
 #: u_translation.rsrot
 msgid "Rot."
 msgstr "旋转"
@@ -4389,13 +4401,18 @@ msgstr "旋转"
 msgid "rotate by"
 msgstr "旋转"
 
+#: u_translation.rsrotateslitto
+#, object-pascal-format
+msgid "Rotate slit to parallactic angle %s"
+msgstr ""
+
 #: u_translation.rsrotatetelesc
 msgid "Rotate the telescope"
 msgstr "旋转望远镜"
 
 #: u_translation.rsrotatetothep
 msgid "Rotate to the parallactic angle"
-msgstr ""
+msgstr "旋转到视差角"
 
 #: u_translation.rsrotating
 msgid "Rotating"
@@ -4411,7 +4428,7 @@ msgstr "旋转器"
 
 #: u_translation.rsrotatorangle
 msgid "Rotator angle"
-msgstr ""
+msgstr "旋转器角度"
 
 #: u_translation.rsrotatorisnot
 msgid "Rotator is not connected"
@@ -4421,11 +4438,6 @@ msgstr "旋转器未连接"
 #, object-pascal-format
 msgid "Rotator move to PA %s"
 msgstr "旋转器移动到PA %s"
-
-#: u_translation.rsrotatorsyncc
-#, object-pascal-format
-msgid "Rotator sync calibration = %s"
-msgstr "旋转器同步校准=%s"
 
 #: u_translation.rsrun
 msgid "Run"
@@ -4440,8 +4452,8 @@ msgid "Run a script"
 msgstr "运行脚本"
 
 #: u_translation.rsrunastrometr
-msgid "Run astrometry on every image to search for drift"
-msgstr "在每张图像上执行解析以探查漂移"
+msgid "Run astrometry on every image"
+msgstr ""
 
 #: u_translation.rsrunautofocus
 #, object-pascal-format
@@ -4463,7 +4475,7 @@ msgstr "运行脚本%s"
 
 #: u_translation.rsrunscriptwhe
 msgid "Run script when the weather change"
-msgstr ""
+msgstr "天气变化时运行脚本"
 
 #: u_translation.rsrununattende
 msgid "Run unattended"
@@ -4527,6 +4539,10 @@ msgstr "保存文件%s"
 #, object-pascal-format
 msgid "Save FITS file%s"
 msgstr "保存FITS文件%s"
+
+#: u_translation.rssaveimagewit
+msgid "Save image with astrometry"
+msgstr ""
 
 #: u_translation.rssavepictures
 #, object-pascal-format
@@ -4860,6 +4876,10 @@ msgstr "设置锁定位置"
 msgid "Set magnitude"
 msgstr "设定星等"
 
+#: u_translation.rssetmountpier
+msgid "Set mount pier side if available"
+msgstr ""
+
 #: u_translation.rssetmountsite
 msgid "Set mount site long/lat from configuration"
 msgstr "从配置中设置赤道仪站点经纬度"
@@ -5104,7 +5124,7 @@ msgstr "绘制狭缝"
 
 #: u_translation.rsslitorientat
 msgid "Slit orientation"
-msgstr ""
+msgstr "狭缝取向"
 
 #: u_translation.rsslope
 msgid "Slope"
@@ -5542,11 +5562,11 @@ msgstr "设置开关%s失败！"
 
 #: u_translation.rssyncoffset
 msgid "Sync Offset"
-msgstr ""
+msgstr "同步偏移量"
 
 #: u_translation.rssynctherotat
 msgid "Sync the rotator"
-msgstr ""
+msgstr "同步旋转器"
 
 #: u_translation.rssynctoeq
 #, object-pascal-format
@@ -5556,7 +5576,7 @@ msgstr "同步到%s %s/%s"
 #: u_translation.rssynctos
 #, object-pascal-format
 msgid "Sync to %s"
-msgstr ""
+msgstr "同步为%s"
 
 #: u_translation.rssystemcross
 msgid "System cross"
@@ -5721,6 +5741,10 @@ msgstr "临时目录名必须仅含有ASCII字符"
 #: u_translation.rsterminationo
 msgid "Termination options"
 msgstr "终止选项"
+
+#: u_translation.rsterminations
+msgid "Termination script"
+msgstr ""
 
 #: u_translation.rstest
 msgid "Test"
@@ -6174,7 +6198,7 @@ msgstr "使用安全监视器"
 
 #: u_translation.rsusesoftwares
 msgid "Use software Sync with sky PA (for use with not compliant rotator)"
-msgstr ""
+msgstr "使用软件同步配合天空PA（适用于不合规的旋转器）"
 
 #: u_translation.rsusespecificr
 msgid "Use specific Readout mode for different actions"
@@ -6186,7 +6210,7 @@ msgstr "使用电源开关"
 
 #: u_translation.rsusetherotato
 msgid "Use the rotator angle"
-msgstr ""
+msgstr "使用旋转器角度"
 
 #: u_translation.rsusethisdevic
 msgid "Use this device if the main camera cannot be used for plate solving. Also configure the camera to use in Preferences/Slewing"
@@ -6236,7 +6260,7 @@ msgstr "详尽的设备日志"
 
 #: u_translation.rsvertical
 msgid "Vertical"
-msgstr ""
+msgstr "竖直"
 
 #: u_translation.rsverticalcorr
 msgid "Vertical correction :"

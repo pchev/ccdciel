@@ -2670,10 +2670,6 @@ msgstr ""
 msgid "Rotator move to PA %s"
 msgstr ""
 
-#: u_translation:rsrotatorsyncc
-msgid "Rotator sync calibration = %s"
-msgstr ""
-
 #: u_translation:rsconnected3
 msgid "Connected"
 msgstr ""
@@ -4003,7 +3999,7 @@ msgid "Recenter sequence target that drift"
 msgstr ""
 
 #: u_translation:rsrunastrometr
-msgid "Run astrometry on every image to search for drift"
+msgid "Run astrometry on every image"
 msgstr ""
 
 #: u_translation:rsrecenterifth
@@ -6203,5 +6199,33 @@ msgstr ""
 
 #: u_translation:rshorizontal
 msgid "Horizontal"
+msgstr ""
+
+#: u_translation:rsrotateslitto
+msgid "Rotate slit to parallactic angle %s"
+msgstr ""
+
+#: u_translation:rssaveimagewit
+msgid "Save image with astrometry"
+msgstr ""
+
+#: u_translation:rsterminations
+msgid "Termination script"
+msgstr ""
+
+#: u_translation:rssetmountpier
+msgid "Set mount pier side if available"
+msgstr ""
+
+#: u_translation:rsroi
+msgid "ROI"
+msgstr ""
+
+#: u_translation:rsfullframe
+msgid "Full frame"
+msgstr ""
+
+#: u_translation:rsnumberofswit
+msgid "Number of switches"
 msgstr ""
 

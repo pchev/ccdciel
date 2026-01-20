@@ -1653,6 +1653,11 @@ resourcestring
   rsHorizontal = 'Horizontal';
   rsRotateSlitTo = 'Rotate slit to parallactic angle %s';
   rsSaveImageWit = 'Save image with astrometry';
+  rsTerminationS = 'Termination script';
+  rsSetMountPier = 'Set mount pier side if available';
+  rsROI = 'ROI';
+  rsFullFrame = 'Full frame';
+  rsNumberOfSwit = 'Number of switches';
 
 implementation
 

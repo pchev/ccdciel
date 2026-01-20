@@ -204,7 +204,7 @@ begin
   CheckBoxFocus.Caption:=rsFocusEvery;
   CheckBoxFocusTemp.Caption:=rsAutofocusAft2;
   CheckBoxFocusHFD.Caption:=rsAutofocusHFD2;
-  Label8.Caption:='Termination script';
+  Label8.Caption:=rsTerminationS;
   BtnStart.Caption:=rsStart;
   ExpTime.Hint:=rsExposureTime;
   Binning.Hint:=rsCameraBinnin;

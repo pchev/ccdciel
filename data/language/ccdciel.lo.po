@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-01-07 17:30+0000\n"
+"POT-Creation-Date: 2026-01-20 13:12+0000\n"
 "PO-Revision-Date: 2025-10-21 04:57+0000\n"
 "Last-Translator: boneni <Unknown>\n"
 "Language-Team: Lao <lo@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-01-07 17:40+0000\n"
-"X-Generator: Launchpad (build 99c00f518760bdd50fc6e353e7736d2fff8fba4a)\n"
+"X-Launchpad-Export-Date: 2026-01-20 13:32+0000\n"
+"X-Generator: Launchpad (build 9fcfff1971229ac997140f06b41a902ac8ec69f4)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -2232,6 +2232,10 @@ msgstr "ຈາກ: %s ຫາ %s ໂດຍ %s"
 msgid "F-stop"
 msgstr "ຄ່າ F-stop"
 
+#: u_translation.rsfullframe
+msgid "Full frame"
+msgstr ""
+
 #: u_translation.rsfwhm
 msgid "FWHM"
 msgstr "FWHM"
@@ -3506,6 +3510,10 @@ msgstr "ຈຳນວນຊ່ອງ"
 msgid "Number of steps"
 msgstr "ຈຳນວນຂັ້ນຕອນ"
 
+#: u_translation.rsnumberofswit
+msgid "Number of switches"
+msgstr ""
+
 #: u_translation.rsobject
 msgid "Object"
 msgstr "ວັດຖຸ"
@@ -4377,6 +4385,10 @@ msgstr "ຂຶ້ນ"
 msgid "Rise/Set condition"
 msgstr "ເງື່ອນໄຂການຂຶ້ນ/ຕົກ"
 
+#: u_translation.rsroi
+msgid "ROI"
+msgstr ""
+
 #: u_translation.rsrot
 msgid "Rot."
 msgstr "ໝຸນ."
@@ -4388,6 +4400,11 @@ msgstr "ໝຸນ"
 #: u_translation.rsrotateby
 msgid "rotate by"
 msgstr "ໝຸນໄປ"
+
+#: u_translation.rsrotateslitto
+#, object-pascal-format
+msgid "Rotate slit to parallactic angle %s"
+msgstr ""
 
 #: u_translation.rsrotatetelesc
 msgid "Rotate the telescope"
@@ -4422,11 +4439,6 @@ msgstr "ໂຕໝຸນບໍ່ໄດ້ເຊື່ອມຕໍ່"
 msgid "Rotator move to PA %s"
 msgstr "ໂຕໝຸນຍ້າຍໄປ PA %s"
 
-#: u_translation.rsrotatorsyncc
-#, object-pascal-format
-msgid "Rotator sync calibration = %s"
-msgstr "ການປັບທຽບການຊິງຄ໌ໂຕໝຸນ = %s"
-
 #: u_translation.rsrun
 msgid "Run"
 msgstr "ແລ່ນ"
@@ -4440,8 +4452,8 @@ msgid "Run a script"
 msgstr "ເຮັດວຽກສະຄຣິບ"
 
 #: u_translation.rsrunastrometr
-msgid "Run astrometry on every image to search for drift"
-msgstr "ດຳເນີນການວັດແທກຕຳແໜ່ງດາວທຸກຮູບເພື່ອຊອກຫາການເຄື່ອນທີ່"
+msgid "Run astrometry on every image"
+msgstr ""
 
 #: u_translation.rsrunautofocus
 #, object-pascal-format
@@ -4527,6 +4539,10 @@ msgstr "ບັນທຶກໄຟລ໌ %s ແລ້ວ"
 #, object-pascal-format
 msgid "Save FITS file%s"
 msgstr "ບັນທຶກໄຟລ໌ FITS%s"
+
+#: u_translation.rssaveimagewit
+msgid "Save image with astrometry"
+msgstr ""
 
 #: u_translation.rssavepictures
 #, object-pascal-format
@@ -4859,6 +4875,10 @@ msgstr "ຕັ້ງຕຳແໜ່ງລັອກ"
 #: u_translation.rssetmagnitude
 msgid "Set magnitude"
 msgstr "ຕັ້ງຄ່າຄວາມສະຫວ່າງ"
+
+#: u_translation.rssetmountpier
+msgid "Set mount pier side if available"
+msgstr ""
 
 #: u_translation.rssetmountsite
 msgid "Set mount site long/lat from configuration"
@@ -5721,6 +5741,10 @@ msgstr "ໂຟເດີຊົ່ວຄາວຕ້ອງມີແຕ່ຕົວ
 #: u_translation.rsterminationo
 msgid "Termination options"
 msgstr "ທາງເລືອກໃນການຢຸດ"
+
+#: u_translation.rsterminations
+msgid "Termination script"
+msgstr ""
 
 #: u_translation.rstest
 msgid "Test"

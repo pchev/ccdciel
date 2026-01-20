@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-01-07 17:30+0000\n"
-"PO-Revision-Date: 2026-01-07 17:37+0000\n"
+"POT-Creation-Date: 2026-01-20 13:12+0000\n"
+"PO-Revision-Date: 2026-01-20 13:28+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-01-07 17:40+0000\n"
-"X-Generator: Launchpad (build 99c00f518760bdd50fc6e353e7736d2fff8fba4a)\n"
+"X-Launchpad-Export-Date: 2026-01-20 13:32+0000\n"
+"X-Generator: Launchpad (build 9fcfff1971229ac997140f06b41a902ac8ec69f4)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -2232,6 +2232,10 @@ msgstr "De: %s à %s par %s"
 msgid "F-stop"
 msgstr "Ouverture"
 
+#: u_translation.rsfullframe
+msgid "Full frame"
+msgstr "Cadre entier"
+
 #: u_translation.rsfwhm
 msgid "FWHM"
 msgstr "FWHM"
@@ -2392,9 +2396,9 @@ msgid "HFD Focus Monitor: Active. Threshold: %s%%, Reference HFD: %s"
 msgstr "Moniteur de focalisation par HFD: Actif. Seuil: %s%%, HFD de référence: %s"
 
 #: u_translation.rshfdmeasuring
-#, object-pascal-format, fuzzy, badformat
+#, object-pascal-format
 msgid "HFD Focus Monitor: Measuring. %d of %d HFD measurements completed."
-msgstr "Moniteur de focalisation par HFD: Mesure. Complété %s sur %s mesures du HFD."
+msgstr "Moniteur de focalisation par HFD: Mesure. Complété %d sur %d mesures du HFD."
 
 #: u_translation.rshfdreset
 msgid "HFD Focus Monitor: Reset. Clearing reference HFD and measurements."
@@ -2513,9 +2517,9 @@ msgid "Images folder Unix path"
 msgstr "Chemin Unix du dossier d'image"
 
 #: u_translation.rsimagesharpne
-#, object-pascal-format, fuzzy, badformat
+#, object-pascal-format
 msgid "Image sharpness %s"
-msgstr "Netteté de l'image"
+msgstr "Netteté de l'image %s"
 
 #: u_translation.rsimagestatist
 msgid "Image statistic"
@@ -3506,6 +3510,10 @@ msgstr "Nombre d'emplacement"
 msgid "Number of steps"
 msgstr "Nombre de pas"
 
+#: u_translation.rsnumberofswit
+msgid "Number of switches"
+msgstr "Nombre de commutateur"
+
 #: u_translation.rsobject
 msgid "Object"
 msgstr "Objet"
@@ -4377,6 +4385,10 @@ msgstr "lever"
 msgid "Rise/Set condition"
 msgstr "Condition de lever/coucher"
 
+#: u_translation.rsroi
+msgid "ROI"
+msgstr "ROI"
+
 #: u_translation.rsrot
 msgid "Rot."
 msgstr "Rot."
@@ -4388,6 +4400,11 @@ msgstr "Tourner"
 #: u_translation.rsrotateby
 msgid "rotate by"
 msgstr "Déplacement de"
+
+#: u_translation.rsrotateslitto
+#, object-pascal-format
+msgid "Rotate slit to parallactic angle %s"
+msgstr "Rotation de la fente à l'angle parallactique %s"
 
 #: u_translation.rsrotatetelesc
 msgid "Rotate the telescope"
@@ -4422,11 +4439,6 @@ msgstr "Le rotateur n'est pas connecté"
 msgid "Rotator move to PA %s"
 msgstr "Le rotateur tourne à %s"
 
-#: u_translation.rsrotatorsyncc
-#, object-pascal-format
-msgid "Rotator sync calibration = %s"
-msgstr "Rotator calibration = %s"
-
 #: u_translation.rsrun
 msgid "Run"
 msgstr "Exécuter"
@@ -4440,8 +4452,8 @@ msgid "Run a script"
 msgstr "Exécute un script"
 
 #: u_translation.rsrunastrometr
-msgid "Run astrometry on every image to search for drift"
-msgstr "Exécuter l'astrométrie sur chaque image pour rechercher une dérive"
+msgid "Run astrometry on every image"
+msgstr "Analyse astrométrique sur chaque image."
 
 #: u_translation.rsrunautofocus
 #, object-pascal-format
@@ -4527,6 +4539,10 @@ msgstr "Fichier sauvegardé %s"
 #, object-pascal-format
 msgid "Save FITS file%s"
 msgstr "Enregistrer  le fichier FITS %s"
+
+#: u_translation.rssaveimagewit
+msgid "Save image with astrometry"
+msgstr "Enregistre l'image avec l'astrométrie"
 
 #: u_translation.rssavepictures
 #, object-pascal-format
@@ -4859,6 +4875,10 @@ msgstr "Défini la position de verrouillage"
 #: u_translation.rssetmagnitude
 msgid "Set magnitude"
 msgstr "Définir la magnitude"
+
+#: u_translation.rssetmountpier
+msgid "Set mount pier side if available"
+msgstr "Commande le côté du pied si disponible"
 
 #: u_translation.rssetmountsite
 msgid "Set mount site long/lat from configuration"
@@ -5721,6 +5741,10 @@ msgstr "Le nom du dossier temporaire ne doit pas contenir de caractère accentu�
 #: u_translation.rsterminationo
 msgid "Termination options"
 msgstr "Options de terminaison"
+
+#: u_translation.rsterminations
+msgid "Termination script"
+msgstr "Script de fin"
 
 #: u_translation.rstest
 msgid "Test"

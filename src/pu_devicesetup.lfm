@@ -5988,22 +5988,28 @@ object f_setup: Tf_setup
             TabOrder = 0
           end
           object Label170: TLabel
+            AnchorSideLeft.Control = DeviceSwitch
+            AnchorSideLeft.Side = asrBottom
             AnchorSideTop.Control = DeviceSwitch
             AnchorSideTop.Side = asrCenter
-            Left = 168
+            Left = 118
             Height = 18
             Top = 10
             Width = 123
+            BorderSpacing.Left = 12
             Caption = 'Number of switches'
             ParentColor = False
           end
           object NumSwitch: TSpinEditEx
+            AnchorSideLeft.Control = Label170
+            AnchorSideLeft.Side = asrBottom
             AnchorSideTop.Control = DeviceSwitch
             AnchorSideTop.Side = asrCenter
-            Left = 320
+            Left = 249
             Height = 32
             Top = 3
             Width = 66
+            BorderSpacing.Left = 8
             MaxLength = 0
             TabOrder = 1
             OnChange = NumSwitchChange

@@ -1481,6 +1481,7 @@ begin
   MeridianOption.Items[1]:=rsAutomaticFli;
   MeridianOption.Items[2]:=rsRunAScript;
   MeridianOption.Items[3]:=rsAbort;
+  MeridianFlipUseSetPierSide.Caption:=rsSetMountPier;
   Label161.Caption:=rsScript;
   Label164.Caption:=rsScriptArgume;
   AutoguiderBox.Items[1]:=rsInternal;

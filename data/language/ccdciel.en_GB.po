@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-01-07 17:30+0000\n"
+"POT-Creation-Date: 2026-01-20 13:12+0000\n"
 "PO-Revision-Date: 2021-08-31 20:37+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-01-07 17:40+0000\n"
-"X-Generator: Launchpad (build 99c00f518760bdd50fc6e353e7736d2fff8fba4a)\n"
+"X-Launchpad-Export-Date: 2026-01-20 13:32+0000\n"
+"X-Generator: Launchpad (build 9fcfff1971229ac997140f06b41a902ac8ec69f4)\n"
 "Language: en_GB\n"
 
 #: u_translation.rs2d
@@ -2230,6 +2230,10 @@ msgstr "From: %s to %s by %s"
 msgid "F-stop"
 msgstr "F-stop"
 
+#: u_translation.rsfullframe
+msgid "Full frame"
+msgstr ""
+
 #: u_translation.rsfwhm
 msgid "FWHM"
 msgstr "FWHM"
@@ -3504,6 +3508,10 @@ msgstr "Number of slot"
 msgid "Number of steps"
 msgstr "Number of steps"
 
+#: u_translation.rsnumberofswit
+msgid "Number of switches"
+msgstr ""
+
 #: u_translation.rsobject
 msgid "Object"
 msgstr "Object"
@@ -4375,6 +4383,10 @@ msgstr "rise"
 msgid "Rise/Set condition"
 msgstr "Rise/Set condition"
 
+#: u_translation.rsroi
+msgid "ROI"
+msgstr ""
+
 #: u_translation.rsrot
 msgid "Rot."
 msgstr "Rot."
@@ -4386,6 +4398,11 @@ msgstr "Rotate"
 #: u_translation.rsrotateby
 msgid "rotate by"
 msgstr "rotate by"
+
+#: u_translation.rsrotateslitto
+#, object-pascal-format
+msgid "Rotate slit to parallactic angle %s"
+msgstr ""
 
 #: u_translation.rsrotatetelesc
 msgid "Rotate the telescope"
@@ -4420,11 +4437,6 @@ msgstr "Rotator is not connected"
 msgid "Rotator move to PA %s"
 msgstr "Rotator move to PA %s"
 
-#: u_translation.rsrotatorsyncc
-#, object-pascal-format
-msgid "Rotator sync calibration = %s"
-msgstr "Rotator sync calibration = %s"
-
 #: u_translation.rsrun
 msgid "Run"
 msgstr "Run"
@@ -4438,8 +4450,8 @@ msgid "Run a script"
 msgstr "Run a script"
 
 #: u_translation.rsrunastrometr
-msgid "Run astrometry on every image to search for drift"
-msgstr "Run astrometry on every image to search for drift"
+msgid "Run astrometry on every image"
+msgstr ""
 
 #: u_translation.rsrunautofocus
 #, object-pascal-format
@@ -4525,6 +4537,10 @@ msgstr "Saved file %s"
 #, object-pascal-format
 msgid "Save FITS file%s"
 msgstr "Save FITS file%s"
+
+#: u_translation.rssaveimagewit
+msgid "Save image with astrometry"
+msgstr ""
 
 #: u_translation.rssavepictures
 #, object-pascal-format
@@ -4857,6 +4873,10 @@ msgstr ""
 #: u_translation.rssetmagnitude
 msgid "Set magnitude"
 msgstr "Set magnitude"
+
+#: u_translation.rssetmountpier
+msgid "Set mount pier side if available"
+msgstr ""
 
 #: u_translation.rssetmountsite
 msgid "Set mount site long/lat from configuration"
@@ -5719,6 +5739,10 @@ msgstr "Temporary folder must contain only ASCII characters"
 #: u_translation.rsterminationo
 msgid "Termination options"
 msgstr "Termination options"
+
+#: u_translation.rsterminations
+msgid "Termination script"
+msgstr ""
 
 #: u_translation.rstest
 msgid "Test"

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-01-07 17:30+0000\n"
+"POT-Creation-Date: 2026-01-20 13:12+0000\n"
 "PO-Revision-Date: 2021-09-24 16:13+0000\n"
 "Last-Translator: Jimmy Frydkær Jensen <jimmy@frydkaer.net>\n"
 "Language-Team: Danish <da@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-01-07 17:40+0000\n"
-"X-Generator: Launchpad (build 99c00f518760bdd50fc6e353e7736d2fff8fba4a)\n"
+"X-Launchpad-Export-Date: 2026-01-20 13:32+0000\n"
+"X-Generator: Launchpad (build 9fcfff1971229ac997140f06b41a902ac8ec69f4)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -2229,6 +2229,10 @@ msgstr "Fra:%s til %s via %s"
 msgid "F-stop"
 msgstr ""
 
+#: u_translation.rsfullframe
+msgid "Full frame"
+msgstr ""
+
 #: u_translation.rsfwhm
 msgid "FWHM"
 msgstr ""
@@ -3503,6 +3507,10 @@ msgstr ""
 msgid "Number of steps"
 msgstr ""
 
+#: u_translation.rsnumberofswit
+msgid "Number of switches"
+msgstr ""
+
 #: u_translation.rsobject
 msgid "Object"
 msgstr ""
@@ -4374,6 +4382,10 @@ msgstr ""
 msgid "Rise/Set condition"
 msgstr ""
 
+#: u_translation.rsroi
+msgid "ROI"
+msgstr ""
+
 #: u_translation.rsrot
 msgid "Rot."
 msgstr ""
@@ -4384,6 +4396,11 @@ msgstr "Rotér"
 
 #: u_translation.rsrotateby
 msgid "rotate by"
+msgstr ""
+
+#: u_translation.rsrotateslitto
+#, object-pascal-format
+msgid "Rotate slit to parallactic angle %s"
 msgstr ""
 
 #: u_translation.rsrotatetelesc
@@ -4419,11 +4436,6 @@ msgstr ""
 msgid "Rotator move to PA %s"
 msgstr ""
 
-#: u_translation.rsrotatorsyncc
-#, object-pascal-format
-msgid "Rotator sync calibration = %s"
-msgstr ""
-
 #: u_translation.rsrun
 msgid "Run"
 msgstr "Kør"
@@ -4437,7 +4449,7 @@ msgid "Run a script"
 msgstr ""
 
 #: u_translation.rsrunastrometr
-msgid "Run astrometry on every image to search for drift"
+msgid "Run astrometry on every image"
 msgstr ""
 
 #: u_translation.rsrunautofocus
@@ -4524,6 +4536,10 @@ msgstr "Gemt fil %s"
 #, object-pascal-format
 msgid "Save FITS file%s"
 msgstr "Gem FITS fil%s"
+
+#: u_translation.rssaveimagewit
+msgid "Save image with astrometry"
+msgstr ""
 
 #: u_translation.rssavepictures
 #, object-pascal-format
@@ -4855,6 +4871,10 @@ msgstr ""
 
 #: u_translation.rssetmagnitude
 msgid "Set magnitude"
+msgstr ""
+
+#: u_translation.rssetmountpier
+msgid "Set mount pier side if available"
 msgstr ""
 
 #: u_translation.rssetmountsite
@@ -5717,6 +5737,10 @@ msgstr ""
 
 #: u_translation.rsterminationo
 msgid "Termination options"
+msgstr ""
+
+#: u_translation.rsterminations
+msgid "Termination script"
 msgstr ""
 
 #: u_translation.rstest

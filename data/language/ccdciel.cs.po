@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-07 17:30+0000\n"
-"PO-Revision-Date: 2025-12-16 18:44+0000\n"
+"POT-Creation-Date: 2026-01-20 13:12+0000\n"
+"PO-Revision-Date: 2026-01-08 16:13+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-01-07 17:40+0000\n"
-"X-Generator: Launchpad (build 99c00f518760bdd50fc6e353e7736d2fff8fba4a)\n"
+"X-Launchpad-Export-Date: 2026-01-20 13:32+0000\n"
+"X-Generator: Launchpad (build 9fcfff1971229ac997140f06b41a902ac8ec69f4)\n"
 "Language: cs\n"
 
 #: u_translation.rs2d
@@ -2229,6 +2229,10 @@ msgstr "Z: %s do %s od %s"
 msgid "F-stop"
 msgstr "Clona"
 
+#: u_translation.rsfullframe
+msgid "Full frame"
+msgstr ""
+
 #: u_translation.rsfwhm
 msgid "FWHM"
 msgstr "FWMH"
@@ -2428,7 +2432,7 @@ msgstr "Profil horizontu"
 
 #: u_translation.rshorizontal
 msgid "Horizontal"
-msgstr ""
+msgstr "Horizontální"
 
 #: u_translation.rshorizontalco
 msgid "Horizontal correction :"
@@ -2989,7 +2993,7 @@ msgstr "Měření nové polohy"
 
 #: u_translation.rsmechanical
 msgid "Mechanical"
-msgstr ""
+msgstr "Mechanická"
 
 #: u_translation.rsmedian
 #, object-pascal-format
@@ -3502,6 +3506,10 @@ msgstr "Počet slotů"
 #: u_translation.rsnumberofstep
 msgid "Number of steps"
 msgstr "Počet kroků"
+
+#: u_translation.rsnumberofswit
+msgid "Number of switches"
+msgstr ""
 
 #: u_translation.rsobject
 msgid "Object"
@@ -4374,6 +4382,10 @@ msgstr "vzestup"
 msgid "Rise/Set condition"
 msgstr "Rise/Set condition"
 
+#: u_translation.rsroi
+msgid "ROI"
+msgstr ""
+
 #: u_translation.rsrot
 msgid "Rot."
 msgstr "Rot."
@@ -4386,13 +4398,18 @@ msgstr "Otočit"
 msgid "rotate by"
 msgstr "otočit o"
 
+#: u_translation.rsrotateslitto
+#, object-pascal-format
+msgid "Rotate slit to parallactic angle %s"
+msgstr ""
+
 #: u_translation.rsrotatetelesc
 msgid "Rotate the telescope"
 msgstr "Otočit dalekohled"
 
 #: u_translation.rsrotatetothep
 msgid "Rotate to the parallactic angle"
-msgstr ""
+msgstr "Otočit do paralaktického úhlu"
 
 #: u_translation.rsrotating
 msgid "Rotating"
@@ -4408,7 +4425,7 @@ msgstr "Rotátor"
 
 #: u_translation.rsrotatorangle
 msgid "Rotator angle"
-msgstr ""
+msgstr "Úhel rotátoru"
 
 #: u_translation.rsrotatorisnot
 msgid "Rotator is not connected"
@@ -4418,11 +4435,6 @@ msgstr "Rotátor nepřipojen"
 #, object-pascal-format
 msgid "Rotator move to PA %s"
 msgstr "Otočení Rotátoru na PA %s"
-
-#: u_translation.rsrotatorsyncc
-#, object-pascal-format
-msgid "Rotator sync calibration = %s"
-msgstr "Kalibrace a synchronizace Rotátoru = %s"
 
 #: u_translation.rsrun
 msgid "Run"
@@ -4437,8 +4449,8 @@ msgid "Run a script"
 msgstr "Spustit skript"
 
 #: u_translation.rsrunastrometr
-msgid "Run astrometry on every image to search for drift"
-msgstr "Spustit astrometrii na každém snímku a hledat drift"
+msgid "Run astrometry on every image"
+msgstr ""
 
 #: u_translation.rsrunautofocus
 #, object-pascal-format
@@ -4524,6 +4536,10 @@ msgstr "Soubor uložen %s"
 #, object-pascal-format
 msgid "Save FITS file%s"
 msgstr "Uložit FITS soubor%s"
+
+#: u_translation.rssaveimagewit
+msgid "Save image with astrometry"
+msgstr ""
 
 #: u_translation.rssavepictures
 #, object-pascal-format
@@ -4856,6 +4872,10 @@ msgstr "Nastavit uzamčenou polohu"
 #: u_translation.rssetmagnitude
 msgid "Set magnitude"
 msgstr "Nastavit magnitudu"
+
+#: u_translation.rssetmountpier
+msgid "Set mount pier side if available"
+msgstr ""
 
 #: u_translation.rssetmountsite
 msgid "Set mount site long/lat from configuration"
@@ -5553,7 +5573,7 @@ msgstr "Synchronizovat s %s %s/%s"
 #: u_translation.rssynctos
 #, object-pascal-format
 msgid "Sync to %s"
-msgstr ""
+msgstr "Synchronizovat s %s"
 
 #: u_translation.rssystemcross
 msgid "System cross"
@@ -5718,6 +5738,10 @@ msgstr "Dočasná složka musí obsahovat pouze znaky ASCII"
 #: u_translation.rsterminationo
 msgid "Termination options"
 msgstr "Možnosti ukončení"
+
+#: u_translation.rsterminations
+msgid "Termination script"
+msgstr ""
 
 #: u_translation.rstest
 msgid "Test"
@@ -6183,7 +6207,7 @@ msgstr "Použít přepínač"
 
 #: u_translation.rsusetherotato
 msgid "Use the rotator angle"
-msgstr ""
+msgstr "Použijte úhel rotátoru"
 
 #: u_translation.rsusethisdevic
 msgid "Use this device if the main camera cannot be used for plate solving. Also configure the camera to use in Preferences/Slewing"
@@ -6233,7 +6257,7 @@ msgstr "Podrobný protokol zařízení"
 
 #: u_translation.rsvertical
 msgid "Vertical"
-msgstr ""
+msgstr "Vertikální"
 
 #: u_translation.rsverticalcorr
 msgid "Vertical correction :"

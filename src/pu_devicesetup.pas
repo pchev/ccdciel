@@ -1094,6 +1094,10 @@ begin
   GuideIndiSensor.Items[1]:=rsGuiderSensor;
   GuideCameraAutoLoadConfig.Caption:=rsLoadConfigur;
   label144.Caption:=rsToUseThisDev;
+  label197.Caption:=rsROI;
+  label200.Caption:=rsWidth;
+  label201.Caption:=rsHeight;
+  btnGuiderFullFrame.Caption:=rsFullFrame;
 
   FinderCamera.Caption:=rsFinderCamera;
   DeviceFinderCamera.Caption:=rsUseFinderCam;
@@ -1115,6 +1119,11 @@ begin
   FinderIndiSensor.Items[1]:=rsGuiderSensor;
   FinderCameraAutoLoadConfig.Caption:=rsLoadConfigur;
   Label160.Caption:=rsUseThisDevic;
+  label191.Caption:=rsROI;
+  label194.Caption:=rsWidth;
+  label196.Caption:=rsHeight;
+  btnFinderFullFrame.Caption:=rsFullFrame;
+
 
   Filterwheel.Caption:=rsFilterWheel;
   label8.Caption:=rsNumberOfSlot;
@@ -1262,8 +1271,10 @@ begin
   WatchdogAutoLoadConfig.Caption:=rsLoadConfigur;
   Label20.Caption:=rsHeartBeatThr;
   DeviceWatchdog.Caption:=rsUseWatchdog+': '+DevInterfaceName[0];
+
   Switch.Caption:=rsSwitch;
   DeviceSwitch.Caption:=rsUseSwitch;
+  label170.Caption:=rsNumberOfSwit;
   Label109.Caption:=rsServer;
   Label110.Caption:=rsPort;
   GetIndi9.Caption:=rsGet;
