@@ -27,12 +27,12 @@ object f_finder: Tf_finder
   end
   object Panel1: TPanel
     Left = 0
-    Height = 716
+    Height = 750
     Top = 20
     Width = 280
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 716
+    ClientHeight = 750
     ClientWidth = 280
     ParentFont = False
     TabOrder = 0
@@ -354,12 +354,12 @@ object f_finder: Tf_finder
     end
     object Panel4: TPanel
       Left = 0
-      Height = 246
+      Height = 280
       Top = 470
       Width = 280
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 246
+      ClientHeight = 280
       ClientWidth = 280
       TabOrder = 6
       object PanelVisu: TPanel
@@ -375,7 +375,7 @@ object f_finder: Tf_finder
   object Panel3: TPanel
     Left = 0
     Height = 50
-    Top = 736
+    Top = 759
     Width = 280
     Align = alTop
     ClientHeight = 50
