@@ -66,16 +66,11 @@ end;
 
 procedure Tf_newscript.ButtonDownloadClick(Sender: TObject);
 begin
-  f_downloadscript:=Tf_downloadscript.Create(self);
-  try
   f_downloadscript.ShowModal;
   if  f_downloadscript.ModalResult=mrOK  then begin
     edit1.Text:=f_downloadscript.Scriptname;
     FDownloaded:=true;
     ModalResult:=mrOK;
-  end;
-  finally
-    f_downloadscript.Free;
   end;
 end;
 

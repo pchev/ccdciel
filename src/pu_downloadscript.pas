@@ -27,6 +27,7 @@ type
     procedure StringGrid1Resize(Sender: TObject);
   private
     FscriptName: string;
+    FDownloadNow: boolean;
     procedure SetLang;
     procedure LoadScriptList;
     function DownloadScript(fn,dfn: string): boolean;
@@ -46,6 +47,7 @@ implementation
 procedure Tf_downloadscript.FormCreate(Sender: TObject);
 begin
   SetLang;
+  FDownloadNow:=true;
 end;
 
 procedure Tf_downloadscript.SetLang;
@@ -64,6 +66,7 @@ procedure Tf_downloadscript.FormShow(Sender: TObject);
 begin
   FscriptName:='';
   LoadScriptList;
+  FDownloadNow:=false;
 end;
 
 procedure Tf_downloadscript.StringGrid1Resize(Sender: TObject);
@@ -76,6 +79,7 @@ end;
 procedure Tf_downloadscript.ButtonRefreshClick(Sender: TObject);
 begin
   DeleteFile(slash(ConfigDir)+'script.list');
+  FDownloadNow:=true;
   LoadScriptList;
 end;
 
@@ -89,7 +93,7 @@ begin
   msg:='';
   fn:=slash(ConfigDir)+'script.list';
   doDownload:=true;
-  if FileExists(fn) then begin
+  if (not FDownloadNow) and FileExists(fn) then begin
     if FileAge(fn,ft) then begin
       doDownload:=(ft<(now-1));
     end;

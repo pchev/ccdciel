@@ -118,6 +118,7 @@ begin
   Application.CreateForm(Tf_findercalibration, f_findercalibration);
   Application.CreateForm(Tf_onlineinfo, f_onlineinfo);
   Application.CreateForm(Tf_autoexposurestep, f_autoexposurestep);
+  Application.CreateForm(Tf_downloadscript, f_downloadscript);
   Application.Run;
   {$ifdef LCLGTK2}
   try

@@ -20615,17 +20615,12 @@ end;
 
 procedure Tf_main.MenuInstallScriptClick(Sender: TObject);
 begin
-  f_downloadscript:=Tf_downloadscript.Create(self);
-  try
   f_downloadscript.ShowModal;
   if  f_downloadscript.ModalResult=mrOK  then begin
     f_script.LoadScriptList;
     f_script.ScriptName:=f_downloadscript.Scriptname;
     if f_script.ScriptName<>'' then
       f_script.BtnEdit.Click;
-  end;
-  finally
-    f_downloadscript.Free;
   end;
 end;
 

@@ -106,6 +106,7 @@ object f_downloadscript: Tf_downloadscript
       Caption = 'Refresh the list'
       OnClick = ButtonRefreshClick
       TabOrder = 0
+      Visible = False
     end
   end
   object DownloadDialog1: TDownloadDialog
