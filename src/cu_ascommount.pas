@@ -605,10 +605,10 @@ begin
  result:=true;
  {$ifdef mswindows}
  try
-   timemax:=now+maxtime/1000/secperday;
+   timemax:=now+maxtime/1000/SecsPerDay;
    lastcheck:=0;
    repeat
-      if now>(lastcheck+waitpoll/1000/secperday) then begin
+      if now>(lastcheck+waitpoll/1000/SecsPerDay) then begin
          ok:=not V.Connecting;
          if ok then break;
          lastcheck:=now;
@@ -637,10 +637,10 @@ begin
  {$ifdef mswindows}
  try
  if CanSlewAsync then begin
-   timemax:=now+maxtime/1000/secperday;
+   timemax:=now+maxtime/1000/SecsPerDay;
    lastcheck:=0;
    repeat
-      if now>(lastcheck+waitpoll/1000/secperday) then begin
+      if now>(lastcheck+waitpoll/1000/SecsPerDay) then begin
          ok:=not V.Slewing;
          if ok then break;
          lastcheck:=now;
@@ -667,10 +667,10 @@ begin
  {$ifdef mswindows}
  try
  if CanPark then begin
-   timemax:=now+maxtime/1000/secperday;
+   timemax:=now+maxtime/1000/SecsPerDay;
    lastcheck:=0;
    repeat
-      if now>(lastcheck+waitpoll/1000/secperday) then begin
+      if now>(lastcheck+waitpoll/1000/SecsPerDay) then begin
          ok:=V.atPark;
          if ok then break;
          lastcheck:=now;

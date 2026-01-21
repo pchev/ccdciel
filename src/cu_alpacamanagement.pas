@@ -27,13 +27,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   https://ascom-standards.org
 }
 
+//{$define AppSkychart}
+{$define AppCcdciel}
+
 interface
 
 uses
  {$IFDEF WINDOWS}
  Variants, comobj, ActiveX,
  {$ENDIF}
-  cu_ascomrest, u_utils, synaip,
+ {$ifdef AppSkychart}
+ u_constant, u_util,
+ {$endif}
+ {$ifdef AppCcdciel}
+ u_global, u_utils,
+ {$endif}
+  cu_ascomrest,  synaip,
   httpsend, synautil, fpjson, jsonparser, blcksock, synsock,
   process, Forms, Dialogs, Classes, SysUtils;
 

@@ -581,10 +581,10 @@ var timemax,lastcheck: double;
 begin
  result:=true;
  try
-   timemax:=now+maxtime/1000/secperday;
+   timemax:=now+maxtime/1000/SecsPerDay;
    lastcheck:=0;
    repeat
-      if now>(lastcheck+waitpoll/1000/secperday) then begin
+      if now>(lastcheck+waitpoll/1000/SecsPerDay) then begin
          ok:=not (V.Get('connecting').AsBool);
          if ok then break;
          lastcheck:=now;
@@ -607,10 +607,10 @@ var timemax,lastcheck: double;
 begin
  result:=true;
  try
-   timemax:=now+maxtime/1000/secperday;
+   timemax:=now+maxtime/1000/SecsPerDay;
    lastcheck:=0;
    repeat
-      if now>(lastcheck+waitpoll/1000/secperday) then begin
+      if now>(lastcheck+waitpoll/1000/SecsPerDay) then begin
          ok:=not (V.Get('slewing').AsBool);
          if ok then break;
          lastcheck:=now;
@@ -632,10 +632,10 @@ begin
  if FStatus<>devConnected then exit;
  try
   if CanPark then begin
-   timemax:=now+maxtime/1000/secperday;
+   timemax:=now+maxtime/1000/SecsPerDay;
    lastcheck:=0;
    repeat
-      if now>(lastcheck+waitpoll/1000/secperday) then begin
+      if now>(lastcheck+waitpoll/1000/SecsPerDay) then begin
          ok:=(V.Get('atpark').AsBool);
          if ok then break;
          lastcheck:=now;
