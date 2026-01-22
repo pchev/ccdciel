@@ -22,6 +22,7 @@ except Exception as ex:
 
 
 try :
+    ccdciel('LogMsg','Connecting to UVEX4 Alpaca server at '+uvex4server)
     uvex4 = UVEX4(uvex4server,0)
     uvex4.Connected=True
     
@@ -30,32 +31,32 @@ try :
        val=f"{uvex4.GetSwitchValue(i)}"
 
        if name=='Grating resolution':
-          print('GRATING='+val)                        # print for a trace in the log
+          ccdciel('LogMsg','GRATING='+val)             # print for a trace in the log
           ccdciel("CustomHeader_add",["GRATING",val])  # update FITS header
 
        elif name=='Central wavelength':
-          print("WAVELNTH="+val)
+          ccdciel('LogMsg','WAVELNTH='+val)
           ccdciel("CustomHeader_add",["WAVELNTH",val])
        elif name=='Min. wavelength':
-          print("WAVEMIN="+val)
+          ccdciel('LogMsg','WAVEMIN='+val)
           ccdciel("CustomHeader_add",["WAVEMIN",val])
        elif name=='Max. wavelength':
-          print("WAVEMAX="+val)
+          ccdciel('LogMsg','WAVEMAX='+val)
           ccdciel("CustomHeader_add",["WAVEMAX",val])
 
        elif name=='Focus position':
-          print("SPECFOC="+val)
+          ccdciel('LogMsg','SPECFOC='+val)
           ccdciel("CustomHeader_add",["SPECFOC",val])
 
        elif name=='Temperature':
-          print("SPECTEMP="+val)
+          ccdciel('LogMsg','SPECTEMP='+val)
           ccdciel("CustomHeader_add",["SPECTEMP",val])
 
        else:
           prefix=name.split(':')
           if len(prefix)>1 :
              if (prefix[0]=='Slit' and val=='1') :
-               print('SLIT='+prefix[1])
+               ccdciel('LogMsg','SLIT='+prefix[1])
                ccdciel("CustomHeader_add",["SLIT",prefix[1]])
 
 

@@ -47,16 +47,18 @@ def findswitch(swn) :
     
   
 try :
+    ccdciel('LogMsg','Connecting to UVEX4 Alpaca server at '+uvex4server)
     uvex4 = UVEX4(uvex4server,0)
     uvex4.Connected=True
     
     sw=findswitch('Focus position')
     if sw>=0 :
-      pos=uvex4.GetSwitchValue(sw)
+      cpos=uvex4.GetSwitchValue(sw)
       if direction=='in':
-        pos=pos+nstep
+        pos=cpos+nstep
       else:
-        pos=pos-nstep
+        pos=cpos-nstep
+      ccdciel('LogMsg','Moving UVEX4 focus from '+f"{cpos}"+' to '+f"{pos}")  
       uvex4.SetSwitchValue(sw,pos)
       p=f"{uvex4.GetSwitchValue(sw)}"
       print('SPECFOC='+ str(p))

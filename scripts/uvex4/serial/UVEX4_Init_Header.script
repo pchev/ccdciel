@@ -13,37 +13,38 @@ scriptdir = os.path.dirname(os.path.abspath(sys.argv[0]))
 
 try :
     # connect to UVEX4 using information in the config file
+    ccdciel('LogMsg','Connecting to UVEX4 serial port')
     uvex = UVEX4(os.path.join(scriptdir,'UVEX4-serial_config.script'))
 
     gr = str(uvex.grating_resolution)
-    print('GRATING='+gr)                        # print for a trace in the log
+    ccdciel('LogMsg','GRATING='+gr)             # print for a trace in the log
     ccdciel("CustomHeader_add",["GRATING",gr])  # update FITS header
 
     if uvex.Grating_motor_enabled :
       w  = uvex.wavelength
-      print("WAVELNTH="+w[1])
-      print("WAVEMIN="+w[2])
-      print("WAVEMAX="+w[3])
+      ccdciel('LogMsg',"WAVELNTH="+w[1])
+      ccdciel('LogMsg',"WAVEMIN="+w[2])
+      ccdciel('LogMsg',"WAVEMAX="+w[3])
       ccdciel("CustomHeader_add",["WAVELNTH",w[1]])
       ccdciel("CustomHeader_add",["WAVEMIN",w[2]])
       ccdciel("CustomHeader_add",["WAVEMAX",w[3]])
     else :
-      print('Grating motor not enabled')
+      ccdciel('LogMsg','Grating motor not enabled')
 
     if uvex.Slit_motor_enabled :
       spos= uvex.slitpos
       sname = uvex.Slits[spos-1].Label
-      print('SLIT='+sname)
+      ccdciel('LogMsg','SLIT='+sname)
       ccdciel("CustomHeader_add",["SLIT",sname])
     else :
-      print('Slit motor not enabled')
+      ccdciel('LogMsg','Slit motor not enabled')
 
     if uvex.Temperature_active :
       t = uvex.temperature
-      print('SPECTEMP='+ str(t))
+      ccdciel('LogMsg','SPECTEMP='+ str(t))
       ccdciel("CustomHeader_add",["SPECTEMP",t])
     else :
-      print('Temperature probe not enabled')
+      ccdciel('LogMsg','Temperature probe not enabled')
 
 except Exception as ex:
     print('Error: '+type(ex).__name__,'-',ex)

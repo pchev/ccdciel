@@ -45,11 +45,13 @@ def findswitch(swn) :
 
   
 try :
+    ccdciel('LogMsg','Connecting to UVEX4 Alpaca server at '+uvex4server)
     uvex4 = UVEX4(uvex4server,0)
     uvex4.Connected=True
 
     sw=findswitch('Calibration:'+cname)
     if sw>=0 :
+      ccdciel('LogMsg','Change UVEX4 calibration '+cname+' to '+f"{state}")   
       uvex4.SetSwitchValue(sw,state)
       time.sleep(1) # let time for calibrex to reply
       if uvex4.GetSwitchValue(sw) == state :
@@ -59,7 +61,29 @@ try :
          sys.exit(1)
     else:     
       print('Error, Calibration not found '+cname)
-      sys.exit(1)  
+      sys.exit(1) 
+      
+    # update header with current settings  
+    for i in range(uvex4.MaxSwitch):
+       name=uvex4.GetSwitchName(i)
+       val=f"{uvex4.GetSwitchValue(i)}"
+       if name=='Grating resolution':
+          ccdciel("CustomHeader_add",["GRATING",val])  # update FITS header
+       elif name=='Central wavelength':
+          ccdciel("CustomHeader_add",["WAVELNTH",val])
+       elif name=='Min. wavelength':
+          ccdciel("CustomHeader_add",["WAVEMIN",val])
+       elif name=='Max. wavelength':
+          ccdciel("CustomHeader_add",["WAVEMAX",val])
+       elif name=='Focus position':
+          ccdciel("CustomHeader_add",["SPECFOC",val])
+       elif name=='Temperature':
+          ccdciel("CustomHeader_add",["SPECTEMP",val])
+       else:
+          prefix=name.split(':')
+          if len(prefix)>1 :
+             if (prefix[0]=='Slit' and val=='1') :
+               ccdciel("CustomHeader_add",["SLIT",prefix[1]])      
 
 
 except Exception as ex:

@@ -40,11 +40,13 @@ def findswitch(swn) :
   
 
 try :
+    ccdciel('LogMsg','Connecting to UVEX4 Alpaca server at '+uvex4server)
     uvex4 = UVEX4(uvex4server,0)
     uvex4.Connected=True
 
     sw=findswitch('Slit:'+slitname)
-    if sw>=0 :
+    if sw>=0:
+      ccdciel('LogMsg','Change UVEX4 slit to '+slitname)
       uvex4.SetSwitchValue(sw,1)
       if uvex4.GetSwitchValue(sw) == 1 :
          print('SLIT='+slitname)

@@ -22,8 +22,10 @@ scriptdir = os.path.dirname(os.path.abspath(sys.argv[0]))
 
 try :
     # connect to UVEX4 using information in the config file
+    ccdciel('LogMsg','Connecting to UVEX4 serial port')
     uvex = UVEX4(os.path.join(scriptdir,'UVEX4-serial_config.script'))
 
+    ccdciel('LogMsg','Change UVEX4 slit to '+slitname)
     uvex.slitpos = slitname
 
     print('SLIT='+slitname)

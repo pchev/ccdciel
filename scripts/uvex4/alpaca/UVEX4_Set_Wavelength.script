@@ -42,11 +42,13 @@ def findswitch(swn) :
   
   
 try :
+    ccdciel('LogMsg','Connecting to UVEX4 Alpaca server at '+uvex4server)
     uvex4 = UVEX4(uvex4server,0)
     uvex4.Connected=True
     
     sw=findswitch('Central wavelength')
     if sw>=0 :
+      ccdciel('LogMsg','Change UVEX4 central wavelength to '+f"{wavelength}")
       uvex4.SetSwitchValue(sw,wavelength)
       w1=f"{uvex4.GetSwitchValue(sw):.1f}"
       w2=f"{uvex4.GetSwitchValue(sw+1):.1f}"

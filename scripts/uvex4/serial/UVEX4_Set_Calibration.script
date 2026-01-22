@@ -3,8 +3,6 @@
 #
 # UVEX4 change calibration light on or off
 #
-# This script can also stop the mount tracking when a calibration light is ON.
-# Uncomment then corresponding block below if you need that.
 
 from ccdciel import ccdciel
 from libuvex4 import UVEX4
@@ -28,9 +26,11 @@ scriptdir = os.path.dirname(os.path.abspath(sys.argv[0]))
 
 try :
     # connect to UVEX4 using information in the config file
+    ccdciel('LogMsg','Connecting to UVEX4 serial port')
     uvex = UVEX4(os.path.join(scriptdir,'UVEX4-serial_config.script'))
 
     # set the switch state
+    ccdciel('LogMsg','Change UVEX4 calibration '+cname+' to '+f"{state}")   
     uvex.calibration = [cname, state]
 
     # update FITS header
@@ -48,11 +48,6 @@ try :
     if uvex.Temperature_active :
       t = uvex.temperature
       ccdciel("CustomHeader_add",["SPECTEMP",t])
-
-
-    # stop tracking for calibration images
-    #if (state==1) :
-    #   ccdciel('Telescope_Abortmotion');
 
 except Exception as ex:
     print('Error: '+type(ex).__name__,'-',ex)

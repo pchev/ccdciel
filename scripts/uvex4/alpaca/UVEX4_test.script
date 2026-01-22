@@ -23,12 +23,11 @@ except Exception as ex:
 
 
 try :
-    print('UVEX4 IP: '+uvex4server)   
+    ccdciel('LogMsg','UVEX4 Alpaca server IP: '+uvex4server)   
     desc=management.description(uvex4server)
-    print('Name: '+ desc['ServerName'])
-    print('Manufacturer: '+ desc['Manufacturer'])
-    print('Version: '+ desc['ManufacturerVersion'])
-    print()
+    ccdciel('LogMsg','Name: '+ desc['ServerName'])
+    ccdciel('LogMsg','Manufacturer: '+ desc['Manufacturer'])
+    ccdciel('LogMsg','Version: '+ desc['ManufacturerVersion'])
 
     uvex4 = UVEX4(uvex4server,0)
     uvex4.Connected=True
@@ -36,7 +35,7 @@ try :
     for i in range(uvex4.MaxSwitch):
       name=uvex4.GetSwitchName(i)
       val=uvex4.GetSwitchValue(i)
-      print(name+' '+f"{val}")
+      ccdciel('LogMsg',name+' = '+f"{val}")
 
 
 except Exception as ex:

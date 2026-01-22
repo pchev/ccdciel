@@ -29,8 +29,10 @@ scriptdir = os.path.dirname(os.path.abspath(sys.argv[0]))
 
 try :
     # connect to UVEX4 using information in the config file
+    ccdciel('LogMsg','Connecting to UVEX4 serial port')
     uvex = UVEX4(os.path.join(scriptdir,'UVEX4-serial_config.script'))
 
+    ccdciel('LogMsg','Moving UVEX4 focus '+direction+' by '+f"{nstep}") 
     if direction == 'in' :
        # move focus in
        uvex.focusin(nstep)
@@ -38,12 +40,18 @@ try :
        # move focus out
        uvex.focusout(nstep)
 
-    p1 = 'relative '+str(uvex.focusrelpos)
+    p = str(uvex.focusrelpos)
+    p1 = 'relative '+p
     if uvex.Focuser_hall_enabled :
-      p2 = ', absolute '+str(uvex.focuspos)
+      p = str(uvex.focuspos)
+      p2 = ', absolute '+p
     else:
       p2 = ''  
     print('Focuser position: '+p1+p2)
+      
+    print('SPECFOC='+ str(p))
+    ccdciel("CustomHeader_add",["SPECFOC",p])
+      
 
 except Exception as ex:
     print('Error: '+type(ex).__name__,'-',ex)
