@@ -688,7 +688,7 @@ type
     f_msg: Tf_msg;
     fits, guidefits, finderfits: TFits;
     ImaBmp,ImaGuideBmp,ImaFinderBmp: TBGRABitmap;
-    TCPDaemon: TTCPDaemon;
+    TCPDaemon, TCPDaemon4: TTCPDaemon;
     refmask: boolean;
     reftreshold,refcolor: integer;
     reffile: string;
@@ -17255,10 +17255,21 @@ begin
     TCPDaemon.onExecuteCmd:=@TCPcmd;
     TCPDaemon.onExecuteJSON:=@TCPjsoncmd;
     TCPDaemon.onGetImage:=@TCPgetimage;
-    TCPDaemon.IPaddr := '0.0.0.0';
+    TCPDaemon.IPaddr := '::0';
     TCPDaemon.IPport := TCPIPConfigPort;
     TCPIPServerPort := TCPDaemon.IPport;
     TCPDaemon.Start;
+    {$ifdef mswindows}
+    // above IPaddr make Linux to listen on both ipv4 and ipv6, not Windows
+    TCPDaemon4 := TTCPDaemon.Create;
+    TCPDaemon4.onErrorMsg := @TCPShowError;
+    TCPDaemon4.onExecuteCmd:=@TCPcmd;
+    TCPDaemon4.onExecuteJSON:=@TCPjsoncmd;
+    TCPDaemon4.onGetImage:=@TCPgetimage;
+    TCPDaemon4.IPaddr := '0.0.0.0';
+    TCPDaemon4.IPport := TCPIPConfigPort;
+    TCPDaemon4.Start;
+    {$endif}
   except
 
   end;
@@ -17279,6 +17290,9 @@ begin
         TCPDaemon.TCPThrd[i].stoping := True;
       end;
     TCPDaemon.stoping := True;
+    {$ifdef mswindows}
+    TCPDaemon4.stoping := True;
+    {$endif}
     Wait(1);
     screen.cursor := crDefault;
   except
