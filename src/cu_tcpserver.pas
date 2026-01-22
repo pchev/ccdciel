@@ -104,6 +104,9 @@ type
 
 implementation
 
+Const
+  NoSocket = -1;
+
 {$ifdef darwin}
 uses BaseUnix;       //  to catch SIGPIPE
 
@@ -179,6 +182,10 @@ begin
       setLinger(True, 15000);
       if lasterror <> 0 then
         Synchronize(@ShowError);
+      //socket timeout for accept
+      SetTimeout(50);
+      if lasterror <> 0 then
+        Synchronize(@ShowError);
       //writetrace('bind to '+fipaddr+' '+fipport);
       bind(FIPaddr, FIPport);
       if lasterror <> 0 then
@@ -192,9 +199,9 @@ begin
       repeat
         if stoping or terminated then
           break;
-        if canread(500) and (not terminated) and (not stoping) then
+        ClientSock := Accept;
+        if ClientSock<>NoSocket then
         begin
-          ClientSock := accept;
           if lastError = 0 then
           begin
             n := -1;
@@ -383,7 +390,6 @@ var attrib,value:Tstringlist;
     p: integer;
 begin
   try
-
     Fjsonid:='null';
     attrib:=Tstringlist.Create;
     value:=Tstringlist.Create;
@@ -401,7 +407,6 @@ begin
       attrib.Free;
       value.Free;
     end;
-
   except
     on E: Exception do cmdresult := '{"jsonrpc": "2.0", "error": {"code": -32603, "message": "Internal error:'+E.Message+'"}, "id": '+Fjsonid+'}';
   end;
