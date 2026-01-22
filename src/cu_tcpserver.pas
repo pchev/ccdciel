@@ -104,9 +104,6 @@ type
 
 implementation
 
-Const
-  NoSocket = -1;
-
 {$ifdef darwin}
 uses BaseUnix;       //  to catch SIGPIPE
 
@@ -115,6 +112,8 @@ var
   res: integer;
 
 {$endif}
+Const
+  NoSocket = -1;
 
 constructor TTCPDaemon.Create;
 var i: integer;
