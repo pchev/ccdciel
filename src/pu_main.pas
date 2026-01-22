@@ -17247,7 +17247,14 @@ begin
 end;
 
 procedure Tf_main.StartServer;
+var defaultIP: string;
 begin
+  {$ifdef darwin}
+    // cannot find what to specify to bind on ipv6 on the Mac, use ipv4 for now.
+    defaultIP:='0.0.0.0';
+  {$else}
+    defaultIP:='::0';
+  {$endif}
   try
     TCPDaemon := TTCPDaemon.Create;
     TCPDaemon.onErrorMsg := @TCPShowError;
@@ -17255,7 +17262,7 @@ begin
     TCPDaemon.onExecuteCmd:=@TCPcmd;
     TCPDaemon.onExecuteJSON:=@TCPjsoncmd;
     TCPDaemon.onGetImage:=@TCPgetimage;
-    TCPDaemon.IPaddr := '::0';
+    TCPDaemon.IPaddr := defaultIP;
     TCPDaemon.IPport := TCPIPConfigPort;
     TCPIPServerPort := TCPDaemon.IPport;
     TCPDaemon.Start;
