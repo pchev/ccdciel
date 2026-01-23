@@ -972,6 +972,7 @@ var oldx,oldy,newx,newy,fsx,fsy,fnx,fny: integer;
 {$endif}
 begin
  {$ifdef mswindows}
+   if VarIsEmpty(V) then exit;
    try
    if debug_msg then msg('Request binning '+inttostr(sbinX)+','+inttostr(sbinY));
    oldx:=FBinX;
@@ -1010,6 +1011,7 @@ var Xmax,Ymax,w,h,bx,by: integer;
 {$endif}
 begin
  {$ifdef mswindows}
+   if VarIsEmpty(V) then exit;
    try
    if debug_msg then msg('Request frame '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height));
    w:=FCameraXSize;
@@ -1135,6 +1137,7 @@ Procedure T_ascomcamera.AbortExposure;
 begin
  {$ifdef mswindows}
    try
+    if VarIsEmpty(V) then exit;
     ExposureTimer.Enabled:=false;
     StatusTimer.Enabled:=true;
     WaitExposure:=false;
