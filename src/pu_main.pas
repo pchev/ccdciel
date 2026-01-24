@@ -1078,6 +1078,7 @@ type
     procedure ShowGuiderDarkInfo;
     Procedure DrawGuideImage(display: boolean);
     Procedure PlotGuideImage;
+    Procedure PlotGuideImageAsync(Data: PtrInt);
     procedure GuideCameraSetTemperature(Sender: TObject);
     procedure GuideCameraSetCooler(Sender: TObject);
     procedure GuiderMeasureAtPos(x,y:integer);
@@ -18880,7 +18881,7 @@ begin
 
   // draw image to screen
   if displayimage then
-    PlotGuideImage;
+    WaitExecute(50,@PlotGuideImageAsync,0);
 end;
 
 procedure Tf_main.PageInternalGuiderShow(Sender: TObject);
@@ -18995,6 +18996,11 @@ end;
 Procedure Tf_main.ClearGuideImage;
 begin
 ScrGuideBmp.FillRect(0,0,ScrGuideBmp.Width,ScrGuideBmp.Height,clDarkBlue);
+end;
+
+Procedure Tf_main.PlotGuideImageAsync(Data: PtrInt);
+begin
+  PlotGuideImage;
 end;
 
 Procedure Tf_main.PlotGuideImage;
