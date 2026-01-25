@@ -17,6 +17,10 @@ try:
   state = int(sys.argv[2])
   if (state<0) or (state>1) :
      raise Exception('Incorrect calibration switch state')
+  if len(sys.argv) > 3 :
+     delay = int(sys.argv[3])
+  else:
+     delay = 0
 except Exception as ex:
   print('Invalid parameters: ',ex)
   sys.exit(1)
@@ -32,6 +36,12 @@ try :
     # set the switch state
     ccdciel('LogMsg','Change UVEX4 calibration '+cname+' to '+f"{state}")   
     uvex.calibration = [cname, state]
+
+    if delay>0 :
+       ccdciel('LogMsg','Waiting for '+f"{delay}"+' seconds')
+       time.sleep(delay)
+    else:
+       time.sleep(1) # let time for calibrex to reply
 
     # update FITS header
     gr = str(uvex.grating_resolution)
