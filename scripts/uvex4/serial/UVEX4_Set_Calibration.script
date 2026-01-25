@@ -6,6 +6,7 @@
 
 from ccdciel import ccdciel
 from libuvex4 import UVEX4
+import time
 import sys
 import os
 
