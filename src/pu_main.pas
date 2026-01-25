@@ -5402,8 +5402,8 @@ begin
   f_internalguider.SlitL:=config.GetValue('/InternalGuider/Spectro/SlitL',0);
   f_internalguider.SlitPA:=config.GetValue('/InternalGuider/Spectro/SlitPA',0);
   f_internalguider.SpectroAstrometryExposure:=config.GetValue('/InternalGuider/Spectro/AstrometryExposure',10.0);
-  f_internalguider.cbParallactic.Checked:=config.GetValue('/InternalGuider/Spector/Parallactic',false);
-  f_internalguider.SlitVertical.Checked:=config.GetValue('/InternalGuider/Spector/SlitVertical',true);
+  f_internalguider.cbParallactic.Checked:=config.GetValue('/InternalGuider/Spectro/Parallactic',false);
+  f_internalguider.SlitVertical.Checked:=config.GetValue('/InternalGuider/Spectro/SlitVertical',true);
   f_internalguider.SlitHorizontal.Checked:=not f_internalguider.SlitVertical.Checked;
   f_internalguider.SpiralDither:=config.GetValue('/InternalGuider/SpiralDither',true);
   f_internalguider.ChangeSpectro;
@@ -6082,8 +6082,8 @@ begin
   config.SetValue('/InternalGuider/Spectro/SlitL',f_internalguider.SlitL);
   config.SetValue('/InternalGuider/Spectro/SlitPA',f_internalguider.SlitPA);
   config.SetValue('/InternalGuider/Spectro/AstrometryExposure',f_internalguider.SpectroAstrometryExposure);
-  config.SetValue('/InternalGuider/Spector/Parallactic',f_internalguider.cbParallactic.Checked);
-  config.SetValue('/InternalGuider/Spector/SlitVertical',f_internalguider.SlitVertical.Checked);
+  config.SetValue('/InternalGuider/Spectro/Parallactic',f_internalguider.cbParallactic.Checked);
+  config.SetValue('/InternalGuider/Spectro/SlitVertical',f_internalguider.SlitVertical.Checked);
   config.SetValue('/InternalGuider/SpiralDither',f_internalguider.SpiralDither);
 
   // finder offset need to be saved at the same time
