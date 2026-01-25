@@ -1094,7 +1094,7 @@ begin
   GuideIndiSensor.Items[1]:=rsGuiderSensor;
   GuideCameraAutoLoadConfig.Caption:=rsLoadConfigur;
   label144.Caption:=rsToUseThisDev;
-  label197.Caption:=rsROI;
+  label197.Caption:=rsSpectroSlitR;
   label200.Caption:=rsWidth;
   label201.Caption:=rsHeight;
   btnGuiderFullFrame.Caption:=rsFullFrame;

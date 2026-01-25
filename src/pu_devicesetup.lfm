@@ -1603,19 +1603,21 @@ object f_setup: Tf_setup
             object Label197: TLabel
               AnchorSideTop.Side = asrCenter
               Left = 8
-              Height = 18
-              Top = 12
-              Width = 68
-              Caption = 'Guider ROI'
+              Height = 55
+              Top = 8
+              Width = 74
+              AutoSize = False
+              Caption = 'Spectro Slit ROI'
               ParentColor = False
+              WordWrap = True
             end
             object Label198: TLabel
               AnchorSideLeft.Control = Label197
               AnchorSideLeft.Side = asrBottom
               AnchorSideTop.Control = Label197
-              Left = 88
+              Left = 94
               Height = 18
-              Top = 12
+              Top = 8
               Width = 8
               BorderSpacing.Left = 12
               BorderSpacing.Right = 4
@@ -1625,10 +1627,10 @@ object f_setup: Tf_setup
             object Label199: TLabel
               AnchorSideLeft.Control = GuiderX
               AnchorSideLeft.Side = asrBottom
-              AnchorSideTop.Control = Label197
-              Left = 173
+              AnchorSideTop.Control = Label198
+              Left = 179
               Height = 18
-              Top = 12
+              Top = 8
               Width = 9
               BorderSpacing.Left = 8
               BorderSpacing.Right = 4
@@ -1638,10 +1640,10 @@ object f_setup: Tf_setup
             object Label200: TLabel
               AnchorSideLeft.Control = GuiderY
               AnchorSideLeft.Side = asrBottom
-              AnchorSideTop.Control = Label197
-              Left = 259
+              AnchorSideTop.Control = Label198
+              Left = 265
               Height = 18
-              Top = 12
+              Top = 8
               Width = 37
               BorderSpacing.Left = 8
               BorderSpacing.Right = 4
@@ -1651,10 +1653,10 @@ object f_setup: Tf_setup
             object Label201: TLabel
               AnchorSideLeft.Control = GuiderW
               AnchorSideLeft.Side = asrBottom
-              AnchorSideTop.Control = Label197
-              Left = 369
+              AnchorSideTop.Control = Label198
+              Left = 375
               Height = 18
-              Top = 12
+              Top = 8
               Width = 41
               BorderSpacing.Left = 4
               Caption = 'Height'
@@ -1663,12 +1665,12 @@ object f_setup: Tf_setup
             object GuiderX: TSpinEditEx
               AnchorSideLeft.Control = Label198
               AnchorSideLeft.Side = asrBottom
-              AnchorSideTop.Control = Label197
+              AnchorSideTop.Control = Label198
               AnchorSideTop.Side = asrCenter
-              Left = 100
+              Left = 106
               Height = 32
               Hint = 'X'
-              Top = 5
+              Top = 1
               Width = 65
               BorderSpacing.Left = 4
               MaxLength = 0
@@ -1682,10 +1684,10 @@ object f_setup: Tf_setup
               AnchorSideLeft.Control = Label199
               AnchorSideLeft.Side = asrBottom
               AnchorSideTop.Control = GuiderX
-              Left = 186
+              Left = 192
               Height = 32
               Hint = 'Y'
-              Top = 5
+              Top = 1
               Width = 65
               BorderSpacing.Left = 4
               BorderSpacing.Right = 8
@@ -1700,10 +1702,10 @@ object f_setup: Tf_setup
               AnchorSideLeft.Control = Label200
               AnchorSideLeft.Side = asrBottom
               AnchorSideTop.Control = GuiderX
-              Left = 300
+              Left = 306
               Height = 32
               Hint = 'Width'
-              Top = 5
+              Top = 1
               Width = 65
               BorderSpacing.Left = 4
               MaxLength = 0
@@ -1718,10 +1720,10 @@ object f_setup: Tf_setup
               AnchorSideLeft.Side = asrBottom
               AnchorSideTop.Control = GuiderX
               AnchorSideRight.Side = asrBottom
-              Left = 414
+              Left = 420
               Height = 32
               Hint = 'Height'
-              Top = 5
+              Top = 1
               Width = 65
               BorderSpacing.Left = 4
               MaxLength = 0
@@ -1733,7 +1735,7 @@ object f_setup: Tf_setup
             end
             object btnGuiderFullFrame: TButton
               AnchorSideLeft.Control = GuiderX
-              Left = 100
+              Left = 106
               Height = 25
               Top = 40
               Width = 150
@@ -2258,7 +2260,7 @@ object f_setup: Tf_setup
               AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 18
-              Top = 12
+              Top = 8
               Width = 65
               Caption = 'Finder ROI'
               ParentColor = False
@@ -2269,7 +2271,7 @@ object f_setup: Tf_setup
               AnchorSideTop.Control = Label191
               Left = 85
               Height = 18
-              Top = 12
+              Top = 8
               Width = 8
               BorderSpacing.Left = 12
               BorderSpacing.Right = 4
@@ -2282,7 +2284,7 @@ object f_setup: Tf_setup
               AnchorSideTop.Control = Label191
               Left = 170
               Height = 18
-              Top = 12
+              Top = 8
               Width = 9
               BorderSpacing.Left = 8
               BorderSpacing.Right = 4
@@ -2295,7 +2297,7 @@ object f_setup: Tf_setup
               AnchorSideTop.Control = Label191
               Left = 256
               Height = 18
-              Top = 12
+              Top = 8
               Width = 37
               BorderSpacing.Left = 8
               BorderSpacing.Right = 4
@@ -2308,7 +2310,7 @@ object f_setup: Tf_setup
               AnchorSideTop.Control = Label191
               Left = 366
               Height = 18
-              Top = 12
+              Top = 8
               Width = 41
               BorderSpacing.Left = 4
               Caption = 'Height'
@@ -2322,7 +2324,7 @@ object f_setup: Tf_setup
               Left = 97
               Height = 32
               Hint = 'X'
-              Top = 5
+              Top = 1
               Width = 65
               BorderSpacing.Left = 4
               MaxLength = 0
@@ -2338,7 +2340,7 @@ object f_setup: Tf_setup
               Left = 183
               Height = 32
               Hint = 'Y'
-              Top = 5
+              Top = 1
               Width = 65
               BorderSpacing.Left = 4
               BorderSpacing.Right = 8
@@ -2355,7 +2357,7 @@ object f_setup: Tf_setup
               Left = 297
               Height = 32
               Hint = 'Width'
-              Top = 5
+              Top = 1
               Width = 65
               BorderSpacing.Left = 4
               MaxLength = 0
@@ -2372,7 +2374,7 @@ object f_setup: Tf_setup
               Left = 411
               Height = 32
               Hint = 'Height'
-              Top = 5
+              Top = 1
               Width = 65
               BorderSpacing.Left = 4
               MaxLength = 0

@@ -1658,6 +1658,7 @@ resourcestring
   rsROI = 'ROI';
   rsFullFrame = 'Full frame';
   rsNumberOfSwit = 'Number of switches';
+  rsSpectroSlitR = 'Spectro Slit ROI';
 
 implementation
 
