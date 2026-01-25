@@ -1602,10 +1602,10 @@ object f_setup: Tf_setup
             TabOrder = 0
             object Label197: TLabel
               AnchorSideTop.Side = asrCenter
-              Left = 8
+              Left = 4
               Height = 55
               Top = 8
-              Width = 74
+              Width = 86
               AutoSize = False
               Caption = 'Spectro Slit ROI'
               ParentColor = False
@@ -1615,11 +1615,11 @@ object f_setup: Tf_setup
               AnchorSideLeft.Control = Label197
               AnchorSideLeft.Side = asrBottom
               AnchorSideTop.Control = Label197
-              Left = 94
+              Left = 98
               Height = 18
               Top = 8
               Width = 8
-              BorderSpacing.Left = 12
+              BorderSpacing.Left = 8
               BorderSpacing.Right = 4
               Caption = 'X'
               ParentColor = False
@@ -1628,7 +1628,7 @@ object f_setup: Tf_setup
               AnchorSideLeft.Control = GuiderX
               AnchorSideLeft.Side = asrBottom
               AnchorSideTop.Control = Label198
-              Left = 179
+              Left = 183
               Height = 18
               Top = 8
               Width = 9
@@ -1641,7 +1641,7 @@ object f_setup: Tf_setup
               AnchorSideLeft.Control = GuiderY
               AnchorSideLeft.Side = asrBottom
               AnchorSideTop.Control = Label198
-              Left = 265
+              Left = 269
               Height = 18
               Top = 8
               Width = 37
@@ -1654,7 +1654,7 @@ object f_setup: Tf_setup
               AnchorSideLeft.Control = GuiderW
               AnchorSideLeft.Side = asrBottom
               AnchorSideTop.Control = Label198
-              Left = 375
+              Left = 379
               Height = 18
               Top = 8
               Width = 41
@@ -1667,7 +1667,7 @@ object f_setup: Tf_setup
               AnchorSideLeft.Side = asrBottom
               AnchorSideTop.Control = Label198
               AnchorSideTop.Side = asrCenter
-              Left = 106
+              Left = 110
               Height = 32
               Hint = 'X'
               Top = 1
@@ -1684,7 +1684,7 @@ object f_setup: Tf_setup
               AnchorSideLeft.Control = Label199
               AnchorSideLeft.Side = asrBottom
               AnchorSideTop.Control = GuiderX
-              Left = 192
+              Left = 196
               Height = 32
               Hint = 'Y'
               Top = 1
@@ -1702,7 +1702,7 @@ object f_setup: Tf_setup
               AnchorSideLeft.Control = Label200
               AnchorSideLeft.Side = asrBottom
               AnchorSideTop.Control = GuiderX
-              Left = 306
+              Left = 310
               Height = 32
               Hint = 'Width'
               Top = 1
@@ -1720,7 +1720,7 @@ object f_setup: Tf_setup
               AnchorSideLeft.Side = asrBottom
               AnchorSideTop.Control = GuiderX
               AnchorSideRight.Side = asrBottom
-              Left = 420
+              Left = 424
               Height = 32
               Hint = 'Height'
               Top = 1
@@ -1735,7 +1735,7 @@ object f_setup: Tf_setup
             end
             object btnGuiderFullFrame: TButton
               AnchorSideLeft.Control = GuiderX
-              Left = 106
+              Left = 110
               Height = 25
               Top = 40
               Width = 150

@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 13:12+0000\n"
-"PO-Revision-Date: 2026-01-08 16:13+0000\n"
+"POT-Creation-Date: 2026-01-25 14:48+0000\n"
+"PO-Revision-Date: 2026-01-22 12:27+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-01-20 13:32+0000\n"
+"X-Launchpad-Export-Date: 2026-01-25 14:56+0000\n"
 "X-Generator: Launchpad (build 9fcfff1971229ac997140f06b41a902ac8ec69f4)\n"
 "Language: cs\n"
 
@@ -2231,7 +2231,7 @@ msgstr "Clona"
 
 #: u_translation.rsfullframe
 msgid "Full frame"
-msgstr ""
+msgstr "Plný snímek"
 
 #: u_translation.rsfwhm
 msgid "FWHM"
@@ -3509,7 +3509,7 @@ msgstr "Počet kroků"
 
 #: u_translation.rsnumberofswit
 msgid "Number of switches"
-msgstr ""
+msgstr "Počet spínačů"
 
 #: u_translation.rsobject
 msgid "Object"
@@ -4384,7 +4384,7 @@ msgstr "Rise/Set condition"
 
 #: u_translation.rsroi
 msgid "ROI"
-msgstr ""
+msgstr "ROI"
 
 #: u_translation.rsrot
 msgid "Rot."
@@ -4401,7 +4401,7 @@ msgstr "otočit o"
 #: u_translation.rsrotateslitto
 #, object-pascal-format
 msgid "Rotate slit to parallactic angle %s"
-msgstr ""
+msgstr "Otočit štěrbinu na paralaktický úhel %s"
 
 #: u_translation.rsrotatetelesc
 msgid "Rotate the telescope"
@@ -4450,7 +4450,7 @@ msgstr "Spustit skript"
 
 #: u_translation.rsrunastrometr
 msgid "Run astrometry on every image"
-msgstr ""
+msgstr "Proveďte astrometrii na každém snímku"
 
 #: u_translation.rsrunautofocus
 #, object-pascal-format
@@ -4539,7 +4539,7 @@ msgstr "Uložit FITS soubor%s"
 
 #: u_translation.rssaveimagewit
 msgid "Save image with astrometry"
-msgstr ""
+msgstr "Uložit snímek s astrometrií"
 
 #: u_translation.rssavepictures
 #, object-pascal-format
@@ -4875,7 +4875,7 @@ msgstr "Nastavit magnitudu"
 
 #: u_translation.rssetmountpier
 msgid "Set mount pier side if available"
-msgstr ""
+msgstr "Nastavte stranu pilíře, pokud je k dispozici"
 
 #: u_translation.rssetmountsite
 msgid "Set mount site long/lat from configuration"
@@ -5121,7 +5121,7 @@ msgstr "Nákres štěrbiny"
 
 #: u_translation.rsslitorientat
 msgid "Slit orientation"
-msgstr ""
+msgstr "Orientace štěrbiny"
 
 #: u_translation.rsslope
 msgid "Slope"
@@ -5180,6 +5180,10 @@ msgstr "Spektrální profil"
 #: u_translation.rsspectroscopy
 msgid "Spectroscopy"
 msgstr "Spektroskopie"
+
+#: u_translation.rsspectroslitr
+msgid "Spectroscope ROI"
+msgstr ""
 
 #: u_translation.rsspeed
 msgid "Speed"
@@ -5741,7 +5745,7 @@ msgstr "Možnosti ukončení"
 
 #: u_translation.rsterminations
 msgid "Termination script"
-msgstr ""
+msgstr "Skript pro ukončení"
 
 #: u_translation.rstest
 msgid "Test"
