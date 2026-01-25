@@ -1058,6 +1058,7 @@ type
     procedure CollimationApplyInspection(Sender: TObject);
     procedure ReadyForVideo(var v: boolean);
     procedure ShowStatus(str: string);
+    procedure InternalguiderSetSpectro(Sender: TObject);
     procedure InternalguiderConfigure(Sender: TObject);
     procedure InternalguiderReferenceImage(Sender: TObject);
     procedure InternalguiderLoop(Sender: TObject);
@@ -2031,6 +2032,7 @@ begin
     f_internalguider.framesize1.Enabled:=true;
   end;
   f_internalguider.onConfigureGuider:=@InternalguiderConfigure;
+  f_internalguider.onSetSpectro:=@InternalguiderSetSpectro;
   f_internalguider.onLoop:=@InternalguiderLoop;
   f_internalguider.onStart:=@InternalguiderStart;
   f_internalguider.onStop:=@InternalguiderStop;
@@ -19958,6 +19960,16 @@ begin
   MenuTabInternalGuider.Visible:=TBInternalGuider.Visible;
   f_internalguider.Panel1.Visible:=(n=4);
   f_internalguider.Panel11.Visible:=(n<>4);
+end;
+
+procedure Tf_main.InternalguiderSetSpectro(Sender: TObject);
+begin
+  if f_internalguider.SpectroFunctions then begin
+    if guidecamera=findercamera then
+       SetFinderCameraFrame
+    else
+       SetGuiderCameraFrame;
+  end;
 end;
 
 procedure Tf_main.InternalguiderConfigure(Sender: TObject);

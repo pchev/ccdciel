@@ -311,6 +311,7 @@ type
     FonStart, FonStop, FonCalibrate, FonCalibrateBacklash, FonLoop, FonRedraw,
     FonSpectroGuideChange,FonConfigureGuider,FonMeasureReferenceImage: TNotifyEvent;
     FonSetTemperature,FonSetCooler, FonCaptureDark, FonLoadDark, FonClearDark,FonDarkInfo, FonShowImage: TNotifyEvent;
+    FonSetSpectro: TNotifyEvent;
     FonParameterChange: TNotifyStr;
     cur_minHFD,cur_minSNR,cur_Exposure,cur_vsolar,cur_vpasolar : double;
     cur_RAgain,cur_RA_hysteresis,cur_DECgain,cur_DEC_hysteresis,cur_LongestPulse,cur_shortestPulse: integer;
@@ -535,6 +536,7 @@ type
     property Configured:Boolean read GetConfigured;
     property onConfigureGuider: TNotifyEvent read FonConfigureGuider write FonConfigureGuider;
     property onMeasureReferenceImage: TNotifyEvent read FonMeasureReferenceImage write FonMeasureReferenceImage;
+    property onSetSpectro: TNotifyEvent read FonSetSpectro write FonSetSpectro;
 
   end;
 
@@ -1118,6 +1120,7 @@ begin
   else begin
     framesize1.Enabled:=true;
   end;
+  if Assigned(FonSetSpectro) then FonSetSpectro(self);
 end;
 
 
