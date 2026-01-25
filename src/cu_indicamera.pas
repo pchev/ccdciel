@@ -757,6 +757,7 @@ begin
   end
   else if (proptype=INDI_NUMBER)and(CCDTemperature=nil)and(propname='CCD_TEMPERATURE') then begin
      CCDTemperature:=indiProp.getNumber;
+     FCanSetTemperature:=CCDTemperature.p=IP_RW;
   end
   else if (proptype=INDI_NUMBER)and(CCDinfo=nil)and(propname='CCD_INFO') then begin
      CCDinfo:=indiProp.getNumber;

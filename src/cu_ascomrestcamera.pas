@@ -40,7 +40,7 @@ T_ascomrestcamera = class(T_camera)
    newtimestart,timedout:double;
    FPixelSizeX,FPixelSizeY: double;
    FMaxBinX,FMaxBinY,FBinX,FBinY:integer;
-   FHasTemperature, FCanSetTemperature: boolean;
+   FHasTemperature: boolean;
    stCCDtemp,stCoolerPower : double;
    stCooler : boolean;
    stX,stY,stWidth,stHeight: integer;
@@ -184,7 +184,6 @@ begin
  FOffsetY:=0;
  FCType:='';
  FHasTemperature:=false;
- FCanSetTemperature:=false;
  FCameraInterface:=ASCOMREST;
  FVerticalFlip:=false;
  ExposureTimer:=TTimer.Create(nil);

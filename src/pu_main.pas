@@ -4384,7 +4384,10 @@ begin
   f_internalguider.Offset.MinValue:=guidecamera.OffsetMin;
   f_internalguider.Offset.MaxValue:=guidecamera.OffsetMax;
   f_internalguider.PanelTemperature.Visible:=guidecamera.Temperature<>NullCoord;
-  if f_internalguider.PanelTemperature.Visible then GuideCameraSetCooler(nil);
+  f_internalguider.Temperature.Visible:=guidecamera.CanSetTemperature;
+  f_internalguider.ButtonSetTemp.Visible:=f_internalguider.Temperature.Visible;
+  f_internalguider.Cooler.Visible:=f_internalguider.Temperature.Visible;
+  if f_internalguider.Cooler.Visible then GuideCameraSetCooler(nil);
 end;
 
 procedure Tf_main.FinderCameraConnectTimerTimer(Sender: TObject);
@@ -4404,7 +4407,10 @@ begin
   f_finder.Offset.MaxValue:=findercamera.OffsetMax;
   f_finder.Offset.Value:=config.GetValue('/PrecSlew/Offset',NullInt);
   f_finder.PanelTemperature.Visible:=findercamera.Temperature<>NullCoord;
-  if f_finder.PanelTemperature.Visible then FinderCameraSetCooler(nil);
+  f_finder.Temperature.Visible:=findercamera.CanSetTemperature;
+  f_finder.ButtonSetTemp.Visible:=f_finder.Temperature.Visible;
+  f_finder.Cooler.Visible:=f_finder.Temperature.Visible;
+  if f_finder.Cooler.Visible then FinderCameraSetCooler(nil);
   f_finder.Binning.Value:=config.GetValue('/PrecSlew/Binning',1);
   if (astrometry.FinderOffsetX=0)and(astrometry.FinderOffsetY=0) then begin
     // set default position in the middle of the image
@@ -6578,6 +6584,8 @@ procedure Tf_main.ShowTemperatureRange;
 var buf: string;
 begin
   if camera.Temperature=NullCoord then f_ccdtemp.Visible:=False;
+  f_ccdtemp.PanelSetTemp.Visible:=camera.CanSetTemperature;
+  f_ccdtemp.PanelCooler.Visible:=f_ccdtemp.PanelSetTemp.Visible;
   f_ccdtemp.CurrentTemperature:=camera.Temperature;
   buf:=FormatFloat(f0,TempDisplay(TemperatureScale,camera.TemperatureRange.min))+ellipsis+FormatFloat(f0,TempDisplay(TemperatureScale,camera.TemperatureRange.max));
   f_ccdtemp.Setpoint.Hint:=rsDesiredTempe+crlf+buf;

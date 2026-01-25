@@ -88,7 +88,7 @@ T_camera = class(TComponent)
     FASCOMFlipImage: boolean;
     FAddFrames,FSaveFrames,FAlignFrames,FPrepareStack,FStackRotation: boolean;
     FVideoSizes, FVideoRates,FFNumberList,FVideoEncoder:TStringList;
-    FTemperatureRampActive, FCancelTemperatureRamp: boolean;
+    FTemperatureRampActive, FCancelTemperatureRamp, FCanSetTemperature: boolean;
     FIndiTransfert: TIndiTransfert;
     FIndiTransfertDir,FIndiTransfertPrefix: string;
     FhasGain,FhasOffset,FhasGainISO,FCanSetGain,FhasCfaInfo,FhasFnumber,FhasCoolerPower: boolean;
@@ -283,6 +283,7 @@ T_camera = class(TComponent)
     property VideoPreviewLimit: integer read GetVideoPreviewLimit write SetVideoPreviewLimit;
     property CoolerPower: Double read GetCoolerPower;
     property Cooler: boolean read GetCooler write SetCooler;
+    property CanSetTemperature: boolean read FCanSetTemperature;
     property Temperature: double read GetTemperature write SetTemperatureRamp;
     property TemperatureRampActive: Boolean read FTemperatureRampActive;
     property BinX: Integer read getBinX;
@@ -413,6 +414,7 @@ begin
   FVideoRates:=TStringList.Create;
   FFNumberList:=TStringList.Create;
   FVideoEncoder:=TStringList.Create;
+  FCanSetTemperature:=false;
   FTemperatureRampActive:=false;
   FCancelTemperatureRamp:=false;
   FStackCount:=0;

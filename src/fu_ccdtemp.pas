@@ -44,7 +44,7 @@ type
     Label2: TLabel;
     Panel1: TPanel;
     Panel2: TPanel;
-    Panel3: TPanel;
+    PanelSetTemp: TPanel;
     Title: TLabel;
     procedure BtnSetClick(Sender: TObject);
     procedure CCDcoolerChange(Sender: TObject);

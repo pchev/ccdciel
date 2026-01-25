@@ -69,7 +69,7 @@ object f_ccdtemp: Tf_ccdtemp
         ParentFont = False
       end
     end
-    object Panel3: TPanel
+    object PanelSetTemp: TPanel
       Left = 1
       Height = 32
       Top = 28
@@ -97,11 +97,12 @@ object f_ccdtemp: Tf_ccdtemp
         Height = 32
         Top = 0
         Width = 82
+        MaxLength = 0
+        ParentFont = False
+        TabOrder = 0
         DecimalPlaces = 1
         MaxValue = 100
         MinValue = -100
-        ParentFont = False
-        TabOrder = 0
       end
       object BtnSet: TButton
         AnchorSideTop.Control = Setpoint
@@ -130,7 +131,7 @@ object f_ccdtemp: Tf_ccdtemp
         Left = 4
         Height = 22
         Top = 2
-        Width = 69
+        Width = 65
         Caption = 'Cooler'
         OnClick = CCDcoolerChange
         ParentFont = False
@@ -141,7 +142,7 @@ object f_ccdtemp: Tf_ccdtemp
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = CCDcooler
         AnchorSideTop.Side = asrCenter
-        Left = 79
+        Left = 75
         Height = 18
         Top = 4
         Width = 40
@@ -154,7 +155,7 @@ object f_ccdtemp: Tf_ccdtemp
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = CCDcooler
         AnchorSideTop.Side = asrCenter
-        Left = 127
+        Left = 123
         Height = 18
         Top = 4
         Width = 5
