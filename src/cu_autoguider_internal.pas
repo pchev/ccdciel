@@ -40,6 +40,14 @@ type
      RA,DEC: double;
      valid: boolean;
   end;
+  TGuide_frame=record
+     x,y,size : double;
+  end;
+  TGuide_frame_array = array of TGuide_frame;
+  TGuide_line=record
+     x1,y1,x2,y2 : integer;
+  end;
+  TGuide_line_array = array of TGuide_line;
 
 
   T_autoguider_internal = class(T_autoguider)
@@ -58,6 +66,9 @@ type
     xy_trend : xy_guiderlist;
     dither_position: dither_positionarray;
     xy_array,xy_array_old : star_position_array;//internal guider for measure drift
+    FGuide_frame_counter, FGuide_line_counter: integer;
+    FGuide_frame_array: TGuide_frame_array;
+    FGuide_line_array: TGuide_line_array;
     GuideLog: TextFile;
     FPaused, FSettling, FSettlingInRange, FFastDither, PulseGuiding, OffsetFromTarget, FInitialDither: boolean;
     InternalguiderCalibratingMeridianFlip : boolean;
@@ -129,6 +140,10 @@ type
     function WaitDithering(maxwait:integer=5):boolean; override;
     procedure ShowImgInfo;
     procedure NewImageReceived;
+    property Guide_frame_counter: integer read FGuide_frame_counter;
+    property Guide_frame_array: TGuide_frame_array read FGuide_frame_array;
+    property Guide_line_counter: integer read FGuide_line_counter;
+    property Guide_line_array: TGuide_line_array read FGuide_line_array;
   end;
 
 implementation
@@ -229,6 +244,8 @@ begin
   DECposition:=0;
   pulseRA:=0;
   pulseDEC:=0;
+  FGuide_frame_counter:=0;
+  FGuide_line_counter:=0;
 
 end;
 
@@ -538,6 +555,8 @@ const
 begin
   result:=1;// Assume no stars detected
   star_counter:=0;
+  FGuide_frame_counter:=0;
+  FGuide_line_counter:=0;
 
   //square search area
   if (finternalguider.SpectroFunctions or FFastDither) and FSettling and (not finternalguider.GuideLock) then
@@ -551,11 +570,6 @@ begin
   LogSNR:=0;
   LogFlux:=0;
 
-  FGuideBmp.Canvas.Pen.Color:=clYellow;
-  FGuideBmp.Canvas.Pen.Mode:=pmCopy;
-  FGuideBmp.Canvas.Pen.Style:=psSolid;
-  FGuideBmp.Canvas.Pen.Width:=1;
-
   xsize:=guidefits.HeaderInfo.naxis1;// width image
   ysize:=guidefits.HeaderInfo.naxis2;// height image
 
@@ -563,6 +577,8 @@ begin
   if initialize then
   begin
     setlength(xy_array,maxstars);
+    setlength(FGuide_frame_array,maxstars);
+    setlength(FGuide_line_array,1);
     ditherx:=0;// dither offset
     dithery:=0;
     drX:=0; // initial drift is 0
@@ -660,12 +676,17 @@ begin
         star_counter:=1;
         // Mark star area
         hfd1:=finternalguider.SearchWinMin/2/3;
-        FGuideBmp.Canvas.Pen.Color:=clYellow;
-        FGuideBmp.Canvas.Frame(trunc(1+xc*GuideImgPixRatio-hfd1*3),trunc(1+yc-hfd1*3),trunc(1+xc*GuideImgPixRatio+hfd1*3),trunc(1+yc+hfd1*3));
+        inc(FGuide_frame_counter);
+        FGuide_frame_array[FGuide_frame_counter-1].size:=hfd1*3;
+        FGuide_frame_array[FGuide_frame_counter-1].x:=xc*GuideImgPixRatio;
+        FGuide_frame_array[FGuide_frame_counter-1].y:=yc;
         if Finternalguider.GuideStarOffset then begin
           xo:=xc-Finternalguider.StarOffsetX.Value;
           yo:=yc+Finternalguider.StarOffsetY.Value;
-          FGuideBmp.Canvas.Frame(trunc(1+xo*GuideImgPixRatio-hfd1*3),trunc(1+yo-hfd1*3),trunc(1+xo*GuideImgPixRatio+hfd1*3),trunc(1+yo+hfd1*3));
+          inc(FGuide_frame_counter);
+          FGuide_frame_array[FGuide_frame_counter-1].size:=hfd1*3;
+          FGuide_frame_array[FGuide_frame_counter-1].x:=xo*GuideImgPixRatio;
+          FGuide_frame_array[FGuide_frame_counter-1].y:=yo;
         end;
         WriteLog('INFO: Star(s)='+inttostr(star_counter)+', HFD='+FormatFloat(f3v,CurrentHFD));
         msg(inttostr(star_counter)+' guide stars used, HFD='+FormatFloat(f3v,CurrentHFD),3);
@@ -707,7 +728,10 @@ begin
           LogFlux:=max(LogFlux,flux);
 
           // Annotate the star
-          FGuideBmp.Canvas.Frame(trunc(1+xc*GuideImgPixRatio-hfd1*3),trunc(1+yc-hfd1*3),trunc(1+xc*GuideImgPixRatio+hfd1*3),trunc(1+yc+hfd1*3));
+          inc(FGuide_frame_counter);
+          FGuide_frame_array[FGuide_frame_counter-1].size:=hfd1*3;
+          FGuide_frame_array[FGuide_frame_counter-1].x:=xc*GuideImgPixRatio;
+          FGuide_frame_array[FGuide_frame_counter-1].y:=yc;
         end;
 
         inc(fitsx,stepsize);
@@ -806,11 +830,13 @@ begin
        xy_array_old[0].x2:=xy_array_old[0].x2- SearchCorrX;
        xy_array_old[0].y2:=xy_array_old[0].y2- SearchCorrY;
        // mark this position
-       FGuideBmp.Canvas.Pen.Color:=clRed;
        xs2:=round(xy_array_old[0].x2);
        ys2:=round(xy_array_old[0].y2);
-       FGuideBmp.Canvas.Line(xs1,ys1,xs2,ys2);
-       FGuideBmp.Canvas.Pen.Color:=clYellow;
+       FGuide_line_counter:=1;
+       FGuide_line_array[FGuide_line_counter-1].x1:=xs1;
+       FGuide_line_array[FGuide_line_counter-1].y1:=ys1;
+       FGuide_line_array[FGuide_line_counter-1].x2:=xs2;
+       FGuide_line_array[FGuide_line_counter-1].y2:=ys2;
      end;
 
      // adjust SearchWinMin during calibration to take account for large saturated stars
@@ -843,12 +869,17 @@ begin
        finternalguider.GuideLockNextY:=ysize-round(yc);
        // Mark star area
        hfd1:=WinMin/2/3;
-       FGuideBmp.Canvas.Pen.Color:=clYellow;
-       FGuideBmp.Canvas.Frame(trunc(1+xc*GuideImgPixRatio-hfd1*3),trunc(1+yc-hfd1*3),trunc(1+xc*GuideImgPixRatio+hfd1*3),trunc(1+yc+hfd1*3));
+       inc(FGuide_frame_counter);
+       FGuide_frame_array[FGuide_frame_counter-1].size:=hfd1*3;
+       FGuide_frame_array[FGuide_frame_counter-1].x:=xc*GuideImgPixRatio;
+       FGuide_frame_array[FGuide_frame_counter-1].y:=yc;
        if Finternalguider.GuideStarOffset then begin
          xo:=xc-Finternalguider.StarOffsetX.Value;
          yo:=yc+Finternalguider.StarOffsetY.Value;
-         FGuideBmp.Canvas.Frame(trunc(1+xo*GuideImgPixRatio-hfd1*3),trunc(1+yo-hfd1*3),trunc(1+xo*GuideImgPixRatio+hfd1*3),trunc(1+yo+hfd1*3));
+         inc(FGuide_frame_counter);
+         FGuide_frame_array[FGuide_frame_counter-1].size:=hfd1*3;
+         FGuide_frame_array[FGuide_frame_counter-1].x:=xo*GuideImgPixRatio;
+         FGuide_frame_array[FGuide_frame_counter-1].y:=yo;
        end;
        finternalguider.Info:=IntToStr(star_counter)+' star, Intensity: '+FormatFloat(f1,vmax);
      end
@@ -887,7 +918,10 @@ begin
         LogFlux:=max(LogFlux,flux);
 
         // Mark star area
-        FGuideBmp.Canvas.Frame(trunc(1+xc*GuideImgPixRatio-hfd1*3),trunc(1+yc-hfd1*3),trunc(1+xc*GuideImgPixRatio+hfd1*3),trunc(1+yc+hfd1*3));
+        inc(FGuide_frame_counter);
+        FGuide_frame_array[FGuide_frame_counter-1].size:=hfd1*3;
+        FGuide_frame_array[FGuide_frame_counter-1].x:=xc*GuideImgPixRatio;
+        FGuide_frame_array[FGuide_frame_counter-1].y:=yc;
       end
       else
       begin //Star lost temporary

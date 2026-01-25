@@ -59,7 +59,6 @@ type
     FMount: T_mount;
     FRotator: T_rotator;
     FCamera: T_camera;
-    FGuideBmp: TBGRABitmap;
     FGuideFits: Tfits;
     Finternalguider: Tf_internalguider;
     Fastrometry: TAstrometry;
@@ -118,7 +117,6 @@ type
     property RAdistance: double read FRAdistance;
     property Decdistance: double read FDecdistance;
     property Starmass: double read FStarmass;
-    property GuideBmp: TBGRABitmap read FGuideBmp write FGuideBmp;
     property GuideFits: Tfits read FGuideFits write FGuideFits;
     property InternalGuider: Tf_internalguider read Finternalguider write Finternalguider;
     property Astrometry: TAstrometry read Fastrometry write FAstrometry;

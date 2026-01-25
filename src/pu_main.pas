@@ -2077,7 +2077,6 @@ begin
   autoguider.onShowMessage:=@NewMessage;
   autoguider.InternalGuider:=f_internalguider;
   autoguider.Astrometry:=astrometry;
-  autoguider.GuideBmp:=ImaGuideBmp;
   autoguider.GuideFits:=guidefits;
 
   f_autoguider:=Tf_autoguider.Create(self);
@@ -5707,7 +5706,6 @@ begin
     autoguider.onShowMessage:=@NewMessage;
     autoguider.InternalGuider:=f_internalguider;
     autoguider.Astrometry:=astrometry;
-    autoguider.GuideBmp:=ImaGuideBmp;
     autoguider.GuideFits:=guidefits;
     autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
     f_sequence.Switch:=switch;
@@ -9105,7 +9103,6 @@ begin
    autoguider.onShowMessage:=@NewMessage;
    autoguider.InternalGuider:=f_internalguider;
    autoguider.Astrometry:=astrometry;
-   autoguider.GuideBmp:=ImaGuideBmp;
    autoguider.GuideFits:=guidefits;
    f_sequence.Autoguider:=autoguider;
    f_scriptengine.Autoguider:=autoguider;
@@ -18831,9 +18828,7 @@ begin
    exit;
   end;
 
-  // prepare image
-  f_internalguider.visu.DrawHistogram(guidefits,true,true);
-  DrawGuideImage(displayimage);
+  // process image
   if InternalguiderRunning and (autoguider is T_autoguider_internal) then begin
     // signal an image is available
     T_autoguider_internal(autoguider).NewImageReceived;
@@ -18911,7 +18906,7 @@ end;
 
 Procedure Tf_main.DrawGuideImage(display: boolean);
 var tmpbmp:TBGRABitmap;
-    xs,ys,r: integer;
+    i,xs,ys,r: integer;
     sp,cp,xx1,xx2,yy1,yy2: double;
 begin
 if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
@@ -18938,6 +18933,24 @@ if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
   end;
   guideimg_Width:=ImaGuideBmp.Width;
   guideimg_Height:=ImaGuideBmp.Height;
+  // plot guide stars
+  ImaGuideBmp.Canvas.Pen.Mode:=pmCopy;
+  ImaGuideBmp.Canvas.Pen.Style:=psSolid;
+  ImaGuideBmp.Canvas.Pen.Width:=1;
+  if autoguider is T_autoguider_internal then
+   with T_autoguider_internal(autoguider) do begin
+    ImaGuideBmp.Canvas.Pen.Color:=clYellow;
+    for i:=0 to Guide_frame_counter-1 do begin
+      ImaGuideBmp.Canvas.Frame(trunc(1+Guide_frame_array[i].x-Guide_frame_array[i].size),
+                               trunc(1+Guide_frame_array[i].y-Guide_frame_array[i].size),
+                               trunc(1+Guide_frame_array[i].x+Guide_frame_array[i].size),
+                               trunc(1+Guide_frame_array[i].y+Guide_frame_array[i].size));
+    end;
+    ImaGuideBmp.Canvas.Pen.Color:=clRed;
+    for i:=0 to Guide_line_counter-1 do begin
+      ImaGuideBmp.Canvas.Line(Guide_line_array[i].x1,Guide_line_array[i].y1,Guide_line_array[i].x2,Guide_line_array[i].y2);
+    end;
+  end;
   if f_internalguider.SpectroFunctions then begin
     // always draw slit position
     ImaGuideBmp.Canvas.Pen.Mode:=pmCopy;
@@ -19000,6 +19013,9 @@ end;
 
 Procedure Tf_main.PlotGuideImageAsync(Data: PtrInt);
 begin
+  // called from GuideCameraNewImageAsync to draw the image after the next guide exposure is started
+  f_internalguider.visu.DrawHistogram(guidefits,true,true);
+  DrawGuideImage(true);
   PlotGuideImage;
 end;
 
