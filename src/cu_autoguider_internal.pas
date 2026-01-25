@@ -80,6 +80,7 @@ type
     FSpectroGuideStar: TSpectroGuideStar;
     StarSelectedManually: boolean;
     SPdra,SPdde,SPx,SPy,SPdx,SPdy: integer;
+    NextExposureStartTime: double;
     function  measure_drift(var initialize: boolean; out drX,drY :double) : integer;
     function angular_distance(a1,a2:double):double;
     Procedure StartGuideExposure;
@@ -134,6 +135,7 @@ type
     procedure InternalCalibrationPhase2;
     procedure InternalguiderCaptureDark;
     procedure ParameterChange(txt: string);
+    procedure SetExposureStartTime;
     Procedure StartGuideExposureAsync(Data: PtrInt);
     function WaitBusy(maxwait:integer=5):boolean; override;
     function WaitGuiding(maxwait:integer=5):boolean; override;
@@ -218,6 +220,7 @@ begin
   FSettleTmin:=5;
   FSettleTmax:=30;
   FLongestPulse:=1000;
+  NextExposureStartTime:=0;
   InitLog;
   StopInternalguider:=false;
   InternalguiderRunning:=false;
@@ -1015,7 +1018,13 @@ begin
   Binning:=Finternalguider.Binning.Value;
   if not (SameGuiderFinder or finternalguider.SpectroFunctions) then Fcamera.ResetFrame;
   FRecoveringCameraCount:=0;
+  NextExposureStartTime:=0;
   Application.QueueAsyncCall(@StartGuideExposureAsync,0);
+end;
+
+procedure T_autoguider_internal.SetExposureStartTime;
+begin
+  NextExposureStartTime:=now+Finternalguider.delayms/MSecsPerDay;
 end;
 
 Procedure T_autoguider_internal.StartGuideExposureAsync(Data: PtrInt);
@@ -1032,6 +1041,12 @@ if (FCamera.Status=devConnected) then begin
   if PulseGuiding then begin
      WaitExecute(50,@StartGuideExposureAsync,0);
      exit;
+  end;
+  // check start delay
+  if InternalguiderGuiding and (not FSettling) and (now<NextExposureStartTime) then begin
+    Finternalguider.CameraStatus:=rsWaiting+ellipsis;
+    WaitExecute(50,@StartGuideExposureAsync,0);
+    exit;
   end;
   // check exposure time
   e:=finternalguider.Exposure.value;

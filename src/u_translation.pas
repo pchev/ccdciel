@@ -1659,6 +1659,7 @@ resourcestring
   rsFullFrame = 'Full frame';
   rsNumberOfSwit = 'Number of switches';
   rsSpectroSlitR = 'Spectroscope ROI';
+  rsWaiting = 'Waiting';
 
 implementation
 

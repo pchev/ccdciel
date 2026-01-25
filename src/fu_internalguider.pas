@@ -27,7 +27,7 @@ interface
 
 uses   UScaleDPI, Dialogs, u_hints, u_translation, u_global, u_utils, cu_camera, cu_rotator, indiapi, fu_visu,
   Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls, SpinEx,
-  math,LCLintf, ComCtrls, Buttons, Menus;
+  math,LCLintf, ComCtrls, Buttons, Menus, Spin;
 
 
 type
@@ -72,6 +72,7 @@ type
     disable_guiding1: TCheckBox;
     Label17: TLabel;
     Label18: TLabel;
+    Label19: TLabel;
     LabelSetOffset: TLabel;
     Label55: TLabel;
     Label56: TLabel;
@@ -96,6 +97,7 @@ type
     rgSpectroStrategy: TRadioGroup;
     Shape1: TShape;
     SlitOffsetX: TFloatSpinEditEx;
+    ExpDelay: TSpinEditEx;
     StarOffsetX: TFloatSpinEditEx;
     SlitOffsetY: TFloatSpinEditEx;
     framesize1: TComboBox;
@@ -437,6 +439,7 @@ type
     function GetConfigured:Boolean;
     Procedure Redraw(Sender: TObject);
     Procedure ZoomImage(Sender: TObject);
+    function GetDelayms: integer;
 
   public
     { public declarations }
@@ -537,6 +540,7 @@ type
     property onConfigureGuider: TNotifyEvent read FonConfigureGuider write FonConfigureGuider;
     property onMeasureReferenceImage: TNotifyEvent read FonMeasureReferenceImage write FonMeasureReferenceImage;
     property onSetSpectro: TNotifyEvent read FonSetSpectro write FonSetSpectro;
+    property delayms: integer read GetDelayms;
 
   end;
 
@@ -2172,6 +2176,11 @@ Procedure Tf_internalguider.ZoomImage(Sender: TObject);
 begin
  GuideImgZoom:=visu.Zoom;
  if Assigned(FonRedraw) then FonRedraw(self);
+end;
+
+function Tf_internalguider.GetDelayms: integer;
+begin
+  result:=ExpDelay.Value;
 end;
 
 end.

@@ -5378,6 +5378,7 @@ begin
   f_internalguider.DecBacklash:=config.GetValue('/InternalGuider/DecBacklash',0);
   f_internalguider.trend_scale:=config.GetValue('/InternalGuider/Scale',5);
   f_internalguider.Exposure.Value:=config.GetValue('/InternalGuider/Camera/Exposure',2.0);
+  f_internalguider.ExpDelay.Value:=config.GetValue('/InternalGuider/Camera/ExpDelay',0);
   f_internalguider.Binning.Value:=config.GetValue('/InternalGuider/Camera/Binning',1);
   f_internalguider.Gain.Value:=config.GetValue('/InternalGuider/Camera/Gain',0);
   f_internalguider.Offset.Value:=config.GetValue('/InternalGuider/Camera/Offset',0);
@@ -6049,6 +6050,7 @@ begin
   config.SetValue('/InternalGuider/BacklashCompensation',f_internalguider.BacklashCompensation);
   config.SetValue('/InternalGuider/DecBacklash',f_internalguider.DecBacklash);
   config.SetValue('/InternalGuider/Camera/Exposure',f_internalguider.Exposure.Value);
+  config.SetValue('/InternalGuider/Camera/ExpDelay',f_internalguider.ExpDelay.Value);
   config.SetValue('/InternalGuider/Camera/Binning',f_internalguider.Binning.Value);
   config.SetValue('/InternalGuider/Camera/Gain',f_internalguider.Gain.Value);
   config.SetValue('/InternalGuider/Camera/Offset',f_internalguider.Offset.Value);
@@ -18873,6 +18875,7 @@ begin
     end;
 
     // start next exposure
+    T_autoguider_internal(autoguider).SetExposureStartTime;
     Application.QueueAsyncCall(@T_autoguider_internal(autoguider).StartGuideExposureAsync,0)
   end;
 
