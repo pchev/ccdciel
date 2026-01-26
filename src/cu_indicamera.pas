@@ -25,6 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 //{$define debug_raw}
 //{$define camera_debug}
+//{$define timing_stdout}
 
 interface
 
@@ -1082,6 +1083,7 @@ procedure T_indicamera.NewText(tvp: ITextVectorProperty);
 var i: integer;
     ft: string;
     data: TMemoryStream;
+    {$ifdef timing_stdout}tt: double;{$endif}
 begin
 if tvp=CCDfilepath then begin
   if tvp.s=IPS_OK then begin // ignore extra messages from Indigo
@@ -1089,9 +1091,11 @@ if tvp=CCDfilepath then begin
     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'INDI receive new file path '+CCDfilepath.tp[0].text );{$endif}
     ft:=ExtractFileExt(CCDfilepath.tp[0].text);
     if ft='.fits' then begin
+      {$ifdef timing_stdout}tt:=now;{$endif}
       ExposureTimer.Enabled:=false;
       FMidExposureTime:=(Ftimestart+NowUTC)/2;
       FImageFormat:=ft;
+      {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' receive file '+CCDfilepath.tp[0].text);{$endif}
       if assigned(FonExposureProgress) then FonExposureProgress(-10);
       FImgStream.Clear;
       FImgStream.Position:=0;
@@ -1099,6 +1103,7 @@ if tvp=CCDfilepath then begin
       FImgStream.LoadFromFile(CCDfilepath.tp[0].text);
       {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Delete FITS file');{$endif}
       DeleteFile(CCDfilepath.tp[0].text);
+      {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' read file time = '+FormatFloat('0.000',86400*(now-tt)));{$endif}
       // if possible start next exposure now
       TryNextExposure(FImgNum);
       if assigned(FonExposureProgress) then FonExposureProgress(-11);
@@ -1226,6 +1231,7 @@ end;
 
 procedure T_indicamera.NewBlob(bp: IBLOB);
 begin
+ {$ifdef timing_stdout} writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' Receive blob in camera interface');{$endif}
  if debug_msg then msg('receive blob');
  if bp.bloblen>0 then begin
    bp.blob.Position:=0;
@@ -1246,6 +1252,7 @@ var source,dest: array of char;
     sourceLen,destLen:UInt64;
     i: integer;
     tmpf,rmsg: string;
+    {$ifdef timing_stdout}tt: double;{$endif}
 begin
  // report any change to NewText() in use with RAM disk transfer
  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'INDI receive blob');{$endif}
@@ -1261,6 +1268,7 @@ begin
         if zlibok then begin
           {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'uncompress file');{$endif}
           if debug_msg then msg('uncompress file');
+          {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' compressed image');{$endif}
           sourceLen:=blen;
           if sz>0 then
              destLen:=sz
@@ -1283,6 +1291,7 @@ begin
    end;
    if ft='.fits.fz' then begin // receive a packed FITS file
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'funpack');{$endif}
+     {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' packed image');{$endif}
      FImageFormat:='.fits';
      if assigned(FonExposureProgress) then FonExposureProgress(-10);
      if debug_msg then msg('this is a packed fits file');
@@ -1302,6 +1311,7 @@ begin
    end
    else if ft='.fits' then begin // receive a FITS file
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'received fits file');{$endif}
+     {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' FITS image');{$endif}
      FImageFormat:='.fits';
      if assigned(FonExposureProgress) then FonExposureProgress(-10);
      if debug_msg then msg('this is a fits file');
@@ -1309,13 +1319,16 @@ begin
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'copy blob stream');{$endif}
      FImgStream.Clear;
      FImgStream.Position:=0;
+     {$ifdef timing_stdout}tt:=now;{$endif}
      FImgStream.CopyFrom(data,data.Size);
+     {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' secure image stream time = '+FormatFloat('0.000',86400*(now-tt))); {$endif}
      if debug_msg then msg('NewImage');
      if assigned(FonExposureProgress) then FonExposureProgress(-11);
      NewImage;
    end
    else if (ft='.jpeg')or(ft='.jpg')or(ft='.tiff')or(ft='.png') then begin // receive an image file
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'received '+ft+' file');{$endif}
+     {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' bitmap image');{$endif}
      FImageFormat:=ft;
      if assigned(FonExposureProgress) then FonExposureProgress(-10);
      if debug_msg then msg('this is a '+ft+' file');
@@ -1332,6 +1345,7 @@ begin
    end
    else if pos(UpperCase(ft)+',',UpperCase(rawext))>0 then begin
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'received '+ft+' raw file');{$endif}
+     {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' RAW image');{$endif}
      FImageFormat:=ft;
      if assigned(FonExposureProgress) then FonExposureProgress(-10);
      if debug_msg then msg('this is a '+ft+' file');
@@ -1427,6 +1441,7 @@ if UseMainSensor then begin
   end;
   if CCDexpose<>nil then begin;
     CCDexposeValue.value:=exptime;
+    {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' send message to start INDI camera exposure '+formatfloat(f3,exptime));{$endif}
     indiclient.sendNewNumber(CCDexpose);
   end;
 end else begin

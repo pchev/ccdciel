@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 //{$define debug_raw}
-
+//{$define timing_stdout}
 
 interface
 
@@ -559,10 +559,12 @@ var f,fs:TFits;
     objectstr,fn: string;
     ft:TFrameType;
     wcs: TcdcWCScoord;
+    {$ifdef timing_stdout}tt : double; {$endif}
 const datefmt = 'yyyy"-"mm"-"dd"T"hh"-"nn"-"ss';
 begin
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'NewImage');{$endif}
 if FAddFrames then begin  // stack preview frames
+  {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' stacking images');{$endif}
   if (FStackCount=0)or((FStackNum>0)and(FStackCount>=FStackNum)) then
      FFits.ClearImage;
   if FSaveFrames then begin
@@ -736,7 +738,9 @@ else begin  // normal capture
   Ffits.Stream:=FImgStream;
   FImgStream:=TMemoryStream.Create;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'write headers');{$endif}
+  {$ifdef timing_stdout}tt:=now;{$endif}
   WriteHeaders(FFits);
+  {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' write header time = '+FormatFloat('0.000',86400*(now-tt)));{$endif}
   end;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'process new image');{$endif}
   if Assigned(FonNewImage) then FonNewImage(self);

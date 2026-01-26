@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 //{$define debug_raw}
+//{$define timing_stdout}
 
 interface
 
@@ -18822,14 +18823,21 @@ end;
 
 procedure Tf_main.GuideCameraNewImageAsync(Data: PtrInt);
 var displayimage: boolean;
+    {$ifdef timing_stdout}tt: double;{$endif}
 begin
   displayimage:=GuideImage.IsVisible or (not f_internalguider.cbEnlargeImage.Checked);
+  {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' start to prepare guide image, display='+BoolToStr(displayimage,true));{$endif}
   if (not guidefits.ImageValid) then begin
+     {$ifdef timing_stdout}tt:=now;{$endif}
      guidefits.LoadStream;
+     {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' Format image data time = '+FormatFloat('0.000',86400*(now-tt)));{$endif}
   end;
 
-  if f_internalguider.FilterNoise and (not InternalguiderCapturingDark) then
+  if f_internalguider.FilterNoise and (not InternalguiderCapturingDark) then begin
+    {$ifdef timing_stdout}tt:=now;{$endif}
     guidefits.MedianFilter;
+    {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' Image median filtering time = '+FormatFloat('0.000',86400*(now-tt)));{$endif}
+  end;
 
   if StopInternalguider then begin
    InternalguiderRunning:=false;
@@ -18842,20 +18850,27 @@ begin
 
   // process image
   if InternalguiderRunning and (autoguider is T_autoguider_internal) then begin
+    {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' start to process guide image');{$endif}
+    {$ifdef timing_stdout}tt:=now;{$endif}
     // signal an image is available
     T_autoguider_internal(autoguider).NewImageReceived;
     // process depending on current state
     if InternalguiderGuiding then begin
       // process autoguiding
       T_autoguider_internal(autoguider).InternalAutoguiding;
+      {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' process autoguiding time = '+FormatFloat('0.000',86400*(now-tt)));{$endif}
       if StopInternalguider then exit; // in case of new astrometry request
     end
-    else if InternalguiderCalibrating then
+    else if InternalguiderCalibrating then begin
       // process calibration
-      T_autoguider_internal(autoguider).InternalCalibration
-    else if InternalguiderCalibratingBacklash then
+      T_autoguider_internal(autoguider).InternalCalibration;
+      {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' process calibration time = '+FormatFloat('0.000',86400*(now-tt)));{$endif}
+    end
+    else if InternalguiderCalibratingBacklash then begin
       // process backlash calibration
-      T_autoguider_internal(autoguider).BacklashCalibration
+      T_autoguider_internal(autoguider).BacklashCalibration;
+      {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' process backlash calibration time = '+FormatFloat('0.000',86400*(now-tt)));{$endif}
+    end
     else if InternalguiderCapturingDark then begin
       // process dark capture
       if (not guidecamera.AddFrames)or(guidecamera.StackNum<1)or(guidecamera.StackCount>=guidecamera.StackNum) then begin
@@ -18866,12 +18881,14 @@ begin
         T_autoguider_internal(autoguider).InternalguiderStop;
         exit;
       end;
+      {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' process dark capture time = '+FormatFloat('0.000',86400*(now-tt)));{$endif}
     end
     else begin
       if GuiderAutofocus and f_starprofile.AutofocusRunning then begin
          // process autofocus frame
          try
          DoGuiderAutoFocus;
+         {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' process autofocus frame time = '+FormatFloat('0.000',86400*(now-tt)));{$endif}
          except
            on E: Exception do NewMessage('GuideCameraNewImage, Autofocus :'+ E.Message,1);
          end;
@@ -18879,10 +18896,13 @@ begin
       else begin
         // looping
         T_autoguider_internal(autoguider).ShowImgInfo;
+        {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' process preview time = '+FormatFloat('0.000',86400*(now-tt)));{$endif}
       end;
     end;
 
     // start next exposure
+    {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' queue next exposure');{$endif}
+    {$ifdef timing_stdout}writeln;{$endif}
     T_autoguider_internal(autoguider).SetExposureStartTime;
     Application.QueueAsyncCall(@T_autoguider_internal(autoguider).StartGuideExposureAsync,0)
   end;
