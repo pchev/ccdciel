@@ -6907,10 +6907,26 @@ begin
 end;
 
 Procedure Tf_main.ConnectGuideCamera(Sender: TObject);
+var inditransfer: TIndiTransfert;
+    indihost,inditransferdir: string;
+    ok: boolean;
 begin
    case guidecamera.CameraInterface of
     INDI : begin
-           guidecamera.IndiTransfert:=itNetwork;
+           inditransfer:=TIndiTransfert(config.GetValue('/INDIguidecamera/IndiTransfert',ord(itNetwork)));
+           inditransferdir:=config.GetValue('/INDIguidecamera/IndiTransfertDir',defTransfertPath);
+           indihost:=config.GetValue('/INDIguidecamera/Server','');
+           if inditransfer=itDisk then begin
+             // some control to be sure we can use disk transfer
+             ok:=(copy(indihost,1,3)='127')or(uppercase(indihost)='LOCALHOST'); // local indiserver
+             ok:=ok and DirectoryIsWritable(inditransferdir);
+             if not ok then begin
+               inditransfer:=itNetwork;
+               NewMessage('Cannot use ramdisk guide camera transfer, switch to network',3);
+             end;
+           end;
+           guidecamera.IndiTransfert:=inditransfer;
+           guidecamera.IndiTransfertDir:=inditransferdir;
            guidecamera.Connect(config.GetValue('/INDIguidecamera/Server',''),
                           config.GetValue('/INDIguidecamera/ServerPort',''),
                           config.GetValue('/INDIguidecamera/Device',''),
@@ -9552,6 +9568,8 @@ begin
     if f_setup.GuideCameraIndiDevice.Text<>'' then config.SetValue('/INDIguidecamera/Device',f_setup.GuideCameraIndiDevice.Text);
     config.SetValue('/INDIguidecamera/Sensor',f_setup.GuideCameraSensor);
     config.SetValue('/INDIguidecamera/AutoLoadConfig',f_setup.GuideCameraAutoLoadConfig.Checked);
+    config.SetValue('/INDIguidecamera/IndiTransfert',f_setup.GuideCameraIndiTransfert.ItemIndex);
+    config.SetValue('/INDIguidecamera/IndiTransfertDir',f_setup.GuideCameraIndiTransfertDir.Text);
     config.SetValue('/ASCOMguidecamera/Device',f_setup.AscomGuideCamera.Text);
     config.SetValue('/ASCOMRestguidecamera/Protocol',f_setup.GuideCameraARestProtocol.ItemIndex);
     config.SetValue('/ASCOMRestguidecamera/Host',f_setup.GuideCameraARestHost.Text);

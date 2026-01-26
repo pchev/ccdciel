@@ -484,6 +484,7 @@ end;
 Procedure T_indicamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 begin
 CreateIndiClient;
+if FGuideCamera then FIndiTransfertPrefix:='ccdciel_guide_tmp';
 if not indiclient.Connected then begin
   Findiserver:=cp1;
   Findiserverport:=cp2;

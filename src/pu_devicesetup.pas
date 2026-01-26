@@ -95,6 +95,9 @@ type
     BtnSetupCover: TButton;
     btnGuiderFullFrame: TButton;
     ButtonHelp: TButton;
+    GuideCameraDiskPanel: TPanel;
+    GuideCameraIndiTransfert: TRadioGroup;
+    GuideCameraIndiTransfertDir: TEdit;
     cbIndistarterAutostart: TCheckBox;
     cbIndistarterConfig: TComboBox;
     cbRotatorSoftSync: TCheckBox;
@@ -133,6 +136,7 @@ type
     Label26: TLabel;
     Label29: TLabel;
     Label4: TLabel;
+    Label62: TLabel;
     Label70: TLabel;
     Label71: TLabel;
     Label72: TLabel;
@@ -770,6 +774,7 @@ type
     procedure GuideCameraIndiDeviceChange(Sender: TObject);
     procedure GuideCameraIndiPortChange(Sender: TObject);
     procedure GuideCameraIndiServerChange(Sender: TObject);
+    procedure GuideCameraIndiTransfertClick(Sender: TObject);
     procedure GuideIndiSensorChange(Sender: TObject);
     procedure GuiderHChange(Sender: TObject);
     procedure GuiderWChange(Sender: TObject);
@@ -1098,6 +1103,10 @@ begin
   label200.Caption:=rsWidth;
   label201.Caption:=rsHeight;
   btnGuiderFullFrame.Caption:=rsFullFrame;
+  GuideCameraIndiTransfert.Caption:=rsImageTransfe;
+  GuideCameraIndiTransfert.Items[0]:=rsNetwork;
+  GuideCameraIndiTransfert.Items[1]:=rsRAMDisk;
+  Label62.Caption:=rsDirectory;
 
   FinderCamera.Caption:=rsFinderCamera;
   DeviceFinderCamera.Caption:=rsUseFinderCam;
@@ -1354,6 +1363,8 @@ begin
   Panel10.Hint:=rsGlobalALPACA;
   CameraIndiTransfert.Hint:=rsDoNotSetThis+crlf+crlf+Format(rsMakeTestToDe, [crlf]);
   CameraIndiTransfertDir.Hint:=rsTheTemporary;
+  GuideCameraIndiTransfert.Hint:=rsDoNotSetThis+crlf+crlf+Format(rsMakeTestToDe, [crlf]);
+  GuideCameraIndiTransfertDir.Hint:=rsTheTemporary;
 
   label4.Caption:='Alpaca '+rsServer+blank+rsSetup;
   label7.Caption:='Alpaca '+rsServer+blank+rsSetup;
@@ -1509,7 +1520,10 @@ end;
 GuideCameraIndiDevice.Text:=conf.GetValue('/INDIguidecamera/Device','');
 GuideCameraSensor:=conf.GetValue('/INDIguidecamera/Sensor','CCD1');
 GuideCameraAutoLoadConfig.Checked:=conf.GetValue('/INDIguidecamera/AutoLoadConfig',true);
+GuideCameraIndiTransfert.ItemIndex:=config.GetValue('/INDIguidecamera/IndiTransfert',ord(itNetwork));
+GuideCameraIndiTransfertDir.Text:=config.GetValue('/INDIguidecamera/IndiTransfertDir',defTransfertPath);
 AscomGuideCamera.Text:=conf.GetValue('/ASCOMguidecamera/Device','');
+GuideCameraDiskPanel.Visible:=GuideCameraIndiTransfert.ItemIndex>0;
 GuideCameraARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestguidecamera/Protocol',0);
 GuideCameraARestHost.Text:=conf.GetValue('/ASCOMRestguidecamera/Host','127.0.0.1');
 GuideCameraARestPort.Value:=conf.GetValue('/ASCOMRestguidecamera/Port',11111);
@@ -2259,6 +2273,11 @@ end;
 procedure Tf_setup.CameraIndiTransfertClick(Sender: TObject);
 begin
   CameraDiskPanel.Visible:=CameraIndiTransfert.ItemIndex>0;
+end;
+
+procedure Tf_setup.GuideCameraIndiTransfertClick(Sender: TObject);
+begin
+  GuideCameraDiskPanel.Visible:=GuideCameraIndiTransfert.ItemIndex>0;
 end;
 
 procedure Tf_setup.cbRotatorSoftSyncChange(Sender: TObject);
