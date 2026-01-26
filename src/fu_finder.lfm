@@ -412,4 +412,10 @@ object f_finder: Tf_finder
       OnClick = MenuItemClearDarkClick
     end
   end
+  object ClearMsgTimer: TTimer
+    Enabled = False
+    OnTimer = ClearMsgTimerTimer
+    Left = 24
+    Top = 480
+  end
 end

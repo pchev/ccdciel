@@ -18863,6 +18863,7 @@ begin
    InternalguiderCalibrating:=false;
    InternalguiderCalibratingBacklash:=false;
    StopInternalguider:=false;
+   f_internalguider.CameraStatus:='';
    exit;
   end;
 

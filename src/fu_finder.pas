@@ -74,6 +74,7 @@ type
     Panel2: TPanel;
     PanelVisu: TPanel;
     Temperature: TSpinEditEx;
+    ClearMsgTimer: TTimer;
     Title: TLabel;
     procedure BinningChange(Sender: TObject);
     procedure BtnPreviewLoopClick(Sender: TObject);
@@ -82,6 +83,7 @@ type
     procedure ButtonDarkMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ButtonMousePositionClick(Sender: TObject);
     procedure ButtonSetTempClick(Sender: TObject);
+    procedure ClearMsgTimerTimer(Sender: TObject);
     procedure CoolerClick(Sender: TObject);
     procedure GainChange(Sender: TObject);
     procedure MenuItemCaptureDarkClick(Sender: TObject);
@@ -255,6 +257,13 @@ begin
   FCamera.AbortExposure;
   BtnPreviewLoop.Caption:=rsStartPreview;
   msg(rsStopPreviewL,3);
+  ClearMsgTimer.Enabled:=true;
+end;
+
+procedure Tf_finder.ClearMsgTimerTimer(Sender: TObject);
+begin
+  ClearMsgTimer.Enabled:=false;
+  LabelInfo.Caption := '';
 end;
 
 Procedure Tf_finder.StartExposureAsync(Data: PtrInt);
