@@ -2251,4 +2251,10 @@ object f_internalguider: Tf_internalguider
       OnClick = btnDelSlitOffsetClick
     end
   end
+  object ClearMsgTimer: TTimer
+    Enabled = False
+    OnTimer = ClearMsgTimerTimer
+    Left = 138
+    Top = 484
+  end
 end

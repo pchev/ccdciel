@@ -1899,6 +1899,7 @@ begin
   Finternalguider.ButtonDark.enabled:=true;
   Finternalguider.cbSpectro.enabled:=true;
   Finternalguider.led.Brush.Color:=clGray;
+  Finternalguider.ClearMsgTimer.Enabled:=true;
   if verbose then SetStatus('Stopped',GUIDER_IDLE);
 end;
 

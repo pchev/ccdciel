@@ -263,7 +263,7 @@ end;
 procedure Tf_finder.ClearMsgTimerTimer(Sender: TObject);
 begin
   ClearMsgTimer.Enabled:=false;
-  LabelInfo.Caption := '';
+  LabelInfo.Caption := rsStop;
 end;
 
 Procedure Tf_finder.StartExposureAsync(Data: PtrInt);

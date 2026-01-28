@@ -238,6 +238,7 @@ type
     Temperature: TSpinEditEx;
     TabSheetOptions: TTabSheet;
     TabSheetCamera: TTabSheet;
+    ClearMsgTimer: TTimer;
     unitarcseconds1: TCheckBox;
     vpa_solar1: TFloatSpinEditEx;
     v_solar1: TFloatSpinEditEx;
@@ -274,6 +275,7 @@ type
     procedure cbParallacticChange(Sender: TObject);
     procedure CheckBoxBacklashChange(Sender: TObject);
     procedure CheckBoxTrackSolar1Change(Sender: TObject);
+    procedure ClearMsgTimerTimer(Sender: TObject);
     procedure CoolerClick(Sender: TObject);
     procedure dec_gain1Change(Sender: TObject);
     procedure dec_hysteresis1Change(Sender: TObject);
@@ -1160,6 +1162,12 @@ begin
   vpa_solar1.enabled:=CheckBoxTrackSolar1.checked;
   if (cur_tracksolar<>SolarTracking) and Assigned(FonParameterChange) then FonParameterChange('SolarTracking = '+BoolToStr(SolarTracking,'true','false'));
   cur_tracksolar:=SolarTracking;
+end;
+
+procedure Tf_internalguider.ClearMsgTimerTimer(Sender: TObject);
+begin
+  ClearMsgTimer.Enabled:=false;
+  SetCameraStatus(rsStop);
 end;
 
 procedure Tf_internalguider.ButtonSetTempClick(Sender: TObject);
