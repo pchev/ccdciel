@@ -6621,9 +6621,18 @@ end;
 
 procedure Tf_main.ShowFrame(reset:boolean);
 var x,y,w,h: integer;
+    rx,ry,rw,rh:TNumRange;
 begin
  if reset or (FrameW=0)or(FrameH=0) then begin
-   camera.GetFrame(x,y,w,h);
+   if reset then
+     camera.GetFrame(x,y,w,h)
+   else begin
+     camera.GetFrameRange(rx,ry,rw,rh);
+     x:=round(rx.min);
+     y:=round(ry.min);
+     w:=round(rw.max);
+     h:=round(rh.max);
+   end;
    FrameBin:=camera.BinX;
    if (x<>FrameX)or(y<>FrameY)or(w<>FrameW)or(h<>FrameH) then begin
      FrameX:=x;
@@ -6634,6 +6643,11 @@ begin
      f_frame.FY.Text:=inttostr(FrameY);
      f_frame.FWidth.Text:=inttostr(FrameW);
      f_frame.FHeight.Text:=inttostr(FrameH);
+     config.SetValue('/CCDframe/FrameX',FrameX);
+     config.SetValue('/CCDframe/FrameY',FrameY);
+     config.SetValue('/CCDframe/FrameW',FrameW);
+     config.SetValue('/CCDframe/FrameH',FrameH);
+     config.SetValue('/CCDframe/FrameBin',FrameBin);
      NewMessage(Format(rsCameraFrameX, [f_frame.FX.Text, f_frame.FY.Text,
        f_frame.FWidth.Text, f_frame.FHeight.Text]),2);
    end;
@@ -6675,7 +6689,8 @@ begin
   y:=StrToIntDef(f_frame.FY.Text,-1);
   w:=StrToIntDef(f_frame.FWidth.Text,-1);
   h:=StrToIntDef(f_frame.FHeight.Text,-1);
-  camera.SetFrame(x,y,w,h);
+  if (w>0)and(h>0) then
+    camera.SetFrame(x,y,w,h);
 end;
 
 procedure Tf_main.ResetFrame(Sender: TObject);
@@ -6693,12 +6708,14 @@ begin
   FrameW:=config.GetValue('/CCDframe/FrameW',FrameW);
   FrameH:=config.GetValue('/CCDframe/FrameH',FrameH);
   FrameBin:=config.GetValue('/CCDframe/FrameBin',1);
-  f_frame.FX.Text:=inttostr(FrameX);
-  f_frame.FY.Text:=inttostr(FrameY);
-  f_frame.FWidth.Text:=inttostr(FrameW);
-  f_frame.FHeight.Text:=inttostr(FrameH);
-  camera.SetBinning(FrameBin,FrameBin);
-  SetFrame(nil);
+  if (FrameW>0)and(FrameH>0) then begin
+    f_frame.FX.Text:=inttostr(FrameX);
+    f_frame.FY.Text:=inttostr(FrameY);
+    f_frame.FWidth.Text:=inttostr(FrameW);
+    f_frame.FHeight.Text:=inttostr(FrameH);
+    camera.SetBinning(FrameBin,FrameBin);
+    SetFrame(nil);
+  end;
 end;
 
 procedure Tf_main.ShowBinningRange;

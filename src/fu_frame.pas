@@ -126,6 +126,7 @@ end;
 procedure Tf_frame.SetRoi(RoiName: string);
 var i: integer;
 begin
+ if RoiName<>'' then begin
   for i:=0 to RoiList.Items.Count-1 do begin
     if RoiList.Items[i]=RoiName then begin
       RoiList.ItemIndex:=i;
@@ -134,6 +135,7 @@ begin
       break;
     end;
   end;
+ end;
 end;
 
 procedure Tf_frame.ClearRoi;

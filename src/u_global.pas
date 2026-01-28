@@ -375,7 +375,7 @@ const
   SwitchTxt='Switch';
   SubDirCount=8;
   FileNameCount=13;
-  MinFrameSize=5;
+  MinFrameSize=10;
   SafetyActionNum=15;
   encryptpwd='m=Nrv"wE+W^RA?$b:]w<!t1v]pcTT>3$B?3";~OG9\7$,n[~8KLaUrfCgvRh$=DnlXK]Vxr^0!.HAA';
 
