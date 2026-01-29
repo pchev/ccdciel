@@ -1027,6 +1027,7 @@ type
     procedure StopSequence(Sender: TObject);
     procedure ScriptExecute(Sender: TObject);
     procedure ScriptAfterExecute(Sender: TObject);
+    procedure updMeridianTime;
     function CheckMeridianFlip(nextexposure:double; canwait:boolean; out waittime:integer):boolean;
     procedure CheckMeridianFlip; overload;
     procedure StartServer;
@@ -8905,6 +8906,7 @@ begin
   f_mount.BtnGoto.Caption:=rsStop;
   f_mount.Pierside.Caption:=rsGOTOInProgre+ellipsis;
   f_mount.Pierside.Font.Color:=clRed;
+  f_mount.TimeToMeridian.Caption:='';
   if astrometry.FinderCamera<>nil then begin
     FinderRestartLoop:=FinderPreviewLoop;
     if FinderPreviewLoop then f_finder.StopLoop;
@@ -8918,6 +8920,7 @@ begin
   f_mount.BtnGoto.Caption:=rsGoto;
   f_mount.Pierside.Font.Color:=clDefault;
   MountPiersideChange(nil);
+  updMeridianTime;
   if FinderRestartLoop and (astrometry.FinderCamera<>nil) then f_finder.StartLoop;
   FinderRestartLoop:=false;
 end;
@@ -16496,6 +16499,48 @@ begin
  Redraw(Sender);
 
 end;
+
+procedure Tf_main.updMeridianTime;
+var ra,de,hh,a,h: double;
+    CurSt: double;
+    hhmin: integer;
+    circumpolar: boolean;
+begin
+if (mount.Status=devConnected) and
+(mount.Park=false) and
+(mount.Tracking) and
+(not mount.MountSlewing) and
+(not meridianflipping) then begin
+  CurST:=CurrentSidTim;
+  ra:=mount.RA;
+  de:=mount.Dec;
+  circumpolar:=(sgn(de)=sgn(ObsLatitude))and(abs(de)>=abs(ObsLatitude));
+  MountToLocal(mount.EquinoxJD,ra,de);
+  ra:=deg2rad*15*ra;
+  hh:=CurSt-ra;
+  Eq2Hz(hh,deg2rad*de,a,h) ;
+  a:=rad2deg*rmod(a+pi,pi2);
+  h:=rad2deg*h;
+  if hh>pi then hh:=hh-pi2;
+  if hh<-pi then hh:=hh+pi2;
+  hhmin:=round(rad2deg*60*hh/15);
+  if circumpolar then begin
+    if (hhmin>360) then begin
+       hhmin:=hhmin-720;
+    end
+    else if (hhmin<-360) then begin
+       hhmin:=hhmin+720;
+    end;
+  end;
+  f_mount.TimeToMeridian.Caption:=inttostr(abs(hhmin));
+  if AzimuthOrigin=azSouth then a:=rmod(180+a,360);
+  f_mount.AZ.Caption:=FormatFloat(f2,a);
+  f_mount.ALT.Caption:=FormatFloat(f2,h);
+  if hhmin<=0 then f_mount.LabelMeridian.Caption:=rsMeridianIn
+              else f_mount.LabelMeridian.Caption:=rsMeridianSinc;
+end;
+end;
+
 
 function Tf_main.CheckMeridianFlip(nextexposure:double; canwait:boolean; out waittime:integer):boolean;
 var ra,de,hh,a,h,tra,tde,mra,mde,err: double;
