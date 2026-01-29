@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-01-25 14:48+0000\n"
-"PO-Revision-Date: 2026-01-16 12:32+0000\n"
+"POT-Creation-Date: 2026-01-29 08:57+0000\n"
+"PO-Revision-Date: 2026-01-26 10:25+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-01-25 14:56+0000\n"
-"X-Generator: Launchpad (build 9fcfff1971229ac997140f06b41a902ac8ec69f4)\n"
+"X-Launchpad-Export-Date: 2026-01-29 09:00+0000\n"
+"X-Generator: Launchpad (build 4847db153920c8fbc330ac275b92a72279fa07a2)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -2234,7 +2234,7 @@ msgstr "光圈"
 
 #: u_translation.rsfullframe
 msgid "Full frame"
-msgstr ""
+msgstr "全幅面"
 
 #: u_translation.rsfwhm
 msgid "FWHM"
@@ -3512,7 +3512,7 @@ msgstr "步数"
 
 #: u_translation.rsnumberofswit
 msgid "Number of switches"
-msgstr ""
+msgstr "开关数量"
 
 #: u_translation.rsobject
 msgid "Object"
@@ -4387,7 +4387,7 @@ msgstr "升起/落下条件"
 
 #: u_translation.rsroi
 msgid "ROI"
-msgstr ""
+msgstr "ROI"
 
 #: u_translation.rsrot
 msgid "Rot."
@@ -4404,7 +4404,7 @@ msgstr "旋转"
 #: u_translation.rsrotateslitto
 #, object-pascal-format
 msgid "Rotate slit to parallactic angle %s"
-msgstr ""
+msgstr "将狭缝旋转到视差角度%s"
 
 #: u_translation.rsrotatetelesc
 msgid "Rotate the telescope"
@@ -4453,7 +4453,7 @@ msgstr "运行脚本"
 
 #: u_translation.rsrunastrometr
 msgid "Run astrometry on every image"
-msgstr ""
+msgstr "对每张图像都做解析"
 
 #: u_translation.rsrunautofocus
 #, object-pascal-format
@@ -4542,7 +4542,7 @@ msgstr "保存FITS文件%s"
 
 #: u_translation.rssaveimagewit
 msgid "Save image with astrometry"
-msgstr ""
+msgstr "保存图像的解析信息"
 
 #: u_translation.rssavepictures
 #, object-pascal-format
@@ -4878,7 +4878,7 @@ msgstr "设定星等"
 
 #: u_translation.rssetmountpier
 msgid "Set mount pier side if available"
-msgstr ""
+msgstr "如果可用则设置赤道仪基座方向"
 
 #: u_translation.rssetmountsite
 msgid "Set mount site long/lat from configuration"
@@ -5186,7 +5186,7 @@ msgstr "光谱分析"
 
 #: u_translation.rsspectroslitr
 msgid "Spectroscope ROI"
-msgstr ""
+msgstr "光谱仪的ROI"
 
 #: u_translation.rsspeed
 msgid "Speed"
@@ -5748,7 +5748,7 @@ msgstr "终止选项"
 
 #: u_translation.rsterminations
 msgid "Termination script"
-msgstr ""
+msgstr "终止脚本"
 
 #: u_translation.rstest
 msgid "Test"
@@ -6318,6 +6318,10 @@ msgstr "解析后等待"
 #, object-pascal-format, fuzzy, badformat
 msgid "Wait %d seconds and retry"
 msgstr "等待%s秒后重试"
+
+#: u_translation.rswaiting
+msgid "Waiting"
+msgstr ""
 
 #: u_translation.rswaitingdseco
 #, object-pascal-format, fuzzy, badformat

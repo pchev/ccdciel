@@ -6233,3 +6233,7 @@ msgstr ""
 msgid "Spectroscope ROI"
 msgstr ""
 
+#: u_translation:rswaiting
+msgid "Waiting"
+msgstr ""
+
