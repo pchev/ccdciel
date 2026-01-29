@@ -15997,7 +15997,7 @@ n:=cdcwcs_initfitsfile(pchar(fn),wcsnum);
 if n=0 then
   n:=cdcwcs_getinfo(addr(wcsinfo),wcsnum)
 else begin
-  NewMessage(Format(rsErrorProcess, [TmpDir]),1);
+  NewMessage(Format(rsErrorProcess, [slash(TmpDir)+'ccdcielsolved.fits']),1);
   exit;
 end;
 
@@ -16030,7 +16030,7 @@ n:=cdcwcs_initfitsfile(pchar(fn),wcsnum);
 if n=0 then
    n:=cdcwcs_getinfo(addr(wcsinfo),wcsnum)
 else begin
-  NewMessage(Format(rsErrorProcess, [TmpDir]),1);
+  NewMessage(Format(rsErrorProcess, [slash(TmpDir)+'ccdcielsolved.fits']),1);
   exit;
 end;
 

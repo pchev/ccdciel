@@ -725,7 +725,7 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
    fn:=slash(TmpDir)+'ccdcielsolved.fits';
    n:=cdcwcs_initfitsfile(pchar(fn),wcsmain);
    if n<>0 then begin
-     msg(Format(rsErrorProcess, [TmpDir]),0);
+     msg(Format(rsErrorProcess, [fn]),0);
      exit;
    end;
    if (n=0) and CurrentCoord(ra,de,eq,pa) then begin
@@ -772,7 +772,7 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
    fn:=slash(TmpDir)+'ccdcielsolved.fits';
    n:=cdcwcs_initfitsfile(pchar(fn),wcsmain);
    if n<>0 then begin
-     msg(Format(rsErrorProcess, [TmpDir]),0);
+     msg(Format(rsErrorProcess, [fn]),0);
      exit;
    end;
    n:=cdcwcs_getinfo(addr(i),wcsmain);
@@ -889,7 +889,7 @@ begin
         fn:=slash(TmpDir)+'ccdcielsolved.fits';
         n:=cdcwcs_initfitsfile(pchar(fn),wcsmain);
         if n<>0 then begin
-          msg(Format(rsErrorProcess, [TmpDir]),0);
+          msg(Format(rsErrorProcess, [fn]),0);
           exit;
         end;
         if (n<>0) or (not CurrentCoord(cra,cde,eq,pa)) then break;
@@ -916,7 +916,7 @@ begin
         fn:=slash(TmpDir)+'findersolved.fits';
         n:=cdcwcs_initfitsfile(pchar(fn),wcsfind);
         if n<>0 then begin
-          msg(Format(rsErrorProcess, [TmpDir]),0);
+          msg(Format(rsErrorProcess, [fn]),0);
           exit;
         end;
         if (n<>0) or (not FinderCurrentCoord(cra,cde,eq,pa)) then break;
