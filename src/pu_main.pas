@@ -700,7 +700,7 @@ type
     SaveFocusZoom,ImgCx, ImgCy: double;
     Mx, My, PolX, PolY: integer;
     StartX, StartY, EndX, EndY, MouseDownX,MouseDownY: integer;
-    FrameX,FrameY,FrameW,FrameH,FrameBin: integer;
+    FrameX,FrameY,FrameW,FrameH,FrameBin,FrameMaxW,FrameMaxH: integer;
     GuideMx, GuideMy: integer;
     GuideOffset1X,GuideOffset1Y,GuideOffset2X,GuideOffset2Y: double;
     GuideMouseMoving: boolean;
@@ -2847,6 +2847,8 @@ begin
   FrameY:=config.GetValue('/CCDframe/FrameY',0);
   FrameW:=config.GetValue('/CCDframe/FrameW',0);
   FrameH:=config.GetValue('/CCDframe/FrameH',0);
+  FrameMaxW:=config.GetValue('/CCDframe/FrameMaxW',-1);
+  FrameMaxH:=config.GetValue('/CCDframe/FrameMaxH',-1);
   FrameBin:=config.GetValue('/CCDframe/FrameBin',1);
 
   f_visu.Gamma.Value:=config.GetValue('/Visu/Gamma',1.0);
@@ -5950,6 +5952,8 @@ begin
    config.SetValue('/CCDframe/FrameW',FrameW);
    config.SetValue('/CCDframe/FrameH',FrameH);
    config.SetValue('/CCDframe/FrameBin',FrameBin);
+   config.SetValue('/CCDframe/FrameMaxW',FrameMaxW);
+   config.SetValue('/CCDframe/FrameMaxH',FrameMaxH);
 
    config.SetValue('/Sequence/Targets',f_sequence.Filename);
    config.SetValue('/Sequence/Unattended',f_sequence.Unattended.Checked);
@@ -6633,6 +6637,8 @@ begin
      y:=round(ry.min);
      w:=round(rw.max);
      h:=round(rh.max);
+     FrameMaxW:=w;
+     FrameMaxH:=h;
    end;
    FrameBin:=camera.BinX;
    if (x<>FrameX)or(y<>FrameY)or(w<>FrameW)or(h<>FrameH) then begin
@@ -6648,6 +6654,8 @@ begin
      config.SetValue('/CCDframe/FrameY',FrameY);
      config.SetValue('/CCDframe/FrameW',FrameW);
      config.SetValue('/CCDframe/FrameH',FrameH);
+     config.SetValue('/CCDframe/FrameMaxW',FrameMaxW);
+     config.SetValue('/CCDframe/FrameMaxH',FrameMaxH);
      config.SetValue('/CCDframe/FrameBin',FrameBin);
      NewMessage(Format(rsCameraFrameX, [f_frame.FX.Text, f_frame.FY.Text,
        f_frame.FWidth.Text, f_frame.FHeight.Text]),2);
@@ -6665,6 +6673,17 @@ procedure Tf_main.ShowFrameRange;
 var rx,ry,rw,rh:TNumRange;
 begin
  camera.GetFrameRange(rx,ry,rw,rh);
+ if (FrameMaxW<0)or(FrameMaxH<0) then begin
+   FrameMaxW:=round(rw.max);  // upgrade from old profile
+   FrameMaxH:=round(rh.max);
+ end;
+ if ((FrameMaxW<>round(rw.max)) or (FrameMaxH<>round(rh.max))) then begin
+   // camera sensor size change since last connection, reset the ROI
+   FrameW:=0;
+   FrameH:=0;
+   FrameMaxW:=round(rw.max);
+   FrameMaxH:=round(rh.max);
+ end;
  f_frame.FX.Hint:=FormatFloat(f0,rx.min)+ellipsis+FormatFloat(f0,rx.max);
  f_frame.FY.Hint:=FormatFloat(f0,ry.min)+ellipsis+FormatFloat(f0,ry.max);
  f_frame.FWidth.Hint:=FormatFloat(f0,rw.min)+ellipsis+FormatFloat(f0,rw.max);
@@ -9538,6 +9557,8 @@ begin
       FrameY:=config.GetValue('/CCDframe/FrameY',0);
       FrameW:=config.GetValue('/CCDframe/FrameW',0);
       FrameH:=config.GetValue('/CCDframe/FrameH',0);
+      FrameMaxW:=config.GetValue('/CCDframe/FrameMaxW',-1);
+      FrameMaxH:=config.GetValue('/CCDframe/FrameMaxH',-1);
       FrameBin:=config.GetValue('/CCDframe/FrameBin',1);
     end;
     ShowDarkInfo;
