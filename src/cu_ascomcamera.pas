@@ -1021,18 +1021,16 @@ begin
    Xmax:= w div bx;
    Ymax:= h div by;
    if debug_msg then msg('Xmax='+inttostr(Xmax)+' Ymax='+inttostr(Ymax));
-   // check range
-   if (width<MinFrameSize) or (height<MinFrameSize) then begin
-     width:=Xmax;
-     height:=Ymax;
-   end;
-   if (x+width)>Xmax then x:=Xmax-width;
-   if (y+height)>Ymax then y:=Ymax-height;
-   if x<0 then x:=0;
-   if y<0 then y:=0;
    // force even values
    x:=round(x+0.5);
    y:=round(y+0.5);
+   // check range
+   if (width<MinFrameSize) or (height<MinFrameSize) or ((x+width)>Xmax) or ((y+height)>Ymax) then begin
+     x:=0;
+     y:=0;
+     width:=Xmax;
+     height:=Ymax;
+   end;
    if debug_msg then msg('Set frame '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height));
    V.StartX:=x;
    V.StartY:=y;

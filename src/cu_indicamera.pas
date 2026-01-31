@@ -1650,18 +1650,16 @@ begin
   if UseMainSensor and (CCDframe<>nil) then begin
      Xmax:=round(FCameraXSize);
      Ymax:=round(FCameraYSize);
-     // check range
-     if (width<MinFrameSize) or (height<MinFrameSize) then begin
-       width:=Xmax;
-       height:=Ymax;
-     end;
-     if (x+width)>Xmax then x:=Xmax-width;
-     if (y+height)>Ymax then y:=Ymax-height;
-     if x<0 then x:=0;
-     if y<0 then y:=0;
      // force even values
      x:=round(x+0.5);
      y:=round(y+0.5);
+     // check range
+     if (width<MinFrameSize) or (height<MinFrameSize) or ((x+width)>Xmax) or ((y+height)>Ymax) then begin
+       x:=0;
+       y:=0;
+       width:=Xmax;
+       height:=Ymax;
+     end;
      CCDframeX.value:=x;
      CCDframeY.value:=y;
      CCDframeWidth.value:=width;
