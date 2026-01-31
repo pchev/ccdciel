@@ -91,8 +91,9 @@ begin
   V.User:=cp5;
   V.Password:=cp6;
   Fdevice:=cp4;
-  if Assigned(FonStatusChange) then FonStatusChange(self);
   V.Device:=Fdevice;
+  if Assigned(FonStatusChange) then FonStatusChange(self);
+  msg('Connecting to Alpaca server '+cp1+':'+cp2,9);
   V.Timeout:=5000;
   try
   FInterfaceVersion:=V.Get('interfaceversion').AsInt;
