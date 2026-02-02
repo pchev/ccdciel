@@ -225,7 +225,7 @@ begin
   V.Device:=Fdevice;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   msg('Connecting to Alpaca server '+cp1+':'+cp2,9);
-  V.Timeout:=5000;
+  V.Timeout:=StdTimeout;
   try
   FInterfaceVersion:=V.Get('interfaceversion').AsInt;
   except
@@ -239,7 +239,6 @@ begin
   else
     V.Put('Connected',true);
   if V.Get('connected').AsBool then begin
-    V.Timeout:=120000;
     try
     FDriverInfo:=V.Get('driverinfo').AsString;
     msg(FDriverInfo,9);
@@ -604,7 +603,12 @@ begin
    if assigned(FonExposureProgress) then FonExposureProgress(-10);
    if debug_msg then msg('read image.');
    try
-   imgarray:=V.GetImageArray;
+     try
+     V.Timeout:=LongTimeout;
+     imgarray:=V.GetImageArray;
+     finally
+     V.Timeout:=StdTimeout;
+     end;
    except
      on E: Exception do begin
        msg('Error accessing ImageArray: ' + E.Message,0);
@@ -1033,7 +1037,12 @@ begin
    if FStatus<>devConnected then exit;
    try
    msg(Format(rsSetFilterPos, [inttostr(num)]));
-   V.Put('Position',num-1);
+   try
+     V.Timeout:=LongTimeout;
+     V.Put('Position',num-1);
+   finally
+     V.Timeout:=StdTimeout;
+   end;
    Wait(1);
    except
     on E: Exception do msg('Set filter error: ' + E.Message,0);

@@ -134,7 +134,7 @@ begin
   V.Device:=Fdevice;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   msg('Connecting to Alpaca server '+cp1+':'+cp2,9);
-  V.Timeout:=5000;
+  V.Timeout:=StdTimeout;
   try
   FInterfaceVersion:=V.Get('interfaceversion').AsInt;
   except
@@ -151,7 +151,6 @@ begin
     V.Put('Connected',true);
   if Connected then begin
      FDeviceName:=DeviceName;
-     V.Timeout:=120000;
      try
      msg(V.Get('driverinfo').AsString,9);
      except

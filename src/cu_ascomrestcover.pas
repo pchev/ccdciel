@@ -91,7 +91,7 @@ begin
   V.Device:=Fdevice;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   msg('Connecting to Alpaca server '+cp1+':'+cp2,9);
-  V.Timeout:=5000;
+  V.Timeout:=StdTimeout;
   try
   FInterfaceVersion:=V.Get('interfaceversion').AsInt;
   except
@@ -105,7 +105,6 @@ begin
   else
     V.Put('Connected',true);
   if V.Get('connected').AsBool then begin
-     V.Timeout:=120000;
      try
      msg(V.Get('driverinfo').AsString,9);
      except
@@ -266,7 +265,12 @@ Procedure T_ascomrestcover.OpenCover;
 begin
  if FStatus<>devConnected then exit;
  try
+   try
+   V.Timeout:=LongTimeout;
    V.Put('opencover');
+   finally
+   V.Timeout:=StdTimeout;
+   end;
  except
    on E: Exception do msg('OpenCover error: ' + E.Message,0);
  end;
@@ -276,7 +280,12 @@ Procedure T_ascomrestcover.CloseCover;
 begin
  if FStatus<>devConnected then exit;
  try
+   try
+   V.Timeout:=LongTimeout;
    V.Put('closecover');
+   finally
+   V.Timeout:=StdTimeout;
+   end;
  except
    on E: Exception do msg('CloseCover error: ' + E.Message,0);
  end;

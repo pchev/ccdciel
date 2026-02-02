@@ -163,7 +163,7 @@ begin
   V.Device:=Fdevice;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   msg('Connecting to Alpaca server '+cp1+':'+cp2,9);
-  V.Timeout:=5000;
+  V.Timeout:=StdTimeout;
   try
   FInterfaceVersion:=V.Get('interfaceversion').AsInt;
   except
@@ -177,7 +177,6 @@ begin
   else
      V.Put('Connected',true);
   if V.Get('connected').AsBool then begin
-     V.Timeout:=120000;
      try
      msg(V.Get('driverinfo').AsString,9);
      except
@@ -516,8 +515,14 @@ begin
    if CanSlewAsync then begin
      V.Put('slewtocoordinatesasync',['RightAscension',FormatFloat(f6,sra),'Declination',FormatFloat(f6,sde)]);
    end
-   else
+   else begin
+    try
+     V.Timeout:=LongTimeout;
      V.Put('slewtocoordinates',['RightAscension',FormatFloat(f6,sra),'Declination',FormatFloat(f6,sde)]);
+    finally
+     V.Timeout:=StdTimeout;
+    end;
+   end;
    result:=true;
    except
      on E: Exception do msg('Slew error: ' + E.Message,0);
@@ -547,8 +552,14 @@ begin
      V.Put('slewtocoordinatesasync',['RightAscension',FormatFloat(f6,sra),'Declination',FormatFloat(f6,sde)]);
      WaitMountSlewing(SlewDelay);
    end
-   else
+   else begin
+     try
+     V.Timeout:=LongTimeout;
      V.Put('slewtocoordinates',['RightAscension',FormatFloat(f6,sra),'Declination',FormatFloat(f6,sde)]);
+     finally
+      V.Timeout:=StdTimeout;
+     end;
+   end;
    wait(2);
    msg(rsSlewComplete);
    FMountSlewing:=false;

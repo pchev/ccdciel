@@ -79,6 +79,7 @@ end;
 
 procedure T_ascomrestswitch.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 var i: integer;
+    J: TAscomResult;
 begin
   try
   FStatus := devConnecting;
@@ -91,7 +92,7 @@ begin
   V.Device:=Fdevice;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   msg('Connecting to Alpaca server '+cp1+':'+cp2,9);
-  V.Timeout:=5000;
+  V.Timeout:=StdTimeout;
   try
   FInterfaceVersion:=V.Get('interfaceversion').AsInt;
   except
@@ -105,7 +106,6 @@ begin
   else
     V.Put('Connected',true);
   if V.Get('connected').AsBool then begin
-     V.Timeout:=120000;
      try
      msg(V.Get('driverinfo').AsString,9);
      except
@@ -164,8 +164,9 @@ begin
      end;
      if FInterfaceVersion>=3 then begin
        try
-         V.Get('devicestate');
+         J:=V.Get('devicestate');
          hasDevicestate:=true;
+         J.Free;
        except
          hasDevicestate:=false;
        end;
@@ -399,13 +400,23 @@ begin
          p[2]:='Value';
          p[3]:=FloatToStr(value[i].Value);
          msg('Set switch '+value[i].Name+'='+p[3],3);
+         try
+         V.Timeout:=LongTimeout;   // TODO: implement async setswich
          V.Put('setswitchvalue',p);
+         finally
+         V.Timeout:=StdTimeout;
+         end;
        end
        else begin
          p[2]:='State';
          p[3]:=BoolToStr(value[i].Checked,true);
          msg('Set switch '+value[i].Name+'='+p[3],3);
+         try
+         V.Timeout:=LongTimeout;  // TODO: implement async setswich
          V.Put('setswitch',p);
+         finally
+         V.Timeout:=StdTimeout;
+         end;
        end;
      end;
    end;
