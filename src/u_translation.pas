@@ -1660,6 +1660,7 @@ resourcestring
   rsNumberOfSwit = 'Number of switches';
   rsSpectroSlitR = 'Spectroscope ROI';
   rsWaiting = 'Waiting';
+  rsFrameSizeToo = 'Frame size too small for the selected dithering, please increase the size or reduce the dither';
 
 implementation
 

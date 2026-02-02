@@ -763,6 +763,7 @@ begin
         fry:=min(ysize-1-frh,max(0,fry));
 
         star_counter2:=0;
+        margin:=2*DitherPixel+10;
         for i:=0 to star_counter-1 do
         begin
           if FCamera.VerticalFlip then y:=ysize-xy_array[i].y1 else  y:=xy_array[i].y1;
@@ -789,6 +790,8 @@ begin
             inc(star_counter2);
           end;
         end;
+        if star_counter2=0 then
+           msg(rsFrameSizeToo, 3);
         star_counter:=star_counter2;
 
         FCamera.SetFrame(frx,fry,frw,frh);//set frame area around the brightest star
