@@ -428,6 +428,7 @@ begin
    result[i].Min        := FSwitch[i].Min;
    result[i].Max        := FSwitch[i].Max;
    result[i].Step       := FSwitch[i].Step;
+   result[i].Edited     := false;
    case FSwitch[i].IndiType of
      INDI_SWITCH : begin
        result[i].Value      := FSwitch[i].Value;
@@ -463,24 +464,26 @@ begin
    t:=FSwitch[i].IndiType;
    case t of
      INDI_SWITCH: begin
-         ok := ( value[i].Checked <> (ISwitchVectorProperty(SwitchPropList[FSwitch[i].IndiProp]).sp[FSwitch[i].IndiIndex].s=ISS_ON) );
+         ok := value[i].Edited;
          modified:=modified or ok;
-         if ok then
+         if ok then begin
            msg('Set switch '+value[i].Name+'='+BoolToStr(value[i].Checked,true),3);
-         if value[i].Checked then begin
-           if value[i].IndiGroup>=0 then
-             IUResetSwitch(ISwitchVectorProperty(SwitchPropList[FSwitch[i].IndiProp]));
-           ISwitchVectorProperty(SwitchPropList[FSwitch[i].IndiProp]).sp[FSwitch[i].IndiIndex].s:=ISS_ON
-         end
-         else
-           ISwitchVectorProperty(SwitchPropList[FSwitch[i].IndiProp]).sp[FSwitch[i].IndiIndex].s:=ISS_OFF;
+           if value[i].Checked then begin
+             if value[i].IndiGroup>=0 then
+               IUResetSwitch(ISwitchVectorProperty(SwitchPropList[FSwitch[i].IndiProp]));
+             ISwitchVectorProperty(SwitchPropList[FSwitch[i].IndiProp]).sp[FSwitch[i].IndiIndex].s:=ISS_ON
+           end
+           else
+             ISwitchVectorProperty(SwitchPropList[FSwitch[i].IndiProp]).sp[FSwitch[i].IndiIndex].s:=ISS_OFF;
+         end;
      end;
      INDI_NUMBER: begin
-         ok := ( value[i].Value <> (INumberVectorProperty(SwitchPropList[FSwitch[i].IndiProp]).np[FSwitch[i].IndiIndex].Value) );
+         ok := value[i].Edited;
          modified:=modified or ok;
-         if ok then
+         if ok then begin
            msg('Set switch '+value[i].Name+'='+FloatToStr(value[i].Value),3);
-         INumberVectorProperty(SwitchPropList[FSwitch[i].IndiProp]).np[FSwitch[i].IndiIndex].Value := value[i].Value;
+           INumberVectorProperty(SwitchPropList[FSwitch[i].IndiProp]).np[FSwitch[i].IndiIndex].Value := value[i].Value;
+         end;
      end;
    end;
  end;

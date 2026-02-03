@@ -307,7 +307,7 @@ begin
  if (not VarIsEmpty(V)) and (FNumSwitch>0)then begin
  try
    for i:=0 to FNumSwitch-1 do begin
-     if value[i].CanWrite and ((value[i].Value<>FSwitch[i].Value)or(value[i].Checked<>FSwitch[i].Checked)) then begin
+     if value[i].CanWrite and value[i].Edited then begin
        if FSwitch[i].MultiState then begin
          msg('Set switch '+value[i].Name+'='+FloatToStr(value[i].Value),3);
          V.SetSwitchValue(i,value[i].Value);

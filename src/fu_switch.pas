@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI, u_global, Graphics, Dialogs, u_translation, cu_switch, fu_switchpage,
+uses  UScaleDPI, u_global, u_utils, Graphics, Dialogs, u_translation, cu_switch, fu_switchpage,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls;
 
 type
@@ -40,9 +40,13 @@ type
     { private declarations }
     FConnected: array[0..MaxSwitches] of boolean;
     FonSetSwitch: TNotifyEvent;
+    procedure DetachForm(Sender: TObject);
+    procedure DetachFormClose(Sender: TObject; var CloseAction: TCloseAction);
+
   public
     { public declarations }
     SwitchPage: array[0..MaxSwitches] of integer;
+    PinGlyph: TImage;
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
@@ -69,6 +73,7 @@ begin
    FConnected[i]:=false;
    SwitchPage[i]:=-1;
  end;
+ PinGlyph:=TImage.Create(self);
  ScaleDPI(Self);
  SetLang;
 end;
@@ -121,9 +126,11 @@ begin
  sp.Parent:=tb;
  sp.Align:=alClient;
  sp.Tag:=sw.Tag;
+ sp.BtnPinSwitch.Glyph.Assign(PinGlyph.Picture.Bitmap);
  sp.NumSwitch:=sw.NumSwitch;
  sp.Switch:=sw.Switch;
  sp.onSetSwitch:=FonSetSwitch;
+ sp.onDetach:=@DetachForm;
  PageControl1.ShowTabs:=(PageControl1.PageCount>1)or(sw.DeviceName<>'');
  Height:=DoScaleY(250);
 end;
@@ -156,6 +163,52 @@ begin
   sp.Switch:=sw.Switch;
   sp.LabelMsg.Caption:=sw.LastError;
   PageControl1.ShowTabs:=(PageControl1.PageCount>1)or(sw.DeviceName<>'');
+end;
+
+procedure Tf_switch.DetachForm(Sender: TObject);
+var f: TForm;
+    x,y,w,h: integer;
+begin
+  if PageControl1.Parent=Panel1 then begin
+   // detach the graph
+   x:=config.GetValue('/Switch/PosX',-1);
+   y:=config.GetValue('/Switch/PosY',-1);
+   w:=config.GetValue('/Switch/PosW',-1);
+   h:=config.GetValue('/Switch/PosH',-1);
+   f:=TForm.Create(self);
+   f.FormStyle:=fsStayOnTop;
+   f.OnClose:=@DetachFormClose;
+   if w>0 then
+     f.Width:=w
+   else
+     f.Width:=DoScaleX(400);
+   if h>0 then
+     f.Height:=h
+   else
+     f.Height:=DoScaleY(350);
+   f.Caption:=rsSwitch;
+   PageControl1.Parent:=f;
+   if (x>0)and(y>0) then begin
+     f.Left:=x;
+     f.Top:=y;
+   end
+   else
+     FormPos(f,mouse.CursorPos.x,mouse.CursorPos.y);
+   f.Show;
+  end
+  else if PageControl1.Parent is TForm then begin
+    TForm(PageControl1.Parent).Close;
+  end;
+end;
+
+procedure Tf_switch.DetachFormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  config.SetValue('/Switch/PosX',TForm(Sender).Left);
+  config.SetValue('/Switch/PosY',TForm(Sender).Top);
+  config.SetValue('/Switch/PosW',TForm(Sender).Width);
+  config.SetValue('/Switch/PosH',TForm(Sender).Height);
+  CloseAction:=caFree;
+  PageControl1.Parent:=Panel1;
 end;
 
 end.

@@ -2696,6 +2696,7 @@ try
      sw:=Fswitch[i].Switch;
      for j:=0 to Fswitch[i].NumSwitch-1 do begin
        if sw[j].Name=swname then begin
+         sw[j].Edited:=true;
          if sw[j].MultiState then
            sw[j].Value:=StrToFloat(value)
          else

@@ -38,6 +38,7 @@ TSwitchRec = record
                Checked: boolean;
                Min, Max, Step: double;
                Value: double;
+               Edited: boolean;
              end;
 TSwitchList = array of TSwitchRec;
 

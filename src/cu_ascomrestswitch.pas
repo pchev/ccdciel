@@ -336,6 +336,7 @@ begin
       result[i].Min        := FSwitch[i].Min;
       result[i].Max        := FSwitch[i].Max;
       result[i].Step       := FSwitch[i].Step;
+      result[i].Edited     := false;
       result[i].IndiGroup  := -1;
       if result[i].MultiState then begin
         try
@@ -393,7 +394,7 @@ begin
  if (FStatus<>devConnected)or(FNumSwitch=0) then exit;
  try
    for i:=0 to FNumSwitch-1 do begin
-     if value[i].CanWrite and ((value[i].Value<>FSwitch[i].Value)or(value[i].Checked<>FSwitch[i].Checked)) then begin
+     if value[i].CanWrite and value[i].Edited then begin
        p[0]:='Id';
        p[1]:=inttostr(i);
        if FSwitch[i].MultiState then begin

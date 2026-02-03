@@ -3272,6 +3272,7 @@ begin
   f_starprofile.BtnPin2D.Glyph.Assign(btn);
   f_starprofile.BtnPinTrend.Glyph.Assign(btn);
   f_profile.BtnPinProfile.Glyph.Assign(btn);
+  f_switch.PinGlyph.Picture.Assign(btn);
   TBTabs.Images.GetBitmap(10, btn);
   f_EditTargets.BtnRepeatInf.Glyph.Assign(btn);
   btn.Free;
