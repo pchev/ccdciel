@@ -51,7 +51,7 @@ T_switch = class(TComponent)
     FonStatusChange, FonSwitchChange: TNotifyEvent;
     FTimeOut: integer;
     Fdevice, FNickname,FLastError: string;
-    FAutoLoadConfig: boolean;
+    FAutoLoadConfig,FLimitRate,FLimitLock: boolean;
     FNumSwitch: integer;
     FSwitch: TSwitchList;
     procedure msg(txt: string; level:integer=3);
@@ -67,6 +67,8 @@ T_switch = class(TComponent)
     property Nickname: string read GetNickname write FNickname;
     property DeviceName: string read FDevice;
     property SwitchInterface: TDevInterface read FSwitchInterface;
+    property LimitRate: boolean read FLimitRate;
+    property LimitLock: boolean read FLimitLock write FLimitLock;
     property Status: TDeviceStatus read FStatus;
     property LastError: string read FLastError;
     property NumSwitch: integer read FNumSwitch;
@@ -89,6 +91,8 @@ begin
   FStatus := devDisconnected;
   FNumSwitch:=0;
   FLastError:='';
+  FLimitRate:=false;
+  FLimitLock:=false;
 end;
 
 destructor  T_switch.Destroy;

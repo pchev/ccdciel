@@ -304,6 +304,8 @@ type
     function cmd_Internalguider_SetSpectroMultistaroffset(x,y:string):string;
     function cmd_Spectro_Rotate_Parallactic: string;
     function cmd_Internalguider_SetSpectroRotateParallactic(onoff:string):string;
+    procedure LockSwitch;
+    procedure UnLockSwitch;
     function ScriptType(fn: string): TScriptType;
     function  RunScript(sname,path,args: string):boolean;
     function ScriptRunning: boolean;
@@ -1037,6 +1039,8 @@ var fn: string;
     st: TScriptType;
 begin
  try
+  try
+  LockSwitch;
   result:=false;
   msg(Format(rsRunScript2, [sname+blank+args]));
   FScriptFilename:=sname;
@@ -1092,6 +1096,9 @@ begin
   else begin
     result:=false;
     msg('Unknown script language '+fn);
+  end;
+  finally
+    UnLockSwitch;
   end;
  except
    on E: Exception do begin
@@ -3031,6 +3038,22 @@ try
 except
   result:=msgFailed;
 end;
+end;
+
+procedure Tf_scriptengine.LockSwitch;
+var i: integer;
+begin
+// this only affect switch with LimitRate
+  for i:=0 to NumSwitches-1 do begin
+    Switch[i].LimitLock:=true;
+  end;
+end;
+
+procedure Tf_scriptengine.UnLockSwitch;
+var i: integer;
+begin
+  for i:=0 to NumSwitches-1 do
+    Switch[i].LimitLock:=false;
 end;
 
 ///// Python scripts ///////

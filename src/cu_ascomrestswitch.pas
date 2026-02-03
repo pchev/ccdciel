@@ -80,6 +80,7 @@ end;
 procedure T_ascomrestswitch.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 var i: integer;
     J: TAscomResult;
+    buf:string;
 begin
   try
   FStatus := devConnecting;
@@ -107,7 +108,9 @@ begin
     V.Put('Connected',true);
   if V.Get('connected').AsBool then begin
      try
-     msg(V.Get('driverinfo').AsString,9);
+     buf:=V.Get('driverinfo').AsString;
+     FLimitRate:=copy(buf,1,5)='UVEX4'; // UVEX4 can only handle one simultaneous http connection
+     msg(buf,9);
      except
      end;
      try
@@ -263,8 +266,9 @@ var s: TSwitchList;
   i: integer;
   changed:boolean;
 begin
- StatusTimer.Enabled:=false;
+ if FLimitLock and FLimitRate then exit;
  try
+ StatusTimer.Enabled:=false;
   if Connected then begin
     try
      s:=GetSwitch;
@@ -400,10 +404,10 @@ begin
        if FSwitch[i].MultiState then begin
          p[2]:='Value';
          p[3]:=FloatToStr(value[i].Value);
-         msg('Set switch '+value[i].Name+'='+p[3],3);
          try
          V.Timeout:=LongTimeout;   // TODO: implement async setswich
          V.Put('setswitchvalue',p);
+         msg('Set switch '+value[i].Name+'='+p[3],3);
          finally
          V.Timeout:=StdTimeout;
          end;
@@ -411,10 +415,10 @@ begin
        else begin
          p[2]:='State';
          p[3]:=BoolToStr(value[i].Checked,true);
-         msg('Set switch '+value[i].Name+'='+p[3],3);
          try
          V.Timeout:=LongTimeout;  // TODO: implement async setswich
          V.Put('setswitch',p);
+         msg('Set switch '+value[i].Name+'='+p[3],3);
          finally
          V.Timeout:=StdTimeout;
          end;

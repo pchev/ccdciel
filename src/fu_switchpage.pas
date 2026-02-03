@@ -315,12 +315,15 @@ end;
 procedure Tf_switchpage.CheckBoxClick(Sender: TObject);
 var i: integer;
 begin
+  if lockclick then exit;
   if sender is TCheckBox then begin
     i:=TCheckBox(Sender).Tag;
     if (i>=0) and (i<FNumSwitch) then begin
       FSwitch[i].Checked:=TCheckBox(Sender).Checked;
       FSwitch[i].Edited:=true;
+      LabelMsg.Caption:='Set switch '+FSwitch[i].Name;
       if Assigned(FonSetSwitch) then FonSetSwitch(self);
+      FSwitch[i].Edited:=false;
     end;
   end;
 end;
@@ -334,7 +337,9 @@ begin
     if (i>=0) and (i<FNumSwitch) then begin
       FSwitch[i].Checked:=TRadioButton(Sender).Checked;
       FSwitch[i].Edited:=true;
+      LabelMsg.Caption:='Set switch '+FSwitch[i].Name;
       if Assigned(FonSetSwitch) then FonSetSwitch(self);
+      FSwitch[i].Edited:=false;
     end;
   end;
 end;
@@ -351,7 +356,9 @@ begin
       if s<>nil then begin
         FSwitch[i].Value:=s.Value;
         FSwitch[i].Edited:=true;
+        LabelMsg.Caption:='Set switch '+FSwitch[i].Name;
         if Assigned(FonSetSwitch) then FonSetSwitch(self);
+        FSwitch[i].Edited:=false;
       end;
     end;
   end;
