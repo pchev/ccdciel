@@ -271,7 +271,12 @@ begin
  StatusTimer.Enabled:=false;
   if Connected then begin
     try
+     try
+     if LimitRate then FLimitBusy:=true;
      s:=GetSwitch;
+     finally
+     FLimitBusy:=false;
+     end;
      if (FStatus<>devConnected)or(FNumSwitch=0) then exit;
      changed:=false;
      for i:=0 to FNumSwitch-1 do begin
@@ -285,6 +290,7 @@ begin
     end;
   end;
   finally
+   FLimitBusy:=false;
    if FStatus=devConnected then StatusTimer.Enabled:=true;
   end;
 end;

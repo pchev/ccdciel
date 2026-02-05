@@ -185,6 +185,8 @@ type
     function CompileScripts: boolean;
     function doParamstr: Tstringlist;
     function doParamCount: Integer;
+    procedure LockSwitch;
+    procedure UnLockSwitch;
   public
     { public declarations }
     dbgscr: TPSScriptDebugger;
@@ -304,8 +306,6 @@ type
     function cmd_Internalguider_SetSpectroMultistaroffset(x,y:string):string;
     function cmd_Spectro_Rotate_Parallactic: string;
     function cmd_Internalguider_SetSpectroRotateParallactic(onoff:string):string;
-    procedure LockSwitch;
-    procedure UnLockSwitch;
     function ScriptType(fn: string): TScriptType;
     function  RunScript(sname,path,args: string):boolean;
     function ScriptRunning: boolean;
@@ -3043,15 +3043,23 @@ end;
 procedure Tf_scriptengine.LockSwitch;
 var i: integer;
 begin
-// this only affect switch with LimitRate
+  // this only affect switch with LimitRate
+  // prevent a new status update
   for i:=0 to NumSwitches-1 do begin
     Switch[i].LimitLock:=true;
+  end;
+  // wait end of an eventual status update
+  for i:=0 to NumSwitches-1 do begin
+    if Switch[i].LimitBusy then begin
+      sleep(500); // sleep is OK to wait the end of the Alpaca thread
+    end;
   end;
 end;
 
 procedure Tf_scriptengine.UnLockSwitch;
 var i: integer;
 begin
+  // resume status update
   for i:=0 to NumSwitches-1 do
     Switch[i].LimitLock:=false;
 end;
