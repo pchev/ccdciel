@@ -1486,6 +1486,7 @@ begin
    if Astrometry.Busy then Astrometry.StopAstrometry;
    if f_scriptengine.ScriptRunning then begin
       f_scriptengine.StopScript;
+      FWaiting:=false;
    end;
    if FCurrentTarget>=0 then
       p:=t_plan(Ftargets[FCurrentTarget].plan)
