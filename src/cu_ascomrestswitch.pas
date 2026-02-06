@@ -286,7 +286,12 @@ begin
      end;
      if changed and Assigned(FonSwitchChange) then FonSwitchChange(self);
     except
-     on E: Exception do msg('Status error: ' + E.Message,0);
+     on E: Exception do begin
+        if FLimitRate then
+          msg('Status error: ' + E.Message,9)
+        else
+          msg('Status error: ' + E.Message,0);
+     end;
     end;
   end;
   finally
