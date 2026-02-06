@@ -6237,3 +6237,7 @@ msgstr ""
 msgid "Waiting"
 msgstr ""
 
+#: u_translation:rsframesizetoo
+msgid "Frame size too small for the selected dithering, please increase the size or reduce the dither"
+msgstr ""
+
