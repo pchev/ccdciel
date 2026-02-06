@@ -2108,6 +2108,7 @@ begin
        if FRunning then begin
        if FUnattended then begin
          StopSequence(true);
+         FWaiting:=false;
          exit;
        end else begin
          f_pause.Caption:=Format(rsScriptFailed, ['']);
@@ -2117,6 +2118,7 @@ begin
             Dec(FCurrentTarget);
          end else begin
             StopSequence(false);
+            FWaiting:=false;
             exit;
          end;
        end;
