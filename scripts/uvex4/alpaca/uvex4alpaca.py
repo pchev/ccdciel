@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # -----------------------------------------------------------------------------
 # UVEX4 - Copied from alpyca switch.py
-#         Implements a special ASCOM Alpaca Switch class with increased timeout
-#         to allow enough time to position the motors when some switch are set.
+#         Implements a special ASCOM Alpaca Switch class with connection retry and
+#         increased timeout to allow enough time to position the motors when some switch are set.
 #         The change add tmo=60.0 to the _put call of SetSwitch and SetSwitchValue.
 #
 # Part of the Alpyca application interface package
@@ -49,6 +49,8 @@
 # -----------------------------------------------------------------------------
 
 from alpaca.device import Device
+from typing import List
+import time
 
 class UVEX4(Device):
     """ASCOM Standard ISwitch V2 Interface"""
@@ -68,6 +70,73 @@ class UVEX4(Device):
 
         """
         super().__init__(address, "switch", device_number, protocol)
+
+    def __get(self,attribute: str, tmo=5.0, **data) -> str:
+        """ get with retry in case of failure """
+        maxretry=15
+        waitretry=1
+        for n in range(maxretry):
+           try:
+              result=self._get(attribute, tmo, **data)
+           except Exception as ex:
+              lastex=ex
+              exname=type(ex).__name__
+              if (exname == "ConnectionError") or (exname == "ConnectTimeout") or (exname == "ReadTimeout"):
+                 # retry in case the UVEX4 connection is busy
+                 if n<(maxretry-2):
+                    #print(attribute,'retry',n)
+                    time.sleep(waitretry)
+              else:
+                 # other exception to not retry
+                 raise lastex from None
+           else:
+              # normal exit when all is fine
+              break
+        else:
+           # number of retry excedded
+           raise lastex from None
+        # return value
+        return result
+
+    def __put(self,attribute: str, tmo=5.0, **data) -> str:
+        """ put with retry in case of failure """
+        maxretry=15
+        waitretry=1
+        for n in range(maxretry):
+           try:
+              result=self._put(attribute, tmo, **data)
+           except Exception as ex:
+              lastex=ex
+              exname=type(ex).__name__
+              if (exname == "ConnectionError") or (exname == "ConnectTimeout") or (exname == "ReadTimeout"):
+                 # retry in case the UVEX4 connection is busy
+                 if n<(maxretry-2):
+                    #print(attribute,'retry',n)
+                    time.sleep(waitretry)
+              else:
+                 # other exception to not retry
+                 raise lastex from None
+           else:
+              # normal exit when all is fine
+              break
+        else:
+           # number of retry excedded
+           raise lastex from None
+        # return value
+        return result
+
+    # other properties normally in device.py we want to make work with retries
+    @property
+    def Connected(self) -> bool:
+        return self.__get("connected")
+    @Connected.setter
+    def Connected(self, ConnectedState: bool):
+        self.__put("connected", Connected=ConnectedState)
+    @property
+    def DeviceState(self) ->List[dict]:
+        response = self.__get("devicestate")
+        return response
+
 
     @property
     def MaxSwitch(self) -> int:
@@ -97,7 +166,7 @@ class UVEX4(Device):
 
                 `Switch.MaxSwitch <https://ascom-standards.org/newdocs/switch.html#Switch.MaxSwitch>`_
         """
-        return self._get("maxswitch")
+        return self.__get("maxswitch")
 
     def CanAsync(self, Id: int) -> bool:
         """The specified switch can operate asynchronously.
@@ -132,7 +201,7 @@ class UVEX4(Device):
 
                 `Switch.CanAsync() <https://ascom-standards.org/newdocs/switch.html#Switch.CanAsync>`_
         """
-        return self._get("canasync", Id=Id)
+        return self.__get("canasync", Id=Id)
 
     def CancelAsync(self, Id: int) -> None:
         """Cancels an in-progress asynchronous state change operation. See :meth:`SetAsync` and
@@ -168,7 +237,7 @@ class UVEX4(Device):
 
                 `Switch.CancelAsync() <https://ascom-standards.org/newdocs/switch.html#Switch.CancelAsync>`_
         """
-        return self._put("cancelasync", Id=Id)
+        return self.__put("cancelasync", Id=Id)
 
     def CanWrite(self, Id: int) -> bool:
         """The specified switch can be written to.
@@ -202,7 +271,7 @@ class UVEX4(Device):
 
                 `Switch.CanWrite() <https://ascom-standards.org/newdocs/switch.html#Switch.CanWrite>`_
         """
-        return self._get("canwrite", Id=Id)
+        return self.__get("canwrite", Id=Id)
 
     def GetSwitch(self, Id: int) -> bool:
         """The state of the specified switch.
@@ -235,7 +304,7 @@ class UVEX4(Device):
 
                 `Switch.GetSwitch() <https://ascom-standards.org/newdocs/switch.html#Switch.GetSwitch>`_
         """
-        return self._get("getswitch", Id=Id)
+        return self.__get("getswitch", Id=Id)
 
     def GetSwitchDescription(self, Id: int) -> str:
         """The textual description of the specified switch.
@@ -267,7 +336,7 @@ class UVEX4(Device):
 
                 `Switch.GetSwitchDescription() <https://ascom-standards.org/newdocs/switch.html#GetSwitchDescription.MaxSwitch>`_
         """
-        return self._get("getswitchdescription", Id=Id)
+        return self.__get("getswitchdescription", Id=Id)
 
     def GetSwitchName(self, Id: int) -> str:
         """The textual name of the specified switch.
@@ -299,7 +368,7 @@ class UVEX4(Device):
 
                 `Switch.GetSwitchName() <https://ascom-standards.org/newdocs/switch.html#Switch.GetSwitchName>`_
         """
-        return self._get("getswitchname", Id=Id)
+        return self.__get("getswitchname", Id=Id)
 
     def GetSwitchValue(self, Id: int) -> float:
         """The value of the specified switch as a float.
@@ -332,7 +401,7 @@ class UVEX4(Device):
 
                 `Switch.GetSwitchValue() <https://ascom-standards.org/newdocs/switch.html#Switch.GetSwitchValue>`_
         """
-        return self._get("getswitchvalue", Id=Id)
+        return self.__get("getswitchvalue", Id=Id)
 
     def MaxSwitchValue(self, Id: int) -> float:
         """The maximum value of the specified switch as a double.
@@ -364,7 +433,7 @@ class UVEX4(Device):
 
                 `Switch.MaxSwitchValue() <https://ascom-standards.org/newdocs/switch.html#Switch.MaxSwitchValue>`_
         """
-        return self._get("maxswitchvalue", Id=Id)
+        return self.__get("maxswitchvalue", Id=Id)
 
     def MinSwitchValue(self, Id: int) -> float:
         """The minimum value of the specified switch as a double.
@@ -396,7 +465,7 @@ class UVEX4(Device):
 
                 `Switch.MinSwitchValue() <https://ascom-standards.org/newdocs/switch.html#Switch.MinSwitchValue>`_
         """
-        return self._get("minswitchvalue", Id=Id)
+        return self.__get("minswitchvalue", Id=Id)
 
     def SetAsync(self, Id: int, State: bool) -> None:
         """Asynchronouly Set a switch to the specified boolean on/off state.
@@ -435,7 +504,7 @@ class UVEX4(Device):
 
                 `Switch.SetAsync() <https://ascom-standards.org/newdocs/switch.html#Switch.SetAsync>`_
         """
-        self._put("setasync", Id=Id, State=State)
+        self.__put("setasync", Id=Id, State=State)
 
     def SetAsyncValue(self, Id: int, Value: float) -> None:
         """Asynchronouly Set a switch to the specified value
@@ -477,7 +546,7 @@ class UVEX4(Device):
 
                 `Switch.SetAsyncValue() <https://ascom-standards.org/newdocs/switch.html#Switch.SetAsyncValue>`_
         """
-        self._put("setasyncvalue", Id=Id, Value=Value)
+        self.__put("setasyncvalue", Id=Id, Value=Value)
 
     def SetSwitch(self, Id: int, State: bool) -> None:
         """Set a switch to the specified state
@@ -511,7 +580,7 @@ class UVEX4(Device):
 
                 `Switch.SetSwitch() <https://ascom-standards.org/newdocs/switch.html#Switch.SetSwitch>`_
         """
-        self._put("setswitch", Id=Id, State=State, tmo=60.0)
+        self.__put("setswitch", Id=Id, State=State, tmo=60.0)
 
     def SetSwitchName(self, Id: int, Name: str) -> None:
         """Set a switch name to the specified value.
@@ -545,7 +614,7 @@ class UVEX4(Device):
 
                 `Switch.SetSwitchName() <https://ascom-standards.org/newdocs/switch.html#Switch.SetSwitchName>`_
         """
-        self._put("setswitchname", Id=Id, Name=Name)
+        self.__put("setswitchname", Id=Id, Name=Name)
 
     def SetSwitchValue(self, Id: int, Value: float) -> None:
         """Set a switch value to the specified value.
@@ -582,7 +651,7 @@ class UVEX4(Device):
 
                 `Switch.SetSwitchValue() <https://ascom-standards.org/newdocs/switch.html#Switch.SetSwitchValue>`_
         """
-        self._put("setswitchvalue", Id=Id, Value=Value, tmo=60.0)
+        self.__put("setswitchvalue", Id=Id, Value=Value, tmo=60.0)
 
     def StateChangeComplete(self, Id: int) -> bool:
         """True if the last :meth:`SetAsync` or :meth:`SetAsyncValue`
@@ -618,7 +687,7 @@ class UVEX4(Device):
 
                 `Switch.StateChangeComplete() <https://ascom-standards.org/newdocs/switch.html#Switch.StateChangeComplete>`_
         """
-        return self._get("statechangecomplete", Id=Id)
+        return self.__get("statechangecomplete", Id=Id)
 
     def SwitchStep(self, Id: int) -> float:
         """The step size of the specified switch (see Notes).
@@ -651,4 +720,4 @@ class UVEX4(Device):
 
                 `Switch.SwitchStep() <https://ascom-standards.org/newdocs/switch.html#Switch.SwitchStep>`_
         """
-        return self._get("switchstep", Id=Id)
+        return self.__get("switchstep", Id=Id)
