@@ -1392,6 +1392,7 @@ begin
   else begin
     // we not pause, just remove the condition
     WeatherPauseCapture:=false;
+    WeatherCancelRestart:=false;
   end;
 end;
 
@@ -2616,6 +2617,7 @@ begin
         if Autoguider.State<>GUIDER_DISCONNECTED then begin
           if not StopGuider then begin
             InitTargetError:=rsFailToStopTh;
+            msg(InitTargetError, 3);
             exit;
           end;
           Wait(2);
@@ -2665,6 +2667,7 @@ begin
         ok:=Slew(t.ra,t.de,astrometrypointing,t.astrometrypointing);
         if not ok then begin
           InitTargetError:=rsTelescopeSle3;
+          msg(InitTargetError, 3);
           exit;
         end;
         Wait;
