@@ -41,9 +41,12 @@ uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp, fu_device
   {$endif}
   u_translation, Controls, Graphics, Dialogs, ExtCtrls;
 
+const
+  MaxPythonScr=10;
+
 type
 
-  TNotifyOutput = procedure(msg:TStringList; r: integer) of object;
+  TNotifyOutput = procedure(num:integer; msg:TStringList; r: integer) of object;
 
   Tradec = class(TObject)
     ra,dec: double;
@@ -55,6 +58,7 @@ type
     procedure ShowOutput;
   public
     PyProcess: TProcess;
+    pynum: integer;
     pycmd, pyscript, pypath, args: string;
     debug: boolean;
     host,port: string;
@@ -191,9 +195,9 @@ type
     { public declarations }
     dbgscr: TPSScriptDebugger;
     scr: TPSScript;
-    PythonScr: TPythonThread;
-    PythonResult: integer;
-    PythonOutput: TStringList;
+    PythonScr: array[1..MaxPythonScr] of TPythonThread;
+    PythonResult: array[1..MaxPythonScr] of integer;
+    PythonOutput: array[1..MaxPythonScr] of TStringList;
     function cmd_DevicesConnection(onoff:string):string;
     function cmd_MountPark(onoff:string):string;
     function cmd_MountTrack:string;
@@ -309,10 +313,10 @@ type
     function ScriptType(fn: string): TScriptType;
     function  RunScript(sname,path,args: string):boolean;
     function ScriptRunning: boolean;
-    function RunPython(pycmd, pyscript, pypath, args: string; debug:boolean=false): boolean;
+    function RunPython(pycmd, pyscript, pypath, args: string; out num:integer; debug:boolean=false): boolean;
     procedure StopPython;
-    function PythonRunning: boolean;
-    procedure ShowPythonOutput(output: TStringList; exitcode: integer);
+    function PythonRunning(n: integer = -1): boolean;
+    procedure ShowPythonOutput(num:integer; output: TStringList; exitcode: integer);
     procedure StopScript;
     property AstrometryGotoRunning: boolean read FAstrometryGotoRunning;
     property AstrometryGotoResult: boolean read FAstrometryGotoResult;
@@ -371,7 +375,7 @@ implementation
 procedure Tf_scriptengine.FormCreate(Sender: TObject);
 var i: integer;
 begin
-  PythonOutput:=TStringList.Create;
+  for i:=1 to MaxPythonScr do PythonOutput[i]:=TStringList.Create;
   SetLength(ilist,10);
   SetLength(dlist,10);
   SetLength(slist,10);
@@ -408,7 +412,7 @@ end;
 procedure Tf_scriptengine.FormDestroy(Sender: TObject);
 var i: integer;
 begin
-  PythonOutput.Free;
+  for i:=1 to MaxPythonScr do PythonOutput[i].Free;
   scr.Free;
   dbgscr.Free;
   radec.Free;
@@ -1034,7 +1038,7 @@ end;
 
 function Tf_scriptengine.RunScript(sname,path,args: string):boolean;
 var fn: string;
-    i: integer;
+    i,n: integer;
     ok: boolean;
     st: TScriptType;
 begin
@@ -1042,6 +1046,7 @@ begin
   try
   LockSwitch;
   result:=false;
+  n:=1;
   msg(Format(rsRunScript2, [sname+blank+args]));
   FScriptFilename:=sname;
   FScriptArgs:=args;
@@ -1049,14 +1054,14 @@ begin
   st:=ScriptType(fn);
   if st=stPython then begin
     ScriptCancel:=false;
-    result:=RunPython(PythonCmd, fn, slash(ScriptsDir),args);
+    result:=RunPython(PythonCmd, fn, slash(ScriptsDir),args,n);
     result:=result and (not ScriptCancel);
-    for i:=0 to PythonOutput.Count-1 do
-       msg(PythonOutput[i]);
+    for i:=0 to PythonOutput[n].Count-1 do
+       msg(PythonOutput[n][i]);
     if result then
        msg(Format(rsScriptFinish, [sname]))
     else begin
-       msg(Format(rsScriptError,[inttostr(PythonResult)]));
+       msg(Format(rsScriptError,[inttostr(PythonResult[n])]));
        msg(Format(rsScriptFinish, [sname]));
     end;
   end
@@ -3066,50 +3071,73 @@ end;
 
 ///// Python scripts ///////
 
-function Tf_scriptengine.RunPython(pycmd, pyscript, pypath, args: string; debug:boolean=false): boolean;
+function Tf_scriptengine.RunPython(pycmd, pyscript, pypath, args: string; out num:integer; debug:boolean=false): boolean;
+var i,n: integer;
 begin
 result:=false;
 try
-  PythonResult:=-1;
-  PythonScr:=TPythonThread.Create;
-  PythonScr.FOnShowOutput:=@ShowPythonOutput;
-  PythonScr.pycmd:=pycmd;
-  PythonScr.pyscript:=pyscript;
-  PythonScr.pypath:=pypath;
-  PythonScr.args:=args;
-  PythonScr.debug:=debug;
-  PythonScr.Start;
+  n:=-1;
+  for i:=1 to MaxPythonScr do begin
+    if PythonScr[i]=nil then begin
+      n:=i;
+      break;
+    end;
+  end;
+  if n<0 then begin
+    msg('Cannot run more than '+IntToStr(MaxPythonScr)+' scripts simultaneously');
+    exit;
+  end;
+  num:=n;
+  PythonResult[n]:=-1;
+  PythonScr[n]:=TPythonThread.Create;
+  PythonScr[n].FOnShowOutput:=@ShowPythonOutput;
+  PythonScr[n].pynum:=n;
+  PythonScr[n].pycmd:=pycmd;
+  PythonScr[n].pyscript:=pyscript;
+  PythonScr[n].pypath:=pypath;
+  PythonScr[n].args:=args;
+  PythonScr[n].debug:=debug;
+  PythonScr[n].Start;
   if assigned(FonScriptExecute) then FonScriptExecute(self);
   repeat
     wait(1);
-  until not PythonRunning;
-  result:=(PythonResult=0);
-  FreeAndNil(PythonScr);
+  until not PythonRunning(n);
+  result:=(PythonResult[n]=0);
+  FreeAndNil(PythonScr[n]);
 except
-  FreeAndNil(PythonScr);
+  FreeAndNil(PythonScr[n]);
 end;
 end;
 
-function Tf_scriptengine.PythonRunning: boolean;
+function Tf_scriptengine.PythonRunning(n: integer = -1): boolean;
+var i:integer;
 begin
 try
-  result:=(PythonScr<>nil) and (PythonScr.FRunning);
+  if (n>0) and (n<=MaxPythonScr) then
+    result:=(PythonScr[n]<>nil) and (PythonScr[n].FRunning)
+  else begin
+    result:=false;
+    for i:=1 to MaxPythonScr do
+       result:=result or ((PythonScr[i]<>nil) and (PythonScr[i].FRunning))
+  end;
 except
   result:=false;
 end;
 end;
 
 procedure Tf_scriptengine.StopPython;
+var i: integer;
 begin
-  if PythonRunning then PythonScr.PyProcess.Terminate(1);
+  for i:=1 to MaxPythonScr do
+    if PythonRunning(i) then PythonScr[i].PyProcess.Terminate(1);
 end;
 
-procedure Tf_scriptengine.ShowPythonOutput(output: TStringList; exitcode: integer);
+procedure Tf_scriptengine.ShowPythonOutput(num:integer; output: TStringList; exitcode: integer);
 begin
-PythonResult:=exitcode;
-PythonOutput.Clear;
+PythonResult[num]:=exitcode;
+PythonOutput[num].Clear;
 if output<>nil then
-  PythonOutput.Assign(output);
+  PythonOutput[num].Assign(output);
 if assigned(FonScriptAfterExecute) then FonScriptAfterExecute(self);
 end;
 
@@ -3118,6 +3146,7 @@ begin
 inherited Create(true);
 FreeOnTerminate := false;
 FRunning:=false;
+pynum:=1;
 end;
 
 procedure TPythonThread.Execute;
@@ -3230,7 +3259,7 @@ end;
 
 procedure TPythonThread.ShowOutput;
 begin
-  if Assigned(FOnShowOutput) then FOnShowOutput(output,rc);
+  if Assigned(FOnShowOutput) then FOnShowOutput(pynum,output,rc);
 end;
 
 end.

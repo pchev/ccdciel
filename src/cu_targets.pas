@@ -2600,15 +2600,11 @@ begin
       buf:=buf+'"';
       buf:=buf+' '+t.initscriptargs;
       if not f_scriptengine.RunScript(t.initscriptname,t.initscriptpath,buf) then begin
-        if f_scriptengine.PythonResult=2 then begin
-          SkipTarget:=true;
-          InitTargetError:=Format(rsSkipTarget, [t.objectname])+', skipped by initialization script';
-          msg(InitTargetError, 3);
-          result:=false;
-          exit;
-        end
-        else
-          msg(Format(rsScriptFailed, [t.initscriptname]),0);
+        SkipTarget:=true;
+        InitTargetError:=Format(rsSkipTarget, [t.objectname])+', skipped by initialization script';
+        msg(InitTargetError, 3);
+        result:=false;
+        exit;
       end;
       FScriptRunning:=false;
     end;

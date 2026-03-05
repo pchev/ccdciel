@@ -244,7 +244,7 @@ end;
 end;
 
 procedure Tf_pascaleditor.ButtonRunClick(Sender: TObject);
-var i: integer;
+var i,n: integer;
     fn,args:string;
 begin
 if FScriptType=stPascal then begin
@@ -254,21 +254,23 @@ if FScriptType=stPascal then begin
     Startdebug;
 end
 else if FScriptType=stPython then begin
+  n:=1;
   fn:=slash(ConfigDir)+'tmpscript';
   SynEdit1.Lines.SaveToFile(fn);
   args:=trim(params.Text);
   DebugMemo.Clear;
   DebugMemo.Lines.Add('running...');
   Application.ProcessMessages;
-  f_scriptengine.RunPython(PythonCmd, fn, slash(ScriptsDir),args);
-  for i:=0 to f_scriptengine.PythonOutput.Count-1 do
-     DebugMemo.Lines.Add(f_scriptengine.PythonOutput[i]);
-  DebugMemo.Lines.Add('Exit code: '+inttostr(f_scriptengine.PythonResult));
+  f_scriptengine.RunPython(PythonCmd, fn, slash(ScriptsDir),args,n);
+  for i:=0 to f_scriptengine.PythonOutput[n].Count-1 do
+     DebugMemo.Lines.Add(f_scriptengine.PythonOutput[n][i]);
+  DebugMemo.Lines.Add('Exit code: '+inttostr(f_scriptengine.PythonResult[n]));
 end;
 end;
 
 procedure Tf_pascaleditor.ButtonStepIntoClick(Sender: TObject);
 var fn,args:string;
+    n: integer;
 begin
 if FScriptType=stPascal then begin
   if Fdbgscr.Exec.Status in isRunningOrPaused then
@@ -285,8 +287,8 @@ else if FScriptType=stPython then begin
   DebugMemo.Clear;
   DebugMemo.Lines.Add('debugging...');
   Application.ProcessMessages;
-  f_scriptengine.RunPython(PythonCmd, fn, slash(ScriptsDir),args,true);
-  DebugMemo.Lines.Add('Exit code: '+inttostr(f_scriptengine.PythonResult));
+  f_scriptengine.RunPython(PythonCmd, fn, slash(ScriptsDir),args,n,true);
+  DebugMemo.Lines.Add('Exit code: '+inttostr(f_scriptengine.PythonResult[n]));
 end;
 end;
 
