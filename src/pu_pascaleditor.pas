@@ -261,7 +261,7 @@ else if FScriptType=stPython then begin
   DebugMemo.Clear;
   DebugMemo.Lines.Add('running...');
   Application.ProcessMessages;
-  f_scriptengine.RunPython(PythonCmd, fn, slash(ScriptsDir),args,n);
+  f_scriptengine.RunPython(PythonCmd, fn, slash(ScriptsDir),args,true,n);
   for i:=0 to f_scriptengine.PythonOutput[n].Count-1 do
      DebugMemo.Lines.Add(f_scriptengine.PythonOutput[n][i]);
   DebugMemo.Lines.Add('Exit code: '+inttostr(f_scriptengine.PythonResult[n]));
@@ -287,7 +287,7 @@ else if FScriptType=stPython then begin
   DebugMemo.Clear;
   DebugMemo.Lines.Add('debugging...');
   Application.ProcessMessages;
-  f_scriptengine.RunPython(PythonCmd, fn, slash(ScriptsDir),args,n,true);
+  f_scriptengine.RunPython(PythonCmd, fn, slash(ScriptsDir),args,true,n,true);
   DebugMemo.Lines.Add('Exit code: '+inttostr(f_scriptengine.PythonResult[n]));
 end;
 end;
