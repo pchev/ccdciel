@@ -5078,6 +5078,7 @@ var i,n: integer;
     oldbayer: TBayerMode;
     oldRed,oldGreen,oldBlue,x:double;
     oldBalance, oldBGneutralization,oldColorizeSpectra:boolean;
+    oldr1,oldr2,oldr3: integer;
     posprev,poscapt:integer;
     binprev,bincapt:string;
     roi:TRoi;
@@ -5141,6 +5142,9 @@ begin
   oldBlue:=BlueBalance;
   oldBalance:=BalanceFromCamera;
   oldBGneutralization:=BGneutralization;
+  oldr1:=CrR1;
+  oldr2:=CrR2;
+  oldr3:=CrR3;
   DefaultBayerMode:=TBayerMode(config.GetValue('/Color/BayerMode',4));
   BalanceFromCamera:=config.GetValue('/Color/BalanceFromCamera',true);
   BGneutralization:=config.GetValue('/Color/BGneutralization',true);
@@ -5195,6 +5199,9 @@ begin
   StackUseFlat:=config.GetValue('/PreviewStack/StackUseFlat',false);
   StackDebayer:=config.GetValue('/PreviewStack/StackDebayer',false);
   MaxVideoPreviewRate:=config.GetValue('/Video/PreviewRate',5);
+  CrR1:=config.GetValue('/Visu/CrosshairsR1',-1);
+  CrR2:=config.GetValue('/Visu/CrosshairsR2',-1);
+  CrR3:=config.GetValue('/Visu/CrosshairsR3',-1);
   i:=TemperatureScale;
   TemperatureScale:=config.GetValue('/Cooler/TemperatureScale',0);
   if TemperatureScale<>i then begin
@@ -5775,6 +5782,9 @@ begin
   if TitleColor<>i then begin
      SetTheme;
   end;
+
+  if f_visu.BullsEye and ((oldr1<>CrR1)or(oldr2<>CrR2)or(oldr3<>CrR3)) then
+    PlotImage;
 
 end;
 
@@ -10000,6 +10010,21 @@ begin
    f_option.FileStackFloat.Checked:=config.GetValue('/PreviewStack/FileStackFloat',false);
    f_option.VideoPreviewRate.Value:=config.GetValue('/Video/PreviewRate',5);
    f_option.ShowVideo.Checked:=config.GetValue('/Video/ShowVideo',false);
+   i:=config.GetValue('/Visu/CrosshairsR1',-1);
+   if i>0 then
+     f_option.CrosshairsR1.Text:=IntToStr(i)
+   else
+     f_option.CrosshairsR1.Text:='';
+   i:=config.GetValue('/Visu/CrosshairsR2',-1);
+   if i>0 then
+     f_option.CrosshairsR2.Text:=IntToStr(i)
+   else
+     f_option.CrosshairsR2.Text:='';
+   i:=config.GetValue('/Visu/CrosshairsR3',-1);
+   if i>0 then
+     f_option.CrosshairsR3.Text:=IntToStr(i)
+   else
+     f_option.CrosshairsR3.Text:='';
    f_option.VideoGroup.Visible:=(camera.CameraInterface=INDI);
    f_option.RefTreshold.Position:=config.GetValue('/RefImage/Treshold',128);
    f_option.RefColor.ItemIndex:=config.GetValue('/RefImage/Color',0);
@@ -10587,6 +10612,9 @@ begin
      config.SetValue('/PreviewStack/FileStackFloat',f_option.FileStackFloat.Checked);
      config.SetValue('/Video/PreviewRate',f_option.VideoPreviewRate.Value);
      config.SetValue('/Video/ShowVideo',f_option.ShowVideo.Checked);
+     config.SetValue('/Visu/CrosshairsR1',StrToIntDef(f_option.CrosshairsR1.Text,-1));
+     config.SetValue('/Visu/CrosshairsR2',StrToIntDef(f_option.CrosshairsR2.Text,-1));
+     config.SetValue('/Visu/CrosshairsR3',StrToIntDef(f_option.CrosshairsR3.Text,-1));
      config.SetValue('/RefImage/Treshold',f_option.RefTreshold.Position);
      config.SetValue('/RefImage/Color',f_option.RefColor.ItemIndex);
      screenconfig.SetValue('/Cursor/ImageCursor',f_option.ImageCursor.ItemIndex);
@@ -12905,6 +12933,18 @@ if f_visu.BullsEye and (not SplitImage) and (fits.HeaderInfo.naxis>1) then begin
   scrbmp.EllipseAntialias(cx,cy,s,s,co,1);
   s:=round((min(img_Height,img_Width) div 8)*scale);
   scrbmp.EllipseAntialias(cx,cy,s,s,co,1);
+  if CrR1>0 then begin
+    s:=round(CrR1*scale);
+    scrbmp.EllipseAntialias(cx,cy,s,s,co,1);
+  end;
+  if CrR2>0 then begin
+    s:=round(CrR2*scale);
+    scrbmp.EllipseAntialias(cx,cy,s,s,co,1);
+  end;
+  if CrR3>0 then begin
+    s:=round(CrR3*scale);
+    scrbmp.EllipseAntialias(cx,cy,s,s,co,1);
+  end;
 end;
 Image1.Invalidate;
 MagnifyerTimer.Enabled:=true;

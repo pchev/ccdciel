@@ -34,12 +34,18 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    BtnClearCrosshairs: TButton;
     cbSlewSyncRotator: TCheckBox;
     cbAFmedianfilter: TCheckBox;
     cbHighlightColor: TComboBox;
     cbWeatherScript: TComboBox;
     cbAstrometryNewImage: TCheckBox;
     CheckRecenterTarget: TCheckBox;
+    CrosshairsR1: TEdit;
+    CrosshairsR2: TEdit;
+    CrosshairsR3: TEdit;
+    GroupBox23: TGroupBox;
+    Label192: TLabel;
     PanelRecenter: TPanel;
     Label130: TLabel;
     Label131: TLabel;
@@ -800,6 +806,7 @@ type
     RefTreshold: TTrackBar;
     procedure ASTAPadvancedClick(Sender: TObject);
     procedure AstrometryCameraChange(Sender: TObject);
+    procedure BtnClearCrosshairsClick(Sender: TObject);
     procedure cbAstrometryNewImageChange(Sender: TObject);
     procedure AstUseOnlineClick(Sender: TObject);
     procedure AstUseScriptClick(Sender: TObject);
@@ -2209,6 +2216,13 @@ begin
   SlewFilter.Enabled:=AstrometryCamera.ItemIndex=0;
   PanelFinder.Visible:=AstrometryCamera.ItemIndex=1;
   PanelRotator.Visible:=WantRotator and (AstrometryCamera.ItemIndex=0);
+end;
+
+procedure Tf_option.BtnClearCrosshairsClick(Sender: TObject);
+begin
+  CrosshairsR1.Text:='';
+  CrosshairsR2.Text:='';
+  CrosshairsR3.Text:='';
 end;
 
 procedure Tf_option.cbAstrometryNewImageChange(Sender: TObject);
