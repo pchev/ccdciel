@@ -500,9 +500,15 @@ end;
 
 procedure Tf_visu.BtnBullsEyeClick(Sender: TObject);
 begin
-  FBullsEye:=not FBullsEye;
-  TimerRedraw.Enabled:=false;
-  TimerRedraw.Enabled:=true;
+  if img_Width>0 then begin
+    FBullsEye:=not FBullsEye;
+    BullsEyeX:=img_Width div 2;
+    BullsEyeY:=img_Height div 2;
+    TimerRedraw.Enabled:=false;
+    TimerRedraw.Enabled:=true;
+  end
+  else
+    BtnBullsEye.Down:=false;
 end;
 
 procedure Tf_visu.BtnClippingClick(Sender: TObject);

@@ -480,7 +480,7 @@ var
   GuideImgCx,GuideImgCy,FinderImgCx,FinderImgCy: double;
   SplitImage: boolean;
   GuideImgScale0,GuideImgPixRatio,GuideImgZoom,GuideZoomMin: double;
-  ScrWidth,ScrHeigth,ScrGuideWidth,ScrGuideHeigth,ScrFinderWidth,ScrFinderHeigth,SplitMargin: integer;
+  ScrWidth,ScrHeigth,ScrGuideWidth,ScrGuideHeigth,ScrFinderWidth,ScrFinderHeigth,SplitMargin,BullsEyeX,BullsEyeY: integer;
   FinderImgScale0,FinderImgPixRatio,FinderImgZoom,FinderZoomMin: double;
   FinderCapturingDark: boolean;
   MaxADU, ClippingOverflow, ClippingUnderflow: double;

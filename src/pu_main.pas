@@ -708,7 +708,7 @@ type
     FinderMouseMoving: boolean;
     FinderRestartLoop: boolean;
     DeviceTimeout: integer;
-    MouseMoving, MouseFrame, MouseSpectra, MouseRule, LockTimerPlot, LockMouseWheel, PolarMoving: boolean;
+    MouseMoving, MouseFrame, MouseSpectra, MouseRule, LockTimerPlot, LockMouseWheel, PolarMoving, BullsEyeMoving: boolean;
     LockGuideMouseWheel, LockGuideTimerPlot, LockFinderMouseWheel, LockFinderTimerPlot: boolean;
     learningvcurve: boolean;
     LogFileOpen,DeviceLogFileOpen: Boolean;
@@ -4123,7 +4123,12 @@ else if (ssMeta in Shift)or(ssAlt in Shift) then begin
   MouseRule:=true;
 end
 else if (ssCtrl in Shift) then begin
-  if (ImgZoom>0) then begin
+  if f_visu.BullsEye then begin
+     Mx:=X;
+     My:=y;
+     BullsEyeMoving:=true;
+  end
+  else if (ImgZoom>0) then begin
      Mx:=X;
      My:=y;
      MouseMoving:=true;
@@ -4236,6 +4241,10 @@ if MouseMoving and fits.HeaderInfo.valid and fits.ImageValid then begin
     Mx:=X;
     My:=Y;
 end;
+if BullsEyeMoving and fits.HeaderInfo.valid and fits.ImageValid then begin
+    Screen2Fits(Mx,My,f_visu.FlipHorz,f_visu.FlipVert,BullsEyeX,BullsEyeY);
+    PlotImage;
+end;
 if MouseFrame and fits.HeaderInfo.valid and fits.ImageValid then begin
   Image1.Canvas.Pen.Color:=clBlack;
   Image1.Canvas.Pen.Mode:=pmCopy;
@@ -4302,6 +4311,7 @@ if MouseRule then begin
   Image1.Invalidate;
 end;
 MouseMoving:=false;
+BullsEyeMoving:=false;
 MouseFrame:=false;
 MouseRule:=false;
 MouseSpectra:=false;
@@ -12886,8 +12896,8 @@ end;
 if f_visu.BullsEye and (not SplitImage) and (fits.HeaderInfo.naxis>1) then begin
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'BullsEye');{$endif}
   co:=ColorToBGRA($0000AA);
-  cx:=img_Width div 2;
-  cy:=img_Height div 2;
+  cx:=BullsEyeX;
+  cy:=BullsEyeY;
   Fits2Screen(cx,cy,f_visu.FlipHorz,f_visu.FlipVert,cx,cy);
   scrbmp.DrawHorizLine(0,cy,ScrBmp.Width,co);
   scrbmp.DrawVertLine(cx,0,ScrBmp.Height,co);
