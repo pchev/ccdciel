@@ -58,11 +58,11 @@ object f_script: Tf_script
         Width = 202
         Align = alClient
         Constraints.MaxHeight = 28
-        ItemHeight = 18
-        ParentFont = False
-        TabOrder = 0
+        ItemHeight = 24
         OnChange = ComboBoxScriptChange
         OnKeyDown = ComboBoxScriptKeyDown
+        ParentFont = False
+        TabOrder = 0
       end
       object ButtonParam: TButton
         Left = 202
@@ -72,8 +72,8 @@ object f_script: Tf_script
         Align = alRight
         Caption = '...'
         Constraints.MaxHeight = 28
-        TabOrder = 1
         OnClick = ButtonParamClick
+        TabOrder = 1
       end
     end
     object Panel5: TPanel
@@ -93,7 +93,7 @@ object f_script: Tf_script
         Top = 0
         Width = 227
         Align = alClient
-        ItemHeight = 18
+        ItemHeight = 24
         TabOrder = 0
       end
     end
@@ -115,9 +115,9 @@ object f_script: Tf_script
         Top = 0
         Width = 80
         Caption = 'Run'
+        OnClick = BtnRunClick
         ParentFont = False
         TabOrder = 0
-        OnClick = BtnRunClick
       end
       object BtnStop: TButton
         Left = 82
@@ -125,9 +125,9 @@ object f_script: Tf_script
         Top = 0
         Width = 70
         Caption = 'Stop'
+        OnClick = BtnStopClick
         ParentFont = False
         TabOrder = 1
-        OnClick = BtnStopClick
       end
       object led: TShape
         Left = 185
@@ -157,9 +157,9 @@ object f_script: Tf_script
         Top = 0
         Width = 80
         Caption = 'Edit'
+        OnClick = BtnScriptClick
         ParentFont = False
         TabOrder = 0
-        OnClick = BtnScriptClick
       end
       object BtnNew: TButton
         Left = 82
@@ -168,9 +168,9 @@ object f_script: Tf_script
         Width = 70
         BorderSpacing.Bottom = 4
         Caption = 'New'
+        OnClick = BtnScriptClick
         ParentFont = False
         TabOrder = 1
-        OnClick = BtnScriptClick
       end
       object BtnCopy: TButton
         Left = 154
@@ -178,10 +178,16 @@ object f_script: Tf_script
         Top = 0
         Width = 70
         Caption = 'Copy'
+        OnClick = BtnCopyClick
         ParentFont = False
         TabOrder = 2
-        OnClick = BtnCopyClick
       end
     end
+  end
+  object TimerUnlockDoubleClick: TTimer
+    Interval = 500
+    OnTimer = TimerUnlockDoubleClickTimer
+    Left = 41
+    Top = 32
   end
 end

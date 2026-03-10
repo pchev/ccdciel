@@ -48,6 +48,7 @@ type
     Panel4: TPanel;
     Panel5: TPanel;
     ScriptParam: TComboBox;
+    TimerUnlockDoubleClick: TTimer;
     Title: TLabel;
     procedure BtnCopyClick(Sender: TObject);
     procedure BtnScriptClick(Sender: TObject);
@@ -56,6 +57,7 @@ type
     procedure ButtonParamClick(Sender: TObject);
     procedure ComboBoxScriptChange(Sender: TObject);
     procedure ComboBoxScriptKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure TimerUnlockDoubleClickTimer(Sender: TObject);
   private
     { private declarations }
     Fcamera: T_camera;
@@ -66,6 +68,7 @@ type
     Fastrometry: TAstrometry;
     FonMsg: TNotifyMsg;
     FonScriptChange: TNotifyEvent;
+    LockDoubleClick: boolean;
     procedure msg(txt:string);
     function GetScriptList: TStrings;
     procedure AddMRU(txt:string);
@@ -117,6 +120,7 @@ begin
  ScaleDPI(Self);
  SetLang;
  led.Canvas.AntialiasingMode:=amOn;
+ LockDoubleClick:=false;
 end;
 
 destructor  Tf_script.Destroy;
@@ -235,7 +239,7 @@ begin
   path:=ConfigDir;
   sname:='startup';
   if FileExistsUTF8(slash(path)+sname+'.script') then begin
-    f_scriptengine.RunScript(sname,path,'');
+    f_scriptengine.RunScriptAsync(sname,path,'');
   end;
 end;
 
@@ -268,7 +272,7 @@ begin
   path:=ConfigDir;
   sname:='connected';
   if FileExistsUTF8(slash(path)+sname+'.script') then begin
-    f_scriptengine.RunScript(sname,path,profile);
+    f_scriptengine.RunScriptAsync(sname,path,profile);
   end;
 end;
 
@@ -279,19 +283,25 @@ begin
   path:=ConfigDir;
   sname:='disconnected';
   if FileExistsUTF8(slash(path)+sname+'.script') then begin
-    f_scriptengine.RunScript(sname,path,profile);
+    f_scriptengine.RunScriptAsync(sname,path,profile);
   end;
+end;
+
+procedure Tf_script.TimerUnlockDoubleClickTimer(Sender: TObject);
+begin
+  TimerUnlockDoubleClick.Enabled:=false;
+  LockDoubleClick:=false;
 end;
 
 procedure Tf_script.BtnRunClick(Sender: TObject);
 var sname,args: string;
     i: integer;
 begin
+  if LockDoubleClick then exit;
+  TimerUnlockDoubleClick.Enabled:=true;
+  LockDoubleClick:=true;
   i:=ComboBoxScript.ItemIndex;
   if i>=0 then begin
-    if f_scriptengine.ScriptRunning then begin
-      msg(rsAnotherScrip);
-    end else begin
       sname:=ComboBoxScript.Items[i];
       if panel5.Visible then begin
         args:=trim(ScriptParam.text);
@@ -304,8 +314,7 @@ begin
         msg(Format(rsFileNotFound,[sname+'.script']));
         exit;
       end;
-      f_scriptengine.RunScript(sname,ConfigDir,args);
-   end;
+      f_scriptengine.RunScriptAsync(sname,ConfigDir,args);
   end
   else msg(rsPleaseSelect);
 end;

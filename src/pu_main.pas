@@ -2139,6 +2139,34 @@ begin
   f_scriptengine.Planetarium:=planetarium;
   f_scriptengine.InternalGuider:=f_internalguider;
   f_scriptengine.Finder:=f_finder;
+  seq_scriptengine:=Tf_scriptengine.Create(self);
+  seq_scriptengine.Fits:=fits;
+  seq_scriptengine.onMsg:=@NewMessage;
+  seq_scriptengine.onStartSequence:=nil; // do not start sequence from sequence
+  seq_scriptengine.onStopSequence:=nil; // do not stop sequence from sequence
+  seq_scriptengine.onScriptExecute:=nil;  // script from sequence do not update the tool status
+  seq_scriptengine.onScriptAfterExecute:=nil; // script from sequence do not update the tool status
+  seq_scriptengine.onOpenFitsFile:=@LoadFitsFile;
+  seq_scriptengine.onSaveFitsFile:=@SaveFitsFile;
+  seq_scriptengine.onOpenReferenceImage:=@OpenRefImage;
+  seq_scriptengine.onClearReferenceImage:=@ClearRefImage;
+  seq_scriptengine.onSlewImageCenter:=@ResolveSlewCenter;
+  seq_scriptengine.onPlotDSO:=@ResolvePlotDso;
+  seq_scriptengine.onPlotHyperleda:=@MenuResolveHyperledaClick;
+  seq_scriptengine.onAutomaticAutofocus:=@cmdAutomaticAutofocus;
+  seq_scriptengine.onAutofocus:=@cmdAutofocus;
+  seq_scriptengine.DevicesConnection:=f_devicesconnection;
+  seq_scriptengine.Preview:=f_preview;
+  seq_scriptengine.Capture:=f_capture;
+  seq_scriptengine.Ccdtemp:=f_ccdtemp;
+  seq_scriptengine.Fomount:=f_mount;
+  seq_scriptengine.Cover:=f_cover;
+  seq_scriptengine.Starprofile:=f_starprofile;
+  seq_scriptengine.Autoguider:=autoguider;
+  seq_scriptengine.Astrometry:=astrometry;
+  seq_scriptengine.Planetarium:=planetarium;
+  seq_scriptengine.InternalGuider:=f_internalguider;
+  seq_scriptengine.Finder:=f_finder;
 
   f_script:=Tf_script.Create(self);
   f_script.onMsg:=@NewMessage;
@@ -2427,6 +2455,20 @@ begin
    f_scriptengine.CoverCalibrator:=cover;
    f_scriptengine.Safety:=safety;
    f_scriptengine.Weather:=weather;
+ end;
+ if seq_scriptengine<>nil then begin
+   seq_scriptengine.Filter:=wheel;
+   seq_scriptengine.Mount:=mount;
+   seq_scriptengine.Camera:=camera;
+   seq_scriptengine.GuiderCamera:=guidecamera;
+   seq_scriptengine.FinderCamera:=findercamera;
+   seq_scriptengine.Focuser:=focuser;
+   seq_scriptengine.Switch:=switch;
+   seq_scriptengine.Dome:=dome;
+   seq_scriptengine.Rotator:=rotator;
+   seq_scriptengine.CoverCalibrator:=cover;
+   seq_scriptengine.Safety:=safety;
+   seq_scriptengine.Weather:=weather;
  end;
  if f_script<>nil then begin
    f_script.Camera:=camera;
@@ -3463,16 +3505,6 @@ end;
 procedure Tf_main.ScriptExecute(Sender: TObject);
 begin
   f_script.led.Brush.Color:=clLime;
-  if (f_scriptengine.ScriptFilename<>'startup')and
-     (f_scriptengine.ScriptFilename<>'shutdown') and
-     (f_scriptengine.ScriptFilename<>'unattended_error')
-     then begin
-      f_script.ScriptName:=f_scriptengine.ScriptFilename;
-      if f_scriptengine.ScriptArgs>'' then begin
-        f_script.panel5.Visible:=true;
-        f_script.ScriptParam.Text:=f_scriptengine.ScriptArgs;
-      end;
-     end;
 end;
 
 procedure Tf_main.ScriptAfterExecute(Sender: TObject);
@@ -5712,6 +5744,7 @@ begin
      f_planetariuminfo.planetarium:=planetarium;
      f_goto.planetarium:=planetarium;
      f_scriptengine.Planetarium:=planetarium;
+     seq_scriptengine.Planetarium:=planetarium;
      f_sequence.Planetarium:=planetarium;
   end;
   if autoguider.AutoguiderType<>TAutoguiderType(config.GetValue('/Autoguider/Software',2)) then begin
@@ -5742,6 +5775,7 @@ begin
     f_sequence.Switch:=switch;
     f_sequence.Autoguider:=autoguider;
     f_scriptengine.Autoguider:=autoguider;
+    seq_scriptengine.Autoguider:=autoguider;
     f_script.Autoguider:=autoguider;
     f_autoguider.Status.Text:=autoguider.Status;
     f_autoguider.AutoguiderType:=autoguider.AutoguiderType;
@@ -9195,6 +9229,7 @@ begin
    autoguider.GuideFits:=guidefits;
    f_sequence.Autoguider:=autoguider;
    f_scriptengine.Autoguider:=autoguider;
+   seq_scriptengine.Autoguider:=autoguider;
    f_script.Autoguider:=autoguider;
    f_autoguider.Status.Text:=autoguider.Status;
    f_autoguider.AutoguiderType:=autoguider.AutoguiderType;
@@ -16207,6 +16242,7 @@ begin
    f_planetariuminfo.planetarium:=planetarium;
    f_goto.planetarium:=planetarium;
    f_scriptengine.Planetarium:=planetarium;
+   seq_scriptengine.Planetarium:=planetarium;
    f_sequence.Planetarium:=planetarium;
    StatusBar1.Invalidate;
  end;

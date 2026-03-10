@@ -90,7 +90,6 @@ type
     procedure TplPSScriptLine(Sender: TObject);
   private
     { private declarations }
-    FScriptFilename,FScriptArgs: string;
     Ffits : TFits;
     Fdevicesconnection:Tf_devicesconnection;
     Fcapture: Tf_capture;
@@ -312,8 +311,10 @@ type
     function cmd_Internalguider_SetSpectroRotateParallactic(onoff:string):string;
     function cmd_runscript(sname,path,args: string):string;
     function ScriptType(fn: string): TScriptType;
+    function  RunScriptAsync(sname,path,args: string; notify:boolean=True):boolean;
     function  RunScript(sname,path,args: string; notify:boolean=True):boolean;
     function ScriptRunning: boolean;
+    function RunPythonAsync(pycmd, pyscript, pypath, args: string; notify: boolean; out num:integer; debug:boolean=false): boolean;
     function RunPython(pycmd, pyscript, pypath, args: string; notify: boolean; out num:integer; debug:boolean=false): boolean;
     procedure StopPython;
     function PythonRunning(n: integer = -1): boolean;
@@ -357,15 +358,13 @@ type
     property Autoguider: T_autoguider read Fautoguider write Fautoguider;
     property Astrometry: TAstrometry read Fastrometry write Fastrometry;
     property Planetarium: TPlanetarium read Fplanetarium write Fplanetarium;
-    property ScriptFilename: string read FScriptFilename;
-    property ScriptArgs: string read FScriptArgs;
     property InternalGuider: Tf_internalguider read Finternalguider write Finternalguider;
     property Finder: Tf_finder read FFinder write FFinder;
     property Switch: TSwitches read FSwitch write FSwitch;
   end;
 
 var
-  f_scriptengine: Tf_scriptengine;
+  f_scriptengine, seq_scriptengine: Tf_scriptengine;
 
 implementation
 
@@ -1037,34 +1036,22 @@ begin
  end;
 end;
 
-function Tf_scriptengine.RunScript(sname,path,args: string; notify:boolean=True):boolean;
+function Tf_scriptengine.RunScriptAsync(sname,path,args: string; notify:boolean=True):boolean;
 var fn: string;
     i,n: integer;
     ok: boolean;
     st: TScriptType;
 begin
  try
-  try
   LockSwitch;
   result:=false;
   n:=1;
   msg(Format(rsRunScript2, [sname+blank+args]));
-  FScriptFilename:=sname;
-  FScriptArgs:=args;
   fn:=slash(path)+sname+'.script';
   st:=ScriptType(fn);
   if st=stPython then begin
     ScriptCancel:=false;
-    result:=RunPython(PythonCmd, fn, slash(ScriptsDir),args,notify,n);
-    result:=result and (not ScriptCancel);
-    for i:=0 to PythonOutput[n].Count-1 do
-       msg(PythonOutput[n][i]);
-    if result then
-       msg(Format(rsScriptFinish, [sname]))
-    else begin
-       msg(Format(rsScriptError,[inttostr(PythonResult[n])]));
-       msg(Format(rsScriptFinish, [sname]));
-    end;
+    result:=RunPythonAsync(PythonCmd, fn, slash(ScriptsDir),args,notify,n);
   end
   else if st=stPascal then begin
     {$if defined(CPUARM) or defined(CPUAARCH64)}
@@ -1103,12 +1090,74 @@ begin
     result:=false;
     msg('Unknown script language '+fn);
   end;
-  finally
+ except
+   on E: Exception do begin
+    msg(Format(rsScriptError, [E.Message]));
     UnLockSwitch;
+   end;
+ end;
+end;
+
+
+function Tf_scriptengine.RunScript(sname,path,args: string; notify:boolean=True):boolean;
+var fn: string;
+    i,n: integer;
+    ok: boolean;
+    st: TScriptType;
+begin
+ try
+  LockSwitch;
+  result:=false;
+  n:=1;
+  msg(Format(rsRunScript2, [sname+blank+args]));
+  fn:=slash(path)+sname+'.script';
+  st:=ScriptType(fn);
+  if st=stPython then begin
+    ScriptCancel:=false;
+    result:=RunPython(PythonCmd, fn, slash(ScriptsDir),args,notify,n);
+    result:=result and (not ScriptCancel);
+  end
+  else if st=stPascal then begin
+    {$if defined(CPUARM) or defined(CPUAARCH64)}
+      msg('Pascal language script are not supported on ARM processor');
+      exit;
+    {$endif}
+    FParamStr:=TStringList.Create;
+    FParamStr.Add(fn);
+    if args<>'' then begin
+      SplitCmdLineParams(args,FParamStr,true);
+    end;
+    scr.Script.LoadFromFile(fn);
+    ok:=scr.Compile;
+    ScriptCancel:=false;
+    if ok then begin
+      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+      result:=scr.Execute;
+      wait(2);
+      result:=result and (not ScriptCancel);
+      if result then
+         msg(Format(rsScriptFinish, [sname]))
+      else begin
+         msg(Format(rsScriptExecut, [inttostr(scr.ExecErrorRow),
+           scr.ExecErrorToString]));
+         msg(Format(rsScriptFinish, [sname]));
+      end;
+    end else begin
+      for i:=0 to scr.CompilerMessageCount-1 do begin
+         msg(Format(rsCompilationE, [scr.CompilerErrorToStr(i)]));
+      end;
+      result:=false;
+    end;
+    FParamStr.Free;
+  end
+  else begin
+    result:=false;
+    msg('Unknown script language '+fn);
   end;
  except
    on E: Exception do begin
     msg(Format(rsScriptError, [E.Message]));
+    UnLockSwitch;
    end;
  end;
 end;
@@ -2399,14 +2448,20 @@ end;
 
 function Tf_scriptengine.cmd_SequenceStart(seq:string):string;
 begin
-  if Assigned(FonStartSequence) then FonStartSequence(seq);
-  result:=msgOK;
+  result:=msgFailed;
+  if Assigned(FonStartSequence) then begin
+    FonStartSequence(seq);
+    result:=msgOK;
+  end;
 end;
 
 function Tf_scriptengine.cmd_SequenceStop:string;
 begin
-  if Assigned(FonStopSequence) then FonStopSequence(self);
-  result:=msgOK;
+  result:=msgFailed;
+  if Assigned(FonStopSequence) then begin
+    FonStopSequence(self);
+    result:=msgOK;
+  end;
 end;
 
 function Tf_scriptengine.cmd_SaveFitsFile(fn:string):string;
@@ -3060,6 +3115,7 @@ end;
 procedure Tf_scriptengine.LockSwitch;
 var i: integer;
 begin
+  if Switch=nil then exit;
   // this only affect switch with LimitRate
   // prevent a new status update
   for i:=0 to NumSwitches-1 do begin
@@ -3076,6 +3132,7 @@ end;
 procedure Tf_scriptengine.UnLockSwitch;
 var i: integer;
 begin
+  if Switch=nil then exit;
   // resume status update
   for i:=0 to NumSwitches-1 do
     Switch[i].LimitLock:=false;
@@ -3122,16 +3179,50 @@ except
 end;
 end;
 
+function Tf_scriptengine.RunPythonAsync(pycmd, pyscript, pypath, args: string; notify: boolean; out num:integer; debug:boolean=false): boolean;
+var i,n: integer;
+begin
+result:=false;
+try
+  n:=-1;
+  for i:=1 to MaxPythonScr do begin
+    if PythonScr[i]=nil then begin
+      n:=i;
+      break;
+    end;
+  end;
+  if n<0 then begin
+    msg('Cannot run more than '+IntToStr(MaxPythonScr)+' scripts simultaneously');
+    exit;
+  end;
+  num:=n;
+  PythonResult[n]:=-1;
+  PythonScr[n]:=TPythonThread.Create;
+  PythonScr[n].FreeOnTerminate:=true;
+  PythonScr[n].FOnShowOutput:=@ShowPythonOutput;
+  PythonScr[n].pynum:=n;
+  PythonScr[n].notify:=notify;
+  PythonScr[n].pycmd:=pycmd;
+  PythonScr[n].pyscript:=pyscript;
+  PythonScr[n].pypath:=pypath;
+  PythonScr[n].args:=args;
+  PythonScr[n].debug:=debug;
+  PythonScr[n].Start;
+  if notify and assigned(FonScriptExecute) then FonScriptExecute(self);
+except
+end;
+end;
+
 function Tf_scriptengine.PythonRunning(n: integer = -1): boolean;
 var i:integer;
 begin
 try
   if (n>0) and (n<=MaxPythonScr) then
-    result:=(PythonScr[n]<>nil) and (PythonScr[n].FRunning)
+    result:=(PythonScr[n]<>nil) and (not PythonScr[n].Terminated) and (PythonScr[n].FRunning)
   else begin
     result:=false;
     for i:=1 to MaxPythonScr do
-       result:=result or ((PythonScr[i]<>nil) and (PythonScr[i].FRunning))
+       result:=result or ((PythonScr[i]<>nil) and (not PythonScr[i].Terminated) and (PythonScr[i].FRunning))
   end;
 except
   result:=false;
@@ -3146,12 +3237,24 @@ begin
 end;
 
 procedure Tf_scriptengine.ShowPythonOutput(num:integer; output: TStringList; exitcode: integer;  notify:boolean);
+var sname: string;
+    i: integer;
 begin
+sname:=ExtractFileNameWithoutExt(PythonScr[num].pyscript);
 PythonResult[num]:=exitcode;
 PythonOutput[num].Clear;
 if output<>nil then
   PythonOutput[num].Assign(output);
 if notify and assigned(FonScriptAfterExecute) then FonScriptAfterExecute(self);
+UnLockSwitch;
+for i:=0 to PythonOutput[num].Count-1 do
+   msg(PythonOutput[num][i]);
+if exitcode=0 then
+   msg(Format(rsScriptFinish, [sname]))
+else begin
+   msg(Format(rsScriptError,[inttostr(PythonResult[num])]));
+   msg(Format(rsScriptFinish, [sname]));
+end;
 end;
 
 constructor TPythonThread.Create;

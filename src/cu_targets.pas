@@ -1311,7 +1311,7 @@ begin
     scriptfound:=false;
     if FileExistsUTF8(slash(ConfigDir)+sc+'.script') then begin
        scriptfound:=true;
-       f_scriptengine.RunScript(sc,ConfigDir,param);
+       seq_scriptengine.RunScript(sc,ConfigDir,param);
     end;
     if not scriptfound then begin
       msg(Format(rsFileNotFound,[sc+'.script']),1);
@@ -1485,8 +1485,8 @@ begin
    Camera.AbortExposure;
    if Mount.MountSlewing then Mount.AbortMotion;
    if Astrometry.Busy then Astrometry.StopAstrometry;
-   if f_scriptengine.ScriptRunning then begin
-      f_scriptengine.StopScript;
+   if seq_scriptengine.ScriptRunning then begin
+      seq_scriptengine.StopScript;
       FWaiting:=false;
    end;
    if FCurrentTarget>=0 then
@@ -1524,7 +1524,7 @@ begin
         Preview.Stop;
      end;
      StopGuider;
-     if f_scriptengine.ScriptRunning then f_scriptengine.StopScript;
+     if seq_scriptengine.ScriptRunning then seq_scriptengine.StopScript;
      msg(rsSequenceAbor,0);
      RunErrorAction;
      ShowDelayMsg('');
@@ -2103,7 +2103,7 @@ begin
      TargetForceNext:=false;
      Targets[FCurrentTarget].autoguiding:=false;
      FScriptRunning:=true;
-     if not f_scriptengine.RunScript(Targets[FCurrentTarget].planname,Targets[FCurrentTarget].path,Targets[FCurrentTarget].scriptargs)then begin
+     if not seq_scriptengine.RunScript(Targets[FCurrentTarget].planname,Targets[FCurrentTarget].path,Targets[FCurrentTarget].scriptargs)then begin
        FScriptRunning:=false;
        msg(Format(rsScriptFailed, [Targets[FCurrentTarget].planname]),0);
        if FRunning then begin
@@ -2137,7 +2137,7 @@ begin
      sw:=TStringList.Create;
      SplitRec(Targets[FCurrentTarget].planname,tab,sw);
      if sw.Count=3 then
-       r:=f_scriptengine.cmd_setswitch(sw[0],sw[1],sw[2])
+       r:=seq_scriptengine.cmd_setswitch(sw[0],sw[1],sw[2])
      else
        r:='Wrong parameters count';
      if r<>msgOK then begin
@@ -2600,7 +2600,7 @@ begin
       buf:=buf+' ,'+t.magnitude_str;
       buf:=buf+'"';
       buf:=buf+' '+t.initscriptargs;
-      if not f_scriptengine.RunScript(t.initscriptname,t.initscriptpath,buf) then begin
+      if not seq_scriptengine.RunScript(t.initscriptname,t.initscriptpath,buf) then begin
         SkipTarget:=true;
         InitTargetError:=Format(rsSkipTarget, [t.objectname])+', skipped by initialization script';
         msg(InitTargetError, 3);
@@ -3281,7 +3281,7 @@ begin
     scriptfound:=false;
     if FileExistsUTF8(slash(ConfigDir)+sc+'.script') then begin
        scriptfound:=true;
-       f_scriptengine.RunScript(sc,ConfigDir,param);
+       seq_scriptengine.RunScript(sc,ConfigDir,param);
     end;
     if not scriptfound then begin
       msg(Format(rsFileNotFound,[sc+'.script']),1);
@@ -3340,7 +3340,7 @@ if AtEndStopTracking or AtEndPark or AtEndCloseDome or AtEndWarmCamera or AtEndR
     scriptfound:=false;
     if FileExistsUTF8(slash(ConfigDir)+sc+'.script') then begin
        scriptfound:=true;
-       f_scriptengine.RunScript(sc,ConfigDir,param);
+       seq_scriptengine.RunScript(sc,ConfigDir,param);
     end;
     if not scriptfound then begin
       msg(Format(rsFileNotFound,[sc+'.script']),1);

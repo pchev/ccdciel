@@ -327,7 +327,7 @@ begin
         CurrentStepName:=p.description;
         ShowDelayMsg('');
         msg(Format(rsStartStep, [p.description_str]),1);
-        if not f_scriptengine.RunScript(p.scriptname,p.scriptpath,p.scriptargs)then begin
+        if not seq_scriptengine.RunScript(p.scriptname,p.scriptpath,p.scriptargs)then begin
           msg(Format(rsScriptFailed, [p.scriptname]),0);
         end;
         FScriptRunning:=false;
@@ -337,7 +337,7 @@ begin
         StepTimeStart:=now;
         CurrentStepName:=p.description;
         msg(Format(rsStartStep, [p.description_str]),1);
-        r:=f_scriptengine.cmd_setswitch(p.switchnickname,p.switchname,p.switchvalue);
+        r:=seq_scriptengine.cmd_setswitch(p.switchnickname,p.switchname,p.switchvalue);
         if r<>msgOK then begin
           msg(Format(rsSwitchFailed, [p.switchnickname+' '+p.switchname])+' '+r,0);
         end;
