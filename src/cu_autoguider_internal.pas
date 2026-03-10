@@ -678,18 +678,20 @@ begin
         setlength(xy_array_old,1);
         star_counter:=1;
         // Mark star area
-        hfd1:=finternalguider.SearchWinMin/2/3;
-        inc(FGuide_frame_counter);
-        FGuide_frame_array[FGuide_frame_counter-1].size:=hfd1*3;
-        FGuide_frame_array[FGuide_frame_counter-1].x:=xc*GuideImgPixRatio;
-        FGuide_frame_array[FGuide_frame_counter-1].y:=yc;
-        if Finternalguider.GuideStarOffset then begin
-          xo:=xc-Finternalguider.StarOffsetX.Value;
-          yo:=yc+Finternalguider.StarOffsetY.Value;
+        if FGuide_frame_counter<(maxstars-2) then begin
+          hfd1:=finternalguider.SearchWinMin/2/3;
           inc(FGuide_frame_counter);
           FGuide_frame_array[FGuide_frame_counter-1].size:=hfd1*3;
-          FGuide_frame_array[FGuide_frame_counter-1].x:=xo*GuideImgPixRatio;
-          FGuide_frame_array[FGuide_frame_counter-1].y:=yo;
+          FGuide_frame_array[FGuide_frame_counter-1].x:=xc*GuideImgPixRatio;
+          FGuide_frame_array[FGuide_frame_counter-1].y:=yc;
+          if Finternalguider.GuideStarOffset then begin
+            xo:=xc-Finternalguider.StarOffsetX.Value;
+            yo:=yc+Finternalguider.StarOffsetY.Value;
+            inc(FGuide_frame_counter);
+            FGuide_frame_array[FGuide_frame_counter-1].size:=hfd1*3;
+            FGuide_frame_array[FGuide_frame_counter-1].x:=xo*GuideImgPixRatio;
+            FGuide_frame_array[FGuide_frame_counter-1].y:=yo;
+          end;
         end;
         WriteLog('INFO: Star(s)='+inttostr(star_counter)+', HFD='+FormatFloat(f3v,CurrentHFD));
         msg(inttostr(star_counter)+' guide stars used, HFD='+FormatFloat(f3v,CurrentHFD),3);
@@ -731,10 +733,12 @@ begin
           LogFlux:=max(LogFlux,flux);
 
           // Annotate the star
-          inc(FGuide_frame_counter);
-          FGuide_frame_array[FGuide_frame_counter-1].size:=hfd1*3;
-          FGuide_frame_array[FGuide_frame_counter-1].x:=xc*GuideImgPixRatio;
-          FGuide_frame_array[FGuide_frame_counter-1].y:=yc;
+          if FGuide_frame_counter<(maxstars-1) then begin
+            inc(FGuide_frame_counter);
+            FGuide_frame_array[FGuide_frame_counter-1].size:=hfd1*3;
+            FGuide_frame_array[FGuide_frame_counter-1].x:=xc*GuideImgPixRatio;
+            FGuide_frame_array[FGuide_frame_counter-1].y:=yc;
+          end;
         end;
 
         inc(fitsx,stepsize);
@@ -874,18 +878,20 @@ begin
        finternalguider.GuideLockNextX:=round(xc); // in case of recovery restart
        finternalguider.GuideLockNextY:=ysize-round(yc);
        // Mark star area
-       hfd1:=WinMin/2/3;
-       inc(FGuide_frame_counter);
-       FGuide_frame_array[FGuide_frame_counter-1].size:=hfd1*3;
-       FGuide_frame_array[FGuide_frame_counter-1].x:=xc*GuideImgPixRatio;
-       FGuide_frame_array[FGuide_frame_counter-1].y:=yc;
-       if Finternalguider.GuideStarOffset then begin
-         xo:=xc-Finternalguider.StarOffsetX.Value;
-         yo:=yc+Finternalguider.StarOffsetY.Value;
+       if FGuide_frame_counter<(maxstars-2) then begin
+         hfd1:=WinMin/2/3;
          inc(FGuide_frame_counter);
          FGuide_frame_array[FGuide_frame_counter-1].size:=hfd1*3;
-         FGuide_frame_array[FGuide_frame_counter-1].x:=xo*GuideImgPixRatio;
-         FGuide_frame_array[FGuide_frame_counter-1].y:=yo;
+         FGuide_frame_array[FGuide_frame_counter-1].x:=xc*GuideImgPixRatio;
+         FGuide_frame_array[FGuide_frame_counter-1].y:=yc;
+         if Finternalguider.GuideStarOffset then begin
+           xo:=xc-Finternalguider.StarOffsetX.Value;
+           yo:=yc+Finternalguider.StarOffsetY.Value;
+           inc(FGuide_frame_counter);
+           FGuide_frame_array[FGuide_frame_counter-1].size:=hfd1*3;
+           FGuide_frame_array[FGuide_frame_counter-1].x:=xo*GuideImgPixRatio;
+           FGuide_frame_array[FGuide_frame_counter-1].y:=yo;
+         end;
        end;
        finternalguider.Info:=IntToStr(star_counter)+' star, Intensity: '+FormatFloat(f1,vmax);
      end
@@ -924,10 +930,12 @@ begin
         LogFlux:=max(LogFlux,flux);
 
         // Mark star area
-        inc(FGuide_frame_counter);
-        FGuide_frame_array[FGuide_frame_counter-1].size:=hfd1*3;
-        FGuide_frame_array[FGuide_frame_counter-1].x:=xc*GuideImgPixRatio;
-        FGuide_frame_array[FGuide_frame_counter-1].y:=yc;
+        if FGuide_frame_counter<(maxstars-1) then begin
+          inc(FGuide_frame_counter);
+          FGuide_frame_array[FGuide_frame_counter-1].size:=hfd1*3;
+          FGuide_frame_array[FGuide_frame_counter-1].x:=xc*GuideImgPixRatio;
+          FGuide_frame_array[FGuide_frame_counter-1].y:=yc;
+        end;
       end
       else
       begin //Star lost temporary
