@@ -310,6 +310,7 @@ type
     function cmd_Spectro_Rotate_Parallactic: string;
     function cmd_Internalguider_SetSpectroRotateParallactic(onoff:string):string;
     function cmd_runscript(sname,path,args: string):string;
+    function cmd_runscriptasync(sname,path,args: string):string;
     function ScriptType(fn: string): TScriptType;
     function  RunScriptAsync(sname,path,args: string; notify:boolean=True):boolean;
     function  RunScript(sname,path,args: string; notify:boolean=True):boolean;
@@ -3106,6 +3107,17 @@ begin
 result:=msgFailed;
 try
    if RunScript(sname,path,args,false) then
+     result:=msgOK;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_runscriptasync(sname,path,args: string):string;
+begin
+result:=msgFailed;
+try
+   if RunScriptAsync(sname,path,args,false) then
      result:=msgOK;
 except
   result:=msgFailed;
