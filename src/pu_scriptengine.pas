@@ -312,13 +312,14 @@ type
     function cmd_runscript(sname,path,args: string):string;
     function cmd_runscriptasync(sname,path,args: string):string;
     function cmd_scriptrunning(num: string): boolean;
+    function cmd_scriptstop(num: string): string;
     function ScriptType(fn: string): TScriptType;
     function  RunScriptAsync(sname,path,args: string; notify:boolean=True):integer;
     function  RunScript(sname,path,args: string; notify:boolean=True):boolean;
     function ScriptRunning: boolean;
     function RunPythonAsync(pycmd, pyscript, pypath, args: string; notify: boolean; out num:integer; debug:boolean=false): boolean;
     function RunPython(pycmd, pyscript, pypath, args: string; notify: boolean; out num:integer; debug:boolean=false): boolean;
-    procedure StopPython;
+    procedure StopPython(n: integer = -1);
     function PythonRunning(n: integer = -1): boolean;
     procedure ShowPythonOutput(num:integer; output: TStringList; exitcode: integer; notify:boolean);
     procedure StopScript;
@@ -3147,6 +3148,21 @@ except
 end;
 end;
 
+function Tf_scriptengine.cmd_scriptstop(num: string): string;
+var i,n: integer;
+begin
+result:=msgFailed;
+try
+  val(num,i,n);
+  if n<>0 then exit;
+  if (i<=0) or (i>MaxPythonScr) then exit;
+  StopPython(i);
+  result:=msgOK;
+except
+  result:=msgFailed;
+end;
+end;
+
 procedure Tf_scriptengine.LockSwitch;
 var i: integer;
 begin
@@ -3266,11 +3282,15 @@ except
 end;
 end;
 
-procedure Tf_scriptengine.StopPython;
+procedure Tf_scriptengine.StopPython(n: integer = -1);
 var i: integer;
 begin
-  for i:=1 to MaxPythonScr do
-    if PythonRunning(i) then PythonScr[i].PyProcess.Terminate(1);
+  if (n>0) and (n<=MaxPythonScr) then
+    if PythonRunning(n) then PythonScr[n].PyProcess.Terminate(1)
+  else begin
+    for i:=1 to MaxPythonScr do
+      if PythonRunning(i) then PythonScr[i].PyProcess.Terminate(1);
+  end;
 end;
 
 procedure Tf_scriptengine.ShowPythonOutput(num:integer; output: TStringList; exitcode: integer;  notify:boolean);

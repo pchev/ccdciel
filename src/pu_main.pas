@@ -18650,6 +18650,12 @@ try
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     result:=result+'"result": '+BoolToStr(f_scriptengine.cmd_scriptrunning(buf1),tr,fa);
   end
+  else if method='SCRIPT_STOP' then begin
+    CheckParamCount(1);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_scriptstop(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
   // method not found
   else begin
     result:=result+'"error": {"code": -32601, "message": "Method not found"}';
