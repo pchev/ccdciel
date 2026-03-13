@@ -3386,6 +3386,7 @@ try
   PyProcess.Environment.Add('CCDCIEL_PORT='+TCPIPServerPort);
   PyProcess.Execute;
   while PyProcess.Running do begin
+    sleep(10);
     if (output<>nil) and (PyProcess.Output<>nil) then begin
       s:=PyProcess.Output.NumBytesAvailable;
       if s>0 then begin
