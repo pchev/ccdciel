@@ -18635,17 +18635,7 @@ try
     x2:=rad2deg*x2;
     result:=result+'"result":{"ra": '+FormatFloat(f9v,x1)+', "dec": '+FormatFloat(f9v,x2)+'}';
   end
-  else if method='RUNSCRIPT' then begin
-    CheckParamCount(1);
-    buf1:=trim(value[attrib.IndexOf('params.0')]);
-    buf2:='';
-    for i:=1 to nparms-1 do begin
-      buf2:=buf2+' "'+trim(value[attrib.IndexOf('params.'+IntToStr(i))])+'"';
-    end;
-    buf:=f_scriptengine.cmd_runscript(buf1,ConfigDir,buf2);
-    result:=result+'"result":{"status": "'+buf+'"}';
-  end
-  else if method='RUNSCRIPTASYNC' then begin
+  else if method='SCRIPT_RUN' then begin
     CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf2:='';
@@ -18653,7 +18643,12 @@ try
       buf2:=buf2+' "'+trim(value[attrib.IndexOf('params.'+IntToStr(i))])+'"';
     end;
     buf:=f_scriptengine.cmd_runscriptasync(buf1,ConfigDir,buf2);
-    result:=result+'"result":{"status": "'+buf+'"}';
+    result:=result+'"result": '+buf
+  end
+  else if method='SCRIPT_RUNNING' then begin
+    CheckParamCount(1);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    result:=result+'"result": '+BoolToStr(f_scriptengine.cmd_scriptrunning(buf1),tr,fa);
   end
   // method not found
   else begin

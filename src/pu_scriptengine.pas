@@ -311,8 +311,9 @@ type
     function cmd_Internalguider_SetSpectroRotateParallactic(onoff:string):string;
     function cmd_runscript(sname,path,args: string):string;
     function cmd_runscriptasync(sname,path,args: string):string;
+    function cmd_scriptrunning(num: string): boolean;
     function ScriptType(fn: string): TScriptType;
-    function  RunScriptAsync(sname,path,args: string; notify:boolean=True):boolean;
+    function  RunScriptAsync(sname,path,args: string; notify:boolean=True):integer;
     function  RunScript(sname,path,args: string; notify:boolean=True):boolean;
     function ScriptRunning: boolean;
     function RunPythonAsync(pycmd, pyscript, pypath, args: string; notify: boolean; out num:integer; debug:boolean=false): boolean;
@@ -1037,7 +1038,7 @@ begin
  end;
 end;
 
-function Tf_scriptengine.RunScriptAsync(sname,path,args: string; notify:boolean=True):boolean;
+function Tf_scriptengine.RunScriptAsync(sname,path,args: string; notify:boolean=True):integer;
 var fn: string;
     i,n: integer;
     ok: boolean;
@@ -1045,14 +1046,19 @@ var fn: string;
 begin
  try
   LockSwitch;
-  result:=false;
+  result:=-1;
   n:=1;
   msg(Format(rsRunScript2, [sname+blank+args]));
   fn:=slash(path)+sname+'.script';
+  if not FileExists(fn) then begin
+    msg(Format(rsFileNotFound,[fn]));
+    exit;
+  end;
   st:=ScriptType(fn);
   if st=stPython then begin
     ScriptCancel:=false;
-    result:=RunPythonAsync(PythonCmd, fn, slash(ScriptsDir),args,notify,n);
+    ok:=RunPythonAsync(PythonCmd, fn, slash(ScriptsDir),args,notify,n);
+    if ok then result:=n;
   end
   else if st=stPascal then begin
     {$if defined(CPUARM) or defined(CPUAARCH64)}
@@ -1069,26 +1075,28 @@ begin
     ScriptCancel:=false;
     if ok then begin
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-      result:=scr.Execute;
+      ok:=scr.Execute;
       wait(2);
-      result:=result and (not ScriptCancel);
-      if result then
+      ok:=ok and (not ScriptCancel);
+      if ok then begin
+         result:=0;
          msg(Format(rsScriptFinish, [sname]))
+      end
       else begin
-         msg(Format(rsScriptExecut, [inttostr(scr.ExecErrorRow),
-           scr.ExecErrorToString]));
+         result:=1;
+         msg(Format(rsScriptExecut, [inttostr(scr.ExecErrorRow), scr.ExecErrorToString]));
          msg(Format(rsScriptFinish, [sname]));
       end;
     end else begin
       for i:=0 to scr.CompilerMessageCount-1 do begin
          msg(Format(rsCompilationE, [scr.CompilerErrorToStr(i)]));
       end;
-      result:=false;
+      result:=1;
     end;
     FParamStr.Free;
   end
   else begin
-    result:=false;
+    result:=-1;
     msg('Unknown script language '+fn);
   end;
  except
@@ -3114,13 +3122,28 @@ end;
 end;
 
 function Tf_scriptengine.cmd_runscriptasync(sname,path,args: string):string;
+var i: integer;
 begin
-result:=msgFailed;
+result:='-1';
 try
-   if RunScriptAsync(sname,path,args,false) then
-     result:=msgOK;
+   i:= RunScriptAsync(sname,path,args,false);
+   result:=IntToStr(i);
 except
-  result:=msgFailed;
+  result:='-1';
+end;
+end;
+
+function Tf_scriptengine.cmd_scriptrunning(num: string): boolean;
+var i,n: integer;
+begin
+result:=false;
+try
+  val(num,i,n);
+  if n<>0 then exit;
+  if (i<=0) or (i>MaxPythonScr) then exit;
+  result:=PythonRunning(i);
+except
+  result:=false;
 end;
 end;
 
@@ -3198,7 +3221,7 @@ result:=false;
 try
   n:=-1;
   for i:=1 to MaxPythonScr do begin
-    if PythonScr[i]=nil then begin
+    if not PythonRunning(i) then begin
       n:=i;
       break;
     end;
@@ -3220,8 +3243,10 @@ try
   PythonScr[n].args:=args;
   PythonScr[n].debug:=debug;
   PythonScr[n].Start;
+  result:=true;
   if notify and assigned(FonScriptExecute) then FonScriptExecute(self);
 except
+  result:=false;
 end;
 end;
 
