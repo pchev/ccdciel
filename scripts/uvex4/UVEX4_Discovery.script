@@ -27,8 +27,10 @@ for svr in svrs:
        print('Manufacturer: '+ desc['Manufacturer'])
        print('Version: '+ desc['ManufacturerVersion'])
        config = configparser.ConfigParser()
-       config['Default'] = {'Server': svr}
-       with open(os.path.join(scriptdir,'UVEX4_Server.config'), 'w') as configfile:
+       config.read(os.path.join(scriptdir,'UVEX4_config.script'))
+       config['alpaca'] = {'server': svr}
+       config['settings'] = {'connection': 'alpaca'}
+       with open(os.path.join(scriptdir,'UVEX4_config.script'), 'w') as configfile:
          config.write(configfile)
        print('UVEX4 IP address and port updated in the config file')
        found=True

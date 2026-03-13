@@ -1,0 +1,9 @@
+[settings]
+connection = serial
+
+[serial]
+portcom = COM4
+serialtimeout = 10
+commandtimeout = 60
+
+[alpaca]

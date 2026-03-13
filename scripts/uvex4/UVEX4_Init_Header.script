@@ -1,0 +1,117 @@
+# Python program for CCDciel
+# see: https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference
+
+# UVEX4 set FITS headers with current UVEX4 information
+
+from ccdciel import ccdciel
+import configparser
+import sys
+import os
+
+# current script directory
+scriptdir = os.path.dirname(os.path.abspath(sys.argv[0]))
+# read connection from config
+try:
+  config = configparser.ConfigParser()
+  config.read(os.path.join(scriptdir,'UVEX4_config.script'))
+  connection=config['settings']['connection']
+except Exception as ex:
+  print('UVEX4 connection setting not found in UVEX4_config')
+  sys.exit(1)
+
+if connection=='serial':
+   from libuvex4 import UVEX4  
+   try :
+       # connect to UVEX4 using information in the config file
+       ccdciel('LogMsg','Connecting to UVEX4 serial port')
+       uvex = UVEX4(os.path.join(scriptdir,'UVEX4_config.script'))
+       gr = str(uvex.grating_resolution)
+       ccdciel('LogMsg','GRATING='+gr)             # print for a trace in the log
+       ccdciel("CustomHeader_add",["GRATING",gr])  # update FITS header
+
+       if uvex.Grating_motor_enabled :
+         w  = uvex.wavelength
+         ccdciel('LogMsg',"WAVELNTH="+w[1])
+         ccdciel('LogMsg',"WAVEMIN="+w[2])
+         ccdciel('LogMsg',"WAVEMAX="+w[3])
+         ccdciel("CustomHeader_add",["WAVELNTH",w[1]])
+         ccdciel("CustomHeader_add",["WAVEMIN",w[2]])
+         ccdciel("CustomHeader_add",["WAVEMAX",w[3]])
+       else :
+         ccdciel('LogMsg','Grating motor not enabled')
+
+       if uvex.Slit_motor_enabled :
+         spos= uvex.slitpos
+         sname = uvex.Slits[spos-1].Label
+         ccdciel('LogMsg','SLIT='+sname)
+         ccdciel("CustomHeader_add",["SLIT",sname])
+       else :
+         ccdciel('LogMsg','Slit motor not enabled')
+
+       if uvex.Temperature_active :
+         t = uvex.temperature
+         ccdciel('LogMsg','SPECTEMP='+ str(t))
+         ccdciel("CustomHeader_add",["SPECTEMP",t])
+       else :
+         ccdciel('LogMsg','Temperature probe not enabled')
+
+   except Exception as ex:
+       print('Error: '+type(ex).__name__,'-',ex)
+       sys.exit(1)
+
+elif connection=='alpaca':
+   from alpaca import management
+   from uvex4alpaca import *   
+     
+   try:
+     uvex4server=config['alpaca']['server']
+   except Exception as ex:
+     print('Server configuration not found. Please run UVEX4_Discovery')
+     sys.exit(1)
+     
+   try :
+       ccdciel('LogMsg','Connecting to UVEX4 Alpaca server at '+uvex4server)
+       uvex4 = UVEX4(uvex4server,0)
+       uvex4.Connected=True
+    
+       for i in range(uvex4.MaxSwitch):
+          name=uvex4.GetSwitchName(i)
+          val=f"{uvex4.GetSwitchValue(i)}"
+
+          if name=='Grating resolution':
+             ccdciel('LogMsg','GRATING='+val)             # print for a trace in the log
+             ccdciel("CustomHeader_add",["GRATING",val])  # update FITS header
+
+          elif name=='Central wavelength':
+             ccdciel('LogMsg','WAVELNTH='+val)
+             ccdciel("CustomHeader_add",["WAVELNTH",val])
+          elif name=='Min. wavelength':
+             ccdciel('LogMsg','WAVEMIN='+val)
+             ccdciel("CustomHeader_add",["WAVEMIN",val])
+          elif name=='Max. wavelength':
+             ccdciel('LogMsg','WAVEMAX='+val)
+             ccdciel("CustomHeader_add",["WAVEMAX",val])
+
+          elif name=='Focus position':
+             ccdciel('LogMsg','SPECFOC='+val)
+             ccdciel("CustomHeader_add",["SPECFOC",val])
+
+          elif name=='Temperature':
+             ccdciel('LogMsg','SPECTEMP='+val)
+             ccdciel("CustomHeader_add",["SPECTEMP",val])
+
+          else:
+             prefix=name.split(':')
+             if len(prefix)>1 :
+                if (prefix[0]=='Slit' and val=='1') :
+                  ccdciel('LogMsg','SLIT='+prefix[1])
+                  ccdciel("CustomHeader_add",["SLIT",prefix[1]])
+
+   except Exception as ex:
+       print('Error: '+type(ex).__name__,'-',ex)
+       sys.exit(1)
+       
+else:
+   print('Invalid connection '+connection+' in UVEX4_config')
+   sys.exit(1)
+       

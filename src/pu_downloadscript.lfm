@@ -2,10 +2,10 @@ object f_downloadscript: Tf_downloadscript
   Left = 369
   Height = 451
   Top = 30
-  Width = 608
+  Width = 744
   Caption = 'f_downloadscript'
   ClientHeight = 451
-  ClientWidth = 608
+  ClientWidth = 744
   Constraints.MinHeight = 200
   Constraints.MinWidth = 500
   OnCreate = FormCreate
@@ -14,7 +14,7 @@ object f_downloadscript: Tf_downloadscript
     Left = 0
     Height = 369
     Top = 40
-    Width = 608
+    Width = 744
     Align = alClient
     ColCount = 3
     Columns = <    
@@ -35,7 +35,7 @@ object f_downloadscript: Tf_downloadscript
         MaxSize = 1000
         SizePriority = 0
         Title.Caption = 'Description'
-        Width = 340
+        Width = 470
       end>
     FixedCols = 0
     MouseWheelOption = mwGrid
@@ -45,22 +45,22 @@ object f_downloadscript: Tf_downloadscript
     ColWidths = (
       134
       134
-      340
+      470
     )
   end
   object PanelBottom: TPanel
     Left = 0
     Height = 42
     Top = 409
-    Width = 608
+    Width = 744
     Align = alBottom
     ClientHeight = 42
-    ClientWidth = 608
+    ClientWidth = 744
     TabOrder = 1
     object ButtonCancel: TButton
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = ButtonDownload
-      Left = 172
+      Left = 240
       Height = 25
       Top = 8
       Width = 75
@@ -74,7 +74,7 @@ object f_downloadscript: Tf_downloadscript
     object ButtonDownload: TButton
       AnchorSideLeft.Control = PanelBottom
       AnchorSideLeft.Side = asrCenter
-      Left = 267
+      Left = 335
       Height = 25
       Top = 8
       Width = 75
@@ -87,17 +87,17 @@ object f_downloadscript: Tf_downloadscript
     Left = 0
     Height = 40
     Top = 0
-    Width = 608
+    Width = 744
     Align = alTop
     Caption = 'Select the script to download'
     ClientHeight = 40
-    ClientWidth = 608
+    ClientWidth = 744
     TabOrder = 2
     object ButtonRefresh: TButton
       AnchorSideLeft.Control = PanelTitle
       AnchorSideRight.Control = PanelTitle
       AnchorSideRight.Side = asrBottom
-      Left = 455
+      Left = 591
       Height = 25
       Top = 8
       Width = 144

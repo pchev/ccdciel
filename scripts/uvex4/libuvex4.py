@@ -14,9 +14,9 @@ verbose=False
 def UVEX4readconfig(configfile) :
     parser = ConfigParser()
     parser.read(configfile)                          # read the configuration file
-    portCom = parser['settings']['portCOM']          # mandatory serial port, COM4 or /dev/ttyUSB0
-    serialtimeout = int(parser['settings'].get('serialtimeout','10'))  # timeout to use to create the serial
-    cmdtimeout = int(parser['settings'].get('commandtimeout','60'))    # maximum elapse time for a UVEX4 command
+    portCom = parser['serial']['portCOM']          # mandatory serial port, COM4 or /dev/ttyUSB0
+    serialtimeout = int(parser['serial'].get('serialtimeout','10'))  # timeout to use to create the serial
+    cmdtimeout = int(parser['serial'].get('commandtimeout','60'))    # maximum elapse time for a UVEX4 command
     return portCom, serialtimeout, cmdtimeout 
 
 # connect serial link, command timeout, and wait the end of initialization
@@ -86,7 +86,8 @@ def UVEX4query(command, resp='', minlen=3, numresp=1) :
       if verbose :
               logging.warning('Receive: {!r}'.format(r))
       if len(r) == 0 :
-        logging.error('timeout')
+        if verbose :
+           logging.error('timeout')
         break                                  # timeout, exit
       if time.time()-start > globaltimeout:    # global command timeout exceded
          raise Exception('Command {!r} take too long to complete'.format(command))
@@ -119,7 +120,8 @@ def UVEX4cmd(command, resp, testbusy=True) :
       if verbose :
               logging.warning('Receive: {!r}'.format(r))
       if len(r) == 0 :
-        logging.error('timeout')
+        if verbose :
+           logging.error('timeout')
         break                                  # serial timeout, exit
       if time.time()-start > globaltimeout:    # global command timeout exceded
          raise Exception('Command {!r} take too long to complete'.format(command))

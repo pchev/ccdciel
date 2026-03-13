@@ -129,7 +129,7 @@ end;
 
 procedure Tf_downloadscript.ButtonDownloadClick(Sender: TObject);
 var x: integer;
-    fn,basefn,dfn,configfn: string;
+    fn,basefn,dfn,configfn,oldconfig: string;
     configexist: boolean;
     FUnZipper: TUnZipper;
 begin
@@ -168,6 +168,13 @@ begin
         DeleteFile(configfn+'.dist');
         RenameFile(configfn,configfn+'.dist');
         CopyFile(configfn+'.backup',configfn,[cffOverwriteFile]);
+      end;
+      if (basefn='UVEX4') then  begin
+        oldconfig:=slash(ConfigDir)+'UVEX4-serial_config.script';
+        if FileExists(oldconfig) then begin
+           DeleteFile(oldconfig+'.bak');
+           RenameFile(oldconfig,oldconfig+'.bak');
+        end;
       end;
       FscriptName:=trim(basefn)+'_config';
       if not FileExists(slash(ConfigDir)+FscriptName+'.script') then  begin

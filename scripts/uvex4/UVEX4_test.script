@@ -1,0 +1,110 @@
+# Python program for CCDciel
+# see: https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference
+#
+# Display current UVEX4 informations
+
+from ccdciel import ccdciel
+import configparser
+import sys
+import os
+
+# current script directory
+scriptdir = os.path.dirname(os.path.abspath(sys.argv[0]))
+# read connection from config
+try:
+  config = configparser.ConfigParser()
+  config.read(os.path.join(scriptdir,'UVEX4_config.script'))
+  connection=config['settings']['connection']
+except Exception as ex:
+  print('UVEX4 connection setting not found in UVEX4_config')
+  sys.exit(1)
+
+
+if connection=='serial':
+   from libuvex4 import UVEX4
+   # connect to UVEX4 using information in the config file
+   ccdciel('LogMsg','Connecting to UVEX4 serial port')
+   uvex = UVEX4(os.path.join(scriptdir,'UVEX4_config.script'))
+
+   ccdciel('LogMsg','Version_Arduino='+uvex.Version_Arduino)
+
+   ccdciel('LogMsg','SlitSet='+str(uvex.SlitSet))
+
+   if uvex.Slit_motor_enabled :
+     ccdciel('LogMsg','NumSlit='+str(uvex.NumSlit))
+     for i in range(uvex.NumSlit):
+        ccdciel('LogMsg',str(i+1)+', '+uvex.Slits[i].Label+', '+', '+str(uvex.Slits[i].Offset))
+     spos= uvex.slitpos
+     sname = uvex.Slits[spos-1].Label
+     ccdciel('LogMsg','Current slit='+str(spos)+' '+sname)
+   else :
+     ccdciel('LogMsg','Slit motor not enabled')
+
+   ccdciel('LogMsg','Grating resolution='+str(uvex.grating_resolution)+' line/mm')
+   ccdciel('LogMsg','Grating resolution='+str(uvex.GratingSpRes)+' A/px')
+   ccdciel('LogMsg','Grating resolution='+str(uvex.GratingAnRes)+' A/step')
+   if uvex.Grating_motor_enabled :
+     w  = uvex.wavelength
+     ccdciel('LogMsg',"WAVELNTH="+w[1])
+     ccdciel('LogMsg',"WAVEMIN="+w[2])
+     ccdciel('LogMsg',"WAVEMAX="+w[3])
+   else :
+     ccdciel('LogMsg','Grating motor not enabled')
+
+   if uvex.Calibrex_enabled :
+     if ( uvex.CalibrationNb > 0 ) :
+       ccdciel('LogMsg','CalibrationNb='+str(uvex.CalibrationNb))
+       try:
+         n = uvex.calibrations_name
+         c = uvex.calibration
+         for i in range(uvex.CalibrationNb):
+           ccdciel('LogMsg','Relay '+str(i+1)+ ', ' +n[i] + ' = ' + str(c[i]) )
+       except:
+         ccdciel('LogMsg','No response from Calibrex')
+   else :
+     ccdciel('LogMsg','Calibrex not enabled')
+
+   if uvex.Focuser_motor_enabled :
+     p1 = 'relative '+str(uvex.focusrelpos)
+     if uvex.Focuser_hall_enabled :
+       p2 = ', absolute '+str(uvex.focuspos)
+     else:
+       p2 = ''
+     ccdciel('LogMsg','Focuser position: '+p1+p2)
+   else :
+     ccdciel('LogMsg','Focuser motor not enabled')
+
+   if uvex.Temperature_active :
+     ccdciel('LogMsg','Temperature='+ str(uvex.temperature))
+   else :
+     ccdciel('LogMsg','Temperature probe not available')
+     
+elif connection=='alpaca':
+   from alpaca import management
+   from uvex4alpaca import *
+   try:
+     uvex4server=config['alpaca']['server']
+   except Exception as ex:
+     print('Server configuration not found. Please run UVEX4_Discovery')
+     sys.exit(1)
+   try :
+      ccdciel('LogMsg','UVEX4 Alpaca server IP: '+uvex4server)   
+      desc=management.description(uvex4server)
+      ccdciel('LogMsg','Name: '+ desc['ServerName'])
+      ccdciel('LogMsg','Manufacturer: '+ desc['Manufacturer'])
+      ccdciel('LogMsg','Version: '+ desc['ManufacturerVersion'])
+
+      uvex4 = UVEX4(uvex4server,0)
+      uvex4.Connected=True
+    
+      for i in range(uvex4.MaxSwitch):
+         name=uvex4.GetSwitchName(i)
+         val=uvex4.GetSwitchValue(i)
+         ccdciel('LogMsg',name+' = '+f"{val}")
+   except Exception as ex:
+      print('Error: '+type(ex).__name__,'-',ex)
+      sys.exit(1)
+     
+else:
+   print('Invalid connection '+connection+' in UVEX4_config')
+   sys.exit(1)
