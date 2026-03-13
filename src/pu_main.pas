@@ -1255,6 +1255,16 @@ var fs : TSearchRec;
 begin
  // purge file older than 30 days
  tl:=DateTimeToFileDate(now-30);
+ // purge old backup files
+ i:=FindFirstUTF8(slash(ConfigDir)+'*.bak',0,fs);
+ while i=0 do begin
+   if (fs.Time>0)and(fs.Time<tl) then begin
+     buf:=slash(ConfigDir)+fs.Name;
+     DeleteFileUTF8(buf);
+   end;
+   i:=FindNextUTF8(fs);
+ end;
+ FindCloseUTF8(fs);
  // purge standard log
  i:=FindFirstUTF8(slash(LogDir)+'Log_*',0,fs);
  while i=0 do begin
