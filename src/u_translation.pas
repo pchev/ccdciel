@@ -1661,6 +1661,10 @@ resourcestring
   rsSpectroSlitR = 'Spectroscope ROI';
   rsWaiting = 'Waiting';
   rsFrameSizeToo = 'Frame size too small for the selected dithering, please increase the size or reduce the dither';
+  rsNextSequence = 'Next sequence';
+  rsContinueWith = 'Continue with the %s sequence';
+  rsLoadAndStart = 'Load and start the sequence %s now?';
+  rsDoNotStartSN = 'Do not start %s now.';
 
 implementation
 

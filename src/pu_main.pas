@@ -689,7 +689,10 @@ type
     f_msg: Tf_msg;
     fits, guidefits, finderfits: TFits;
     ImaBmp,ImaGuideBmp,ImaFinderBmp: TBGRABitmap;
-    TCPDaemon, TCPDaemon4: TTCPDaemon;
+    TCPDaemon: TTCPDaemon;
+    {$ifdef mswindows}
+    TCPDaemon4: TTCPDaemon;
+    {$endif}
     refmask: boolean;
     reftreshold,refcolor: integer;
     reffile: string;

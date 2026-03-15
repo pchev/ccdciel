@@ -59,6 +59,7 @@ type
     Splitter1: TSplitter;
     StatusTimer: TTimer;
     StartTimer: TTimer;
+    NextSequenceTimer: TTimer;
     Unattended: TCheckBox;
     DelayMsg: TLabel;
     StatusMsg: TLabel;
@@ -86,6 +87,7 @@ type
     procedure MenuCopyClick(Sender: TObject);
     procedure MenuDeleteClick(Sender: TObject);
     procedure MenuEditClick(Sender: TObject);
+    procedure NextSequenceTimerTimer(Sender: TObject);
     procedure PlanGridDrawCell(Sender: TObject; aCol, aRow: Integer;
       aRect: TRect; aState: TGridDrawState);
     procedure StartTimerTimer(Sender: TObject);
@@ -99,7 +101,7 @@ type
   private
     { private declarations }
     TargetRow, PlanRow: integer;
-    StartingSequence: Boolean;
+    StartingSequence, FUserStop: Boolean;
     FEditingTarget: Boolean;
     Targets: T_Targets;
     FonMsg: TNotifyMsg;
@@ -228,6 +230,7 @@ begin
  CurrentStepName:='';
  StartingSequence:=false;
  FEditingTarget:=false;
+ FUserStop:=false;
  Targets:=T_Targets.Create(nil);
  Targets.Preview:=Fpreview;
  Targets.Capture:=Fcapture;
@@ -575,6 +578,7 @@ begin
    f_EditTargets.LoadScriptList;
    f_EditTargets.Switch:=FSwitch;
    f_EditTargets.LoadSwitchList;
+   f_EditTargets.SetSequenceList;
    f_EditTargets.StepList.Columns[pcolrefexp-1].PickList.Assign(f_autoexposurestep.cbRef.Items);
    f_EditTargets.SolarTracking:=(Autoguider.AutoguiderType=agINTERNAL);
    if live then begin
@@ -657,6 +661,8 @@ begin
    Title3.Caption:=rsTargets+': '+Targets.TargetName;
    if Targets.TargetsRepeat>1 then
      Title3.Caption:=Title3.Caption+' x'+inttostr(Targets.TargetsRepeat);
+   if Targets.NextSequence<>'' then
+     Title3.Caption:=Title3.Caption+', '+rsNext+': '+Targets.NextSequence;
    for i:=1 to Targets.count do begin
      TargetGrid.Cells[0,i]:=Targets.Targets[i-1].objectname;
      if Targets.Targets[i-1].repeatcount>0 then
@@ -813,6 +819,7 @@ begin
  end;
  Targets.TargetsRepeatCount:=Targets.SequenceFile.Items.GetValue('/Targets/RepeatDone',0);
  StartingSequence:=true;
+ FUserStop:=false;
  msg(Format(rsStartingSequ,['']),1);
  led.Brush.Color:=clYellow;
  // check mount park
@@ -973,10 +980,38 @@ begin
  led.Brush.Color:=clRed;
  PlanGrid.Invalidate;
  TargetGrid.Invalidate;
+ if (not FUserStop) and (Targets.NextSequence<>'') then begin
+    msg(Format(rsContinueWith, [Targets.NextSequence]), 3);
+    NextSequenceTimer.Enabled:=true;
+ end;
+end;
+
+procedure Tf_sequence.NextSequenceTimerTimer(Sender: TObject);
+var seqn,fn: string;
+begin
+  NextSequenceTimer.Enabled:=false;
+  seqn:=Targets.NextSequence;
+  fn:=slash(SequenceDir)+seqn+'.targets';
+  if FileExists(fn) then begin
+    if not Unattended.Checked then begin
+      f_pause.Caption:=rsNextSequence+' '+seqn;
+      f_pause.Text:=Format(rsLoadAndStart, [seqn]);
+      if not f_pause.Wait(30) then begin
+         msg(Format(rsDoNotStartSN, [seqn]), 3);
+         exit;
+      end;
+    end;
+    LoadTargets(fn);
+    StartSequence;
+  end
+  else begin
+    msg(rsAbort+', '+format(rsFileNotFound,[fn]),1);
+  end;
 end;
 
 procedure Tf_sequence.BtnStopClick(Sender: TObject);
 begin
+ FUserStop:=true;
  StopSequence;
 end;
 
@@ -1023,7 +1058,7 @@ begin
      if ObsLongitude<0 then buf:=rsEast else buf:=rsWest;
      msg(Format(rsTheComputerT, [FormatFloat(f1, ObsTimeZone), FormatFloat(f1, abs(ObsLongitude))+blank+buf])+crlf+rsBeSureTheCom+crlf+rsBeCarefulOft, 0);
    end
-   else if Targets.Running or Fcapture.Running then begin
+   else if Targets.Running or Fcapture.Running or f_pause.Visible then begin
      msg(rsCaptureAlrea,0);
    end
    else if Targets.Count=0 then begin

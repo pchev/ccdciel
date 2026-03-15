@@ -43,6 +43,7 @@ type
   { Tf_EditTargets }
 
   Tf_EditTargets = class(TForm)
+    Bevel1: TBevel;
     Bevel3: TBevel;
     Bevel4: TBevel;
     BtnAddStep: TButton;
@@ -71,8 +72,10 @@ type
     cbMoonAvoidance: TCheckBox;
     CheckBoxResetRepeat: TCheckBox;
     CheckBoxRestartStatus: TCheckBox;
+    cbNextSequence: TComboBox;
     Label22: TLabel;
     Label23: TLabel;
+    Label24: TLabel;
     MenuAddCaptureStep: TMenuItem;
     MenuAddScriptStep: TMenuItem;
     MenuAddSwitchStep: TMenuItem;
@@ -88,6 +91,7 @@ type
     MenuMagnitude: TMenuItem;
     MenuOnlineCoord: TMenuItem;
     Panel10: TPanel;
+    PanelLeft: TPanel;
     PanelOptions: TPanel;
     Panel16: TPanel;
     PopupAddStep: TPopupMenu;
@@ -373,6 +377,7 @@ type
     procedure LoadPlanList;
     procedure LoadScriptList;
     procedure LoadSwitchList;
+    procedure SetSequenceList;
     procedure SetTarget(n: integer; t: TTarget);
     procedure ClearTargetList;
     procedure ClearStepList;
@@ -561,6 +566,7 @@ begin
   CheckBoxRepeatList.Caption := rsRepeatTheWho;
   CheckBoxRestartStatus.Caption:=rsRecordRestar;
   CheckBoxResetRepeat.Caption:=rsClearRestart;
+  Label24.Caption:=rsNextSequence;
   Label5.Caption:=rsSequenceStar2;
   SeqStart.Caption := rsStartAt;
   SeqStop.Caption := rsStopAt;
@@ -1760,6 +1766,25 @@ begin
     TermOpt.Items[cbUnattended]:=rsUnattendedEr+': '+UnattendedScript
   else
     TermOpt.Items[cbUnattended]:=rsUnattendedEr;
+end;
+
+procedure Tf_EditTargets.SetSequenceList;
+var i: integer;
+    fs : TSearchRec;
+    list: TStringList;
+begin
+  list:=TStringList.Create;
+  cbNextSequence.Clear;
+  list.Add('');
+  i:=FindFirst(slash(SequenceDir)+'*.targets',0,fs);
+  while i=0 do begin
+    list.Add(ExtractFileNameWithoutExt(fs.Name));
+    i:=FindNext(fs);
+  end;
+  FindClose(fs);
+  list.Sort;
+  cbNextSequence.Items.Assign(list);
+  list.Free;
 end;
 
 procedure Tf_EditTargets.FormResize(Sender: TObject);
@@ -4068,6 +4093,7 @@ begin
   value.ResetRepeat      := CheckBoxResetRepeat.Checked;
   value.TargetsRepeat    := TargetsRepeat;
   value.TargetsRepeatCount:=TargetsRepeatCount;
+  value.NextSequence    := cbNextSequence.Text;
   value.SeqStart         := SeqStart.Checked;
   value.SeqStop          := SeqStop.Checked;
   value.SeqStartTwilight := SeqStartTwilight.Checked;
@@ -4101,6 +4127,12 @@ begin
      CheckBoxResetRepeat.Checked:=value.ResetRepeat;
      TargetsRepeat:=value.TargetsRepeat;
      TargetsRepeatCount:=value.TargetsRepeatCount;
+     for i:=0 to cbNextSequence.Items.Count-1 do begin
+        if cbNextSequence.Items[i]=value.NextSequence then begin
+          cbNextSequence.ItemIndex:=i;
+          break;
+        end;
+     end;
      TargetList.RowCount:=value.Count+1;
      SeqStart.Checked:=value.SeqStart;
      SeqStop.Checked:=value.SeqStop;
@@ -4136,6 +4168,7 @@ begin
      CheckBoxResetRepeat.Checked:=true;
      TargetsRepeat:=1;
      TargetsRepeatCount:=0;
+     cbNextSequence.ItemIndex:=0;
      SeqStart.Checked:=false;
      SeqStop.Checked:=false;
      SeqStartTwilight.Checked:=false;

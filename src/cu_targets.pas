@@ -111,6 +111,7 @@ type
       FRestarting, FRealRestart: boolean;
       Fslewing: boolean;
       InitTargetError: string;
+      FNextSequence: string;
       function GetBusy: boolean;
       procedure SetTargetName(val: string);
       procedure SetPreview(val: Tf_preview);
@@ -251,6 +252,7 @@ type
       property AtEndShutdown: boolean read FAtEndShutdown write FAtEndShutdown;
       property OnShutdown: TNotifyEvent read FonShutdown write FonShutdown;
       property OnRestart: TNotifyEvent read FonRestart write FonRestart;
+      property NextSequence: string read FNextSequence write FNextSequence;
   end;
 
   function TemplateModified(p:T_Plan):boolean;
@@ -288,6 +290,7 @@ begin
   FAtStartUnpark:=false;
   FAtStartRunScript:=false;
   FAtStartScript:='';
+  FNextSequence:='';
   FAtEndPark:=false;
   FAtEndCloseDome:=false;
   FAtEndStopTracking:=true;
@@ -521,6 +524,7 @@ begin
   FAtEndScript := Source.FAtEndScript;
   FOnErrorRunScript := Source.FOnErrorRunScript;
   FOnErrorScript := Source.FOnErrorScript;
+  FNextSequence := Source.FNextSequence;
   FAtStartCool := Source.FAtStartCool;
   FAtStartUnpark := Source.FAtStartUnpark;
   FAtStartRunScript := Source.FAtStartRunScript;
@@ -584,6 +588,7 @@ begin
   FAtEndScript := Source.FAtEndScript;
   FOnErrorRunScript := Source.FOnErrorRunScript;
   FOnErrorScript := Source.FOnErrorScript;
+  FNextSequence := Source.FNextSequence;
 
   // change to start condition
   StartChange:=
@@ -797,6 +802,7 @@ begin
    OnErrorRunScript := FSequenceFile.Items.GetValue('/Termination/ErrorRunScript',false);
    AtEndScript      := FSequenceFile.Items.GetValue('/Termination/EndScript','');
    OnErrorScript    := FSequenceFile.Items.GetValue('/Termination/ErrorScript','');
+   FNextSequence   := FSequenceFile.Items.GetValue('/Termination/NextSequence','');
    if FileVersion<>TargetFileVersion then
       msg('Upgrade sequence file '+CurrentSeqName+' from version '+IntToStr(FileVersion)+' to version '+IntToStr(TargetFileVersion),1);
    if FileVersion<3 then begin
@@ -1008,6 +1014,7 @@ try
     FSequenceFile.Items.SetValue('/Termination/ErrorRunScript',OnErrorRunScript);
     FSequenceFile.Items.SetValue('/Termination/EndScript',AtEndScript);
     FSequenceFile.Items.SetValue('/Termination/ErrorScript',OnErrorScript);
+    FSequenceFile.Items.SetValue('/Termination/NextSequence',FNextSequence);
     for i:=1 to Count do begin
       t:=FTargets[i-1];
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/ObjectName',t.objectname);

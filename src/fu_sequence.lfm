@@ -314,7 +314,7 @@ object f_sequence: Tf_sequence
       Height = 22
       Hint = 'If checked no confirmation dialog will be presented and failed operation will abort the current step.'
       Top = 112
-      Width = 127
+      Width = 123
       Caption = 'Run unattended'
       OnChange = UnattendedChange
       ParentFont = False
@@ -376,5 +376,11 @@ object f_sequence: Tf_sequence
       Caption = 'MenuEdit'
       OnClick = MenuEditClick
     end
+  end
+  object NextSequenceTimer: TTimer
+    Enabled = False
+    OnTimer = NextSequenceTimerTimer
+    Left = 34
+    Top = 133
   end
 end
