@@ -6241,3 +6241,19 @@ msgstr ""
 msgid "Frame size too small for the selected dithering, please increase the size or reduce the dither"
 msgstr ""
 
+#: u_translation:rsnextsequence
+msgid "Next sequence"
+msgstr ""
+
+#: u_translation:rscontinuewith
+msgid "Continue with the %s sequence"
+msgstr ""
+
+#: u_translation:rsloadandstart
+msgid "Load and start the sequence %s now?"
+msgstr ""
+
+#: u_translation:rsdonotstartsn
+msgid "Do not start %s now."
+msgstr ""
+

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-02-06 19:49+0000\n"
-"PO-Revision-Date: 2026-02-06 20:39+0000\n"
+"POT-Creation-Date: 2026-03-15 09:57+0000\n"
+"PO-Revision-Date: 2026-03-15 10:02+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-02-06 20:40+0000\n"
-"X-Generator: Launchpad (build 4847db153920c8fbc330ac275b92a72279fa07a2)\n"
+"X-Launchpad-Export-Date: 2026-03-15 10:04+0000\n"
+"X-Generator: Launchpad (build 30ebb7e51b1d452d1afd137b32cca7f23d23d307)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -1170,6 +1170,11 @@ msgstr "Poursuit l’exécution de la séquence"
 msgid "Continue the sequence"
 msgstr "Continue la séquence"
 
+#: u_translation.rscontinuewith
+#, object-pascal-format
+msgid "Continue with the %s sequence"
+msgstr "Continuer avec la séquence %s"
+
 #: u_translation.rscontrolexpos
 msgid "Control exposure"
 msgstr "Exposition de contrôle"
@@ -1607,6 +1612,11 @@ msgstr "Ne démare pas l'autoguidage"
 #: u_translation.rsdonotstartif
 msgid "Do not start if it cannot be done completely"
 msgstr "Ne pas commencer si cela ne peut pas être fait complètement"
+
+#: u_translation.rsdonotstartsn
+#, object-pascal-format
+msgid "Do not start %s now."
+msgstr "Ne démarre pas %s maintenant."
 
 #: u_translation.rsdontswait
 #, object-pascal-format
@@ -2766,6 +2776,11 @@ msgstr "Limite le changement"
 msgid "Load"
 msgstr "Charger"
 
+#: u_translation.rsloadandstart
+#, object-pascal-format
+msgid "Load and start the sequence %s now?"
+msgstr "Charge et démarre le séquence %s maintenant ?"
+
 #: u_translation.rsloadconfigur
 msgid "Load configuration on startup"
 msgstr "Charge la configuration au démarrage"
@@ -3330,6 +3345,10 @@ msgstr "Nouveau script"
 #: u_translation.rsnext
 msgid "Next"
 msgstr "Suivant"
+
+#: u_translation.rsnextsequence
+msgid "Next sequence"
+msgstr "Séquence suivante"
 
 #: u_translation.rsnexttarget
 msgid "Next target"

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-02-06 19:49+0000\n"
+"POT-Creation-Date: 2026-03-15 09:57+0000\n"
 "PO-Revision-Date: 2025-10-22 19:24+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-02-06 20:40+0000\n"
-"X-Generator: Launchpad (build 4847db153920c8fbc330ac275b92a72279fa07a2)\n"
+"X-Launchpad-Export-Date: 2026-03-15 10:04+0000\n"
+"X-Generator: Launchpad (build 30ebb7e51b1d452d1afd137b32cca7f23d23d307)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -1170,6 +1170,11 @@ msgstr "Продолжение выполнения задания"
 msgid "Continue the sequence"
 msgstr "Выполнение задания"
 
+#: u_translation.rscontinuewith
+#, object-pascal-format
+msgid "Continue with the %s sequence"
+msgstr ""
+
 #: u_translation.rscontrolexpos
 msgid "Control exposure"
 msgstr "Контрольный снимок"
@@ -1607,6 +1612,11 @@ msgstr "Не запускать гидирование"
 #: u_translation.rsdonotstartif
 msgid "Do not start if it cannot be done completely"
 msgstr "Не начинать, если невозможно выполнить полностью"
+
+#: u_translation.rsdonotstartsn
+#, object-pascal-format
+msgid "Do not start %s now."
+msgstr ""
 
 #: u_translation.rsdontswait
 #, object-pascal-format
@@ -2766,6 +2776,11 @@ msgstr "Использовать лимит"
 msgid "Load"
 msgstr "Загрузить"
 
+#: u_translation.rsloadandstart
+#, object-pascal-format
+msgid "Load and start the sequence %s now?"
+msgstr ""
+
 #: u_translation.rsloadconfigur
 msgid "Load configuration on startup"
 msgstr "Загрузить конфигурацию при запуске"
@@ -3330,6 +3345,10 @@ msgstr "Новый скрипт"
 #: u_translation.rsnext
 msgid "Next"
 msgstr "Далее"
+
+#: u_translation.rsnextsequence
+msgid "Next sequence"
+msgstr ""
 
 #: u_translation.rsnexttarget
 msgid "Next target"
