@@ -1695,14 +1695,21 @@ begin
 end;
 
 function ParallacticAngle(ra,de: double; st: double=-1):double;
-var ha: double;
+var ha,a,h: double;
 begin
 try
   if st<0 then
     st:=CurrentSidTim;
   ha:=st - ra;
-  result:=ArcTan2(sin(ha),(tan(deg2rad*ObsLatitude)*cos(de))-(sin(de)*cos(ha)));
-  if IsNan(result) then result:=0;
+  Eq2HZ(ha, de, a, h, 0);
+  h:=rad2deg*h;
+  if (h>-1)and(h<85) then begin
+    result:=ArcTan2(sin(ha),(tan(deg2rad*ObsLatitude)*cos(de))-(sin(de)*cos(ha)));
+    if IsNan(result) then result:=0;
+  end
+  else begin
+    result:=0;
+  end;
 except
   result:=0;
 end;
