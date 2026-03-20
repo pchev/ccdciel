@@ -2388,7 +2388,7 @@ var t: TTarget;
     p: T_Plan;
     ok,wtok,nd:boolean;
     stw,i,intime: integer;
-    st,newra,newde,newV,newPA,enddelay,chkendtime,q: double;
+    st,newra,newde,newV,newPA,enddelay,chkendtime,mra,mde,q: double;
     moonra,moonde,moonphase,moonillum,moondist: double;
     autofocusstart, astrometrypointing, isCalibrationTarget: boolean;
     skipmsg, buf: string;
@@ -2669,6 +2669,22 @@ begin
         astrometrypointing:=t.astrometrypointing and (not (autofocusstart and (not InplaceAutofocus))) ;
         // must track before to slew
         if not mount.Tracking then mount.Track;
+        // set rotator position, before astrometric slew for the case the target position is not centered in the sensor
+        if Frotator.Status=devConnected then begin
+          if (autoguider.AutoguiderType=agINTERNAL) and finternalguider.SpectroFunctions and finternalguider.cbParallactic.Checked then begin
+            // parallactic angle at target position
+            mra:=t.ra;
+            mde:=t.de;
+            J2000ToMount(mount.EquinoxJD,mra,mde);
+            q:=ParallacticAngle(mount.EquinoxJD,mra, mde, finternalguider.SlitHorizontal.Checked);
+            q:=rmod(q+360,360);
+            Frotator.Angle:=q;
+          end
+          else if (t.pa<>NullCoord) then begin // use specified PA
+            Frotator.Angle:=t.pa;
+          end
+        end;
+
         // slew to coordinates
         FSlewRetry:=1;
         ok:=Slew(t.ra,t.de,astrometrypointing,t.astrometrypointing);
@@ -2713,7 +2729,7 @@ begin
     end
     else if ((t.ra=NullCoord)or(t.de=NullCoord))and(not mount.Tracking) then
        mount.Track;
-    // set rotator position, after slew and before to start guiding
+    // set rotator position before to start guiding and after slew for the case it is altered by the mount driver.
     if Frotator.Status=devConnected then begin
       if (autoguider.AutoguiderType=agINTERNAL) and finternalguider.SpectroFunctions and finternalguider.cbParallactic.Checked then begin
         // parallactic angle at current mount position
