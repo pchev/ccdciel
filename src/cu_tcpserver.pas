@@ -113,7 +113,11 @@ var
 
 {$endif}
 Const
+  {$ifdef mswindows}
+  NoSocket = High(TSocket);
+  {$else}
   NoSocket = -1;
+  {$endif}
 
 constructor TTCPDaemon.Create;
 var i: integer;
