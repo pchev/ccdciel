@@ -11530,7 +11530,7 @@ begin
 end;
 
 function Tf_main.PrepareCaptureExposure(canwait:boolean):boolean;
-var e,x,ra,de,st,q: double;
+var e,x,ra,de,a,h,st,q: double;
     buf,txt,r: string;
     waittime,i: integer;
     ftype:TFrameType;
@@ -11838,28 +11838,41 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
      (rotator<>nil) and (rotator.Status=devConnected) then
   begin
     if canwait then begin
-      // at the time of mid-exposure
-      e:=StrToFloatDef(f_capture.ExpTime.Text,0);
-      st:=SidTimT(now+e/2/secperday);
-      // parallactic angle at current mount position
-      q:=ParallacticAngle(mount.EquinoxJD, mount.RA, mount.Dec, f_internalguider.SlitHorizontal.Checked,st);
-      q:=rmod(q+360,360);
-      NewMessage(Format(rsRotateSlitTo, [FormatFloat(f1, q)]));
-      // rotate and settle
-      if (f_internalguider.SpectroStrategy=spMultiStar)or
-         (f_internalguider.SpectroStrategy=spSingleMulti) then begin
-        // need to redo astrometry for the new image rotation
-        autoguider.Guide(false);
-        rotator.Angle:=q;
-        autoguider.Guide(true);
+      ra:=mount.RA;
+      de:=mount.Dec;
+      MountToLocal(mount.EquinoxJD,ra,de);
+      cmdEq2Hz(ra,de,a,h);
+      // do not change the rotation angle near the zenith
+      if (h>-1)and(h<85) then begin
+        // at the time of mid-exposure
+        e:=StrToFloatDef(f_capture.ExpTime.Text,0);
+        st:=SidTimT(now+e/2/secperday);
+        // parallactic angle at current mount position
+        q:=ParallacticAngle(mount.EquinoxJD, mount.RA, mount.Dec, f_internalguider.SlitHorizontal.Checked,st);
+        q:=rmod(q+360,360);
+        NewMessage(Format(rsRotateSlitTo, [FormatFloat(f1, q)]));
+        // rotate and settle
+        if (f_internalguider.SpectroStrategy=spMultiStar)or
+           (f_internalguider.SpectroStrategy=spSingleMulti) then begin
+          // need to redo astrometry for the new image rotation
+          autoguider.Guide(false);
+          rotator.Angle:=q;
+          autoguider.Guide(true);
+        end
+        else begin
+          // settling is enough to recenter the star
+          autoguider.Pause(true);
+          rotator.Angle:=q;
+          autoguider.Pause(false);
+        end;
+        autoguider.WaitGuiding(SettleMaxTime);
       end
       else begin
-        // settling is enough to recenter the star
-        autoguider.Pause(true);
-        rotator.Angle:=q;
-        autoguider.Pause(false);
+        if h<0 then
+           NewMessage('Do not change the parallactic rotation when below the horizon.',3)
+        else
+           NewMessage('Do not change the parallactic rotation near the zenith.',3)
       end;
-      autoguider.WaitGuiding(SettleMaxTime);
     end
     else begin
       exit; // cannot start now
