@@ -11845,10 +11845,20 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
       q:=ParallacticAngle(mount.EquinoxJD, mount.RA, mount.Dec, f_internalguider.SlitHorizontal.Checked,st);
       q:=rmod(q+360,360);
       NewMessage(Format(rsRotateSlitTo, [FormatFloat(f1, q)]));
-      // rotate and settle, this is a small displacement because it already rotate on initial slew and with previous exposure.
-      autoguider.Pause(true);
-      rotator.Angle:=q;
-      autoguider.Pause(false);
+      // rotate and settle
+      if (f_internalguider.SpectroStrategy=spMultiStar)or
+         (f_internalguider.SpectroStrategy=spSingleMulti) then begin
+        // need to redo astrometry for the new image rotation
+        autoguider.Guide(false);
+        rotator.Angle:=q;
+        autoguider.Guide(true);
+      end
+      else begin
+        // settling is enough to recenter the star
+        autoguider.Pause(true);
+        rotator.Angle:=q;
+        autoguider.Pause(false);
+      end;
       autoguider.WaitGuiding(SettleMaxTime);
     end
     else begin
