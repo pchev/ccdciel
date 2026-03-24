@@ -13,6 +13,7 @@ import os
 
 try:
   from urllib import request
+  from urllib.error import URLError
 except:
   print('Cannot import urllib.request, your version of python is probably too old, try python3')
   sys.exit(1)
@@ -76,7 +77,7 @@ def ccdciel(method, params='', host=None, port=None):
        req = request.Request(ccdciel_url)
        req.add_header('Content-Type', 'application/json; charset=utf-8')
        res = request.urlopen(req, jsondata).read()
-    except Exception as inst:
+    except URLError as inst:
        print(type(inst))
        print(inst.args)
        sys.exit(1)
