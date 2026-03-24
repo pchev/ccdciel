@@ -104,7 +104,7 @@ def IsRunning (pgm):
         for proc in psutil.process_iter():
             if proc.name() == pgm :
                 alreadyrunning = True
-      except Exception as inst:
+      except NameError as inst:
         print(type(inst))
         print(inst.args)
         print('Be sure the module psutil is installed before to use this function')
@@ -143,7 +143,7 @@ def StopProgram(pgm) :
                 except Exception as inst:
                     print(type(inst))
                     print(inst.args)
-      except Exception as inst:
+      except NameError as inst:
         print(type(inst))
         print(inst.args)
         print('Be sure the module psutil is installed before to use this function')
