@@ -356,12 +356,13 @@ var
   init: boolean;
   s: TStringStream;
   n, c, tl: integer;
-  cmdok: boolean;
+  tm, err: boolean;
 
 begin
   try
     tcpclient := TTCPClient.Create;
     s := TStringStream.Create('');
+    err:=false;
     try
       OpenProtocolTrace;
       {$ifdef withCriticalsection}
@@ -382,48 +383,46 @@ begin
       begin
         // first send a getProperties
         RefreshProps;
-        // main loop
         buf := '';
         s.WriteString('<INDIMSG>');
         c := 0;
+        // main loop
         repeat
           if terminated then
             break;
-          rbuf := tcpclient.Sock.RecvTerminated(FTimeout, LF);
-          n:=Length(rbuf);
-          if (tcpclient.Sock.lastError <> 0) and
-            (tcpclient.Sock.lastError <> WSAETIMEDOUT) then
-            break;
-          if n > 0 then
-          begin
-            if FProtocolTrace then
-              WriteProtocolRaw('Receive buffer size=' + IntToStr(n) +': '+ rbuf);
-            s.WriteString(rbuf);
-            // detect closing of first level
-            cmdok:=(copy(rbuf,1,2)='</');
-            if cmdok then
-              begin
-                s.WriteString('</INDIMSG>');
-                if FProtocolTrace then
-                begin
-                  s.Position := 0;
-                  tbuf := s.DataString;
-                  tl:=length(tbuf);
-                  if tl<=1024 then
-                    WriteProtocolTrace('Process data=' + StringReplace(
-                      StringReplace(tbuf, cr, '', [rfReplaceAll]),
-                      lf, '', [rfReplaceAll]))
-                  else
-                    WriteProtocolTrace('Process data=' + StringReplace(
-                      StringReplace(copy(tbuf, 1, 1024), cr, '', [rfReplaceAll]),
-                      lf, '', [rfReplaceAll]) + '...');
-                end;
-                // process this buffer
-                ProcessDataThread(s);
-                // initialize a new buffer
-                s := TStringStream.Create('');
-                s.WriteString('<INDIMSG>');
+          // read a complete block
+          repeat
+            rbuf := tcpclient.Sock.RecvTerminated(20, LF);
+            if (tcpclient.Sock.lastError <> 0) and
+              (tcpclient.Sock.lastError <> WSAETIMEDOUT) then begin
+                 err:=true;
+                 break;
               end;
+            tm:=tcpclient.Sock.lastError=WSAETIMEDOUT;
+            n:=Length(rbuf);
+            if n>0 then begin
+              if FProtocolTrace then
+                 WriteProtocolRaw('Receive buffer size=' + IntToStr(n) +': '+ rbuf);
+              s.WriteString(rbuf);
+            end;
+          until tm;
+          if err then
+             break;
+          if s.Size > 10 then
+          begin
+              // process data block
+              s.WriteString('</INDIMSG>');
+              if FProtocolTrace then
+              begin
+                s.Position := 0;
+                tbuf := copy(s.DataString,1,1024);
+                WriteProtocolTrace('Process data=' + StringReplace(StringReplace(tbuf, cr, '', [rfReplaceAll]), lf, '', [rfReplaceAll]));
+              end;
+              // process this buffer
+              ProcessDataThread(s);
+              // initialize a new buffer
+              s := TStringStream.Create('');
+              s.WriteString('<INDIMSG>');
           end;
           if init then
           begin
