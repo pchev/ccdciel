@@ -140,7 +140,7 @@ def StopProgram(pgm) :
             if proc.name() ==  pgm :
                 try:
                     proc.terminate()
-                except Exception as inst:
+                except psutil.Error as inst:
                     print(type(inst))
                     print(inst.args)
       except NameError as inst:
