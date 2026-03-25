@@ -1066,6 +1066,7 @@ begin
       msg('Pascal language script are not supported on ARM processor');
       exit;
     {$endif}
+    msg('Script writen in Pascal language are deprecated, please convert them to Python.');
     FParamStr:=TStringList.Create;
     FParamStr.Add(fn);
     if args<>'' then begin
@@ -1132,6 +1133,7 @@ begin
       msg('Pascal language script are not supported on ARM processor');
       exit;
     {$endif}
+    msg('Script writen in Pascal language are deprecated, please convert them to Python.');
     FParamStr:=TStringList.Create;
     FParamStr.Add(fn);
     if args<>'' then begin

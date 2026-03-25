@@ -779,6 +779,9 @@ type
     Procedure PurgeOldLog;
     procedure SetTool(tool:TFrame; configname: string; defaultParent: TPanel; defaultpos: integer; chkmenu,toolmenu: TMenuItem; DeviceSelected:boolean; ForceDefault:boolean=false);
     procedure UpdConfig(oldver:string);
+    procedure CheckDeprecated;
+    procedure DeprecatedClose(Sender: TObject);
+    procedure DeprecatedClick(Sender: TObject);
     procedure SetConfig;
     procedure SetOptions;
     procedure OpenConfig(n: string);
@@ -1877,6 +1880,8 @@ begin
 
   if not open_de(slash(Appdir) + slash('data') + 'jpleph') then
     NewMessage('Warning! Using low precision ephemeris');
+
+  CheckDeprecated;
 
   fits:=TFits.Create(self);
   fits.onMsg:=@NewMessage;
@@ -3956,6 +3961,78 @@ except
   on E: Exception do NewMessage('Error upgrading configuration: '+ E.Message,1);
 end;
 end;
+
+procedure Tf_main.CheckDeprecated;
+var txt,buf: string;
+    st: TScriptType;
+    f: Tform;
+    p: TPanel;
+    l,li: TLabel;
+begin
+  txt:='';
+  if not config.GetValue('/Sensor/CanSetGain',true) then
+    txt:=txt+crlf+'The option to show the camera gain and offset is deprecated, it will alway be enabled.';
+  if (config.GetValue('/StarAnalysis/AutoFocusMode',3)=0) then
+    txt:=txt+crlf+'The Vcurve autofocus method is deprecated, use Dynamic instead.';
+  if (config.GetValue('/StarAnalysis/AutoFocusMode',3)=2) then
+    txt:=txt+crlf+'The Iterative autofocus method is deprecated, use Dynamic instead.';
+  if (config.GetValue('/Astrometry/Resolver',ResolverAstap)=ResolverElbrus) then
+    txt:=txt+crlf+'The Elbrus astrometry resolver is deprecated, use ASTAP.';
+  if (config.GetValue('/Autoguider/Software',2)=1) then
+    txt:=txt+crlf+'The Lin_Guider autoguider is deprecated, use PHD2 or the Internal guider.';
+  if config.GetValue('/ASCOMcamera/FixPixelRange',false) then
+    txt:=txt+crlf+'The option to match the camera ADU range to A/D bit depth is deprecated.';
+  buf:=config.GetValue('/Script/ScriptName','');
+  if buf<>'' then begin
+    buf:=slash(ConfigDir)+buf+'.script';
+    st:=f_scriptengine.ScriptType(buf);
+    if st=stPascal then
+       txt:=txt+crlf+'Script writen in Pascal language are deprecated, please convert them to Python.';
+  end;
+  if txt<>'' then begin
+     NewMessage('Warning!'+txt,1);
+     f:=TForm.Create(self);
+     f.Constraints.MinWidth:=500;
+     f.AutoSize:=true;
+     f.Position:=poScreenCenter;
+     l:=tlabel.Create(f);
+     l.BorderSpacing.Around:=5;
+     l.Parent:=f;
+     l.Top:=0;
+     l.Left:=0;
+     l.WordWrap:=true;
+     l.AutoSize:=true;
+     l.Caption:='Warning!'+crlf+txt+crlf+crlf+'Please fix it now because this will be removed in the next version.'+crlf+'For more details see:';
+     l.Align:=alClient;
+     li:=tlabel.Create(f);
+     li.Parent:=f;
+     li.BorderSpacing.Left:=5;
+     li.BorderSpacing.Bottom:=5;
+     li.Align:=alBottom;
+     li.Caption:='https://groups.io/g/ccdciel/topic/removal_of_some_redundant/118169275';
+     li.Font.Color:=clBlue;
+     li.Cursor:=crHandPoint;
+     li.OnClick:=@DeprecatedClick;
+     p:=TPanel.Create(f);
+     p.Parent:=f;
+     p.Caption:=rsContinue;
+     p.Height:=30;
+     p.Align:=alBottom;
+     p.OnClick:=@DeprecatedClose;
+     f.ShowModal;
+  end;
+end;
+
+procedure Tf_main.DeprecatedClick(Sender: TObject);
+begin
+  ExecuteFile('https://groups.io/g/ccdciel/topic/removal_of_some_redundant/118169275');
+end;
+
+procedure Tf_main.DeprecatedClose(Sender: TObject);
+begin
+  TForm(TPanel(sender).Parent).Close;
+end;
+
 
 procedure Tf_main.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
@@ -7265,6 +7342,7 @@ begin
      f_focuser.Notebook1.PageIndex:=1;
   end
   else begin
+     ShowMessage('Warning'+crlf+'Timer controled focuser are deprecated and will be removed in the next version');
      f_focuser.Notebook1.PageIndex:=0;
   end;
   f_focuser.FocusPosition:=focuser.Position;
@@ -9593,6 +9671,9 @@ begin
       OpenConfig(configfile);
       f_devicesconnection.ProfileLabel.Caption:=profile;
       caption:='CCDciel '+ccdcielver+'-'+ShortRevisionStr+blank+profile;
+
+      CheckDeprecated;
+
       ConfigFlatFile:=slash(ConfigDir)+'flatframe_'+profile+'.fits';
       if FileExists(ConfigFlatFile) then begin
         fits.LoadFlat(ConfigFlatFile);
@@ -9894,7 +9975,6 @@ begin
     else begin
       f_internalguider.framesize1.Enabled:=true;
     end;
-
   end;
 end;
 
@@ -10948,6 +11028,8 @@ begin
      SaveConfig;
 
      SetOptions;
+
+     CheckDeprecated;
 
      if (lang<>config.GetValue('/Language',lang)) then begin
        lang:=config.GetValue('/Language',lang);
@@ -14086,6 +14168,7 @@ end;
 
 procedure Tf_main.MenuRefimageClick(Sender: TObject);
 begin
+  ShowMessage('Warning'+crlf+'The reference image function is deprecated and will be removed in the next version');
   OpenDialog1.Title:=rsOpenReferenc;
   if OpenDialog1.Execute then begin
     OpenRefImage(OpenDialog1.FileName);
