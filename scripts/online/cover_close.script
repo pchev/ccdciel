@@ -1,23 +1,15 @@
-// This script close the telescope cover
-// Require a CoverCalibrator driver
+# This script close the telescope cover
+# Require a CoverCalibrator driver
 
-var txt,resp: string;
+from ccdciel import ccdciel;
+import sys
 
-procedure exiterror;
-var errtxt: string;
-begin
-getS('LastError',errtxt);
-raiseexception(erCustomError, errtxt);
-end;
+# Close cover
+resp = ccdciel('COVER_CLOSE')['result']['status']
+if resp!='OK!':
+   sys.exit(1)
 
-begin
+# Show status
+txt = ccdciel('coverstatus')['result']
+ccdciel('logMsg','Cover is now '+txt)
 
-  // Close cover
-  resp := cmd('COVER_CLOSE');
-  if resp<>msgOK then exiterror;
-
-  // Show status
-  GetS('coverstatus',txt);
-  logMsg('Cover is now '+txt);
-
-end.

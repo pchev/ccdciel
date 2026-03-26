@@ -1,44 +1,30 @@
-// This script turn on the calibrator light at the specifed brightness
-// Require a CoverCalibrator driver
+# This script turn on the calibrator light at the specifed brightness
+# Require a CoverCalibrator driver
 
-// Set here the desired calibrator brightness
-// It is best to first copy this script to include the brightness in the name, for example calibrator_on_65
+from ccdciel import ccdciel;
+import sys
 
-const brightness = 0 ;
+# Set here the desired calibrator brightness
+# It is best to first copy this script to include the brightness in the name, for example calibrator_on_65
 
-// No change required below this line
+brightness = 50
 
-var i: integer;
-    txt,resp: string;
-    arg: tstringlist;
+# No change required below this line
 
-procedure exiterror;
-var errtxt: string;
-begin
-getS('LastError',errtxt);
-raiseexception(erCustomError, errtxt);
-end;
+txt = ccdciel('coverstatus')['result']
+if txt!='Closed':
+  print('Cover is not closed')
+  sys.exit(1)
 
-begin
-  GetSL('STRL1',arg);
+if brightness>0 :
+  resp = ccdciel('CALIBRATOR_LIGHT_ON',brightness)['result']['status']
+  if resp!='OK!':
+    sys.exit(1)
+else:
+  ccdciel('logmsg','Please configure the desired brightness at the top the script')
+  sys.exit(1)
 
-  GetS('coverstatus',txt);
-  if txt<>'Closed' then raiseexception(erCustomError, 'Cover is not closed');
+txt = ccdciel('calibratorstatus')['result']
+i = ccdciel('calibratorbrightness')['result']
+ccdciel('logMsg','Calibrator is '+txt+', brightness='+i)
 
-  if brightness>0 then begin
-    arg.clear;
-    arg.add(InttoStr(brightness));
-    resp:=CmdArg('CALIBRATOR_LIGHT_ON',arg);
-    if resp<>msgOK then exiterror;
-    wait(1);
-  end
-  else begin
-    logmsg('Please configure the desired brightness at the top the script');
-    exit;
-  end;
-
-  GetS('calibratorstatus',txt);
-  GetI('calibratorbrightness',i);
-  logMsg('Calibrator is '+txt+', brightness='+inttostr(i));
-
-end.

@@ -1,38 +1,37 @@
-{ 
+'''
   CCDciel script to shutdown the computer. 
   
-  You need to review and test the command used in the Run() function below.
-  This may need to modify the system settings to allow this command to run.
-}
+  You need to review and test the command used in the os.system function below.
+  You may need to modify the system settings to allow this command to run.
 
-var connected: boolean;
-    hostOS: string;
-begin
- // Get operating system we are running
-  GetS('hostOS',hostOS);
-  if (hostOS<>'linux') and (hostOS<>'windows') then begin
-    logMsg('This script is not supported on '+hostOS);
-    exit;
-  end;
+'''
 
- // telescope connected?
-  GetB('TELESCOPE_CONNECTED',connected);
-  if connected then begin
-    logMsg('Telescope connected, stopping all mount movement including tracking');
-    logMsg(cmd('TELESCOPE_ABORTMOTION'));
-  end;
- 
-  logMsg('Will shutdown in 120 seconds');
-  // wait 1/720 part of a day
-   if not waittill(formatdatetime('hh":"nn":"ss',now+1.0/720),true) then exit;
+from ccdciel import ccdciel
+import sys
+import os
+import platform
+import time
 
-   if hostOS='windows' then
-     Run('shutdown /s  /t 2'); {force a shutdown}
+hostOS = platform.system().upper()
 
-   if hostOS='linux' then
-     Run('/sbin/poweroff');
-     {depending on system setting you may have to add sudo here}
-     {and use visudo to allow to run this command without password}
+if (hostOS!='LINUX') and (hostOS!='WINDOWS'):
+    ccdciel('logMsg','This script is not supported on '+hostOS)
+    sys.exit(1)
 
-end.
+# telescope connected?
+connected = ccdciel('TELESCOPE_CONNECTED')['result']
+if connected:
+    ccdciel('logMsg','Telescope connected, stopping all mount movement including tracking')
+    ccdciel('TELESCOPE_ABORTMOTION')
+
+ccdciel('logMsg','Will shutdown in 120 seconds')
+time.sleep(120)
+
+if hostOS=='WINDOWS':
+   os.system('shutdown /s  /t 2')  # force a shutdown
+
+if hostOS=='LINUX':
+   os.system('/sbin/poweroff')
+   # depending on system setting you may have to add sudo here
+   # and use visudo to allow the user to run this command without password
 
