@@ -3272,8 +3272,9 @@ function Tf_scriptengine.PythonRunning(n: integer = -1): boolean;
 var i:integer;
 begin
 try
-  if (n>0) and (n<=MaxPythonScr) then
+  if (n>0) and (n<=MaxPythonScr) then begin
     result:=(PythonScr[n]<>nil) and (not PythonScr[n].Terminated) and (PythonScr[n].FRunning)
+  end
   else begin
     result:=false;
     for i:=1 to MaxPythonScr do
@@ -3287,8 +3288,9 @@ end;
 procedure Tf_scriptengine.StopPython(n: integer = -1);
 var i: integer;
 begin
-  if (n>0) and (n<=MaxPythonScr) then
+  if (n>0) and (n<=MaxPythonScr) then begin
     if PythonRunning(n) then PythonScr[n].PyProcess.Terminate(1)
+  end
   else begin
     for i:=1 to MaxPythonScr do
       if PythonRunning(i) then PythonScr[i].PyProcess.Terminate(1);
