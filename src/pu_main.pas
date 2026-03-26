@@ -748,6 +748,8 @@ type
     HFM_MeasIdx: integer;      // index location for next element in array
     HFM_RefHFD, HFM_MeasAvg: double;
 
+    DeprecatedScripts: TStringList;
+
     procedure CreateDevices;
     procedure SetDevices;
     procedure DestroyDevices;
@@ -782,6 +784,7 @@ type
     procedure CheckDeprecated;
     procedure DeprecatedClose(Sender: TObject);
     procedure DeprecatedClick(Sender: TObject);
+    procedure DeprecatedScriptList(Sender: TObject);
     procedure SetConfig;
     procedure SetOptions;
     procedure OpenConfig(n: string);
@@ -3964,11 +3967,16 @@ end;
 
 procedure Tf_main.CheckDeprecated;
 var txt,buf: string;
+    i: integer;
+    fs : TSearchRec;
     st: TScriptType;
     f: Tform;
     p: TPanel;
     l,li: TLabel;
+    b1,b2: TButton;
 begin
+  DeprecatedScripts:=TStringList.Create;
+  try
   txt:='';
   if not config.GetValue('/Sensor/CanSetGain',true) then
     txt:=txt+crlf+'The option to show the camera gain and offset is deprecated, it will alway be enabled.';
@@ -3982,21 +3990,25 @@ begin
     txt:=txt+crlf+'The Lin_Guider autoguider is deprecated, use PHD2 or the Internal guider.';
   if config.GetValue('/ASCOMcamera/FixPixelRange',false) then
     txt:=txt+crlf+'The option to match the camera ADU range to A/D bit depth is deprecated.';
-  buf:=config.GetValue('/Script/ScriptName','');
-  if buf<>'' then begin
-    buf:=slash(ConfigDir)+buf+'.script';
+  i:=FindFirst(slash(ConfigDir)+'*.script',0,fs);
+  while i=0 do begin
+    buf:=slash(ConfigDir)+fs.Name;
     st:=f_scriptengine.ScriptType(buf);
     if st=stPascal then
-       txt:=txt+crlf+'Script writen in Pascal language are deprecated, please convert them to Python.';
+      DeprecatedScripts.add(fs.Name);
+    i:=FindNext(fs);
   end;
+  FindClose(fs);
+  if DeprecatedScripts.Count>0 then
+    txt:=txt+crlf+'Script writen in Pascal language are deprecated, please convert them to Python.';
   if txt<>'' then begin
      NewMessage('Warning!'+txt,1);
      f:=TForm.Create(self);
-     f.Constraints.MinWidth:=500;
+     f.Constraints.MinWidth:=DoScaleY(500);
      f.AutoSize:=true;
      f.Position:=poScreenCenter;
      l:=tlabel.Create(f);
-     l.BorderSpacing.Around:=5;
+     l.BorderSpacing.Around:=DoScaleX(5);
      l.Parent:=f;
      l.Top:=0;
      l.Left:=0;
@@ -4006,8 +4018,8 @@ begin
      l.Align:=alClient;
      li:=tlabel.Create(f);
      li.Parent:=f;
-     li.BorderSpacing.Left:=5;
-     li.BorderSpacing.Bottom:=5;
+     li.BorderSpacing.Left:=DoScaleX(5);
+     li.BorderSpacing.Bottom:=DoScaleX(5);
      li.Align:=alBottom;
      li.Caption:='https://groups.io/g/ccdciel/topic/removal_of_some_redundant/118169275';
      li.Font.Color:=clBlue;
@@ -4016,16 +4028,41 @@ begin
      p:=TPanel.Create(f);
      p.Parent:=f;
      p.Caption:=rsContinue;
-     p.Height:=30;
+     p.Height:=DoScaleX(30);
      p.Align:=alBottom;
      p.OnClick:=@DeprecatedClose;
+     if DeprecatedScripts.Count>0 then begin
+       b1:=TButton.Create(f);
+       b1.Parent:=p;
+       b1.AutoSize:=true;
+       b1.Caption:='Pascal script list';
+       b1.left:=DoScaleX(4);
+       b1.OnClick:=@DeprecatedScriptList;
+     end;
      f.ShowModal;
+  end;
+  finally
+   DeprecatedScripts.Free;
   end;
 end;
 
 procedure Tf_main.DeprecatedClick(Sender: TObject);
 begin
   ExecuteFile('https://groups.io/g/ccdciel/topic/removal_of_some_redundant/118169275');
+end;
+
+procedure Tf_main.DeprecatedScriptList(Sender: TObject);
+var f: Tf_viewtext;
+begin
+ if DeprecatedScripts.Count>0 then begin
+   DeprecatedScripts.Sort;
+   f:=Tf_viewtext.Create(self);
+   f.FormStyle:=fsStayOnTop;
+   f.Caption:='Pascal script list';
+   f.Memo1.Lines.Assign(DeprecatedScripts);
+   FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
+   f.ShowModal;
+ end;
 end;
 
 procedure Tf_main.DeprecatedClose(Sender: TObject);
