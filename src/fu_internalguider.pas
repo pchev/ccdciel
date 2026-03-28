@@ -719,7 +719,8 @@ begin
   Label57.Caption:=rsOffset+' Y';
   btnSetStarOffset.Caption:=rsClickOnTheIm;
   Label58.Caption:=rsReferenceIma;
-  btnRefImage.Caption:=rsResolve;
+  btnRefImage.Caption:=rsCalibrate;
+  btnRefImage.Hint:=rsSpecificAstr;
   MenuSlitOffset.Caption:=rsManage;
   MenuItemAddSlit.Caption:=rsAdd;
   MenuItemDelSlit.Caption:=rsDelete;

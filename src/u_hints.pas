@@ -183,6 +183,7 @@ resourcestring
   rsTheUpperLimi = 'The upper limit of histogram truncation';
   rsClickAndMove = 'Click and move to adjust the histogram truncation';
   rsBewareThisMa = 'Beware this may result in the selection of a wrong star if the mount guiding is not ideal';
+  rsSpecificAstr = 'Specific astrometry of the guider field, redo it for any change in the image scale or rotation';
 
 implementation
 
