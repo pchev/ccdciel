@@ -839,7 +839,7 @@ begin
   delay:=config.GetValue('/PrecSlew/Delay',5);
   dist:=abs(NullCoord/60);
   FLastSlewErr:=dist;
-  if (Mount.Status=devConnected)and(Camera.Status=devConnected)and AllDevicesConnected then begin
+  if (Mount.Status=devConnected)and(Camera.Status=devConnected)and((FFinderCamera=nil)or(FFinderCamera.Status=devConnected)) then begin
    if astrometryResolver=ResolverNone then begin
       msg(rsNoResolverCo,2);
       msg(Format(rsDoSimpleSlew, [ARToStr3(ra), DEToStr(de)]),2);
@@ -984,7 +984,9 @@ begin
       inc(i);
     until (not RetryMeridianSync)and((dist<=prec)or(i>maxslew));
    end;
-  end;
+  end
+  else
+    msg(rsSomeDefinedD,1);
   result:=(dist<=prec);
 
   if result and SlewSyncRotator and (FFinderCamera=nil) and (Frotator.Status=devConnected) and (pa<>NullCoord) then begin
