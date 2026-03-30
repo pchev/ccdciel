@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses SysUtils, Classes, LazFileUtils, u_utils, u_global, BGRABitmap, BGRABitmapTypes, ExpandedBitmap,
-  GraphType,  FPReadJPEG, LazSysUtils, u_libraw, dateutils, FPReadTiff, FPWriteTiff, FPTiffCmn,
+  GraphType,  FPReadJPEG, LazSysUtils, u_libraw, dateutils, FPReadTiff, cu_tiff,
   LCLIntf, LazUTF8, Graphics,Math, FPImage, Controls, LCLType, Dialogs, u_translation, IntfGraphics;
 
 type
@@ -3249,74 +3249,23 @@ begin
 end;
 
 procedure TFits.SaveAstroTiff(fn: string; delayed:boolean=false);
-// From ASTAP save_tiff16()
 var
-  i, j, k,m      :integer;
-  image: TFPCustomImage;
-  writer: TFPCustomImageWriter;
-  thecolor  :Tfpcolor;
   flip_V, flip_H: boolean;
   SourceImage: Timafloat;
-  SaveTiff: TSaveTiff;
 begin
   flip_V:=true;
   flip_H:=false;
-
-  Image := TFPMemoryImage.Create(Fwidth, Fheight);
-  Writer := TFPWriterTIFF.Create;
-
-  Image.Extra[TiffAlphaBits]:='0';
-  if n_plane>1 then
-  begin
-    Image.Extra[TiffRedBits]:='16';
-    Image.Extra[TiffGreenBits]:='16';
-    Image.Extra[TiffBlueBits]:='16';
-    Image.Extra[TiffGrayBits]:='16';
-    Image.Extra[TiffPhotoMetric]:='2'; {RGB color}
-   end;
-  {grayscale}
-  if n_plane=1 then
-  begin
-    Image.Extra[TiffGrayBits]:='16';
-    Image.Extra[TiffPhotoMetric]:='1'; {Monochrome with black=0}
-  end;
-
-  image.Extra[TiffSoftware]:='CCDciel';
-  image.Extra[TiffImageDescription]:=FHeader.AsString; {store full header in TIFF !!!}
-
-  Image.Extra[TiffCompression]:= '8'; {FPWriteTiff only supports Deflate compression (Best). Any other compression setting is silently replaced in FPWriteTiff at line 465 for Deflate. FPReadTiff that can read other compressed files including LZW.}
 
   if FUseRawImage then
     SourceImage:=Frawimage
   else
     SourceImage:=Fimage;
-  For i:=0 to Fheight-1 do
-  begin
-    if flip_V=false then k:=Fheight-1-i else k:=i;{reverse fits down to counting}
-    for j:=0 to Fwidth-1 do
-    begin
-      if flip_H=true then m:=Fwidth-1-j else m:=j;
-      thecolor.red:=min(round(SourceImage[0,k,m]), $FFFF);
-      if n_plane=3 then begin
-        thecolor.green:=min(round(SourceImage[1,k,m]), $FFFF);
-        thecolor.blue:=min(round(SourceImage[2,k,m]), $FFFF);
-      end
-      else begin
-        thecolor.green:=thecolor.red;
-        thecolor.blue:=thecolor.red;
-      end;
-      thecolor.alpha:=65535;
-      image.Colors[j,i]:=thecolor;
-    end;
-  end;
 
-  // image buffer is now secured, save in separate thread to let other task to run.
-  SaveTiff:=TSaveTiff.Create(true);
-  SaveTiff.filename:=fn;
-  SaveTiff.image:=image;
-  SaveTiff.writer:=writer;
-  SaveTiff.Start;
+  if save_tiff_16(SourceImage,fn,  FHeader.AsString, flip_H, flip_V ,1 {compression})=false then  //save to 16 bit gray scale TIFF file, compressionlevel 0..3 equals clnone,clfastest, cldefault, clmax
+    PostMessage(MsgHandle, LM_CCDCIEL, M_Message, PtrInt(strnew(PChar('Error, could not save tiff!'))));
 end;
+
+
 
 constructor TSaveTiff.Create(CreateSuspended: boolean);
 begin
@@ -4541,6 +4490,7 @@ begin
        if (h=0)or(w=0) then begin
          exit;
        end;
+
        if reader is TFPReaderTiff then begin
          headerdesc:=img.Extra['TiffImageDescription'];
          imgphot:=StrToIntDef(img.Extra['TiffPhotoMetricInterpretation'],0);
@@ -4594,7 +4544,8 @@ begin
      end;
    end;
    // detect BW or color
-   if naxis=0 then begin
+   if naxis=0 then
+   begin
      naxis:=2;
      for i:=0 to (h-1)div 10 do begin
         y:=10*i;
@@ -4608,6 +4559,7 @@ begin
         if naxis=3 then break;
      end;
    end;
+
    // create fits header
    if not isAstroTiff then begin
      hdr.ClearHeader;
