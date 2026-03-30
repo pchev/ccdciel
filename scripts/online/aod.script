@@ -1,0 +1,103 @@
+## Set the keyword AOD550 in CCDciel FITS header 
+## Optional parameter is the hour (only the integer hour) for the prevision, default is the current time
+## Data are retreived from Copernicus: 
+## https://ads.atmosphere.copernicus.eu/datasets/cams-global-atmospheric-composition-forecasts
+##
+## Do not run this script too often because it can take time and the value do not change quickly.
+## Running one or two time per night is fine.
+
+import os
+
+from ccdciel import ccdciel
+from dateutil import tz
+import datetime
+import sys
+try:
+  import pupygrib
+except:
+  print('Please install the pupygrib module in your Python virtual environment')
+  print('if this sound unfamiliar see: https://www.ap-i.net/ccdciel/en/documentation/install_python')
+  sys.exit(1)
+try:
+  import cdsapi
+except:
+  print('Please install the cdsapi module in your Python virtual environment') 
+  print('and be sure to setup your API key')
+  print('More information from https://ads.atmosphere.copernicus.eu/how-to-api')
+  sys.exit(1)
+
+# prevision hour for current day
+try:
+  # read first parameter
+  if len(sys.argv) > 1:
+     hour = int(sys.argv[1])
+     if (hour<0)or(hour>24):
+        raise Exception('Parameter Hour not in range 0..24')
+  else:
+     # default is now
+     hour=datetime.datetime.now().hour
+except Exception as ex:
+  print('Invalid parameters: ',ex)
+  sys.exit(1)
+
+workdir=ccdciel('tmpdir')['result']
+os.chdir(workdir)
+
+# get observatory coord from ccdciel
+lat = round(ccdciel('Obs_Latitude')['result'] - 0.1, 1)
+lon = round(ccdciel('Obs_Longitude')['result'] - 0.1, 1)
+
+# prevision date in UT
+d=datetime.datetime.now()
+t=datetime.time(hour,0)
+lt=datetime.datetime.combine(d, t)
+lt=lt.replace(tzinfo=tz.tzlocal())
+ut=lt.astimezone(tz.tzutc())
+
+# last available model date
+if datetime.datetime.now(datetime.UTC).hour<=12:
+   um=ut-datetime.timedelta(days=1)
+   modeld=um.strftime("%Y-%m-%d")
+   modelt='12:00'
+   lh=str(ut.hour+12)
+else:
+   modeld=ut.strftime("%Y-%m-%d")
+   modelt='00:00'
+   lh=ut.strftime("%H")
+
+dataset = "cams-global-atmospheric-composition-forecasts"
+# get the value at 550nm, other wavelength are available if necessary
+request = {
+    "variable": [
+        "total_aerosol_optical_depth_550nm",
+    ],
+    "date": [modeld+"/"+modeld],
+    "time": [modelt],
+    "leadtime_hour": [lh],
+    "type": ["forecast"],
+    "data_format": "grib",
+    "area": [lat, lon, lat+0.5, lon+0.5]
+}
+target = 'aod.grib'
+
+os.chdir(workdir)
+try:
+  os.remove(target)
+except:
+  pass
+
+ccdciel('LogMsg','Start Copernicus API request, please wait ...')
+client = cdsapi.Client()
+client.retrieve(dataset, request, target)
+
+with open(target, 'rb') as stream:
+   g=pupygrib.read(stream)
+   for gr in g :
+     # grid is 0.4°, it is possible there is more than one value in the result, we average them
+     aod=round((gr.get_values().mean()),3)
+     # single message
+     break
+
+print('AOD550 =',aod)
+ccdciel("CustomHeader_add",["AOD550",aod])
+
