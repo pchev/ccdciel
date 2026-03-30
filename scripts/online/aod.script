@@ -31,8 +31,8 @@ try:
   # read first parameter
   if len(sys.argv) > 1:
      hour = int(sys.argv[1])
-     if (hour<0)or(hour>24):
-        raise Exception('Parameter Hour not in range 0..24')
+     if (hour<0)or(hour>23):
+        raise Exception('Parameter Hour not in range 0..23')
   else:
      # default is now
      hour=datetime.datetime.now().hour
