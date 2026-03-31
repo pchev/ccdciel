@@ -829,6 +829,7 @@ object f_main: Tf_main
       object MenuAscomFinderCameraSetup: TMenuItem
         Tag = 13
         Caption = 'MenuAscomFinderCameraSetup'
+        OnClick = MenuAscomSetupClick
       end
       object MenuAscomWheelSetup: TMenuItem
         Tag = 2
@@ -868,6 +869,7 @@ object f_main: Tf_main
       object MenuAscomSwitchSetup: TMenuItem
         Tag = 10
         Caption = 'MenuAscomSwitchSetup'
+        OnClick = MenuAscomSetupClick
       end
       object MenuAscomCoverSetup: TMenuItem
         Tag = 11
@@ -891,6 +893,7 @@ object f_main: Tf_main
       object MenuAlpacaFinderCameraSetup: TMenuItem
         Tag = 13
         Caption = 'MenuAlpacaFinderCameraSetup'
+        OnClick = MenuAlpacaSetupClick
       end
       object MenuAlpacaWheelSetup: TMenuItem
         Tag = 2
@@ -930,6 +933,7 @@ object f_main: Tf_main
       object MenuAlpacaSwitchSetup: TMenuItem
         Tag = 10
         Caption = 'MenuAlpacaSwitchSetup'
+        OnClick = MenuAlpacaSetupClick
       end
       object MenuAlpacaCoverSetup: TMenuItem
         Tag = 11
