@@ -18279,6 +18279,7 @@ try
     result:=result+']';
     sl.Free;
   end
+  else if method='INTERNALGUIDER_BUSY' then result:=result+'"result": '+BoolToStr(InternalguiderRunning,tr,fa)
   else if method='INTERNALGUIDER_GETGUIDEEXPOSURE' then result:=result+'"result": '+StringReplace(f_internalguider.Exposure.Text,',','.',[])
   else if method='INTERNALGUIDER_GETAGRESSIVITYRA' then result:=result+'"result": ['+inttostr(f_internalguider.RAgain)+','+inttostr(f_internalguider.RA_hysteresis)+']'
   else if method='INTERNALGUIDER_GETAGRESSIVITYDEC' then result:=result+'"result": ['+inttostr(f_internalguider.DECgain)+','+inttostr(f_internalguider.DEC_hysteresis)+']'
