@@ -46,6 +46,17 @@ if not IsWindows:
 
 id = 0
 
+class JsonRpcException(Exception):
+    def __init__(self, code: int, message: str):
+        self.code = code
+        self.message = message
+        super().__init__(f'JSON-RPC error: {self.code} {self.message}')
+
+class CCDcielException(Exception):
+    def __init__(self, message: str):
+        self.message = message
+        super().__init__(f'CCDciel error: {self.message}')
+
 # Define the function to call CCDciel method
 def ccdciel(method, params='', host=None, port=None):
     
@@ -73,19 +84,32 @@ def ccdciel(method, params='', host=None, port=None):
         "method": method,
         "params": params }
         ).encode('utf8')
-
-    try:
-       # Execute the request using POST method
-       req = request.Request(ccdciel_url)
-       req.add_header('Content-Type', 'application/json; charset=utf-8')
-       res = request.urlopen(req, jsondata).read()
-    except URLError as inst:
-       print(type(inst))
-       print(inst.args)
-       sys.exit(1)
     
+    # Execute the request using POST method
+    req = request.Request(ccdciel_url)
+    req.add_header('Content-Type', 'application/json; charset=utf-8')
+    res = request.urlopen(req, jsondata).read()
+
     # Return result as JSON
     return json.loads(res.decode("utf8"))
+
+# CCDciel method that raise an exception in case of error
+def ccdcielex(method, params='', host=None, port=None):
+
+    # Call the default method
+    result = ccdciel(method, params, host, port)
+
+    # Check Json-Rpc error
+    if ('error' in result):
+      if isinstance(result['error'], dict):
+         raise JsonRpcException(result['error']['code'], result['error']['message'])
+
+    # Check CCDciel error
+    if ('result' in result):
+      if isinstance(result['result'], dict):
+         if ('status' in result['result']):
+            if result['result']['status'] != 'OK!' :
+               raise CCDcielException(result['result']['status'])
 
 
 # Utility function to test if a program is running
