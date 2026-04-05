@@ -589,6 +589,7 @@ begin
  LabelInfo2.Caption:='';
  LabelInfo3.Caption:='';
  LabelInfo4.Caption:='';
+ LabelSetOffset.Caption:='';
  pier_side1.Text:='N/A';
  cur_minHFD:=minHFD;
  cur_minSNR:=minSNR;
