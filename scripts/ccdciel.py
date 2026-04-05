@@ -109,6 +109,8 @@ def ccdcielex(method, params='', host=None, port=None):
             if result['result']['status'] != 'OK!' :
                raise CCDcielException(result['result']['status'])
 
+    return result
+
 
 # Utility function to test if a program is running
 # parameter is exe name without the path
