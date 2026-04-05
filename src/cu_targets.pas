@@ -1483,6 +1483,7 @@ begin
    WeatherPauseCapture:=false;
    WeatherCancelRestart:=false;
    if WaitTillrunning then begin
+     FWaiting:=false;
      if wt_pause<>nil
       then wt_pause.BtnCancel.Click
       else cancelWaitTill:=true;
