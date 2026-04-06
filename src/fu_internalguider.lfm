@@ -525,7 +525,6 @@ object f_internalguider: Tf_internalguider
               BorderSpacing.Left = 4
               MaxLength = 0
               TabOrder = 2
-              Increment = 100
               MaxValue = 60
               NullValue = 0
               Value = 0
