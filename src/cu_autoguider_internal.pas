@@ -1035,7 +1035,7 @@ end;
 
 procedure T_autoguider_internal.SetExposureStartTime;
 begin
-  NextExposureStartTime:=now+Finternalguider.delayms/MSecsPerDay;
+  NextExposureStartTime:=now+Finternalguider.Delay/SecsPerDay;
 end;
 
 Procedure T_autoguider_internal.StartGuideExposureAsync(Data: PtrInt);

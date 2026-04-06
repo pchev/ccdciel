@@ -3962,6 +3962,8 @@ try
       config.SetValue('/Astrometry/FocaleLength',f);
       config.SetValue('/Astrometry/FocaleFromTelescope',false);
     end;
+    i:=config.GetValue('/InternalGuider/Camera/ExpDelay',0);
+    config.SetValue('/InternalGuider/Camera/ExpDelay',i div 1000);
   end;
   if config.Modified then begin
      config.SetValue('/Configuration/Version',ccdcielver);

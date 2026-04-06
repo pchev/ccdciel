@@ -73,6 +73,7 @@ type
     Label17: TLabel;
     Label18: TLabel;
     Label19: TLabel;
+    Label59: TLabel;
     LabelSetOffset: TLabel;
     Label55: TLabel;
     Label56: TLabel;
@@ -441,7 +442,7 @@ type
     function GetConfigured:Boolean;
     Procedure Redraw(Sender: TObject);
     Procedure ZoomImage(Sender: TObject);
-    function GetDelayms: integer;
+    function GetDelay: integer;
 
   public
     { public declarations }
@@ -542,7 +543,7 @@ type
     property onConfigureGuider: TNotifyEvent read FonConfigureGuider write FonConfigureGuider;
     property onMeasureReferenceImage: TNotifyEvent read FonMeasureReferenceImage write FonMeasureReferenceImage;
     property onSetSpectro: TNotifyEvent read FonSetSpectro write FonSetSpectro;
-    property delayms: integer read GetDelayms;
+    property Delay: integer read GetDelay;
 
   end;
 
@@ -660,6 +661,7 @@ begin
   MenuItemDarkInfo.Caption:=rsViewHeader;
   cbFilterNoise.Caption:=rsNoiseFilter;
   Label10.Caption:=rsExposure;
+  label59.Caption:=rsSec;
   Label14.Caption:=rsBinning;
   Label15.Caption:=rsGain;
   Label16.Caption:=rsOffset2;
@@ -2188,7 +2190,7 @@ begin
  if Assigned(FonRedraw) then FonRedraw(self);
 end;
 
-function Tf_internalguider.GetDelayms: integer;
+function Tf_internalguider.GetDelay: integer;
 begin
   result:=ExpDelay.Value;
 end;

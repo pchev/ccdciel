@@ -519,14 +519,14 @@ object f_internalguider: Tf_internalguider
               AnchorSideTop.Control = Exposure
               Left = 230
               Height = 32
-              Hint = 'Delay between exposures'
+              Hint = 'Delay between exposures in seconds'
               Top = 0
-              Width = 82
+              Width = 58
               BorderSpacing.Left = 4
               MaxLength = 0
               TabOrder = 2
               Increment = 100
-              MaxValue = 10000
+              MaxValue = 60
               NullValue = 0
               Value = 0
             end
@@ -541,6 +541,14 @@ object f_internalguider: Tf_internalguider
               Width = 8
               BorderSpacing.Left = 4
               Caption = '+'
+              ParentColor = False
+            end
+            object Label59: TLabel
+              Left = 296
+              Height = 18
+              Top = 7
+              Width = 20
+              Caption = 'sec'
               ParentColor = False
             end
           end
