@@ -131,6 +131,8 @@ T_ascomrestcamera = class(T_camera)
    function GetVideoEncoder: integer; override;
    procedure SetVideoEncoder(value:integer); override;
    function GetFullWellCapacity: double; override;
+   function GetAperture:double;  override;
+   function GetFocaleLength:double; override;
 
 public
    constructor Create(AOwner: TComponent);override;
@@ -1662,5 +1664,18 @@ function T_ascomrestcamera.GetImageFormat: string;
 begin
  result:=FImageFormat;
 end;
+
+function  T_ascomrestcamera.GetAperture:double;
+begin
+ // ASCOM Aperture in mount driver
+result:=-1;
+end;
+
+function  T_ascomrestcamera.GetFocaleLength:double;
+begin
+// ASCOM Focale in mount driver
+result:=-1;
+end;
+
 
 end.

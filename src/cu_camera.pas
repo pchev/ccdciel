@@ -190,6 +190,9 @@ T_camera = class(TComponent)
     function GetVideoEncoder: integer; virtual; abstract;
     procedure SetVideoEncoder(value:integer); virtual; abstract;
     function GetFullWellCapacity: double; virtual; abstract;
+    function GetAperture:double;  virtual; abstract;
+    function GetFocaleLength:double; virtual; abstract;
+
   private
     lockvideoframe: boolean;
     TempFinal: Double;
@@ -340,6 +343,8 @@ T_camera = class(TComponent)
     property GuideLockX: double read FGuideLockX write FGuideLockX;
     property GuideLockY: double read FGuideLockY write FGuideLockY;
     property FullWellCapacity: double read GetFullWellCapacity;
+    property Aperture: double read GetAperture;
+    property FocaleLength: double read GetFocaleLength;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onExposureProgress: TNotifyNum read FonExposureProgress write FonExposureProgress;
@@ -891,17 +896,12 @@ begin
     telname:=config.GetValue('/Info/TelescopeName','');
     instrum:=config.GetValue('/Info/InstrumentName','');
     if not FGuideCamera then begin
-      if FFinderCamera then begin
-        focal_length:=config.GetValue('/Astrometry/FinderFocalLength',0.0);
-      end
-      else begin
       if config.GetValue('/Astrometry/FocaleFromTelescope',true)
       then begin
          if focal_length<0 then focal_length:=Fmount.FocaleLength;
       end
       else begin
          focal_length:=config.GetValue('/Astrometry/FocaleLength',0.0);
-      end;
       end;
     end;
     if not (FGuideCamera or config.GetValue('/Astrometry/PixelSizeFromCamera',true)) then begin

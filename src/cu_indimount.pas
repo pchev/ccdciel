@@ -60,8 +60,6 @@ T_indimount = class(T_mount)
    parkprop: ISwitchVectorProperty;
    swpark,swunpark: ISwitch;
    AbortmotionProp: ISwitchVectorProperty;
-   TelescopeInfo: INumberVectorProperty;
-   TelescopeAperture, TelescopeFocale: INumber;
    eod_coord:  boolean;
    configprop: ISwitchVectorProperty;
    configload,configsave: ISwitch;
@@ -226,7 +224,6 @@ end;
 procedure T_indimount.ClearStatus;
 begin
     MountDevice:=nil;
-    TelescopeInfo:=nil;
     parkprop:=nil;
     TrackState:=nil;
     TrackR:=nil;
@@ -479,12 +476,6 @@ begin
    else if (proptype=INDI_SWITCH)and(AbortmotionProp=nil)and(propname='TELESCOPE_ABORT_MOTION') then begin
       AbortmotionProp:=indiProp.getSwitch;
    end
-   else if (proptype=INDI_NUMBER)and(TelescopeInfo=nil)and(propname='TELESCOPE_INFO') then begin
-      TelescopeInfo:=indiProp.getNumber;
-      TelescopeAperture:=IUFindNumber(TelescopeInfo,'TELESCOPE_APERTURE');
-      TelescopeFocale:=IUFindNumber(TelescopeInfo,'TELESCOPE_FOCAL_LENGTH');
-      if (TelescopeAperture=nil)or(TelescopeFocale=nil) then TelescopeInfo:=nil;
-   end
    else if (proptype=INDI_SWITCH)and(Pier_Side=nil)and(propname='TELESCOPE_PIER_SIDE') then begin
       Pier_Side:=indiProp.getSwitch;
       Pier_East:=IUFindSwitch(Pier_Side,'PIER_EAST');
@@ -682,18 +673,14 @@ end;
 
 function  T_indimount.GetAperture:double;
 begin
-if TelescopeInfo<>nil then begin
-  result:=TelescopeAperture.value;
-end
-else result:=-1;
+// INDI Aperture in camera driver
+result:=-1;
 end;
 
 function  T_indimount.GetFocaleLength:double;
 begin
-if TelescopeInfo<>nil then begin
-  result:=TelescopeFocale.value;
-end
-else result:=-1;
+// INDI Focale in camera driver
+result:=-1;
 end;
 
 function T_indimount.SlewAsync(sra,sde: double):Boolean;

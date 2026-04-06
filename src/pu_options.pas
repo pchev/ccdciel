@@ -44,7 +44,11 @@ type
     CrosshairsR1: TEdit;
     CrosshairsR2: TEdit;
     CrosshairsR3: TEdit;
+    FocaleFromDriver: TCheckBox;
+    FocaleLength: TFloatSpinEditEx;
     GroupBox23: TGroupBox;
+    Label166: TLabel;
+    Label167: TLabel;
     Label192: TLabel;
     PanelRecenter: TPanel;
     Label130: TLabel;
@@ -139,8 +143,6 @@ type
     Label171: TLabel;
     PlanetariumShowAstrometry: TCheckBox;
     Label165: TLabel;
-    Label166: TLabel;
-    Label167: TLabel;
     MeridianFlipUseSetPierSide: TCheckBox;
     Label161: TLabel;
     Label164: TLabel;
@@ -162,7 +164,6 @@ type
     Panel28: TPanel;
     LogDir: TEdit;
     LogDirDefault: TButton;
-    FinderFocalLength: TSpinEditEx;
     RoiX: TSpinEditEx;
     RoiW: TSpinEditEx;
     RoiY: TSpinEditEx;
@@ -354,7 +355,6 @@ type
     SaveBitmap: TCheckBox;
     MeasureNewImage: TCheckBox;
     FocusStarMagAdjust: TCheckBox;
-    Label132: TLabel;
     Label133: TLabel;
     GroupBox22: TGroupBox;
     Label127: TLabel;
@@ -556,7 +556,6 @@ type
     PageWeather: TTabSheet;
     Tolerance: TFloatSpinEditEx;
     MaxRadius: TFloatSpinEditEx;
-    Focale: TFloatSpinEditEx;
     FocuserTempCoeff: TFloatSpinEditEx;
     FocusWindow: TSpinEditEx;
     FocuserBacklash: TSpinEditEx;
@@ -796,10 +795,8 @@ type
     PageAstrometry: TTabSheet;
     Label7: TLabel;
     Label6: TLabel;
-    FocaleFromTelescope: TCheckBox;
     astrometrynet: TGroupBox;
     Label2: TLabel;
-    Label4: TLabel;
     GroupBox2: TGroupBox;
     Label1: TLabel;
     Panel1: TPanel;
@@ -858,7 +855,7 @@ type
     procedure CheckBoxLocalCdcChange(Sender: TObject);
     procedure DomeSlaveToMountChange(Sender: TObject);
     procedure FlatTypeClick(Sender: TObject);
-    procedure FocaleFromTelescopeChange(Sender: TObject);
+    procedure FocaleFromDriverChange(Sender: TObject);
     procedure FileOrFolderOptionsClick(Sender: TObject);
     procedure FileOrFolderOptionsColRowMoved(Sender: TObject; IsColumn: Boolean;
       sIndex, tIndex: Integer);
@@ -1346,9 +1343,9 @@ begin
   GuiderAutofocus.Caption:=rsAutofocusUsi;
   PageAstrometry.Caption := rsAstrometry;
   GroupBox4.Caption := rsAstrometryOp;
-  FocaleFromTelescope.Caption := rsFromTelescop;
-  Label4.Caption := rsFocaleLength;
-  Label132.Caption:='[mm]';
+  FocaleFromDriver.Caption := rsFromTelescop;
+  Label166.Caption := rsFocaleLength;
+  Label167.Caption:='[mm]';
   Label3.Caption := rsPixelSize;
   PixelSizeFromCamera.Caption := rsFromCameraDr;
   ResolverBox.Caption := rsSoftware;
@@ -1894,11 +1891,11 @@ begin
       FGetPixelSize(self);
 end;
 
-procedure Tf_option.FocaleFromTelescopeChange(Sender: TObject);
+procedure Tf_option.FocaleFromDriverChange(Sender: TObject);
 begin
-  Focale.Enabled:=not FocaleFromTelescope.Checked;
-  if (not Focale.Enabled) and (assigned(FGetFocale)) then
-      FGetFocale(self);
+  FocaleLength.Enabled:=not FocaleFromDriver.Checked;
+  if FocaleFromDriver.Checked and (assigned(FGetFocale)) then
+     FGetFocale(self);
 end;
 
 procedure Tf_option.PlanetariumBoxClick(Sender: TObject);
@@ -2216,6 +2213,7 @@ begin
   SlewFilter.Enabled:=AstrometryCamera.ItemIndex=0;
   PanelFinder.Visible:=AstrometryCamera.ItemIndex=1;
   PanelRotator.Visible:=WantRotator and (AstrometryCamera.ItemIndex=0);
+  FocaleFromDriverChange(Sender);
 end;
 
 procedure Tf_option.BtnClearCrosshairsClick(Sender: TObject);

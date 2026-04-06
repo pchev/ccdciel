@@ -3956,6 +3956,13 @@ try
        config.SetValue('/PrecSlew/AstrometryNewImage',true);
     end;
   end;
+  if oldver<'0.9.94' then begin
+    if config.GetValue('/Astrometry/Camera',0)=1 then begin
+      f:=config.GetValue('/Astrometry/FinderFocalLength',0);
+      config.SetValue('/Astrometry/FocaleLength',f);
+      config.SetValue('/Astrometry/FocaleFromTelescope',false);
+    end;
+  end;
   if config.Modified then begin
      config.SetValue('/Configuration/Version',ccdcielver);
      SaveConfig;
@@ -10350,16 +10357,14 @@ begin
    f_option.cbSaveAstrometryNewImage.Checked:=config.GetValue('/PrecSlew/SaveAstrometryNewImage',false);
    f_option.CheckRecenterTarget.Checked:=config.GetValue('/PrecSlew/CheckRecenterTarget',false);
    f_option.PixelSize.Value:=config.GetValue('/Astrometry/PixelSize',0.0);
-   f_option.Focale.Value:=config.GetValue('/Astrometry/FocaleLength',0.0);
+   f_option.FocaleLength.Value:=config.GetValue('/Astrometry/FocaleLength',0.0);
    f_option.PixelSizeFromCamera.Checked:=config.GetValue('/Astrometry/PixelSizeFromCamera',true);
    f_option.Resolver:=config.GetValue('/Astrometry/Resolver',ResolverAstap);
    if f_option.MaxAduFromCamera.Checked and (camera.Status=devConnected) then
       f_option.MaxAdu.Value:=round(camera.MaxAdu);
    if f_option.PixelSizeFromCamera.Checked and (camera.Status=devConnected) and (camera.PixelSizeX>0) then
       f_option.PixelSize.Value:=camera.PixelSizeX;
-   f_option.FocaleFromTelescope.Checked:=config.GetValue('/Astrometry/FocaleFromTelescope',true);
-   if f_option.FocaleFromTelescope.Checked then
-      f_option.Focale.Value:=mount.FocaleLength;
+   f_option.FocaleFromDriver.Checked:=config.GetValue('/Astrometry/FocaleFromTelescope',true);
    f_option.Tolerance.Value:=config.GetValue('/Astrometry/ScaleTolerance',0.5);
    f_option.MaxRadius.Value:=config.GetValue('/Astrometry/MaxRadius',15.0);
    f_option.AstrometryTimeout.Value:=round(config.GetValue('/Astrometry/Timeout',60.0));
@@ -10414,6 +10419,8 @@ begin
       f_option.SlewFilter.ItemIndex:=0;
    f_option.SlewFilter.Enabled:=f_option.AstrometryCamera.ItemIndex=0;
    f_option.PanelFinder.Visible:=f_option.AstrometryCamera.ItemIndex=1;
+   if f_option.FocaleFromDriver.Checked then
+      OptionGetFocaleLength(f_option);
    if hasGainISO then
      f_option.SlewISObox.ItemIndex:=config.GetValue('/PrecSlew/Gain',f_preview.ISObox.ItemIndex)
    else
@@ -10425,7 +10432,6 @@ begin
    else
        f_option.SlewBin.MaxValue:=9;
    f_option.SlewDelay.Value:=config.GetValue('/PrecSlew/Delay',5);
-   f_option.FinderFocalLength.Value:=config.GetValue('/Astrometry/FinderFocalLength',0);
    f_option.UseFinderSolver.Checked:=config.GetValue('/Astrometry/UseFinderSolver',false);
    f_option.FinderSolver.ItemIndex:=config.GetValue('/Astrometry/FinderSolver',ResolverAstap);
    f_option.UseFinderSolverChange(nil);
@@ -10846,9 +10852,9 @@ begin
      config.SetValue('/PrecSlew/CheckRecenterTarget',f_option.CheckRecenterTarget.Checked);
      config.SetValue('/Astrometry/Resolver',f_option.Resolver);
      config.SetValue('/Astrometry/PixelSizeFromCamera',f_option.PixelSizeFromCamera.Checked);
-     config.SetValue('/Astrometry/FocaleFromTelescope',f_option.FocaleFromTelescope.Checked);
+     config.SetValue('/Astrometry/FocaleFromTelescope',f_option.FocaleFromDriver.Checked);
      config.SetValue('/Astrometry/PixelSize',f_option.PixelSize.Value);
-     config.SetValue('/Astrometry/FocaleLength',f_option.Focale.Value);
+     config.SetValue('/Astrometry/FocaleLength',f_option.FocaleLength.Value);
      config.SetValue('/Astrometry/ScaleTolerance',f_option.Tolerance.Value);
      config.SetValue('/Astrometry/MaxRadius',f_option.MaxRadius.Value);
      config.SetValue('/Astrometry/Timeout',f_option.AstrometryTimeout.Value);
@@ -10891,7 +10897,6 @@ begin
      config.SetValue('/PrecSlew/SyncRotator',f_option.cbSlewSyncRotator.Checked);
      config.SetValue('/Sequence/MinimumMoonDistance',f_option.MinimumMoonDistance.Value);
      config.SetValue('/Sequence/SequenceTwilight',f_option.SequenceTwilight.Value);
-     config.SetValue('/Astrometry/FinderFocalLength',f_option.FinderFocalLength.Value);
      config.SetValue('/Astrometry/UseFinderSolver',f_option.UseFinderSolver.Checked);
      config.SetValue('/Astrometry/FinderSolver',f_option.FinderSolver.ItemIndex);
      config.SetValue('/Meridian/MeridianOption',f_option.MeridianOption.ItemIndex);
@@ -11153,9 +11158,20 @@ begin
 end;
 
 procedure Tf_main.OptionGetFocaleLength(Sender: TObject);
+var c:T_camera;
 begin
+ if f_option.AstrometryCamera.ItemIndex=0
+   then c:=camera
+   else c:=findercamera;
+ if c.CameraInterface=INDI then begin
+   if (c.Status=devConnected) and (c.FocaleLength>0) then
+      f_option.FocaleLength.Value:=c.FocaleLength;
+ end
+ else
+ if (mount.MountInterface=ASCOM)or(mount.MountInterface=ASCOMREST) then begin
    if (mount.Status=devConnected) and (mount.FocaleLength>0) then
-      f_option.Focale.Value:=mount.FocaleLength;
+      f_option.FocaleLength.Value:=mount.FocaleLength;
+ end;
 end;
 
 procedure Tf_main.OptionGetWeather(Sender: TObject);

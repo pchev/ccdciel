@@ -146,6 +146,8 @@ private
    StreamEncoder: ISwitchVectorProperty;
    CCDoffset:INumberVectorProperty;
    CCDoffsetValue:INumber;
+   ScopeInfo: INumberVectorProperty;
+   ScopeAperture, ScopeFocale: INumber;
    FRAWformat: integer;
    FhasBlob,Fready,FWheelReady,Fconnected,UseMainSensor,Fconnectsend,FConnectDevice: boolean;
    Findiserver, Findiserverport, Findidevice, Findisensor: string;
@@ -256,6 +258,8 @@ private
    function GetVideoEncoder: integer; override;
    procedure SetVideoEncoder(value:integer); override;
    function GetFullWellCapacity: double; override;
+   function GetAperture:double;  override;
+   function GetFocaleLength:double; override;
 
  public
    constructor Create(AOwner: TComponent);override;
@@ -357,6 +361,7 @@ end;
 procedure T_indicamera.ClearStatus;
 begin
     CCDDevice:=nil;
+    ScopeInfo:=nil;
     CCDexpose:=nil;
     CCDbinning:=nil;
     CCDframe:=nil;
@@ -584,6 +589,7 @@ begin
  if Fready and (FStatus<>devConnected) then begin
    if (CCDWebsocket<>nil)and(CCDWebsocketON.s=ISS_ON) then
       ConnectWs;
+   indiclient.RefreshProps;  // some properties set by driver initialization are not send
    if UseMainSensor then begin
      GetFrameRange(xr,yr,widthr,heightr);
      FCameraXSize:=round(widthr.max);
@@ -811,6 +817,12 @@ begin
      Guiderbitperpixel:=IUFindNumber(CCDinfo,'GUIDER_BITSPERPIXEL');
      if (Guidermaxx=nil)or(Guidermaxy=nil)or(Guiderpixelsize=nil)or(Guiderpixelsizex=nil)or(Guiderpixelsizey=nil)or(Guiderbitperpixel=nil) then Guiderinfo:=nil;
   end
+  else if (proptype=INDI_NUMBER)and(ScopeInfo=nil)and(propname='SCOPE_INFO') then begin
+     ScopeInfo:=indiProp.getNumber;
+     ScopeAperture:=IUFindNumber(ScopeInfo,'APERTURE');
+     ScopeFocale:=IUFindNumber(ScopeInfo,'FOCAL_LENGTH');
+     if (ScopeAperture=nil)or(ScopeFocale=nil) then ScopeInfo:=nil;
+  end
   else if (proptype=INDI_NUMBER)and(WheelSlot=nil)and(propname='FILTER_SLOT') then begin
      WheelSlot:=indiProp.getNumber;
      Slot:=IUFindNumber(WheelSlot,'FILTER_SLOT_VALUE');
@@ -1037,6 +1049,9 @@ begin
         else
            FonExposureProgress(-4);
      end;
+  end
+  else if nvp=ScopeInfo then begin
+    writeln(ScopeFocale.value);
   end
   else if nvp=CCDframe then begin
     // ignore ASI CCDFrame change because this can be just a binning requirement, see: https://indilib.org/forum/ccds-dslrs/4956-indi-asi-driver-bug-causes-false-binned-images.html
@@ -2586,6 +2601,22 @@ begin
   end
   else
     GetFrame(x,y,width,height);
+end;
+
+function  T_indicamera.GetAperture:double;
+begin
+if ScopeInfo<>nil then begin
+  result:=ScopeAperture.value;
+end
+else result:=-1;
+end;
+
+function  T_indicamera.GetFocaleLength:double;
+begin
+if ScopeInfo<>nil then begin
+  result:=ScopeFocale.value;
+end
+else result:=-1;
 end;
 
 procedure T_indicamera.ConnectWs;
