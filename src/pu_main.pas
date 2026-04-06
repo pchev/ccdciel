@@ -721,7 +721,7 @@ type
     AccelList: array[0..MaxMenulevel] of string;
     SaveAutofocusBinning: string;
     SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH,SaveAutofocusBX,SaveAutofocusBY: integer;
-    SaveAutofocusGain, SaveAutofocusOffset, SaveAutofocusPreviewGain, SaveAutofocusPreviewOffset: integer;
+    SaveAutofocusGain, SaveAutofocusOffset, SaveAutofocusPreviewGain, SaveAutofocusPreviewOffset,SaveAutofocusFilter: integer;
     SaveAutofocusExposure,SaveGuiderAutofocusExposure: double;
     SaveGuiderAutofocusGain, SaveGuiderAutofocusOffset: integer;
     TerminateVcurve: boolean;
@@ -5501,7 +5501,7 @@ begin
     AutofocusSlippageOffset:=0;
   AutofocusGain:=config.GetValue('/StarAnalysis/AutofocusGain',f_preview.Gain);
   AutofocusOffset:=config.GetValue('/StarAnalysis/AutofocusOffset',f_preview.Offset);
-
+  AutofocusFilter:=config.GetValue('/StarAnalysis/AutofocusFilter',0);
   MagnitudeCalibration:=config.GetValue('/StarAnalysis/MagnitudeCalibration',MagnitudeCalibration);
 
   debug_msg:=config.GetValue('/Log/debug_msg',false);
@@ -10290,6 +10290,12 @@ begin
      f_option.AutofocusGainEdit.Value:=config.GetValue('/StarAnalysis/AutofocusGain',AutofocusGain);
    f_option.AutofocusOffsetEdit.Value:=config.GetValue('/StarAnalysis/AutofocusOffset',AutofocusOffset);
    f_option.AutofocusBinning.Value:=config.GetValue('/StarAnalysis/AutofocusBinning',AutofocusBinning);
+
+   f_option.cbAutofocusFilter.Items.Assign(FilterList);
+   i:=config.GetValue('/StarAnalysis/AutofocusFilter',0);
+   if (i<0)or(i>=f_option.cbAutofocusFilter.Items.Count) then i:=0;
+   f_option.cbAutofocusFilter.ItemIndex:=i;
+
    f_option.cbAFmedianfilter.Checked:=config.GetValue('/StarAnalysis/AFmedianfilter',true);
    if (camera.Status=devConnected)and(camera.BinXrange<>NullRange) then
        f_option.AutofocusBinning.MaxValue:=round(camera.BinXrange.max)
@@ -10702,6 +10708,9 @@ begin
        config.SetValue('/StarAnalysis/AutofocusGain',f_option.AutofocusGainEdit.Value);
      config.SetValue('/StarAnalysis/AutofocusOffset',f_option.AutofocusOffsetEdit.Value);
      config.SetValue('/StarAnalysis/AutofocusBinning',f_option.AutofocusBinning.Value);
+
+     config.SetValue('/StarAnalysis/AutofocusFilter',f_option.cbAutofocusFilter.ItemIndex);
+
      config.SetValue('/StarAnalysis/AFmedianfilter',f_option.cbAFmedianfilter.Checked);
      config.SetValue('/StarAnalysis/FocuserBacklash',f_option.FocuserBacklash.Value);
      config.SetValue('/StarAnalysis/FocuserBacklashActive',f_option.FocuserBacklashActive.checked);
@@ -15254,6 +15263,7 @@ begin
   SaveAutofocusPreviewOffset:=f_preview.Offset;
   SaveAutofocusGain:=camera.Gain;
   SaveAutofocusOffset:=camera.Offset;
+  SaveAutofocusFilter:=wheel.Filter;
   camera.GetFrame(SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH);
   if (camera.Status<>devConnected)or(focuser.Status<>devConnected) then begin
    NewMessage(rsCameraOrFocu,1);
@@ -15297,6 +15307,11 @@ begin
     NewMessage(Format(rsPleaseRunVcu, [inttostr(AutofocusBinning)]),1);
     f_starprofile.ChkAutofocusDown(false);
     exit;
+  end;
+  // set filter
+  if AutofocusFilter>0 then begin
+    wheel.Filter:=AutofocusFilter;
+    wait(FocuserDelay+5);  // let time to modify the exposure factor and apply the focus offset
   end;
   // protect against wrong setting
   if AutofocusExposureFact<=0 then AutofocusExposureFact:=1;
@@ -15471,6 +15486,9 @@ begin
    if camera.CanSetGain then begin
       camera.Gain:=SaveAutofocusGain;
       if hasOffset then camera.Offset:=SaveAutofocusOffset;
+   end;
+   if AutofocusFilter>0 then begin
+     wheel.Filter:=SaveAutofocusFilter;
    end;
    ImgZoom:=f_visu.Zoom;
    f_starprofile.StarX:=-1;

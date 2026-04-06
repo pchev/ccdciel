@@ -4167,34 +4167,74 @@ object f_option: Tf_option
           ClientHeight = 62
           ClientWidth = 551
           TabOrder = 4
-          object Label174: TLabel
-            AnchorSideTop.Control = DefocusAmount
-            AnchorSideTop.Side = asrCenter
-            Left = 6
-            Height = 18
-            Top = 11
-            Width = 102
-            Caption = 'Defocus amount'
-            ParentColor = False
-          end
-          object DefocusAmount: TSpinEditEx
-            Left = 212
-            Height = 32
-            Top = 4
-            Width = 61
-            MaxLength = 0
+          object Panel41: TPanel
+            Left = 0
+            Height = 62
+            Top = 0
+            Width = 288
+            Align = alLeft
+            ClientHeight = 62
+            ClientWidth = 288
             TabOrder = 0
-            NullValue = 0
-            Value = 0
+            object Label174: TLabel
+              AnchorSideTop.Control = DefocusAmount
+              AnchorSideTop.Side = asrCenter
+              Left = 6
+              Height = 18
+              Top = 11
+              Width = 102
+              Caption = 'Defocus amount'
+              ParentColor = False
+            end
+            object DefocusAmount: TSpinEditEx
+              Left = 212
+              Height = 32
+              Top = 4
+              Width = 61
+              MaxLength = 0
+              TabOrder = 0
+              NullValue = 0
+              Value = 0
+            end
+            object GuiderAutofocus: TCheckBox
+              Left = 6
+              Height = 22
+              Top = 40
+              Width = 226
+              Caption = 'Autofocus using the OAG camera'
+              OnClick = GuiderAutofocusClick
+              TabOrder = 1
+            end
           end
-          object GuiderAutofocus: TCheckBox
-            Left = 6
-            Height = 22
-            Top = 40
-            Width = 226
-            Caption = 'Autofocus using the OAG camera'
-            OnClick = GuiderAutofocusClick
+          object PanelAutofocusFilter: TPanel
+            Left = 288
+            Height = 62
+            Top = 0
+            Width = 263
+            Align = alClient
+            ClientHeight = 62
+            ClientWidth = 263
             TabOrder = 1
+            object cbAutofocusFilter: TComboBox
+              Left = 16
+              Height = 28
+              Top = 28
+              Width = 191
+              AutoSize = False
+              Constraints.MaxHeight = 28
+              ItemHeight = 18
+              ParentFont = False
+              Style = csDropDownList
+              TabOrder = 0
+            end
+            object Label4: TLabel
+              Left = 16
+              Height = 18
+              Top = 8
+              Width = 195
+              Caption = 'Always autofocus with this filter'
+              ParentColor = False
+            end
           end
         end
       end

@@ -508,7 +508,7 @@ var
   AutofocusMinSpeed,AutofocusMaxSpeed,AutofocusNearNum,FocuserDelay,AutofocusBinning,AutofocusPeriod: integer;
   AutofocusStartHFD,AutofocusNearHFD: double;
   AutofocusExposure,AutofocusExposureFact:double;
-  AutofocusGain, AutofocusOffset: integer;
+  AutofocusGain, AutofocusOffset,AutofocusFilter: integer;
   AutofocusMoveDir,AFmedianfilter: boolean;
   PosStartL,PosStartR,PosNearL,PosNearR,PosFocus,AutofocusVcNum,AutofocusVcSkipNum,VcCenterpos,VcHalfwidth,VcNsteps:integer;
   AutofocusVc: array[0..100]of array[1..2] of double;
