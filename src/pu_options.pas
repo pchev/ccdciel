@@ -1347,7 +1347,7 @@ begin
   GuiderAutofocus.Caption:=rsAutofocusUsi;
   PageAstrometry.Caption := rsAstrometry;
   GroupBox4.Caption := rsAstrometryOp;
-  FocaleFromDriver.Caption := rsFromTelescop;
+  FocaleFromDriver.Caption := rsFromDriver;
   Label166.Caption := rsFocaleLength;
   Label167.Caption:='[mm]';
   Label3.Caption := rsPixelSize;
@@ -1391,7 +1391,7 @@ begin
   PrecSlewBox.Caption := rsCorrectionMe;
   Label66.Caption := rsFilter;
   Label87.Caption := rsDelayAfterTe;
-  Label166.Caption := rsFinderFocalL;
+  Label166.Caption := rsFocaleLength;
   UseFinderSolver.Caption := rsUseAlternati;
   cbSlewSyncRotator.Caption := rsSyncTheRotat;
   PageMeridian.Caption := rsMeridian;

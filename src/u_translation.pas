@@ -529,7 +529,7 @@ resourcestring
   rsArcmin = '[arcmin]';
   rsAstrometry = 'Astrometry';
   rsAstrometryOp = 'Astrometry options';
-  rsFromTelescop = 'From telescope driver';
+  rsFromDriver = 'From driver';
   rsFocaleLength = 'Focal length';
   rsStartFocus = 'Start focus';
   rsPixelSize = 'Pixel size';
@@ -1608,7 +1608,6 @@ resourcestring
   rsMandatorySta = 'Mandatory start time';
   rsSelectArea = 'Select area';
   rsSettlingFor = 'Settling for';
-  rsFinderFocalL = 'Finder focal length';
   rsUseAlternati = 'Use alternative solver';
   rsRemoveSpaceI = 'Remove space in object name';
   rsSequenceSepa = 'Sequence separator';
