@@ -1309,8 +1309,9 @@ begin
 end;
 
 procedure Tf_starprofile.doAutofocusDynamic;
-var i,k,step,sumpos,numpos,focuspos: integer;
-    p_hyp,a_hyp,b_hyp,x: double;
+var i,k,step,sumpos,numpos,focuspos, iteration_cycles :integer;
+    p_hyp,a_hyp,b_hyp,x,lowest_error: double;
+
   procedure BestPosition;
   begin
    if FPreFocusPos=-1 then begin
@@ -1444,7 +1445,7 @@ begin
               end;
               // compute focus
               p_hyp:=0;a_hyp:=0;b_hyp:=0;
-              find_best_hyperbola_fit(dyn_v_curve,afmpos,p_hyp,a_hyp,b_hyp); {output: bestfocusposition=p, a, b of hyperbola}
+              find_best_hyperbola_fit(dyn_v_curve,afmpos,p_hyp,a_hyp,b_hyp,lowest_error,iteration_cycles); {output: bestfocusposition=p, a, b of hyperbola}
               if DynAbsStartPos>0 then
                 x:=DynAbsStartPos+(p_hyp-1)*DynAbsStep
               else
@@ -1502,8 +1503,9 @@ begin
 end;
 
 procedure Tf_starprofile.doAutofocusPlanet;
-var i,k,step,sumpos,numpos: integer;
-    p_hyp,a_hyp,b_hyp,x: double;
+var i,k,step,sumpos,numpos,iteration_cycles: integer;
+    p_hyp,a_hyp,b_hyp,x, lowest_error      : double;
+
   procedure ResetPos;
   begin
     k:=round(AutofocusPlanetMovement*(AutofocusPlanetNumPoint-aminpos));
@@ -1599,7 +1601,7 @@ begin
               end;
               // compute focus
               p_hyp:=0;a_hyp:=0;b_hyp:=0;
-              find_best_hyperbola_fit(dyn_v_curve,afmpos,p_hyp,a_hyp,b_hyp); {output: bestfocusposition=p, a, b of hyperbola}
+              find_best_hyperbola_fit(dyn_v_curve,afmpos,p_hyp,a_hyp,b_hyp,lowest_error,iteration_cycles); {output: bestfocusposition=p, a, b of hyperbola}
               if DynAbsStartPos>0 then
                 x:=DynAbsStartPos+(p_hyp-1)*DynAbsStep
               else
