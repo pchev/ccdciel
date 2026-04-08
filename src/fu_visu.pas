@@ -395,10 +395,12 @@ else begin
       x:=x+Fhist[i*FHistStep+j];
     HistGraphAreaSeries1.Add(ln(x+1));
   end;
-  HistGraphMinLine.Position:=FimgMin;
-  HistGraphMaxLine.Position:=FimgMax;
-  HistGraph.Extent.UseXMax:=false;
-  HistGraph.Extent.UseXMin:=false;
+  HistGraphMinLine.Position:=max(0,FimgMin/FHistStep);
+  HistGraphMaxLine.Position:=min(FimgMax/FHistStep,r/FHistStep);
+  HistGraph.Extent.XMin:=0;
+  HistGraph.Extent.XMax:=r/FHistStep;
+  HistGraph.Extent.UseXMax:=true;
+  HistGraph.Extent.UseXMin:=true;
 end;
 Finitialized:=true;
 SpinEditMaxChange(nil);
