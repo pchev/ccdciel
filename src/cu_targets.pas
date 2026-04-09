@@ -2325,8 +2325,7 @@ var i: integer;
     dt,dn: Tdatetime;
     fd: string;
 begin
-  fd:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
-  if copy(fd,1,1)='.' then fd:=ExpandFileName(slash(Appdir)+fd);
+  fd:=slash(BaseCapturePath);
   dt:=NowUTC;
   dn:=now-0.5;
   for i:=0 to SubDirCount-1 do begin

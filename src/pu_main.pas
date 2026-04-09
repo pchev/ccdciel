@@ -5292,7 +5292,8 @@ begin
   SaveBitmap:=config.GetValue('/Files/SaveBitmap',false);
   SaveBitmapFormat:=config.GetValue('/Files/SaveBitmapFormat','png');
   OpenPictureDialog1.InitialDir:=config.GetValue('/Files/CapturePath',defCapturePath);
-  LastCapturePath:=config.GetValue('/Files/CapturePath',defCapturePath);
+  BaseCapturePath:=config.GetValue('/Files/CapturePath',defCapturePath);
+  if copy(BaseCapturePath,1,1)='.' then BaseCapturePath:=ExpandFileName(slash(Appdir)+BaseCapturePath);
   f_video.VideoCaptureDir.Text:=config.GetValue('/Files/VideoCapturePath','/tmp');
   CustomHeaderNum:=config.GetValue('/Files/CustomHeader/Num',0);
   for i:=1 to CustomHeaderNum do begin
@@ -12782,7 +12783,6 @@ try
  filterstr:=trim(filterstr);
  // construct path
  fd:=CapturePath(fits,framestr,objectstr,expstr,binstr,false,f_sequence.Running,camera.IsDSLR,f_sequence.StepTotalCount,f_sequence.StepRepeatCount);
- LastCapturePath:=fd;
  ForceDirectoriesUTF8(fd);
  // construct file name
  fn:=CaptureFilename(fits,fd,framestr,objectstr,expstr,binstr,f_sequence.Running,camera.IsDSLR);
@@ -18296,7 +18296,7 @@ try
   else if method='DIRECTORYSEPARATOR' then result:=result+'"result": "'+stringreplace(DirectorySeparator,'\','\\',[rfReplaceAll])+'"'
   else if method='APPDIR' then result:=result+'"result": "'+stringreplace(Appdir,'\','\\',[rfReplaceAll])+'"'
   else if method='TMPDIR' then result:=result+'"result": "'+stringreplace(TmpDir,'\','\\',[rfReplaceAll])+'"'
-  else if method='CAPTUREDIR' then result:=result+'"result": "'+stringreplace(config.GetValue('/Files/CapturePath',defCapturePath),'\','\\',[rfReplaceAll])+'"'
+  else if method='CAPTUREDIR' then result:=result+'"result": "'+stringreplace(BaseCapturePath,'\','\\',[rfReplaceAll])+'"'
   else if method='LIGHTDIR' then result:=result+'"result": "'+trim(FrameName[0])+'"'
   else if method='BIASDIR' then result:=result+'"result": "'+trim(FrameName[1])+'"'
   else if method='DARKDIR' then result:=result+'"result": "'+trim(FrameName[2])+'"'
@@ -20484,7 +20484,10 @@ begin
   end
   else if f_finder.cbSaveImages.Checked then begin
     // save image
-    fn:=LastCapturePath;
+    if CurrentSequenceDirectory<>'' then
+      fn:=CurrentSequenceDirectory
+    else
+      fn:=BaseCapturePath;
     ForceDirectories(fn);
     fn:=slash(fn)+'Finder'+FilenameSep;
     objectstr:=f_capture.Fname.Text;

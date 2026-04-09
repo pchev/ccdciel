@@ -437,8 +437,7 @@ if not Camera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeAstrometry,pgain,poff
 end
 else
   if SaveImages.Checked then begin
-    fn:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
-    if copy(fn,1,1)='.' then fn:=ExpandFileName(slash(Appdir)+fn);
+    fn:=slash(BaseCapturePath);
     fn:=slash(fn)+'PolarAlign_'+FormatDateTime('hhnnss',FDateStart)+'_'+inttostr(1+(FExposeStep div 3))+'.fits';
     tracemsg('Save file '+fn);
     Fits.SaveToFile(fn);

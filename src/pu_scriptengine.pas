@@ -1894,10 +1894,13 @@ begin
  if n=0 then
    val(count,c,n);
  if n=0 then begin;
-   dir:=LastCapturePath;
+   if CurrentSequenceDirectory<>'' then
+     dir:=CurrentSequenceDirectory
+   else
+     dir:=BaseCapturePath;
    ForceDirectories(dir);
    basefn:=ExtractFileNameOnly(basefn);
-   if CurrentTargetName<>'' then basefn:=StringReplace(basefn,'%obj%',CurrentTargetName,[rfReplaceAll]);
+   basefn:=StringReplace(basefn,'%obj%',CurrentTargetName,[rfReplaceAll]);
    basefn:=slash(dir)+basefn;
    i:=1;
    for j:=0 to c-1 do begin
@@ -1928,10 +1931,13 @@ begin
  if n=0 then
    val(count,c,n);
  if n=0 then begin;
-   dir:=LastCapturePath;
+   if CurrentSequenceDirectory<>'' then
+     dir:=CurrentSequenceDirectory
+   else
+     dir:=BaseCapturePath;
    ForceDirectories(dir);
    basefn:=ExtractFileNameOnly(basefn);
-   if CurrentTargetName<>'' then basefn:=StringReplace(basefn,'%obj%',CurrentTargetName,[rfReplaceAll]);
+   basefn:=StringReplace(basefn,'%obj%',CurrentTargetName,[rfReplaceAll]);
    basefn:=slash(dir)+basefn;
    i:=1;
    for j:=0 to c-1 do begin
@@ -1957,10 +1963,13 @@ var i: integer;
 begin
  result:=msgFailed;
  try
-   dir:=LastCapturePath;
+   if CurrentSequenceDirectory<>'' then
+     dir:=CurrentSequenceDirectory
+   else
+     dir:=BaseCapturePath;
    ForceDirectories(dir);
    basefn:=ExtractFileNameOnly(basefn);
-   if CurrentTargetName<>'' then basefn:=StringReplace(basefn,'%obj%',CurrentTargetName,[rfReplaceAll]);
+   basefn:=StringReplace(basefn,'%obj%',CurrentTargetName,[rfReplaceAll]);
    basefn:=slash(dir)+basefn;
    i:=1;
    seqstr:=inttostr(i);

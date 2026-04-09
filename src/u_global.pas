@@ -437,7 +437,7 @@ var
   defCapturePath, defPython, TCPIPConfigPort, TCPIPServerPort: string;
   CameraName,WheelName,FocuserName,RotatorName,MountName,DomeName,WatchdogName,WeatherName,SafetyName,SwitchName,CoverName,GuideCameraName,FinderCameraName: string;
   ConfigFlatFile,ConfigDarkFile,ConfigGuiderDarkFile,ConfigFinderDarkFile,ConfigGuiderReferenceFile,cdate: string;
-  LastCapturePath: string;
+  BaseCapturePath: string;
   isAdmin, UacEnabled, debug_msg: boolean;
   AllDevicesConnected: boolean;
   ConfirmClose, ScreenScaling, LogToFile: boolean;

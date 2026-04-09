@@ -5042,8 +5042,7 @@ else begin
 end;
 dn:=now-0.5;
 // construct path
-fd:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
-if copy(fd,1,1)='.' then fd:=ExpandFileName(slash(Appdir)+fd);
+fd:=slash(BaseCapturePath);
 if preview then begin
   framestr:=rsPreview;
 end
