@@ -576,7 +576,7 @@ var
   Offset,OffsetMin,OffsetMax: integer;
   SubDirName: array[0..SubDirCount-1] of string;
   FilenameName: array[0..FileNameCount-1] of string;
-  CurrentSeqName, CurrentTargetName, CurrentStepName: string;
+  CurrentSeqName, CurrentTargetName, CurrentStepName,CurrentSequenceDirectory: string;
   CurrentStepNum,CurrentDoneCount: integer;
   WeatherPauseTarget,WeatherPauseCapture,WeatherCapturePaused,WeatherPauseCanceled,WeatherCancelRestart: boolean;
   WeatherRestartDelay: integer;

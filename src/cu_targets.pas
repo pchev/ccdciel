@@ -27,7 +27,7 @@ interface
 
 uses u_global, cu_plan, u_utils, indiapi, pu_scriptengine, pu_pause, cu_rotator, cu_planetarium, u_ephem, cu_waitthread,
   fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider, cu_autoguider_internal, cu_astrometry,
-  fu_safety, fu_weather, cu_dome, u_ccdconfig, cu_sequencefile, fu_internalguider, math,
+  fu_safety, fu_weather, cu_dome, u_ccdconfig, cu_sequencefile, fu_internalguider, math, LazSysUtils,
   u_translation, LazFileUtils, Controls, Dialogs, ExtCtrls,Classes, Forms, SysUtils;
 
 type
@@ -126,6 +126,7 @@ type
       procedure StopSequence(abort: boolean);
       procedure NextTargetAsync(Data: PtrInt);
       procedure NextTarget;
+      function SequenceDirectory: string;
       function SetTargetTime(t:TTarget; middletime:double; out pivot:double):boolean;
       function InitTarget:boolean;
       function InitSkyFlat: boolean;
@@ -1465,6 +1466,7 @@ begin
   end;
   CurrentTargetName:='';
   CurrentStepName:='';
+  CurrentSequenceDirectory:='';
 end;
 
 
@@ -1546,6 +1548,7 @@ begin
    if assigned(FonEndSequence) then FonEndSequence(nil);
    CurrentTargetName:='';
    CurrentStepName:='';
+   CurrentSequenceDirectory:='';
  end
  else begin
     msg(rsNotRunningNo,1);
@@ -2105,6 +2108,7 @@ begin
   if FRunning and (FCurrentTarget<NumTargets) then begin
    // there is more target to process
    CurrentTargetName:=Targets[FCurrentTarget].objectname;
+   CurrentSequenceDirectory:=SequenceDirectory;
    if Targets[FCurrentTarget].objectname=ScriptTxt then begin
      // process script
      FInitializing:=false;
@@ -2306,12 +2310,38 @@ begin
        msg(r,9);
      end;
      if assigned(FonEndSequence) then FonEndSequence(nil);
+     CurrentTargetName:='';
+     CurrentSequenceDirectory:='';
      finally
        FWaiting:=false;
        FFinalizing:=false;
      end;
    end;
   end;
+end;
+
+function T_Targets.SequenceDirectory: string;
+var i: integer;
+    dt,dn: Tdatetime;
+    fd: string;
+begin
+  fd:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
+  if copy(fd,1,1)='.' then fd:=ExpandFileName(slash(Appdir)+fd);
+  dt:=NowUTC;
+  dn:=now-0.5;
+  for i:=0 to SubDirCount-1 do begin
+    case SubDirOpt[i] of
+      sdSeq : if SubDirActive[i] then
+                 fd:=slash(fd+trim(CurrentSeqName));
+      sdObj : if SubDirActive[i] and (CurrentTargetName<>ScriptTxt) and (CurrentTargetName<>SwitchTxt) and (CurrentTargetName<>SkyFlatTxt) then
+                 fd:=slash(fd+CurrentTargetName);
+      sdDate: if SubDirActive[i] then
+                 fd:=fd+slash(FormatDateTime('yyyymmdd',dt));
+      sdNight: if SubDirActive[i] then
+                 fd:=fd+slash(FormatDateTime('yyyymmdd',dn));
+    end;
+  end;
+  result:=fd;
 end;
 
 function T_Targets.SetTargetTime(t:TTarget; middletime:double; out pivot:double): boolean;

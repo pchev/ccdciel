@@ -228,6 +228,7 @@ begin
  CurrentSeqName:='';
  CurrentTargetName:='';
  CurrentStepName:='';
+ CurrentSequenceDirectory:='';
  StartingSequence:=false;
  FEditingTarget:=false;
  FUserStop:=false;
