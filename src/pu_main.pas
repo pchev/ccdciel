@@ -20490,7 +20490,7 @@ begin
       fn:=BaseCapturePath;
     ForceDirectories(fn);
     fn:=slash(fn)+'Finder'+FilenameSep;
-    objectstr:=f_capture.Fname.Text;
+    objectstr:=CurrentTargetName;
     objectstr:=SafeFileName(objectstr);
     fn:=fn+wordspace(StringReplace(objectstr,FilenameSep,'-',[rfReplaceAll]))+FilenameSep;
     if finderfits.Header.Valueof('DATE-OBS',dateobs) then
@@ -20500,6 +20500,7 @@ begin
     fn:=fn+FormatDateTime('yyyymmdd'+FilenameSep+'hhnnss',dt);
     fn:=fn+'.fits';
     finderfits.SaveToFile(fn);
+    NewMessage(rsFinder+': '+Format(rsSavedFile, [fn]),3);
   end;
   // solve polar alignment
   if PolarAlignmentOverlay and UseFinder then begin

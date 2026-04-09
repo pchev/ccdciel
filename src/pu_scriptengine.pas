@@ -1911,6 +1911,7 @@ begin
      end;
      fn:=basefn+FilenameSep+seqstr+FitsFileExt;
      if not finder.Snapshot(e,fn) then exit;
+     msg(rsFinder+': '+Format(rsSavedFile, [fn]));
      inc(i);
    end;
    result:=msgOK;
@@ -1948,6 +1949,7 @@ begin
      end;
      fn:=basefn+FilenameSep+seqstr+FitsFileExt;
      if not FInternalGuider.Snapshot(e,fn) then exit;
+     msg(rsGuider+': '+Format(rsSavedFile, [fn]));
      inc(i);
    end;
    result:=msgOK;
@@ -1979,6 +1981,7 @@ begin
    end;
    fn:=basefn+FilenameSep+seqstr+FitsFileExt;
    if not FInternalGuider.SaveFits(fn) then exit;
+   msg(rsGuider+': '+Format(rsSavedFile, [fn]));
    result:=msgOK;
  except
    result:=msgFailed;
