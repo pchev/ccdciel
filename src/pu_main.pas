@@ -3429,6 +3429,7 @@ end;
 procedure Tf_main.StatusBar1DrawPanel(StatusBar: TStatusBar;  Panel: TStatusPanel; const Rect: TRect);
 var
     s,hs,x,y: integer;
+    bar: TRect;
 begin
   if StatusBar=StatusBar1 then begin;
     if panel=StatusBar.Panels[panelled] then begin
@@ -3495,22 +3496,26 @@ begin
       statusbar.Hint:=MsgStatusLed;
     end
     else if panel=StatusBar.Panels[panelstatus] then begin
+      statusbar.Canvas.Font.Color:=clDefault;
+      statusbar.Canvas.Brush.Color:=clDefault;
+      statusbar.Canvas.FillRect(Rect);
       if (CameraExposureRemain>0)and(camera.LastExposureTime>0) then begin
         x:=round(rect.Width*CameraExposureRemain/camera.LastExposureTime);
+        bar.Top:=Rect.Top;
+        bar.Left:=Rect.Left;
+        bar.Width:=Rect.Width;
+        bar.Height:=DoScaleY(5);
         statusbar.Canvas.Brush.Color:=colorProgress2;
-        statusbar.Canvas.FillRect(Rect);
-        Rect.Width:=Rect.Width-x;
+        statusbar.Canvas.FillRect(bar);
+        bar.Width:=bar.Width-x;
         statusbar.Canvas.Brush.Color:=colorProgress1;
-        statusbar.Canvas.FillRect(Rect);
+        statusbar.Canvas.FillRect(bar);
         statusbar.Canvas.Brush.Style:=bsClear;
         statusbar.Canvas.Font.Color:=colorProgressText;
-        statusbar.Canvas.TextOut(Rect.Left,Rect.Top,panel.Text);
+        statusbar.Canvas.TextOut(Rect.Left,Rect.Top+DoScaleY(2),panel.Text);
         statusbar.Canvas.Brush.Style:=bsSolid;
       end
       else begin
-        statusbar.Canvas.Font.Color:=clDefault;
-        statusbar.Canvas.Brush.Color:=clDefault;
-        statusbar.Canvas.FillRect(Rect);
         statusbar.Canvas.TextOut(Rect.Left,Rect.Top,panel.Text);
       end;
     end
