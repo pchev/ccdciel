@@ -1050,9 +1050,6 @@ begin
            FonExposureProgress(-4);
      end;
   end
-  else if nvp=ScopeInfo then begin
-    writeln(ScopeFocale.value);
-  end
   else if nvp=CCDframe then begin
     // ignore ASI CCDFrame change because this can be just a binning requirement, see: https://indilib.org/forum/ccds-dslrs/4956-indi-asi-driver-bug-causes-false-binned-images.html
     if (not isASI)and(stX<>round(CCDframeX.value))and(stY<>round(CCDframeY.value))and(stWidth<>round(CCDframeWidth.value))and(stHeight<>round(CCDframeHeight.value))  then begin
