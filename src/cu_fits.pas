@@ -3857,10 +3857,11 @@ begin
   valmax:=0;
   bg:=0;
   snr:=0;
-  valmax:=0;
   hfd:=-1;
   star_fwhm:=-1;
   flux:=-1;
+  xc:=x;
+  yc:=y;
 
   if strict_saturation then
      max_saturated:=0
@@ -3906,7 +3907,10 @@ begin
           SumValY:=SumValY+val*(j);
         end;
       end;
-      if sumval<=15*sd then exit; {no star found, too noisy}
+      if sumval<=15*sd then begin
+        valmax:=0;
+        exit; {no star found, too noisy}
+      end;
       Xg:=SumValX/SumVal;
       Yg:=SumValY/SumVal;
       xc:=(x+Xg);
