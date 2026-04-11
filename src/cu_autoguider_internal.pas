@@ -122,6 +122,7 @@ type
     function SpectroSetGuideStar(GuideRa,GuideDec:double):boolean; override;
     function SpectroSetTarget(TargetRa,TargetDec: double):boolean; override;
     procedure SpectroSelectNewStar(x,y: integer);
+    procedure SpectroSetMultistarOffset(ox,oy: double);
     procedure InternalguiderLoop;
     procedure InternalguiderStart(verbose: boolean=True);
     procedure InternalguiderStop(verbose: boolean=True);
@@ -1002,6 +1003,8 @@ begin
   Finternalguider.ButtonCalibrate.enabled:=false;
   Finternalguider.ButtonDark.enabled:=false;
   Finternalguider.ButtonGuide.enabled:=true;
+  Finternalguider.btnSetStarOffset.Enabled:=true;
+  Finternalguider.btnSetMultiStarOffset.Enabled:=true;
   if InternalguiderCapturingDark then begin
     FGuideFits.SetBPM(bpm,0,0,0,0);
     FGuideFits.DarkOn:=false;
@@ -1302,6 +1305,8 @@ begin
 
   InternalguiderLoop;
   Finternalguider.ButtonGuide.enabled:=false;
+  Finternalguider.btnSetStarOffset.Enabled:=false;
+  Finternalguider.btnSetMultiStarOffset.Enabled:=false;
   StartSettle;
 end;
 
@@ -1911,6 +1916,8 @@ begin
   Finternalguider.cbSpectro.enabled:=true;
   Finternalguider.led.Brush.Color:=clGray;
   Finternalguider.ClearMsgTimer.Enabled:=true;
+  Finternalguider.btnSetStarOffset.Enabled:=true;
+  Finternalguider.btnSetMultiStarOffset.Enabled:=true;
   if verbose then SetStatus('Stopped',GUIDER_IDLE);
 end;
 
@@ -2882,6 +2889,14 @@ begin
     finternalguider.GuideLockNextX:=x;
     finternalguider.GuideLockNextY:=y;
   end;
+end;
+
+procedure T_autoguider_internal.SpectroSetMultistarOffset(ox,oy: double);
+begin
+  // manually set the multistar offset to move the target to the slit
+  finternalguider.OffsetX:=ox;
+  finternalguider.OffsetY:=oy;
+  OffsetFromTarget:=true;
 end;
 
 procedure T_autoguider_internal.initspiral;//reset spiral global values

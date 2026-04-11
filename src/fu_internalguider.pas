@@ -42,6 +42,7 @@ type
 
   Tf_internalguider = class(TFrame)
     Backlash: TSpinEditEx;
+    btnSetMultiStarOffset: TButton;
     Button1: TButton;
     btnRefImage: TButton;
     btnSetStarOffset: TButton;
@@ -74,6 +75,7 @@ type
     Label18: TLabel;
     Label19: TLabel;
     Label59: TLabel;
+    LabelSetMultiOffset: TLabel;
     LabelSetOffset: TLabel;
     Label55: TLabel;
     Label56: TLabel;
@@ -258,6 +260,7 @@ type
     procedure BinningChange(Sender: TObject);
     procedure btnAddSlitOffsetClick(Sender: TObject);
     procedure btnDelSlitOffsetClick(Sender: TObject);
+    procedure btnSetMultiStarOffsetClick(Sender: TObject);
     procedure btnSetStarOffsetClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure btnRefImageClick(Sender: TObject);
@@ -325,7 +328,7 @@ type
     cur_disable_guiding, cur_tracksolar, FForceMultiStar: boolean;
     FDrawSettingChange, LockSlit: boolean;
     FGuideLock, FGuideMultistar, FGuideAstrometry,FGuideStarOffset,BinningChanging: boolean;
-    FGuideLockNextX, FGuideLockNextY, FStarOffsetStep, BinningRef: integer;
+    FGuideLockNextX, FGuideLockNextY, FStarOffsetStep, FMultiStarOffsetStep, BinningRef: integer;
     FonShowMessage: TNotifyMsg;
     Fcamera: T_camera;
     FRotator: T_rotator;
@@ -527,6 +530,7 @@ type
     property GuideLockNextX: integer read FGuideLockNextX write FGuideLockNextX;
     property GuideLockNextY: integer read FGuideLockNextY write FGuideLockNextY;
     property StarOffsetStep: integer read FStarOffsetStep write FStarOffsetStep;
+    property MultiStarOffsetStep: integer read FMultiStarOffsetStep write FMultiStarOffsetStep;
     property SearchWinMin: integer read GetSearchWinMin write SetSearchWinMin; // star search area
     property SearchWinMax: integer read GetSearchWinMax write SetSearchWinMax;
     property DrawSlit: boolean read GetDrawSlit write SetDrawSlit;
@@ -591,6 +595,7 @@ begin
  LabelInfo3.Caption:='';
  LabelInfo4.Caption:='';
  LabelSetOffset.Caption:='';
+ LabelSetMultiOffset.Caption:='';
  pier_side1.Text:='N/A';
  cur_minHFD:=minHFD;
  cur_minSNR:=minSNR;
@@ -616,6 +621,7 @@ begin
  FGuideLockNextX:=-1;
  FGuideLockNextY:=-1;
  FStarOffsetStep:=-1;
+ FMultiStarOffsetStep:=-1;
  led.Canvas.AntialiasingMode:=amOn;
  FForceMultiStar:=false;
  BinningChanging:=false;
@@ -721,6 +727,7 @@ begin
   Label56.Caption:=rsOffset+' X';
   Label57.Caption:=rsOffset+' Y';
   btnSetStarOffset.Caption:=rsClickOnTheIm;
+  btnSetMultiStarOffset.Caption:=rsClickOnTheIm;
   Label58.Caption:=rsReferenceIma;
   btnRefImage.Caption:=rsCalibrate;
   btnRefImage.Hint:=rsSpecificAstr;
@@ -2117,12 +2124,24 @@ begin
  end;
 end;
 
+procedure Tf_internalguider.btnSetMultiStarOffsetClick(Sender: TObject);
+begin
+  if not InternalguiderGuiding then begin
+    edOffsetX.Value:=0;
+    edOffsetY.Value:=0;
+    FMultiStarOffsetStep:=1;
+    LabelSetMultiOffset.Caption:=rsClickAtTheTa;
+  end;
+end;
+
 procedure Tf_internalguider.btnSetStarOffsetClick(Sender: TObject);
 begin
-  StarOffsetX.Value:=0;
-  StarOffsetY.Value:=0;
-  FStarOffsetStep:=1;
-  LabelSetOffset.Caption:=rsClickAtTheTa;
+  if not InternalguiderGuiding then begin
+    StarOffsetX.Value:=0;
+    StarOffsetY.Value:=0;
+    FStarOffsetStep:=1;
+    LabelSetOffset.Caption:=rsClickAtTheTa;
+  end;
 end;
 
 procedure Tf_internalguider.SlitOffsetChange(Sender: TObject);

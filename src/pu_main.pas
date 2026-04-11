@@ -19895,6 +19895,10 @@ var xx,yy: integer;
     bg,bgdev,xc,yc,hfd,fwhm,vmax,snr,flux,lockx,locky: double;
 begin
   if f_internalguider.SpectroFunctions and (autoguider is T_autoguider_internal) and (f_internalguider.StarOffsetStep>0) then begin
+    if not guidefits.HeaderInfo.valid then begin
+      f_internalguider.LabelSetOffset.Caption:='';
+      exit;
+    end;
     w:=guidefits.HeaderInfo.naxis1;
     h:=guidefits.HeaderInfo.naxis2;
     case f_internalguider.StarOffsetStep of
@@ -19945,6 +19949,36 @@ begin
             f_internalguider.StarOffsetY.Value:=0;
             f_internalguider.LabelSetOffset.Caption:=rsGuidePositio2;
           end;
+          end;
+    end;
+  end;
+  if f_internalguider.SpectroFunctions and (autoguider is T_autoguider_internal) and (f_internalguider.MultiStarOffsetStep>0) then begin
+    if not guidefits.HeaderInfo.valid then begin
+      f_internalguider.LabelSetMultiOffset.Caption:='';
+      exit;
+    end;
+    w:=guidefits.HeaderInfo.naxis1;
+    h:=guidefits.HeaderInfo.naxis2;
+    case f_internalguider.MultiStarOffsetStep of
+       1: begin
+          GuiderScreen2fits(GuideMx,GuideMy,true,xx,yy);
+          GuideOffset1X:=xx;
+          GuideOffset1Y:=h-yy;
+          s:=f_internalguider.SearchWinMin;
+          guidefits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
+          if vmax>0 then begin
+            guidefits.GetHFD2(xxc,yyc,2*rc,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
+            if vmax>0 then begin
+              GuideOffset1X:=xc;
+              GuideOffset1Y:=h-yc;
+            end;
+          end;
+          GuideOffset1X:=-f_internalguider.SlitPosX+GuideOffset1X;
+          GuideOffset1Y:=f_internalguider.SlitPosY-GuideOffset1Y;
+          T_autoguider_internal(autoguider).SpectroSetMultistarOffset(GuideOffset1X,GuideOffset1Y);
+          f_internalguider.MultiStarOffsetStep:=-1;
+          f_internalguider.LabelSetMultiOffset.Caption:='';
+          InternalguiderStart(Sender);
           end;
     end;
   end;
