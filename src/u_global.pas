@@ -606,7 +606,7 @@ var
   Collimation: boolean;
   CollimationCircle: integer;
   AutoguiderStat: array of TAutoguiderStatistics;
-  colorGreen, colorBlue, colorRed, colorText, colorBg, colorGray, colorLightGray: Tcolor;
+  colorGreen, colorBlue, colorRed, colorText, colorBg, colorGray, colorLightGray, colorProgress1, colorProgress2, colorProgressText: Tcolor;
   AutoguiderAlert,AutoguiderStarting,LockRestartExposure: boolean;
   AutoguiderAlertTime,AutoguiderMsgTime: double;
   MountTrackingAlert: boolean;

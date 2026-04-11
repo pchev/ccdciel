@@ -619,15 +619,19 @@ object f_main: Tf_main
     BorderWidth = 1
     Panels = <    
       item
+        Style = psOwnerDraw
         Width = 430
       end    
       item
+        Style = psOwnerDraw
         Width = 259
       end    
       item
+        Style = psOwnerDraw
         Width = 323
       end    
       item
+        Style = psOwnerDraw
         Width = 60
       end    
       item

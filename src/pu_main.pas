@@ -3277,6 +3277,9 @@ begin
     colorBg:=clWhite;
     colorGray:=clGray;
     colorLightGray:=clSilver;
+    colorProgress1:=clLime;
+    colorProgress2:=clSilver;
+    colorProgressText:=clBlack;
     if f_EditTargets<>nil then begin
       f_EditTargets.TargetList.TitleImageList:=f_EditTargets.ImageListDay;
     end;
@@ -3292,6 +3295,9 @@ begin
     colorBg:=clBlack;
     colorGray:=clSilver;
     colorLightGray:=clGray;
+    colorProgress1:=clGreen;
+    colorProgress2:=clGray;
+    colorProgressText:=clWhite;
     {$ifdef lclcocoa}
     TBTabs.Color:=clBackground;
     {$endif}
@@ -3435,6 +3441,7 @@ begin
       y:=Rect.Height div 2;
       hs:=(Rect.Width-6*s) div 4;
       // clear
+      statusbar.Canvas.Font.Color:=clDefault;
       statusbar.Canvas.Brush.Color:=clDefault;
       statusbar.Canvas.FillRect(Rect);
       // planetarium
@@ -3486,6 +3493,32 @@ begin
       statusbar.Canvas.Ellipse(x-s,y-s,x+s,y+s);
       // set hint
       statusbar.Hint:=MsgStatusLed;
+    end
+    else if panel=StatusBar.Panels[panelstatus] then begin
+      if (CameraExposureRemain>0)and(camera.LastExposureTime>0) then begin
+        x:=round(rect.Width*CameraExposureRemain/camera.LastExposureTime);
+        statusbar.Canvas.Brush.Color:=colorProgress2;
+        statusbar.Canvas.FillRect(Rect);
+        Rect.Width:=Rect.Width-x;
+        statusbar.Canvas.Brush.Color:=colorProgress1;
+        statusbar.Canvas.FillRect(Rect);
+        statusbar.Canvas.Brush.Style:=bsClear;
+        statusbar.Canvas.Font.Color:=colorProgressText;
+        statusbar.Canvas.TextOut(Rect.Left,Rect.Top,panel.Text);
+        statusbar.Canvas.Brush.Style:=bsSolid;
+      end
+      else begin
+        statusbar.Canvas.Font.Color:=clDefault;
+        statusbar.Canvas.Brush.Color:=clDefault;
+        statusbar.Canvas.FillRect(Rect);
+        statusbar.Canvas.TextOut(Rect.Left,Rect.Top,panel.Text);
+      end;
+    end
+    else begin
+      statusbar.Canvas.Font.Color:=clDefault;
+      statusbar.Canvas.Brush.Color:=clDefault;
+      statusbar.Canvas.FillRect(Rect);
+      statusbar.Canvas.TextOut(Rect.Left,Rect.Top,panel.Text);
     end;
   end;
 end;
@@ -8171,6 +8204,7 @@ end;
 
 Procedure Tf_main.CameraExposureAborted(Sender: TObject);
 begin
+ CameraExposureRemain:=-1;
  AbortTimer.Enabled:=true;
 end;
 
