@@ -29,12 +29,12 @@ object f_internalguider: Tf_internalguider
   end
   object Panel1: TPanel
     Left = 0
-    Height = 992
+    Height = 996
     Top = 20
     Width = 346
     Align = alTop
     AutoSize = True
-    ClientHeight = 992
+    ClientHeight = 996
     ClientWidth = 346
     ParentFont = False
     TabOrder = 0
@@ -123,7 +123,7 @@ object f_internalguider: Tf_internalguider
     end
     object pcInternalguider: TPageControl
       Left = 1
-      Height = 925
+      Height = 929
       Top = 66
       Width = 344
       ActivePage = TabSheetGuider
@@ -136,17 +136,17 @@ object f_internalguider: Tf_internalguider
       OnChange = pcInternalguiderChange
       object TabSheetGuider: TTabSheet
         Caption = 'Guider'
-        ClientHeight = 921
+        ClientHeight = 925
         ClientWidth = 340
         ParentFont = False
         object Panel3: TPanel
           Left = 0
-          Height = 921
+          Height = 925
           Top = 0
           Width = 340
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 921
+          ClientHeight = 925
           ClientWidth = 340
           Color = clMenu
           ParentBackground = False
@@ -386,16 +386,16 @@ object f_internalguider: Tf_internalguider
       end
       object TabSheetCamera: TTabSheet
         Caption = 'Camera'
-        ClientHeight = 921
+        ClientHeight = 925
         ClientWidth = 340
         object Panel4: TPanel
           Left = 0
-          Height = 921
+          Height = 925
           Top = 0
           Width = 340
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 921
+          ClientHeight = 925
           ClientWidth = 340
           Color = clMenu
           ParentBackground = False
@@ -685,12 +685,12 @@ object f_internalguider: Tf_internalguider
           end
           object Panel8: TPanel
             Left = 0
-            Height = 624
+            Height = 628
             Top = 297
             Width = 340
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 624
+            ClientHeight = 628
             ClientWidth = 340
             TabOrder = 5
             object PanelVisu: TPanel
@@ -707,16 +707,16 @@ object f_internalguider: Tf_internalguider
       end
       object TabSheetOptions: TTabSheet
         Caption = 'Options'
-        ClientHeight = 921
+        ClientHeight = 925
         ClientWidth = 340
         object Panel5: TPanel
           Left = 0
-          Height = 921
+          Height = 925
           Top = 0
           Width = 340
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 921
+          ClientHeight = 925
           ClientWidth = 340
           Color = clMenu
           ParentBackground = False
@@ -992,12 +992,12 @@ object f_internalguider: Tf_internalguider
           end
           object GroupBox3: TGroupBox
             Left = 0
-            Height = 464
+            Height = 468
             Top = 457
             Width = 340
             Align = alClient
             Caption = 'Calibration options'
-            ClientHeight = 434
+            ClientHeight = 438
             ClientWidth = 336
             ParentBackground = False
             TabOrder = 0
@@ -1110,7 +1110,7 @@ object f_internalguider: Tf_internalguider
       end
       object TabSheetSpectro: TTabSheet
         Caption = 'Spectro'
-        ClientHeight = 921
+        ClientHeight = 925
         ClientWidth = 340
         object Panel9: TPanel
           Left = 0
@@ -1137,12 +1137,12 @@ object f_internalguider: Tf_internalguider
         end
         object PanelSpectro: TPanel
           Left = 0
-          Height = 891
+          Height = 895
           Top = 30
           Width = 340
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 891
+          ClientHeight = 895
           ClientWidth = 340
           Color = clMenu
           ParentBackground = False
@@ -1343,7 +1343,7 @@ object f_internalguider: Tf_internalguider
           end
           object PageControl2: TPageControl
             Left = 0
-            Height = 144
+            Height = 148
             Top = 313
             Width = 340
             ActivePage = TabSheet2
@@ -1353,16 +1353,16 @@ object f_internalguider: Tf_internalguider
             TabOrder = 2
             object TabSheet1: TTabSheet
               Caption = 'TabSheet1'
-              ClientHeight = 140
+              ClientHeight = 144
               ClientWidth = 336
               object GroupBoxSearchArea: TGroupBox
                 Left = 0
-                Height = 140
+                Height = 144
                 Top = 0
                 Width = 336
                 Align = alClient
                 Caption = 'Star search area'
-                ClientHeight = 110
+                ClientHeight = 114
                 ClientWidth = 332
                 ParentBackground = False
                 TabOrder = 0
@@ -1383,6 +1383,8 @@ object f_internalguider: Tf_internalguider
                   Width = 65
                   MaxLength = 0
                   TabOrder = 0
+                  MaxValue = 200
+                  MinValue = 15
                   NullValue = 0
                   Value = 40
                 end
@@ -1396,8 +1398,10 @@ object f_internalguider: Tf_internalguider
                   BorderSpacing.Top = 2
                   MaxLength = 0
                   TabOrder = 1
+                  MaxValue = 800
+                  MinValue = 100
                   NullValue = 0
-                  Value = 80
+                  Value = 100
                 end
                 object Label31: TLabel
                   AnchorSideTop.Control = edslitWinMax
@@ -1423,16 +1427,16 @@ object f_internalguider: Tf_internalguider
             end
             object TabSheet2: TTabSheet
               Caption = 'TabSheet2'
-              ClientHeight = 140
+              ClientHeight = 144
               ClientWidth = 336
               object GroupBoxOffset: TGroupBox
                 Left = 0
-                Height = 140
+                Height = 144
                 Top = 0
                 Width = 336
                 Align = alClient
                 Caption = 'Multi-star guide offset'
-                ClientHeight = 110
+                ClientHeight = 114
                 ClientWidth = 332
                 ParentBackground = False
                 TabOrder = 0
@@ -1475,7 +1479,7 @@ object f_internalguider: Tf_internalguider
                 object btnSetMultiStarOffset: TButton
                   Left = 10
                   Height = 25
-                  Top = 61
+                  Top = 68
                   Width = 319
                   Caption = 'Click on the image to set the offset and guide'
                   OnClick = btnSetMultiStarOffsetClick
@@ -1484,7 +1488,7 @@ object f_internalguider: Tf_internalguider
                 object LabelSetMultiOffset: TLabel
                   Left = 15
                   Height = 18
-                  Top = 87
+                  Top = 94
                   Width = 121
                   Caption = 'LabelSetMultiOffset'
                   ParentColor = False
@@ -1495,7 +1499,7 @@ object f_internalguider: Tf_internalguider
           object GroupBoxLock: TGroupBox
             Left = 0
             Height = 252
-            Top = 457
+            Top = 461
             Width = 340
             Align = alTop
             AutoSize = True
@@ -1728,7 +1732,7 @@ object f_internalguider: Tf_internalguider
           object GroupBoxSlit: TGroupBox
             Left = 0
             Height = 182
-            Top = 709
+            Top = 713
             Width = 340
             Align = alTop
             Caption = 'Slit drawing'
@@ -1872,17 +1876,17 @@ object f_internalguider: Tf_internalguider
       end
       object TabSheetAdvanced: TTabSheet
         Caption = 'Advanced'
-        ClientHeight = 921
+        ClientHeight = 925
         ClientWidth = 340
         ParentFont = False
         object Panel2: TPanel
           Left = 0
-          Height = 921
+          Height = 925
           Top = 0
           Width = 340
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 921
+          ClientHeight = 925
           ClientWidth = 340
           Color = clMenu
           ParentBackground = False
@@ -1891,12 +1895,12 @@ object f_internalguider: Tf_internalguider
           TabOrder = 0
           object GroupBox2: TGroupBox
             Left = 0
-            Height = 921
+            Height = 925
             Top = 0
             Width = 340
             Align = alClient
             Caption = 'Calibration results:'
-            ClientHeight = 891
+            ClientHeight = 895
             ClientWidth = 336
             ParentBackground = False
             TabOrder = 0

@@ -2037,13 +2037,19 @@ begin
                InternalCalibration; // iterate without new image
              end;
           1: begin
+               if finternalguider.SpectroFunctions then begin
+                  if Finternalguider.SpectroStrategy=spMultiStar then
+                     Finternalguider.SpectroStrategy:=spSingleStar;     // use single star for calibration
+               end;
                CalibrationDuration:=round(CalibrationDuration*1.5);
                msg('Testing pulse guiding East for '+FormatFloat(f2v,CalibrationDuration/1000)+ ' seconds',2);
                InternalCalibrationInitialize:=true;
                CalEastRa1:=mount.ra;//mount right ascension at start of east calibration
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure reference star positions
-               if finternalguider.SpectroFunctions then
-                 MinimumDrift:=max(5,min(25,3*CurrentHFD))
+               if finternalguider.SpectroFunctions then begin
+                 MinimumDrift:=max(5,min(25,3*CurrentHFD));
+                 Finternalguider.SearchWinMin:=round(3*MinimumDrift);  // set a reasonable search box based on HFD
+               end
                else
                  MinimumDrift:=5;
                mount.PulseGuide(2,CalibrationDuration {duration msec} );  // 0=north, 1=south, 2 East, 3 West
