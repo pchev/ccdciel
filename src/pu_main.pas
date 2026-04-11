@@ -19975,6 +19975,7 @@ begin
           end;
           GuideOffset1X:=-f_internalguider.SlitPosX+GuideOffset1X;
           GuideOffset1Y:=f_internalguider.SlitPosY-GuideOffset1Y;
+          T_autoguider_internal(autoguider).SpectroSetTarget(NullCoord,NullCoord);
           T_autoguider_internal(autoguider).SpectroSetMultistarOffset(GuideOffset1X,GuideOffset1Y);
           f_internalguider.MultiStarOffsetStep:=-1;
           f_internalguider.LabelSetMultiOffset.Caption:='';

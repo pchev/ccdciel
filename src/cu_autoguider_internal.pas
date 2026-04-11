@@ -1005,6 +1005,7 @@ begin
   Finternalguider.ButtonGuide.enabled:=true;
   Finternalguider.btnSetStarOffset.Enabled:=true;
   Finternalguider.btnSetMultiStarOffset.Enabled:=true;
+  Finternalguider.rgSpectroStrategy.Enabled:=true;
   if InternalguiderCapturingDark then begin
     FGuideFits.SetBPM(bpm,0,0,0,0);
     FGuideFits.DarkOn:=false;
@@ -1307,6 +1308,7 @@ begin
   Finternalguider.ButtonGuide.enabled:=false;
   Finternalguider.btnSetStarOffset.Enabled:=false;
   Finternalguider.btnSetMultiStarOffset.Enabled:=false;
+  Finternalguider.rgSpectroStrategy.Enabled:=false;
   StartSettle;
 end;
 
@@ -1918,6 +1920,7 @@ begin
   Finternalguider.ClearMsgTimer.Enabled:=true;
   Finternalguider.btnSetStarOffset.Enabled:=true;
   Finternalguider.btnSetMultiStarOffset.Enabled:=true;
+  Finternalguider.rgSpectroStrategy.Enabled:=true;
   if verbose then SetStatus('Stopped',GUIDER_IDLE);
 end;
 
@@ -2852,7 +2855,7 @@ try
       msg(rsMissingTarge, 0)
     else if finternalguider.SpectroAstrometry then
       msg(rsMissingTarge2, 0);
-    if StarSelectedManually then begin
+    if StarSelectedManually or (OffsetFromTarget and not(FSpectroTarget.valid or FSpectroTarget.newastrometry)) then begin
       msg(rsUsingManuall, 3);
       result:=true;
     end
