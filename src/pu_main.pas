@@ -3512,7 +3512,7 @@ begin
         statusbar.Canvas.FillRect(bar);
         statusbar.Canvas.Brush.Style:=bsClear;
         statusbar.Canvas.Font.Color:=colorProgressText;
-        statusbar.Canvas.TextOut(Rect.Left,Rect.Top+DoScaleY(2),panel.Text);
+        statusbar.Canvas.TextOut(Rect.Left,Rect.Top+DoScaleY({$ifdef mswindows}4{$else}2{$endif}),panel.Text);
         statusbar.Canvas.Brush.Style:=bsSolid;
       end
       else begin
