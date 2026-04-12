@@ -1181,37 +1181,17 @@ end;
 
 Procedure Tf_scriptengine.StopScript;
 begin
-  if Mount.MountSlewing then Mount.AbortMotion;
-  if Astrometry.Busy then Astrometry.StopAstrometry;
-  if Capture.Running then begin
-     Camera.AbortExposure;
-     Capture.Stop;
-  end;
-  if Preview.Running then begin
-     Camera.AbortExposure;
-     Preview.Stop;
-  end;
-  if Autoguider.Running then begin
-    msg(rsStopAutoguid);
-    Autoguider.Guide(false);
-    Autoguider.WaitBusy(15);
-  end;
-  msg(rsScriptTermin);
   if scr.Running then begin
+    msg(rsScriptTermin);
     ScriptCancel:=true;
     scr.Stop;
+    if RunProcess<>nil then RunProcess.Active:=false;
   end
   else if PythonRunning then begin
+     msg(rsScriptTermin);
      ScriptCancel:=true;
      StopPython;
   end;
-  if Waitrunning then cancelWait:=true;
-  if WaitTillrunning then begin
-    if f_pause<>nil
-     then f_pause.BtnCancel.Click
-     else cancelWaitTill:=true;
-  end;
-  if RunProcess<>nil then RunProcess.Active:=false;
 end;
 
 function Tf_scriptengine.CompileScripts: boolean;
