@@ -4676,6 +4676,8 @@ if CanClose then begin
  if (TCPDaemon<>nil) then StopServer;
  NewMessage(rsDisconnectin+blank+ellipsis,1);
  Disconnect(nil);
+ f_scriptengine.StopScript;
+ seq_scriptengine.StopScript;
  wait(1);
 end;
 end;
