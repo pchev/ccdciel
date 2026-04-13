@@ -4026,7 +4026,7 @@ begin
   try
   txt:='';
   if not config.GetValue('/Sensor/CanSetGain',true) then
-    txt:=txt+crlf+'The option to show the camera gain and offset is deprecated, it will alway be enabled.';
+    txt:=txt+crlf+'The option to not use the camera gain and offset is deprecated, they will alway be enabled.';
   if (config.GetValue('/StarAnalysis/AutoFocusMode',3)=0) then
     txt:=txt+crlf+'The Vcurve autofocus method is deprecated, use Dynamic instead.';
   if (config.GetValue('/StarAnalysis/AutoFocusMode',3)=2) then
@@ -5377,7 +5377,7 @@ begin
   end;
   f_frame.PanelRoi.Visible:=(n>0);
   LastROIname:=config.GetValue('/Sensor/ROI/ROIname','');
-  CanSetGainOffset:=config.GetValue('/Sensor/CanSetGain',false);
+  CanSetGainOffset:=config.GetValue('/Sensor/CanSetGain',true);
   if CanSetGainOffset<>camera.CanSetGain then begin
     camera.CanSetGain:=CanSetGainOffset;
     Showgain;
@@ -7045,7 +7045,7 @@ end;
 
 procedure Tf_main.ShowGain;
 begin
- camera.CanSetGain:=config.GetValue('/Sensor/CanSetGain',false);
+ camera.CanSetGain:=config.GetValue('/Sensor/CanSetGain',true);
  camera.CheckGain;
  hasGain:=camera.hasGain;
  hasGainISO:=camera.hasGainISO;
@@ -10396,7 +10396,7 @@ begin
      f_option.RoiList.ItemIndex:=0;
      f_option.RoiListChange(nil);
    end;
-   f_option.CanSetGain.Checked:=config.GetValue('/Sensor/CanSetGain',camera.CanSetGain);
+   f_option.CanSetGain.Checked:=config.GetValue('/Sensor/CanSetGain',true);
    f_option.MaxAdu.Value:=config.GetValue('/Sensor/MaxADU',MAXWORD);
    f_option.MaxAduFromCamera.Checked:=config.GetValue('/Sensor/MaxADUFromCamera',true);
    f_option.NotDisplayCapture.Checked:=not config.GetValue('/Visu/DisplayCapture',DisplayCapture);

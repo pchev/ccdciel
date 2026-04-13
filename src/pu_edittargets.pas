@@ -3840,6 +3840,8 @@ begin
   end;
   p.steptype:=0;
   p.description:=txt;
+  p.gain:=Gain;
+  p.offset:=Offset;
   StepList.RowCount:=StepList.RowCount+1;
   i:=StepList.RowCount-1;
   StepList.Cells[pcolseq,i]:=IntToStr(i);
