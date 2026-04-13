@@ -3211,7 +3211,7 @@ begin
 
   MenuIndiSettings.Visible:= (camera.CameraInterface=INDI)or(wheel.WheelInterface=INDI)or(focuser.FocuserInterface=INDI)or
                              (mount.MountInterface=INDI)or(rotator.RotatorInterface=INDI)or(weather.WeatherInterface=INDI)or
-                             (safety.SafetyInterface=INDI)or(dome.DomeInterface=INDI)or(switch[0].SwitchInterface=INDI)or
+                             (safety.SafetyInterface=INDI)or(dome.DomeInterface=INDI)or((switch<>nil)and(switch[0].SwitchInterface=INDI))or
                              (cover.CoverInterface=INDI)or(guidecamera.CameraInterface=INDI)or(findercamera.CameraInterface=INDI);
 
   SetGuiderCamera;
