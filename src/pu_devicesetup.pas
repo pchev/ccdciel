@@ -26,9 +26,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses indibaseclient, indibasedevice, indiapi, u_global, u_utils, u_ccdconfig, UScaleDPI, u_hints,  u_translation,
-  cu_alpacamanagement,
+  cu_alpacamanagement, math,
   {$ifdef mswindows}
-    Variants, comobj, math,
+    Variants, comobj,
   {$endif}
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, ComCtrls, Grids, Buttons, SpinEx, Types;
@@ -1679,6 +1679,7 @@ SafetyARestPort.Value:=conf.GetValue('/ASCOMRestsafety/Port',11111);
 SafetyARestDevice.Value:=conf.GetValue('/ASCOMRestsafety/Device',0);
 
 n:=config.GetValue('/Switch/NumSwitch',1);
+n:=max(n,1);
 for i:=0 to n-1 do begin
   SwitchList[i].Nickname:=conf.GetValue('/Switch/Switch'+inttostr(i)+'/Nickname','');
   SwitchList[i].SwitchConnection:=TDevInterface(conf.GetValue('/Switch/Switch'+inttostr(i)+'/SwitchInterface',ord(DefaultSwitchInterface)));

@@ -9729,7 +9729,10 @@ begin
   f_setup.DefaultRotatorInterface:=rotator.RotatorInterface;
   f_setup.DefaultWeatherInterface:=weather.WeatherInterface;
   f_setup.DefaultSafetyInterface:=safety.SafetyInterface;
-  f_setup.DefaultSwitchInterface:=switch[0].SwitchInterface;
+  if switch<>nil then
+     f_setup.DefaultSwitchInterface:=switch[0].SwitchInterface
+  else
+     f_setup.DefaultSwitchInterface:=camera.CameraInterface;
   f_setup.DefaultCoverInterface:=cover.CoverInterface;
   f_setup.DefaultGuideCameraInterface:=guidecamera.CameraInterface;
   f_setup.DefaultFinderCameraInterface:=findercamera.CameraInterface;
@@ -9971,6 +9974,7 @@ begin
     config.SetValue('/ASCOMRestsafety/Device',f_setup.SafetyARestDevice.Value);
 
     n:=f_setup.NumSwitch.Value;
+    if not f_setup.DeviceSwitch.Checked then n:=0;
     config.SetValue('/Switch/NumSwitch',n);
     for i:=0 to n-1 do begin
       config.SetValue('/Switch/Switch'+inttostr(i)+'/Nickname',f_setup.SwitchList[i].Nickname);
