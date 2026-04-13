@@ -2275,7 +2275,7 @@ begin
    safety.onStatusChange:=@SafetyStatus;
    safety.onSafeChange:=@SafetySafeChange;
 
-   NumSwitches:=config.GetValue('/Switch/NumSwitch',1);
+   NumSwitches:=config.GetValue('/Switch/NumSwitch',0);
    SetLength(switch,NumSwitches);
    for i:=0 to NumSwitches-1 do begin
      aInt:=TDevInterface(config.GetValue('/Switch/Switch'+inttostr(i)+'/SwitchInterface',ord(DefaultInterface)));
