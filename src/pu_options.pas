@@ -35,6 +35,7 @@ type
 
   Tf_option = class(TForm)
     BtnClearCrosshairs: TButton;
+    cbBrightStarOffset: TCheckBox;
     cbSlewSyncRotator: TCheckBox;
     cbAFmedianfilter: TCheckBox;
     cbHighlightColor: TComboBox;

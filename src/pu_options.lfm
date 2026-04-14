@@ -5298,12 +5298,12 @@ object f_option: Tf_option
           end
           object PanelFinder: TPanel
             Left = 0
-            Height = 40
+            Height = 56
             Top = 472
             Width = 551
             Align = alTop
             BevelOuter = bvNone
-            ClientHeight = 40
+            ClientHeight = 56
             ClientWidth = 551
             TabOrder = 5
             object FinderSolver: TComboBox
@@ -5334,11 +5334,19 @@ object f_option: Tf_option
               OnChange = UseFinderSolverChange
               TabOrder = 1
             end
+            object cbBrightStarOffset: TCheckBox
+              Left = 16
+              Height = 22
+              Top = 32
+              Width = 287
+              Caption = 'Astrometry with offset to avoid bright stars'
+              TabOrder = 2
+            end
           end
           object PanelRotator: TPanel
             Left = 0
             Height = 42
-            Top = 512
+            Top = 528
             Width = 551
             Align = alTop
             BevelOuter = bvNone

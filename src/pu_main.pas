@@ -10309,6 +10309,7 @@ begin
    f_option.FinderSolver.ItemIndex:=config.GetValue('/Astrometry/FinderSolver',ResolverAstap);
    f_option.UseFinderSolverChange(nil);
    f_option.WantRotator:=WantRotator;
+   f_option.cbBrightStarOffset.Checked:=config.GetValue('/PrecSlew/BrightStarOffset',false);
    f_option.cbSlewSyncRotator.Checked:=config.GetValue('/PrecSlew/SyncRotator',SlewSyncRotator);
    f_option.PanelRotator.Visible:=WantRotator and (f_option.AstrometryCamera.ItemIndex=0);
    f_option.RecenterTargetDistance.value:=config.GetValue('/PrecSlew/RecenterTargetDistance',RecenterTargetDistance);
@@ -10761,6 +10762,7 @@ begin
      i:=f_option.AstrometryCamera.ItemIndex;
      if (i=1) and (not WantFinderCamera) then i:=0;
      config.SetValue('/Astrometry/Camera',i);
+     config.SetValue('/PrecSlew/BrightStarOffset',(i=1) and f_option.cbBrightStarOffset.Checked);
      if hasGainISO then
        config.SetValue('/PrecSlew/Gain',f_option.SlewISObox.ItemIndex)
      else

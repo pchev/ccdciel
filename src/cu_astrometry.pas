@@ -93,7 +93,7 @@ TAstrometry = class(TComponent)
     procedure SyncCurrentImage(wait: boolean);
     procedure StackSolve(f: TFits; out ra,de,pa,scale: double; out ok:boolean);
     procedure SlewScreenXY(x,y: integer);
-    function PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew,sgain,soffset: integer; out err: double):boolean;
+    function PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew,sgain,soffset: integer; brightstaroffset: boolean; out err: double):boolean;
     function PrecisionSlew(ra,de:double; out err: double):boolean;
     function AutofocusPrecisionSlew(ra,de:double; out err: double):boolean;
     procedure MarkPlanetarium(ra,de: double);
@@ -765,6 +765,7 @@ var fn: string;
     err,prec,exp:double;
     sgain,soffset: integer;
     fi,cormethod,bin,maxretry: integer;
+    br: boolean;
 begin
 TimerAstrometrySlewScreenXY.Enabled:=false;
 try
@@ -793,7 +794,7 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
        soffset:=config.GetValue('/PrecSlew/Offset',NullInt);
        bin:=config.GetValue('/PrecSlew/Binning',1);
        fi:=config.GetValue('/PrecSlew/Filter',0);
-       PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,sgain,soffset,err);
+       PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,sgain,soffset,false,err);
      end;
    end;
 end;
@@ -802,8 +803,9 @@ finally
 end;
 end;
 
-function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew,sgain,soffset: integer; out err: double): boolean;
+function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew,sgain,soffset: integer; brightstaroffset: boolean; out err: double): boolean;
 var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde,pa,ara,ade: double;
+    finalra, finaldec: double;
     fn:string;
     n,i,oldfilter,delay,RetryMeridianSyncCount:integer;
     SyncOK,NearMeridian,RetryMeridianSync: boolean;
@@ -855,6 +857,11 @@ begin
         oldfilter:=Fwheel.Filter;
         Fwheel.Filter:=filter;
       end;
+    end;
+    if brightstaroffset then begin
+      finalra:=ra;
+      finaldec:=de;
+      ra:=rmod(ra+2/(60*cos(deg2rad*de))+24,24); // offset 30 arcmin to the east
     end;
     raoffset:=0;
     deoffset:=0;
@@ -995,6 +1002,11 @@ begin
     Frotator.Sync(pa);
   end;
 
+  if result and brightstaroffset then begin
+    result:=Mount.Slew(finalra, finaldec);
+    WaitSlewDelay(delay);
+  end;
+
   finally
     err:=dist;
     FLastSlewErr:=dist;
@@ -1010,6 +1022,7 @@ function TAstrometry.PrecisionSlew(ra,de:double; out err: double):boolean;
 var prec,exp:double;
     fi,cormethod,bin,maxretry: integer;
     sgain,soffset: integer;
+    br: boolean;
 begin
   prec:=config.GetValue('/PrecSlew/Precision',SlewPrecision)/60;
   cormethod:=config.GetValue('/PrecSlew/Method',1);
@@ -1019,13 +1032,15 @@ begin
   soffset:=config.GetValue('/PrecSlew/Offset',NullInt);
   bin:=config.GetValue('/PrecSlew/Binning',1);
   fi:=config.GetValue('/PrecSlew/Filter',0);
-  result:=PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,sgain,soffset,err);
+  br:=config.GetValue('/PrecSlew/BrightStarOffset',false);
+  result:=PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,sgain,soffset,br,err);
 end;
 
 function TAstrometry.AutofocusPrecisionSlew(ra,de:double; out err: double):boolean;
 var prec,exp:double;
     fi,cormethod,bin,maxretry: integer;
     sgain,soffset: integer;
+    br: boolean;
 begin
   prec:=config.GetValue('/StarAnalysis/AutofocusPrecisionSlew',2.0)/60;
   cormethod:=config.GetValue('/PrecSlew/Method',1);
@@ -1035,7 +1050,8 @@ begin
   soffset:=config.GetValue('/PrecSlew/Offset',NullInt);
   bin:=config.GetValue('/PrecSlew/Binning',1);
   fi:=config.GetValue('/PrecSlew/Filter',0);
-  result:=PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,sgain,soffset,err);
+  br:=config.GetValue('/PrecSlew/BrightStarOffset',false);
+  result:=PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,sgain,soffset,br,err);
 end;
 
 procedure TAstrometry.MarkPlanetarium(ra,de: double);

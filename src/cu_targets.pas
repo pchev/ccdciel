@@ -3106,6 +3106,7 @@ var err: double;
     prec,exp:double;
     sgain,soffset: integer;
     fi,cormethod,bin,maxretry,delay: integer;
+    br: boolean;
 begin
  try
   Fslewing:=true;
@@ -3131,7 +3132,8 @@ begin
     soffset:=config.GetValue('/PrecSlew/Offset',NullInt);
     bin:=config.GetValue('/PrecSlew/Binning',1);
     fi:=config.GetValue('/PrecSlew/Filter',0);
-    result:=astrometry.PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,sgain,soffset,err);
+    br:=config.GetValue('/PrecSlew/BrightStarOffset',false);
+    result:=astrometry.PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,sgain,soffset,br,err);
     if result then begin
       FTargetCoord:=true;
       FTargetRA:=ra;
