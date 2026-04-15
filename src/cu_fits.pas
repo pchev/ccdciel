@@ -166,6 +166,7 @@ type
     FStarList: TStarList;
     FDark: TFits;
     FDarkOn: boolean;
+    FDarkExp: double;
     FFlat: TFits;
     FFlatOn: boolean;
     FDarkProcess, FBPMProcess, FFlatProcess, FPrivateDark, FPrivateFlat, FNoiseProcess: boolean;
@@ -2755,6 +2756,12 @@ begin
   FDark.onMsg:=FonMsg;
   PrivateDark:=true;
   FDark.LoadFromFile(fn);
+  if FDark.FFitsInfo.stackexp>0 then
+    FDarkExp:=FDark.FFitsInfo.stackexp
+  else if FDark.FFitsInfo.exptime>0 then
+    FDarkExp:=FDark.FFitsInfo.exptime
+  else
+    FDarkExp:=1;
 end;
 
 procedure TFits.FreeDark;
@@ -2775,7 +2782,7 @@ begin
            drkexp:=FDark.FFitsInfo.exptime
          else
            drkexp:=FFitsInfo.exptime;
-         expratio:=FFitsInfo.exptime/drkexp;
+         expratio:=min(FDarkExp,FFitsInfo.exptime)/drkexp;
          // rudimentary dark scaling, should use a bias, but this work not too bad when scaling down, so take the dark with max exposure time.
          // all the values are double, this make no problem scaling back and forth.
          if abs(expratio-1)>0.1 then begin
