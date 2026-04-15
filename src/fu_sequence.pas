@@ -138,6 +138,7 @@ type
     function GetTargetCoord: boolean;
     function GetTargetRA: double;
     function GetTargetDE: double;
+    function GetTargetMagn: double;
     function GetCurrentPlan: T_Plan;
     procedure SaveTargets(fn,defaultname:string);
     procedure StartSequence;
@@ -186,6 +187,7 @@ type
     property TargetCoord: boolean read GetTargetCoord;
     property TargetRA: double read GetTargetRA;
     property TargetDE: double read GetTargetDE;
+    property TargetMagn: double read GetTargetMagn;
     property CurrentPlan: T_Plan read GetCurrentPlan;
     property Preview: Tf_preview read Fpreview write SetPreview;
     property Capture: Tf_capture read Fcapture write SetCapture;
@@ -794,6 +796,11 @@ begin
   result:=Targets.TargetDE;
 end;
 
+function Tf_sequence.GetTargetMagn: double;
+begin
+  result:=Targets.TargetMagn;
+end;
+
 function Tf_sequence.GetCurrentPlan: T_Plan;
 begin
   if (Targets<>nil)and(Targets.CurrentTarget>=0) then
@@ -1091,7 +1098,7 @@ begin
   if Targets.Running or Targets.Waiting then begin
    try
    // show plan status
-   if (newtarget>0) then begin
+   if (newtarget>0)and(Targets.CurrentTarget<Targets.Count) then begin
     p:=T_Plan(Targets.Targets[Targets.CurrentTarget].plan);
     if p=nil then exit;
     newplan:=p.CurrentStep+1;

@@ -94,7 +94,7 @@ TAstrometry = class(TComponent)
     procedure StackSolve(f: TFits; out ra,de,pa,scale: double; out ok:boolean);
     procedure SlewScreenXY(x,y: integer);
     function PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew,sgain,soffset: integer; brightstaroffset: boolean; out err: double):boolean;
-    function PrecisionSlew(ra,de:double; out err: double):boolean;
+    function PrecisionSlew(ra,de:double; out err: double; magn:double=-9999):boolean;
     function AutofocusPrecisionSlew(ra,de:double; out err: double):boolean;
     procedure MarkPlanetarium(ra,de: double);
     property Busy: Boolean read FBusy;
@@ -1018,8 +1018,8 @@ begin
   end;
 end;
 
-function TAstrometry.PrecisionSlew(ra,de:double; out err: double):boolean;
-var prec,exp:double;
+function TAstrometry.PrecisionSlew(ra,de:double; out err: double; magn:double=-9999):boolean;
+var prec,exp,brmagn:double;
     fi,cormethod,bin,maxretry: integer;
     sgain,soffset: integer;
     br: boolean;
@@ -1033,6 +1033,8 @@ begin
   bin:=config.GetValue('/PrecSlew/Binning',1);
   fi:=config.GetValue('/PrecSlew/Filter',0);
   br:=config.GetValue('/PrecSlew/BrightStarOffset',false);
+  brmagn:=config.GetValue('/PrecSlew/BrightStarMagnitude',1);
+  br:=br and (magn<>NullCoord) and (magn<=brmagn);
   result:=PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,sgain,soffset,br,err);
 end;
 

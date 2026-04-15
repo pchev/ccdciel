@@ -92,7 +92,7 @@ type
       Fplanetarium: TPlanetarium;
       StartPlanTimer: TTimer;
       FTargetCoord: boolean;
-      FTargetRA,FTargetDE: double;
+      FTargetRA,FTargetDE,FTargetMagn: double;
       FIgnoreRestart: boolean;
       FTargetsRepeatCount: integer;
       FFileVersion, FSlewRetry: integer;
@@ -135,7 +135,7 @@ type
       procedure RunEndAction(confirm: boolean=true);
       function StopGuider:boolean;
       function StartGuider:boolean;
-      function Slew(ra,de: double; precision,planprecision: boolean):boolean;
+      function Slew(ra,de,magn: double; precision,planprecision: boolean):boolean;
       procedure TargetTimerTimer(Sender: TObject);
       procedure TargetRepeatTimerTimer(Sender: TObject);
       procedure StartPlanTimerTimer(Sender: TObject);
@@ -215,6 +215,7 @@ type
       property TargetCoord: boolean read FTargetCoord;
       property TargetRA: double read FTargetRA;
       property TargetDE: double read FTargetDE;
+      property TargetMagn: double read FTargetMagn;
       property TargetInitializing: boolean read FTargetInitializing;
       property WaitStarting: boolean read FWaitStarting;
       property DoneStatus: string read FDoneStatus;
@@ -312,6 +313,7 @@ begin
   FTargetCoord:=false;
   FTargetRA:=NullCoord;
   FTargetDE:=NullCoord;
+  FTargetMagn:=NullCoord;
   SkipTarget:=false;
   TargetTimer:=TTimer.Create(self);
   TargetTimer.Enabled:=false;
@@ -1222,6 +1224,7 @@ begin
   FTargetCoord:=false;
   FTargetRA:=NullCoord;
   FTargetDE:=NullCoord;
+  FTargetMagn:=NullCoord;
   CancelAutofocus:=false;
   WeatherCancelRestart:=false;
   WeatherPauseTarget:=false;
@@ -2282,6 +2285,7 @@ begin
      FTargetCoord:=false;
      FTargetRA:=NullCoord;
      FTargetDE:=NullCoord;
+     FTargetMagn:=NullCoord;
      if FResetRepeat then ClearDoneCount(false);
      FRunning:=true;
      msg(Format(rsStartingSequ2, [FName, inttostr(FTargetsRepeatCount+1),inttostr(FTargetsRepeat)]),1);
@@ -2717,7 +2721,7 @@ begin
 
         // slew to coordinates
         FSlewRetry:=1;
-        ok:=Slew(t.ra,t.de,astrometrypointing,t.astrometrypointing);
+        ok:=Slew(t.ra,t.de,t.magnitude,astrometrypointing,t.astrometrypointing);
         if not ok then begin
           InitTargetError:=rsTelescopeSle3;
           msg(InitTargetError, 3);
@@ -3100,10 +3104,10 @@ begin
   Targets[FCurrentTarget].autoguiding:=false;
 end;
 
-function T_Targets.Slew(ra,de: double; precision,planprecision: boolean):boolean;
+function T_Targets.Slew(ra,de,magn: double; precision,planprecision: boolean):boolean;
 var err: double;
     errtxt: string;
-    prec,exp:double;
+    prec,exp,brmagn:double;
     sgain,soffset: integer;
     fi,cormethod,bin,maxretry,delay: integer;
     br: boolean;
@@ -3133,11 +3137,14 @@ begin
     bin:=config.GetValue('/PrecSlew/Binning',1);
     fi:=config.GetValue('/PrecSlew/Filter',0);
     br:=config.GetValue('/PrecSlew/BrightStarOffset',false);
+    brmagn:=config.GetValue('/PrecSlew/BrightStarMagnitude',1);
+    br:=br and (magn<>NullCoord) and (magn<=brmagn);
     result:=astrometry.PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,sgain,soffset,br,err);
     if result then begin
       FTargetCoord:=true;
       FTargetRA:=ra;
       FTargetDE:=de;
+      FTargetMagn:=magn;
       MountToLocal(mount.EquinoxJD,FTargetRA,FTargetDE);
       FTargetRA:=deg2rad*15*FTargetRA;
       FTargetDE:=deg2rad*FTargetDE;
@@ -3153,6 +3160,7 @@ begin
       FTargetCoord:=true;
       FTargetRA:=ra;
       FTargetDE:=de;
+      FTargetMagn:=magn;
       MountToLocal(mount.EquinoxJD,FTargetRA,FTargetDE);
       FTargetRA:=deg2rad*15*FTargetRA;
       FTargetDE:=deg2rad*FTargetDE;
@@ -3175,7 +3183,7 @@ begin
       if f_pause.Wait(WaitResponseTime) then begin
          inc(FSlewRetry);
          MountToJ2000(mount.EquinoxJD,ra,de);
-         result:=Slew(ra,de,precision,planprecision);
+         result:=Slew(ra,de,magn,precision,planprecision);
          exit;
       end;
     end;

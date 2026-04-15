@@ -10314,7 +10314,10 @@ begin
    f_option.FinderSolver.ItemIndex:=config.GetValue('/Astrometry/FinderSolver',ResolverAstap);
    f_option.UseFinderSolverChange(nil);
    f_option.WantRotator:=WantRotator;
-   f_option.cbBrightStarOffset.Checked:=config.GetValue('/PrecSlew/BrightStarOffset',false);
+   f_option.Spectrofunctions:=f_internalguider.SpectroFunctions;
+   f_option.PanelSlewBrightStar.Visible:=(f_option.AstrometryCamera.ItemIndex=1)and SameGuiderFinder and f_internalguider.Spectrofunctions;
+   f_option.cbBrightStarOffset.Checked:=config.GetValue('/PrecSlew/BrightStarOffset',false) and f_option.PanelSlewBrightStar.Visible;
+   f_option.BrightStarMagn.Value:=config.GetValue('/PrecSlew/BrightStarMagnitude',1);
    f_option.cbSlewSyncRotator.Checked:=config.GetValue('/PrecSlew/SyncRotator',SlewSyncRotator);
    f_option.PanelRotator.Visible:=WantRotator and (f_option.AstrometryCamera.ItemIndex=0);
    f_option.RecenterTargetDistance.value:=config.GetValue('/PrecSlew/RecenterTargetDistance',RecenterTargetDistance);
@@ -10768,6 +10771,7 @@ begin
      if (i=1) and (not WantFinderCamera) then i:=0;
      config.SetValue('/Astrometry/Camera',i);
      config.SetValue('/PrecSlew/BrightStarOffset',(i=1) and f_option.cbBrightStarOffset.Checked);
+     config.SetValue('/PrecSlew/BrightStarMagnitude',f_option.BrightStarMagn.Value);
      if hasGainISO then
        config.SetValue('/PrecSlew/Gain',f_option.SlewISObox.ItemIndex)
      else
@@ -16707,7 +16711,7 @@ end;
 
 
 function Tf_main.CheckMeridianFlip(nextexposure:double; canwait:boolean; out waittime:integer):boolean;
-var ra,de,hh,a,h,tra,tde,mra,mde,err: double;
+var ra,de,hh,a,h,tra,tde,tmagn,mra,mde,err: double;
     CurSt: double;
     MeridianDelay1,MeridianDelay2,NextDelay,hhmin,waittimeout,nretry: integer;
     slewtopos,slewtoimg, restartguider, SaveCapture, ok, circumpolar, belowpole, wrongside: boolean;
@@ -16822,6 +16826,7 @@ begin
           if (f_sequence.TargetRA<>NullCoord)and(f_sequence.TargetDE<>NullCoord) then begin
             tra:=f_sequence.TargetRA;
             tde:=f_sequence.TargetDE;
+            tmagn:=f_sequence.TargetMagn;
             slewtopos:=true;
             slewtoimg:=false;
           end;
@@ -16931,7 +16936,7 @@ begin
           mra:=rad2deg*tra/15;
           mde:=rad2deg*tde;
           LocalToMount(mount.EquinoxJD,mra,mde);
-          astrometry.PrecisionSlew(mra,mde,err);
+          astrometry.PrecisionSlew(mra,mde,err,tmagn);
           wait(2);
           if restartguider and (autoguider is T_autoguider_internal) then begin
             ApparentToJ2000(tra,tde);

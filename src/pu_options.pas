@@ -27,7 +27,7 @@ interface
 
 uses u_utils, u_global, UScaleDPI, u_hints, u_translation, u_speech, u_ccdconfig,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, LCLType, math,
-  StdCtrls, ExtCtrls, ComCtrls, Grids, EditBtn, CheckLst, Buttons, SpinEx, enhedits, Types;
+  StdCtrls, ExtCtrls, ComCtrls, Grids, EditBtn, CheckLst, Buttons, Spin, SpinEx, enhedits, Types;
 
 type
 
@@ -48,11 +48,13 @@ type
     FocaleFromDriver: TCheckBox;
     FocaleLength: TFloatSpinEditEx;
     GroupBox23: TGroupBox;
+    Label132: TLabel;
     Label166: TLabel;
     Label167: TLabel;
     Label192: TLabel;
     Label4: TLabel;
     Panel41: TPanel;
+    PanelSlewBrightStar: TPanel;
     PanelAutofocusFilter: TPanel;
     PanelRecenter: TPanel;
     Label130: TLabel;
@@ -81,6 +83,7 @@ type
     RemoveSpace: TCheckBox;
     ColorizeSpectra: TCheckBox;
     cbAutofocusFilter: TComboBox;
+    BrightStarMagn: TSpinEditEx;
     SpinAutoFocusHFD: TFloatSpinEditEx;
     BtnDelHdr: TButton;
     BtnAddRoi: TButton;
@@ -929,7 +932,7 @@ type
     procedure SetupHFMOption;
   public
     { public declarations }
-    LockTemp,WantRotator: Boolean;
+    LockTemp,WantRotator,Spectrofunctions: Boolean;
     procedure Setlang;
     procedure SetAutofocusMode(value: TAutofocusMode);
     function  GetAutofocusMode: TAutofocusMode;
@@ -2217,6 +2220,7 @@ begin
   if AstrometryCamera.ItemIndex>0 then SlewFilter.ItemIndex:=0;
   SlewFilter.Enabled:=AstrometryCamera.ItemIndex=0;
   PanelFinder.Visible:=AstrometryCamera.ItemIndex=1;
+  PanelSlewBrightStar.Visible:=(AstrometryCamera.ItemIndex=1)and SameGuiderFinder and Spectrofunctions;
   PanelRotator.Visible:=WantRotator and (AstrometryCamera.ItemIndex=0);
   FocaleFromDriverChange(Sender);
 end;

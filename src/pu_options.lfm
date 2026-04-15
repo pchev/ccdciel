@@ -5298,12 +5298,12 @@ object f_option: Tf_option
           end
           object PanelFinder: TPanel
             Left = 0
-            Height = 56
+            Height = 40
             Top = 472
             Width = 551
             Align = alTop
             BevelOuter = bvNone
-            ClientHeight = 56
+            ClientHeight = 40
             ClientWidth = 551
             TabOrder = 5
             object FinderSolver: TComboBox
@@ -5334,19 +5334,11 @@ object f_option: Tf_option
               OnChange = UseFinderSolverChange
               TabOrder = 1
             end
-            object cbBrightStarOffset: TCheckBox
-              Left = 16
-              Height = 22
-              Top = 32
-              Width = 287
-              Caption = 'Astrometry with offset to avoid bright stars'
-              TabOrder = 2
-            end
           end
           object PanelRotator: TPanel
             Left = 0
             Height = 42
-            Top = 528
+            Top = 544
             Width = 551
             Align = alTop
             BevelOuter = bvNone
@@ -5360,6 +5352,50 @@ object f_option: Tf_option
               Width = 123
               Caption = 'Sync the rotator'
               TabOrder = 0
+            end
+          end
+          object PanelSlewBrightStar: TPanel
+            Left = 0
+            Height = 32
+            Top = 512
+            Width = 551
+            Align = alTop
+            BevelOuter = bvNone
+            ClientHeight = 32
+            ClientWidth = 551
+            TabOrder = 7
+            object cbBrightStarOffset: TCheckBox
+              AnchorSideTop.Control = BrightStarMagn
+              AnchorSideTop.Side = asrCenter
+              Left = 16
+              Height = 22
+              Top = 3
+              Width = 287
+              Caption = 'Astrometry with offset to avoid bright stars'
+              TabOrder = 0
+            end
+            object BrightStarMagn: TSpinEditEx
+              Left = 406
+              Height = 28
+              Top = 0
+              Width = 50
+              Constraints.MaxHeight = 28
+              MaxLength = 0
+              ParentFont = False
+              TabOrder = 1
+              MaxValue = 6
+              NullValue = 0
+              Value = 0
+            end
+            object Label132: TLabel
+              AnchorSideTop.Control = BrightStarMagn
+              AnchorSideTop.Side = asrCenter
+              Left = 328
+              Height = 18
+              Top = 5
+              Width = 67
+              Caption = 'magnitude'
+              ParentColor = False
             end
           end
         end
