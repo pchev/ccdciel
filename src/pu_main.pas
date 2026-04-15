@@ -7001,8 +7001,13 @@ var inditransfer: TIndiTransfert;
 begin
    case guidecamera.CameraInterface of
     INDI : begin
-           inditransfer:=TIndiTransfert(config.GetValue('/INDIguidecamera/IndiTransfert',ord(itNetwork)));
-           inditransferdir:=config.GetValue('/INDIguidecamera/IndiTransfertDir',defTransfertPath);
+           if FinderCameraName=GuideCameraName then begin
+             inditransfer:=itNetwork;
+           end
+           else begin
+             inditransfer:=TIndiTransfert(config.GetValue('/INDIguidecamera/IndiTransfert',ord(itNetwork)));
+             inditransferdir:=config.GetValue('/INDIguidecamera/IndiTransfertDir',defTransfertPath);
+           end;
            indihost:=config.GetValue('/INDIguidecamera/Server','');
            if inditransfer=itDisk then begin
              // some control to be sure we can use disk transfer
