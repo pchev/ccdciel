@@ -160,6 +160,7 @@ private
    FSensorList: TStringList;
    FNotAbortSequence: boolean;
    FISOInitialized, isASI: boolean;
+   FExposureInProgress: boolean;
    procedure ExposureTimerTimer(sender: TObject);
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
@@ -341,6 +342,7 @@ begin
  ExposureTimer.Enabled:=false;
  ExposureTimer.Interval:=1000;
  ExposureTimer.OnTimer:=@ExposureTimerTimer;
+ FExposureInProgress:=false;
  lockvideostream:=false;
  FVideoMsg:=false;
 end;
@@ -350,7 +352,10 @@ begin
  InitTimer.Enabled:=false;
  ConnectTimer.Enabled:=false;
  ExposureTimer.Enabled:=false;
+ try
  if indiclient<>nil then indiclient.onServerDisconnected:=nil;
+ except
+ end;
  FSensorList.Free;
  FreeAndNil(ExposureTimer);
  FreeAndNil(InitTimer);
@@ -446,6 +451,7 @@ begin
     isASI:=false;
     FVideoEncoder.Clear;
     FWantCooler:=false;
+    FExposureInProgress:=false;
     if Assigned(FonStatusChange) then FonStatusChange(self);
     if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
 end;
@@ -490,6 +496,7 @@ Procedure T_indicamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:st
 begin
 CreateIndiClient;
 if FGuideCamera then FIndiTransfertPrefix:='ccdciel_guide_tmp';
+if FFinderCamera then FIndiTransfertPrefix:='ccdciel_finder_tmp';
 if not indiclient.Connected then begin
   Findiserver:=cp1;
   Findiserverport:=cp2;
@@ -580,7 +587,7 @@ begin
    ConnectTimer.Enabled:=true;
  end;
  if FhasBlob then begin
-   indiblob.setBLOBMode(B_ONLY,Findidevice);
+   indiblob.setBLOBMode(B_NEVER,Findidevice);
    for i:=0 to FSensorList.Count-1 do begin
      if FSensorList[i]<>Findisensor then
         indiblob.setBLOBMode(B_NEVER,Findidevice,FSensorList[i]);
@@ -1043,7 +1050,7 @@ begin
         msg(rsError2, 0);
         if assigned(FonAbortExposure) then FonAbortExposure(self);
      end
-     else if Assigned(FonExposureProgress) then begin
+     else if FExposureInProgress and Assigned(FonExposureProgress) then begin
         if nvp.np[0].value >0 then
            FonExposureProgress(nvp.np[0].value)
         else
@@ -1106,6 +1113,7 @@ if tvp=CCDfilepath then begin
     if ft='.fits' then begin
       {$ifdef timing_stdout}tt:=now;{$endif}
       ExposureTimer.Enabled:=false;
+      FExposureInProgress:=false;
       FMidExposureTime:=(Ftimestart+NowUTC)/2;
       FImageFormat:=ft;
       {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' receive file '+CCDfilepath.tp[0].text);{$endif}
@@ -1270,8 +1278,10 @@ begin
  // report any change to NewText() in use with RAM disk transfer
  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'INDI receive blob');{$endif}
  ExposureTimer.Enabled:=false;
+ FExposureInProgress:=false;
  FMidExposureTime:=(Ftimestart+NowUTC)/2;
  if debug_msg then msg('receive blob');
+ indiblob.setBLOBMode(B_NEVER,Findidevice,Findisensor);
  // if possible start next exposure now
  TryNextExposure(FImgNum);
  ft:=trim(ft);
@@ -1438,6 +1448,8 @@ case FIndiTransfert of
             end;
             end;
 end;
+indiblob.setBLOBMode(B_ONLY,Findidevice,Findisensor);
+FExposureInProgress:=true;
 if UseMainSensor then begin
   if (not zlibok)and(CCDCompression<>nil)and(CCDcompress.s=ISS_ON) then begin
     IUResetSwitch(CCDCompression);
@@ -1489,6 +1501,7 @@ procedure T_indicamera.ExposureTimerTimer(sender: TObject);
 begin
  ExposureTimer.Enabled:=false;
  if (now>timedout) then begin
+    FExposureInProgress:=false;
     msg(rsNoResponseFr2, 0);
     if assigned(FonAbortExposure) then FonAbortExposure(self);
  end
@@ -1524,6 +1537,7 @@ end;
 Procedure T_indicamera.AbortExposure;
 begin
 ExposureTimer.Enabled:=false;
+FExposureInProgress:=false;
 WaitExposure:=false;
 if UseMainSensor then begin
   if CCDAbortExposure<>nil then begin
@@ -1538,6 +1552,7 @@ end else begin
      indiclient.sendNewSwitch(GuiderAbortExposure);
    end;
 end;
+indiblob.setBLOBMode(B_NEVER,Findidevice,Findisensor);
 end;
 
 function T_indicamera.GetBinX:integer;
