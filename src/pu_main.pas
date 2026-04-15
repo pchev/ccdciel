@@ -7001,7 +7001,7 @@ var inditransfer: TIndiTransfert;
 begin
    case guidecamera.CameraInterface of
     INDI : begin
-           if FinderCameraName=GuideCameraName then begin
+           if SameGuiderFinder then begin
              inditransfer:=itNetwork;
            end
            else begin
