@@ -220,6 +220,7 @@ type
      procedure FreeFlat;
      procedure ClearImage;
      procedure Math(operand: TFits; MathOperator:TMathOperator; new: boolean=false; seqnum: integer=1; mult: double=1.0);
+     procedure Mult(mult: double);
      procedure Shift(dx,dy: double; rot: double = 0.0);
      procedure ShiftInteger(dx,dy: integer);
      procedure ShiftRot(dx,dy, rot: double);
@@ -2762,11 +2763,25 @@ begin
 end;
 
 procedure TFits.ApplyDark;
+var drkexp,expratio: double;
 begin
   if (FDarkOn) then begin
     if (FDark<>nil) then begin
       if (SameFormat(FDark)) then begin
-        {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'apply dark');{$endif}
+         {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'apply dark');{$endif}
+         if FDark.FFitsInfo.stackexp>0 then
+           drkexp:=FDark.FFitsInfo.stackexp
+         else if FDark.FFitsInfo.exptime>0 then
+           drkexp:=FDark.FFitsInfo.exptime
+         else
+           drkexp:=FFitsInfo.exptime;
+         expratio:=FFitsInfo.exptime/drkexp;
+         // rudimentary dark scaling, should use a bias, but this work not too bad when scaling down, so take the dark with max exposure time.
+         // all the values are double, this make no problem scaling back and forth.
+         if abs(expratio-1)>0.1 then begin
+           FDark.Mult(expratio);
+           FDark.FFitsInfo.stackexp:=FFitsInfo.exptime;
+         end;
          Math(FDark,moSub);
          FDarkProcess:=true;
          FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Dark subtracted','');
@@ -4320,6 +4335,50 @@ begin
     FFitsInfo.dmin:=dmin;
     FFitsInfo.dmax:=dmax;
  end;
+end;
+
+procedure TFits.Mult(mult: double);
+var i,j,k,nax: integer;
+    x,dmin,dmax : double;
+    ni,sum,sum2 : extended;
+begin
+    dmin:=1.0E100;
+    dmax:=-1.0E100;
+    sum:=0; sum2:=0; ni:=0;
+    FillByte(FHistogram,sizeof(THistogram),0);
+    if FUseRawImage then
+      nax:=n_plane
+    else
+      nax:=Fpreview_axis;
+    for k:=0 to nax-1 do begin
+      for i:=0 to FFitsInfo.naxis2-1 do begin
+       for j := 0 to FFitsInfo.naxis1-1 do begin
+         if FUseRawImage then begin
+           x:=Frawimage[k,i,j];
+         end
+         else begin
+           x:=Fimage[k,i,j];
+         end;
+         x:=x*mult;
+         if FUseRawImage then
+           Frawimage[k,i,j] := x
+         else
+           Fimage[k,i,j] := x;
+         inc(FHistogram[round(max(0,min(maxword,x)))]);
+         dmin:=min(x,dmin);
+         dmax:=max(x,dmax);
+         sum:=sum+x;
+         sum2:=sum2+x*x;
+         ni:=ni+1;
+       end;
+      end;
+    end;
+    FStreamValid:=false;
+    Fmean:=(sum/ni);
+    Fsigma:=sqrt((sum2/ni)-((sum/ni)*(sum/ni)));
+    if dmin>=dmax then dmax:=dmin+1;
+    FFitsInfo.dmin:=dmin;
+    FFitsInfo.dmax:=dmax;
 end;
 
 procedure TFits.Shift(dx,dy: double; rot: double = 0.0);
