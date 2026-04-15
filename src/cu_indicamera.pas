@@ -587,7 +587,10 @@ begin
    ConnectTimer.Enabled:=true;
  end;
  if FhasBlob then begin
-   indiblob.setBLOBMode(B_NEVER,Findidevice);
+   if FFinderCamera or FGuideCamera then
+     indiblob.setBLOBMode(B_NEVER,Findidevice)
+   else
+     indiblob.setBLOBMode(B_ONLY,Findidevice);
    for i:=0 to FSensorList.Count-1 do begin
      if FSensorList[i]<>Findisensor then
         indiblob.setBLOBMode(B_NEVER,Findidevice,FSensorList[i]);
@@ -1281,7 +1284,8 @@ begin
  FExposureInProgress:=false;
  FMidExposureTime:=(Ftimestart+NowUTC)/2;
  if debug_msg then msg('receive blob');
- indiblob.setBLOBMode(B_NEVER,Findidevice,Findisensor);
+ if FFinderCamera or FGuideCamera then
+   indiblob.setBLOBMode(B_NEVER,Findidevice,Findisensor);
  // if possible start next exposure now
  TryNextExposure(FImgNum);
  ft:=trim(ft);
@@ -1552,7 +1556,8 @@ end else begin
      indiclient.sendNewSwitch(GuiderAbortExposure);
    end;
 end;
-indiblob.setBLOBMode(B_NEVER,Findidevice,Findisensor);
+if FFinderCamera or FGuideCamera then
+  indiblob.setBLOBMode(B_NEVER,Findidevice,Findisensor);
 end;
 
 function T_indicamera.GetBinX:integer;
