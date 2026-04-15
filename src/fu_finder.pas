@@ -119,7 +119,7 @@ type
     procedure ShowCalibration;
     Procedure StartExposureAsync(Data: PtrInt);
     procedure StartLoop;
-    procedure StopLoop;
+    procedure StopLoop(abort: boolean=true);
     function Snapshot(exp: double; fn: string):boolean;
     procedure CaptureDark;
     property Camera: T_camera read FCamera write FCamera;
@@ -219,6 +219,7 @@ end;
 procedure Tf_finder.StartLoop;
 begin
   FinderPreviewLoop:=true;
+  CancelPreviewLoop:=false;
   BtnPreviewLoop.Caption:=rsStopPreviewL;
   msg(rsStartPreview,0);
   if FinderCapturingDark then begin
@@ -250,11 +251,11 @@ begin
   Application.QueueAsyncCall(@StartExposureAsync,0);
 end;
 
-procedure Tf_finder.StopLoop;
+procedure Tf_finder.StopLoop(abort: boolean=true);
 begin
   FinderCapturingDark:=false;
   FinderPreviewLoop:=false;
-  FCamera.AbortExposure;
+  if abort then FCamera.AbortExposure;
   BtnPreviewLoop.Caption:=rsStartPreview;
   msg(rsStopPreviewL,3);
   ClearMsgTimer.Enabled:=true;
@@ -301,6 +302,10 @@ end;
 
 procedure Tf_finder.BtnPreviewLoopClick(Sender: TObject);
 begin
+  if SameGuiderFinder and InternalguiderRunning then begin
+    LabelInfo.Caption:='Cannot loop the finder, the same camera is in use by the guider';
+    exit;
+  end;
   if FinderPreviewLoop then begin
     StopLoop;
   end

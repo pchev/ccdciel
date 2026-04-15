@@ -20417,7 +20417,10 @@ begin
   f_finder.visu.DrawHistogram(finderfits,true,true);
   DrawFinderImage(displayimage);
   // start next exposure
-  if FinderPreviewLoop then Application.QueueAsyncCall(@f_finder.StartExposureAsync,0);
+  if FinderPreviewLoop and (not CancelPreviewLoop) then
+    Application.QueueAsyncCall(@f_finder.StartExposureAsync,0)
+  else
+    f_finder.StopLoop(false);
   // draw image to screen
   if displayimage then
     PlotFinderImage;

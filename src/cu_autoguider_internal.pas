@@ -85,6 +85,7 @@ type
     function angular_distance(a1,a2:double):double;
     Procedure StartGuideExposure;
     procedure InternalguiderStartAsync(Data: PtrInt);
+    procedure InternalguiderLoopAsync(Data: PtrInt);
     function  WaitPulseGuiding(pulse:longint): boolean;
     procedure SetStatus(aStatus: string ; aState: TAutoguiderState);
     Procedure InitLog;
@@ -990,9 +991,19 @@ begin
   result:=0; // good result
 end;
 
+procedure T_autoguider_internal.InternalguiderLoopAsync(Data: PtrInt);
+begin
+  InternalguiderLoop;
+end;
 
 procedure T_autoguider_internal.InternalguiderLoop;
 begin
+  if SameGuiderFinder and FinderPreviewLoop then begin
+    if not CancelPreviewLoop then msg('Wait to stop the finder loop',3);
+    CancelPreviewLoop:=true;
+    WaitExecute(1000, @InternalguiderLoopAsync,0);
+    exit;
+  end;
   SetStatus('Looping Exposures',GUIDER_IDLE);
   StopInternalguider:=false;
   InternalguiderRunning:=true;

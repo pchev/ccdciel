@@ -627,7 +627,7 @@ var
   {internal guider}
   InternalguiderRunning,InternalguiderCalibrating,InternalguiderCalibratingBacklash,InternalguiderGuiding,StopInternalguider,InternalguiderCapturingDark: boolean;
   {finder}
-  UseFinder,FinderPreviewLoop: boolean;
+  UseFinder,FinderPreviewLoop,CancelPreviewLoop: boolean;
   EditorFontName: string;
   EditorFontSize,EditorFontStyle: integer;
   TabChange: boolean;
