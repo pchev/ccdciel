@@ -93,7 +93,7 @@ TAstrometry = class(TComponent)
     procedure SyncCurrentImage(wait: boolean);
     procedure StackSolve(f: TFits; out ra,de,pa,scale: double; out ok:boolean);
     procedure SlewScreenXY(x,y: integer);
-    function PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew,sgain,soffset: integer; brightstaroffset: boolean; offsetra: double; out err: double):boolean;
+    function PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew,sgain,soffset: integer; brightstaroffset: boolean; broffset: double; out err: double):boolean;
     function PrecisionSlew(ra,de:double; out err: double; magn:double=-9999):boolean;
     function AutofocusPrecisionSlew(ra,de:double; out err: double):boolean;
     procedure MarkPlanetarium(ra,de: double);
@@ -471,7 +471,6 @@ end;
 end;
 
 procedure TAstrometry.SolvePreviewImage;
-var n: integer;
 begin
   if (not FBusy) and (FFits.HeaderInfo.naxis>0) and FFits.ImageValid then begin
     FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
@@ -765,7 +764,6 @@ var fn: string;
     err,prec,exp:double;
     sgain,soffset: integer;
     fi,cormethod,bin,maxretry: integer;
-    br: boolean;
 begin
 TimerAstrometrySlewScreenXY.Enabled:=false;
 try
@@ -803,9 +801,9 @@ finally
 end;
 end;
 
-function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew,sgain,soffset: integer; brightstaroffset: boolean; offsetra: double; out err: double): boolean;
+function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew,sgain,soffset: integer; brightstaroffset: boolean; broffset: double; out err: double): boolean;
 var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde,pa,ara,ade,fov: double;
-    finalra, finaldec: double;
+    originalra, originaldec: double;
     fn:string;
     n,i,oldfilter,delay,RetryMeridianSyncCount:integer;
     SyncOK,NearMeridian,RetryMeridianSync: boolean;
@@ -859,11 +857,11 @@ begin
       end;
     end;
     if brightstaroffset then begin
-      finalra:=ra;
-      finaldec:=de;
-      offsetra:=(offsetra/15)/(60*cos(deg2rad*de));
-      ra:=rmod(ra+offsetra+24,24); // offset 30 arcmin to the east
-      msg(Format(rsSlewingWithS, [FormatFloat(f1, 60*offsetra)]), 3);
+      originalra:=ra;
+      originaldec:=de;
+      broffset:=(broffset/15)/(60*cos(deg2rad*de));
+      ra:=rmod(ra+broffset+24,24); // offset 30 arcmin to the east
+      msg(Format(rsSlewingWithS, [FormatFloat(f1, 60*broffset)]), 3);
     end;
     raoffset:=0;
     deoffset:=0;
@@ -1018,7 +1016,10 @@ begin
 
   if result and brightstaroffset then begin
     msg(rsSlewingToFin, 3);
-    result:=Mount.Slew(finalra, finaldec);
+    case method of
+      0: result:=Mount.Slew(originalra, originaldec);
+      1: result:=Mount.Slew(rmod(newra-broffset+24,24), newde);
+    end;
     WaitSlewDelay(delay);
     // short exposure to show the new position with the bright star
     if FFinderCamera<>nil then
