@@ -236,12 +236,20 @@ object f_goto: Tf_goto
     object SpectroGuiding: TCheckBox
       Left = 40
       Height = 22
-      Top = 92
+      Top = 112
       Width = 188
       Caption = 'Start spectroscope guiding'
       Checked = True
       State = cbChecked
       TabOrder = 1
+    end
+    object BrightStarOffset: TCheckBox
+      Left = 40
+      Height = 22
+      Top = 88
+      Width = 161
+      Caption = 'Astrometry with offset'
+      TabOrder = 2
     end
   end
   object msginfo: TLabel

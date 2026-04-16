@@ -9014,7 +9014,7 @@ begin
 end;
 
 procedure Tf_main.MountGoto(Sender: TObject);
-var ra,de,ra2000,de2000,err,q:double;
+var ra,de,ra2000,de2000,err,q,br:double;
     tra,tde,objn: string;
     restartguiding: boolean;
 begin
@@ -9043,6 +9043,8 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
    f_goto.PanelAltAz.Visible:=true;
    f_goto.SpectroGuiding.Visible:=(autoguider is T_autoguider_internal) and f_internalguider.SpectroFunctions and f_internalguider.SpectroAstrometry;
    f_goto.SpectroGuiding.Enabled:=f_goto.SpectroGuiding.Visible and f_goto.GotoAstrometry.Checked;
+   f_goto.BrightStarOffset.Visible:=config.GetValue('/PrecSlew/BrightStarOffset',false);
+   f_goto.BrightStarOffset.Enabled:=f_goto.BrightStarOffset.Visible and f_goto.GotoAstrometry.Checked;
    f_goto.ButtonOK.Caption:=rsGoto;
    f_goto.ShowModal;
    if f_goto.ModalResult=mrok then begin
@@ -9057,6 +9059,10 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
        de:=NullCoord
      else
        de:=StrToDE(tde);
+     if f_goto.BrightStarOffset.Checked then
+        br:=-1
+     else
+        br:=NullCoord;
      if (ra<>NullCoord) and (de<>NullCoord) then begin
        if autoguider.State in [GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT,GUIDER_INITIALIZING] then begin
          NewMessage(rsStopAutoguid,2);
@@ -9074,7 +9080,7 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
        de2000:=de;
        J2000ToMount(mount.EquinoxJD,ra,de);
        if f_goto.GotoAstrometry.Checked then begin
-         if astrometry.PrecisionSlew(ra,de,err) then begin
+         if astrometry.PrecisionSlew(ra,de,err,br) then begin
            if (rotator.Status=devConnected)and(autoguider.AutoguiderType=agINTERNAL)and(f_internalguider.SpectroFunctions)and(f_internalguider.cbParallactic.Checked) then
            begin
              // parallactic angle at current mount position

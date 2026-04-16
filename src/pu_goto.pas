@@ -37,6 +37,7 @@ type
     BtnSearch: TButton;
     ButtonOK: TButton;
     Button2: TButton;
+    BrightStarOffset: TCheckBox;
     SpectroGuiding: TCheckBox;
     De: TEdit;
     GotoAstrometry: TCheckBox;
@@ -113,6 +114,7 @@ begin
   Label8.Caption:=ssec+'/'+rsPixel;
   GotoAstrometry.Caption:=rsUseAstrometr;
   SpectroGuiding.Caption:=rsStartSpectro;
+  BrightStarOffset.Caption:=rsAstrometryWi;
   msginfo.Caption:='';
   LabelResolver.Caption:='';
   BtnCompute.Caption:=rsCompute;
@@ -134,6 +136,7 @@ end;
 procedure Tf_goto.GotoAstrometryChange(Sender: TObject);
 begin
   SpectroGuiding.Enabled:=SpectroGuiding.Visible and GotoAstrometry.Checked;
+  BrightStarOffset.Enabled:=f_goto.BrightStarOffset.Visible and GotoAstrometry.Checked
 end;
 
 procedure Tf_goto.FormClose(Sender: TObject; var CloseAction: TCloseAction);
