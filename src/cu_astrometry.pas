@@ -804,7 +804,7 @@ end;
 end;
 
 function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew,sgain,soffset: integer; brightstaroffset: boolean; offsetra: double; out err: double): boolean;
-var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde,pa,ara,ade: double;
+var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde,pa,ara,ade,fov: double;
     finalra, finaldec: double;
     fn:string;
     n,i,oldfilter,delay,RetryMeridianSyncCount:integer;
@@ -889,10 +889,22 @@ begin
         if StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',nil,asMain) then
            WaitBusy(AstrometryTimeout+30);
         if not LastResult then begin
+           // cannot solve current image
            StopAstrometry;
            msg(rsFailToResolv,0);
-           inc(i);
-           continue;
+           fov:=Fcamera.Fits.HeaderInfo.Frwidth*Fcamera.Fits.HeaderInfo.scale;
+           if (not brightstaroffset)and(fov>0)and(fov<3600) then begin
+              // the FOV is small and can be problematic (bright star or cluster, no star)
+              // we retry with an offset equal to the FOV width
+              msg(rsRetryWithAnO, 3);
+              result:=PrecisionSlew(ra,de,prec,exp,filter,binx,biny,method,maxslew,sgain,soffset,true,fov/60,err);
+              exit;
+           end
+           else begin
+             // Other case, retry for the configured retries
+             inc(i);
+             continue;
+           end;
         end;
         if CancelAutofocus or CancelGoto then exit;
         fn:=slash(TmpDir)+'ccdcielsolved.fits';

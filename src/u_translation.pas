@@ -1667,6 +1667,7 @@ resourcestring
   rsAstrometryWi = 'Astrometry with offset to avoid bright stars';
   rsSlewingWithS = 'Slewing with %s minutes RA offset';
   rsSlewingToFin = 'Slewing to final position';
+  rsRetryWithAnO = 'Retry with an offset';
 
 implementation
 
