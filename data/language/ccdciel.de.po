@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-03-15 09:57+0000\n"
+"POT-Creation-Date: 2026-04-16 10:57+0000\n"
 "PO-Revision-Date: 2025-04-13 06:44+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-03-15 10:04+0000\n"
-"X-Generator: Launchpad (build 30ebb7e51b1d452d1afd137b32cca7f23d23d307)\n"
+"X-Launchpad-Export-Date: 2026-04-16 11:12+0000\n"
+"X-Generator: Launchpad (build 866d07beecca8ac2e3326342adf6c1740cd3e7b3)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -252,6 +252,10 @@ msgstr "Astrometrie Optionen"
 #: u_translation.rsastrometryre
 msgid "Astrometry resolver log"
 msgstr "Astrometrie Platesolver Protokoll"
+
+#: u_translation.rsastrometrywi
+msgid "Astrometry with offset to avoid bright stars"
+msgstr ""
 
 #: u_translation.rsatdawn
 msgid "at dawn"
@@ -1979,10 +1983,6 @@ msgstr "Sucher"
 msgid "Finder camera"
 msgstr "Sucher Kamera"
 
-#: u_translation.rsfinderfocall
-msgid "Finder focal length"
-msgstr ""
-
 #: u_translation.rsfit
 msgid "Fit"
 msgstr "Fit"
@@ -2217,6 +2217,10 @@ msgstr "Vom Kameratreiber"
 msgid "From color image"
 msgstr "Von einem Farbbild"
 
+#: u_translation.rsfromdriver
+msgid "From driver"
+msgstr ""
+
 #: u_translation.rsfromemailadd
 msgid "From email address"
 msgstr "Absender E-Mail Adresse"
@@ -2232,10 +2236,6 @@ msgstr "Vom Planetarium"
 #: u_translation.rsfromplatesol
 msgid "From plate solving"
 msgstr "Ergebnisse Platesolving"
-
-#: u_translation.rsfromtelescop
-msgid "From telescope driver"
-msgstr "Vom Teleskoptreiber"
 
 #: u_translation.rsfromtoby
 #, object-pascal-format
@@ -4383,6 +4383,10 @@ msgstr "Position aus Deepsky-Datenbank abrufen"
 msgid "Retry"
 msgstr "Erneut versuchen"
 
+#: u_translation.rsretrywithano
+msgid "Retry with an offset"
+msgstr ""
+
 #: u_translation.rsretrywithast
 msgid "Retry with astrometry.net"
 msgstr "Mit astrometry.net erneut versuchen"
@@ -5101,6 +5105,15 @@ msgstr "Schwenk ist abgeschlossen"
 #: u_translation.rsslewing
 msgid "Slewing"
 msgstr "Schwenken"
+
+#: u_translation.rsslewingtofin
+msgid "Slewing to final position"
+msgstr ""
+
+#: u_translation.rsslewingwiths
+#, object-pascal-format
+msgid "Slewing with %s minutes RA offset"
+msgstr ""
 
 #: u_translation.rsslewtelescop2
 msgid "Slew telescope to flat panel position"

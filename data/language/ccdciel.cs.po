@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-15 09:57+0000\n"
-"PO-Revision-Date: 2026-02-07 07:32+0000\n"
+"POT-Creation-Date: 2026-04-16 10:57+0000\n"
+"PO-Revision-Date: 2026-03-16 14:18+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-03-15 10:04+0000\n"
-"X-Generator: Launchpad (build 30ebb7e51b1d452d1afd137b32cca7f23d23d307)\n"
+"X-Launchpad-Export-Date: 2026-04-16 11:12+0000\n"
+"X-Generator: Launchpad (build 866d07beecca8ac2e3326342adf6c1740cd3e7b3)\n"
 "Language: cs\n"
 
 #: u_translation.rs2d
@@ -249,6 +249,10 @@ msgstr "Nastavení astrometrie"
 #: u_translation.rsastrometryre
 msgid "Astrometry resolver log"
 msgstr "Protokol astrometrického řešení"
+
+#: u_translation.rsastrometrywi
+msgid "Astrometry with offset to avoid bright stars"
+msgstr ""
 
 #: u_translation.rsatdawn
 msgid "at dawn"
@@ -1170,7 +1174,7 @@ msgstr "Pokračovat v sekvenci"
 #: u_translation.rscontinuewith
 #, object-pascal-format
 msgid "Continue with the %s sequence"
-msgstr ""
+msgstr "Pokračovat v sekvenci %s"
 
 #: u_translation.rscontrolexpos
 msgid "Control exposure"
@@ -1613,7 +1617,7 @@ msgstr "Nezačínat, pokud nelze dokončit"
 #: u_translation.rsdonotstartsn
 #, object-pascal-format
 msgid "Do not start %s now."
-msgstr ""
+msgstr "%s nyní nespouštějte."
 
 #: u_translation.rsdontswait
 #, object-pascal-format
@@ -1976,10 +1980,6 @@ msgstr "Vyhledávač"
 msgid "Finder camera"
 msgstr "Vyhledávací kamera"
 
-#: u_translation.rsfinderfocall
-msgid "Finder focal length"
-msgstr "Ohnisková vzdálenost hledáčku"
-
 #: u_translation.rsfit
 msgid "Fit"
 msgstr "Optimální"
@@ -2214,6 +2214,10 @@ msgstr "Z ovladače kamery"
 msgid "From color image"
 msgstr "Z barevného snímku"
 
+#: u_translation.rsfromdriver
+msgid "From driver"
+msgstr ""
+
 #: u_translation.rsfromemailadd
 msgid "From email address"
 msgstr "Z e-mailové adresy"
@@ -2229,10 +2233,6 @@ msgstr "Z planetária"
 #: u_translation.rsfromplatesol
 msgid "From plate solving"
 msgstr "Z astrometrie"
-
-#: u_translation.rsfromtelescop
-msgid "From telescope driver"
-msgstr "Z ovladače dalekohledu"
 
 #: u_translation.rsfromtoby
 #, object-pascal-format
@@ -2776,7 +2776,7 @@ msgstr "Načíst"
 #: u_translation.rsloadandstart
 #, object-pascal-format
 msgid "Load and start the sequence %s now?"
-msgstr ""
+msgstr "Načíst a spustit sekvenci %s nyní?"
 
 #: u_translation.rsloadconfigur
 msgid "Load configuration on startup"
@@ -3345,7 +3345,7 @@ msgstr "Další"
 
 #: u_translation.rsnextsequence
 msgid "Next sequence"
-msgstr ""
+msgstr "Další sekvence"
 
 #: u_translation.rsnexttarget
 msgid "Next target"
@@ -4380,6 +4380,10 @@ msgstr "Načíst pozici z DSO databáze"
 msgid "Retry"
 msgstr "Opakovat"
 
+#: u_translation.rsretrywithano
+msgid "Retry with an offset"
+msgstr ""
+
 #: u_translation.rsretrywithast
 msgid "Retry with astrometry.net"
 msgstr "Opakujte akci s astrometry.net"
@@ -5098,6 +5102,15 @@ msgstr "Přejezd je dokončen"
 #: u_translation.rsslewing
 msgid "Slewing"
 msgstr "Přejíždění"
+
+#: u_translation.rsslewingtofin
+msgid "Slewing to final position"
+msgstr ""
+
+#: u_translation.rsslewingwiths
+#, object-pascal-format
+msgid "Slewing with %s minutes RA offset"
+msgstr ""
 
 #: u_translation.rsslewtelescop2
 msgid "Slew telescope to flat panel position"

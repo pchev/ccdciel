@@ -582,3 +582,7 @@ msgstr ""
 msgid "Beware this may result in the selection of a wrong star if the mount guiding is not ideal"
 msgstr ""
 
+#: u_hints:rsspecificastr
+msgid "Specific astrometry of the guider field, redo it for any change in the image scale or rotation"
+msgstr ""
+

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-03-15 09:57+0000\n"
+"POT-Creation-Date: 2026-04-16 10:57+0000\n"
 "PO-Revision-Date: 2025-10-22 19:24+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-03-15 10:04+0000\n"
-"X-Generator: Launchpad (build 30ebb7e51b1d452d1afd137b32cca7f23d23d307)\n"
+"X-Launchpad-Export-Date: 2026-04-16 11:12+0000\n"
+"X-Generator: Launchpad (build 866d07beecca8ac2e3326342adf6c1740cd3e7b3)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -252,6 +252,10 @@ msgstr "Параметры"
 #: u_translation.rsastrometryre
 msgid "Astrometry resolver log"
 msgstr "Лог распознавания"
+
+#: u_translation.rsastrometrywi
+msgid "Astrometry with offset to avoid bright stars"
+msgstr ""
 
 #: u_translation.rsatdawn
 msgid "at dawn"
@@ -1979,10 +1983,6 @@ msgstr "Искатель"
 msgid "Finder camera"
 msgstr "Камера-искатель"
 
-#: u_translation.rsfinderfocall
-msgid "Finder focal length"
-msgstr "Фокусное расстояние искателя"
-
 #: u_translation.rsfit
 msgid "Fit"
 msgstr ""
@@ -2217,6 +2217,10 @@ msgstr "От драйвера камеры"
 msgid "From color image"
 msgstr "Из цветного изображения"
 
+#: u_translation.rsfromdriver
+msgid "From driver"
+msgstr ""
+
 #: u_translation.rsfromemailadd
 msgid "From email address"
 msgstr "С адреса email"
@@ -2232,10 +2236,6 @@ msgstr "Из планетария"
 #: u_translation.rsfromplatesol
 msgid "From plate solving"
 msgstr "Из распознавания кадра"
-
-#: u_translation.rsfromtelescop
-msgid "From telescope driver"
-msgstr "От драйвера телескопа"
 
 #: u_translation.rsfromtoby
 #, object-pascal-format
@@ -4383,6 +4383,10 @@ msgstr "Получить позицию из базы данных"
 msgid "Retry"
 msgstr "Повторить"
 
+#: u_translation.rsretrywithano
+msgid "Retry with an offset"
+msgstr ""
+
 #: u_translation.rsretrywithast
 msgid "Retry with astrometry.net"
 msgstr "Повтор с использованием astrometry.net..."
@@ -5101,6 +5105,15 @@ msgstr "Поворот выполнен"
 #: u_translation.rsslewing
 msgid "Slewing"
 msgstr "Наведение"
+
+#: u_translation.rsslewingtofin
+msgid "Slewing to final position"
+msgstr ""
+
+#: u_translation.rsslewingwiths
+#, object-pascal-format
+msgid "Slewing with %s minutes RA offset"
+msgstr ""
 
 #: u_translation.rsslewtelescop2
 msgid "Slew telescope to flat panel position"

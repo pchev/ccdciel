@@ -1858,8 +1858,8 @@ msgstr ""
 msgid "Astrometry options"
 msgstr ""
 
-#: u_translation:rsfromtelescop
-msgid "From telescope driver"
+#: u_translation:rsfromdriver
+msgid "From driver"
 msgstr ""
 
 #: u_translation:rsfocalelength
@@ -6029,10 +6029,6 @@ msgstr ""
 msgid "Settling for"
 msgstr ""
 
-#: u_translation:rsfinderfocall
-msgid "Finder focal length"
-msgstr ""
-
 #: u_translation:rsusealternati
 msgid "Use alternative solver"
 msgstr ""
@@ -6255,5 +6251,21 @@ msgstr ""
 
 #: u_translation:rsdonotstartsn
 msgid "Do not start %s now."
+msgstr ""
+
+#: u_translation:rsastrometrywi
+msgid "Astrometry with offset to avoid bright stars"
+msgstr ""
+
+#: u_translation:rsslewingwiths
+msgid "Slewing with %s minutes RA offset"
+msgstr ""
+
+#: u_translation:rsslewingtofin
+msgid "Slewing to final position"
+msgstr ""
+
+#: u_translation:rsretrywithano
+msgid "Retry with an offset"
 msgstr ""
 

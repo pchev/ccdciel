@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-03-15 09:57+0000\n"
+"POT-Creation-Date: 2026-04-16 10:57+0000\n"
 "PO-Revision-Date: 2026-02-05 04:11+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-03-15 10:04+0000\n"
-"X-Generator: Launchpad (build 30ebb7e51b1d452d1afd137b32cca7f23d23d307)\n"
+"X-Launchpad-Export-Date: 2026-04-16 11:12+0000\n"
+"X-Generator: Launchpad (build 866d07beecca8ac2e3326342adf6c1740cd3e7b3)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -252,6 +252,10 @@ msgstr "天体测量选项"
 #: u_translation.rsastrometryre
 msgid "Astrometry resolver log"
 msgstr "解析日志"
+
+#: u_translation.rsastrometrywi
+msgid "Astrometry with offset to avoid bright stars"
+msgstr ""
 
 #: u_translation.rsatdawn
 msgid "at dawn"
@@ -1979,10 +1983,6 @@ msgstr "寻星镜"
 msgid "Finder camera"
 msgstr "寻星相机"
 
-#: u_translation.rsfinderfocall
-msgid "Finder focal length"
-msgstr "寻星镜焦距"
-
 #: u_translation.rsfit
 msgid "Fit"
 msgstr "拟合"
@@ -2217,6 +2217,10 @@ msgstr "来自于相机驱动"
 msgid "From color image"
 msgstr "来自于彩色图像"
 
+#: u_translation.rsfromdriver
+msgid "From driver"
+msgstr ""
+
 #: u_translation.rsfromemailadd
 msgid "From email address"
 msgstr "发件地址"
@@ -2232,10 +2236,6 @@ msgstr "来自于星图"
 #: u_translation.rsfromplatesol
 msgid "From plate solving"
 msgstr "来自于解析"
-
-#: u_translation.rsfromtelescop
-msgid "From telescope driver"
-msgstr "来自于望远镜驱动"
 
 #: u_translation.rsfromtoby
 #, object-pascal-format
@@ -4383,6 +4383,10 @@ msgstr "从深空数据库检索位置"
 msgid "Retry"
 msgstr "重试"
 
+#: u_translation.rsretrywithano
+msgid "Retry with an offset"
+msgstr ""
+
 #: u_translation.rsretrywithast
 msgid "Retry with astrometry.net"
 msgstr "使用astrometry.net重试"
@@ -5101,6 +5105,15 @@ msgstr "回转完成"
 #: u_translation.rsslewing
 msgid "Slewing"
 msgstr "回转"
+
+#: u_translation.rsslewingtofin
+msgid "Slewing to final position"
+msgstr ""
+
+#: u_translation.rsslewingwiths
+#, object-pascal-format
+msgid "Slewing with %s minutes RA offset"
+msgstr ""
 
 #: u_translation.rsslewtelescop2
 msgid "Slew telescope to flat panel position"
