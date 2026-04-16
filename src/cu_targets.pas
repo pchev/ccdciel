@@ -3107,7 +3107,7 @@ end;
 function T_Targets.Slew(ra,de,magn: double; precision,planprecision: boolean):boolean;
 var err: double;
     errtxt: string;
-    prec,exp,brmagn:double;
+    prec,exp,brmagn,broffset:double;
     sgain,soffset: integer;
     fi,cormethod,bin,maxretry,delay: integer;
     br: boolean;
@@ -3137,9 +3137,10 @@ begin
     bin:=config.GetValue('/PrecSlew/Binning',1);
     fi:=config.GetValue('/PrecSlew/Filter',0);
     br:=config.GetValue('/PrecSlew/BrightStarOffset',false);
+    broffset:=config.GetValue('/PrecSlew/BrightStarOffsetValue',30);
     brmagn:=config.GetValue('/PrecSlew/BrightStarMagnitude',1);
     br:=br and (magn<>NullCoord) and (magn<=brmagn);
-    result:=astrometry.PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,sgain,soffset,br,err);
+    result:=astrometry.PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,sgain,soffset,br,broffset,err);
     if result then begin
       FTargetCoord:=true;
       FTargetRA:=ra;
