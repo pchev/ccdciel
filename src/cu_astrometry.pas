@@ -805,7 +805,7 @@ end;
 
 function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew,sgain,soffset: integer; brightstaroffset: boolean; out err: double): boolean;
 var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde,pa,ara,ade: double;
-    finalra, finaldec: double;
+    offsetra,finalra, finaldec: double;
     fn:string;
     n,i,oldfilter,delay,RetryMeridianSyncCount:integer;
     SyncOK,NearMeridian,RetryMeridianSync: boolean;
@@ -861,7 +861,9 @@ begin
     if brightstaroffset then begin
       finalra:=ra;
       finaldec:=de;
-      ra:=rmod(ra+2/(60*cos(deg2rad*de))+24,24); // offset 30 arcmin to the east
+      offsetra:=(30/15)/(60*cos(deg2rad*de));
+      ra:=rmod(ra+offsetra+24,24); // offset 30 arcmin to the east
+      msg(Format('Slewing with %s minutes RA offset',[FormatFloat(f1,60*offsetra)]),3);
     end;
     raoffset:=0;
     deoffset:=0;
@@ -1003,8 +1005,14 @@ begin
   end;
 
   if result and brightstaroffset then begin
+    msg('Slewing to final position',3);
     result:=Mount.Slew(finalra, finaldec);
     WaitSlewDelay(delay);
+    // short exposure to show the new position with the bright star
+    if FFinderCamera<>nil then
+      FFinderCamera.ControlExposure(min(1,exp),binx,biny,LIGHT,ReadoutModeAstrometry,sgain,soffset)
+    else
+      Fcamera.ControlExposure(min(1,exp),binx,biny,LIGHT,ReadoutModeAstrometry,sgain,soffset)
   end;
 
   finally
