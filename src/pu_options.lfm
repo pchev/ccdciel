@@ -5338,7 +5338,7 @@ object f_option: Tf_option
           object PanelRotator: TPanel
             Left = 0
             Height = 42
-            Top = 544
+            Top = 572
             Width = 551
             Align = alTop
             BevelOuter = bvNone
@@ -5356,16 +5356,15 @@ object f_option: Tf_option
           end
           object PanelSlewBrightStar: TPanel
             Left = 0
-            Height = 32
+            Height = 60
             Top = 512
             Width = 551
             Align = alTop
             BevelOuter = bvNone
-            ClientHeight = 32
+            ClientHeight = 60
             ClientWidth = 551
             TabOrder = 7
             object cbBrightStarOffset: TCheckBox
-              AnchorSideTop.Control = BrightStarMagn
               AnchorSideTop.Side = asrCenter
               Left = 16
               Height = 22
@@ -5375,10 +5374,15 @@ object f_option: Tf_option
               TabOrder = 0
             end
             object BrightStarMagn: TSpinEditEx
-              Left = 406
+              AnchorSideLeft.Control = Label132
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = Label132
+              AnchorSideTop.Side = asrCenter
+              Left = 119
               Height = 28
-              Top = 0
+              Top = 27
               Width = 50
+              BorderSpacing.Left = 12
               Constraints.MaxHeight = 28
               MaxLength = 0
               ParentFont = False
@@ -5388,13 +5392,55 @@ object f_option: Tf_option
               Value = 0
             end
             object Label132: TLabel
-              AnchorSideTop.Control = BrightStarMagn
               AnchorSideTop.Side = asrCenter
-              Left = 328
+              Left = 40
               Height = 18
-              Top = 5
+              Top = 32
               Width = 67
               Caption = 'magnitude'
+              ParentColor = False
+            end
+            object Label193: TLabel
+              AnchorSideLeft.Control = BrightStarMagn
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = Label132
+              Left = 197
+              Height = 18
+              Top = 32
+              Width = 36
+              BorderSpacing.Left = 28
+              Caption = 'offset'
+              ParentColor = False
+            end
+            object BrightStarOffset: TSpinEditEx
+              AnchorSideLeft.Control = Label193
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = Label132
+              AnchorSideTop.Side = asrCenter
+              Left = 245
+              Height = 28
+              Top = 27
+              Width = 56
+              BorderSpacing.Left = 12
+              Constraints.MaxHeight = 28
+              MaxLength = 0
+              ParentFont = False
+              TabOrder = 2
+              MaxValue = 120
+              MinValue = 1
+              NullValue = 0
+              Value = 1
+            end
+            object Label194: TLabel
+              AnchorSideLeft.Control = BrightStarOffset
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = Label132
+              Left = 305
+              Height = 18
+              Top = 32
+              Width = 63
+              BorderSpacing.Left = 4
+              Caption = 'arcminute'
               ParentColor = False
             end
           end

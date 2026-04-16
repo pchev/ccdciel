@@ -1664,6 +1664,9 @@ resourcestring
   rsContinueWith = 'Continue with the %s sequence';
   rsLoadAndStart = 'Load and start the sequence %s now?';
   rsDoNotStartSN = 'Do not start %s now.';
+  rsAstrometryWi = 'Astrometry with offset to avoid bright stars';
+  rsSlewingWithS = 'Slewing with %s minutes RA offset';
+  rsSlewingToFin = 'Slewing to final position';
 
 implementation
 

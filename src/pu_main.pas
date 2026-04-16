@@ -10318,6 +10318,7 @@ begin
    f_option.PanelSlewBrightStar.Visible:=(f_option.AstrometryCamera.ItemIndex=1)and SameGuiderFinder and f_internalguider.Spectrofunctions;
    f_option.cbBrightStarOffset.Checked:=config.GetValue('/PrecSlew/BrightStarOffset',false) and f_option.PanelSlewBrightStar.Visible;
    f_option.BrightStarMagn.Value:=config.GetValue('/PrecSlew/BrightStarMagnitude',1);
+   f_option.BrightStarOffset.Value:=config.GetValue('/PrecSlew/BrightStarOffsetValue',30);
    f_option.cbSlewSyncRotator.Checked:=config.GetValue('/PrecSlew/SyncRotator',SlewSyncRotator);
    f_option.PanelRotator.Visible:=WantRotator and (f_option.AstrometryCamera.ItemIndex=0);
    f_option.RecenterTargetDistance.value:=config.GetValue('/PrecSlew/RecenterTargetDistance',RecenterTargetDistance);
@@ -10772,6 +10773,7 @@ begin
      config.SetValue('/Astrometry/Camera',i);
      config.SetValue('/PrecSlew/BrightStarOffset',(i=1) and f_option.cbBrightStarOffset.Checked);
      config.SetValue('/PrecSlew/BrightStarMagnitude',f_option.BrightStarMagn.Value);
+     config.SetValue('/PrecSlew/BrightStarOffsetValue',f_option.BrightStarOffset.Value);
      if hasGainISO then
        config.SetValue('/PrecSlew/Gain',f_option.SlewISObox.ItemIndex)
      else

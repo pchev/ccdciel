@@ -34,6 +34,7 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    BrightStarOffset: TSpinEditEx;
     BtnClearCrosshairs: TButton;
     cbBrightStarOffset: TCheckBox;
     cbSlewSyncRotator: TCheckBox;
@@ -52,6 +53,8 @@ type
     Label166: TLabel;
     Label167: TLabel;
     Label192: TLabel;
+    Label193: TLabel;
+    Label194: TLabel;
     Label4: TLabel;
     Panel41: TPanel;
     PanelSlewBrightStar: TPanel;
@@ -1397,6 +1400,10 @@ begin
   Label87.Caption := rsDelayAfterTe;
   Label166.Caption := rsFocaleLength;
   UseFinderSolver.Caption := rsUseAlternati;
+  cbBrightStarOffset.Caption:=rsAstrometryWi;
+  Label132.Caption:=rsMagnitude;
+  Label193.Caption:=rsOffset2;
+  Label194.Caption:=rsArcmin;
   cbSlewSyncRotator.Caption := rsSyncTheRotat;
   PageMeridian.Caption := rsMeridian;
   MeridianOption.Caption := rsOnMeridianCr;

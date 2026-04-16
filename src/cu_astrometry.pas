@@ -861,9 +861,10 @@ begin
     if brightstaroffset then begin
       finalra:=ra;
       finaldec:=de;
-      offsetra:=(30/15)/(60*cos(deg2rad*de));
+      offsetra:=config.GetValue('/PrecSlew/BrightStarOffsetValue',30);
+      offsetra:=(offsetra/15)/(60*cos(deg2rad*de));
       ra:=rmod(ra+offsetra+24,24); // offset 30 arcmin to the east
-      msg(Format('Slewing with %s minutes RA offset',[FormatFloat(f1,60*offsetra)]),3);
+      msg(Format(rsSlewingWithS, [FormatFloat(f1, 60*offsetra)]), 3);
     end;
     raoffset:=0;
     deoffset:=0;
@@ -1000,12 +1001,12 @@ begin
 
   if result and SlewSyncRotator and (FFinderCamera=nil) and (Frotator.Status=devConnected) and (pa<>NullCoord) then begin
     pa:=rmod(pa+360,360);
-    msg('Sync the rotator: '+FormatFloat(f2,pa)+' '+rsDegree,3);
+    msg(rsSyncTheRotat+': '+FormatFloat(f2, pa)+' '+rsDegree, 3);
     Frotator.Sync(pa);
   end;
 
   if result and brightstaroffset then begin
-    msg('Slewing to final position',3);
+    msg(rsSlewingToFin, 3);
     result:=Mount.Slew(finalra, finaldec);
     WaitSlewDelay(delay);
     // short exposure to show the new position with the bright star
