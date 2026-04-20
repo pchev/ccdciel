@@ -775,7 +775,7 @@ var origin,observer,telname,instrum,objname,siso,CType,roworder,buf: string;
     hCloudCover,hDewPoint,hHumidity,hPressure,hRainRate,hSkyBrightness,hSkyQuality,
     hSkyTemperature,hStarFWHM,hTemperature,hWindDirection,hWindGust,hWindSpeed: double;
     hbzero,hbscale,hdmin,hdmax,hra,hdec,hexp,hpix1,hpix2,hairmass,focusertemp: double;
-    haz,hal,pa: double;
+    haz,hal,pa,dt,jdt: double;
     gamma,voffset,coffset,OffsetX,OffsetY: integer;
     Frx,Fry,Frwidth,Frheight: integer;
     hasfocusertemp,hasfocuserpos: boolean;
@@ -1050,6 +1050,9 @@ begin
       f.Header.Insert(i,'DATE-OBS',hdateobs,'UTC start date from camera')
     else
       f.Header.Insert(i,'DATE-OBS',hdateobs,'UTC start date of observation');
+    dt:=DateIso2DateTime(hdateobs);
+    jdt:=DateTimetoJD(dt);
+    f.Header.Insert(i,'MJD-OBS',jdt-2400000.5,'MJD start date of observation');
     if shutter>0 then begin
       f.Header.Insert(i,'EXPTIME',shutter,'[s] Camera Exposure Time');
       if hexp>0 then f.Header.Insert(i,'REQTIME',hexp,'[s] Requested Exposure Time');
@@ -1063,6 +1066,9 @@ begin
   end
   else begin
     f.Header.Insert(i,'DATE-OBS',FStackExpStart,'UTC start date of observation');
+    dt:=DateIso2DateTime(FStackExpStart);
+    jdt:=DateTimetoJD(dt);
+    f.Header.Insert(i,'MJD-OBS',jdt-2400000.5,'MJD start date of observation');
     f.Header.Insert(i,'EXPTIME',hexp*FStackCount,'[s] Total Exposure Time');
     f.Header.Insert(i,'STACKCNT',FStackCount,'Number of stacked frames');
     f.Header.Insert(i,'STACKEXP',hexp,'[s] Individual frame exposure Time');
