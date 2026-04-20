@@ -944,7 +944,7 @@ end;
 function TFitsHeader.Insert(idx: integer; key:string; val:double; comment: string):integer;
 var txt: string;
 begin
-  txt:=Format('%20.10g',[val]);
+  txt:=Format('%20.13g',[val]);
   result:=Insert(idx,key,txt,comment,false);
 end;
 
