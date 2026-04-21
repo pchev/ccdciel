@@ -1468,6 +1468,7 @@ begin
      p.ClearRunning;
   end;
   CurrentTargetName:='';
+  CurrentTargetInfo:='[" "," ",0,0,0]';
   CurrentStepName:='';
   CurrentSequenceDirectory:='';
 end;
@@ -1550,6 +1551,7 @@ begin
    SaveDoneCount;
    if assigned(FonEndSequence) then FonEndSequence(nil);
    CurrentTargetName:='';
+   CurrentTargetInfo:='[" "," ",0,0,0]';
    CurrentStepName:='';
    CurrentSequenceDirectory:='';
  end
@@ -2315,6 +2317,7 @@ begin
      end;
      if assigned(FonEndSequence) then FonEndSequence(nil);
      CurrentTargetName:='';
+     CurrentTargetInfo:='[" "," ",0,0,0]';
      CurrentSequenceDirectory:='';
      finally
        FWaiting:=false;
@@ -2632,6 +2635,12 @@ begin
     end;
 
     // initialization script
+    CurrentTargetInfo:='[';
+    CurrentTargetInfo:=CurrentTargetInfo+'"'+StringReplace(StringReplace(t.objectname,'"',' ',[rfReplaceAll]),',',' ',[rfReplaceAll]);
+    CurrentTargetInfo:=CurrentTargetInfo+'","'+StringReplace(StringReplace(t.planname,'"',' ',[rfReplaceAll]),',',' ',[rfReplaceAll]);
+    CurrentTargetInfo:=CurrentTargetInfo+'" ,'+t.ra_str+','+t.de_str;
+    CurrentTargetInfo:=CurrentTargetInfo+' ,'+t.magnitude_str;
+    CurrentTargetInfo:=CurrentTargetInfo+']';
     if t.initscript then begin
       FScriptRunning:=true;
       buf:='"';
@@ -3136,9 +3145,9 @@ begin
     soffset:=config.GetValue('/PrecSlew/Offset',NullInt);
     bin:=config.GetValue('/PrecSlew/Binning',1);
     fi:=config.GetValue('/PrecSlew/Filter',0);
-    br:=config.GetValue('/PrecSlew/BrightStarOffset',false);
-    broffset:=config.GetValue('/PrecSlew/BrightStarOffsetValue',30);
-    brmagn:=config.GetValue('/PrecSlew/BrightStarMagnitude',1);
+    br:=SlewingAvoidBrightStar;
+    broffset:=SlewingBrightStarOffset;
+    brmagn:=SlewingBrightStarMagn;
     br:=br and (magn<>NullCoord) and (magn<=brmagn);
     result:=astrometry.PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,sgain,soffset,br,broffset,err);
     if result then begin
@@ -3557,12 +3566,12 @@ end;
 
 function TTarget.ra_str: string;
 begin
-  Result:=FormatFloat(f5,ra);
+  Result:=FormatFloat(f7,ra);
 end;
 
 function TTarget.de_str: string;
 begin
-  Result:=FormatFloat(f5,de);
+  Result:=FormatFloat(f7,de);
 end;
 
 function TTarget.pa_str: string;

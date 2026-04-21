@@ -298,6 +298,7 @@ const
   f4 = '0.0000';
   f5 = '0.00000';
   f6 = '0.000000';
+  f7 = '0.0000000';
   f1v = '0.#';
   f2v = '0.##';
   f3v = '0.###';
@@ -483,7 +484,8 @@ var
   ScrWidth,ScrHeigth,ScrGuideWidth,ScrGuideHeigth,ScrFinderWidth,ScrFinderHeigth,SplitMargin: integer;
   BullsEyeX,BullsEyeY,CrR1,CrR2,CrR3: integer;
   FinderImgScale0,FinderImgPixRatio,FinderImgZoom,FinderZoomMin: double;
-  FinderCapturingDark: boolean;
+  FinderCapturingDark,SlewingAvoidBrightStar: boolean;
+  SlewingBrightStarMagn,SlewingBrightStarOffset: integer;
   MaxADU, ClippingOverflow, ClippingUnderflow: double;
   MsgHandle: THandle;
   LastPixelSize: double;
@@ -576,7 +578,7 @@ var
   Offset,OffsetMin,OffsetMax: integer;
   SubDirName: array[0..SubDirCount-1] of string;
   FilenameName: array[0..FileNameCount-1] of string;
-  CurrentSeqName, CurrentTargetName, CurrentStepName,CurrentSequenceDirectory: string;
+  CurrentSeqName, CurrentTargetName, CurrentTargetInfo, CurrentStepName,CurrentSequenceDirectory: string;
   CurrentStepNum,CurrentDoneCount: integer;
   WeatherPauseTarget,WeatherPauseCapture,WeatherCapturePaused,WeatherPauseCanceled,WeatherCancelRestart: boolean;
   WeatherRestartDelay: integer;

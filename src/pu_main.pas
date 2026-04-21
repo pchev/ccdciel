@@ -5527,6 +5527,9 @@ begin
   SlewPrecision:=config.GetValue('/PrecSlew/Precision',SlewPrecision);
   RecenterTargetDistance:=config.GetValue('/PrecSlew/RecenterTargetDistance',RecenterTargetDistance);
   SlewSyncRotator:=config.GetValue('/PrecSlew/SyncRotator',SlewSyncRotator);
+  SlewingAvoidBrightStar:=config.GetValue('/PrecSlew/BrightStarOffset',false);
+  SlewingBrightStarMagn:=config.GetValue('/PrecSlew/BrightStarMagnitude',1);
+  SlewingBrightStarOffset:=config.GetValue('/PrecSlew/BrightStarOffsetValue',30);
   MinimumMoonDistance:=config.GetValue('/Sequence/MinimumMoonDistance',MinimumMoonDistance);
   SequenceTwilight:=config.GetValue('/Sequence/SequenceTwilight',SequenceTwilight);
   if (autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED) then autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
@@ -9043,7 +9046,7 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
    f_goto.PanelAltAz.Visible:=true;
    f_goto.SpectroGuiding.Visible:=(autoguider is T_autoguider_internal) and f_internalguider.SpectroFunctions and f_internalguider.SpectroAstrometry;
    f_goto.SpectroGuiding.Enabled:=f_goto.SpectroGuiding.Visible and f_goto.GotoAstrometry.Checked;
-   f_goto.BrightStarOffset.Visible:=config.GetValue('/PrecSlew/BrightStarOffset',false);
+   f_goto.BrightStarOffset.Visible:=SlewingAvoidBrightStar;
    f_goto.BrightStarOffset.Enabled:=f_goto.BrightStarOffset.Visible and f_goto.GotoAstrometry.Checked;
    f_goto.ButtonOK.Caption:=rsGoto;
    f_goto.ShowModal;
@@ -18165,6 +18168,7 @@ try
   else if method='CAPTURE_RUNNING' then result:=result+'"result": '+BoolToStr(f_Capture.Running,tr,fa)
   else if method='CAPTURE_GETLASTFILENAME' then result:=result+'"result": "'+stringreplace(LastCaptureFile,'\','\\',[rfReplaceAll])+'"'
   else if method='SEQUENCE_GETCURRENTDIRECTORY' then result:=result+'"result": "'+stringreplace(CurrentSequenceDirectory,'\','\\',[rfReplaceAll])+'"'
+  else if method='SEQUENCE_TARGETINFORMATION' then result:=result+'"result": '+CurrentTargetInfo
   else if method='CURRENTHEADER' then result:=result+'"result": '+fits.Header.asJSON
   else if method='TELESCOPERA' then result:=result+'"result": '+FormatFloat(f6,f_mount.CurrentRA)
   else if method='TELESCOPEDE' then result:=result+'"result": '+FormatFloat(f6,f_mount.CurrentDec)
@@ -18202,6 +18206,7 @@ try
   end
   else if method='INTERNALGUIDER_BUSY' then result:=result+'"result": '+BoolToStr(InternalguiderRunning,tr,fa)
   else if method='INTERNALGUIDER_GETGUIDEEXPOSURE' then result:=result+'"result": '+StringReplace(f_internalguider.Exposure.Text,',','.',[])
+  else if method='INTERNALGUIDER_GETEXPOSUREDELAY' then result:=result+'"result": '+StringReplace(f_internalguider.ExpDelay.Text,',','.',[])
   else if method='INTERNALGUIDER_GETAGRESSIVITYRA' then result:=result+'"result": ['+inttostr(f_internalguider.RAgain)+','+inttostr(f_internalguider.RA_hysteresis)+']'
   else if method='INTERNALGUIDER_GETAGRESSIVITYDEC' then result:=result+'"result": ['+inttostr(f_internalguider.DECgain)+','+inttostr(f_internalguider.DEC_hysteresis)+']'
   else if method='INTERNALGUIDER_GETSPECTROFUNCTION' then result:=result+'"result": '+BoolToStr(f_internalguider.SpectroFunctions,tr,fa)
@@ -18211,6 +18216,9 @@ try
   else if method='INTERNALGUIDER_GETSPECTROGUIDESTAROFFSET' then result:=result+'"result": ['+StringReplace(f_internalguider.StarOffsetX.text,',','.',[])+','+StringReplace(f_internalguider.StarOffsetY.text,',','.',[])+']'
   else if method='INTERNALGUIDER_GETSPECTROMULTISTAROFFSET' then result:=result+'"result": ['+StringReplace(f_internalguider.edOffsetX.text,',','.',[])+','+StringReplace(f_internalguider.edOffsetY.text,',','.',[])+']'
   else if method='INTERNALGUIDER_GETSPECTROROTATEPARALLACTIC' then result:=result+'"result": '+BoolToStr(f_internalguider.cbParallactic.Checked,tr,fa)
+  else if method='SLEWING_GETAVOIDBRIGHTSTAR' then result:=result+'"result": '+BoolToStr(SlewingAvoidBrightStar,tr,fa)
+  else if method='SLEWING_GETBRIGHTSTARMAGNITUDE' then result:=result+'"result": '+inttostr(SlewingBrightStarMagn)
+  else if method='SLEWING_GETBRIGHTSTAROFFSET' then result:=result+'"result": '+inttostr(SlewingBrightStarOffset)
   // execute command without parameter
   else if method='TELESCOPE_ABORTMOTION' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_MountAbortMotion+'"}'
   else if method='TELESCOPE_TRACK' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_MountTrack+'"}'
@@ -18616,6 +18624,12 @@ try
     buf:=f_scriptengine.cmd_Internalguider_SetGuideExposure(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
+  else if method='INTERNALGUIDER_SETEXPOSUREDELAY' then begin
+    CheckParamCount(1);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Internalguider_SetExpDelay(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
   else if method='INTERNALGUIDER_SETAGRESSIVITYRA' then begin
     CheckParamCount(2);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
@@ -18686,6 +18700,24 @@ try
     CheckParamCount(1);
     if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf1:='ON' else buf1:='OFF';
     buf:=f_scriptengine.cmd_Internalguider_SetSpectroRotateParallactic(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='SLEWING_SETAVOIDBRIGHTSTAR' then begin
+   CheckParamCount(1);
+    if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf1:='ON' else buf1:='OFF';
+    buf:=f_scriptengine.cmd_Slewing_SetAvoidBrightStar(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='SLEWING_SETBRIGHTSTARMAGNITUDE' then begin
+    CheckParamCount(1);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Slewing_SetBrightStarMagnitude(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='SLEWING_SETBRIGHTSTAROFFSET' then begin
+    CheckParamCount(1);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Slewing_SetBrightStarOffset(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='J2000_TO_APPARENT' then begin

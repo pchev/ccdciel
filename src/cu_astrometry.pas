@@ -1053,9 +1053,9 @@ begin
   soffset:=config.GetValue('/PrecSlew/Offset',NullInt);
   bin:=config.GetValue('/PrecSlew/Binning',1);
   fi:=config.GetValue('/PrecSlew/Filter',0);
-  br:=config.GetValue('/PrecSlew/BrightStarOffset',false);
-  broffset:=config.GetValue('/PrecSlew/BrightStarOffsetValue',30);
-  brmagn:=config.GetValue('/PrecSlew/BrightStarMagnitude',1);
+  br:=SlewingAvoidBrightStar;
+  broffset:=SlewingBrightStarOffset;
+  brmagn:=SlewingBrightStarMagn;
   br:=br and (magn<>NullCoord) and (magn<=brmagn);
   result:=PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,sgain,soffset,br,broffset,err);
 end;

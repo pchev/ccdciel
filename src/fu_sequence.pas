@@ -229,6 +229,7 @@ begin
  SetLang;
  CurrentSeqName:='';
  CurrentTargetName:='';
+ CurrentTargetInfo:='[" "," ",0,0,0]';
  CurrentStepName:='';
  CurrentSequenceDirectory:='';
  StartingSequence:=false;

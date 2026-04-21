@@ -295,6 +295,7 @@ type
     function cmd_cameraresetframe: string;
     function cmd_cameragetframe(out fx,fy,fw,fh: integer): string;
     function cmd_Internalguider_SetGuideExposure(exp:string):string;
+    function cmd_Internalguider_SetExpDelay(delay:string):string;
     function cmd_Internalguider_SetAgressivityRA(gain,hyst:string):string;
     function cmd_Internalguider_SetAgressivityDEC(gain,hyst:string):string;
     function cmd_Internalguider_SetSpectrofunction(onoff:string):string;
@@ -307,6 +308,9 @@ type
     function cmd_Internalguider_SetSpectroGuidestarRaDec(ra,de:string):string;
     function cmd_Internalguider_ClearSpectroGuidestarRaDec: string;
     function cmd_Internalguider_SetSpectroMultistaroffset(x,y:string):string;
+    function cmd_Slewing_SetAvoidBrightStar(onoff:string):string;
+    function cmd_Slewing_SetBrightStarMagnitude(magn:string):string;
+    function cmd_Slewing_SetBrightStarOffset(offset:string):string;
     function cmd_Spectro_Rotate_Parallactic: string;
     function cmd_Internalguider_SetSpectroRotateParallactic(onoff:string):string;
     function cmd_runscript(sname,path,args: string):string;
@@ -2844,6 +2848,22 @@ except
 end;
 end;
 
+function Tf_scriptengine.cmd_Internalguider_SetExpDelay(delay:string):string;
+var x,n: integer;
+begin
+result:=msgFailed;
+try
+ val(delay,x,n);
+ if (n=0)and(Fautoguider.AutoguiderType=agINTERNAL) then begin
+   Finternalguider.ExpDelay.Value:=x;
+   result:=msgOK;
+ end;
+except
+  result:=msgFailed;
+end;
+end;
+
+
 function Tf_scriptengine.cmd_Internalguider_SetAgressivityRA(gain,hyst:string):string;
 var  g,h,n: integer;
 begin
@@ -3100,6 +3120,45 @@ try
      Frotator.Angle:=q;
      result:=msgOK;
   end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Slewing_SetAvoidBrightStar(onoff:string):string;
+begin
+result:=msgFailed;
+try
+  SlewingAvoidBrightStar:=(onoff='ON');
+  result:=msgOK;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Slewing_SetBrightStarMagnitude(magn:string):string;
+var x,n: integer;
+begin
+result:=msgFailed;
+try
+  val(magn,x,n);
+  if n<>0 then exit;
+  SlewingBrightStarMagn:=x;
+  result:=msgOK;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Slewing_SetBrightStarOffset(offset:string):string;
+var x,n: integer;
+begin
+result:=msgFailed;
+try
+  val(offset,x,n);
+  if n<>0 then exit;
+  SlewingBrightStarOffset:=x;
+  result:=msgOK;
 except
   result:=msgFailed;
 end;
