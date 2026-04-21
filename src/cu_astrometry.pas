@@ -891,7 +891,7 @@ begin
            StopAstrometry;
            msg(rsFailToResolv,0);
            fov:=Fcamera.Fits.HeaderInfo.Frwidth*Fcamera.Fits.HeaderInfo.scale;
-           if (not brightstaroffset)and(fov>0)and(fov<3600) then begin
+           if (i>1)and(not brightstaroffset)and(fov>0)and(fov<1800) then begin
               // the FOV is small and can be problematic (bright star or cluster, no star)
               // we retry with an offset equal to the FOV width
               msg(rsRetryWithAnO, 3);
