@@ -8,6 +8,7 @@
 # See configuration below.
 #
 # Additional parameter: the guide method to use (case insensitive), it use the default if not set
+#    AutoMagn
 #    SingleStar
 #    SingleOffset
 #    SingleAstrometry
@@ -27,7 +28,11 @@ from ccdciel import ccdciel
 #=========== Configuration here ===============================================
 
 # the default guide method to use if the parameter is not present, this not work for SingleOffset because it also require the guide star RA,DEC.
-defaultGuideMethod = 'SingleAstrometry'
+defaultGuideMethod = 'AutoMagn'
+
+# the magnitude threshold for AutoMagn selection
+AutoSingleMax = 5   # Use SingleStar when brighter than this, SingleAstrometry above
+AutoMultiMin  = 12  # Use SingleAstrometry when brighter than this, MultiStar above
 
 #=== Single star settings ===
 # guiding aggressiveness for single star, on slit guiding
@@ -123,6 +128,14 @@ try:
     magnitude = refMagn  # use exposure time set for the reference star
 
   guidemethod = guidemethod.upper()
+
+  if guidemethod == 'AUTOMAGN':
+     if magnitude < AutoSingleMax:
+        guidemethod = 'SINGLESTAR'
+     elif magnitude <  AutoMultiMin:
+        guidemethod = 'SINGLEASTROMETRY'
+     else:
+        guidemethod = 'MULTISTAR'
 
   if guidemethod == 'SINGLESTAR':
     exposure = SingleExposureTime(magnitude)
