@@ -147,6 +147,8 @@ begin
     if FileExists(dfn) then begin
       if MessageDlg(format(rsScriptAlread,[fn]),mtConfirmation,mbYesNo,0)=mrNo
         then exit;
+      CopyFile(dfn,dfn+'.backup',[cffOverwriteFile]);
+      ShowMessage(rsPreviousVers+crlf+dfn+'.backup');
   end;
   end;
   if DownloadScript(fn,dfn) then  begin

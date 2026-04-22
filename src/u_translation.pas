@@ -1668,6 +1668,7 @@ resourcestring
   rsSlewingWithS = 'Slewing with %s minutes RA offset';
   rsSlewingToFin = 'Slewing to final position';
   rsRetryWithAnO = 'Retry with an offset';
+  rsPreviousVers = 'Previous version copied to';
 
 implementation
 
