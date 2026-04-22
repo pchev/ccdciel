@@ -6269,3 +6269,7 @@ msgstr ""
 msgid "Retry with an offset"
 msgstr ""
 
+#: u_translation:rspreviousvers
+msgid "Previous version copied to"
+msgstr ""
+

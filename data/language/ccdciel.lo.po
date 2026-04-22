@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-04-16 10:57+0000\n"
+"POT-Creation-Date: 2026-04-22 12:51+0000\n"
 "PO-Revision-Date: 2025-10-21 04:57+0000\n"
 "Last-Translator: boneni <Unknown>\n"
 "Language-Team: Lao <lo@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-04-16 11:12+0000\n"
+"X-Launchpad-Export-Date: 2026-04-22 12:56+0000\n"
 "X-Generator: Launchpad (build 866d07beecca8ac2e3326342adf6c1740cd3e7b3)\n"
 
 #: u_translation.rs2d
@@ -4056,6 +4056,10 @@ msgstr "Debayer ຕົວຢ່າງ"
 #: u_translation.rspreviewprepr
 msgid "Preview preprocessing"
 msgstr "ການປະມວນຜົນເບື້ອງຕົ້ນຂອງຕົວຢ່າງ"
+
+#: u_translation.rspreviousvers
+msgid "Previous version copied to"
+msgstr ""
 
 #: u_translation.rsprofile
 #, object-pascal-format
