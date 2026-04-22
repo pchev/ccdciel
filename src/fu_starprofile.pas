@@ -881,6 +881,8 @@ Fhfd:=-1;
  if s>=(f.HeaderInfo.naxis2 div 2) then s:=f.HeaderInfo.naxis2 div 2;
 
  f.FindStarPos(x,y,s,xm,ym,ri,FValMax,bg,bgdev);
+ if FValMax=0 then
+    f.FindStarPos(x,y,2*s,xm,ym,ri,FValMax,bg,bgdev);
  if FValMax=0 then exit;
 
  f.GetHFD2(xm,ym,2*ri,xg,yg,bg,bgdev,Fhfd,Ffwhm,FValMax,Fsnr,flux);

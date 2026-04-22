@@ -13400,6 +13400,12 @@ end;
 procedure  Tf_main.StarSelection(Sender: TObject);
 begin
   // redraw star box
+  if f_visu.BullsEye then begin
+     // crosshair follow the selected star
+     BullsEyeX:=round(f_starprofile.StarX);
+     BullsEyeY:=round(f_starprofile.StarY);
+     PlotImage;
+  end;
   image1.Invalidate;
   if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
 end;
