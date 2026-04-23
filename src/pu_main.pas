@@ -13029,6 +13029,7 @@ if f_visu.BullsEye and (not SplitImage) and (fits.HeaderInfo.naxis>1) then begin
   scrbmp.EllipseAntialias(cx,cy,s,s,co,1);
   s:=round((min(img_Height,img_Width) div 8)*scale);
   scrbmp.EllipseAntialias(cx,cy,s,s,co,1);
+  co:=ColorToBGRA(clOrange);
   if CrR1>0 then begin
     s:=round(CrR1*scale);
     scrbmp.EllipseAntialias(cx,cy,s,s,co,1);
