@@ -8,7 +8,7 @@ Preprocessing; siril.pkg; Preprocessing scripts for Bias,Dark,Flat,Light using S
 Spectroscope; UVEX4.pkg; Scripts for the UVEX4 spectroscope using both Alpaca and serial link
 Spectroscope; Spectro_SetGuideMethod; Allow to define per target guiding strategy and parameters
 Spectroscope; specinti.pkg; Process spectra with specINTI
-Spectroscope; aod.script; Get the Aerosol Optical Depth from Copernicus, add it to FITS header
+Spectroscope; aod; Get the Aerosol Optical Depth from Copernicus, add it to FITS header
 Calibrator; cover_open; Open the telescope cover
 Calibrator; cover_close; Close the telescope cover
 Calibrator; calibrator_on; Turn the calibrator light on
