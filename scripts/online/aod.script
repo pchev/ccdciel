@@ -1,7 +1,10 @@
-## Set the keyword AOD550 in CCDciel FITS header 
+## Set the keyword AOD550 in CCDciel FITS header for the Aerosol Optical Depth
 ## Optional parameter is the hour (only the integer hour) for the prevision, default is the current time
 ## Data are retreived from Copernicus: 
 ## https://ads.atmosphere.copernicus.eu/datasets/cams-global-atmospheric-composition-forecasts
+##
+## This script require to install additional Python modules, see:
+## https://www.ap-i.net/ccdciel/en/documentation/install_python
 ##
 ## Do not run this script too often because it can take time and the value do not change quickly.
 ## Running one or two time per night is fine.
