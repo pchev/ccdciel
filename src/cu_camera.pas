@@ -838,7 +838,7 @@ begin
   if not f.Header.Valueof('MULT_R',multr)  then multr:=-1;
   if not f.Header.Valueof('MULT_G',multg)  then multg:=-1;
   if not f.Header.Valueof('MULT_B',multb)  then multb:=-1;
-  if not f.Header.Valueof('DATE-OBS',hdateobs) then hdateobs:=FormatDateTime(dateisoshort,NowUTC);
+  if not f.Header.Valueof('DATE-OBS',hdateobs) then hdateobs:=FormatDateTime(dateiso,Ftimestart);
   if not f.Header.Valueof('AIRMASS',hairmass) then hairmass:=-1;
   // get other values
   pierside:='';
