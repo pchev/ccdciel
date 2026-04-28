@@ -839,7 +839,9 @@ begin
   delay:=config.GetValue('/PrecSlew/Delay',5);
   dist:=abs(NullCoord/60);
   FLastSlewErr:=dist;
-  if (Mount.Status=devConnected)and(Camera.Status=devConnected)and((FFinderCamera=nil)or(FFinderCamera.Status=devConnected)) then begin
+  if (Mount.Status=devConnected)and(
+  ((FFinderCamera=nil)and(Camera.Status=devConnected)) or
+  ((FFinderCamera<>nil)and(FFinderCamera.Status=devConnected))) then begin
    if astrometryResolver=ResolverNone then begin
       msg(rsNoResolverCo,2);
       msg(Format(rsDoSimpleSlew, [ARToStr3(ra), DEToStr(de)]),2);

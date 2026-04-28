@@ -9023,7 +9023,7 @@ var ra,de,ra2000,de2000,err,q,br:double;
 begin
 restartguiding:=false;
 if f_mount.BtnGoto.Caption=rsGoto then begin
- if (AllDevicesConnected) and (mount.Status=devConnected) then begin
+ if mount.Status=devConnected then begin
    if Mount.Park then begin
      NewMessage(rsTheTelescope);
      exit;
@@ -9044,6 +9044,9 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
    f_goto.msginfo.Caption:='';
    f_goto.PanelPxSz.Visible:=false;
    f_goto.PanelAltAz.Visible:=true;
+   f_goto.GotoAstrometry.Enabled:=(UseFinder and (findercamera.Status=devConnected))or((not UseFinder)and(camera.Status=devConnected));
+   if not f_goto.GotoAstrometry.Enabled then
+     f_goto.GotoAstrometry.Checked:=false;
    f_goto.SpectroGuiding.Visible:=(autoguider is T_autoguider_internal) and f_internalguider.SpectroFunctions and f_internalguider.SpectroAstrometry;
    f_goto.SpectroGuiding.Enabled:=f_goto.SpectroGuiding.Visible and f_goto.GotoAstrometry.Checked;
    f_goto.BrightStarOffset.Visible:=SlewingAvoidBrightStar;
@@ -11579,7 +11582,7 @@ if not f_capture.Running then begin
   NewMessage(rsCaptureStopp2, 0);
   exit;
 end;
-if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_video.Running) then begin
+if (camera.Status=devConnected)and(not autofocusing)and(not learningvcurve)and(not f_video.Running) then begin
   // do not interrupt the current stack, run prepare only on the start of a new stack
   if (camera.AddFrames)and(not camera.PrepareStack) then begin
      result:=true;
@@ -12092,7 +12095,7 @@ var e: double;
     p,binx,biny,cc: integer;
     ftype:TFrameType;
 begin
-if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
+if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) then begin
   if (f_capture.FrameType>=0)and(f_capture.FrameType<=ord(High(TFrameType))) then
     ftype:=TFrameType(f_capture.FrameType)
   else
@@ -14940,6 +14943,10 @@ begin
  else
  begin
    // move to focus star
+   if mount.Status<>devConnected then begin
+     NewMessage(Format(rsNotConnected,[rsMount]));
+     exit;
+   end;
    if restartguider and (Autoguider.State in [GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT,GUIDER_INITIALIZING]) then begin
      // stop autoguider
      NewMessage(rsStopAutoguid,2);
@@ -15163,11 +15170,6 @@ begin
    f_starprofile.ChkAutofocusDown(false);
    exit;
   end;
-  if not AllDevicesConnected then begin
-    NewMessage(rsSomeDefinedD,1);
-    f_starprofile.ChkAutofocusDown(false);
-    exit;
-  end;
   if f_preview.Running then begin
     StopPreview;
   end;
@@ -15202,7 +15204,7 @@ begin
     exit;
   end;
   // set filter
-  if AutofocusFilter>0 then begin
+  if (AutofocusFilter>0)and(wheel.Status=devConnected) then begin
     wheel.Filter:=AutofocusFilter;
     wait(FocuserDelay+5);  // let time to modify the exposure factor and apply the focus offset
   end;
@@ -15380,7 +15382,7 @@ begin
       camera.Gain:=SaveAutofocusGain;
       if hasOffset then camera.Offset:=SaveAutofocusOffset;
    end;
-   if AutofocusFilter>0 then begin
+   if (AutofocusFilter>0)and(wheel.Status=devConnected) then begin
      wheel.Filter:=SaveAutofocusFilter;
    end;
    ImgZoom:=f_visu.Zoom;

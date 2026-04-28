@@ -1150,18 +1150,25 @@ var
   verbose: boolean;
 begin
   verbose:=(Data=1);
-  if AllDevicesConnected=false then
-  begin
-    msg('Internal guider: '+rsSomeDefinedD,1);
-    InternalguiderStop;
-    SetStatus('Devices not connected',GUIDER_ALERT);
-    exit;
-  end;
   if FCamera.Status<>devConnected then
   begin
     msg('Internal guider: Guide camera not connected!',1);
     InternalguiderStop;
     SetStatus('Guide camera not connected',GUIDER_ALERT);
+    exit;
+  end;
+  if FMount.Status<>devConnected then
+  begin
+    msg('Internal guider: Mount not connected!',1);
+    InternalguiderStop;
+    SetStatus('Mount not connected',GUIDER_ALERT);
+    exit;
+  end;
+  if (Finternalguider.cbRotator.Checked)and(FRotator.Status<>devConnected) then
+  begin
+    msg('Internal guider: Rotator not connected!',1);
+    InternalguiderStop;
+    SetStatus('Rotator not connected',GUIDER_ALERT);
     exit;
   end;
   if Fmount.canpulseguide=false then
