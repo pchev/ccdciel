@@ -9715,7 +9715,11 @@ begin
     config.SetValue('/Finder/ROI/H',f_setup.FinderH.Value);
     config.SetValue('/Finder/SameGuiderFinder',f_setup.SameGuiderFinder);
 
-    config.SetValue('/FilterWheelInterface',ord(f_setup.WheelConnection));
+    if (f_setup.WheelConnection=INDI)and(f_setup.WheelIndiDevice.Text<>'')and(f_setup.WheelIndiDevice.Text=f_setup.CameraIndiDevice.Text) then
+      i:=ord(INCAMERA)
+    else
+      i:=ord(f_setup.WheelConnection);
+    config.SetValue('/FilterWheelInterface',i);
     config.SetValue('/INDIwheel/Server',f_setup.WheelIndiServer.Text);
     config.SetValue('/INDIwheel/ServerPort',f_setup.WheelIndiPort.Text);
     if f_setup.WheelIndiDevice.Text<>'' then config.SetValue('/INDIwheel/Device',f_setup.WheelIndiDevice.Text);
