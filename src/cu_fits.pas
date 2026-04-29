@@ -2770,25 +2770,11 @@ begin
 end;
 
 procedure TFits.ApplyDark;
-var drkexp,expratio: double;
 begin
   if (FDarkOn) then begin
     if (FDark<>nil) then begin
       if (SameFormat(FDark)) then begin
          {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'apply dark');{$endif}
-         if FDark.FFitsInfo.stackexp>0 then
-           drkexp:=FDark.FFitsInfo.stackexp
-         else if FDark.FFitsInfo.exptime>0 then
-           drkexp:=FDark.FFitsInfo.exptime
-         else
-           drkexp:=FFitsInfo.exptime;
-         expratio:=min(FDarkExp,FFitsInfo.exptime)/drkexp;
-         // rudimentary dark scaling, should use a bias, but this work not too bad when scaling down, so take the dark with max exposure time.
-         // all the values are double, this make no problem scaling back and forth.
-         if abs(expratio-1)>0.1 then begin
-           FDark.Mult(expratio);
-           FDark.FFitsInfo.stackexp:=FFitsInfo.exptime;
-         end;
          Math(FDark,moSub);
          FDarkProcess:=true;
          FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Dark subtracted','');
