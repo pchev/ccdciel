@@ -1,10 +1,10 @@
 object f_dark: Tf_dark
   Left = 369
-  Height = 254
+  Height = 278
   Top = 30
   Width = 301
   Caption = 'f_dark'
-  ClientHeight = 254
+  ClientHeight = 278
   ClientWidth = 301
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
@@ -13,7 +13,7 @@ object f_dark: Tf_dark
   object MaxExposure: TSpinEdit
     Left = 200
     Height = 32
-    Top = 8
+    Top = 32
     Width = 84
     MaxValue = 60
     OnChange = TotalChange
@@ -25,7 +25,7 @@ object f_dark: Tf_dark
     AnchorSideTop.Side = asrCenter
     Left = 8
     Height = 18
-    Top = 15
+    Top = 39
     Width = 56
     Caption = 'Exp. max'
     ParentColor = False
@@ -35,7 +35,7 @@ object f_dark: Tf_dark
     AnchorSideTop.Side = asrCenter
     Left = 8
     Height = 18
-    Top = 55
+    Top = 79
     Width = 71
     Caption = 'Stack count'
     ParentColor = False
@@ -43,7 +43,7 @@ object f_dark: Tf_dark
   object Stackcount: TSpinEdit
     Left = 200
     Height = 32
-    Top = 48
+    Top = 72
     Width = 84
     MaxValue = 15
     MinValue = 1
@@ -54,7 +54,7 @@ object f_dark: Tf_dark
   object btnStart: TButton
     Left = 200
     Height = 25
-    Top = 108
+    Top = 132
     Width = 84
     Caption = 'Start'
     OnClick = btnStartClick
@@ -63,21 +63,21 @@ object f_dark: Tf_dark
   object ProgressBarStack: TProgressBar
     Left = 8
     Height = 20
-    Top = 184
+    Top = 208
     Width = 276
     TabOrder = 3
   end
   object ProgressBarCount: TProgressBar
     Left = 8
     Height = 20
-    Top = 160
+    Top = 184
     Width = 276
     TabOrder = 4
   end
   object btnCancel: TButton
     Left = 200
     Height = 25
-    Top = 216
+    Top = 240
     Width = 84
     Caption = 'Cancel'
     OnClick = btnCancelClick
@@ -86,7 +86,7 @@ object f_dark: Tf_dark
   object Status: TLabel
     Left = 8
     Height = 18
-    Top = 136
+    Top = 160
     Width = 39
     Caption = 'Status'
     ParentColor = False
@@ -96,7 +96,7 @@ object f_dark: Tf_dark
     AnchorSideTop.Side = asrCenter
     Left = 8
     Height = 18
-    Top = 111
+    Top = 135
     Width = 41
     Caption = 'Label3'
     ParentColor = False
@@ -104,9 +104,20 @@ object f_dark: Tf_dark
   object Label4: TLabel
     Left = 8
     Height = 18
-    Top = 88
+    Top = 112
     Width = 42
     Caption = 'Label4'
     ParentColor = False
+  end
+  object cbMultiExp: TCheckBox
+    Left = 8
+    Height = 22
+    Top = 4
+    Width = 251
+    Caption = 'Multiple dark with different exposure'
+    Checked = True
+    OnChange = cbMultiExpChange
+    State = cbChecked
+    TabOrder = 6
   end
 end

@@ -1673,6 +1673,7 @@ resourcestring
   rsCoverTheCame2 = 'Cover the camera';
   rsRunTerminati = 'Run termination script after every image';
   rsOverwrite = 'Overwrite';
+  rsMultipleDark = 'Multiple dark with different exposure';
 
 implementation
 

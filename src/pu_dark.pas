@@ -36,6 +36,7 @@ type
   Tf_dark = class(TForm)
     btnStart: TButton;
     btnCancel: TButton;
+    cbMultiExp: TCheckBox;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
@@ -47,6 +48,7 @@ type
     Stackcount: TSpinEdit;
     procedure btnCancelClick(Sender: TObject);
     procedure btnStartClick(Sender: TObject);
+    procedure cbMultiExpChange(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormCreate(Sender: TObject);
@@ -98,6 +100,7 @@ begin
   Label1.Caption:=rsMaxExposure;
   Label2.Caption:=rsStackingCoun;
   Label3.Caption:=rsCoverTheCame2;
+  cbMultiExp.Caption:=rsMultipleDark;
 end;
 
 procedure Tf_dark.FormShow(Sender: TObject);
@@ -128,20 +131,36 @@ begin
   if Frunning then CanClose:=false;
 end;
 
+procedure Tf_dark.cbMultiExpChange(Sender: TObject);
+begin
+  if cbMultiExp.Checked then
+    Label1.Caption:=rsMaxExposure
+  else
+    Label1.Caption:=rsExposureTime2;
+end;
+
 procedure Tf_dark.btnStartClick(Sender: TObject);
 begin
   Frunning:=true;
   maxexp:=MaxExposure.Value;
-  nloop:=trunc(LogN(sq2,maxexp))+1;
+  if cbMultiExp.Checked then begin
+    nloop:=trunc(LogN(sq2,maxexp))+1;
+    curloop:=-1;
+    curexp:=0;
+    curft:=BIAS;
+  end
+  else begin
+    nloop:=-1;
+    curloop:=-1;
+    curexp:=maxexp;
+    curft:=DARK;
+  end;
   nstack:=Stackcount.Value;
   ProgressBarCount.Min:=-2;
   ProgressBarCount.Max:=nloop;
   ProgressBarCount.Position:=-1;
   fdark:=TMemoryStream.Create;
   Fcamera.onEndControlExposure:=@EndExposure;
-  curloop:=-1;
-  curexp:=0;
-  curft:=BIAS;
   ProgressBarStack.Min:=-1;
   ProgressBarStack.Max:=nstack;
   ProgressBarStack.Position:=0;
@@ -245,16 +264,26 @@ procedure Tf_dark.TotalChange(Sender: TObject);
 var i,j,k,n: integer;
     tot,texp: double;
 begin
-  n:=trunc(LogN(sq2,MaxExposure.Value))+1;
+  if cbMultiExp.Checked then begin
+    n:=trunc(LogN(sq2,MaxExposure.Value))+1;
+  end
+  else begin
+    n:=-1;
+  end;
   tot:=0;
   k:=2; // extra time for processing and waiting
   for i:=-1 to n do begin
-    if i<0 then
-      texp:=k
-    else if i=n then
-      texp:=MaxExposure.Value+k
-    else
-      texp:=sq2**i+k;
+    if cbMultiExp.Checked then begin
+      if i<0 then
+        texp:=k
+      else if i=n then
+        texp:=MaxExposure.Value+k
+      else
+        texp:=sq2**i+k;
+    end
+    else begin
+      texp:=MaxExposure.Value+k;
+    end;
     for j:=1 to Stackcount.Value do begin
       tot:=tot+texp;
     end;
