@@ -1632,8 +1632,8 @@ begin
    end;
    canvas.textout(0,h2+DoScaleX(20-10),FormatFloat(f1v,-2*scale));
    canvas.textout(0,h2+DoScaleX(40-10),FormatFloat(f1v,-4*scale));
-   canvas.textout(0,h2-DoScaleX(20-10),'+'+FormatFloat(f1v,+2*scale));
-   canvas.textout(0,h2-DoScaleX(40-10),'+'+FormatFloat(f1v,+4*scale)+scaleunit);
+   canvas.textout(0,h2-DoScaleX(20+10),'+'+FormatFloat(f1v,+2*scale));
+   canvas.textout(0,h2-DoScaleX(40+10),'+'+FormatFloat(f1v,+4*scale)+scaleunit);
 
 
 
