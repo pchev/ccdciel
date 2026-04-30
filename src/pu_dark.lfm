@@ -15,9 +15,10 @@ object f_dark: Tf_dark
     Height = 32
     Top = 8
     Width = 84
+    MaxValue = 60
     OnChange = TotalChange
     TabOrder = 0
-    Value = 30
+    Value = 5
   end
   object Label1: TLabel
     AnchorSideTop.Control = MaxExposure
@@ -44,6 +45,8 @@ object f_dark: Tf_dark
     Height = 32
     Top = 48
     Width = 84
+    MaxValue = 15
+    MinValue = 1
     OnChange = TotalChange
     TabOrder = 1
     Value = 5
