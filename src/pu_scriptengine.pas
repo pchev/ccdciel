@@ -237,6 +237,7 @@ type
     function cmd_Wheel_GetFiltersName(var fl:TStringList):string;
     function cmd_Wheel_SetFiltersName(fl:TStringList):string;
     function cmd_SetFilterOffset(f,o: string):string;
+    function cmd_Autofocus_SetExposure(exp:string): string;
     function cmd_Focuser_SetPosition(p:string):string;
     function cmd_Rotator_Sync(p:string):string;
     function cmd_Rotator_Goto(p:string):string;
@@ -2038,6 +2039,17 @@ if i>=0 then begin
   config.SetValue('/Filters/Offset'+IntToStr(i),n);
   result:=msgOK;
 end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Autofocus_SetExposure(exp:string): string;
+begin
+try
+result:=msgFailed;
+AutofocusExposure:=StrToFloat(exp);
+result:=msgOK;
 except
   result:=msgFailed;
 end;

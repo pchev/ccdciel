@@ -18193,6 +18193,7 @@ try
   else if method='CCDTEMP' then result:=result+'"result": '+FormatFloat(f2,f_ccdtemp.CurrentTemperature)
   else if method='CCDCOOLER_POWER' then result:=result+'"result": '+FormatFloat(f2,f_ccdtemp.CurrentCoolerPower)
   else if method='FOCUSERPOSITION' then result:=result+'"result": '+IntToStr(focuser.Position)
+  else if method='AUTOFOCUS_GETEXPOSURE' then result:=result+'"result": '+FormatFloat(f3,AutofocusExposure)
   else if method='ROTATOR_ANGLE' then result:=result+'"result": '+FormatFloat(f2,rotator.Angle)
   else if method='TIMENOW' then result:=result+'"result": "'+FormatDateTime(dateiso,now)+'"'
   else if method='DIRECTORYSEPARATOR' then result:=result+'"result": "'+stringreplace(DirectorySeparator,'\','\\',[rfReplaceAll])+'"'
@@ -18368,6 +18369,12 @@ try
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf2:=trim(value[attrib.IndexOf('params.1')]);
     buf:=f_scriptengine.cmd_SetFilterOffset(buf1,buf2);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='AUTOFOCUS_SETEXPOSURE' then begin
+    CheckParamCount(1);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Autofocus_SetExposure(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='FOCUSER_SETPOSITION' then begin
