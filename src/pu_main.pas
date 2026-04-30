@@ -38,7 +38,7 @@ uses
   fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame, fu_magnifyer, fu_internalguider, fu_profile,
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider, fu_cover, fu_switch, fu_switchpage,
   fu_sequence, fu_planetarium, fu_script, fu_finder, pu_findercalibration, u_ccdconfig, pu_edittargets, pu_scriptengine,
-  fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause, cu_tcpserver, cu_waitthread,
+  fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause, cu_tcpserver, cu_waitthread, pu_dark,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI, pu_handpad, pu_downloadscript,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration, pu_onlineinfo,
   fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator, cu_watchdog, cu_indiwatchdog, pu_sensoranalysis,
@@ -4732,23 +4732,22 @@ begin
 end;
 
 procedure Tf_main.MenuDarkCameraClick(Sender: TObject);
-var bin: integer;
 begin
- f_pause.Caption:='Dark frame';
- f_pause.Text:=rsCoverTheCame+crlf+rsClickContinu;
- if f_pause.Wait then begin
-   bin:=f_preview.Bin;
-   camera.ResetFrame;
-   fits.SetBPM(bpm,0,0,0,0);
-   fits.DarkOn:=false;
-   if camera.ControlExposure(f_preview.Exposure,bin,bin,DARK,ReadoutModeCapture,f_preview.Gain,f_preview.Offset) then begin
-     fits.SaveToFile(ConfigDarkFile);
-     fits.LoadDark(ConfigDarkFile);
-   end
-   else
-     NewMessage(rsExposureFail,1);
- end;
- ShowDarkInfo;
+  if not (camera.Status=devConnected) then exit;
+  camera.ResetFrame;
+  fits.SetBPM(bpm,0,0,0,0);
+  fits.DarkOn:=false;
+  f_dark.camera:=camera;
+  f_dark.Gain:=f_preview.Gain;
+  f_dark.Offset:=f_preview.Offset;
+  f_dark.Binning:=f_preview.Bin;
+  f_dark.filename:=ConfigDarkFile;
+  FormPos(f_dark,mouse.CursorPos.X,mouse.CursorPos.Y);
+  f_dark.ShowModal;
+  if f_dark.ModalResult=mrOK then begin
+    fits.LoadDark(ConfigDarkFile);
+  end;
+  ShowDarkInfo;
 end;
 
 procedure Tf_main.MenuDarkClearClick(Sender: TObject);
@@ -4898,7 +4897,9 @@ begin
     if fits.DarkFrame.HeaderInfo.naxis>2 then MenuDarkInfo2.Caption:=rsFromColorIma
        else MenuDarkInfo2.Caption:=rsFromImage;
     MenuDarkInfo2.Caption:=MenuDarkInfo2.Caption+' '+rsSize+': '+inttostr(fits.DarkFrame.HeaderInfo.naxis1)+'x'+inttostr(fits.DarkFrame.HeaderInfo.naxis2);
-    MenuDarkInfo2.Caption:=MenuDarkInfo2.Caption+', '+rsExposureTime2+': '+FormatFloat(f3,fits.DarkFrame.HeaderInfo.exptime);
+    MenuDarkInfo2.Caption:=MenuDarkInfo2.Caption+', '+rsExposureTime2+': '+FormatFloat(f3,fits.DarkExp[0]);
+    if fits.NumDark>1 then
+      MenuDarkInfo2.Caption:=MenuDarkInfo2.Caption+'...'+FormatFloat(f3,fits.DarkExp[fits.NumDark-1]);
     NewMessage(MenuDarkInfo1.Caption+blank+MenuDarkInfo2.Caption,3);
   end
   else begin
@@ -19043,10 +19044,24 @@ end;
 
 Procedure Tf_main.InternalguiderCaptureDark(Sender: TObject);
 begin
- f_pause.Caption:='Dark frame';
- f_pause.Text:='Cover the guide camera'+crlf+rsClickContinu;
- if f_pause.Wait then begin
-   if autoguider is T_autoguider_internal then T_autoguider_internal(autoguider).InternalguiderCaptureDark;
+ if (autoguider is T_autoguider_internal) and (guidecamera.Status=devConnected) then begin
+   if SameGuiderFinder and FinderPreviewLoop then begin
+     if not FinderCancelPreviewLoop then NewMessage('Wait to stop the finder loop',3);
+     FinderCancelPreviewLoop:=true;
+   end;
+   guidefits.SetBPM(bpm,0,0,0,0);
+   guidefits.DarkOn:=false;
+   f_dark.camera:=guidecamera;
+   f_dark.Gain:=f_internalguider.Gain.Value;
+   f_dark.Offset:=f_internalguider.Offset.Value;
+   f_dark.Binning:=f_internalguider.Binning.Value;
+   f_dark.filename:=ConfigGuiderDarkFile;
+   FormPos(f_dark,mouse.CursorPos.X,mouse.CursorPos.Y);
+   f_dark.ShowModal;
+   if f_dark.ModalResult=mrOK then begin
+     guidefits.LoadDark(ConfigGuiderDarkFile);
+   end;
+   ShowGuiderDarkInfo;
  end;
 end;
 
@@ -19158,7 +19173,7 @@ begin
      {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' Format image data time = '+FormatFloat('0.000',86400*(now-tt)));{$endif}
   end;
 
-  if f_internalguider.FilterNoise and (not InternalguiderCapturingDark) then begin
+  if f_internalguider.FilterNoise then begin
     {$ifdef timing_stdout}tt:=now;{$endif}
     guidefits.MedianFilter;
     {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' Image median filtering time = '+FormatFloat('0.000',86400*(now-tt)));{$endif}
@@ -19196,18 +19211,6 @@ begin
       // process backlash calibration
       T_autoguider_internal(autoguider).BacklashCalibration;
       {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' process backlash calibration time = '+FormatFloat('0.000',86400*(now-tt)));{$endif}
-    end
-    else if InternalguiderCapturingDark then begin
-      // process dark capture
-      if (not guidecamera.AddFrames)or(guidecamera.StackNum<1)or(guidecamera.StackCount>=guidecamera.StackNum) then begin
-        // Stack count reach, save dark and stop
-        guidefits.SaveToFile(ConfigGuiderDarkFile);
-        guidefits.LoadDark(ConfigGuiderDarkFile);
-        ShowGuiderDarkInfo;
-        T_autoguider_internal(autoguider).InternalguiderStop;
-        exit;
-      end;
-      {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' process dark capture time = '+FormatFloat('0.000',86400*(now-tt)));{$endif}
     end
     else begin
       if GuiderAutofocus and f_starprofile.AutofocusRunning then begin
@@ -19251,11 +19254,9 @@ begin
   if (guidefits.DarkFrame<>nil)and(guidefits.DarkFrame.HeaderInfo.valid) then begin
     f_internalguider.LabelDark.Caption:='Dark ';
     f_internalguider.LabelDark.Caption:=f_internalguider.LabelDark.Caption+' '+rsSize+': '+inttostr(guidefits.DarkFrame.HeaderInfo.naxis1)+'x'+inttostr(guidefits.DarkFrame.HeaderInfo.naxis2);
-    f_internalguider.LabelDark.Caption:=f_internalguider.LabelDark.Caption+', '+rsExposureTime2+': ';
-    if guidefits.DarkFrame.HeaderInfo.stackcount>0 then
-      f_internalguider.LabelDark.Caption:=f_internalguider.LabelDark.Caption+FormatFloat(f3,guidefits.DarkFrame.HeaderInfo.stackexp)
-    else
-      f_internalguider.LabelDark.Caption:=f_internalguider.LabelDark.Caption+FormatFloat(f3,guidefits.DarkFrame.HeaderInfo.exptime);
+    f_internalguider.LabelDark.Caption:=f_internalguider.LabelDark.Caption+', '+rsExposureTime2+': '+FormatFloat(f3,guidefits.DarkExp[0]);
+    if guidefits.NumDark>1 then
+       f_internalguider.LabelDark.Caption:=f_internalguider.LabelDark.Caption+'...'+FormatFloat(f3,guidefits.DarkExp[guidefits.NumDark-1]);
     NewMessage(rsInternalGuid+' '+f_internalguider.LabelDark.Caption,3);
   end
   else begin
@@ -20250,11 +20251,23 @@ end;
 
 Procedure Tf_main.FinderCaptureDark(Sender: TObject);
 begin
- f_pause.Caption:='Dark frame';
- f_pause.Text:='Cover the finder camera'+crlf+rsClickContinu;
- if f_pause.Wait then begin
-   f_finder.CaptureDark;
- end;
+  if (findercamera.Status=devConnected) and (not(SameGuiderFinder and InternalguiderRunning)) then begin
+    FinderCapturingDark:=true;
+    finderfits.SetBPM(bpm,0,0,0,0);
+    finderfits.DarkOn:=false;
+    f_dark.camera:=findercamera;
+    f_dark.Gain:=f_finder.Gain.Value;
+    f_dark.Offset:=f_finder.Offset.Value;
+    f_dark.Binning:=f_finder.Binning.Value;
+    f_dark.filename:=ConfigFinderDarkFile;
+    FormPos(f_dark,mouse.CursorPos.X,mouse.CursorPos.Y);
+    f_dark.ShowModal;
+    FinderCapturingDark:=false;
+    if f_dark.ModalResult=mrOK then begin
+      finderfits.LoadDark(ConfigFinderDarkFile);
+    end;
+    ShowFinderDarkInfo;
+  end;
 end;
 
 procedure Tf_main.ShowFinderDarkInfo;
@@ -20262,11 +20275,9 @@ begin
   if (finderfits.DarkFrame<>nil)and(finderfits.DarkFrame.HeaderInfo.valid) then begin
     f_finder.LabelInfo.Caption:='Dark ';
     f_finder.LabelInfo.Caption:=f_finder.LabelInfo.Caption+' '+rsSize+': '+inttostr(finderfits.DarkFrame.HeaderInfo.naxis1)+'x'+inttostr(finderfits.DarkFrame.HeaderInfo.naxis2);
-    f_finder.LabelInfo.Caption:=f_finder.LabelInfo.Caption+', '+rsExposureTime2+': ';
-    if finderfits.DarkFrame.HeaderInfo.stackcount>0 then
-      f_finder.LabelInfo.Caption:=f_finder.LabelInfo.Caption+FormatFloat(f3,finderfits.DarkFrame.HeaderInfo.stackexp)
-    else
-      f_finder.LabelInfo.Caption:=f_finder.LabelInfo.Caption+FormatFloat(f3,finderfits.DarkFrame.HeaderInfo.exptime);
+    f_finder.LabelInfo.Caption:=f_finder.LabelInfo.Caption+', '+rsExposureTime2+': '+FormatFloat(f3,finderfits.DarkExp[0]);
+    if finderfits.NumDark>1 then
+      f_finder.LabelInfo.Caption:=f_finder.LabelInfo.Caption+'...'+FormatFloat(f3,finderfits.DarkExp[finderfits.NumDark-1]);
     NewMessage(rsFinder+' '+f_finder.LabelInfo.Caption,3);
   end
   else begin
@@ -20432,21 +20443,10 @@ begin
      finderfits.LoadStream;
   end;
 
-  if f_finder.FilterNoise and (not FinderCapturingDark) then
+  if f_finder.FilterNoise then
     finderfits.MedianFilter;
 
-  if FinderCapturingDark then begin
-    // process dark capture
-    if (not findercamera.AddFrames)or(findercamera.StackNum<1)or(findercamera.StackCount>=findercamera.StackNum) then begin
-      // Stack count reach, save dark and stop
-      finderfits.SaveToFile(ConfigFinderDarkFile);
-      finderfits.LoadDark(ConfigFinderDarkFile);
-      ShowFinderDarkInfo;
-      f_finder.StopLoop;
-      exit;
-    end;
-  end
-  else if f_finder.cbSaveImages.Checked then begin
+  if f_finder.cbSaveImages.Checked then begin
     // save image
     if CurrentSequenceDirectory<>'' then
       fn:=CurrentSequenceDirectory
@@ -20475,7 +20475,7 @@ begin
   f_finder.visu.DrawHistogram(finderfits,true,true);
   DrawFinderImage(displayimage);
   // start next exposure
-  if FinderPreviewLoop and (not CancelPreviewLoop) then
+  if FinderPreviewLoop and (not FinderCancelPreviewLoop) then
     Application.QueueAsyncCall(@f_finder.StartExposureAsync,0)
   else
     f_finder.StopLoop(false);

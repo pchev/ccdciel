@@ -87,6 +87,7 @@ type
 
   TSaveFilter = array[0..SaveFilterNum] of string;
 
+  TDoubleArray = array of double;
   TDouble2 = array[1..2] of double;
   TArrayDouble2 = array of TDouble2;
 
@@ -627,9 +628,9 @@ var
   IndistarterConfig, IndistarterConfigdir: string;
   IndistarterAutostart: boolean;
   {internal guider}
-  InternalguiderRunning,InternalguiderCalibrating,InternalguiderCalibratingBacklash,InternalguiderGuiding,StopInternalguider,InternalguiderCapturingDark: boolean;
+  InternalguiderRunning,InternalguiderCalibrating,InternalguiderCalibratingBacklash,InternalguiderGuiding,StopInternalguider: boolean;
   {finder}
-  UseFinder,FinderPreviewLoop,CancelPreviewLoop: boolean;
+  UseFinder,FinderPreviewLoop,FinderCancelPreviewLoop: boolean;
   EditorFontName: string;
   EditorFontSize,EditorFontStyle: integer;
   TabChange: boolean;

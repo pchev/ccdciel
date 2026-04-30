@@ -121,7 +121,6 @@ type
     procedure StartLoop;
     procedure StopLoop(abort: boolean=true);
     function Snapshot(exp: double; fn: string):boolean;
-    procedure CaptureDark;
     property Camera: T_camera read FCamera write FCamera;
     property Astrometry: TAstrometry read FAstrometry write FAstrometry;
     property DrawSettingChange: boolean read FDrawSettingChange write FDrawSettingChange;
@@ -219,45 +218,28 @@ end;
 procedure Tf_finder.StartLoop;
 begin
   FinderPreviewLoop:=true;
-  CancelPreviewLoop:=false;
+  FinderCapturingDark:=false;
+  FinderCancelPreviewLoop:=false;
   BtnPreviewLoop.Caption:=rsStopPreviewL;
   msg(rsStartPreview,0);
-  if FinderCapturingDark then begin
-    FCamera.Fits.SetBPM(bpm,0,0,0,0);
-    FCamera.Fits.DarkOn:=false;
-    FCamera.Fits.FlatOn:=false;
-    FCamera.AddFrames:=true;
-    FCamera.StackNum:=12;
-    FCamera.SaveFrames:=false;
-    FCamera.AlignFrames:=false;
-    FCamera.StackOperation:=1;
-    FCamera.StackAllow8bit:=true;
-    FCamera.StackUseDark:=false;
-    FCamera.StackUseFlat:=false;
-    FCamera.StackDebayer:=false;
-    FCamera.FrameType:=DARK
-  end
-  else begin
-    FCamera.Fits.SetBPM(bpm,0,0,0,0);
-    FCamera.Fits.DarkOn:=true;
-    FCamera.Fits.FlatOn:=false;
-    FCamera.AddFrames:=false;
-    FCamera.StackNum:=-1;
-    FCamera.StackAllow8bit:=false;
-    FCamera.SaveFrames:=false;
-    FCamera.AlignFrames:=false;
-    FCamera.FrameType:=LIGHT;
-  end;
+  FCamera.Fits.SetBPM(bpm,0,0,0,0);
+  FCamera.Fits.DarkOn:=true;
+  FCamera.Fits.FlatOn:=false;
+  FCamera.AddFrames:=false;
+  FCamera.StackNum:=-1;
+  FCamera.StackAllow8bit:=false;
+  FCamera.SaveFrames:=false;
+  FCamera.AlignFrames:=false;
+  FCamera.FrameType:=LIGHT;
   Application.QueueAsyncCall(@StartExposureAsync,0);
 end;
 
 procedure Tf_finder.StopLoop(abort: boolean=true);
 begin
-  FinderCapturingDark:=false;
   FinderPreviewLoop:=false;
   if abort then FCamera.AbortExposure;
   BtnPreviewLoop.Caption:=rsStartPreview;
-  msg(rsStopPreviewL,3);
+  if abort then msg(rsStopPreviewL,3);
   ClearMsgTimer.Enabled:=true;
 end;
 
@@ -284,13 +266,8 @@ begin
           FCamera.Offset:=LoopOffset;
      end;
    end;
-   if FinderCapturingDark then begin
-     if FCamera.FrameType<>DARK then FCamera.FrameType:=DARK;
-   end
-   else begin
-     if FCamera.FrameType<>LIGHT then FCamera.FrameType:=LIGHT;
-     FCamera.Fits.DarkOn:=true;
-   end;
+   if FCamera.FrameType<>LIGHT then FCamera.FrameType:=LIGHT;
+   FCamera.Fits.DarkOn:=true;
    FCamera.ObjectName:=rsFinderCamera;
    FCamera.StartExposure(LoopExp);
  end
@@ -508,21 +485,6 @@ try
 except
   result:=false;
 end;
-end;
-
-procedure Tf_finder.CaptureDark;
-begin
-  if FCamera.Status<>devConnected then
-  begin
-    msg('Finder: Finder camera not connected!',1);
-    exit;
-  end;
-  if FinderPreviewLoop then begin
-    StopLoop;
-    wait(5);
-  end;
-  FinderCapturingDark:=true;
-  StartLoop;
 end;
 
 procedure Tf_finder.SetFilterNoise(value:Boolean);

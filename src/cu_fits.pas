@@ -166,7 +166,8 @@ type
     FStarList: TStarList;
     FDark: TFits;
     FDarkOn: boolean;
-    FDarkExp: double;
+    FNumDark: integer;
+    FDarkExp: TDoubleArray;
     FFlat: TFits;
     FFlatOn: boolean;
     FDarkProcess, FBPMProcess, FFlatProcess, FPrivateDark, FPrivateFlat, FNoiseProcess: boolean;
@@ -276,6 +277,8 @@ type
      property DarkProcess: boolean read FDarkProcess;
      property DarkOn: boolean read FDarkOn write FDarkOn;
      property DarkFrame: TFits read FDark write FDark;
+     property NumDark: integer read FNumDark;
+     property DarkExp: TDoubleArray read FDarkExp;
      property PrivateDark: boolean read FPrivateDark write FPrivateDark;
      property FlatProcess: boolean read FFlatProcess;
      property FlatOn: boolean read FFlatOn write FFlatOn;
@@ -621,7 +624,7 @@ if (ext=-1) and searchextend then begin  // search eventual extensions
     if naxis>1 then size:=size*naxis2;
     if naxis>2 then size:=size*naxis3;
     if size>0 then begin
-      size:=(trunc(size/2880)+1)*2880;
+      size:=(trunc(size/2880))*2880;
     end;
   end;
   FNumExtend:=GetExtend(ff,ff.position,size,FNumExtend);
@@ -730,7 +733,7 @@ try
            if naxis>1 then extsize:=extsize*naxis2;
            if naxis>2 then extsize:=extsize*naxis3;
            if extsize>0 then begin
-             extsize:=(trunc(extsize/2880)+1)*2880;
+             extsize:=(trunc(extsize/2880))*2880;
              ff.position:=ff.position+extsize;
            end;
          end;
@@ -1620,6 +1623,7 @@ FBPMProcess:=false;
 FNoiseProcess:=false;
 FDarkProcess:=false;
 FDarkOn:=false;
+FNumDark:=0;
 FPrivateDark:=false;
 FFlatProcess:=false;
 FFlatOn:=false;
@@ -1711,7 +1715,7 @@ end;
 
 procedure TFits.SetCurrentExtend(value: integer);
 begin
-  if FStreamValid and Header.MultiExtend and (value>=0) and (value<=header.FNumExtend) then begin
+  if FStreamValid and Header.MultiExtend and (value>=0) and (value<=header.FNumExtend) and (value<>FHeader.FCurrentExtend) then begin
     Fhdr_end:=FHeader.ReadHeader(FStream,value);
     LoadStream;
   end;
@@ -2750,34 +2754,52 @@ begin
 end;
 
 procedure TFits.LoadDark(fn: string);
+var i: integer;
 begin
   FreeDark;
   FDark:=TFits.Create(nil);
   FDark.onMsg:=FonMsg;
   PrivateDark:=true;
   FDark.LoadFromFile(fn);
-  if FDark.FFitsInfo.stackexp>0 then
-    FDarkExp:=FDark.FFitsInfo.stackexp
-  else if FDark.FFitsInfo.exptime>0 then
-    FDarkExp:=FDark.FFitsInfo.exptime
-  else
-    FDarkExp:=1;
+  FNumDark:=FDark.NumExtend+1;
+  SetLength(FDarkExp,FNumDark);
+  for i:=0 to FNumDark-1 do begin
+    FDark.CurrentExtend:=i;
+    if FDark.FFitsInfo.stackexp>0 then
+      FDarkExp[i]:=FDark.FFitsInfo.stackexp
+    else if FDark.FFitsInfo.exptime>0 then
+      FDarkExp[i]:=FDark.FFitsInfo.exptime
+    else
+      FDarkExp[i]:=0;
+  end;
 end;
 
 procedure TFits.FreeDark;
 begin
   if FPrivateDark and (FDark<>nil) then FreeAndNil(FDark);
+  FNumDark:=0;
+  SetLength(FDarkExp,0);
 end;
 
 procedure TFits.ApplyDark;
+var i,n: integer;
 begin
   if (FDarkOn) then begin
     if (FDark<>nil) then begin
       if (SameFormat(FDark)) then begin
          {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'apply dark');{$endif}
+         n:=0;
+         if FNumDark>1 then begin
+           for i:=0 to FNumDark-1 do begin
+             if FDarkExp[i]>FFitsInfo.exptime then
+                break;
+             n:=i;
+           end;
+           FDark.CurrentExtend:=n;
+         end;
          Math(FDark,moSub);
          FDarkProcess:=true;
-         FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Dark subtracted','');
+         FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Dark subtracted, dark exposure='+FormatFloat(f1,FDarkExp[n]),'');
       end
       else begin
          FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Dark not applied, not the same format','');

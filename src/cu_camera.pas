@@ -108,7 +108,7 @@ T_camera = class(TComponent)
     FTargetRA,FTargetDE: Double;
     FCoordinateOrigin: string;
     FCameraTimeout: integer;
-    WaitExposure, ControlExposureOK: boolean;
+    WaitExposure, FControlExposureOK: boolean;
     procedure msg(txt: string; level:integer=3);
     procedure NewImage;
     procedure TryNextExposure(Data: PtrInt);
@@ -345,6 +345,7 @@ T_camera = class(TComponent)
     property FullWellCapacity: double read GetFullWellCapacity;
     property Aperture: double read GetAperture;
     property FocaleLength: double read GetFocaleLength;
+    property ControlExposureOK: boolean read FControlExposureOK;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onExposureProgress: TNotifyNum read FonExposureProgress write FonExposureProgress;
@@ -1307,7 +1308,7 @@ if Status=devConnected then begin
   if (pbinx<>BinX)or(pbiny<>BinY) then SetBinning(pbinx,pbiny);
   WaitExposure:=true;
   ExpectedStop:=false;
-  ControlExposureOK:=false;
+  FControlExposureOK:=false;
   AddFrames:=false;
   if CanSetGain then begin
     if hasGainISO and (pgain<>NullInt) then begin
@@ -1328,7 +1329,7 @@ if Status=devConnected then begin
     Sleep(100);
     if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
   end;
-  result:=ControlExposureOK;
+  result:=FControlExposureOK;
   onNewImage:=SaveonNewImage;
   if result and Assigned(SaveonNewImage) then SaveonNewImage(self);
   if not quiet then Wait(1);
@@ -1337,7 +1338,7 @@ end;
 
 procedure T_camera.EndExposure(Sender: TObject);
 begin
-  ControlExposureOK:=true;
+  FControlExposureOK:=true;
   WaitExposure:=false;
   if assigned(FonEndControlExposure) then FonEndControlExposure(self);
 end;

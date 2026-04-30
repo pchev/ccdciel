@@ -1669,6 +1669,8 @@ resourcestring
   rsSlewingToFin = 'Slewing to final position';
   rsRetryWithAnO = 'Retry with an offset';
   rsPreviousVers = 'Previous version copied to';
+  rsTotalExecuti = 'Total execution time';
+  rsCoverTheCame2 = 'Cover the camera';
 
 implementation
 

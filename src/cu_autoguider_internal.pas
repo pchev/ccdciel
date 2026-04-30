@@ -135,7 +135,6 @@ type
     procedure InternalCalibration;
     procedure BacklashCalibration;
     procedure InternalCalibrationPhase2;
-    procedure InternalguiderCaptureDark;
     procedure ParameterChange(txt: string);
     procedure SetExposureStartTime;
     Procedure StartGuideExposureAsync(Data: PtrInt);
@@ -229,7 +228,6 @@ begin
   InternalguiderGuiding:=false;
   InternalguiderCalibrating:=false;
   InternalguiderCalibratingBacklash:=false;
-  InternalguiderCapturingDark:=false;
   InternalguiderCalibratingMeridianFlip:=false;
   frame_size:=999999;
   TimerWaitPulseGuiding:=TSimpleTimer.Create(nil);
@@ -999,8 +997,8 @@ end;
 procedure T_autoguider_internal.InternalguiderLoop;
 begin
   if SameGuiderFinder and FinderPreviewLoop then begin
-    if not CancelPreviewLoop then msg('Wait to stop the finder loop',3);
-    CancelPreviewLoop:=true;
+    if not FinderCancelPreviewLoop then msg('Wait to stop the finder loop',3);
+    FinderCancelPreviewLoop:=true;
     WaitExecute(1000, @InternalguiderLoopAsync,0);
     exit;
   end;
@@ -1017,30 +1015,14 @@ begin
   Finternalguider.btnSetStarOffset.Enabled:=true;
   Finternalguider.btnSetMultiStarOffset.Enabled:=true;
   Finternalguider.rgSpectroStrategy.Enabled:=true;
-  if InternalguiderCapturingDark then begin
-    FGuideFits.SetBPM(bpm,0,0,0,0);
-    FGuideFits.DarkOn:=false;
-    FGuideFits.FlatOn:=false;
-    FCamera.AddFrames:=true;
-    FCamera.StackNum:=12;
-    FCamera.SaveFrames:=false;
-    FCamera.AlignFrames:=false;
-    FCamera.StackOperation:=1;
-    FCamera.StackAllow8bit:=true;
-    FCamera.StackUseDark:=false;
-    FCamera.StackUseFlat:=false;
-    FCamera.StackDebayer:=false;
-  end
-  else begin
-    FGuideFits.SetBPM(bpm,0,0,0,0);
-    FGuideFits.DarkOn:=true;
-    FGuideFits.FlatOn:=false;
-    FCamera.AddFrames:=false;
-    FCamera.StackNum:=-1;
-    FCamera.StackAllow8bit:=false;
-    FCamera.SaveFrames:=false;
-    FCamera.AlignFrames:=false;
-  end;
+  FGuideFits.SetBPM(bpm,0,0,0,0);
+  FGuideFits.DarkOn:=true;
+  FGuideFits.FlatOn:=false;
+  FCamera.AddFrames:=false;
+  FCamera.StackNum:=-1;
+  FCamera.StackAllow8bit:=false;
+  FCamera.SaveFrames:=false;
+  FCamera.AlignFrames:=false;
   Binning:=Finternalguider.Binning.Value;
   if not (SameGuiderFinder or finternalguider.SpectroFunctions) then Fcamera.ResetFrame;
   FRecoveringCameraCount:=0;
@@ -1098,15 +1080,9 @@ if (FCamera.Status=devConnected) then begin
          FCamera.Offset:=finternalguider.Offset.Value;
     end;
   end;
-  if InternalguiderCapturingDark then begin
-    if (FCamera.FrameType<>DARK) then
-      FCamera.FrameType:=DARK
-  end
-  else begin
-    if FCamera.FrameType<>LIGHT then
-      FCamera.FrameType:=LIGHT;
-    FGuideFits.DarkOn:=true;
-  end;
+  if FCamera.FrameType<>LIGHT then
+    FCamera.FrameType:=LIGHT;
+  FGuideFits.DarkOn:=true;
   FCamera.ObjectName:=rsGuide;
   FCamera.GuidePixelScale:=Finternalguider.pixel_size;
   if Finternalguider.SpectroFunctions then begin
@@ -1910,7 +1886,7 @@ end;
 
 procedure T_autoguider_internal.InternalguiderStop(verbose: boolean=True);
 begin
-  if verbose and InternalguiderGuiding and (not InternalguiderCapturingDark)and(not StopInternalguider) then begin
+  if verbose and InternalguiderGuiding and (not StopInternalguider) then begin
     WriteLog('Guiding Ends at '+FormatDateTime('YYYY-MM-DD HH:NN:SS',now));
     WriteLog('');
   end;
@@ -1926,7 +1902,6 @@ begin
   InternalguiderGuiding:=false;
   InternalguiderCalibrating:=false;
   InternalguiderCalibratingBacklash:=false;
-  InternalguiderCapturingDark:=false;
   InternalguiderCalibratingMeridianFlip:=false;
   Finternalguider.Binning.enabled:=true;
   Finternalguider.ButtonLoop.enabled:=true;
@@ -2602,20 +2577,6 @@ begin
   end;
   except
   end;
-end;
-
-procedure T_autoguider_internal.InternalguiderCaptureDark;
-begin
-  if FCamera.Status<>devConnected then
-  begin
-    msg('Internal guider: Guide camera not connected!',1);
-    exit;
-  end;
-
-  StopInternalguider:=false;
-  InternalguiderCapturingDark:=true;
-  SetStatus('Capture dark',GUIDER_BUSY);
-  InternalguiderLoop;
 end;
 
 procedure T_autoguider_internal.NewImageReceived;
