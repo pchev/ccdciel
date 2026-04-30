@@ -1,0 +1,109 @@
+object f_dark: Tf_dark
+  Left = 369
+  Height = 254
+  Top = 30
+  Width = 301
+  Caption = 'f_dark'
+  ClientHeight = 254
+  ClientWidth = 301
+  OnClose = FormClose
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  OnShow = FormShow
+  object MaxExposure: TSpinEdit
+    Left = 200
+    Height = 32
+    Top = 8
+    Width = 84
+    OnChange = TotalChange
+    TabOrder = 0
+    Value = 30
+  end
+  object Label1: TLabel
+    AnchorSideTop.Control = MaxExposure
+    AnchorSideTop.Side = asrCenter
+    Left = 8
+    Height = 18
+    Top = 15
+    Width = 56
+    Caption = 'Exp. max'
+    ParentColor = False
+  end
+  object Label2: TLabel
+    AnchorSideTop.Control = Stackcount
+    AnchorSideTop.Side = asrCenter
+    Left = 8
+    Height = 18
+    Top = 55
+    Width = 71
+    Caption = 'Stack count'
+    ParentColor = False
+  end
+  object Stackcount: TSpinEdit
+    Left = 200
+    Height = 32
+    Top = 48
+    Width = 84
+    OnChange = TotalChange
+    TabOrder = 1
+    Value = 5
+  end
+  object btnStart: TButton
+    Left = 200
+    Height = 25
+    Top = 108
+    Width = 84
+    Caption = 'Start'
+    OnClick = btnStartClick
+    TabOrder = 2
+  end
+  object ProgressBarStack: TProgressBar
+    Left = 8
+    Height = 20
+    Top = 184
+    Width = 276
+    TabOrder = 3
+  end
+  object ProgressBarCount: TProgressBar
+    Left = 8
+    Height = 20
+    Top = 160
+    Width = 276
+    TabOrder = 4
+  end
+  object btnCancel: TButton
+    Left = 200
+    Height = 25
+    Top = 216
+    Width = 84
+    Caption = 'Cancel'
+    OnClick = btnCancelClick
+    TabOrder = 5
+  end
+  object Status: TLabel
+    Left = 8
+    Height = 18
+    Top = 136
+    Width = 39
+    Caption = 'Status'
+    ParentColor = False
+  end
+  object Label3: TLabel
+    AnchorSideTop.Control = btnStart
+    AnchorSideTop.Side = asrCenter
+    Left = 8
+    Height = 18
+    Top = 111
+    Width = 41
+    Caption = 'Label3'
+    ParentColor = False
+  end
+  object Label4: TLabel
+    Left = 8
+    Height = 18
+    Top = 88
+    Width = 42
+    Caption = 'Label4'
+    ParentColor = False
+  end
+end
