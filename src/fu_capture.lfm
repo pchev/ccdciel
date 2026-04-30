@@ -347,6 +347,14 @@ object f_capture: Tf_capture
         NullValue = 0
         Value = 1
       end
+      object cbOverwrite: TCheckBox
+        Left = 203
+        Height = 22
+        Top = 1
+        Width = 85
+        Caption = 'Overwrite'
+        TabOrder = 1
+      end
     end
     object Panel6: TPanel
       Left = 1

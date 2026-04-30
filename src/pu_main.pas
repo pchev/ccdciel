@@ -5566,6 +5566,8 @@ begin
     FileNameOpt[i]:=TFilenameList(round(config.GetValue('/Files/FileNameOpt'+inttostr(i),i)));
     FileNameActive[i]:=config.GetValue('/Files/FileNameActive'+inttostr(i),i in [0,1,5]);
   end;
+  for i:=0 to FileNameCount-1 do
+    if (FileNameOpt[i]=fnDate) then f_capture.cbOverwrite.Visible:= not FileNameActive[i];
   FilenameSep:=config.GetValue('/Files/FileNameSep','_');
   FilenameSeqSep:=config.GetValue('/Files/FileNameSeqSep','_');
   FitsFileExt:=config.GetValue('/Files/FitsFileExt','.fits');
@@ -12661,7 +12663,7 @@ end;
 procedure Tf_main.CameraSaveNewImage;
 var fn,fd,buf: string;
     framestr,objectstr,binstr,expstr,filterstr: string;
-    i: integer;
+    i, forceseq: integer;
 begin
 try
  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Camera save new image');{$endif}
@@ -12683,7 +12685,11 @@ try
  fd:=CapturePath(fits,framestr,objectstr,expstr,binstr,false,f_sequence.Running,camera.IsDSLR,f_sequence.StepTotalCount,f_sequence.StepRepeatCount);
  ForceDirectoriesUTF8(fd);
  // construct file name
- fn:=CaptureFilename(fits,fd,framestr,objectstr,expstr,binstr,f_sequence.Running,camera.IsDSLR);
+ if f_capture.Overwrite then
+   forceseq:=f_capture.SeqCount
+ else
+   forceseq:=-1;
+ fn:=CaptureFilename(fits,fd,framestr,objectstr,expstr,binstr,f_sequence.Running,camera.IsDSLR,forceseq);
  // save the file
  if (SaveFormat=ffFITS) or (FileStackFloat and fits.Header.Valueof('STACKCNT',i) and (i>1)) then begin
    fn:=slash(fd)+fn+FitsFileExt;

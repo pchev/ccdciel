@@ -1672,6 +1672,7 @@ resourcestring
   rsTotalExecuti = 'Total execution time';
   rsCoverTheCame2 = 'Cover the camera';
   rsRunTerminati = 'Run termination script after every image';
+  rsOverwrite = 'Overwrite';
 
 implementation
 

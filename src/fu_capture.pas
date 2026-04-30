@@ -37,6 +37,7 @@ type
     Binning: TComboBox;
     BtnStart: TButton;
     cbEndScriptImage: TCheckBox;
+    cbOverwrite: TCheckBox;
     CheckBoxFocusHFD: TCheckBox;
     CheckBoxFocusTemp: TCheckBox;
     CheckBoxDither: TCheckBox;
@@ -121,6 +122,7 @@ type
     function GetEndScript:string;
     function GetEndScriptImage:boolean;
     procedure ComputeTotalTime;
+    function GetOverwrite:boolean;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -131,6 +133,7 @@ type
     procedure setCustomFrameType;
     property Mount: T_mount read FMount write FMount;
     property Running: boolean read Frunning write Frunning;
+    property Overwrite: boolean read GetOverwrite;
     property SeqCount: Integer read FSeqCount write FSeqCount;
     property StackCount: Integer read FStackCount write FStackCount;
     property ExposureTime: double read FExposureTime write SetExposureTime;
@@ -203,6 +206,7 @@ begin
   Label6.Caption:=rsFStop;
   Label3.Caption:=rsObject;
   Label4.Caption:=rsCount;
+  cbOverwrite.Caption:=rsOverwrite;
   Label5.Caption:=rsType;
   CheckBoxDither.Caption:=rsDitherEvery;
   CheckBoxFocus.Caption:=rsFocusEvery;
@@ -294,7 +298,8 @@ begin
         if ExposureTime>FlatMaxExp then ExposureTime:=FlatMaxExp;
       end;
       if Assigned(FonMsg) then FonMsg(rsStartCapture,2);
-      EarlyNextExposure:= ConfigExpEarlyStart and (ExposureTime>=1) and ((TFrameType(cbFrameType.ItemIndex)=LIGHT)or(TFrameType(cbFrameType.ItemIndex)=DARK)or(cbFrameType.ItemIndex>ord(high(TFrameType))));
+      EarlyNextExposure:= ConfigExpEarlyStart and (ExposureTime>=1) and (not Overwrite)
+          and ((TFrameType(cbFrameType.ItemIndex)=LIGHT)or(TFrameType(cbFrameType.ItemIndex)=DARK)or(cbFrameType.ItemIndex>ord(high(TFrameType))));
       if PanelStack.Visible and (StackNum.Value>1) and Assigned(FonResetStack) then FonResetStack(self);
       if Assigned(FonStartExposure) then FonStartExposure(self);
       if (not Frunning) and Assigned(FonMsg) then FonMsg(rsCannotStartC,0);
@@ -369,6 +374,11 @@ begin
   OffsetEdit.Value:=value;
 end;
 
+function Tf_capture.GetOverwrite:boolean;
+begin
+  result:= cbOverwrite.Visible and cbOverwrite.Checked;
+end;
+
 procedure Tf_capture.CheckLight(Sender: TObject);
 begin
   if cbFrameType.ItemIndex<>0 then begin
@@ -410,6 +420,7 @@ begin
     else
       FRunScript(cbEndScript.text,ConfigDir,'1');
   end;
+  cbOverwrite.Checked:=false;
   EarlyNextExposure:=false;
   CameraProcessingImage:=false;
   led.Brush.Color:=clGray;

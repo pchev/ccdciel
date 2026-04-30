@@ -384,7 +384,7 @@ type
   function PackFits(unpackedfilename,packedfilename: string; out rmsg:string):integer;
   function UnpackFits(packedfilename: string; var ImgStream:TMemoryStream; out rmsg:string):integer;
   function CapturePath(f:TFits; DefFrameType,DefObject,DefExp,DefBin:string; preview,sequence,dslr: boolean; StepTotalCount,StepRepeatCount:integer):string;
-  function CaptureFilename(f:TFits; Directory,DefFrameType,DefObject,DefExp,DefBin:string; sequence,dslr:boolean):string;
+  function CaptureFilename(f:TFits; Directory,DefFrameType,DefObject,DefExp,DefBin:string; sequence,dslr:boolean; seqnum:integer=-1):string;
   procedure HistLevel(pos,sum,start,maxp: integer; hist:THistogram; out imin,imax: double);
   procedure HistStats(hist:THistogram; out maxhist,maxp,sumhist,starthist,stophist:integer);
 
@@ -5166,7 +5166,7 @@ end;
 result:=fd;
 end;
 
-function CaptureFilename(f:TFits; Directory,DefFrameType,DefObject,DefExp,DefBin:string; sequence,dslr:boolean):string;
+function CaptureFilename(f:TFits; Directory,DefFrameType,DefObject,DefExp,DefBin:string; sequence,dslr:boolean; seqnum:integer=-1):string;
 var dt: Tdatetime;
     fn,buf,fileseqstr,fileseqext,blankrep,dateobs: string;
     framestr,objectstr,binstr,expstr,filterstr: string;
@@ -5264,21 +5264,28 @@ begin
      delete(fn,length(fn),1); // remove last _
   // sequence number must always be at the end
   if UseFileSequenceNumber then begin
-    fileseqnum:=1;
-    fileseqstr:=IntToStr(fileseqnum);
-    if (SaveFormat=ffFITS) or FileStackFloat then begin
-      if FilePack then
-        fileseqext:=FitsFileExt+'.fz'
-      else
-        fileseqext:=FitsFileExt;
-    end
-    else
-      fileseqext:='.tif';
-    if FileSequenceWidth>0 then fileseqstr:=PadZeros(IntToStr(fileseqnum),FileSequenceWidth);
-    while FileExistsUTF8(slash(Directory)+fn+FilenameSeqSep+fileseqstr+fileseqext) do begin
-      inc(fileseqnum);
+    if seqnum>0 then begin
+      fileseqnum:=seqnum;
       fileseqstr:=IntToStr(fileseqnum);
       if FileSequenceWidth>0 then fileseqstr:=PadZeros(IntToStr(fileseqnum),FileSequenceWidth);
+    end
+    else begin
+      fileseqnum:=1;
+      fileseqstr:=IntToStr(fileseqnum);
+      if (SaveFormat=ffFITS) or FileStackFloat then begin
+        if FilePack then
+          fileseqext:=FitsFileExt+'.fz'
+        else
+          fileseqext:=FitsFileExt;
+      end
+      else
+        fileseqext:='.tif';
+      if FileSequenceWidth>0 then fileseqstr:=PadZeros(IntToStr(fileseqnum),FileSequenceWidth);
+      while FileExistsUTF8(slash(Directory)+fn+FilenameSeqSep+fileseqstr+fileseqext) do begin
+        inc(fileseqnum);
+        fileseqstr:=IntToStr(fileseqnum);
+        if FileSequenceWidth>0 then fileseqstr:=PadZeros(IntToStr(fileseqnum),FileSequenceWidth);
+      end;
     end;
     fn:=fn+FilenameSeqSep+fileseqstr;
   end;
