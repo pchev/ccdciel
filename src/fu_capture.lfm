@@ -1,23 +1,23 @@
 object f_capture: Tf_capture
   Left = 0
-  Height = 524
+  Height = 605
   Top = 0
-  Width = 218
+  Width = 271
   AutoSize = True
   ChildSizing.ControlsPerLine = 1
-  ClientHeight = 524
-  ClientWidth = 218
+  ClientHeight = 605
+  ClientWidth = 271
   ParentFont = False
   TabOrder = 0
   object Panel1: TPanel
     Left = 0
-    Height = 504
+    Height = 585
     Top = 20
-    Width = 218
+    Width = 271
     Align = alClient
     AutoSize = True
-    ClientHeight = 504
-    ClientWidth = 218
+    ClientHeight = 585
+    ClientWidth = 271
     ParentColor = False
     ParentFont = False
     TabOrder = 0
@@ -26,13 +26,13 @@ object f_capture: Tf_capture
       Left = 1
       Height = 29
       Top = 5
-      Width = 216
+      Width = 269
       Align = alTop
       BorderSpacing.Top = 4
       BevelOuter = bvNone
       Caption = ' '
       ClientHeight = 29
-      ClientWidth = 216
+      ClientWidth = 269
       ParentFont = False
       TabOrder = 0
       object ExpTime: TComboBox
@@ -79,13 +79,12 @@ object f_capture: Tf_capture
       Left = 1
       Height = 29
       Top = 272
-      Width = 216
+      Width = 269
       Align = alTop
       BorderSpacing.Top = 4
       BevelOuter = bvNone
-      Caption = ' '
       ClientHeight = 29
-      ClientWidth = 216
+      ClientWidth = 269
       ParentFont = False
       TabOrder = 10
       object Label7: TLabel
@@ -120,12 +119,12 @@ object f_capture: Tf_capture
       Left = 1
       Height = 68
       Top = 38
-      Width = 216
+      Width = 269
       Align = alTop
       BorderSpacing.Top = 4
       BevelOuter = bvNone
       ClientHeight = 68
-      ClientWidth = 216
+      ClientWidth = 269
       ParentFont = False
       TabOrder = 8
       Visible = False
@@ -203,13 +202,13 @@ object f_capture: Tf_capture
       Left = 1
       Height = 29
       Top = 110
-      Width = 216
+      Width = 269
       Align = alTop
       BorderSpacing.Top = 4
       BevelOuter = bvNone
       Caption = ' '
       ClientHeight = 29
-      ClientWidth = 216
+      ClientWidth = 269
       ParentFont = False
       TabOrder = 1
       object Binning: TComboBox
@@ -244,12 +243,12 @@ object f_capture: Tf_capture
       Left = 1
       Height = 28
       Top = 240
-      Width = 216
+      Width = 269
       Align = alTop
       BorderSpacing.Top = 4
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 216
+      ClientWidth = 269
       ParentFont = False
       TabOrder = 9
       Visible = False
@@ -269,6 +268,7 @@ object f_capture: Tf_capture
         Height = 28
         Top = 0
         Width = 101
+        Anchors = [akTop, akLeft, akRight, akBottom]
         Constraints.MaxHeight = 28
         ItemHeight = 24
         ParentFont = False
@@ -279,12 +279,12 @@ object f_capture: Tf_capture
       Left = 1
       Height = 28
       Top = 143
-      Width = 216
+      Width = 269
       Align = alTop
       BorderSpacing.Top = 4
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 216
+      ClientWidth = 269
       ParentFont = False
       TabOrder = 2
       object Fname: TEdit
@@ -312,13 +312,13 @@ object f_capture: Tf_capture
       Left = 1
       Height = 28
       Top = 175
-      Width = 216
+      Width = 269
       Align = alTop
       BorderSpacing.Top = 4
       BevelOuter = bvNone
       Caption = ' '
       ClientHeight = 28
-      ClientWidth = 216
+      ClientWidth = 269
       ParentFont = False
       TabOrder = 3
       object Label4: TLabel
@@ -352,12 +352,12 @@ object f_capture: Tf_capture
       Left = 1
       Height = 29
       Top = 207
-      Width = 216
+      Width = 269
       Align = alTop
       BorderSpacing.Top = 4
       BevelOuter = bvNone
       ClientHeight = 29
-      ClientWidth = 216
+      ClientWidth = 269
       ParentFont = False
       TabOrder = 4
       object Label5: TLabel
@@ -396,12 +396,12 @@ object f_capture: Tf_capture
       Left = 1
       Height = 28
       Top = 305
-      Width = 216
+      Width = 269
       Align = alTop
       BorderSpacing.Top = 4
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 216
+      ClientWidth = 269
       ParentFont = False
       TabOrder = 5
       object CheckBoxDither: TCheckBox
@@ -435,12 +435,12 @@ object f_capture: Tf_capture
       Left = 1
       Height = 88
       Top = 337
-      Width = 216
+      Width = 269
       Align = alTop
       BorderSpacing.Top = 4
       BevelOuter = bvNone
       ClientHeight = 88
-      ClientWidth = 216
+      ClientWidth = 269
       ParentColor = False
       ParentFont = False
       TabOrder = 6
@@ -489,61 +489,16 @@ object f_capture: Tf_capture
         TabOrder = 3
       end
     end
-    object Panel10: TPanel
-      Left = 1
-      Height = 32
-      Top = 425
-      Width = 216
-      Align = alTop
-      BevelOuter = bvNone
-      ClientHeight = 32
-      ClientWidth = 216
-      TabOrder = 11
-      object cbEndScript: TComboBox
-        Left = 49
-        Height = 32
-        Top = 0
-        Width = 167
-        Align = alClient
-        BorderSpacing.Left = 8
-        ItemHeight = 18
-        Style = csDropDownList
-        TabOrder = 0
-      end
-      object Panel11: TPanel
-        Left = 0
-        Height = 32
-        Top = 0
-        Width = 41
-        Align = alLeft
-        AutoSize = True
-        BevelOuter = bvNone
-        ClientHeight = 32
-        ClientWidth = 41
-        TabOrder = 1
-        object Label8: TLabel
-          AnchorSideTop.Control = Panel11
-          AnchorSideTop.Side = asrCenter
-          Left = 0
-          Height = 18
-          Top = 7
-          Width = 41
-          Caption = 'Label8'
-          ParentColor = False
-          WordWrap = True
-        end
-      end
-    end
     object Panel9: TPanel
       Left = 1
       Height = 30
-      Top = 461
-      Width = 216
+      Top = 484
+      Width = 269
       Align = alTop
       BorderSpacing.Top = 4
       BevelOuter = bvNone
       ClientHeight = 30
-      ClientWidth = 216
+      ClientWidth = 269
       ParentFont = False
       TabOrder = 7
       object BtnStart: TButton
@@ -584,12 +539,77 @@ object f_capture: Tf_capture
         ParentColor = False
       end
     end
+    object Panel12: TPanel
+      Left = 1
+      Height = 55
+      Top = 425
+      Width = 269
+      Align = alTop
+      BevelOuter = bvNone
+      ClientHeight = 55
+      ClientWidth = 269
+      TabOrder = 11
+      object Panel10: TPanel
+        Left = 0
+        Height = 29
+        Top = 0
+        Width = 269
+        Align = alTop
+        BevelOuter = bvNone
+        ClientHeight = 29
+        ClientWidth = 269
+        TabOrder = 0
+        object cbEndScript: TComboBox
+          Left = 53
+          Height = 29
+          Top = 0
+          Width = 216
+          Align = alClient
+          BorderSpacing.Left = 8
+          ItemHeight = 18
+          Style = csDropDownList
+          TabOrder = 0
+        end
+        object Panel11: TPanel
+          Left = 4
+          Height = 29
+          Top = 0
+          Width = 41
+          Align = alLeft
+          AutoSize = True
+          BorderSpacing.Left = 4
+          BevelOuter = bvNone
+          ClientHeight = 29
+          ClientWidth = 41
+          TabOrder = 1
+          object Label8: TLabel
+            AnchorSideTop.Control = Panel11
+            AnchorSideTop.Side = asrCenter
+            Left = 0
+            Height = 18
+            Top = 5
+            Width = 41
+            Caption = 'Label8'
+            ParentColor = False
+            WordWrap = True
+          end
+        end
+      end
+      object cbEndScriptImage: TCheckBox
+        Left = 4
+        Height = 22
+        Top = 30
+        Width = 272
+        Caption = 'Run termination script after every image'
+        TabOrder = 1
+      end
+    end
   end
   object Title: TLabel
     Left = 0
     Height = 20
     Top = 0
-    Width = 218
+    Width = 271
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -605,7 +625,7 @@ object f_capture: Tf_capture
   object TimerExp: TTimer
     Enabled = False
     OnTimer = TimerExpTimer
-    Left = 96
-    Top = 472
+    Left = 32
+    Top = 552
   end
 end

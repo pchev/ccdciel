@@ -36,6 +36,7 @@ type
   Tf_capture = class(TFrame)
     Binning: TComboBox;
     BtnStart: TButton;
+    cbEndScriptImage: TCheckBox;
     CheckBoxFocusHFD: TCheckBox;
     CheckBoxFocusTemp: TCheckBox;
     CheckBoxDither: TCheckBox;
@@ -45,6 +46,7 @@ type
     LabelTime: TLabel;
     Panel11: TPanel;
     Panel10: TPanel;
+    Panel12: TPanel;
     StackNum: TSpinEditEx;
     Fnumber: TComboBox;
     ISObox: TComboBox;
@@ -117,6 +119,7 @@ type
     procedure SetFrameType(value:integer);
     function GetFrameTypeText:string;
     function GetEndScript:string;
+    function GetEndScriptImage:boolean;
     procedure ComputeTotalTime;
   public
     { public declarations }
@@ -148,6 +151,7 @@ type
     property onResetHFM: TNotifyEvent read FonResetHFM write FonResetHFM;
     property ResetHFM: boolean read FResetHFM write FResetHFM;
     property EndScript: string read GetEndScript;
+    property EndScriptImage: boolean read GetEndScriptImage;
     property onRunScript: TRunScript read FRunScript write FRunScript;
 end;
 
@@ -205,6 +209,7 @@ begin
   CheckBoxFocusTemp.Caption:=rsAutofocusAft2;
   CheckBoxFocusHFD.Caption:=rsAutofocusHFD2;
   Label8.Caption:=rsTerminationS;
+  cbEndScriptImage.Caption:=rsRunTerminati;
   BtnStart.Caption:=rsStart;
   ExpTime.Hint:=rsExposureTime;
   Binning.Hint:=rsCameraBinnin;
@@ -454,6 +459,11 @@ end;
 function Tf_capture.GetEndScript:string;
 begin
   result:=cbEndScript.text;
+end;
+
+function Tf_capture.GetEndScriptImage:boolean;
+begin
+  result:=cbEndScriptImage.Checked;
 end;
 
 procedure Tf_capture.TimerExpTimer(Sender: TObject);

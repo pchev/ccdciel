@@ -12421,6 +12421,10 @@ begin
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'image measurement');{$endif}
      if displayimage and ((not camera.AddFrames)or(camera.StackCount>=camera.StackNum)) then CameraMeasureNewImage;
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'image measurement end');{$endif}
+     // script
+     if f_capture.EndScriptImage and (f_capture.EndScript<>'')and((not camera.AddFrames)or(camera.StackCount>=camera.StackNum)) then begin
+        RunScript(f_capture.EndScript,ConfigDir,'2');
+     end;
      if (not EarlyNextExposure) or SkipEarlyExposure or DomeFlatExposureOK then begin
        // dome flat exposure found, we can continue with early start
        if DomeFlatExposureOK then EarlyNextExposure:=ConfigExpEarlyStart;
