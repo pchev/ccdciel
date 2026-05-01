@@ -137,6 +137,7 @@ begin
     Label1.Caption:=rsMaxExposure
   else
     Label1.Caption:=rsExposureTime2;
+  TotalChange(self);
 end;
 
 procedure Tf_dark.btnStartClick(Sender: TObject);
