@@ -315,7 +315,7 @@ type
   TMedianFilter = class(TThread)
   public
     working: boolean;
-    num, id: integer;
+    num, id, ponderation: integer;
     fits: TFits;
     source: Timafloat;
     procedure Execute; override;
@@ -1308,13 +1308,13 @@ begin
   FreeOnTerminate := False;
   inherited Create(CreateSuspended);
   working := True;
+  ponderation:=1;
 end;
 
 procedure TMedianFilter.Execute;
 var
-  i, j, k, m, n, startline, endline, xs,ys, npix: integer;
-  i1,i2,i3,j1,j2,j3 : integer;
-  t: double;
+  i, j, k, v, w, p, startline, endline, xs,ys, npix: integer;
+  ii,jj: array[1..3] of integer;
   list: array of double;
 begin
 xs:= fits.Fwidth;
@@ -1325,27 +1325,30 @@ if id = (num - 1) then
   endline := ys - 1
 else
   endline := (id + 1) * i - 1;
-npix:=9;
+npix:=9+ponderation-1;
 SetLength(list,npix);
 // process the rows range for this thread
 for i:=startline to endline do begin
-  i1:=max(i-1,0);
-  i2:=i;
-  i3:= min(i+1,ys-1);
+  ii[1]:=max(i-1,0);
+  ii[2]:=i;
+  ii[3]:= min(i+1,ys-1);
   for j := 0 to xs-1 do begin
-     j1:=max(j-1,0);
-     j2:=j;
-     j3:=min(j+1,xs-1);
-     list[0]:=source[0,i1,j1];
-     list[1]:=source[0,i1,j2];
-     list[2]:=source[0,i1,j3];
-     list[3]:=source[0,i2,j1];
-     list[4]:=source[0,i2,j2];
-     list[5]:=source[0,i2,j3];
-     list[6]:=source[0,i3,j1];
-     list[7]:=source[0,i3,j2];
-     list[8]:=source[0,i3,j3];
-     fits.Fimage[0,i2,j2]:=SMedian(list,9,false);
+     jj[1]:=max(j-1,0);
+     jj[2]:=j;
+     jj[3]:=min(j+1,xs-1);
+     k:=0;
+     for v:=1 to 3 do begin
+       for w:=1 to 3 do begin
+         list[k]:=source[0,ii[v],jj[w]];
+         inc(k);
+         if (v=2)and(w=2) then
+           for p:=1 to ponderation-1 do begin
+             list[k]:=source[0,ii[v],jj[w]];
+             inc(k);
+           end;
+       end;
+     end;
+     fits.Fimage[0,ii[2],jj[2]]:=(SMedian(list,npix,false));
   end;
 end;
 working := False;
@@ -2732,6 +2735,7 @@ begin
     thread[i] := TMedianFilter.Create(True);
     thread[i].fits := self;
     thread[i].source:=source;
+    thread[i].ponderation := 5;
     thread[i].num := tc;
     thread[i].id := i;
     thread[i].Start;
