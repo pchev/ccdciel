@@ -2178,6 +2178,7 @@ begin
     if (keyword='BLANK') then blank:=strtofloat(buf);
     if (keyword='FOCALLEN') then focallen:=strtofloat(buf);
     if (keyword='EXPTIME') then exptime:=strtofloat(buf);
+    if (keyword='EXPOSURE') then exptime:=strtofloat(buf);
     if (keyword='STACKEXP') then stackexp:=strtofloat(buf);
     if (keyword='STACKCNT') then stackcount:=StrToInt(buf);
     if (keyword='XPIXSZ') then pixsz1:=strtofloat(buf);
