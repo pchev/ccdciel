@@ -654,7 +654,7 @@ try
   imgok:=false;
   eof:=false;
   eoh:=false;
-  if maxnum=0 then maxnum:=10;
+  if maxnum=0 then maxnum:=25;
   ff.position:=startpos+startoffset;
   repeat
     extpos:=ff.position;
