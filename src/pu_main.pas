@@ -2149,6 +2149,8 @@ begin
   f_scriptengine.onAutomaticAutofocus:=@cmdAutomaticAutofocus;
   f_scriptengine.onAutofocus:=@cmdAutofocus;
   f_scriptengine.DevicesConnection:=f_devicesconnection;
+  f_scriptengine.onConnectDevice:=@ConnectDevice;
+  f_scriptengine.onDisconnectDevice:=@DisconnectDevice;
   f_scriptengine.Preview:=f_preview;
   f_scriptengine.Capture:=f_capture;
   f_scriptengine.Ccdtemp:=f_ccdtemp;
@@ -6588,6 +6590,7 @@ var inditransfer: TIndiTransfert;
     indihost,inditransferdir: string;
     ok: boolean;
 begin
+   if camera.Status<>devDisconnected then exit;
    CameraInitialized:=false;
    case camera.CameraInterface of
     INDI : begin
@@ -7005,6 +7008,7 @@ var inditransfer: TIndiTransfert;
     indihost,inditransferdir: string;
     ok: boolean;
 begin
+   if guidecamera.Status<>devDisconnected then exit;
    case guidecamera.CameraInterface of
     INDI : begin
            if SameGuiderFinder then begin
@@ -7107,6 +7111,7 @@ end;
 
 procedure Tf_main.ConnectFinderCamera(Sender: TObject);
 begin
+  if findercamera.Status<>devDisconnected then exit;
   case findercamera.CameraInterface of
    INDI : begin
           findercamera.IndiTransfert:=itNetwork;
@@ -7198,6 +7203,7 @@ end;
 
 Procedure Tf_main.ConnectWheel(Sender: TObject);
 begin
+  if wheel.Status<>devDisconnected then exit;
   case wheel.WheelInterface of
     INCAMERA : wheel.Connect('');
     INDI : wheel.Connect(config.GetValue('/INDIwheel/Server',''),
@@ -7221,6 +7227,7 @@ end;
 
 Procedure Tf_main.ConnectFocuser(Sender: TObject);
 begin
+  if focuser.Status<>devDisconnected then exit;
   focuser.UseExternalTemperature:=config.GetValue('/Focuser/ExternalTemperature',false);
   case focuser.FocuserInterface of
     INDI : focuser.Connect(config.GetValue('/INDIfocuser/Server',''),
@@ -7287,6 +7294,7 @@ end;
 
 Procedure Tf_main.ConnectRotator(Sender: TObject);
 begin
+  if rotator.Status<>devDisconnected then exit;
   rotator.SoftSync:=config.GetValue('/Rotator/SoftSync',false);
   rotator.SoftLimit:=config.GetValue('/Rotator/SoftLimit',false);
   f_rotator.PanelSoft.Visible:=rotator.SoftSync;
@@ -7312,6 +7320,7 @@ end;
 
 Procedure Tf_main.ConnectMount(Sender: TObject);
 begin
+  if mount.Status<>devDisconnected then exit;
   case mount.MountInterface of
     INDI : mount.Connect(config.GetValue('/INDImount/Server',''),
                           config.GetValue('/INDImount/ServerPort',''),
@@ -7333,6 +7342,7 @@ end;
 
 Procedure Tf_main.ConnectDome(Sender: TObject);
 begin
+  if dome.Status<>devDisconnected then exit;
   case dome.DomeInterface of
     INDI : dome.Connect(config.GetValue('/INDIdome/Server',''),
                           config.GetValue('/INDIdome/ServerPort',''),
@@ -7424,6 +7434,7 @@ end;
 
 Procedure Tf_main.ConnectWatchdog(Sender: TObject);
 begin
+  if watchdog.Status<>devDisconnected then exit;
    if watchdog=nil then exit;
    watchdog.Connect(config.GetValue('/INDIwatchdog/Server',''),
                   config.GetValue('/INDIwatchdog/ServerPort',''),
@@ -7458,6 +7469,7 @@ end;
 
 Procedure Tf_main.ConnectWeather(Sender: TObject);
 begin
+  if weather.Status<>devDisconnected then exit;
   case weather.WeatherInterface of
     INDI : weather.Connect(config.GetValue('/INDIweather/Server',''),
                           config.GetValue('/INDIweather/ServerPort',''),
@@ -7538,6 +7550,7 @@ end;
 
 Procedure Tf_main.ConnectSafety(Sender: TObject);
 begin
+  if safety.Status<>devDisconnected then exit;
   case safety.SafetyInterface of
     INDI : safety.Connect(config.GetValue('/INDIsafety/Server',''),
                           config.GetValue('/INDIsafety/ServerPort',''),
@@ -7704,6 +7717,7 @@ Procedure Tf_main.ConnectSwitch(Sender: TObject);
 var i: integer;
 begin
 for i:=0 to NumSwitches-1 do begin
+ if switch[i].Status=devDisconnected then
   case switch[i].SwitchInterface of
     INDI : switch[i].Connect(config.GetValue('/Switch/Switch'+inttostr(i)+'/INDIswitch/Server',''),
                           config.GetValue('/Switch/Switch'+inttostr(i)+'/INDIswitch/ServerPort',''),
@@ -7785,6 +7799,7 @@ end;
 
 Procedure Tf_main.ConnectCover(Sender: TObject);
 begin
+  if cover.Status<>devDisconnected then exit;
   case cover.CoverInterface of
     INDI : cover.Connect(config.GetValue('/INDIcover/Server',''),
                           config.GetValue('/INDIcover/ServerPort',''),
@@ -18298,8 +18313,13 @@ try
   // execute command with parameter
   else if method='DEVICES_CONNECTION' then begin
     CheckParamCount(1);
-    if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf:='ON' else buf:='OFF';
-    buf:=f_scriptengine.cmd_DevicesConnection(buf);
+    if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf1:='ON' else buf1:='OFF';
+    try
+    buf2:=trim(value[attrib.IndexOf('params.1')]);
+    except
+      buf2:='';
+    end;
+    buf:=f_scriptengine.cmd_DevicesConnection(buf1,buf2);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='TELESCOPE_PARK' then begin

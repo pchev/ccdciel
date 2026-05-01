@@ -128,6 +128,7 @@ type
     FonPlotDSO,FonPlotHyperleda: TNotifyEvent;
     FonAutofocus: TNotifyBool;
     FonAutomaticAutofocus: TNotifyBool;
+    FonConnectDevice,FonDisconnectDevice: TNotifyNum;
     ilist: array of Integer;
     dlist: array of Double;
     slist: array of String;
@@ -197,7 +198,7 @@ type
     PythonScr: array[1..MaxPythonScr] of TPythonThread;
     PythonResult: array[1..MaxPythonScr] of integer;
     PythonOutput: array[1..MaxPythonScr] of TStringList;
-    function cmd_DevicesConnection(onoff:string):string;
+    function cmd_DevicesConnection(onoff:string; dev:string=''):string;
     function cmd_MountPark(onoff:string):string;
     function cmd_MountTrack:string;
     function cmd_MountGetTrackingRate:string;
@@ -344,6 +345,8 @@ type
     property onPlotHyperleda: TNotifyEvent read FonPlotHyperleda write FonPlotHyperleda;
     property onAutofocus: TNotifyBool read FonAutofocus write FonAutofocus;
     property onAutomaticAutofocus: TNotifyBool read FonAutomaticAutofocus write FonAutomaticAutofocus;
+    property onConnectDevice: TNotifyNum read FonConnectDevice write FonConnectDevice;
+    property onDisconnectDevice: TNotifyNum read FonDisconnectDevice write FonDisconnectDevice;
     property fits: TFits read Ffits write Ffits;
     property DevicesConnection: Tf_devicesconnection read Fdevicesconnection write Fdevicesconnection;
     property Ccdtemp: Tf_ccdtemp read Fccdtemp write Fccdtemp;
@@ -1371,24 +1374,48 @@ else if cname='CAMERA_SETFRAME' then result:=cmd_camerasetframe(arg[0],arg[1],ar
 LastErr:='cmdarg('+cname+'): '+result;
 end;
 
-function Tf_scriptengine.cmd_DevicesConnection(onoff:string):string;
+function Tf_scriptengine.cmd_DevicesConnection(onoff:string; dev:string=''):string;
 var connect: boolean;
+    i: integer;
 begin
-try
-result:=msgFailed;
-connect:=(onoff='ON');
-if connect and (Fdevicesconnection.BtnConnect.Caption=rsConnect) then begin
- Fdevicesconnection.Connect;
- wait(1);
-end;
-if (not connect) and (Fdevicesconnection.BtnConnect.Caption=rsDisconnect) then begin
- Fdevicesconnection.Disconnect(false);
- wait(1);
-end;
-result:=msgOK;
-except
+  try
   result:=msgFailed;
-end;
+  connect:=(onoff='ON');
+  if dev='' then begin
+    if connect and (Fdevicesconnection.BtnConnect.Caption=rsConnect) then begin
+     Fdevicesconnection.Connect;
+     wait(1);
+    end;
+    if (not connect) and (Fdevicesconnection.BtnConnect.Caption=rsDisconnect) then begin
+     Fdevicesconnection.Disconnect(false);
+     wait(1);
+    end;
+  end
+  else begin
+    dev:=uppercase(dev);
+    if dev='CAMERA' then i := 1
+    else if dev='FILTERWHEEL' then i := 2
+    else if dev='FOCUSER' then i := 3
+    else if dev='ROTATOR' then i := 4
+    else if dev='MOUNT' then i := 5
+    else if dev='DOME' then i:= 6
+    else if dev='WATCHDOG' then i := 7
+    else if dev='WEATHERSTATION' then i:= 8
+    else if dev='SAFETYMONITOR' then i := 9
+    else if dev='SWITCH' then i:= 10
+    else if dev='COVERCALIBRATOR' then i := 11
+    else if dev='GUIDECAMERA' then i := 12
+    else if dev='FINDERCAMERA' then i:= 13;
+    if connect and assigned(FonConnectDevice) then
+      FonConnectDevice(i);
+    if (not connect) and assigned(FonDisconnectDevice) then
+      FonDisconnectDevice(i);
+    wait(1);
+  end;
+  result:=msgOK;
+  except
+    result:=msgFailed;
+  end;
 end;
 
 function Tf_scriptengine.cmd_MountPark(onoff:string):string;
