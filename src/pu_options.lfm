@@ -754,6 +754,37 @@ object f_option: Tf_option
                 Caption = 'Do not modify the INDI header'
                 TabOrder = 11
               end
+              object FileNameSpaceRep: TComboBox
+                AnchorSideLeft.Control = Label196
+                AnchorSideLeft.Side = asrBottom
+                AnchorSideTop.Control = Label123
+                AnchorSideTop.Side = asrCenter
+                Left = 471
+                Height = 32
+                Top = 8
+                Width = 64
+                BorderSpacing.Left = 6
+                ItemHeight = 24
+                Items.Strings = (
+                  ''
+                  '_'
+                  '-'
+                  '.'
+                )
+                Style = csDropDownList
+                TabOrder = 12
+              end
+              object Label196: TLabel
+                AnchorSideLeft.Control = FileNameSeqSep
+                AnchorSideLeft.Side = asrBottom
+                Left = 348
+                Height = 18
+                Top = 16
+                Width = 117
+                BorderSpacing.Left = 6
+                Caption = 'Space replacement'
+                ParentColor = False
+              end
             end
             object Panel37: TPanel
               Left = 379

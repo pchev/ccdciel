@@ -5575,6 +5575,7 @@ begin
     if (FileNameOpt[i]=fnDate) then f_capture.cbOverwrite.Visible:= not FileNameActive[i];
   FilenameSep:=config.GetValue('/Files/FileNameSep','_');
   FilenameSeqSep:=config.GetValue('/Files/FileNameSeqSep','_');
+  FilenameSpaceRep:=trim(config.GetValue('/Files/FilenameSpaceRep',''));
   FitsFileExt:=config.GetValue('/Files/FitsFileExt','.fits');
   FileSequenceWidth:=config.GetValue('/Files/FileSequenceWidth',0);
   FileRemoveSpace:=config.GetValue('/Files/RemoveSpace',false);
@@ -10017,6 +10018,12 @@ begin
         f_option.FilenameSeqSep.ItemIndex:=i;
      end;
    end;
+   f_option.FileNameSpaceRep.ItemIndex:=0;
+   for i:=0 to f_option.FileNameSpaceRep.Items.Count-1 do begin
+     if f_option.FileNameSpaceRep.Items[i]=FilenameSpaceRep then begin
+        f_option.FileNameSpaceRep.ItemIndex:=i;
+     end;
+   end;
    if FileSequenceWidth>0 then begin
       f_option.UseFileSequenceWidth.Checked:=true;
       f_option.FileSequenceWidth.Enabled:=true;
@@ -10575,6 +10582,7 @@ begin
      end;
      config.SetValue('/Files/FileNameSep',f_option.FilenameSep.Text);
      config.SetValue('/Files/FileNameSeqSep',f_option.FilenameSeqSep.Text);
+     config.SetValue('/Files/FilenameSpaceRep',f_option.FileNameSpaceRep.Text);
      if f_option.UseFileSequenceWidth.Checked then
         config.SetValue('/Files/FileSequenceWidth',f_option.FileSequenceWidth.Text)
      else

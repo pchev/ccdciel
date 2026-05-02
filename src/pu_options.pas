@@ -46,6 +46,7 @@ type
     CrosshairsR1: TEdit;
     CrosshairsR2: TEdit;
     CrosshairsR3: TEdit;
+    FileNameSpaceRep: TComboBox;
     FocaleFromDriver: TCheckBox;
     FocaleLength: TFloatSpinEditEx;
     GroupBox23: TGroupBox;
@@ -57,6 +58,7 @@ type
     Label193: TLabel;
     Label194: TLabel;
     Label195: TLabel;
+    Label196: TLabel;
     Label4: TLabel;
     Panel41: TPanel;
     PanelSlewBrightStar: TPanel;
@@ -1110,6 +1112,7 @@ begin
   UseFileSequenceWidth.Caption:=rsFixedSequenc;
   Label173.Caption:=rsSequenceSepa;
   RemoveSpace.Caption:=rsRemoveSpaceI;
+  Label196.Caption:=rsSpaceReplace;
   KeepIndiHeader.Caption:=rsDoNotModifyT;
   FilePack.Caption:=rsCompressTheF;
   Label156.Caption:=rsFITSFileExte;

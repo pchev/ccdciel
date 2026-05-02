@@ -5196,7 +5196,7 @@ begin
   framestr:=trim(framestr);
   if not f.Header.Valueof('OBJECT',objectstr) then objectstr:=DefObject;
   objectstr:=SafeFileName(objectstr);
-  if FileRemoveSpace then objectstr:=StringReplace(objectstr,' ','',[rfReplaceAll]);
+  if FileRemoveSpace then objectstr:=StringReplace(objectstr,' ',FilenameSpaceRep,[rfReplaceAll]);
   if dslr or (not f.Header.Valueof('EXPTIME',expstr)) then expstr:=DefExp;
   expstr:=trim(expstr);
   if f.Header.Valueof('XBINNING',binstr) then begin
@@ -5209,7 +5209,7 @@ begin
   fn:='';
   if FilenameSep='_' then
      blankrep:='-'
-  else
+  else if FilenameSep='-' then
      blankrep:='_';
   UseFileSequenceNumber:=false;
   for i:=0 to FileNameCount-1 do begin

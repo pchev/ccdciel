@@ -568,7 +568,7 @@ var
   SubDirActive: array[0..SubDirCount-1] of Boolean;
   FilenameOpt: array[0..FileNameCount-1] of TFilenameList;
   FilenameActive: array[0..FileNameCount-1] of Boolean;
-  FilenameSep, FilenameSeqSep: String;
+  FilenameSep, FilenameSeqSep, FilenameSpaceRep: String;
   FilePack,FileStackFloat,FileRemoveSpace: boolean;
   FitsFileExt: string;
   FileSequenceWidth: integer;
