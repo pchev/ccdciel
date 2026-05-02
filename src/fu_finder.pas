@@ -42,6 +42,7 @@ type
     ButtonMousePosition: TSpeedButton;
     ButtonSetTemp: TButton;
     cbFilterNoise: TCheckBox;
+    cbFilterstrength: TComboBox;
     cbSaveImages: TCheckBox;
     Cooler: TCheckBox;
     Gain: TSpinEditEx;
@@ -109,6 +110,8 @@ type
     Procedure ZoomImage(Sender: TObject);
     procedure SetFilterNoise(value:Boolean);
     function GetFilterNoise:Boolean;
+    procedure SetFilterStrength(value:integer);
+    function GetFilterStrength:integer;
   public
     { public declarations }
     visu: Tf_visu;
@@ -125,6 +128,7 @@ type
     property Astrometry: TAstrometry read FAstrometry write FAstrometry;
     property DrawSettingChange: boolean read FDrawSettingChange write FDrawSettingChange;
     property FilterNoise: boolean read GetFilterNoise write SetFilterNoise;
+    property FilterStrength: integer read GetFilterStrength write SetFilterStrength;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property onRedraw: TNotifyEvent read FonRedraw write FonRedraw;
     property onConfigureFinder: TNotifyEvent read FonConfigureFinder write FonConfigureFinder;
@@ -495,6 +499,16 @@ end;
 function Tf_finder.GetFilterNoise:Boolean;
 begin
   result:=cbFilterNoise.Checked;
+end;
+
+procedure Tf_finder.SetFilterStrength(value:integer);
+begin
+  cbFilterstrength.ItemIndex:=value-1;
+end;
+
+function Tf_finder.GetFilterStrength:integer;
+begin
+  result:=cbFilterstrength.ItemIndex+1;
 end;
 
 end.

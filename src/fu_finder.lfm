@@ -176,12 +176,35 @@ object f_finder: Tf_finder
       object cbFilterNoise: TCheckBox
         AnchorSideTop.Control = ButtonDark
         AnchorSideTop.Side = asrCenter
-        Left = 110
+        Left = 112
         Height = 22
         Top = 113
         Width = 92
         Caption = 'Noise filter'
         TabOrder = 4
+      end
+      object cbFilterstrength: TComboBox
+        AnchorSideLeft.Control = cbFilterNoise
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = cbFilterNoise
+        AnchorSideTop.Side = asrCenter
+        Left = 212
+        Height = 32
+        Top = 108
+        Width = 50
+        BorderSpacing.Left = 8
+        ItemHeight = 24
+        ItemIndex = 0
+        Items.Strings = (
+          '1'
+          '2'
+          '3'
+          '4'
+          '5'
+          '6'
+        )
+        TabOrder = 5
+        Text = '1'
       end
     end
     object PanelTemperature: TPanel

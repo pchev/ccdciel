@@ -70,6 +70,7 @@ type
     CheckBoxBacklash: TCheckBox;
     CheckBoxTrackSolar1: TCheckBox;
     cbSlitList: TComboBox;
+    cbFilterstrength: TComboBox;
     disable_guiding1: TCheckBox;
     Label17: TLabel;
     Label18: TLabel;
@@ -387,6 +388,8 @@ type
     function GetVPa_solar:double;
     procedure SetFilterNoise(value:Boolean);
     function GetFilterNoise:Boolean;
+    procedure SetFilterStrength(value:integer);
+    function GetFilterStrength:integer;
     procedure SetBacklash(value:integer);
     function GetBacklash:integer;
     procedure SetBacklashCompensation(value:Boolean);
@@ -508,6 +511,7 @@ type
     property v_solar: double read GetV_solar write SetV_solar;
     property vpa_solar: double read GetVPa_solar write SetVPA_solar;
     property FilterNoise: boolean read GetFilterNoise write SetFilterNoise;
+    property FilterStrength: integer read GetFilterStrength write SetFilterStrength;
     property DecBacklash: integer read GetBacklash write SetBacklash;
     property BacklashCompensation: Boolean read GetBacklashCompensation write SetBacklashCompensation;
     property SpectroFunctions: boolean read GetSpectro write SetSpectro; // single star slit guiding
@@ -994,6 +998,16 @@ end;
 function Tf_internalguider.GetFilterNoise:Boolean;
 begin
   result:=cbFilterNoise.Checked;
+end;
+
+procedure Tf_internalguider.SetFilterStrength(value:integer);
+begin
+  cbFilterstrength.ItemIndex:=value-1;
+end;
+
+function Tf_internalguider.GetFilterStrength:integer;
+begin
+  result:=cbFilterstrength.ItemIndex+1;
 end;
 
 procedure Tf_internalguider.SetBacklash(value:integer);

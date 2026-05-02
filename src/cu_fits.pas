@@ -121,6 +121,7 @@ const    maxl = 20000;
          maxcropsizey = 2000;
          bottomup = 'BOTTOM-UP';
          topdown = 'TOP-DOWN';
+         medianstrength: array[1..6] of array[1..2] of integer = ((3,5),(3,3),(3,1),(5,5),(5,3),(5,1));
 
 type
 
@@ -242,7 +243,7 @@ type
      procedure ClearStarList;
      procedure LoadDark(fn: string);
      procedure LoadFlat(fn: string);
-     procedure MedianFilter;
+     procedure MedianFilter(size,centralweight: integer);
      function dateobs: double;
      property IntfImg: TLazIntfImage read FIntfImg;
      Property HeaderInfo : TFitsInfo read FFitsInfo;
@@ -315,7 +316,7 @@ type
   TMedianFilter = class(TThread)
   public
     working: boolean;
-    num, id, ponderation: integer;
+    num, id, size, centralweight: integer;
     fits: TFits;
     source: Timafloat;
     procedure Execute; override;
@@ -1308,13 +1309,14 @@ begin
   FreeOnTerminate := False;
   inherited Create(CreateSuspended);
   working := True;
-  ponderation:=1;
+  size:=3;
+  centralweight:=1;
 end;
 
 procedure TMedianFilter.Execute;
 var
-  i, j, k, v, w, p, startline, endline, xs,ys, npix: integer;
-  ii,jj: array[1..3] of integer;
+  i, j, k, m, v, w, p, startline, endline, xs,ys, npix: integer;
+  ii,jj: array of integer;
   list: array of double;
 begin
 xs:= fits.Fwidth;
@@ -1325,30 +1327,33 @@ if id = (num - 1) then
   endline := ys - 1
 else
   endline := (id + 1) * i - 1;
-npix:=9+ponderation-1;
+npix:=size*size+centralweight-1;
+m:=size div 2;
 SetLength(list,npix);
+SetLength(ii,size);
+SetLength(jj,size);
 // process the rows range for this thread
 for i:=startline to endline do begin
-  ii[1]:=max(i-1,0);
-  ii[2]:=i;
-  ii[3]:= min(i+1,ys-1);
+  for p:=0 to m-1 do ii[p]:=max(i-p-1,0);
+  ii[m]:=i;
+  for p:=m+1 to size-1 do ii[p]:= min(i+p-1,ys-1);
   for j := 0 to xs-1 do begin
-     jj[1]:=max(j-1,0);
-     jj[2]:=j;
-     jj[3]:=min(j+1,xs-1);
+     for p:=0 to m-1 do jj[p]:=max(j-p-1,0);
+     jj[m]:=j;
+     for p:=m+1 to size-1 do jj[p]:=min(j+p-1,xs-1);
      k:=0;
-     for v:=1 to 3 do begin
-       for w:=1 to 3 do begin
+     for v:=0 to size-1 do begin
+       for w:=0 to size-1 do begin
          list[k]:=source[0,ii[v],jj[w]];
          inc(k);
-         if (v=2)and(w=2) then
-           for p:=1 to ponderation-1 do begin
+         if (v=m)and(w=m) then
+           for p:=1 to centralweight-1 do begin
              list[k]:=source[0,ii[v],jj[w]];
              inc(k);
            end;
        end;
      end;
-     fits.Fimage[0,ii[2],jj[2]]:=(SMedian(list,npix,false));
+     fits.Fimage[0,ii[m],jj[m]]:=(SMedian(list,npix,false));
   end;
 end;
 working := False;
@@ -2716,7 +2721,7 @@ begin
   for i := low(a) to high(a) do Result[i] := copy2d(a[i]);
 end;
 
-procedure TFits.MedianFilter;
+procedure TFits.MedianFilter(size,centralweight: integer);
 var i: integer;
     working, timingout: boolean;
     timelimit: TDateTime;
@@ -2735,7 +2740,8 @@ begin
     thread[i] := TMedianFilter.Create(True);
     thread[i].fits := self;
     thread[i].source:=source;
-    thread[i].ponderation := 5;
+    thread[i].size := size;
+    thread[i].centralweight := centralweight;
     thread[i].num := tc;
     thread[i].id := i;
     thread[i].Start;

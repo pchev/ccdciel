@@ -49,12 +49,14 @@ type
     FocaleFromDriver: TCheckBox;
     FocaleLength: TFloatSpinEditEx;
     GroupBox23: TGroupBox;
+    GroupBox37: TGroupBox;
     Label132: TLabel;
     Label166: TLabel;
     Label167: TLabel;
     Label192: TLabel;
     Label193: TLabel;
     Label194: TLabel;
+    Label195: TLabel;
     Label4: TLabel;
     Panel41: TPanel;
     PanelSlewBrightStar: TPanel;
@@ -139,6 +141,7 @@ type
     sgCustomType: TStringGrid;
     temperature: TFloatEdit;
     tlrate: TFloatEdit;
+    tbFilterstrength: TTrackBar;
     UseFinderSolver: TCheckBox;
     FinderSolver: TComboBox;
     Label172: TLabel;

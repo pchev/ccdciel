@@ -5229,6 +5229,7 @@ begin
   StackUseDark:=config.GetValue('/PreviewStack/StackUseDark',false);
   StackUseFlat:=config.GetValue('/PreviewStack/StackUseFlat',false);
   StackDebayer:=config.GetValue('/PreviewStack/StackDebayer',false);
+  Previewmedianstrength:=config.GetValue('/Preview/Previewmedianstrength',3);
   MaxVideoPreviewRate:=config.GetValue('/Video/PreviewRate',5);
   CrR1:=config.GetValue('/Visu/CrosshairsR1',-1);
   CrR2:=config.GetValue('/Visu/CrosshairsR2',-1);
@@ -5443,6 +5444,7 @@ begin
   f_internalguider.Offset.Value:=config.GetValue('/InternalGuider/Camera/Offset',0);
   f_internalguider.Temperature.Value:=config.GetValue('/InternalGuider/Camera/Temperature',0);
   f_internalguider.FilterNoise:=config.GetValue('/InternalGuider/FilterNoise',false);
+  f_internalguider.FilterStrength:=config.GetValue('/InternalGuider/FilterStrength',3);
   x:=config.GetValue('/InternalGuider/Visu/Gamma',0.5);
   if x>1 then x:=0.5;
   f_internalguider.visu.Gamma.Value:=x;
@@ -5514,6 +5516,7 @@ begin
   f_finder.visu.cbHistRange.ItemIndex:=config.GetValue('/Finder/Visu/HistRange',3);
   f_finder.Temperature.Value:=config.GetValue('/Finder/Temperature',0);
   f_finder.FilterNoise:=config.GetValue('/Finder/FilterNoise',false);
+  f_finder.FilterStrength:=config.GetValue('/Finder/FilterStrength',3);
 
   astrometryResolver:=config.GetValue('/Astrometry/Resolver',ResolverAstap);
   AstrometryTimeout:=config.GetValue('/Astrometry/Timeout',30.0);
@@ -6128,6 +6131,7 @@ begin
   config.SetValue('/InternalGuider/Camera/Temperature',f_internalguider.Temperature.Value);
   config.SetValue('/InternalGuider/EnlargeImage',f_internalguider.cbEnlargeImage.Checked);
   config.SetValue('/InternalGuider/FilterNoise',f_internalguider.FilterNoise);
+  config.SetValue('/InternalGuider/FilterStrength',f_internalguider.FilterStrength);
   config.SetValue('/InternalGuider/Visu/Gamma',f_internalguider.visu.Gamma.Value);
   config.SetValue('/InternalGuider/Visu/ClipRange',f_internalguider.visu.BtnClipRange.Down);
   config.SetValue('/InternalGuider/Visu/HistRange',f_internalguider.visu.cbHistRange.ItemIndex);
@@ -6170,6 +6174,7 @@ begin
   config.SetValue('/Finder/Visu/HistRange',f_finder.visu.cbHistRange.ItemIndex);
   config.SetValue('/Finder/Temperature',f_finder.Temperature.Value);
   config.SetValue('/Finder/FilterNoise',f_finder.FilterNoise);
+  config.SetValue('/Finder/FilterStrength',f_finder.FilterStrength);
 
   // star autoexposure in sequence editor
   n:=f_autoexposurestep.cbRef.Items.Count;
@@ -10075,6 +10080,7 @@ begin
    f_option.ClippingHigh.Value:=config.GetValue('/Color/ClippingOverflow',MAXWORD);
    f_option.ClippingLow.Value:=config.GetValue('/Color/ClippingUnderflow',0);
    f_option.ColorizeSpectra.Checked:=config.GetValue('/Color/ColorizeSpectra',true);
+   f_option.tbFilterstrength.Position:=config.GetValue('/Preview/Previewmedianstrength',3);
    f_option.BPMsigma.Value:=config.GetValue('/BadPixel/Sigma',5.0);
    f_option.StackShow.Checked:=config.GetValue('/PreviewStack/StackShow',false);
    f_option.SaveStack.checked:=config.GetValue('/PreviewStack/SaveStack',false);
@@ -10691,6 +10697,7 @@ begin
      config.SetValue('/Color/ClippingOverflow',f_option.ClippingHigh.Value);
      config.SetValue('/Color/ClippingUnderflow',f_option.ClippingLow.Value);
      config.SetValue('/Color/ColorizeSpectra',f_option.ColorizeSpectra.Checked);
+     config.SetValue('/Preview/Previewmedianstrength',f_option.tbFilterstrength.Position);
      config.SetValue('/BadPixel/Sigma',f_option.BPMsigma.Value);
      config.SetValue('/PreviewStack/StackShow',f_option.StackShow.Checked);
      config.SetValue('/PreviewStack/SaveStack',f_option.SaveStack.checked);
@@ -12360,7 +12367,7 @@ begin
     end;
   end;
   if f_starprofile.AutofocusRunning and AFmedianfilter then
-    fits.MedianFilter;
+    fits.MedianFilter(medianstrength[Previewmedianstrength,1],medianstrength[Previewmedianstrength,2]);
 
   if displayimage then begin
   try
@@ -14038,7 +14045,7 @@ end;
 procedure Tf_main.MenuItemNoiseFilterClick(Sender: TObject);
 begin
   if (fits.HeaderInfo.naxis>1) and fits.ImageValid and (not fits.NoiseProcess) then begin
-    fits.MedianFilter;
+    fits.MedianFilter(medianstrength[Previewmedianstrength,1],medianstrength[Previewmedianstrength,2]);
     DrawHistogram(true,true);
     DrawImage;
   end;
@@ -19200,6 +19207,7 @@ end;
 
 procedure Tf_main.GuideCameraNewImageAsync(Data: PtrInt);
 var displayimage: boolean;
+    i: integer;
     {$ifdef timing_stdout}tt: double;{$endif}
 begin
   displayimage:=GuideImage.IsVisible or (not f_internalguider.cbEnlargeImage.Checked);
@@ -19212,7 +19220,8 @@ begin
 
   if f_internalguider.FilterNoise then begin
     {$ifdef timing_stdout}tt:=now;{$endif}
-    guidefits.MedianFilter;
+    i:=f_internalguider.FilterStrength;
+    guidefits.MedianFilter(medianstrength[i,1],medianstrength[i,2]);
     {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' Image median filtering time = '+FormatFloat('0.000',86400*(now-tt)));{$endif}
   end;
 
@@ -20474,14 +20483,17 @@ procedure Tf_main.FinderCameraNewImageAsync(Data: PtrInt);
 var displayimage: boolean;
     fn,dateobs,objectstr: string;
     dt: double;
+    i: integer;
 begin
   displayimage:=true;
   if (not finderfits.ImageValid) then begin
      finderfits.LoadStream;
   end;
 
-  if f_finder.FilterNoise then
-    finderfits.MedianFilter;
+  if f_finder.FilterNoise then begin
+    i:= f_finder.FilterStrength;
+    finderfits.MedianFilter(medianstrength[i,1],medianstrength[i,2]);
+  end;
 
   if f_finder.cbSaveImages.Checked then begin
     // save image

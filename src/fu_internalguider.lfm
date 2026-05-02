@@ -455,6 +455,29 @@ object f_internalguider: Tf_internalguider
               Caption = 'Noise filter'
               TabOrder = 1
             end
+            object cbFilterstrength: TComboBox
+              AnchorSideLeft.Control = cbFilterNoise
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = cbFilterNoise
+              AnchorSideTop.Side = asrCenter
+              Left = 210
+              Height = 32
+              Top = 4
+              Width = 50
+              BorderSpacing.Left = 8
+              ItemHeight = 24
+              ItemIndex = 0
+              Items.Strings = (
+                '1'
+                '2'
+                '3'
+                '4'
+                '5'
+                '6'
+              )
+              TabOrder = 2
+              Text = '1'
+            end
           end
           object Panel7: TPanel
             Left = 0
