@@ -543,7 +543,7 @@ end;
 
 function  T_autoguider_internal.measure_drift(var initialize:boolean; out drX,drY :double) : integer;// ReferenceX,Y indicates the total drift, drX,drY to drift since previous call. Arrays old_xy_array,xy_array are for storage star positions
 var
-  i,c,s,fitsx,fitsy,stepsize,xsize,ysize,star_counter,star_counter2,counter,len,maxSNRstar,ix,iy: integer;
+  i,c,s,fitsx,fitsy,stepsize,xsize,ysize,star_counter,star_counter2,counter,len,maxSNRstar,ix,iy : integer;
   hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,xo,yo,snr,flux,fluxratio,min_SNR,min_HFD,maxSNR,margin,y,mhfd,peak : double;
   x1,y1,bg1,bgdev1,fwhm1,vmax1,snr1,flux1: double;
   GuideLock: boolean;
@@ -637,7 +637,7 @@ begin
       // can be set to -10 by SpectroSetTarget, in this case we must skip SearchWinMin to go directly with SearchWinMax
       guidefits.FindStarPos2(fitsx,fitsy,finternalguider.SearchWinMin,xc,yc,vmax,bg,bgdev);
       if vmax>0 then begin
-        guidefits.GetHFD2(round(xc),round(yc),finternalguider.SearchWinMin,x1,y1,bg1,bgdev1,hfd1,fwhm1,vmax,snr1,flux1,false,true); // accept fully saturated stars
+        guidefits.GetHFD(round(xc),round(yc),finternalguider.SearchWinMin,maxint{accept saturation},false,x1,y1,bg1,bgdev1,hfd1,fwhm1,vmax,snr1,flux1); // accept fully saturated stars
         if snr1<Finternalguider.MinSNR then vmax:=0;
       end;
     end;
@@ -645,7 +645,7 @@ begin
       // if not found try with larger aperture
       guidefits.FindStarPos2(fitsx,fitsy,finternalguider.SearchWinMax,xc,yc,vmax,bg,bgdev);
       if vmax>0 then begin
-        guidefits.GetHFD2(round(xc),round(yc),finternalguider.SearchWinMin,x1,y1,bg1,bgdev1,hfd1,fwhm1,vmax,snr1,flux1,false,true);
+        guidefits.GetHFD(round(xc),round(yc),finternalguider.SearchWinMin,maxint{accept saturation},false,x1,y1,bg1,bgdev1,hfd1,fwhm1,vmax,snr1,flux1);
         if snr1<Finternalguider.MinSNR then vmax:=0;
       end;
     end;
@@ -653,7 +653,7 @@ begin
       // if still not found search brightest star in image
       guidefits.FindBrightestPixel(xsize div 2,ysize div 2,2*min(xsize,ysize) div 3,starwindow,ix,iy,vmax,true);
       guidefits.FindStarPos2(ix,iy,finternalguider.SearchWinMax,xc,yc,vmax,bg,bgdev);
-      guidefits.GetHFD2(round(xc),round(yc),finternalguider.SearchWinMin,x1,y1,bg1,bgdev1,hfd1,fwhm1,vmax1,snr1,flux1,false,true); //just for fhd, do not change vmax, do not check snr
+      guidefits.GetHFD(round(xc),round(yc),finternalguider.SearchWinMin,maxint{accept saturation},false,x1,y1,bg1,bgdev1,hfd1,fwhm1,vmax1,snr1,flux1); //just for fhd, do not change vmax, do not check snr
     end;
     if vmax>0 then begin
         if hfd1>0 then
@@ -706,7 +706,7 @@ begin
     repeat
       fitsx:=stepsize div 2;
       repeat
-        guidefits.GetHFD3(fitsX,fitsY,searchA,true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);//find a star in this segment. Auto center is true
+        guidefits.GetHFD(fitsX,fitsY,searchA,maxint{accept saturation},true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux);//find a star in this segment. Auto center is true
 
         if ((snr>Min_SNR) and (hfd1>Min_HFD) and (abs(fitsX-xc)<stepsize div 2) and (abs(fitsY-yc)<stepsize div 2) and (star_counter<maxstars))  then //detection and no other area closer
         begin // star in this area
@@ -861,7 +861,7 @@ begin
        guidefits.FindStarPos2(round(xy_array_old[0].x2),round(xy_array_old[0].y2),s,xc,yc,vmax,bg,bgdev);
        if FSettling then begin
          // check SNR to be sure we not loss the star with a large move
-         guidefits.GetHFD2(round(xc),round(yc),s,x1,y1,bg1,bgdev1,hfd1,fwhm1,vmax,snr1,flux1,false,true);
+         guidefits.GetHFD(round(xc),round(yc),s,maxint{accept saturation},false,x1,y1,bg1,bgdev1,hfd1,fwhm1,vmax,snr1,flux1);
          if snr1<Finternalguider.MinSNR then vmax:=0;
        end;
        inc(c);
@@ -908,12 +908,12 @@ begin
     begin
       if xy_array_old[i].flux<>0 then // Previous detection, keep tracking this star while it drifts away
       begin //try first within a small area
-        guidefits.GetHFD3(round(xy_array_old[i].x2),round(xy_array_old[i].y2),round(mean_hfd*3.5){smaller search area},true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);
+        guidefits.GetHFD(round(xy_array_old[i].x2),round(xy_array_old[i].y2),round(mean_hfd*3.5){smaller search area},maxint{accept saturation},true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux);
        if snr<1 then // no detection, look wider
-        guidefits.GetHFD3(round(xy_array_old[i].x2),round(xy_array_old[i].y2),searchA{area},true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false) // use a larger search area
+        guidefits.GetHFD(round(xy_array_old[i].x2),round(xy_array_old[i].y2),searchA{area},maxint{accept saturation},true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux) // use a larger search area
       end
       else // try in the initial area
-        guidefits.GetHFD3(round(xy_array_old[i].x1),round(xy_array_old[i].y1),searchA,true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);// find a star in the original segment
+        guidefits.GetHFD(round(xy_array_old[i].x1),round(xy_array_old[i].y1),searchA,maxint{accept saturation},true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux);// find a star in the original segment
 
       if ((snr>max(min_SNR-10,6)) and (hfd1>Min_HFD)) then // star detection
       begin // star in this area
@@ -2616,7 +2616,7 @@ begin
     repeat
       fitsx:=stepsize div 2;
       repeat
-        guidefits.GetHFD3(fitsX,fitsY,searchA,true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);//find a star in this segment. Auto center is true
+        guidefits.GetHFD(fitsX,fitsY,searchA,maxint{accept saturation},true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux);//find a star in this segment. Auto center is true
 
         if (vmax+bg)>peak then peak:=vmax+bg;
         if ((snr>Min_SNR) and (hfd1>Min_HFD) and (abs(fitsX-xc)<stepsize div 2) and (abs(fitsY-yc)<stepsize div 2) and (star_counter<maxstars))  then //detection and no other area closer
