@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-04-22 12:51+0000\n"
+"POT-Creation-Date: 2026-05-03 18:45+0000\n"
 "PO-Revision-Date: 2025-10-22 19:24+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-04-22 12:56+0000\n"
-"X-Generator: Launchpad (build 866d07beecca8ac2e3326342adf6c1740cd3e7b3)\n"
+"X-Launchpad-Export-Date: 2026-05-03 18:52+0000\n"
+"X-Generator: Launchpad (build 91d5f4cbcbec62cc98ca9991c8ad99af4e21f85a)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -1252,6 +1252,10 @@ msgstr "Крышка-флетпанель"
 #: u_translation.rscoverthecame
 msgid "Cover the camera and set the exposure time and binning in the Preview pane now."
 msgstr "Закройте камеру и установите выдержку и биннинг на панели Превью."
+
+#: u_translation.rscoverthecame2
+msgid "Cover the camera"
+msgstr ""
 
 #: u_translation.rscreatefromca
 msgid "Create from camera"
@@ -3288,6 +3292,10 @@ msgstr "Переход на вторую позицию"
 msgid "Multi panel"
 msgstr "Двойная"
 
+#: u_translation.rsmultipledark
+msgid "Multiple dark with different exposure"
+msgstr ""
+
 #: u_translation.rsmultistargui
 msgid "Multi-star guide offset"
 msgstr "Смещение многозвёздного гидирования"
@@ -3685,6 +3693,10 @@ msgstr "Наружу"
 #, object-pascal-format
 msgid "%s out of range"
 msgstr "%s вне диапазона"
+
+#: u_translation.rsoverwrite
+msgid "Overwrite"
+msgstr ""
 
 #: u_translation.rspa
 msgid "PA"
@@ -4508,6 +4520,10 @@ msgstr "Запущен скрипт %s"
 msgid "Run script when the weather change"
 msgstr ""
 
+#: u_translation.rsrunterminati
+msgid "Run termination script after every image"
+msgstr ""
+
 #: u_translation.rsrununattende
 msgid "Run unattended"
 msgstr "Без уведомлений"
@@ -5215,6 +5231,10 @@ msgstr "Некоторые устройства не подключены"
 #: u_translation.rssouth
 msgid "South"
 msgstr "Юг"
+
+#: u_translation.rsspacereplace
+msgid "Space replacement"
+msgstr ""
 
 #: u_translation.rsspectralprof
 msgid "Spectral profile"
@@ -5989,6 +6009,10 @@ msgstr "Слишком малая разница HFD, попробуйте ув�
 #: u_translation.rstoosmallhfdd2
 msgid "Too small HFD difference."
 msgstr "Слишком маленькая разница в HFD"
+
+#: u_translation.rstotalexecuti
+msgid "Total execution time"
+msgstr ""
 
 #: u_translation.rstotalpolarer
 msgid "Total polar error:"

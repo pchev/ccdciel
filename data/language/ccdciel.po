@@ -6273,3 +6273,27 @@ msgstr ""
 msgid "Previous version copied to"
 msgstr ""
 
+#: u_translation:rstotalexecuti
+msgid "Total execution time"
+msgstr ""
+
+#: u_translation:rscoverthecame2
+msgid "Cover the camera"
+msgstr ""
+
+#: u_translation:rsrunterminati
+msgid "Run termination script after every image"
+msgstr ""
+
+#: u_translation:rsoverwrite
+msgid "Overwrite"
+msgstr ""
+
+#: u_translation:rsmultipledark
+msgid "Multiple dark with different exposure"
+msgstr ""
+
+#: u_translation:rsspacereplace
+msgid "Space replacement"
+msgstr ""
+

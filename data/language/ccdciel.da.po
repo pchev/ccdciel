@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-04-22 12:51+0000\n"
+"POT-Creation-Date: 2026-05-03 18:45+0000\n"
 "PO-Revision-Date: 2021-09-24 16:13+0000\n"
 "Last-Translator: Jimmy Frydkær Jensen <jimmy@frydkaer.net>\n"
 "Language-Team: Danish <da@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-04-22 12:56+0000\n"
-"X-Generator: Launchpad (build 866d07beecca8ac2e3326342adf6c1740cd3e7b3)\n"
+"X-Launchpad-Export-Date: 2026-05-03 18:52+0000\n"
+"X-Generator: Launchpad (build 91d5f4cbcbec62cc98ca9991c8ad99af4e21f85a)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -1249,6 +1249,10 @@ msgstr ""
 #: u_translation.rscoverthecame
 msgid "Cover the camera and set the exposure time and binning in the Preview pane now."
 msgstr "Dæk kameraet og sæt Udsættelsestid og placering i forhåndsvisningsruden nu."
+
+#: u_translation.rscoverthecame2
+msgid "Cover the camera"
+msgstr ""
 
 #: u_translation.rscreatefromca
 msgid "Create from camera"
@@ -3285,6 +3289,10 @@ msgstr ""
 msgid "Multi panel"
 msgstr ""
 
+#: u_translation.rsmultipledark
+msgid "Multiple dark with different exposure"
+msgstr ""
+
 #: u_translation.rsmultistargui
 msgid "Multi-star guide offset"
 msgstr ""
@@ -3681,6 +3689,10 @@ msgstr ""
 #: u_translation.rsoutofrange
 #, object-pascal-format
 msgid "%s out of range"
+msgstr ""
+
+#: u_translation.rsoverwrite
+msgid "Overwrite"
 msgstr ""
 
 #: u_translation.rspa
@@ -4505,6 +4517,10 @@ msgstr ""
 msgid "Run script when the weather change"
 msgstr ""
 
+#: u_translation.rsrunterminati
+msgid "Run termination script after every image"
+msgstr ""
+
 #: u_translation.rsrununattende
 msgid "Run unattended"
 msgstr ""
@@ -5211,6 +5227,10 @@ msgstr ""
 
 #: u_translation.rssouth
 msgid "South"
+msgstr ""
+
+#: u_translation.rsspacereplace
+msgid "Space replacement"
 msgstr ""
 
 #: u_translation.rsspectralprof
@@ -5985,6 +6005,10 @@ msgstr ""
 
 #: u_translation.rstoosmallhfdd2
 msgid "Too small HFD difference."
+msgstr ""
+
+#: u_translation.rstotalexecuti
+msgid "Total execution time"
 msgstr ""
 
 #: u_translation.rstotalpolarer
