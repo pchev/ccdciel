@@ -15173,7 +15173,7 @@ begin
 end;
 
 Procedure Tf_main.AutoFocusStart(Sender: TObject);
-var x,y,rx,ry,xc,yc,ns,n,i,s,s2,s3,s4,fs: integer;
+var x,y,rx,ry,xc,yc,ns,n,i,s,s2,s3,s4,fs : integer;
     hfdlist: array of double;
     vmax,meanhfd, med, pctsize, maxsize: double;
     buf: string;
@@ -15278,7 +15278,7 @@ begin
      s:=starwindow;
      rx:=img_Width-6*s; {search area}
      ry:=img_Height-6*s;
-     fits.GetStarList(rx,ry,s,AutofocusMinSNR,false); {search stars in fits image}
+     fits.GetStarList(rx,ry,s,maxint{accept saturation},AutofocusMinSNR); {search stars in fits image}
      ns:=Length(fits.StarList);
      if ns>0 then begin
        SetLength(hfdlist,ns);
@@ -15291,7 +15291,7 @@ begin
        s:=20; {no star found, try with small default window}
      rx:=img_Width-6*s; {search area}
      ry:=img_Height-6*s;
-     fits.GetStarList(rx,ry,s,AutofocusMinSNR,false); {search stars in fits image}
+     fits.GetStarList(rx,ry,s,maxint{accept saturation},AutofocusMinSNR); {search stars in fits image}
      ns:=Length(fits.StarList);
      // store star list
      if ns>0 then begin
@@ -15542,7 +15542,7 @@ begin
    s:=starwindow;
    rx:=guidefits.HeaderInfo.naxis1-s; {search area}
    ry:=guidefits.HeaderInfo.naxis2-s;
-   guidefits.GetStarList(rx,ry,s,AutofocusMinSNR,false); {search stars in fits image}
+   guidefits.GetStarList(rx,ry,s,maxint{accept saturation} ,AutofocusMinSNR); {search stars in fits image}
    ns:=Length(guidefits.StarList);
    if ns>0 then begin
      SetLength(hfdlist,ns);
@@ -15555,7 +15555,7 @@ begin
      s:=20; {no star found, try with small default window}
    rx:=guidefits.HeaderInfo.naxis1-s; {search area}
    ry:=guidefits.HeaderInfo.naxis2-s;
-   guidefits.GetStarList(rx,ry,s,AutofocusMinSNR,false); {search stars in fits image}
+   guidefits.GetStarList(rx,ry,s,maxint{accept saturation},AutofocusMinSNR); {search stars in fits image}
    ns:=Length(guidefits.StarList);
    // store star list
    if ns>0 then begin
@@ -17130,13 +17130,15 @@ begin
 
   NewMessage('Start image inspection',2);
 
-  s:=28;// Fixed measuring window since in tilted images the stars not have the same HFD.
+//  s:=28;// Fixed measuring window since in tilted images the stars not have the same HFD.
+  s:=14;// Fixed measuring window since in tilted images the stars not have the same HFD.
+
 
   // new measurement with adjusted window
   rx:=img_Width-2*s; {search area}
   ry:=img_Height-2*s;
 
-  fits.GetStarList(rx,ry,s,10 {min_snr},true {strict_saturation}); {search stars in fits image}
+  fits.GetStarList(rx,ry,s, 0{do not accept saturation},10 {min_snr}); {search stars in fits image}
 //  Uncomment to help star detection debugging
 //  PrintStarList;
 
@@ -17406,7 +17408,7 @@ end;
 
 procedure Tf_main.MeasureAtPos(x,y:integer; photometry:boolean);
 var xx,yy,n: integer;
-    val,xxc,yyc,rc,s:integer;
+    val :integer;
     sval:string;
     ra,de: double;
     c: TcdcWCScoord;
@@ -17446,84 +17448,62 @@ begin
       end;
     end
  else sval:='';
- s:=Starwindow div 2;
- if (xx>s)and(xx<(fits.HeaderInfo.naxis1-s))and(yy>s)and(yy<(fits.HeaderInfo.naxis2-s)) then begin
-   s:=Starwindow;
-   fits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
-   if vmax>0 then begin
-     fits.GetHFD2(xxc,yyc,2*rc,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
-     if (hfd>0)and(Undersampled or (hfd>0.7)) then begin
-       sval:=sval+' HFD='+FormatFloat(f1,hfd)+' FWHM='+FormatFloat(f1,fwhm);
-       if flux>0 then begin
-         sval:=sval+' '+rsFlux+'='+FormatFloat(f0, flux)+' SNR='+FormatFloat(f1, snr);
-         if photometry and (f_photometry<>nil) and f_photometry.Visible then begin
-           f_photometry.StarX:=xc;
-           f_photometry.StarY:=yc;
-           f_photometry.hfd:=hfd;
-           f_photometry.Memo1.Clear;
-           if (fits.HeaderInfo.exptime<>0) and (fits.HeaderInfo.airmass<>0) then begin
-             if MagnitudeCalibration<>NullCoord then begin
-               f_photometry.Memo1.Lines.Add(rsSimplifiedPh);
-               f_photometry.Memo1.Lines.Add(rsExposureTime2+' : '+FormatFloat(f3,fits.HeaderInfo.exptime)+blank+rsSeconds);
-               f_photometry.Memo1.Lines.Add(rsAirmass+' : '+FormatFloat(f4, fits.HeaderInfo.airmass));
-               mag:=MagnitudeCalibration-2.5*log10(flux/fits.HeaderInfo.exptime)-atmospheric_absorption(fits.HeaderInfo.airmass);
-             end
-             else begin
-               f_photometry.Memo1.Lines.Add(rsSimplifiedPh2);
-               mag:=-2.5*log10(flux/fits.HeaderInfo.exptime)-atmospheric_absorption(fits.HeaderInfo.airmass);
-             end;
-           end
-           else begin
-             if MagnitudeCalibration<>NullCoord then begin
-               f_photometry.Memo1.Lines.Add(rsSimplifiedPh3);
-               mag:=MagnitudeCalibration-2.5*log10(flux);
-             end
-             else begin
-               f_photometry.Memo1.Lines.Add(rsSimplifiedPh2);
-               mag:=-2.5*log10(flux);
-             end;
-           end;
-           f_photometry.mag:=mag;
-           magerr:=2.5*log10(1+1/snr);
-           f_photometry.Memo1.Lines.Add('');
-           f_photometry.Memo1.Lines.Add(rsStar+' X/Y'+' : '+FormatFloat(f3, xc)+' / '+FormatFloat(f3, img_Height-yc));
-           if fits.HeaderInfo.floatingpoint then
-             f_photometry.Memo1.Lines.Add(rsMaximumInten+' : '+FormatFloat(f3, fits.imageMin+(vmax+bg)/fits.imageC))
-           else
-             f_photometry.Memo1.Lines.Add(rsMaximumInten+' : '+FormatFloat(f0, fits.imageMin+(vmax+bg)/fits.imageC));
-           f_photometry.Memo1.Lines.Add(rsBackground+' : '+FormatFloat(f3, fits.imageMin+bg/fits.imageC)+', '+rsStdDev+blank+FormatFloat(f3, bgdev));
-           if fits.HeaderInfo.floatingpoint then
-             f_photometry.Memo1.Lines.Add(rsFlux+' : '+FormatFloat(f3, flux))
-           else
-             f_photometry.Memo1.Lines.Add(rsFlux+' : '+FormatFloat(f0, flux));
-           f_photometry.Memo1.Lines.Add('SNR'+' : '+FormatFloat(f1,snr)+', '+'+/- '+FormatFloat(f3,magerr)+blank+LowerCase(rsMagnitude));
-           f_photometry.Memo1.Lines.Add(rsMagnitude+' : '+FormatFloat(f3, mag));
+
+ fits.GetHFD(xx,yy,14,0{do not accept saturation},false,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
+ if (hfd>0)and(Undersampled or (hfd>0.7)) then begin
+   sval:=sval+' HFD='+FormatFloat(f1,hfd)+' FWHM='+FormatFloat(f1,fwhm);
+   if flux>0 then begin
+     sval:=sval+' '+rsFlux+'='+FormatFloat(f0, flux)+' SNR='+FormatFloat(f1, snr);
+     if photometry and (f_photometry<>nil) and f_photometry.Visible then begin
+       f_photometry.StarX:=xc;
+       f_photometry.StarY:=yc;
+       f_photometry.hfd:=hfd;
+       f_photometry.Memo1.Clear;
+       if (fits.HeaderInfo.exptime<>0) and (fits.HeaderInfo.airmass<>0) then begin
+         if MagnitudeCalibration<>NullCoord then begin
+           f_photometry.Memo1.Lines.Add(rsSimplifiedPh);
+           f_photometry.Memo1.Lines.Add(rsExposureTime2+' : '+FormatFloat(f3,fits.HeaderInfo.exptime)+blank+rsSeconds);
+           f_photometry.Memo1.Lines.Add(rsAirmass+' : '+FormatFloat(f4, fits.HeaderInfo.airmass));
+           mag:=MagnitudeCalibration-2.5*log10(flux/fits.HeaderInfo.exptime)-atmospheric_absorption(fits.HeaderInfo.airmass);
+         end
+         else begin
+           f_photometry.Memo1.Lines.Add(rsSimplifiedPh2);
+           mag:=-2.5*log10(flux/fits.HeaderInfo.exptime)-atmospheric_absorption(fits.HeaderInfo.airmass);
          end;
        end
        else begin
-         sval:=sval+blank+rsSaturated;
-         if photometry and (f_photometry<>nil) and f_photometry.Visible then begin
-           f_photometry.hfd:=-1;
-           f_photometry.Memo1.Clear;
-           f_photometry.Memo1.Lines.Add(rsSaturated);
-           f_photometry.mag:=NullCoord;
+         if MagnitudeCalibration<>NullCoord then begin
+           f_photometry.Memo1.Lines.Add(rsSimplifiedPh3);
+           mag:=MagnitudeCalibration-2.5*log10(flux);
+         end
+         else begin
+           f_photometry.Memo1.Lines.Add(rsSimplifiedPh2);
+           mag:=-2.5*log10(flux);
          end;
        end;
-     end
-     else begin
-       if photometry and (f_photometry<>nil) and f_photometry.Visible then begin
-         f_photometry.hfd:=-1;
-         f_photometry.Memo1.Clear;
-         f_photometry.Memo1.Lines.Add(rsNoStarFound);
-         f_photometry.mag:=NullCoord;
-       end;
+       f_photometry.mag:=mag;
+       magerr:=2.5*log10(1+1/snr);
+       f_photometry.Memo1.Lines.Add('');
+       f_photometry.Memo1.Lines.Add(rsStar+' X/Y'+' : '+FormatFloat(f3, xc)+' / '+FormatFloat(f3, img_Height-yc));
+       if fits.HeaderInfo.floatingpoint then
+         f_photometry.Memo1.Lines.Add(rsMaximumInten+' : '+FormatFloat(f3, fits.imageMin+(vmax+bg)/fits.imageC))
+       else
+         f_photometry.Memo1.Lines.Add(rsMaximumInten+' : '+FormatFloat(f0, fits.imageMin+(vmax+bg)/fits.imageC));
+       f_photometry.Memo1.Lines.Add(rsBackground+' : '+FormatFloat(f3, fits.imageMin+bg/fits.imageC)+', '+rsStdDev+blank+FormatFloat(f3, bgdev));
+       if fits.HeaderInfo.floatingpoint then
+         f_photometry.Memo1.Lines.Add(rsFlux+' : '+FormatFloat(f3, flux))
+       else
+         f_photometry.Memo1.Lines.Add(rsFlux+' : '+FormatFloat(f0, flux));
+       f_photometry.Memo1.Lines.Add('SNR'+' : '+FormatFloat(f1,snr)+', '+'+/- '+FormatFloat(f3,magerr)+blank+LowerCase(rsMagnitude));
+       f_photometry.Memo1.Lines.Add(rsMagnitude+' : '+FormatFloat(f3, mag));
      end;
    end
-   else begin
+   else begin //hfd measured but no flux is saturated
+     sval:=sval+blank+rsSaturated;
      if photometry and (f_photometry<>nil) and f_photometry.Visible then begin
        f_photometry.hfd:=-1;
        f_photometry.Memo1.Clear;
-       f_photometry.Memo1.Lines.Add(rsNoStarFound);
+       f_photometry.Memo1.Lines.Add(rsSaturated);
        f_photometry.mag:=NullCoord;
      end;
    end;
@@ -19858,7 +19838,7 @@ end;
 
 procedure Tf_main.ImageGuideClick(Sender: TObject);
 var xx,yy: integer;
-    xxc,yyc,rc,s,w,h:integer;
+    xxc,yyc,rc,s,w,h :integer;
     bg,bgdev,xc,yc,hfd,fwhm,vmax,snr,flux,lockx,locky: double;
 begin
   if f_internalguider.SpectroFunctions and (autoguider is T_autoguider_internal) and (f_internalguider.StarOffsetStep>0) then begin
@@ -19876,7 +19856,7 @@ begin
           s:=f_internalguider.SearchWinMin;
           guidefits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
           if vmax>0 then begin
-            guidefits.GetHFD2(xxc,yyc,2*rc,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
+            guidefits.GetHFD(xxc,yyc,2*rc,maxint{accept saturation},false,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
             if vmax>0 then begin
               GuideOffset1X:=xc;
               GuideOffset1Y:=h-yc;
@@ -19893,7 +19873,7 @@ begin
           s:=f_internalguider.SearchWinMin;
           guidefits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
           if vmax>0 then begin
-            guidefits.GetHFD2(xxc,yyc,2*rc,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
+            guidefits.GetHFD(xxc,yyc,2*rc,maxint{accept saturation},false,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
             if vmax>0 then begin
               GuideOffset2X:=xc;
               GuideOffset2Y:=h-yc;
@@ -19934,7 +19914,7 @@ begin
           s:=f_internalguider.SearchWinMin;
           guidefits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
           if vmax>0 then begin
-            guidefits.GetHFD2(xxc,yyc,2*rc,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
+            guidefits.GetHFD(xxc,yyc,2*rc,maxint{accept saturation},false,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
             if vmax>0 then begin
               GuideOffset1X:=xc;
               GuideOffset1Y:=h-yc;
@@ -20162,7 +20142,7 @@ end;
 
 procedure Tf_main.GuiderMeasureAtPos(x,y:integer);
 var xx,yy,n: integer;
-    val,xxc,yyc,rc,s:integer;
+    val,xxc,yyc,rc,s :integer;
     sval:string;
     bg,bgdev,xc,yc,hfd,fwhm,vmax,dval,snr,flux,ra,de: double;
     i: TcdcWCSinfo;
@@ -20207,7 +20187,7 @@ begin
  if (xx>s)and(xx<(guidefits.HeaderInfo.naxis1-s))and(yy>s)and(yy<(guidefits.HeaderInfo.naxis2-s)) then begin
    guidefits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
    if vmax>0 then begin
-     guidefits.GetHFD2(xxc,yyc,2*rc,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
+     guidefits.GetHFD(xxc,yyc,2*rc,maxint{accept saturation},false,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
      if (hfd>=f_internalguider.minHFD) then begin
        sval:=sval+' HFD='+FormatFloat(f1,hfd)+' FWHM='+FormatFloat(f1,fwhm);
        if flux>0 then begin
@@ -20892,8 +20872,8 @@ end;
 
 procedure Tf_main.FinderMeasureAtPos(x,y:integer);
 var xx,yy,n: integer;
-    val,xxc,yyc,rc,s:integer;
-    sval:string;
+    val : integer;
+    sval: string;
     bg,bgdev,xc,yc,hfd,fwhm,vmax,dval,snr,flux,ra,de: double;
     i: TcdcWCSinfo;
     c: TcdcWCScoord;
@@ -20933,31 +20913,18 @@ begin
       end;
     end
  else sval:='';
- s:=Starwindow;
- if (xx>s)and(xx<(finderfits.HeaderInfo.naxis1-s))and(yy>s)and(yy<(finderfits.HeaderInfo.naxis2-s)) then begin
-   finderfits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
-   if vmax>0 then begin
-     finderfits.GetHFD2(xxc,yyc,2*rc,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
-     if (hfd>=0.8) then begin
-       sval:=sval+' HFD='+FormatFloat(f1,hfd)+' FWHM='+FormatFloat(f1,fwhm);
-       if flux>0 then begin
-         sval:=sval+' '+rsFlux+'='+FormatFloat(f0, flux)+' SNR='+FormatFloat(f1, snr);
-       end
-       else begin
-         sval:=sval+blank+rsSaturated;
-        end;
-     end
-     else begin
-      //
-     end;
+
+ finderfits.GetHFD(xx,yy,14, 0{do not accept saturation},false,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
+ if (hfd>=0.8) then begin
+   sval:=sval+' HFD='+FormatFloat(f1,hfd)+' FWHM='+FormatFloat(f1,fwhm);
+   if flux>0 then begin
+     sval:=sval+' '+rsFlux+'='+FormatFloat(f0, flux)+' SNR='+FormatFloat(f1, snr);
    end
-   else begin
-     //
-   end;
- end
- else begin
-   //
+   else begin //HFD measured but no flux reported indicates saturation
+     sval:=sval+blank+rsSaturated;
+    end;
  end;
+
  if finderfits.HeaderInfo.solved then begin
    n:=cdcwcs_getinfo(addr(i),wcsfind);
    if (n=0)and(i.secpix<>0) then begin

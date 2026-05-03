@@ -558,7 +558,7 @@ end;
 
 procedure T_camera.NewImage;
 var f,fs:TFits;
-    n,xi,yi,xc,yc,ri: integer;
+    n,xi,yi,xc,yc,ri : integer;
     xs,ys,xn,yn,hfd,fwhm,vmax,snr,bg,bgdev,flux,rot,scale,ra,de : double;
     stackok,alok,savebayer: boolean;
     mem: TMemoryStream;
@@ -643,7 +643,7 @@ if FAddFrames then begin  // stack preview frames
           yi:=round(FStackStarY);
           f.FindStarPos(xi,yi,50,xc,yc,ri,vmax,bg,bgdev);
           if vmax>0 then begin
-            f.GetHFD2(xc,yc,2*ri,xn,yn,bg,bgdev,hfd,fwhm,vmax,snr,flux,false);
+            f.GetHFD(xc,yc,2*ri,maxint{allow saturation},false,xn,yn,bg,bgdev,hfd,fwhm,vmax,snr,flux);
             if ((hfd>0)and(Undersampled or (hfd>0.7))) and (hfd<10) then begin
               xs:=FStackAlignX-xn;
               ys:=FStackAlignY-yn;
@@ -692,7 +692,7 @@ if FAddFrames then begin  // stack preview frames
           if vmax>0 then begin
             FFits.FindStarPos(xi,yi,20,xc,yc,ri,vmax,bg,bgdev);
             if vmax>0 then begin
-              FFits.GetHFD2(xc,yc,2*ri,xs,ys,bg,bgdev,hfd,fwhm,vmax,snr,flux,false);
+              FFits.GetHFD(xc,yc,2*ri,maxint{allow saturation},false,xs,ys,bg,bgdev,hfd,fwhm,vmax,snr,flux);
               if ((hfd>0)and(Undersampled or (hfd>0.7))) and (hfd<10) then begin
                  FStackAlign:=true;
                  FStackAlignX:=xs;
