@@ -6293,7 +6293,7 @@ msgstr ""
 msgid "Multiple dark with different exposure"
 msgstr ""
 
-#: u_translation:rsspacereplace
-msgid "Space replacement"
+#: u_translation:rsreplaceby
+msgid "replace by"
 msgstr ""
 

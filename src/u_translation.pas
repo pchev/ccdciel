@@ -1674,7 +1674,7 @@ resourcestring
   rsRunTerminati = 'Run termination script after every image';
   rsOverwrite = 'Overwrite';
   rsMultipleDark = 'Multiple dark with different exposure';
-  rsSpaceReplace = 'Space replacement';
+  rsReplaceBy = 'replace by';
 
 implementation
 

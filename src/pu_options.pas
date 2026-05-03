@@ -1112,7 +1112,7 @@ begin
   UseFileSequenceWidth.Caption:=rsFixedSequenc;
   Label173.Caption:=rsSequenceSepa;
   RemoveSpace.Caption:=rsRemoveSpaceI;
-  Label196.Caption:=rsSpaceReplace;
+  Label196.Caption:=', '+rsReplaceBy;
   KeepIndiHeader.Caption:=rsDoNotModifyT;
   FilePack.Caption:=rsCompressTheF;
   Label156.Caption:=rsFITSFileExte;

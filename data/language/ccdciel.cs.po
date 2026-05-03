@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-03 18:45+0000\n"
+"POT-Creation-Date: 2026-05-03 19:15+0000\n"
 "PO-Revision-Date: 2026-03-16 14:18+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-05-03 18:52+0000\n"
+"X-Launchpad-Export-Date: 2026-05-03 19:20+0000\n"
 "X-Generator: Launchpad (build 91d5f4cbcbec62cc98ca9991c8ad99af4e21f85a)\n"
 "Language: cs\n"
 
@@ -4264,6 +4264,10 @@ msgstr "Opakování celého seznamu"
 msgid "Repeat this step"
 msgstr "Tento krok opakujte"
 
+#: u_translation.rsreplaceby
+msgid "replace by"
+msgstr ""
+
 #: u_translation.rsreportaprobl
 msgid "Report a problem"
 msgstr "Nahlásit problém"
@@ -5228,10 +5232,6 @@ msgstr "Některá nadefinovaná zařízení nejsou připojeny"
 #: u_translation.rssouth
 msgid "South"
 msgstr "Jih"
-
-#: u_translation.rsspacereplace
-msgid "Space replacement"
-msgstr ""
 
 #: u_translation.rsspectralprof
 msgid "Spectral profile"
