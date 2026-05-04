@@ -27,7 +27,7 @@ interface
 
 uses u_global, cu_plan, u_utils, indiapi, pu_scriptengine, pu_pause, cu_rotator, cu_planetarium, u_ephem, cu_waitthread,
   fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider, cu_autoguider_internal, cu_astrometry,
-  fu_safety, fu_weather, cu_dome, u_ccdconfig, cu_sequencefile, fu_internalguider, math, LazSysUtils,
+  fu_safety, fu_weather, cu_dome, u_ccdconfig, cu_sequencefile, fu_internalguider, math, LazSysUtils, fu_finder,
   u_translation, LazFileUtils, Controls, Dialogs, ExtCtrls,Classes, Forms, SysUtils;
 
 type
@@ -84,10 +84,11 @@ type
       Fsafety: Tf_safety;
       Fdome: T_dome;
       Fmount: T_mount;
-      Fcamera: T_camera;
+      Fcamera, Fguidecamera, Ffindercamera: T_camera;
       Frotator: T_rotator;
       Fautoguider: T_autoguider;
       Finternalguider: Tf_internalguider;
+      FFinder: Tf_finder;
       Fastrometry: TAstrometry;
       Fplanetarium: TPlanetarium;
       StartPlanTimer: TTimer;
@@ -227,6 +228,8 @@ type
       property Capture: Tf_capture read Fcapture write Setcapture;
       property Mount: T_mount read Fmount write SetMount;
       property Camera: T_camera read Fcamera write SetCamera;
+      property GuideCamera: T_camera read Fguidecamera write Fguidecamera;
+      property FinderCamera: T_camera read Ffindercamera write Ffindercamera;
       property Rotator: T_rotator read Frotator write Frotator;
       property Filter: Tf_filterwheel read Ffilter write SetFilter;
       property Weather: Tf_weather read Fweather write Fweather;
@@ -234,6 +237,7 @@ type
       property Dome: T_dome read Fdome write Fdome;
       property Autoguider: T_autoguider read Fautoguider write SetAutoguider;
       property InternalGuider: Tf_internalguider read Finternalguider write Finternalguider;
+      property Finder: Tf_finder read FFinder write FFinder;
       property Astrometry: TAstrometry read Fastrometry write SetAstrometry;
       property Planetarium: TPlanetarium read Fplanetarium write Fplanetarium;
       property DelayMsg: TNotifyStr read FDelayMsg write FDelayMsg;
@@ -1301,6 +1305,8 @@ begin
       msg(Format(rsCameraNotCoo, [FormatFloat(f1, ccdtemp)]),1);
       ccdtemp:=TempCelsius(TemperatureScale,ccdtemp);
       camera.Temperature:=ccdtemp;
+      if (guidecamera<>nil)and guidecamera.CanSetTemperature then guidecamera.Temperature:=TempCelsius(TemperatureScale,Finternalguider.Temperature.Value);
+      if (findercamera<>nil)and(not SameGuiderFinder)and findercamera.CanSetTemperature then findercamera.Temperature:=TempCelsius(TemperatureScale,Ffinder.Temperature.Value);
       wait;
     end;
   end;
@@ -3399,6 +3405,8 @@ if AtEndStopTracking or AtEndPark or AtEndCloseDome or AtEndWarmCamera or AtEndR
   if AtEndWarmCamera then begin
     msg(rsWarmTheCamer,1);
     Camera.Temperature:=20.0;
+    if (guidecamera<>nil)and guidecamera.CanSetTemperature then guidecamera.Temperature:=20;
+    if (findercamera<>nil)and(not SameGuiderFinder)and findercamera.CanSetTemperature then findercamera.Temperature:=20;
   end;
   if AtEndRunScript then begin
     i:=pos(' ',AtEndScript);

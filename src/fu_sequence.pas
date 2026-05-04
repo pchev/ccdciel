@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses
-  pu_edittargets, u_ccdconfig, u_global, u_utils, UScaleDPI, u_speech, cu_switch,
+  pu_edittargets, u_ccdconfig, u_global, u_utils, UScaleDPI, u_speech, cu_switch, fu_finder,
   fu_capture, fu_preview, fu_filterwheel, fu_internalguider, u_hints, u_translation, math,
   cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator, pu_viewtext, pu_autoexposurestep,
   cu_targets, cu_plan, cu_planetarium, pu_pause, fu_safety, fu_weather, cu_dome,
@@ -113,10 +113,11 @@ type
     Fsafety: Tf_safety;
     Fdome: T_dome;
     Fmount: T_mount;
-    Fcamera: T_camera;
+    Fcamera,Fguidecamera,Ffindercamera: T_camera;
     Frotator: T_rotator;
     Fautoguider: T_autoguider;
     Finternalguider: Tf_internalguider;
+    FFinder: Tf_finder;
     Fastrometry: TAstrometry;
     Fplanetarium: TPlanetarium;
     FSwitch: TSwitches;
@@ -124,6 +125,8 @@ type
     procedure SetCapture(val: Tf_capture);
     procedure SetMount(val: T_mount);
     procedure SetCamera(val: T_camera);
+    procedure SetGuideCamera(val: T_camera);
+    procedure SetFinderCamera(val: T_camera);
     procedure SetRotator(val: T_rotator);
     procedure SetFilter(val: Tf_filterwheel);
     procedure SetWeather(val: Tf_weather);
@@ -131,6 +134,7 @@ type
     procedure SetDome(val: T_dome);
     procedure SetAutoguider(val: T_autoguider);
     procedure SetInternalguider(val: Tf_internalguider);
+    procedure SetFinder(val: Tf_finder);
     procedure SetAstrometry(val: TAstrometry);
     procedure SetPlanetarium(val: TPlanetarium);
     function GetRunning: boolean;
@@ -193,6 +197,8 @@ type
     property Capture: Tf_capture read Fcapture write SetCapture;
     property Mount: T_mount read Fmount write SetMount;
     property Camera: T_camera read Fcamera write SetCamera;
+    property GuideCamera: T_camera read Fguidecamera write SetGuideCamera;
+    property FinderCamera: T_camera read Ffindercamera write SetFinderCamera;
     property Rotator: T_rotator read Frotator write SetRotator;
     property Filter: Tf_filterwheel read Ffilter write SetFilter;
     property Weather: Tf_weather read Fweather write SetWeather;
@@ -200,6 +206,7 @@ type
     property Dome: T_dome read Fdome write SetDome;
     property Autoguider: T_autoguider read Fautoguider write SetAutoguider;
     property InternalGuider: Tf_internalguider read Finternalguider write SetInternalguider;
+    property Finder: Tf_finder read FFinder write SetFinder;
     property Astrometry: TAstrometry read Fastrometry write SetAstrometry;
     property Planetarium: TPlanetarium read FPlanetarium write SetPlanetarium;
     property Switch: TSwitches read FSwitch write FSwitch;
@@ -240,6 +247,8 @@ begin
  Targets.Capture:=Fcapture;
  Targets.Mount:=Fmount;
  Targets.Camera:=Fcamera;
+ Targets.GuideCamera:=Fguidecamera;
+ Targets.FinderCamera:=Ffindercamera;
  Targets.Filter:=Ffilter;
  Targets.Autoguider:=Fautoguider;
  Targets.InternalGuider:=FInternalguider;
@@ -346,6 +355,19 @@ begin
   Targets.Camera:=Fcamera;
 end;
 
+procedure Tf_sequence.SetGuideCamera(val: T_camera);
+begin
+  Fguidecamera:=val;
+  Targets.GuideCamera:=Fguidecamera;
+end;
+
+procedure Tf_sequence.SetFinderCamera(val: T_camera);
+begin
+  FFinderCamera:=val;
+  Targets.FinderCamera:=FFinderCamera;
+end;
+
+
 procedure Tf_sequence.SetRotator(val: T_rotator);
 begin
   Frotator:=val;
@@ -388,6 +410,11 @@ begin
   Targets.InternalGuider:=FInternalguider;
 end;
 
+procedure Tf_sequence.SetFinder(val: Tf_finder);
+begin
+  FFinder:=val;
+  Targets.Finder:=FFinder;
+end;
 
 procedure Tf_sequence.SetAstrometry(val: TAstrometry);
 begin
@@ -881,6 +908,8 @@ begin
        msg(Format(rsCameraNotCoo, [FormatFloat(f1, ccdtemp)]),1);
        ccdtemp:=TempCelsius(TemperatureScale,ccdtemp);
        camera.Temperature:=ccdtemp;
+       if (guidecamera<>nil)and guidecamera.CanSetTemperature then guidecamera.Temperature:=TempCelsius(TemperatureScale,Finternalguider.Temperature.Value);
+       if (findercamera<>nil)and(not SameGuiderFinder)and findercamera.CanSetTemperature then findercamera.Temperature:=TempCelsius(TemperatureScale,Ffinder.Temperature.Value);
     end;
  end;
  if not StartingSequence then exit;

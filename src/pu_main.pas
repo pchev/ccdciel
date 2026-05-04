@@ -659,7 +659,7 @@ type
     astrometry:TAstrometry;
     WantCamera,WantGuideCamera,WantFinderCamera,WantWheel,WantFocuser,WantRotator, WantMount, WantDome, WantWeather, WantSafety, WantSwitch, WantCover, WantWatchdog: boolean;
     CameraInitialized: boolean;
-    FOpenSetup: boolean;
+    FOpenSetup, FConnecting: boolean;
     f_devicesconnection: Tf_devicesconnection;
     f_filterwheel: Tf_filterwheel;
     f_ccdtemp: Tf_ccdtemp;
@@ -1616,6 +1616,7 @@ begin
   ScaleMainForm;
   NeedRestart:=false;
   AllDevicesConnected:=false;
+  FConnecting:=false;
   GUIready:=false;
   filteroffset_initialized:=false;
   MsgHandle:=handle;
@@ -2122,6 +2123,7 @@ begin
   f_sequence.Weather:=f_weather;
   f_sequence.Safety:=f_safety;
   f_sequence.InternalGuider:=f_internalguider;
+  f_sequence.Finder:=f_finder;
   f_sequence.Autoguider:=autoguider;
   f_sequence.Astrometry:=astrometry;
   f_sequence.Planetarium:=planetarium;
@@ -2463,6 +2465,8 @@ begin
    f_sequence.Dome:=dome;
    f_sequence.Mount:=mount;
    f_sequence.Camera:=camera;
+   f_sequence.GuideCamera:=guidecamera;
+   f_sequence.FinderCamera:=findercamera;
    f_sequence.Rotator:=rotator;
  end;
  if f_scriptengine<>nil then begin
@@ -4429,7 +4433,7 @@ begin
   f_internalguider.Temperature.Visible:=guidecamera.CanSetTemperature;
   f_internalguider.ButtonSetTemp.Visible:=f_internalguider.Temperature.Visible;
   f_internalguider.Cooler.Visible:=f_internalguider.Temperature.Visible;
-  if f_internalguider.Cooler.Visible then GuideCameraSetCooler(nil);
+  if f_internalguider.Cooler.Visible and config.GetValue('/Cooler/CameraAutoCool',false) then GuideCameraSetCooler(nil);
 end;
 
 procedure Tf_main.FinderCameraConnectTimerTimer(Sender: TObject);
@@ -4449,10 +4453,10 @@ begin
   f_finder.Offset.MaxValue:=findercamera.OffsetMax;
   f_finder.Offset.Value:=config.GetValue('/PrecSlew/Offset',NullInt);
   f_finder.PanelTemperature.Visible:=findercamera.Temperature<>NullCoord;
-  f_finder.Temperature.Visible:=findercamera.CanSetTemperature;
+  f_finder.Temperature.Visible:=(not SameGuiderFinder) and findercamera.CanSetTemperature;
   f_finder.ButtonSetTemp.Visible:=f_finder.Temperature.Visible;
   f_finder.Cooler.Visible:=f_finder.Temperature.Visible;
-  if f_finder.Cooler.Visible then FinderCameraSetCooler(nil);
+  if f_finder.Cooler.Visible and config.GetValue('/Cooler/CameraAutoCool',false) then FinderCameraSetCooler(nil);
   f_finder.Binning.Value:=config.GetValue('/PrecSlew/Binning',1);
   if (astrometry.FinderOffsetX=0)and(astrometry.FinderOffsetY=0) then begin
     // set default position in the middle of the image
@@ -6247,6 +6251,7 @@ try
       wait(10);
     end;
   end;
+  FConnecting:=true;
   f_script.RunBeforeConnectScript;
   if WantCamera and (CameraName='') then begin
     f_devicesconnection.BtnConnect.Caption:=rsConnect;
@@ -6377,6 +6382,7 @@ Procedure Tf_main.Disconnect(Sender: TObject);
 begin
    if (sender=nil) or (MessageDlg(rsAreYouSureYo, mtConfirmation, mbYesNo, 0)=mrYes) then begin
      NewMessage(rsDisconnectin,9);
+     FConnecting:=false;
      if camera.Status=devConnected then camera.AbortExposure;
      if guidecamera.Status=devConnected then guidecamera.AbortExposure;
      if findercamera.Status=devConnected then findercamera.AbortExposure;
@@ -6455,6 +6461,7 @@ end;
 procedure SetConnected;
 begin
  AllDevicesConnected:=true;
+ FConnecting:=false;
  f_devicesconnection.led.Brush.Color:=clLime;
  f_devicesconnection.BtnProfile.Enabled:=False;
  f_devicesconnection.BtnConnect.Caption:=rsDisconnect;
@@ -6476,8 +6483,10 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
   case camera.Status of
     devConnected: begin
                   inc(upcount);
-                  CameraConnectTimer.Enabled:=false;
-                  CameraConnectTimer.Enabled:=true;
+                  if FConnecting then begin
+                    CameraConnectTimer.Enabled:=false;
+                    CameraConnectTimer.Enabled:=true;
+                  end;
                   end;
     devDisconnected: inc(downcount);
     devConnecting: inc(concount);
@@ -6561,8 +6570,10 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
    case guidecamera.Status of
      devConnected: begin
                    inc(upcount);
-                   GuideCameraConnectTimer.Enabled:=false;
-                   GuideCameraConnectTimer.Enabled:=true;
+                   if FConnecting then begin
+                     GuideCameraConnectTimer.Enabled:=false;
+                     GuideCameraConnectTimer.Enabled:=true;
+                   end;
                    end;
      devDisconnected: inc(downcount);
      devConnecting: inc(concount);
@@ -6573,8 +6584,10 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
    case findercamera.Status of
      devConnected: begin
                    inc(upcount);
-                   FinderCameraConnectTimer.Enabled:=false;
-                   FinderCameraConnectTimer.Enabled:=true;
+                   if FConnecting then begin
+                     FinderCameraConnectTimer.Enabled:=false;
+                     FinderCameraConnectTimer.Enabled:=true;
+                   end;
                    end;
      devDisconnected: inc(downcount);
      devConnecting: inc(concount);
@@ -7671,6 +7684,8 @@ begin
             safWarmCamera: begin
                NewMessage(rsWarmTheCamer);
                if camera<>nil then camera.Temperature:=20;
+               if (guidecamera<>nil)and guidecamera.CanSetTemperature then guidecamera.Temperature:=20;
+               if (findercamera<>nil)and(not SameGuiderFinder)and findercamera.CanSetTemperature then findercamera.Temperature:=20;
                wait(1);
             end;
             safAutoguiderShutdown: begin
