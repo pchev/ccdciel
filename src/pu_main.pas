@@ -19213,6 +19213,7 @@ begin
    end;
    f_internalguider.CameraStatus := txt;
    FGuideProgress:=-1;
+   ImageGuide.Invalidate;
  end else begin
   if n>=10 then txt:=FormatFloat(f0, n)
            else txt:=FormatFloat(f1, n);
@@ -20520,6 +20521,7 @@ begin
    end;
    f_finder.LabelInfo.Caption := txt;
    FFinderProgress:=-1;
+   FinderImage.Invalidate;
  end else begin
   if n>=10 then txt:=FormatFloat(f0, n)
            else txt:=FormatFloat(f1, n);
