@@ -21246,6 +21246,7 @@ begin
   else begin
      i:=PageControlRight.ActivePageIndex;
      if (i=5)and(not f_internalguider.cbEnlargeImage.Checked) then i:=0;
+     if (i=1)and(GuiderAutofocus) then i:=5;
      case i of
           0..4: begin mainimage.Visible:=true;  GuideImage.Visible:=false;  FinderImage.Visible:=false; end;
           5:    begin mainimage.Visible:=false; GuideImage.Visible:=true;   FinderImage.Visible:=false; end;
