@@ -156,12 +156,10 @@ type
     Label47: TLabel;
     Label48: TLabel;
     Label9: TLabel;
-    LabelInfo4: TLabel;
-    LabelInfo3: TLabel;
+    LabelStatus: TLabel;
     Label49: TLabel;
     Label50: TLabel;
     LabelInfo: TLabel;
-    LabelInfo2: TLabel;
     LabelTemperature: TLabel;
     LabelStatusDec: TLabel;
     LabelStatusRA: TLabel;
@@ -595,9 +593,7 @@ begin
  LabelStatusRA.Caption:='';
  LabelStatusDec.Caption:='';
  LabelInfo.Caption:='';
- LabelInfo2.Caption:='';
- LabelInfo3.Caption:='';
- LabelInfo4.Caption:='';
+ LabelStatus.Caption:='';
  LabelSetOffset.Caption:='';
  LabelSetMultiOffset.Caption:='';
  pier_side1.Text:='N/A';
@@ -1986,19 +1982,17 @@ end;
 
 procedure Tf_internalguider.SetCameraStatus(status: string);
 begin
- LabelInfo3.Caption:=status;
- LabelInfo4.Caption:=status;
+ LabelStatus.Caption:=status;
 end;
 
 function Tf_internalguider.GetCameraStatus: string;
 begin
- result:=LabelInfo3.Caption;
+ result:=LabelStatus.Caption;
 end;
 
 procedure Tf_internalguider.SetInfo(status: string);
 begin
  LabelInfo.Caption:=status;
- LabelInfo2.Caption:=status;
 end;
 
 function Tf_internalguider.GetInfo: string;

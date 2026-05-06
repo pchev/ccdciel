@@ -29,12 +29,12 @@ object f_internalguider: Tf_internalguider
   end
   object Panel1: TPanel
     Left = 0
-    Height = 996
+    Height = 1037
     Top = 20
     Width = 346
     Align = alTop
     AutoSize = True
-    ClientHeight = 996
+    ClientHeight = 1037
     ClientWidth = 346
     ParentFont = False
     TabOrder = 0
@@ -66,14 +66,14 @@ object f_internalguider: Tf_internalguider
     end
     object Panel15: TPanel
       Left = 5
-      Height = 25
+      Height = 66
       Top = 37
       Width = 336
       Align = alTop
       AutoSize = True
       BorderSpacing.Around = 4
       BevelOuter = bvNone
-      ClientHeight = 25
+      ClientHeight = 66
       ClientWidth = 336
       TabOrder = 1
       object ButtonLoop: TButton
@@ -120,11 +120,27 @@ object f_internalguider: Tf_internalguider
         ParentFont = False
         TabOrder = 2
       end
+      object LabelInfo: TLabel
+        Left = 0
+        Height = 18
+        Top = 28
+        Width = 58
+        Caption = 'LabelInfo'
+        ParentColor = False
+      end
+      object LabelStatus: TLabel
+        Left = 0
+        Height = 18
+        Top = 48
+        Width = 71
+        Caption = 'LabelStatus'
+        ParentColor = False
+      end
     end
     object pcInternalguider: TPageControl
       Left = 1
       Height = 929
-      Top = 66
+      Top = 107
       Width = 344
       ActivePage = TabSheetGuider
       Align = alTop
@@ -346,22 +362,6 @@ object f_internalguider: Tf_internalguider
             Caption = 'LabelStatusDec'
             ParentColor = False
           end
-          object LabelInfo2: TLabel
-            Left = 4
-            Height = 18
-            Top = 402
-            Width = 65
-            Caption = 'LabelInfo2'
-            ParentColor = False
-          end
-          object LabelInfo3: TLabel
-            Left = 4
-            Height = 18
-            Top = 422
-            Width = 65
-            Caption = 'LabelInfo3'
-            ParentColor = False
-          end
           object cbEnlargeImage: TCheckBox
             AnchorSideTop.Control = ButtonCalibrate
             AnchorSideTop.Side = asrCenter
@@ -403,12 +403,12 @@ object f_internalguider: Tf_internalguider
           TabOrder = 0
           object Panel6: TPanel
             Left = 0
-            Height = 103
+            Height = 64
             Top = 0
             Width = 340
             Align = alTop
             BevelOuter = bvNone
-            ClientHeight = 103
+            ClientHeight = 64
             ClientWidth = 340
             ParentBackground = False
             TabOrder = 0
@@ -427,22 +427,6 @@ object f_internalguider: Tf_internalguider
               Top = 36
               Width = 62
               Caption = 'LabelDark'
-              ParentColor = False
-            end
-            object LabelInfo: TLabel
-              Left = 11
-              Height = 18
-              Top = 57
-              Width = 58
-              Caption = 'LabelInfo'
-              ParentColor = False
-            end
-            object LabelInfo4: TLabel
-              Left = 11
-              Height = 18
-              Top = 79
-              Width = 66
-              Caption = 'LabelInfo4'
               ParentColor = False
             end
             object cbFilterNoise: TCheckBox
@@ -482,7 +466,7 @@ object f_internalguider: Tf_internalguider
           object Panel7: TPanel
             Left = 0
             Height = 66
-            Top = 103
+            Top = 64
             Width = 340
             Align = alTop
             BevelOuter = bvNone
@@ -577,7 +561,7 @@ object f_internalguider: Tf_internalguider
           object PanelGain: TPanel
             Left = 0
             Height = 34
-            Top = 169
+            Top = 130
             Width = 340
             Align = alTop
             BevelOuter = bvNone
@@ -609,7 +593,7 @@ object f_internalguider: Tf_internalguider
           object PanelOffset: TPanel
             Left = 0
             Height = 34
-            Top = 203
+            Top = 164
             Width = 340
             Align = alTop
             BevelOuter = bvNone
@@ -641,7 +625,7 @@ object f_internalguider: Tf_internalguider
           object PanelTemperature: TPanel
             Left = 0
             Height = 60
-            Top = 237
+            Top = 198
             Width = 340
             Align = alTop
             BevelOuter = bvNone
@@ -708,12 +692,12 @@ object f_internalguider: Tf_internalguider
           end
           object Panel8: TPanel
             Left = 0
-            Height = 628
-            Top = 297
+            Height = 667
+            Top = 258
             Width = 340
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 628
+            ClientHeight = 667
             ClientWidth = 340
             TabOrder = 5
             object PanelVisu: TPanel
@@ -760,7 +744,7 @@ object f_internalguider: Tf_internalguider
               Left = 200
               Height = 32
               Hint = 'Improves stability. Typical set at 40. Guide pulses shorter then this value are skipped.  Pulses shorter then this value can cause a larger error then the required correction and are not effective.'
-              Top = 8
+              Top = 4
               Width = 72
               MaxLength = 0
               TabOrder = 0
@@ -776,7 +760,7 @@ object f_internalguider: Tf_internalguider
               AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 18
-              Top = 15
+              Top = 11
               Width = 156
               Caption = 'Shortest guide pulse [ms]'
               ParentColor = False
@@ -786,7 +770,7 @@ object f_internalguider: Tf_internalguider
               AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 18
-              Top = 103
+              Top = 101
               Width = 89
               Caption = 'Minimum HFD'
               ParentColor = False
@@ -820,7 +804,7 @@ object f_internalguider: Tf_internalguider
               Left = 200
               Height = 32
               Hint = 'Minimum star size. could be used to ignore hot pixels.'
-              Top = 96
+              Top = 94
               Width = 72
               MaxLength = 0
               TabOrder = 2
@@ -864,9 +848,11 @@ object f_internalguider: Tf_internalguider
               ParentColor = False
             end
             object Label11: TLabel
+              AnchorSideTop.Control = LongestPulse1
+              AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 18
-              Top = 69
+              Top = 67
               Width = 154
               Caption = 'Longest guide pulse [ms]'
               ParentColor = False
@@ -874,7 +860,7 @@ object f_internalguider: Tf_internalguider
             object LongestPulse1: TSpinEditEx
               Left = 200
               Height = 32
-              Top = 64
+              Top = 60
               Width = 72
               MaxLength = 0
               TabOrder = 1
@@ -888,7 +874,7 @@ object f_internalguider: Tf_internalguider
             object Label20: TLabel
               Left = 8
               Height = 18
-              Top = 40
+              Top = 36
               Width = 100
               Caption = 'Minimum move:'
               ParentColor = False
