@@ -6297,3 +6297,19 @@ msgstr ""
 msgid "replace by"
 msgstr ""
 
+#: u_translation:rsremovestarre
+msgid "Remove star reflection on glass slit"
+msgstr ""
+
+#: u_translation:rsreflection
+msgid "Reflection"
+msgstr ""
+
+#: u_translation:rsstarintensit
+msgid "Star intensity threshold"
+msgstr ""
+
+#: u_translation:rsdiameter
+msgid "diameter"
+msgstr ""
+

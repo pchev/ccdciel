@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-03 19:15+0000\n"
+"POT-Creation-Date: 2026-05-06 14:15+0000\n"
 "PO-Revision-Date: 2026-03-16 14:18+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-05-03 19:20+0000\n"
+"X-Launchpad-Export-Date: 2026-05-06 14:28+0000\n"
 "X-Generator: Launchpad (build 91d5f4cbcbec62cc98ca9991c8ad99af4e21f85a)\n"
 "Language: cs\n"
 
@@ -1467,6 +1467,10 @@ msgstr "Nastavení Zařízení%s"
 #: u_translation.rsdewpoint
 msgid "Dew point"
 msgstr "Rosný bod"
+
+#: u_translation.rsdiameter
+msgid "diameter"
+msgstr ""
 
 #: u_translation.rsdirectory
 msgid "Directory"
@@ -4210,6 +4214,10 @@ msgstr "Referenční expozice"
 msgid "Reference image"
 msgstr "Referenční snímek"
 
+#: u_translation.rsreflection
+msgid "Reflection"
+msgstr ""
+
 #: u_translation.rsrefractedpol
 msgid "Refracted pole"
 msgstr "Změření pólu"
@@ -4237,6 +4245,10 @@ msgstr "Odstranit řádek"
 #: u_translation.rsremovespacei
 msgid "Remove space in object name"
 msgstr "Odstranění mezery v názvu objektu"
+
+#: u_translation.rsremovestarre
+msgid "Remove star reflection on glass slit"
+msgstr ""
 
 #: u_translation.rsremovestep
 msgid "Remove step"
@@ -5308,6 +5320,10 @@ msgstr "Velikost okna pro detekci hvězd "
 #: u_translation.rsstarfwhm
 msgid "Star FWHM"
 msgstr "Hvězda FWHM"
+
+#: u_translation.rsstarintensit
+msgid "Star intensity threshold"
+msgstr ""
 
 #: u_translation.rsstarlostreco
 msgid "Star lost recovery"

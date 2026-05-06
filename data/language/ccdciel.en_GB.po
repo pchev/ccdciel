@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-05-03 19:15+0000\n"
+"POT-Creation-Date: 2026-05-06 14:15+0000\n"
 "PO-Revision-Date: 2021-08-31 20:37+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-05-03 19:20+0000\n"
+"X-Launchpad-Export-Date: 2026-05-06 14:28+0000\n"
 "X-Generator: Launchpad (build 91d5f4cbcbec62cc98ca9991c8ad99af4e21f85a)\n"
 "Language: en_GB\n"
 
@@ -1468,6 +1468,10 @@ msgstr "Devices Setup%s"
 #: u_translation.rsdewpoint
 msgid "Dew point"
 msgstr "Dew point"
+
+#: u_translation.rsdiameter
+msgid "diameter"
+msgstr ""
 
 #: u_translation.rsdirectory
 msgid "Directory"
@@ -4211,6 +4215,10 @@ msgstr ""
 msgid "Reference image"
 msgstr "Reference image"
 
+#: u_translation.rsreflection
+msgid "Reflection"
+msgstr ""
+
 #: u_translation.rsrefractedpol
 msgid "Refracted pole"
 msgstr "Refracted pole"
@@ -4237,6 +4245,10 @@ msgstr ""
 
 #: u_translation.rsremovespacei
 msgid "Remove space in object name"
+msgstr ""
+
+#: u_translation.rsremovestarre
+msgid "Remove star reflection on glass slit"
 msgstr ""
 
 #: u_translation.rsremovestep
@@ -5309,6 +5321,10 @@ msgstr "Star detection window size "
 #: u_translation.rsstarfwhm
 msgid "Star FWHM"
 msgstr "Star FWHM"
+
+#: u_translation.rsstarintensit
+msgid "Star intensity threshold"
+msgstr ""
 
 #: u_translation.rsstarlostreco
 msgid "Star lost recovery"
