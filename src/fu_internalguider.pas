@@ -2008,22 +2008,24 @@ end;
 
 procedure Tf_internalguider.SetCameraStatus(status: string);
 begin
+ if status='' then status:=' ';
  LabelStatus.Caption:=status;
 end;
 
 function Tf_internalguider.GetCameraStatus: string;
 begin
- result:=LabelStatus.Caption;
+ result:=trim(LabelStatus.Caption);
 end;
 
 procedure Tf_internalguider.SetInfo(status: string);
 begin
+ if status='' then status:=' ';
  LabelInfo.Caption:=status;
 end;
 
 function Tf_internalguider.GetInfo: string;
 begin
- result:=LabelInfo.Caption;
+ result:=trim(LabelInfo.Caption);
 end;
 
 procedure Tf_internalguider.msg(txt:string; level: integer);
