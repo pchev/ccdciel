@@ -706,6 +706,7 @@ type
     FrameX,FrameY,FrameW,FrameH,FrameBin,FrameMaxW,FrameMaxH: integer;
     GuideMx, GuideMy: integer;
     GuideOffset1X,GuideOffset1Y,GuideOffset2X,GuideOffset2Y: double;
+    FGuideProgress, FFinderProgress: double;
     GuideMouseMoving: boolean;
     FinderMx, FinderMy: integer;
     FinderMouseMoving: boolean;
@@ -1097,6 +1098,8 @@ type
     procedure ShowGuideImage(Sender: TObject);
     procedure Guider_north;
     procedure Finder_north;
+    procedure FinderStart(Sender: TObject);
+    procedure FinderStop(Sender: TObject);
     procedure FinderCameraProgress(n:double);
     procedure FinderCameraNewImage(Sender: TObject);
     procedure FinderCameraNewImageAsync(Data: PtrInt);
@@ -1734,6 +1737,8 @@ begin
   Image1.OnPaint := @Image1Paint;
   Image1.OnExit := @ImageExit;
   Image1.PopupMenu := ImagePopupMenu;
+  FGuideProgress:=-1;
+  FFinderProgress:=-1;
   ScrGuideBmp := TBGRABitmap.Create;
   ImaGuideBmp:=TBGRABitmap.Create(1,1);
   guideimg_Height:=0;
@@ -2078,6 +2083,8 @@ begin
 
   f_finder:=Tf_finder.Create(self);
   f_finder.Astrometry:=astrometry;
+  f_finder.onStart:=@FinderStart;
+  f_finder.onStop:=@FinderStop;
   f_finder.onShowMessage:=@NewMessage;
   f_finder.onRedraw:=@FinderRedraw;
   f_finder.onConfigureFinder:=@FinderConfigure;
@@ -19070,6 +19077,7 @@ begin
    if autoguider is T_autoguider_internal then T_autoguider_internal(autoguider).InternalguiderStop;
    f_internalguider.GuideLockNextX:=-1;
    f_internalguider.GuideLockNextY:=-1;
+   FGuideProgress:=-1;
    DrawGuideImage(true);
    PlotGuideImage;
 end;
@@ -19180,7 +19188,6 @@ procedure Tf_main.GuideCameraProgress(n:double);
 var txt: string;
     i: integer;
 begin
-if GuideImage.IsVisible then begin
  if (n<=0) then begin
    i:=round(n);
    case i of
@@ -19195,12 +19202,16 @@ if GuideImage.IsVisible then begin
      else txt:=rsUnknownStatu+ellipsis;
    end;
    f_internalguider.CameraStatus := txt;
+   FGuideProgress:=-1;
  end else begin
   if n>=10 then txt:=FormatFloat(f0, n)
            else txt:=FormatFloat(f1, n);
   f_internalguider.CameraStatus := rsExp+blank+txt+blank+rsSec;
+  if guidecamera.LastExposureTime>0 then begin
+    FGuideProgress:=n/guidecamera.LastExposureTime;
+    ImageGuide.Invalidate;
+  end;
  end;
-end;
 end;
 
 procedure Tf_main.GuideCameraNewImage(Sender: TObject);
@@ -19282,7 +19293,8 @@ begin
     {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' queue next exposure');{$endif}
     {$ifdef timing_stdout}writeln;{$endif}
     T_autoguider_internal(autoguider).SetExposureStartTime;
-    Application.QueueAsyncCall(@T_autoguider_internal(autoguider).StartGuideExposureAsync,0)
+    Application.QueueAsyncCall(@T_autoguider_internal(autoguider).StartGuideExposureAsync,0);
+    FGuideProgress:=0;
   end;
 
   // draw image to screen
@@ -19591,7 +19603,8 @@ end;
 end;
 
 procedure Tf_main.ImageGuidePaint(Sender: TObject);
-var h,s,x,y: integer;
+var i,h,s,x,y: integer;
+    bar: TRect;
 begin
 try
   if (ImageGuide.Parent=f_internalguider.PanelImage) and (guideimg_Height>0) and (guideimg_Width>0) then begin
@@ -19612,7 +19625,18 @@ try
   else
     ImageGuide.Canvas.Font.Size:=DoScaleX(10);
   ImageGuide.Canvas.TextOut(1, 1, rsGuideCamera);
-
+  if FGuideProgress>=0 then begin
+    bar.Top:=1;
+    bar.Left:=1;
+    bar.Height:=DoScaleY(5);
+    bar.Width:=DoScaleX(50);
+    i:=round(bar.Width*FGuideProgress);
+    ImageGuide.Canvas.Brush.Color:=colorProgress2;
+    ImageGuide.Canvas.FillRect(bar);
+    bar.Width:=bar.Width-i;
+    ImageGuide.Canvas.Brush.Color:=colorProgress1;
+    ImageGuide.Canvas.FillRect(bar);
+  end;
   if f_internalguider.StarOffsetStep=2 then begin
      GuiderFits2Screen(round(GuideOffset1X),round(guidefits.HeaderInfo.naxis2-GuideOffset1Y),true,x,y);
      s:=max(3,round(max(GuideImgZoom,GuideImgScale0)*f_internalguider.SearchWinMin/2));
@@ -20452,6 +20476,17 @@ begin
   LockFinderTimerPlot:=false;
 end;
 
+procedure Tf_main.FinderStart(Sender: TObject);
+begin
+  FFinderProgress:=0;
+end;
+
+procedure Tf_main.FinderStop(Sender: TObject);
+begin
+  FFinderProgress:=-1;
+  FinderImage.Invalidate;
+end;
+
 procedure Tf_main.FinderCameraProgress(n:double);
 var txt: string;
     i: integer;
@@ -20470,10 +20505,15 @@ begin
      else txt:=rsUnknownStatu+ellipsis;
    end;
    f_finder.LabelInfo.Caption := txt;
+   FFinderProgress:=-1;
  end else begin
   if n>=10 then txt:=FormatFloat(f0, n)
            else txt:=FormatFloat(f1, n);
   f_finder.LabelInfo.Caption := rsExp+blank+txt+blank+rsSec;
+  if findercamera.LastExposureTime>0 then begin
+     FFinderProgress:=n/findercamera.LastExposureTime;
+     ImageFinder.Invalidate;
+  end;
  end;
 end;
 
@@ -20527,8 +20567,10 @@ begin
   f_finder.visu.DrawHistogram(finderfits,true,true);
   DrawFinderImage(displayimage);
   // start next exposure
-  if FinderPreviewLoop and (not FinderCancelPreviewLoop) then
-    Application.QueueAsyncCall(@f_finder.StartExposureAsync,0)
+  if FinderPreviewLoop and (not FinderCancelPreviewLoop) then begin
+    Application.QueueAsyncCall(@f_finder.StartExposureAsync,0);
+    FFinderProgress:=0;
+  end
   else
     f_finder.StopLoop(false);
   // draw image to screen
@@ -20728,7 +20770,8 @@ end;
 end;
 
 procedure Tf_main.ImageFinderPaint(Sender: TObject);
-var x1,y1,x2,y2,x3,y3,xr1,yr1,xr2,yr2,xr3,yr3,xr4,yr4,r: integer;
+var i,x1,y1,x2,y2,x3,y3,xr1,yr1,xr2,yr2,xr3,yr3,xr4,yr4,r: integer;
+    bar: TRect;
 begin
 try
   if (ScrFinderBmp.Height>0)and(ScrFinderBmp.Width>0) then
@@ -20738,6 +20781,18 @@ try
   ImageFinder.Canvas.Font.Color:=clSilver;
   ImageFinder.Canvas.Font.Size:=DoScaleX(16);
   ImageFinder.Canvas.TextOut(1, 1, rsFinderCamera);
+  if FFinderProgress>=0 then begin
+    bar.Top:=1;
+    bar.Left:=1;
+    bar.Height:=DoScaleY(5);
+    bar.Width:=DoScaleX(50);
+    i:=round(bar.Width*FFinderProgress);
+    ImageFinder.Canvas.Brush.Color:=colorProgress2;
+    ImageFinder.Canvas.FillRect(bar);
+    bar.Width:=bar.Width-i;
+    ImageFinder.Canvas.Brush.Color:=colorProgress1;
+    ImageFinder.Canvas.FillRect(bar);
+  end;
   if PolarAlignmentOverlay and UseFinder then begin
      FinderFits2Screen(round(PolarAlignmentStartX+PolarAlignmentOverlayOffsetX),round(PolarAlignmentStartY+PolarAlignmentOverlayOffsetY),true,x1,y1);
      FinderFits2Screen(round(PolarAlignmentEndX+PolarAlignmentOverlayOffsetX),round(PolarAlignmentEndY+PolarAlignmentOverlayOffsetY),true,x2,y2);

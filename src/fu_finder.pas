@@ -99,7 +99,7 @@ type
     FCamera: T_camera;
     FAstrometry: TAstrometry;
     FonShowMessage: TNotifyMsg;
-    FonRedraw,FonSetTemperature,FonSetCooler: TNotifyEvent;
+    FonRedraw,FonSetTemperature,FonSetCooler,FonStart,FonStop: TNotifyEvent;
     FonConfigureFinder, FonCaptureDark, FonLoadDark, FonClearDark,FonDarkInfo: TNotifyEvent;
     FDrawSettingChange: boolean;
     LoopExp:double;
@@ -129,6 +129,8 @@ type
     property DrawSettingChange: boolean read FDrawSettingChange write FDrawSettingChange;
     property FilterNoise: boolean read GetFilterNoise write SetFilterNoise;
     property FilterStrength: integer read GetFilterStrength write SetFilterStrength;
+    property onStart: TNotifyEvent read FonStart write FonStart;
+    property onStop: TNotifyEvent read FonStop write FonStop;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property onRedraw: TNotifyEvent read FonRedraw write FonRedraw;
     property onConfigureFinder: TNotifyEvent read FonConfigureFinder write FonConfigureFinder;
@@ -235,6 +237,7 @@ begin
   FCamera.SaveFrames:=false;
   FCamera.AlignFrames:=false;
   FCamera.FrameType:=LIGHT;
+  if Assigned(FonStart) then FonStart(self);
   Application.QueueAsyncCall(@StartExposureAsync,0);
 end;
 
@@ -245,6 +248,7 @@ begin
   BtnPreviewLoop.Caption:=rsStartPreview;
   if abort then msg(rsStopPreviewL,3);
   ClearMsgTimer.Enabled:=true;
+  if Assigned(FonStop) then FonStop(self);
 end;
 
 procedure Tf_finder.ClearMsgTimerTimer(Sender: TObject);
