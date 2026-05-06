@@ -403,12 +403,11 @@ object f_internalguider: Tf_internalguider
           TabOrder = 0
           object Panel6: TPanel
             Left = 0
-            Height = 64
+            Height = 60
             Top = 0
             Width = 340
             Align = alTop
-            BevelOuter = bvNone
-            ClientHeight = 64
+            ClientHeight = 60
             ClientWidth = 340
             ParentBackground = False
             TabOrder = 0
@@ -463,10 +462,162 @@ object f_internalguider: Tf_internalguider
               Text = '1'
             end
           end
+          object PanelGhost: TPanel
+            Left = 0
+            Height = 94
+            Top = 60
+            Width = 340
+            Align = alTop
+            AutoSize = True
+            ClientHeight = 94
+            ClientWidth = 340
+            TabOrder = 6
+            Visible = False
+            object cbGhost: TCheckBox
+              Left = 12
+              Height = 22
+              Top = 1
+              Width = 236
+              BorderSpacing.Left = 11
+              Caption = 'Remove star reflection on glass slit'
+              OnChange = cbGhostChange
+              TabOrder = 0
+            end
+            object PanelGhost2: TPanel
+              AnchorSideLeft.Control = cbGhost
+              AnchorSideTop.Control = cbGhost
+              AnchorSideTop.Side = asrBottom
+              Left = 12
+              Height = 68
+              Top = 25
+              Width = 327
+              AutoSize = True
+              BorderSpacing.Top = 2
+              BevelOuter = bvNone
+              ClientHeight = 68
+              ClientWidth = 327
+              TabOrder = 1
+              Visible = False
+              object spGhostD: TSpinEdit
+                AnchorSideLeft.Control = Label64
+                AnchorSideLeft.Side = asrBottom
+                AnchorSideTop.Control = spGhostX
+                Left = 272
+                Height = 32
+                Top = 0
+                Width = 55
+                BorderSpacing.Left = 4
+                MaxValue = 999
+                MinValue = 1
+                TabOrder = 0
+                Value = 30
+              end
+              object Label64: TLabel
+                AnchorSideLeft.Control = spGhostY
+                AnchorSideLeft.Side = asrBottom
+                AnchorSideTop.Control = spGhostX
+                AnchorSideTop.Side = asrCenter
+                Left = 211
+                Height = 18
+                Top = 7
+                Width = 57
+                BorderSpacing.Left = 4
+                Caption = 'diameter'
+                ParentColor = False
+              end
+              object spGhostY: TSpinEdit
+                AnchorSideLeft.Control = Label62
+                AnchorSideLeft.Side = asrBottom
+                AnchorSideTop.Control = spGhostX
+                Left = 152
+                Height = 32
+                Top = 0
+                Width = 55
+                BorderSpacing.Left = 4
+                MaxValue = 999
+                MinValue = -999
+                TabOrder = 1
+                Value = 80
+              end
+              object Label62: TLabel
+                AnchorSideLeft.Control = spGhostX
+                AnchorSideLeft.Side = asrBottom
+                AnchorSideTop.Control = spGhostX
+                AnchorSideTop.Side = asrCenter
+                Left = 139
+                Height = 18
+                Top = 7
+                Width = 9
+                BorderSpacing.Left = 4
+                Caption = 'Y'
+                ParentColor = False
+              end
+              object spGhostX: TSpinEdit
+                AnchorSideLeft.Control = Label61
+                AnchorSideLeft.Side = asrBottom
+                Left = 80
+                Height = 32
+                Top = 0
+                Width = 55
+                BorderSpacing.Left = 3
+                MaxValue = 999
+                MinValue = -999
+                TabOrder = 2
+              end
+              object Label61: TLabel
+                AnchorSideLeft.Control = Label60
+                AnchorSideLeft.Side = asrBottom
+                AnchorSideTop.Control = spGhostX
+                AnchorSideTop.Side = asrCenter
+                Left = 69
+                Height = 18
+                Top = 7
+                Width = 8
+                BorderSpacing.Left = 8
+                Caption = 'X'
+                ParentColor = False
+              end
+              object Label60: TLabel
+                AnchorSideTop.Control = spGhostX
+                AnchorSideTop.Side = asrCenter
+                Left = 0
+                Height = 18
+                Top = 7
+                Width = 61
+                Caption = 'Reflection'
+                ParentColor = False
+              end
+              object spGhostThreshold: TSpinEdit
+                AnchorSideLeft.Control = Label63
+                AnchorSideLeft.Side = asrBottom
+                AnchorSideTop.Control = spGhostX
+                AnchorSideTop.Side = asrBottom
+                Left = 147
+                Height = 32
+                Top = 36
+                Width = 85
+                BorderSpacing.Left = 4
+                BorderSpacing.Top = 4
+                MaxValue = 65535
+                TabOrder = 3
+                Value = 1000
+              end
+              object Label63: TLabel
+                AnchorSideTop.Control = spGhostThreshold
+                AnchorSideTop.Side = asrCenter
+                Left = 0
+                Height = 18
+                Top = 43
+                Width = 143
+                Caption = 'Star intensity threshold'
+                ParentColor = False
+              end
+            end
+          end
           object Panel7: TPanel
             Left = 0
             Height = 66
-            Top = 64
+            Top = 154
             Width = 340
             Align = alTop
             BevelOuter = bvNone
@@ -561,7 +712,7 @@ object f_internalguider: Tf_internalguider
           object PanelGain: TPanel
             Left = 0
             Height = 34
-            Top = 130
+            Top = 220
             Width = 340
             Align = alTop
             BevelOuter = bvNone
@@ -593,7 +744,7 @@ object f_internalguider: Tf_internalguider
           object PanelOffset: TPanel
             Left = 0
             Height = 34
-            Top = 164
+            Top = 254
             Width = 340
             Align = alTop
             BevelOuter = bvNone
@@ -625,7 +776,7 @@ object f_internalguider: Tf_internalguider
           object PanelTemperature: TPanel
             Left = 0
             Height = 60
-            Top = 198
+            Top = 288
             Width = 340
             Align = alTop
             BevelOuter = bvNone
@@ -692,12 +843,12 @@ object f_internalguider: Tf_internalguider
           end
           object Panel8: TPanel
             Left = 0
-            Height = 667
-            Top = 258
+            Height = 577
+            Top = 348
             Width = 340
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 667
+            ClientHeight = 577
             ClientWidth = 340
             TabOrder = 5
             object PanelVisu: TPanel

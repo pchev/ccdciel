@@ -242,6 +242,7 @@ type
      procedure LoadDark(fn: string);
      procedure LoadFlat(fn: string);
      procedure MedianFilter(size,centralweight: integer);
+     procedure ghost_blackout(threshold,dx,dy,diameter: integer);
      function dateobs: double;
      property IntfImg: TLazIntfImage read FIntfImg;
      Property HeaderInfo : TFitsInfo read FFitsInfo;
@@ -4272,6 +4273,113 @@ try
 except
   result:=0;
 end;
+end;
+
+procedure TFits.ghost_blackout(threshold,dx,dy,diameter: integer);//blackout of ghost stars for spectroscopy
+var
+  jy,jx,radius,sqrradius,ny,nx,fwidth,fheight,cx,cy,fluxmain,fluxghost1,fluxghost2,gy,gx: integer;
+
+    procedure setpixel(ay,ax : integer; val: single);
+    begin
+      if ((ax>=0) and (ax<Fwidth) and (ay>=0) and (ay<Fheight)) then
+        fimage[0,ay ,ax]:=val;
+    end;
+
+    function getpixel(ay,ax: integer): single;
+    begin
+      if ((ax>=0) and (ax<Fwidth) and (ay>=0) and (ay<Fheight)) then
+        result:=fimage[0,ay ,ax]
+      else
+        result:=0;
+    end;
+
+    function center_of_gravity(iy,ix : integer; out cy,cx,flux : integer): boolean;
+    var
+      sumval,sumvalx,sumvaly : double;
+      val : single;
+      i,j,signal_counter: integer;
+    begin
+      result:=false;//default failure
+      flux:=0;//default failure
+      SumVal:=0;
+      SumValX:=0;
+      SumValY:=0;
+      signal_counter:=0;
+
+      for j:=-diameter to diameter do //search wide enough to center on donuts
+      for i:=-diameter to diameter do
+      begin
+        val:=getpixel(iy+j,ix+i);
+        if val>threshold div 2 then
+        begin
+          SumVal:=SumVal+val;
+          SumValX:=SumValX+val*(i);
+          SumValY:=SumValY+val*(j);
+          inc(signal_counter); {how many pixels are illuminated}
+        end;
+      end;
+      if signal_counter<4 then //no star detected
+      begin
+        cy:=iy;
+        cx:=ix;
+      end
+      else
+      begin //center of gravity
+        cy:=round(iy+SumValY/SumVal);
+        cx:=round(ix+SumValX/SumVal);
+        flux:=round(Sumval);
+        result:=true;
+
+      end;
+    end;
+
+begin
+  Radius:=diameter div 2;
+  sqrradius:=sqr(radius);
+  fheight:=length(fimage[0]);
+  fwidth:=length(fimage[0,0]);
+
+  sqrradius:=sqr(diameter) div 4;
+  try
+    for jy:=1 to Fheight-2 do
+    for jx:=1 to Fwidth-2 do
+    begin
+      if ((fimage[0,jy , jx ]>threshold) and
+          (fimage[0,jy+1 ,jx ]>threshold) and
+          (fimage[0,jy ,jx+1]>threshold) and
+          (fimage[0,jy+1 ,jx+1]>threshold)) then //four pixels above threshold
+      begin
+        if center_of_gravity(jy,jx,cy,cx,fluxmain) then //found a possible true star
+        begin
+          if getpixel(cy+dy,cx+dx)<>0 then
+            center_of_gravity(cy+dy,cx+dx,gy,gx,fluxghost1) //calculate ghost1 flux
+          else //no need to check
+            fluxghost1:=0;
+
+          if getpixel(cy-dy,cx-dx)<>0 then
+            center_of_gravity(cy-dy,cx-dx,gy,gx,fluxghost2) //calculate ghost2 flux
+          else //no need to check
+            fluxghost2:=0;
+
+          if ((fluxghost1<fluxmain) and (fluxghost2<fluxmain)) then //found the main star and not a ghost
+          begin
+            if getpixel(cy+dy,cx+dx)<>0 then //ghost star is not yet blackouted
+            for ny:=-radius to +radius do
+              for nx:=-radius to +radius do
+               if sqr(ny)+sqr(nx)<=sqrradius then //round spot
+                 setpixel(cy+dy+ny,cx+dx+nx,$000000); //blackout ghost1 above
+
+           if getpixel(cy-dy,cx-dx)<>0 then //ghost star is not yet blackouted
+           for ny:=-radius to +radius do
+              for nx:=-radius to +radius do
+               if sqr(ny)+sqr(nx)<=sqrradius then //round spot
+                 setpixel(cy-dy+ny,cx-dx+nx,$000000); //blackout ghost2 below
+          end;
+        end;
+      end;
+    end;
+  except
+  end;
 end;
 
 procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=false;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='';origin:string='';exifkey:TStringList=nil;exifvalue:TStringList=nil);

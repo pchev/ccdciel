@@ -67,6 +67,7 @@ type
     cbFastCentering: TCheckBox;
     cbRotator: TCheckBox;
     cbParallactic: TCheckBox;
+    cbGhost: TCheckBox;
     CheckBoxBacklash: TCheckBox;
     CheckBoxTrackSolar1: TCheckBox;
     cbSlitList: TComboBox;
@@ -76,6 +77,11 @@ type
     Label18: TLabel;
     Label19: TLabel;
     Label59: TLabel;
+    Label60: TLabel;
+    Label61: TLabel;
+    Label62: TLabel;
+    Label63: TLabel;
+    Label64: TLabel;
     LabelSetMultiOffset: TLabel;
     LabelSetOffset: TLabel;
     Label55: TLabel;
@@ -85,6 +91,8 @@ type
     MenuItemAddSlit: TMenuItem;
     MenuItemDelSlit: TMenuItem;
     MenuSlitOffset: TButton;
+    PanelGhost2: TPanel;
+    PanelGhost: TPanel;
     PanelParallactic: TPanel;
     pcTabs: TPageControl;
     Panel12: TPanel;
@@ -102,6 +110,10 @@ type
     Shape1: TShape;
     SlitOffsetX: TFloatSpinEditEx;
     ExpDelay: TSpinEditEx;
+    spGhostX: TSpinEdit;
+    spGhostY: TSpinEdit;
+    spGhostD: TSpinEdit;
+    spGhostThreshold: TSpinEdit;
     StarOffsetX: TFloatSpinEditEx;
     SlitOffsetY: TFloatSpinEditEx;
     framesize1: TComboBox;
@@ -271,6 +283,7 @@ type
     procedure ButtonSetTempClick(Sender: TObject);
     procedure ButtonStopClick(Sender: TObject);
     procedure cbDrawSlitChange(Sender: TObject);
+    procedure cbGhostChange(Sender: TObject);
     procedure cbRotatorChange(Sender: TObject);
     procedure cbSlitListChange(Sender: TObject);
     procedure cbSpectroChange(Sender: TObject);
@@ -666,6 +679,12 @@ begin
   MenuItemClearDark.Caption:=rsClearDarkFra;
   MenuItemDarkInfo.Caption:=rsViewHeader;
   cbFilterNoise.Caption:=rsNoiseFilter;
+  cbGhost.Caption:=rsRemoveStarRe;
+  Label60.Caption:=rsReflection;
+  Label61.Caption:='X';
+  Label62.Caption:='Y';
+  Label63.Caption:=rsStarIntensit;
+  Label64.Caption:=rsDiameter;
   Label10.Caption:=rsExposure;
   label59.Caption:=rsSec;
   Label14.Caption:=rsBinning;
@@ -1066,6 +1085,11 @@ begin
   ForceRedraw(nil);
 end;
 
+procedure Tf_internalguider.cbGhostChange(Sender: TObject);
+begin
+  PanelGhost2.Visible:=cbGhost.Checked;
+end;
+
 procedure Tf_internalguider.ChangeSpectro;
 begin
   cbSpectroChange(nil);
@@ -1140,6 +1164,8 @@ end;
 procedure Tf_internalguider.cbSpectroChange(Sender: TObject);
 begin
   PanelSpectro.Enabled:=cbSpectro.Checked;
+  PanelGhost.Visible:=cbSpectro.Checked;
+  if not PanelGhost.Visible then cbGhost.Checked:=false;
   if cbSpectro.Checked or SameGuiderFinder then begin
     framesize1.Enabled:=false;
     framesize1.ItemIndex:=0;

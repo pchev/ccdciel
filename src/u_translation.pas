@@ -1675,6 +1675,10 @@ resourcestring
   rsOverwrite = 'Overwrite';
   rsMultipleDark = 'Multiple dark with different exposure';
   rsReplaceBy = 'replace by';
+  rsRemoveStarRe = 'Remove star reflection on glass slit';
+  rsReflection = 'Reflection';
+  rsStarIntensit = 'Star intensity threshold';
+  rsDiameter = 'diameter';
 
 implementation
 
