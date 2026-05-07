@@ -523,11 +523,11 @@ var t: double;
 begin
   if not Frunning then begin
     if PanelStack.Visible and (StackNum.Value>1) then begin
-      t:=SeqNum.Value*StackNum.Value*FExposureTime;
+      t:=SeqNum.Value*StackNum.Value*(FExposureTime+1);
       LabelTime.Caption:=TimToStr(t/3600);
     end
     else begin
-      t:=SeqNum.Value*FExposureTime;
+      t:=SeqNum.Value*(FExposureTime+1);
       LabelTime.Caption:=TimToStr(t/3600);
     end;
   end;
