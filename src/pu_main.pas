@@ -12516,7 +12516,7 @@ begin
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'image measurement end');{$endif}
      // end image script
      if f_capture.EndScriptImage and (f_capture.Script<>'')and(FileExists(slash(ConfigDir)+f_capture.Script+'.script'))and((not camera.AddFrames)or(camera.StackCount>=camera.StackNum)) then begin
-        RunScript(f_capture.Script,ConfigDir,'1');
+        RunScript(f_capture.Script,ConfigDir,'1 '+f_capture.ScriptParams);
      end;
      if (not EarlyNextExposure) or SkipEarlyExposure or DomeFlatExposureOK then begin
        // dome flat exposure found, we can continue with early start
