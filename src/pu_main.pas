@@ -12309,6 +12309,11 @@ if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) the
     // show message
     NewMessage(Format(rsStartingExpo, [f_capture.FrameTypeText, inttostr(cc)+'/'+f_capture.SeqNum.Text, FormatFloat(f9v,e)]),1);
   end;
+  // start script
+  if f_capture.StartScriptImage and (f_capture.Script<>'')and(FileExists(slash(ConfigDir)+f_capture.Script+'.script'))and((not camera.AddFrames)or(camera.StackCount=0)) then begin
+     RunScript(f_capture.Script,ConfigDir,'3 '+FormatFloat(f3,e));
+//     RunScript(f_capture.Script,ConfigDir,'["3"'+',"'+FormatFloat(f3,e)+'"]');
+  end;
   // start exposure for time e
   camera.StartExposure(e);
 end
@@ -12508,9 +12513,9 @@ begin
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'image measurement');{$endif}
      if displayimage and ((not camera.AddFrames)or(camera.StackCount>=camera.StackNum)) then CameraMeasureNewImage;
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'image measurement end');{$endif}
-     // script
-     if f_capture.EndScriptImage and (f_capture.EndScript<>'')and((not camera.AddFrames)or(camera.StackCount>=camera.StackNum)) then begin
-        RunScript(f_capture.EndScript,ConfigDir,'2');
+     // end script
+     if f_capture.EndScriptImage and (f_capture.Script<>'')and(FileExists(slash(ConfigDir)+f_capture.Script+'.script'))and((not camera.AddFrames)or(camera.StackCount>=camera.StackNum)) then begin
+        RunScript(f_capture.Script,ConfigDir,'2');
      end;
      if (not EarlyNextExposure) or SkipEarlyExposure or DomeFlatExposureOK then begin
        // dome flat exposure found, we can continue with early start
@@ -21221,11 +21226,11 @@ var buf: string;
     i: integer;
 begin
   // script list modified in fu_script
-  buf:=f_capture.EndScript;
-  f_capture.cbEndScript.Items.Assign(f_script.ScriptList);
-  f_capture.cbEndScript.Items.Insert(0,'');
-  i:=f_capture.cbEndScript.Items.IndexOf(buf);
-  if i>=0 then f_capture.cbEndScript.ItemIndex:=i;
+  buf:=f_capture.Script;
+  f_capture.cbScript.Items.Assign(f_script.ScriptList);
+  f_capture.cbScript.Items.Insert(0,'');
+  i:=f_capture.cbScript.Items.IndexOf(buf);
+  if i>=0 then f_capture.cbScript.ItemIndex:=i;
 end;
 
 procedure Tf_main.SetMultipanel(onoff: boolean);

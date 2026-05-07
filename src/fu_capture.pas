@@ -38,11 +38,13 @@ type
     BtnStart: TButton;
     cbEndScriptImage: TCheckBox;
     cbOverwrite: TCheckBox;
+    cbStartScriptImage: TCheckBox;
+    cbTerminationScript: TCheckBox;
     CheckBoxFocusHFD: TCheckBox;
     CheckBoxFocusTemp: TCheckBox;
     CheckBoxDither: TCheckBox;
     CheckBoxFocus: TCheckBox;
-    cbEndScript: TComboBox;
+    cbScript: TComboBox;
     Label8: TLabel;
     LabelTime: TLabel;
     Panel11: TPanel;
@@ -119,8 +121,9 @@ type
     function GetFrameType:integer;
     procedure SetFrameType(value:integer);
     function GetFrameTypeText:string;
-    function GetEndScript:string;
+    function GetScript:string;
     function GetEndScriptImage:boolean;
+    function GetStartScriptImage:boolean;
     procedure ComputeTotalTime;
     function GetOverwrite:boolean;
   public
@@ -153,7 +156,8 @@ type
     property onFrameTypeChange: TNotifyEvent read FonFrameTypeChange write FonFrameTypeChange;
     property onResetHFM: TNotifyEvent read FonResetHFM write FonResetHFM;
     property ResetHFM: boolean read FResetHFM write FResetHFM;
-    property EndScript: string read GetEndScript;
+    property Script: string read GetScript;
+    property StartScriptImage: boolean read GetStartScriptImage;
     property EndScriptImage: boolean read GetEndScriptImage;
     property onRunScript: TRunScript read FRunScript write FRunScript;
 end;
@@ -212,8 +216,10 @@ begin
   CheckBoxFocus.Caption:=rsFocusEvery;
   CheckBoxFocusTemp.Caption:=rsAutofocusAft2;
   CheckBoxFocusHFD.Caption:=rsAutofocusHFD2;
-  Label8.Caption:=rsTerminationS;
-  cbEndScriptImage.Caption:=rsRunTerminati;
+  Label8.Caption:=rsScript;
+  cbStartScriptImage.Caption:=rsRunScriptBef;
+  cbEndScriptImage.Caption:=rsRunScriptAft;
+  cbTerminationScript.Caption:=rsRunScriptAtT;
   BtnStart.Caption:=rsStart;
   ExpTime.Hint:=rsExposureTime;
   Binning.Hint:=rsCameraBinnin;
@@ -299,6 +305,7 @@ begin
       end;
       if Assigned(FonMsg) then FonMsg(rsStartCapture,2);
       EarlyNextExposure:= ConfigExpEarlyStart and (ExposureTime>=1) and (not Overwrite)
+          and (not cbStartScriptImage.Checked) and (not cbEndScriptImage.Checked)
           and ((TFrameType(cbFrameType.ItemIndex)=LIGHT)or(TFrameType(cbFrameType.ItemIndex)=DARK)or(cbFrameType.ItemIndex>ord(high(TFrameType))));
       if PanelStack.Visible and (StackNum.Value>1) and Assigned(FonResetStack) then FonResetStack(self);
       if Assigned(FonStartExposure) then FonStartExposure(self);
@@ -414,11 +421,11 @@ end;
 procedure Tf_capture.Stop;
 begin
   Frunning:=false;
-  if (FstartedBy=CAPTURE)and(led.Brush.Color<>clGray)and(cbEndScript.text>'')and(FileExists(slash(ConfigDir)+cbEndScript.text+'.script'))and assigned(FRunScript) then begin
+  if (FstartedBy=CAPTURE)and(led.Brush.Color<>clGray)and(cbTerminationScript.Checked)and(cbScript.text>'')and(FileExists(slash(ConfigDir)+cbScript.text+'.script'))and assigned(FRunScript) then begin
     if ExpectedStop then
-      FRunScript(cbEndScript.text,ConfigDir,'0')
+      FRunScript(cbScript.text,ConfigDir,'0')
     else
-      FRunScript(cbEndScript.text,ConfigDir,'1');
+      FRunScript(cbScript.text,ConfigDir,'1');
   end;
   cbOverwrite.Checked:=false;
   EarlyNextExposure:=false;
@@ -467,9 +474,14 @@ begin
   result:=cbFrameType.Text;
 end;
 
-function Tf_capture.GetEndScript:string;
+function Tf_capture.GetScript:string;
 begin
-  result:=cbEndScript.text;
+  result:=cbScript.text;
+end;
+
+function Tf_capture.GetStartScriptImage:boolean;
+begin
+  result:=cbStartScriptImage.Checked;
 end;
 
 function Tf_capture.GetEndScriptImage:boolean;

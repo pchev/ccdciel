@@ -2,22 +2,22 @@ object f_capture: Tf_capture
   Left = 0
   Height = 605
   Top = 0
-  Width = 271
+  Width = 299
   AutoSize = True
   ChildSizing.ControlsPerLine = 1
   ClientHeight = 605
-  ClientWidth = 271
+  ClientWidth = 299
   ParentFont = False
   TabOrder = 0
   object Panel1: TPanel
     Left = 0
     Height = 585
     Top = 20
-    Width = 271
+    Width = 299
     Align = alClient
     AutoSize = True
     ClientHeight = 585
-    ClientWidth = 271
+    ClientWidth = 299
     ParentColor = False
     ParentFont = False
     TabOrder = 0
@@ -26,13 +26,13 @@ object f_capture: Tf_capture
       Left = 1
       Height = 29
       Top = 5
-      Width = 269
+      Width = 297
       Align = alTop
       BorderSpacing.Top = 4
       BevelOuter = bvNone
       Caption = ' '
       ClientHeight = 29
-      ClientWidth = 269
+      ClientWidth = 297
       ParentFont = False
       TabOrder = 0
       object ExpTime: TComboBox
@@ -79,12 +79,12 @@ object f_capture: Tf_capture
       Left = 1
       Height = 29
       Top = 272
-      Width = 269
+      Width = 297
       Align = alTop
       BorderSpacing.Top = 4
       BevelOuter = bvNone
       ClientHeight = 29
-      ClientWidth = 269
+      ClientWidth = 297
       ParentFont = False
       TabOrder = 10
       object Label7: TLabel
@@ -119,12 +119,12 @@ object f_capture: Tf_capture
       Left = 1
       Height = 68
       Top = 38
-      Width = 269
+      Width = 297
       Align = alTop
       BorderSpacing.Top = 4
       BevelOuter = bvNone
       ClientHeight = 68
-      ClientWidth = 269
+      ClientWidth = 297
       ParentFont = False
       TabOrder = 8
       Visible = False
@@ -202,13 +202,13 @@ object f_capture: Tf_capture
       Left = 1
       Height = 29
       Top = 110
-      Width = 269
+      Width = 297
       Align = alTop
       BorderSpacing.Top = 4
       BevelOuter = bvNone
       Caption = ' '
       ClientHeight = 29
-      ClientWidth = 269
+      ClientWidth = 297
       ParentFont = False
       TabOrder = 1
       object Binning: TComboBox
@@ -243,12 +243,12 @@ object f_capture: Tf_capture
       Left = 1
       Height = 28
       Top = 240
-      Width = 269
+      Width = 297
       Align = alTop
       BorderSpacing.Top = 4
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 269
+      ClientWidth = 297
       ParentFont = False
       TabOrder = 9
       Visible = False
@@ -267,7 +267,7 @@ object f_capture: Tf_capture
         Left = 89
         Height = 28
         Top = 0
-        Width = 101
+        Width = 129
         Anchors = [akTop, akLeft, akRight, akBottom]
         Constraints.MaxHeight = 28
         ItemHeight = 24
@@ -279,12 +279,12 @@ object f_capture: Tf_capture
       Left = 1
       Height = 28
       Top = 143
-      Width = 269
+      Width = 297
       Align = alTop
       BorderSpacing.Top = 4
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 269
+      ClientWidth = 297
       ParentFont = False
       TabOrder = 2
       object Fname: TEdit
@@ -312,13 +312,13 @@ object f_capture: Tf_capture
       Left = 1
       Height = 28
       Top = 175
-      Width = 269
+      Width = 297
       Align = alTop
       BorderSpacing.Top = 4
       BevelOuter = bvNone
       Caption = ' '
       ClientHeight = 28
-      ClientWidth = 269
+      ClientWidth = 297
       ParentFont = False
       TabOrder = 3
       object Label4: TLabel
@@ -360,12 +360,12 @@ object f_capture: Tf_capture
       Left = 1
       Height = 29
       Top = 207
-      Width = 269
+      Width = 297
       Align = alTop
       BorderSpacing.Top = 4
       BevelOuter = bvNone
       ClientHeight = 29
-      ClientWidth = 269
+      ClientWidth = 297
       ParentFont = False
       TabOrder = 4
       object Label5: TLabel
@@ -404,12 +404,12 @@ object f_capture: Tf_capture
       Left = 1
       Height = 28
       Top = 305
-      Width = 269
+      Width = 297
       Align = alTop
       BorderSpacing.Top = 4
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 269
+      ClientWidth = 297
       ParentFont = False
       TabOrder = 5
       object CheckBoxDither: TCheckBox
@@ -443,12 +443,12 @@ object f_capture: Tf_capture
       Left = 1
       Height = 88
       Top = 337
-      Width = 269
+      Width = 297
       Align = alTop
       BorderSpacing.Top = 4
       BevelOuter = bvNone
       ClientHeight = 88
-      ClientWidth = 269
+      ClientWidth = 297
       ParentColor = False
       ParentFont = False
       TabOrder = 6
@@ -500,13 +500,13 @@ object f_capture: Tf_capture
     object Panel9: TPanel
       Left = 1
       Height = 30
-      Top = 484
-      Width = 269
+      Top = 529
+      Width = 297
       Align = alTop
       BorderSpacing.Top = 4
       BevelOuter = bvNone
       ClientHeight = 30
-      ClientWidth = 269
+      ClientWidth = 297
       ParentFont = False
       TabOrder = 7
       object BtnStart: TButton
@@ -549,29 +549,29 @@ object f_capture: Tf_capture
     end
     object Panel12: TPanel
       Left = 1
-      Height = 55
+      Height = 100
       Top = 425
-      Width = 269
+      Width = 297
       Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 55
-      ClientWidth = 269
+      ClientHeight = 100
+      ClientWidth = 297
       TabOrder = 11
       object Panel10: TPanel
         Left = 0
         Height = 29
         Top = 0
-        Width = 269
+        Width = 297
         Align = alTop
         BevelOuter = bvNone
         ClientHeight = 29
-        ClientWidth = 269
+        ClientWidth = 297
         TabOrder = 0
-        object cbEndScript: TComboBox
+        object cbScript: TComboBox
           Left = 53
           Height = 29
           Top = 0
-          Width = 216
+          Width = 244
           Align = alClient
           BorderSpacing.Left = 8
           ItemHeight = 18
@@ -604,12 +604,34 @@ object f_capture: Tf_capture
         end
       end
       object cbEndScriptImage: TCheckBox
+        AnchorSideTop.Control = cbStartScriptImage
+        AnchorSideTop.Side = asrBottom
         Left = 4
         Height = 22
-        Top = 30
-        Width = 272
-        Caption = 'Run termination script after every image'
+        Top = 51
+        Width = 196
+        Caption = 'Run script after every image'
         TabOrder = 1
+      end
+      object cbStartScriptImage: TCheckBox
+        AnchorSideTop.Control = Panel10
+        AnchorSideTop.Side = asrBottom
+        Left = 4
+        Height = 22
+        Top = 29
+        Width = 207
+        Caption = 'Run script before every image'
+        TabOrder = 2
+      end
+      object cbTerminationScript: TCheckBox
+        AnchorSideTop.Control = cbEndScriptImage
+        AnchorSideTop.Side = asrBottom
+        Left = 4
+        Height = 22
+        Top = 73
+        Width = 230
+        Caption = 'Run script at the end of the series'
+        TabOrder = 3
       end
     end
   end
@@ -617,7 +639,7 @@ object f_capture: Tf_capture
     Left = 0
     Height = 20
     Top = 0
-    Width = 271
+    Width = 299
     Align = alTop
     Alignment = taCenter
     AutoSize = False

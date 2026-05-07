@@ -1652,7 +1652,6 @@ resourcestring
   rsHorizontal = 'Horizontal';
   rsRotateSlitTo = 'Rotate slit to parallactic angle %s';
   rsSaveImageWit = 'Save image with astrometry';
-  rsTerminationS = 'Termination script';
   rsSetMountPier = 'Set mount pier side if available';
   rsROI = 'ROI';
   rsFullFrame = 'Full frame';
@@ -1671,7 +1670,6 @@ resourcestring
   rsPreviousVers = 'Previous version copied to';
   rsTotalExecuti = 'Total execution time';
   rsCoverTheCame2 = 'Cover the camera';
-  rsRunTerminati = 'Run termination script after every image';
   rsOverwrite = 'Overwrite';
   rsMultipleDark = 'Multiple dark with different exposure';
   rsReplaceBy = 'replace by';
@@ -1679,6 +1677,9 @@ resourcestring
   rsReflection = 'Reflection';
   rsStarIntensit = 'Star intensity threshold';
   rsDiameter = 'diameter';
+  rsRunScriptBef = 'Run script before every exposure';
+  rsRunScriptAft = 'Run script after every image';
+  rsRunScriptAtT = 'Run script at the end of the series';
 
 implementation
 
