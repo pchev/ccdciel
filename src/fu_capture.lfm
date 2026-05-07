@@ -500,7 +500,7 @@ object f_capture: Tf_capture
     object Panel9: TPanel
       Left = 1
       Height = 30
-      Top = 529
+      Top = 553
       Width = 297
       Align = alTop
       BorderSpacing.Top = 4
@@ -549,12 +549,12 @@ object f_capture: Tf_capture
     end
     object Panel12: TPanel
       Left = 1
-      Height = 100
+      Height = 124
       Top = 425
       Width = 297
       Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 100
+      ClientHeight = 124
       ClientWidth = 297
       TabOrder = 11
       object Panel10: TPanel
@@ -568,10 +568,10 @@ object f_capture: Tf_capture
         ClientWidth = 297
         TabOrder = 0
         object cbScript: TComboBox
-          Left = 53
+          Left = 47
           Height = 29
           Top = 0
-          Width = 244
+          Width = 250
           Align = alClient
           BorderSpacing.Left = 8
           ItemHeight = 18
@@ -582,13 +582,14 @@ object f_capture: Tf_capture
           Left = 4
           Height = 29
           Top = 0
-          Width = 41
+          Width = 35
           Align = alLeft
           AutoSize = True
           BorderSpacing.Left = 4
+          BorderSpacing.Right = 8
           BevelOuter = bvNone
           ClientHeight = 29
-          ClientWidth = 41
+          ClientWidth = 35
           TabOrder = 1
           object Label8: TLabel
             AnchorSideTop.Control = Panel11
@@ -596,8 +597,8 @@ object f_capture: Tf_capture
             Left = 0
             Height = 18
             Top = 5
-            Width = 41
-            Caption = 'Label8'
+            Width = 35
+            Caption = 'Script'
             ParentColor = False
             WordWrap = True
           end
@@ -608,17 +609,17 @@ object f_capture: Tf_capture
         AnchorSideTop.Side = asrBottom
         Left = 4
         Height = 22
-        Top = 51
+        Top = 80
         Width = 196
         Caption = 'Run script after every image'
         TabOrder = 1
       end
       object cbStartScriptImage: TCheckBox
-        AnchorSideTop.Control = Panel10
+        AnchorSideTop.Control = Panel13
         AnchorSideTop.Side = asrBottom
         Left = 4
         Height = 22
-        Top = 29
+        Top = 58
         Width = 207
         Caption = 'Run script before every image'
         TabOrder = 2
@@ -628,10 +629,55 @@ object f_capture: Tf_capture
         AnchorSideTop.Side = asrBottom
         Left = 4
         Height = 22
-        Top = 73
+        Top = 102
         Width = 230
         Caption = 'Run script at the end of the series'
         TabOrder = 3
+      end
+      object Panel13: TPanel
+        AnchorSideTop.Side = asrBottom
+        Left = 0
+        Height = 29
+        Top = 29
+        Width = 297
+        Align = alTop
+        BevelOuter = bvNone
+        ClientHeight = 29
+        ClientWidth = 297
+        TabOrder = 4
+        object Panel14: TPanel
+          Left = 4
+          Height = 29
+          Top = 0
+          Width = 71
+          Align = alLeft
+          AutoSize = True
+          BorderSpacing.Left = 4
+          BorderSpacing.Right = 8
+          BevelOuter = bvNone
+          ClientHeight = 29
+          ClientWidth = 71
+          TabOrder = 0
+          object Label9: TLabel
+            AnchorSideTop.Control = Panel14
+            AnchorSideTop.Side = asrCenter
+            Left = 0
+            Height = 18
+            Top = 5
+            Width = 71
+            Caption = 'Parameters'
+            ParentColor = False
+            WordWrap = True
+          end
+        end
+        object edParams: TEdit
+          Left = 83
+          Height = 29
+          Top = 0
+          Width = 214
+          Align = alClient
+          TabOrder = 1
+        end
       end
     end
   end

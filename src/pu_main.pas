@@ -12309,10 +12309,9 @@ if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) the
     // show message
     NewMessage(Format(rsStartingExpo, [f_capture.FrameTypeText, inttostr(cc)+'/'+f_capture.SeqNum.Text, FormatFloat(f9v,e)]),1);
   end;
-  // start script
+  // start exposure script
   if f_capture.StartScriptImage and (f_capture.Script<>'')and(FileExists(slash(ConfigDir)+f_capture.Script+'.script'))and((not camera.AddFrames)or(camera.StackCount=0)) then begin
-     RunScript(f_capture.Script,ConfigDir,'3 '+FormatFloat(f3,e));
-//     RunScript(f_capture.Script,ConfigDir,'["3"'+',"'+FormatFloat(f3,e)+'"]');
+     RunScript(f_capture.Script,ConfigDir,'0'+','+FormatFloat(f3,e)+' '+f_capture.ScriptParams);
   end;
   // start exposure for time e
   camera.StartExposure(e);
@@ -12513,9 +12512,9 @@ begin
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'image measurement');{$endif}
      if displayimage and ((not camera.AddFrames)or(camera.StackCount>=camera.StackNum)) then CameraMeasureNewImage;
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'image measurement end');{$endif}
-     // end script
+     // end image script
      if f_capture.EndScriptImage and (f_capture.Script<>'')and(FileExists(slash(ConfigDir)+f_capture.Script+'.script'))and((not camera.AddFrames)or(camera.StackCount>=camera.StackNum)) then begin
-        RunScript(f_capture.Script,ConfigDir,'2');
+        RunScript(f_capture.Script,ConfigDir,'1');
      end;
      if (not EarlyNextExposure) or SkipEarlyExposure or DomeFlatExposureOK then begin
        // dome flat exposure found, we can continue with early start

@@ -45,11 +45,15 @@ type
     CheckBoxDither: TCheckBox;
     CheckBoxFocus: TCheckBox;
     cbScript: TComboBox;
+    edParams: TEdit;
     Label8: TLabel;
+    Label9: TLabel;
     LabelTime: TLabel;
     Panel11: TPanel;
     Panel10: TPanel;
     Panel12: TPanel;
+    Panel13: TPanel;
+    Panel14: TPanel;
     StackNum: TSpinEditEx;
     Fnumber: TComboBox;
     ISObox: TComboBox;
@@ -122,6 +126,7 @@ type
     procedure SetFrameType(value:integer);
     function GetFrameTypeText:string;
     function GetScript:string;
+    function GetScriptParams:string;
     function GetEndScriptImage:boolean;
     function GetStartScriptImage:boolean;
     procedure ComputeTotalTime;
@@ -157,6 +162,7 @@ type
     property onResetHFM: TNotifyEvent read FonResetHFM write FonResetHFM;
     property ResetHFM: boolean read FResetHFM write FResetHFM;
     property Script: string read GetScript;
+    property ScriptParams: string read GetScriptParams;
     property StartScriptImage: boolean read GetStartScriptImage;
     property EndScriptImage: boolean read GetEndScriptImage;
     property onRunScript: TRunScript read FRunScript write FRunScript;
@@ -423,9 +429,9 @@ begin
   Frunning:=false;
   if (FstartedBy=CAPTURE)and(led.Brush.Color<>clGray)and(cbTerminationScript.Checked)and(cbScript.text>'')and(FileExists(slash(ConfigDir)+cbScript.text+'.script'))and assigned(FRunScript) then begin
     if ExpectedStop then
-      FRunScript(cbScript.text,ConfigDir,'0')
+      FRunScript(cbScript.text,ConfigDir,'2')
     else
-      FRunScript(cbScript.text,ConfigDir,'1');
+      FRunScript(cbScript.text,ConfigDir,'3');
   end;
   cbOverwrite.Checked:=false;
   EarlyNextExposure:=false;
@@ -477,6 +483,11 @@ end;
 function Tf_capture.GetScript:string;
 begin
   result:=cbScript.text;
+end;
+
+function Tf_capture.GetScriptParams:string;
+begin
+  result:=trim(edParams.text);
 end;
 
 function Tf_capture.GetStartScriptImage:boolean;
