@@ -34,6 +34,7 @@ T_rotator = class(TComponent)
  private
    function  GetAngleIntf:double;
    procedure SetAngleIntf(p:double);
+   procedure SetMountPierSide(value: TPierSide);
  protected
     FRotatorInterface: TDevInterface;
     FStatus: TDeviceStatus;
@@ -46,6 +47,7 @@ T_rotator = class(TComponent)
     FSoftSync, FSoftLimit: boolean;
     FCalibrationAngle: double;
     FReverse: Boolean;
+    FMountPierSide, FCalibrationPierSide: TPierSide;
     procedure msg(txt: string; level:integer=3);
     procedure SetReverse(value:boolean);
     function GetReverse:boolean;
@@ -75,6 +77,8 @@ T_rotator = class(TComponent)
     property Reverse: Boolean read GetReverse write SetReverse;
     property SoftSync: boolean read FSoftSync write FSoftSync;
     property SoftLimit: boolean read FSoftLimit write FSoftLimit;
+    property CalibrationPierSide:TPierSide read FCalibrationPierSide write FCalibrationPierSide;
+    property MountPierSide:TPierSide read FMountPierSide write SetMountPierSide;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onAngleChange: TNotifyEvent read FonAngleChange write FonAngleChange;
@@ -89,6 +93,8 @@ begin
   FStatus := devDisconnected;
   FSoftSync:=false;
   FCalibrationAngle:=0;
+  FCalibrationPierSide:=pierUnknown;
+  FMountPierSide:=pierUnknown;
   FReverse:=False;
 end;
 
@@ -126,6 +132,10 @@ if FSoftSync then begin
     result:=(360-GetMechAngle)-FCalibrationAngle
   else
     result:=GetMechAngle-FCalibrationAngle;
+  if (FCalibrationPierSide<pierUnknown)and(FMountPierSide<pierUnknown) then begin
+    if FCalibrationPierSide<>FMountPierSide then
+      result:=result+180;
+  end;
   result:=Rmod(7200+result,360);
   if result>359 then result:=0;
 end
@@ -137,6 +147,10 @@ procedure T_rotator.SetAngleIntf(p:double);
 begin
 msg(Format(rsRotatorMoveT, [FormatFloat(f1, p)]));
 if FSoftSync then begin
+  if (FCalibrationPierSide<pierUnknown)and(FMountPierSide<pierUnknown) then begin
+    if FCalibrationPierSide<>FMountPierSide then
+      p:=p+180;
+  end;
   if FReverse then
     p:=360-p-FCalibrationAngle
   else
@@ -156,6 +170,7 @@ Procedure T_rotator.Sync(p:double);
 begin
 msg(Format(rsSyncToS, [FormatFloat(f1, p)]));
 if FSoftSync then begin
+  FCalibrationPierSide:=FMountPierSide;
   if FReverse then
     FCalibrationAngle:=360-GetMechAngle-p
   else
@@ -167,6 +182,12 @@ if FSoftSync then begin
 end
 else
   SyncAngle(p);
+end;
+
+procedure T_rotator.SetMountPierSide(value: TPierSide);
+begin
+  FMountPierSide:=value;
+  if Assigned(FonAngleChange) then FonAngleChange(self);
 end;
 
 end.

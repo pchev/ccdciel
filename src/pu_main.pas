@@ -2261,6 +2261,7 @@ begin
    rotator.onAngleChange:=@RotatorAngleChange;
    rotator.onStatusChange:=@RotatorStatus;
    rotator.CalibrationAngle:=config.GetValue('/Rotator/CalibrationAngle',0.0);
+   rotator.CalibrationPierSide:=TPierSide(config.GetValue('/Rotator/CalibrationPierSide',ord(pierUnknown)));
 
    aInt:=TDevInterface(config.GetValue('/WeatherInterface',ord(DefaultInterface)));
    case aInt of
@@ -6088,6 +6089,7 @@ begin
 
    config.SetValue('/Rotator/Reverse',f_rotator.Reverse.Checked);
    config.SetValue('/Rotator/CalibrationAngle',rotator.CalibrationAngle);
+   config.SetValue('/Rotator/CalibrationPierSide',ord(rotator.CalibrationPierSide));
 
    config.SetValue('/StarAnalysis/FocuserLastTemp',FocuserLastTemp);
    config.SetValue('/StarAnalysis/MagnitudeCalibration',MagnitudeCalibration);
@@ -8882,6 +8884,9 @@ case rotator.Status of
                       NewMessage(Format(rsConnected, [rsRotator]),1);
                       f_rotator.SetReverse(config.GetValue('/Rotator/Reverse',false));
                       rotator.CalibrationAngle:=config.GetValue('/Rotator/CalibrationAngle',0.0);
+                      rotator.CalibrationPierSide:=TPierSide(config.GetValue('/Rotator/CalibrationPierSide',ord(pierUnknown)));
+                      if mount.Status=devConnected then
+                         rotator.MountPierSide:=mount.PierSide;
                       wait(1);
                       RotatorAngleChange(self);
                    end;
@@ -8896,6 +8901,10 @@ begin
  if rotator.SoftLimit then f_rotator.Angle180.Caption:=FormatFloat(f2,rmod(f_rotator.Angle.Value+360+180,360));
  if rotator.SoftSync then begin
    f_rotator.CalAngle.Caption:=FormatFloat(f2,rotator.CalibrationAngle);
+   if rotator.CalibrationPierSide=pierEast
+      then f_rotator.CalAngle.Caption:=f_rotator.CalAngle.Caption+' E'
+   else if rotator.CalibrationPierSide=pierWest
+      then f_rotator.CalAngle.Caption:=f_rotator.CalAngle.Caption+' W';
    f_rotator.MechAngle.Caption:=FormatFloat(f2,rotator.MechAngle);
  end;
 end;
@@ -8921,6 +8930,7 @@ end;
 Procedure Tf_main.RotatorResetSync(Sender: TObject);
 begin
   rotator.CalibrationAngle:=0;
+  rotator.CalibrationPierSide:=mount.PierSide;
   RotatorAngleChange(Sender);
 end;
 
@@ -8965,6 +8975,7 @@ case mount.Status of
                         f_pause.Wait(30);
                       end;
                       MountCoordChange(Sender);
+                      MountPiersideChange(Sender);
                       StatusTimer.Enabled:=false; // let time to initialize before to do too much
                       StatusTimer.Enabled:=true;
                    end;
@@ -8989,6 +9000,10 @@ else begin
     pierUnknown: f_mount.Pierside.Caption:=rsUnknowPierSi;
     pierNotImplemented: f_mount.Pierside.Caption:='';
   end;
+end;
+if rotator.Status=devConnected then begin
+   rotator.MountPierSide:=mount.PierSide;
+   RotatorAngleChange(self);
 end;
 end;
 
