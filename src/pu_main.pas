@@ -19624,6 +19624,7 @@ end;
 
 procedure Tf_main.ImageGuidePaint(Sender: TObject);
 var i,h,s,x,y: integer;
+    tw: tsize;
     bar: TRect;
 begin
 try
@@ -19646,12 +19647,13 @@ try
     ImageGuide.Canvas.Font.Size:=DoScaleX(10);
   ImageGuide.Canvas.TextOut(1, 1, rsGuideCamera);
   if FGuideProgress>=0 then begin
+    tw:=ImageGuide.Canvas.TextExtent(rsGuideCamera);
     bar.Top:=1;
     bar.Left:=1;
     bar.Height:=DoScaleY(7);
-    bar.Width:=DoScaleX(150);
+    bar.Width:=tw.Width;
     i:=round(bar.Width*FGuideProgress);
-    ImageGuide.Canvas.Brush.Color:=clGray;
+    ImageGuide.Canvas.Brush.Color:=$606060;
     ImageGuide.Canvas.FillRect(bar);
     bar.Width:=bar.Width-i;
     ImageGuide.Canvas.Brush.Color:=colorProgress1;
@@ -20794,6 +20796,7 @@ end;
 
 procedure Tf_main.ImageFinderPaint(Sender: TObject);
 var i,x1,y1,x2,y2,x3,y3,xr1,yr1,xr2,yr2,xr3,yr3,xr4,yr4,r: integer;
+    tw: tsize;
     bar: TRect;
 begin
 try
@@ -20805,12 +20808,13 @@ try
   ImageFinder.Canvas.Font.Size:=DoScaleX(16);
   ImageFinder.Canvas.TextOut(1, 1, rsFinderCamera);
   if FFinderProgress>=0 then begin
+    tw:=ImageFinder.Canvas.TextExtent(rsFinderCamera);
     bar.Top:=1;
     bar.Left:=1;
     bar.Height:=DoScaleY(7);
-    bar.Width:=DoScaleX(150);
+    bar.Width:=tw.Width;
     i:=round(bar.Width*FFinderProgress);
-    ImageFinder.Canvas.Brush.Color:=clGray;
+    ImageFinder.Canvas.Brush.Color:=$606060;
     ImageFinder.Canvas.FillRect(bar);
     bar.Width:=bar.Width-i;
     ImageFinder.Canvas.Brush.Color:=colorProgress1;
