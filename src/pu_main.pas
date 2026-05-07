@@ -12310,8 +12310,10 @@ if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) the
     NewMessage(Format(rsStartingExpo, [f_capture.FrameTypeText, inttostr(cc)+'/'+f_capture.SeqNum.Text, FormatFloat(f9v,e)]),1);
   end;
   // start exposure script
-  if f_capture.StartScriptImage and (f_capture.Script<>'')and(FileExists(slash(ConfigDir)+f_capture.Script+'.script'))and((not camera.AddFrames)or(camera.StackCount=0)) then begin
-     RunScript(f_capture.Script,ConfigDir,'0'+','+FormatFloat(f3,e)+' '+f_capture.ScriptParams);
+  if f_capture.StartScriptImage and (f_capture.Script<>'')and(FileExists(slash(ConfigDir)+f_capture.Script+'.script'))and((not camera.AddFrames)or(camera.StackStarted=1)) then begin
+     buf:='0'+','+FormatFloat(f3,e);
+     if camera.AddFrames then buf:=buf+','+f_capture.StackNum.Text;
+     RunScript(f_capture.Script,ConfigDir,buf+' '+f_capture.ScriptParams);
   end;
   // start exposure for time e
   camera.StartExposure(e);
