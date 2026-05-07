@@ -9326,11 +9326,15 @@ begin
  case autoguider.State of
    GUIDER_DISCONNECTED:begin
                        f_autoguider.led.Brush.Color:=clGray;
+                       FGuideProgress:=-1;
+                       ImageGuide.Invalidate;
                        f_autoguider.BtnGuide.Caption:=rsGuide;
                        MenuAutoguiderGuide.Caption:=rsGuide;
                        end;
    GUIDER_IDLE        :begin
                        f_autoguider.led.Brush.Color:=clYellow;
+                       FGuideProgress:=-1;
+                       ImageGuide.Invalidate;
                        f_autoguider.BtnGuide.Caption:=rsGuide;
                        MenuAutoguiderGuide.Caption:=rsGuide;
                        if (not meridianflipping)and(not autofocusing)and(not WeatherPauseCapture)and(not RecenteringTarget)
@@ -9348,6 +9352,8 @@ begin
                        end;
    GUIDER_ALERT       :begin
                        f_autoguider.led.Brush.Color:=clRed;
+                       FGuideProgress:=-1;
+                       ImageGuide.Invalidate;
                        f_autoguider.BtnGuide.Caption:=rsGuide;
                        MenuAutoguiderGuide.Caption:=rsGuide;
                        end;
@@ -19203,16 +19209,15 @@ begin
    case i of
      -11 : txt:=rsDisplay+ellipsis;
      -10 : txt:=rsReadImage+ellipsis;
-     -9 : txt:=rsUnknownStatu+ellipsis;
-     -5 : txt:=rsError2+ellipsis;
+     -9 : begin txt:=rsUnknownStatu+ellipsis; FGuideProgress:=-1; end;
+     -5 : begin txt:=rsError2+ellipsis; FGuideProgress:=-1; end;
      -4 : txt:=rsDownloading+ellipsis;
      -3 : txt:=rsReadCCD+ellipsis;
      -1 : txt:=rsWaitStart+ellipsis;
       0 : txt:=rsIdle+ellipsis;
-     else txt:=rsUnknownStatu+ellipsis;
+     else begin txt:=rsUnknownStatu+ellipsis; FGuideProgress:=-1; end;
    end;
    f_internalguider.CameraStatus := txt;
-   FGuideProgress:=-1;
    ImageGuide.Invalidate;
  end else begin
   if n>=10 then txt:=FormatFloat(f0, n)
@@ -19643,10 +19648,10 @@ try
   if FGuideProgress>=0 then begin
     bar.Top:=1;
     bar.Left:=1;
-    bar.Height:=DoScaleY(5);
-    bar.Width:=DoScaleX(50);
+    bar.Height:=DoScaleY(7);
+    bar.Width:=DoScaleX(150);
     i:=round(bar.Width*FGuideProgress);
-    ImageGuide.Canvas.Brush.Color:=colorProgress2;
+    ImageGuide.Canvas.Brush.Color:=clGray;
     ImageGuide.Canvas.FillRect(bar);
     bar.Width:=bar.Width-i;
     ImageGuide.Canvas.Brush.Color:=colorProgress1;
@@ -20729,6 +20734,7 @@ end;
 if finderfits.HeaderInfo.solved and AnnotateFinder then begin
   plot_deepsky(ScrFinderBmp.Canvas,ScrFinderBmp.Width,ScrFinderBmp.Height,false,true,1);
 end;
+FFinderProgress:=-1;
 ImageFinder.Invalidate;
 end;
 
@@ -20801,10 +20807,10 @@ try
   if FFinderProgress>=0 then begin
     bar.Top:=1;
     bar.Left:=1;
-    bar.Height:=DoScaleY(5);
-    bar.Width:=DoScaleX(50);
+    bar.Height:=DoScaleY(7);
+    bar.Width:=DoScaleX(150);
     i:=round(bar.Width*FFinderProgress);
-    ImageFinder.Canvas.Brush.Color:=colorProgress2;
+    ImageFinder.Canvas.Brush.Color:=clGray;
     ImageFinder.Canvas.FillRect(bar);
     bar.Width:=bar.Width-i;
     ImageFinder.Canvas.Brush.Color:=colorProgress1;
