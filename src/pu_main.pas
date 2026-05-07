@@ -5472,6 +5472,7 @@ begin
   f_internalguider.spGhostY.Value:=config.GetValue('/InternalGuider/GhostY',100);
   f_internalguider.spGhostD.Value:=config.GetValue('/InternalGuider/GhostD',40);
   f_internalguider.spGhostThreshold.Value:=config.GetValue('/InternalGuider/GhostThreshold',60000);
+  f_internalguider.GhostBinning:=config.GetValue('/InternalGuider/GhostBinning',1);
   f_internalguider.SearchWinMin:=config.GetValue('/InternalGuider/Spectro/SearchWinMin',40);
   f_internalguider.SearchWinMax:=config.GetValue('/InternalGuider/Spectro/SearchWinMax',80);
   f_internalguider.SpectroFastCentering:=config.GetValue('/InternalGuider/Spectro/FastCentering',false);
@@ -6153,6 +6154,7 @@ begin
   config.SetValue('/InternalGuider/Visu/ClipRange',f_internalguider.visu.BtnClipRange.Down);
   config.SetValue('/InternalGuider/Visu/HistRange',f_internalguider.visu.cbHistRange.ItemIndex);
   config.SetValue('/InternalGuider/Spectro/SpectroFunctions',f_internalguider.SpectroFunctions);
+  config.SetValue('/InternalGuider/GhostBinning',f_internalguider.GhostBinning);
   config.SetValue('/InternalGuider/Ghost',f_internalguider.cbGhost.Checked and f_internalguider.SpectroFunctions);
   config.SetValue('/InternalGuider/GhostX',f_internalguider.spGhostX.Value);
   config.SetValue('/InternalGuider/GhostY',f_internalguider.spGhostY.Value);
@@ -19256,7 +19258,7 @@ begin
   end;
 
   if f_internalguider.cbGhost.Checked then begin
-    guidefits.ghost_blackout(f_internalguider.spGhostThreshold.Value,f_internalguider.spGhostX.Value,f_internalguider.spGhostY.Value,f_internalguider.spGhostD.Value);
+    guidefits.ghost_blackout(f_internalguider.spGhostThreshold.Value,f_internalguider.spGhostX.Value,f_internalguider.spGhostY.Value,f_internalguider.spGhostD.Value,f_internalguider.GhostBinning);
   end;
 
   if StopInternalguider then begin
@@ -20559,7 +20561,7 @@ begin
   end;
 
   if SameGuiderFinder and (autoguider.AutoguiderType=agINTERNAL) and f_internalguider.cbGhost.Checked then begin
-    finderfits.ghost_blackout(f_internalguider.spGhostThreshold.Value,f_internalguider.spGhostX.Value,f_internalguider.spGhostY.Value,f_internalguider.spGhostD.Value);
+    finderfits.ghost_blackout(f_internalguider.spGhostThreshold.Value,f_internalguider.spGhostX.Value,f_internalguider.spGhostY.Value,f_internalguider.spGhostD.Value,f_internalguider.GhostBinning);
   end;
 
   if f_finder.cbSaveImages.Checked then begin

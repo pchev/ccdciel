@@ -242,7 +242,7 @@ type
      procedure LoadDark(fn: string);
      procedure LoadFlat(fn: string);
      procedure MedianFilter(size,centralweight: integer);
-     procedure ghost_blackout(threshold,dx,dy,diameter: integer);
+     procedure ghost_blackout(threshold,dx,dy,diameter,binref: integer);
      function dateobs: double;
      property IntfImg: TLazIntfImage read FIntfImg;
      Property HeaderInfo : TFitsInfo read FFitsInfo;
@@ -4275,9 +4275,10 @@ except
 end;
 end;
 
-procedure TFits.ghost_blackout(threshold,dx,dy,diameter: integer);//blackout of ghost stars for spectroscopy
+procedure TFits.ghost_blackout(threshold,dx,dy,diameter,binref: integer);//blackout of ghost stars for spectroscopy
 var
   jy,jx,radius,sqrradius,ny,nx,fwidth,fheight,cx,cy,fluxmain,fluxghost1,fluxghost2,gy,gx: integer;
+  binscale: double;
 
     procedure setpixel(ay,ax : integer; val: single);
     begin
@@ -4334,6 +4335,11 @@ var
     end;
 
 begin
+  binscale:=binref/HeaderInfo.BinX;
+  dx:=round(binscale*dx);
+  dy:=round(binscale*dy);
+  diameter:=round(binscale*diameter);
+
   Radius:=diameter div 2;
   sqrradius:=sqr(radius);
   fheight:=length(fimage[0]);

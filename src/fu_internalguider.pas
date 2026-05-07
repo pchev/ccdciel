@@ -300,6 +300,7 @@ type
     procedure ForceGuideSpeedChange(Sender: TObject);
     procedure ForceRedraw(Sender: TObject);
     procedure ExposureChange(Sender: TObject);
+    procedure GhostPosChange(Sender: TObject);
     procedure MenuSlitOffsetMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure LongestPulse1Change(Sender: TObject);
     procedure MenuItemCaptureDarkClick(Sender: TObject);
@@ -340,7 +341,7 @@ type
     cur_disable_guiding, cur_tracksolar, FForceMultiStar: boolean;
     FDrawSettingChange, LockSlit: boolean;
     FGuideLock, FGuideMultistar, FGuideAstrometry,FGuideStarOffset,BinningChanging: boolean;
-    FGuideLockNextX, FGuideLockNextY, FStarOffsetStep, FMultiStarOffsetStep, BinningRef: integer;
+    FGuideLockNextX, FGuideLockNextY, FStarOffsetStep, FMultiStarOffsetStep, BinningRef, FGhostBinning: integer;
     FonShowMessage: TNotifyMsg;
     Fcamera: T_camera;
     FRotator: T_rotator;
@@ -563,6 +564,7 @@ type
     property onMeasureReferenceImage: TNotifyEvent read FonMeasureReferenceImage write FonMeasureReferenceImage;
     property onSetSpectro: TNotifyEvent read FonSetSpectro write FonSetSpectro;
     property Delay: integer read GetDelay;
+    property GhostBinning: integer read FGhostBinning write FGhostBinning;
 
   end;
 
@@ -638,6 +640,7 @@ begin
  led.Canvas.AntialiasingMode:=amOn;
  FForceMultiStar:=false;
  BinningChanging:=false;
+ FGhostBinning:=1;
  LockSlit:=false;
 end;
 
@@ -1088,6 +1091,12 @@ end;
 procedure Tf_internalguider.cbGhostChange(Sender: TObject);
 begin
   PanelGhost2.Visible:=cbGhost.Checked;
+  FGhostBinning:=Binning.Value;
+end;
+
+procedure Tf_internalguider.GhostPosChange(Sender: TObject);
+begin
+  FGhostBinning:=Binning.Value;
 end;
 
 procedure Tf_internalguider.ChangeSpectro;
