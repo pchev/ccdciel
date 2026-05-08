@@ -6205,10 +6205,6 @@ msgstr ""
 msgid "Save image with astrometry"
 msgstr ""
 
-#: u_translation:rsterminations
-msgid "Termination script"
-msgstr ""
-
 #: u_translation:rssetmountpier
 msgid "Set mount pier side if available"
 msgstr ""
@@ -6281,10 +6277,6 @@ msgstr ""
 msgid "Cover the camera"
 msgstr ""
 
-#: u_translation:rsrunterminati
-msgid "Run termination script after every image"
-msgstr ""
-
 #: u_translation:rsoverwrite
 msgid "Overwrite"
 msgstr ""
@@ -6311,5 +6303,17 @@ msgstr ""
 
 #: u_translation:rsdiameter
 msgid "diameter"
+msgstr ""
+
+#: u_translation:rsrunscriptbef
+msgid "Run script before each exposure"
+msgstr ""
+
+#: u_translation:rsrunscriptaft
+msgid "Run script after an image is saved"
+msgstr ""
+
+#: u_translation:rsrunscriptatt
+msgid "Run script at the end of the series"
 msgstr ""
 

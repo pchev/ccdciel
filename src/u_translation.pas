@@ -1677,8 +1677,8 @@ resourcestring
   rsReflection = 'Reflection';
   rsStarIntensit = 'Star intensity threshold';
   rsDiameter = 'diameter';
-  rsRunScriptBef = 'Run script before every exposure';
-  rsRunScriptAft = 'Run script after every image';
+  rsRunScriptBef = 'Run script before each exposure';
+  rsRunScriptAft = 'Run script after an image is saved';
   rsRunScriptAtT = 'Run script at the end of the series';
 
 implementation

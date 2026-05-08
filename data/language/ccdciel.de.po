@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-05-06 14:15+0000\n"
+"POT-Creation-Date: 2026-05-08 18:18+0000\n"
 "PO-Revision-Date: 2025-04-13 06:44+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-05-06 14:28+0000\n"
+"X-Launchpad-Export-Date: 2026-05-08 18:24+0000\n"
 "X-Generator: Launchpad (build 91d5f4cbcbec62cc98ca9991c8ad99af4e21f85a)\n"
 
 #: u_translation.rs2d
@@ -4532,12 +4532,20 @@ msgstr "Skript ausführen"
 msgid "Run script %s"
 msgstr "Skript ausführen %s"
 
-#: u_translation.rsrunscriptwhe
-msgid "Run script when the weather change"
+#: u_translation.rsrunscriptaft
+msgid "Run script after an image is saved"
 msgstr ""
 
-#: u_translation.rsrunterminati
-msgid "Run termination script after every image"
+#: u_translation.rsrunscriptatt
+msgid "Run script at the end of the series"
+msgstr ""
+
+#: u_translation.rsrunscriptbef
+msgid "Run script before each exposure"
+msgstr ""
+
+#: u_translation.rsrunscriptwhe
+msgid "Run script when the weather change"
 msgstr ""
 
 #: u_translation.rsrununattende
@@ -5821,10 +5829,6 @@ msgstr "Temporärer Ordner darf nur ASCII Zeichen enthalten"
 #: u_translation.rsterminationo
 msgid "Termination options"
 msgstr "Optionen beim Beenden"
-
-#: u_translation.rsterminations
-msgid "Termination script"
-msgstr ""
 
 #: u_translation.rstest
 msgid "Test"

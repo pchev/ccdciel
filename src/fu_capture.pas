@@ -225,6 +225,7 @@ begin
   CheckBoxFocusTemp.Caption:=rsAutofocusAft2;
   CheckBoxFocusHFD.Caption:=rsAutofocusHFD2;
   Label8.Caption:=rsScript;
+  Label9.Caption:=rsParameter;
   cbStartScriptImage.Caption:=rsRunScriptBef;
   cbEndScriptImage.Caption:=rsRunScriptAft;
   cbTerminationScript.Caption:=rsRunScriptAtT;

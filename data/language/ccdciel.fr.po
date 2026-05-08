@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-05-06 14:15+0000\n"
-"PO-Revision-Date: 2026-05-06 14:26+0000\n"
+"POT-Creation-Date: 2026-05-08 18:18+0000\n"
+"PO-Revision-Date: 2026-05-08 18:21+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-05-06 14:28+0000\n"
+"X-Launchpad-Export-Date: 2026-05-08 18:24+0000\n"
 "X-Generator: Launchpad (build 91d5f4cbcbec62cc98ca9991c8ad99af4e21f85a)\n"
 
 #: u_translation.rs2d
@@ -4532,13 +4532,21 @@ msgstr "Exécuter le script"
 msgid "Run script %s"
 msgstr "Exécution du script %s"
 
+#: u_translation.rsrunscriptaft
+msgid "Run script after an image is saved"
+msgstr "Exécuter le script après qu'une image est enregistée"
+
+#: u_translation.rsrunscriptatt
+msgid "Run script at the end of the series"
+msgstr "Exécuter le script à la fin de la série"
+
+#: u_translation.rsrunscriptbef
+msgid "Run script before each exposure"
+msgstr "Exécuter le script avant chaque exposition"
+
 #: u_translation.rsrunscriptwhe
 msgid "Run script when the weather change"
 msgstr "Execute un script quand le temps change"
-
-#: u_translation.rsrunterminati
-msgid "Run termination script after every image"
-msgstr "Executer le script après chaque image"
 
 #: u_translation.rsrununattende
 msgid "Run unattended"
@@ -5821,10 +5829,6 @@ msgstr "Le nom du dossier temporaire ne doit pas contenir de caractère accentu�
 #: u_translation.rsterminationo
 msgid "Termination options"
 msgstr "Options de terminaison"
-
-#: u_translation.rsterminations
-msgid "Termination script"
-msgstr "Script de fin"
 
 #: u_translation.rstest
 msgid "Test"

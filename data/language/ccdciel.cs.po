@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-06 14:15+0000\n"
-"PO-Revision-Date: 2026-03-16 14:18+0000\n"
+"POT-Creation-Date: 2026-05-08 18:18+0000\n"
+"PO-Revision-Date: 2026-05-08 05:36+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-05-06 14:28+0000\n"
+"X-Launchpad-Export-Date: 2026-05-08 18:24+0000\n"
 "X-Generator: Launchpad (build 91d5f4cbcbec62cc98ca9991c8ad99af4e21f85a)\n"
 "Language: cs\n"
 
@@ -252,7 +252,7 @@ msgstr "Protokol astrometrického řešení"
 
 #: u_translation.rsastrometrywi
 msgid "Astrometry with offset to avoid bright stars"
-msgstr ""
+msgstr "Astrometrie s offsetem pro vyloučení jasných hvězd"
 
 #: u_translation.rsatdawn
 msgid "at dawn"
@@ -1252,7 +1252,7 @@ msgstr "Zakryjte kameru a nastavte expoziční čas a binning v okně náhledu."
 
 #: u_translation.rscoverthecame2
 msgid "Cover the camera"
-msgstr ""
+msgstr "Zakryjte kameru"
 
 #: u_translation.rscreatefromca
 msgid "Create from camera"
@@ -1470,7 +1470,7 @@ msgstr "Rosný bod"
 
 #: u_translation.rsdiameter
 msgid "diameter"
-msgstr ""
+msgstr "průměr"
 
 #: u_translation.rsdirectory
 msgid "Directory"
@@ -2224,7 +2224,7 @@ msgstr "Z barevného snímku"
 
 #: u_translation.rsfromdriver
 msgid "From driver"
-msgstr ""
+msgstr "Z ovladače"
 
 #: u_translation.rsfromemailadd
 msgid "From email address"
@@ -3295,7 +3295,7 @@ msgstr "Více panelů"
 
 #: u_translation.rsmultipledark
 msgid "Multiple dark with different exposure"
-msgstr ""
+msgstr "Několik snímků s různou expozicí"
 
 #: u_translation.rsmultistargui
 msgid "Multi-star guide offset"
@@ -3697,7 +3697,7 @@ msgstr "%s mimo rozsah"
 
 #: u_translation.rsoverwrite
 msgid "Overwrite"
-msgstr ""
+msgstr "Přepsat"
 
 #: u_translation.rspa
 msgid "PA"
@@ -4072,7 +4072,7 @@ msgstr "Předzpracování náhledu"
 
 #: u_translation.rspreviousvers
 msgid "Previous version copied to"
-msgstr ""
+msgstr "Původní verze byla zkopírována do"
 
 #: u_translation.rsprofile
 #, object-pascal-format
@@ -4216,7 +4216,7 @@ msgstr "Referenční snímek"
 
 #: u_translation.rsreflection
 msgid "Reflection"
-msgstr ""
+msgstr "Zrcadlení"
 
 #: u_translation.rsrefractedpol
 msgid "Refracted pole"
@@ -4248,7 +4248,7 @@ msgstr "Odstranění mezery v názvu objektu"
 
 #: u_translation.rsremovestarre
 msgid "Remove star reflection on glass slit"
-msgstr ""
+msgstr "Odstranit odraz hvězdy na skleněné štěrbině"
 
 #: u_translation.rsremovestep
 msgid "Remove step"
@@ -4278,7 +4278,7 @@ msgstr "Tento krok opakujte"
 
 #: u_translation.rsreplaceby
 msgid "replace by"
-msgstr ""
+msgstr "nahradit"
 
 #: u_translation.rsreportaprobl
 msgid "Report a problem"
@@ -4414,7 +4414,7 @@ msgstr "Opakovat"
 
 #: u_translation.rsretrywithano
 msgid "Retry with an offset"
-msgstr ""
+msgstr "Zkuste to znovu s offsetem"
 
 #: u_translation.rsretrywithast
 msgid "Retry with astrometry.net"
@@ -4529,13 +4529,21 @@ msgstr "Spustit script"
 msgid "Run script %s"
 msgstr "Spuštění skriptu %s"
 
+#: u_translation.rsrunscriptaft
+msgid "Run script after an image is saved"
+msgstr ""
+
+#: u_translation.rsrunscriptatt
+msgid "Run script at the end of the series"
+msgstr ""
+
+#: u_translation.rsrunscriptbef
+msgid "Run script before each exposure"
+msgstr ""
+
 #: u_translation.rsrunscriptwhe
 msgid "Run script when the weather change"
 msgstr "Spustit skript při změně počasí"
-
-#: u_translation.rsrunterminati
-msgid "Run termination script after every image"
-msgstr ""
 
 #: u_translation.rsrununattende
 msgid "Run unattended"
@@ -5141,12 +5149,12 @@ msgstr "Přejíždění"
 
 #: u_translation.rsslewingtofin
 msgid "Slewing to final position"
-msgstr ""
+msgstr "Otočení do finální polohy"
 
 #: u_translation.rsslewingwiths
 #, object-pascal-format
 msgid "Slewing with %s minutes RA offset"
-msgstr ""
+msgstr "Otočení s offsetem RA o %s minut"
 
 #: u_translation.rsslewtelescop2
 msgid "Slew telescope to flat panel position"
@@ -5255,7 +5263,7 @@ msgstr "Spektroskopie"
 
 #: u_translation.rsspectroslitr
 msgid "Spectroscope ROI"
-msgstr ""
+msgstr "Spektroskop ROI"
 
 #: u_translation.rsspeed
 msgid "Speed"
@@ -5323,7 +5331,7 @@ msgstr "Hvězda FWHM"
 
 #: u_translation.rsstarintensit
 msgid "Star intensity threshold"
-msgstr ""
+msgstr "Prahová intenzita hvězdy"
 
 #: u_translation.rsstarlostreco
 msgid "Star lost recovery"
@@ -5639,7 +5647,7 @@ msgstr "Nastavení přepínače %s selhalo!"
 
 #: u_translation.rssyncoffset
 msgid "Sync Offset"
-msgstr ""
+msgstr "Posun Offset"
 
 #: u_translation.rssynctherotat
 msgid "Sync the rotator"
@@ -5818,10 +5826,6 @@ msgstr "Dočasná složka musí obsahovat pouze znaky ASCII"
 #: u_translation.rsterminationo
 msgid "Termination options"
 msgstr "Možnosti ukončení"
-
-#: u_translation.rsterminations
-msgid "Termination script"
-msgstr "Skript pro ukončení"
 
 #: u_translation.rstest
 msgid "Test"
@@ -6025,7 +6029,7 @@ msgstr "Příliš malý HFD rozdíl."
 
 #: u_translation.rstotalexecuti
 msgid "Total execution time"
-msgstr ""
+msgstr "Celková doba zpracování"
 
 #: u_translation.rstotalpolarer
 msgid "Total polar error:"
