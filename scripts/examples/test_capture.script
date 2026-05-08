@@ -1,0 +1,47 @@
+# Python program for CCDciel
+# see: https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference
+
+# example of script to use in the Capture tab
+
+from ccdciel import ccdciel
+import sys
+
+# the first parameters contain the action code and eventually the exposure time and stack count
+if len(sys.argv) >= 2 :
+  captureparam = sys.argv[1].split(',')
+  action = int(captureparam[0])
+  if len(captureparam)>=2:
+     exptime = float(captureparam[1])
+  if len(captureparam)>=3:
+     stackcount = int(captureparam[2])
+  else:
+     stackcount = 1
+else:
+  sys.exit(1)
+
+# our first additional parameter is here
+if len(sys.argv) >= 3 :
+  p1=sys.argv[2]
+  print('param1='+p1)
+
+match action:
+   case 0:
+      if stackcount==1:
+         print(f"we start an exposure of {exptime} seconds")
+      else:
+         print(f"we start a stack of {stackcount} exposure of {exptime} seconds")
+
+   case 1:
+      lastfile=ccdciel('Capture_getLastfilename')['result']
+      print(f"we just save the file {lastfile}")
+
+   case 2:
+      print('the series terminate normally')
+
+   case 3:
+      print('the series terminate abnormally')
+
+   case _:
+      print('something else ??')
+
+
