@@ -1,22 +1,22 @@
 object f_capture: Tf_capture
   Left = 0
-  Height = 605
+  Height = 616
   Top = 0
   Width = 299
   AutoSize = True
   ChildSizing.ControlsPerLine = 1
-  ClientHeight = 605
+  ClientHeight = 616
   ClientWidth = 299
   ParentFont = False
   TabOrder = 0
   object Panel1: TPanel
     Left = 0
-    Height = 585
+    Height = 596
     Top = 20
     Width = 299
     Align = alClient
     AutoSize = True
-    ClientHeight = 585
+    ClientHeight = 596
     ClientWidth = 299
     ParentColor = False
     ParentFont = False
@@ -500,7 +500,7 @@ object f_capture: Tf_capture
     object Panel9: TPanel
       Left = 1
       Height = 30
-      Top = 553
+      Top = 557
       Width = 297
       Align = alTop
       BorderSpacing.Top = 4
@@ -547,17 +547,18 @@ object f_capture: Tf_capture
         ParentColor = False
       end
     end
-    object Panel12: TPanel
+    object PanelScript: TPanel
       Left = 1
-      Height = 124
+      Height = 128
       Top = 425
       Width = 297
       Align = alTop
+      AutoSize = True
       BevelOuter = bvNone
-      ClientHeight = 124
+      ClientHeight = 128
       ClientWidth = 297
       TabOrder = 11
-      object Panel10: TPanel
+      object PanelScriptname: TPanel
         Left = 0
         Height = 29
         Top = 0
@@ -575,6 +576,7 @@ object f_capture: Tf_capture
           Align = alClient
           BorderSpacing.Left = 8
           ItemHeight = 18
+          OnChange = cbScriptChange
           Style = csDropDownList
           TabOrder = 0
         end
@@ -604,37 +606,7 @@ object f_capture: Tf_capture
           end
         end
       end
-      object cbEndScriptImage: TCheckBox
-        AnchorSideTop.Control = cbStartScriptImage
-        AnchorSideTop.Side = asrBottom
-        Left = 4
-        Height = 22
-        Top = 80
-        Width = 196
-        Caption = 'Run script after every image'
-        TabOrder = 1
-      end
-      object cbStartScriptImage: TCheckBox
-        AnchorSideTop.Control = Panel13
-        AnchorSideTop.Side = asrBottom
-        Left = 4
-        Height = 22
-        Top = 58
-        Width = 207
-        Caption = 'Run script before every image'
-        TabOrder = 2
-      end
-      object cbTerminationScript: TCheckBox
-        AnchorSideTop.Control = cbEndScriptImage
-        AnchorSideTop.Side = asrBottom
-        Left = 4
-        Height = 22
-        Top = 102
-        Width = 230
-        Caption = 'Run script at the end of the series'
-        TabOrder = 3
-      end
-      object Panel13: TPanel
+      object PanelScriptParam: TPanel
         AnchorSideTop.Side = asrBottom
         Left = 0
         Height = 29
@@ -644,7 +616,8 @@ object f_capture: Tf_capture
         BevelOuter = bvNone
         ClientHeight = 29
         ClientWidth = 297
-        TabOrder = 4
+        TabOrder = 1
+        Visible = False
         object Panel14: TPanel
           Left = 4
           Height = 29
@@ -679,6 +652,46 @@ object f_capture: Tf_capture
           TabOrder = 1
         end
       end
+      object PanelRunScript: TPanel
+        Left = 0
+        Height = 70
+        Top = 58
+        Width = 297
+        Align = alTop
+        BevelOuter = bvNone
+        ClientHeight = 70
+        ClientWidth = 297
+        TabOrder = 2
+        Visible = False
+        object cbEndScriptImage: TCheckBox
+          AnchorSideTop.Control = cbStartScriptImage
+          AnchorSideTop.Side = asrBottom
+          Left = 1
+          Height = 22
+          Top = 23
+          Width = 196
+          Caption = 'Run script after every image'
+          TabOrder = 0
+        end
+        object cbStartScriptImage: TCheckBox
+          AnchorSideTop.Side = asrBottom
+          Left = 1
+          Height = 22
+          Top = 1
+          Width = 207
+          Caption = 'Run script before every image'
+          TabOrder = 1
+        end
+        object cbTerminationScript: TCheckBox
+          AnchorSideTop.Side = asrBottom
+          Left = 1
+          Height = 22
+          Top = 47
+          Width = 230
+          Caption = 'Run script at the end of the series'
+          TabOrder = 2
+        end
+      end
     end
   end
   object Title: TLabel
@@ -701,7 +714,7 @@ object f_capture: Tf_capture
   object TimerExp: TTimer
     Enabled = False
     OnTimer = TimerExpTimer
-    Left = 32
-    Top = 552
+    Left = 232
+    Top = 32
   end
 end

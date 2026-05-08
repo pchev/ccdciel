@@ -49,10 +49,11 @@ type
     Label8: TLabel;
     Label9: TLabel;
     LabelTime: TLabel;
+    PanelRunScript: TPanel;
     Panel11: TPanel;
-    Panel10: TPanel;
-    Panel12: TPanel;
-    Panel13: TPanel;
+    PanelScriptname: TPanel;
+    PanelScript: TPanel;
+    PanelScriptParam: TPanel;
     Panel14: TPanel;
     StackNum: TSpinEditEx;
     Fnumber: TComboBox;
@@ -91,6 +92,7 @@ type
     TimerExp: TTimer;
     Title: TLabel;
     procedure BtnStartClick(Sender: TObject);
+    procedure cbScriptChange(Sender: TObject);
     procedure ExpTimeChange(Sender: TObject);
     procedure ExpTimeKeyPress(Sender: TObject; var Key: char);
     procedure CheckLight(Sender: TObject);
@@ -335,6 +337,12 @@ begin
     LabelTime.Caption:='';
     if Assigned(FonMsg) then FonMsg(rsStopCapture,2);
   end;
+end;
+
+procedure Tf_capture.cbScriptChange(Sender: TObject);
+begin
+  PanelScriptParam.Visible:=trim(cbScript.Text)<>'';
+  PanelRunScript.Visible:=PanelScriptParam.Visible;
 end;
 
 procedure Tf_capture.ExpTimeChange(Sender: TObject);
