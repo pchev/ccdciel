@@ -20485,7 +20485,7 @@ end;
 
 procedure Tf_main.InternalguiderSetSpectro(Sender: TObject);
 begin
-  if f_internalguider.SpectroFunctions and (not InternalguiderRunning) then begin
+  if (guidecamera.Status=devConnected) and f_internalguider.SpectroFunctions and (not InternalguiderRunning) then begin
     SetGuiderCameraFrame;
   end;
 end;
