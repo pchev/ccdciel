@@ -3853,8 +3853,6 @@ begin
   DeprecatedScripts:=TStringList.Create;
   try
   txt:='';
-  if not config.GetValue('/Sensor/CanSetGain',true) then
-    txt:=txt+crlf+'The option to not use the camera gain and offset is deprecated, they will alway be enabled.';
   if (config.GetValue('/StarAnalysis/AutoFocusMode',3)=0) then
     txt:=txt+crlf+'The Vcurve autofocus method is deprecated, use Dynamic instead.';
   if (config.GetValue('/StarAnalysis/AutoFocusMode',3)=2) then
@@ -4410,7 +4408,6 @@ procedure Tf_main.GuideCameraConnectTimerTimer(Sender: TObject);
 begin
   GuideCameraConnectTimer.Enabled:=false;
   guidecamera.CheckGain;
-  guidecamera.CanSetGain:=guidecamera.hasGain;
   f_internalguider.PanelGain.Visible:=guidecamera.hasGain;
   f_internalguider.Gain.MinValue:=guidecamera.GainMin;
   f_internalguider.Gain.MaxValue:=guidecamera.GainMax;
@@ -4431,7 +4428,6 @@ var rx,ry,rw,rh:TNumRange;
 begin
   FinderCameraConnectTimer.Enabled:=false;
   findercamera.CheckGain;
-  findercamera.CanSetGain:=findercamera.hasGain;
   f_finder.PanelGain.Visible:=findercamera.hasGain;
   f_finder.Gain.MinValue:=findercamera.GainMin;
   f_finder.Gain.MaxValue:=findercamera.GainMax;
@@ -5192,11 +5188,6 @@ begin
   end;
   f_frame.PanelRoi.Visible:=(n>0);
   LastROIname:=config.GetValue('/Sensor/ROI/ROIname','');
-  CanSetGainOffset:=config.GetValue('/Sensor/CanSetGain',true);
-  if CanSetGainOffset<>camera.CanSetGain then begin
-    camera.CanSetGain:=CanSetGainOffset;
-    Showgain;
-  end;
   MaxADU:=config.GetValue('/Sensor/MaxADU',MAXWORD);
   DisplayCapture:=config.GetValue('/Visu/DisplayCapture',DisplayCapture);
   ok:=f_visu.PanelNoDisplay.Visible<>(not DisplayCapture);
@@ -6891,7 +6882,6 @@ end;
 
 procedure Tf_main.ShowGain;
 begin
- camera.CanSetGain:=config.GetValue('/Sensor/CanSetGain',true);
  camera.CheckGain;
  hasGain:=camera.hasGain;
  hasGainISO:=camera.hasGainISO;
@@ -6920,8 +6910,7 @@ begin
  offsetcapt:=config.GetValue('/Capture/Offset','');
  poffprev:=Offset;
  poffcapt:=Offset;
- if debug_msg then NewMessage('Want camera gain control: '+BoolToStr(camera.CanSetGain,rsTrue,rsFalse));
- f_capture.PanelGain.Visible:=camera.CanSetGain and (hasGain or hasGainISO);
+ f_capture.PanelGain.Visible:=(hasGain or hasGainISO);
  f_capture.PanelOffset.Visible:=f_capture.PanelGain.Visible and hasOffset;
  f_preview.PanelGain.Visible:=f_capture.PanelGain.Visible;
  f_preview.PanelOffset.Visible:=f_capture.PanelGain.Visible and hasOffset;
@@ -10302,7 +10291,6 @@ begin
      f_option.RoiList.ItemIndex:=0;
      f_option.RoiListChange(nil);
    end;
-   f_option.CanSetGain.Checked:=config.GetValue('/Sensor/CanSetGain',true);
    f_option.MaxAdu.Value:=config.GetValue('/Sensor/MaxADU',MAXWORD);
    f_option.MaxAduFromCamera.Checked:=config.GetValue('/Sensor/MaxADUFromCamera',true);
    f_option.NotDisplayCapture.Checked:=not config.GetValue('/Visu/DisplayCapture',DisplayCapture);
@@ -10800,7 +10788,6 @@ begin
        end;
      end;
      f_option.ClearRoi;
-     config.SetValue('/Sensor/CanSetGain',f_option.CanSetGain.Checked);
      config.SetValue('/Sensor/MaxADUFromCamera',f_option.MaxAduFromCamera.Checked);
      config.SetValue('/Sensor/MaxADU',f_option.MaxAdu.Value);
      config.SetValue('/Sensor/ExpEarlyStart',f_option.ExpEarlyStart.Checked);
@@ -11511,13 +11498,11 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
       else NewMessage(rsInvalid+blank+rsFStop+blank+f_preview.Fnumber.Text, 0);
     end;
   end;
-  if camera.CanSetGain then begin
-    if camera.Gain<>f_preview.Gain then begin
-      camera.Gain:=f_preview.Gain;
-    end;
-    if camera.hasOffset then begin
-       if camera.Offset<>f_preview.Offset then camera.Offset:=f_preview.Offset;
-    end;
+  if camera.Gain<>f_preview.Gain then begin
+    camera.Gain:=f_preview.Gain;
+  end;
+  if camera.hasOffset then begin
+     if camera.Offset<>f_preview.Offset then camera.Offset:=f_preview.Offset;
   end;
   if camera.FrameType<>LIGHT then camera.FrameType:=LIGHT;
   camera.ObjectName:=rsPreview;
@@ -12215,13 +12200,11 @@ if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) the
     end;
   end;
   // check and set gain
-  if camera.CanSetGain then begin
-    if camera.Gain<>f_capture.Gain then begin
-      camera.Gain:=f_capture.Gain;
-    end;
-    if camera.hasOffset then begin
-       if camera.Offset<>f_capture.Offset then camera.Offset:=f_capture.Offset;
-    end;
+  if camera.Gain<>f_capture.Gain then begin
+    camera.Gain:=f_capture.Gain;
+  end;
+  if camera.hasOffset then begin
+     if camera.Offset<>f_capture.Offset then camera.Offset:=f_capture.Offset;
   end;
   // check and set frame
   if camera.FrameType<>ftype then camera.FrameType:=ftype;
@@ -15376,10 +15359,8 @@ begin
    f_preview.Exposure:=SaveAutofocusExposure;
    f_preview.Gain:=SaveAutofocusPreviewGain;
    f_preview.Offset:=SaveAutofocusPreviewOffset;
-   if camera.CanSetGain then begin
-      camera.Gain:=SaveAutofocusGain;
-      if hasOffset then camera.Offset:=SaveAutofocusOffset;
-   end;
+   camera.Gain:=SaveAutofocusGain;
+   if hasOffset then camera.Offset:=SaveAutofocusOffset;
    if (AutofocusFilter>0)and(wheel.Status=devConnected) then begin
      wheel.Filter:=SaveAutofocusFilter;
    end;

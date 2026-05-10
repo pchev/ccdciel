@@ -2068,7 +2068,6 @@ end;
 
 procedure T_indicamera.SetGain(value: integer);
 begin
-if FCanSetGain then begin
   if (CCDIso<>nil) and FhasGainISO then begin
     if debug_msg then msg('Set ISO position '+inttostr(value)+' ISO='+CCDIso.sp[value].lbl);
     IUResetSwitch(CCDIso);
@@ -2079,7 +2078,6 @@ if FCanSetGain then begin
     IGain.value:=value;
     indiclient.sendNewNumber(ImageAdjustments);
   end;
-end;
 end;
 
 function T_indicamera.GetGain: integer;
@@ -2101,10 +2099,8 @@ end;
 
 procedure T_indicamera.SetOffset(value: integer);
 begin
- if FCanSetGain and (CCDoffset<>nil) then begin
    CCDoffsetValue.value:=value;
    indiclient.sendNewNumber(CCDoffset);
- end;
 end;
 
 function T_indicamera.GetOffset: integer;

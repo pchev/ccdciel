@@ -233,7 +233,6 @@ type
     Panel26: TPanel;
     PanelLocalCdC: TPanel;
     PythonCmd: TEdit;
-    GroupBox31: TGroupBox;
     GroupBox32: TPanel;
     hemis: TComboBox;
     Label124: TLabel;
@@ -389,7 +388,6 @@ type
     DomeNoSafetyCheck: TCheckBox;
     DomeSlaveToMount: TCheckBox;
     DomeCloseActions: TStringGrid;
-    CanSetGain: TCheckBox;
     FilenameSep: TComboBox;
     Debug_msg: TCheckBox;
     GroupBox11: TGroupBox;
@@ -1210,8 +1208,6 @@ begin
   GroupBox20.Caption:=rsSensorsPrope;
   label19.Caption:=rsMaximumADU;
   MaxAduFromCamera.Caption:=rsFromCameraDr;
-  GroupBox31.Caption:=rsGain+' / '+rsOffset2;
-  CanSetGain.Caption:=rsManageTheGai;
   GroupBox35.Caption:=rsPredefinedRO;
   BtnAddRoi.Caption:=rsAdd;
   BtnModRoi.Caption:=rsModify;
@@ -1582,7 +1578,6 @@ begin
   TelescopeName.Hint:=rsTheTelescopeNameForI;
   HorizonFile.Hint:=rsTheHorizonPr;
   ElevationMin.Hint:=rsTheMinimalOb;
-  CanSetGain.Hint:=rsIfNotChecked;
   FocuserBacklashDirection.Hint:=Format(rsTheDirection, [crlf]);
   FocuserBacklashActive.Hint:=Format(rsActivateBack, [crlf]);
   AutofocusMoveDirIn.Hint:=rsThePreferedF;

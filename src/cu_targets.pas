@@ -1136,17 +1136,15 @@ begin
      pfile:=TCCDconfig.Create(self);
      pfile.Filename:=fn;
      n:=pfile.GetValue('/StepNum',0);
-     if camera.CanSetGain then begin
-       msgstr:='';
-       for i:=1 to n do begin
-          buf1:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Gain','');
-          buf2:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Offset','');
-          if (buf1='')or(buf2='') then
-            msgstr:=rsPlan+blank+plan+': '+rsPleaseBeCare;
-       end;
-       if msgstr<>'' then
-          msg(msgstr,1);
+     msgstr:='';
+     for i:=1 to n do begin
+        buf1:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Gain','');
+        buf2:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Offset','');
+        if (buf1='')or(buf2='') then
+          msgstr:=rsPlan+blank+plan+': '+rsPleaseBeCare;
      end;
+     if msgstr<>'' then
+        msg(msgstr,1);
      msgstr:='';
      for i:=1 to n do begin
        s:=TStep.Create;

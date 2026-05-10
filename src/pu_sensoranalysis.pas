@@ -316,15 +316,6 @@ begin
   exposure_min := Math.min(0.01, Math.max(camera.ExposureRange.min, 0.0));
   //protect against 9999 or -9999 values
 
-  Gain1.Enabled := camera.CanSetGain;
-  Gain2.Enabled := camera.CanSetGain;
-  Gain3.Enabled := camera.CanSetGain;
-  Gain4.Enabled := camera.CanSetGain;
-  Gain5.Enabled := camera.CanSetGain;
-  Gain6.Enabled := camera.CanSetGain;
-  Gain7.Enabled := camera.CanSetGain;
-  Gain8.Enabled := camera.CanSetGain;
-
   Gain1.MaxValue := camera.GainMax;
   Gain1.MinValue := camera.GainMin;
   Gain2.MaxValue := camera.GainMax;
@@ -843,13 +834,6 @@ const
 
 begin
   stoploop := False;
-
-  if camera.CanSetGain = False then
-  begin
-    InstructionsAdd(crlf + crlf +
-      'Fatal failure!! Can not set gain. Allow setting the camera gain in Preference, Camera');
-    exit;
-  end;
 
   Save_Cursor := Screen.Cursor;
   Screen.Cursor := crHourglass; { Show hourglass cursor }

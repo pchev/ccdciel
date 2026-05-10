@@ -571,7 +571,7 @@ var
   FileSequenceWidth: integer;
   LastCaptureFile: string;
   UseRotator: boolean;
-  CanSetGainOffset, hasGain, hasGainISO, hasOffset: boolean;
+  hasGain, hasGainISO, hasOffset: boolean;
   ISOList: TStringList;
   Gain,GainMin,GainMax: integer;
   Offset,OffsetMin,OffsetMax: integer;
@@ -800,10 +800,8 @@ var buf: string;
 begin
   // if any of this change we consider it another step
   buf:=trim(description)+frtype_str+exposure_str+binning_str+filter_str;
-  if CanSetGainOffset then begin
-    if hasGain or hasGainISO then buf:=buf+gain_str;
-    if hasOffset then buf:=buf+offset_str;
-  end;
+  if hasGain or hasGainISO then buf:=buf+gain_str;
+  if hasOffset then buf:=buf+offset_str;
   result:=Hash(buf);
 end;
 

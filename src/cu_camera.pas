@@ -91,7 +91,7 @@ T_camera = class(TComponent)
     FTemperatureRampActive, FCancelTemperatureRamp, FCanSetTemperature: boolean;
     FIndiTransfert: TIndiTransfert;
     FIndiTransfertDir,FIndiTransfertPrefix: string;
-    FhasGain,FhasOffset,FhasGainISO,FCanSetGain,FhasCfaInfo,FhasFnumber,FhasCoolerPower: boolean;
+    FhasGain,FhasOffset,FhasGainISO,FhasCfaInfo,FhasFnumber,FhasCoolerPower: boolean;
     FUseCameraStartTime,FhasLastExposureStartTime,FhasLastExposureDuration: boolean;
     FGainMin, FGainMax, FOffsetMin, FOffsetMax: integer;
     FISOList: TStringList;
@@ -315,7 +315,6 @@ T_camera = class(TComponent)
     property IndiTransfert: TIndiTransfert read FIndiTransfert write FIndiTransfert;
     property IndiTransfertDir: string read FIndiTransfertDir write FIndiTransfertDir;
     property Gain: integer read GetGain write SetGain;
-    property CanSetGain: boolean read FCanSetGain write FCanSetGain;
     property hasGain: boolean read FhasGain;
     property GainMin: integer read FGainMin;
     property GainMax: integer read FGainMax;
@@ -444,7 +443,6 @@ begin
   FFixPixelRange:=false;
   FImageFormat:='.fits';
   Fexptime:=0;
-  FCanSetGain:=false;
   FhasCoolerPower:=false;
   RampTimer:=TTimer.Create(self);
   RampTimer.Enabled:=false;
@@ -1310,16 +1308,14 @@ if Status=devConnected then begin
   ExpectedStop:=false;
   FControlExposureOK:=false;
   AddFrames:=false;
-  if CanSetGain then begin
-    if hasGainISO and (pgain<>NullInt) then begin
-       if Gain<>pgain then Gain:=pgain;
-    end;
-    if hasGain and (not hasGainISO) and (pgain<>NullInt) then begin
-       if Gain<>pgain then Gain:=pgain;
-    end;
-    if hasOffset  and (poffset<>NullInt) then begin
-       if Offset<>poffset then Offset:=poffset;
-    end;
+  if hasGainISO and (pgain<>NullInt) then begin
+     if Gain<>pgain then Gain:=pgain;
+  end;
+  if hasGain and (not hasGainISO) and (pgain<>NullInt) then begin
+     if Gain<>pgain then Gain:=pgain;
+  end;
+  if hasOffset  and (poffset<>NullInt) then begin
+     if Offset<>poffset then Offset:=poffset;
   end;
   InitFrameType(ord(frmt));
   if FrameType<>frmt then FrameType:=frmt;

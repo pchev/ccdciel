@@ -1289,7 +1289,7 @@ end;
 procedure T_ascomrestcamera.SetGain(value: integer);
 begin
  if FStatus<>devConnected then exit;
- if FCanSetGain and (FhasGainISO or FhasGain) then begin
+ if (FhasGainISO or FhasGain) then begin
    try
       V.Put('Gain',value);
       stGain:=value;
@@ -1326,7 +1326,7 @@ end;
 procedure  T_ascomrestcamera.SetOffset(value: integer);
 begin
  if FStatus<>devConnected then exit;
- if FCanSetGain and FhasOffset then begin
+ if FhasOffset then begin
    try
       V.Put('Offset',value);
       stOffset:=value;

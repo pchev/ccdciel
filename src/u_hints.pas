@@ -165,7 +165,6 @@ resourcestring
   rsGuidingHisto = 'Guiding history in arcsecond %s - blue: RA error %s - red: Dec error %s - yellow: Star mass';
   rsDoNotSetThis = 'Do not set this option if you don''t know exactly what you do and without careful testing';
   rsCameraOffset = 'Camera offset';
-  rsIfNotChecked = 'If not checked the program will never change the gain/offset value set in the driver setup';
   rsHistogramFul = 'Histogram full range or clipped to available data';
   rsSaveIndividu = 'Save individual images before stacking';
   rsFlatProcessi = 'Flat processing also require a Dark';
