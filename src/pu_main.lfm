@@ -773,17 +773,6 @@ object f_main: Tf_main
           OnClick = MenuFlatClearClick
         end
       end
-      object N1: TMenuItem
-        Caption = '-'
-      end
-      object MenuRefimage: TMenuItem
-        Caption = 'Open reference image'
-        OnClick = MenuRefimageClick
-      end
-      object MenuClearRef: TMenuItem
-        Caption = 'Clear reference image'
-        OnClick = MenuClearRefClick
-      end
       object N7: TMenuItem
         Caption = '-'
       end

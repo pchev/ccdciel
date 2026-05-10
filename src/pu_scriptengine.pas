@@ -107,8 +107,6 @@ type
     FonScriptAfterExecute: TNotifyEvent;
     FonSaveFitsFile: TNotifyStr;
     FonOpenFitsFile: TNotifyStr;
-    FonOpenReferenceImage: TNotifyStr;
-    FonClearReferenceImage: TNotifyEvent;
     FonSlewImageCenter: TNotifyEvent;
     FonPlotDSO,FonPlotHyperleda: TNotifyEvent;
     FonAutofocus: TNotifyBool;
@@ -265,8 +263,6 @@ type
     property onScriptAfterExecute: TNotifyEvent read FonScriptAfterExecute write FonScriptAfterExecute;
     property onSaveFitsFile: TNotifyStr read FonSaveFitsFile  write FonSaveFitsFile;
     property onOpenFitsFile: TNotifyStr read FonOpenFitsFile  write FonOpenFitsFile;
-    property onOpenReferenceImage: TNotifyStr read FonOpenReferenceImage write FonOpenReferenceImage;
-    property onClearReferenceImage: TNotifyEvent read FonClearReferenceImage write FonClearReferenceImage;
     property onSlewImageCenter: TNotifyEvent read FonSlewImageCenter write FonSlewImageCenter;
     property onPlotDSO: TNotifyEvent read FonPlotDSO write FonPlotDSO;
     property onPlotHyperleda: TNotifyEvent read FonPlotHyperleda write FonPlotHyperleda;

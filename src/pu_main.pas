@@ -240,7 +240,6 @@ type
     MenuItem4: TMenuItem;
     MenuIndiSettings: TMenuItem;
     MenuHelpAbout: TMenuItem;
-    MenuClearRef: TMenuItem;
     MenuBPM: TMenuItem;
     MenuItem5: TMenuItem;
     MenuDownload: TMenuItem;
@@ -339,7 +338,6 @@ type
     MenuResolveSlewCenter2: TMenuItem;
     MenuResolve: TMenuItem;
     MenuResolve2: TMenuItem;
-    MenuRefimage: TMenuItem;
     N7: TMenuItem;
     MenuViewScript: TMenuItem;
     MenuViewPlanetarium: TMenuItem;
@@ -384,7 +382,6 @@ type
     MenuQuit: TMenuItem;
     MenuSetup: TMenuItem;
     N2: TMenuItem;
-    N1: TMenuItem;
     MenuConnection: TMenuItem;
     MenuPreview: TMenuItem;
     MenuCapture: TMenuItem;
@@ -505,7 +502,6 @@ type
     procedure MenuCCDtempSetClick(Sender: TObject);
     procedure MenuChangelogClick(Sender: TObject);
     procedure MenuClearBPMClick(Sender: TObject);
-    procedure MenuClearRefClick(Sender: TObject);
     procedure MenuCollimationClick(Sender: TObject);
     procedure MenuConnectClick(Sender: TObject);
     procedure MenuDarkApplyClick(Sender: TObject);
@@ -561,7 +557,6 @@ type
     procedure MenuPlanetariumConnectClick(Sender: TObject);
     procedure MenuPreviewLoopClick(Sender: TObject);
     procedure MenuPreviewStartClick(Sender: TObject);
-    procedure MenuRefimageClick(Sender: TObject);
     procedure MenuResetToolsClick(Sender: TObject);
     procedure MenuResolveClick(Sender: TObject);
     procedure MenuResolveSlewCenterClick(Sender: TObject);
@@ -693,10 +688,6 @@ type
     {$ifdef mswindows}
     TCPDaemon4: TTCPDaemon;
     {$endif}
-    refmask: boolean;
-    reftreshold,refcolor: integer;
-    reffile: string;
-    refbmp:TBGRABitmap;
     cdcWCSinfo: TcdcWCSinfo;
     AnnotateMain,AnnotateFinder,AnnotateGuider: boolean;
     resolvefits: TFits;
@@ -807,7 +798,6 @@ type
     procedure OptionGetWeather(Sender: TObject);
     procedure Restart;
     procedure SetTheme;
-    procedure SetRefImage;
     procedure GUIdestroy(Sender: TObject);
     Procedure Connect(Sender: TObject);
     Procedure Disconnect(Sender: TObject);
@@ -1030,8 +1020,6 @@ type
     procedure LoadPictureFile(fn:string);
     procedure LoadRawFile(fn:string);
     procedure SaveFitsFile(fn:string);
-    procedure OpenRefImage(fn:string);
-    procedure ClearRefImage(Sender: TObject);
     procedure CCDCIELMessageHandler(var Message: TLMessage); message LM_CCDCIEL;
     Procedure StartSequence(SeqName: string);
     procedure StopSequence(Sender: TObject);
@@ -1691,9 +1679,6 @@ begin
   KeepIndiHeader:=false;
   AllMsg:=TStringList.Create;
   AllMsg.OwnsObjects:=true;
-  refmask:=false;
-  reftreshold:=128;
-  refbmp:=TBGRABitmap.Create;
   FilterList:=TStringList.Create;
   BinningList:=TStringList.Create;
   ReadoutList:=TStringList.Create;
@@ -2150,8 +2135,6 @@ begin
   f_scriptengine.onScriptAfterExecute:=@ScriptAfterExecute;
   f_scriptengine.onOpenFitsFile:=@LoadFitsFile;
   f_scriptengine.onSaveFitsFile:=@SaveFitsFile;
-  f_scriptengine.onOpenReferenceImage:=@OpenRefImage;
-  f_scriptengine.onClearReferenceImage:=@ClearRefImage;
   f_scriptengine.onSlewImageCenter:=@ResolveSlewCenter;
   f_scriptengine.onPlotDSO:=@ResolvePlotDso;
   f_scriptengine.onPlotHyperleda:=@MenuResolveHyperledaClick;
@@ -2180,8 +2163,6 @@ begin
   seq_scriptengine.onScriptAfterExecute:=nil; // script from sequence do not update the tool status
   seq_scriptengine.onOpenFitsFile:=@LoadFitsFile;
   seq_scriptengine.onSaveFitsFile:=@SaveFitsFile;
-  seq_scriptengine.onOpenReferenceImage:=@OpenRefImage;
-  seq_scriptengine.onClearReferenceImage:=@ClearRefImage;
   seq_scriptengine.onSlewImageCenter:=@ResolveSlewCenter;
   seq_scriptengine.onPlotDSO:=@ResolvePlotDso;
   seq_scriptengine.onPlotHyperleda:=@MenuResolveHyperledaClick;
@@ -2578,8 +2559,6 @@ begin
    MenuOpenPicture.Caption := Format(rsOpenPictureF, [ellipsis]);
    MenuSave.Caption := Format(rsSaveFITSFile, [ellipsis]);
    MenuSavePicture.Caption := Format(rsSavePictureS, [ellipsis]);
-   MenuRefimage.Caption := rsOpenReferenc;
-   MenuClearRef.Caption := rsClearReferen;
    MenuSaveConfig.Caption := rsSaveConfigur;
    MenuQuit.Caption := rsQuit;
    MenuItem2.Caption := rsEdit;
@@ -4006,7 +3985,6 @@ begin
   ImaBmp.Free;
   ImaGuideBmp.Free;
   ImaFinderBmp.Free;
-  refbmp.Free;
   config.Free;
   screenconfig.Free;
   credentialconfig.Free;
@@ -5230,8 +5208,6 @@ begin
   AstrometryNewImage:=config.GetValue('/PrecSlew/AstrometryNewImage',false);
   SaveAstrometryNewImage:=config.GetValue('/PrecSlew/SaveAstrometryNewImage',false);
   CheckRecenterTarget:=config.GetValue('/PrecSlew/CheckRecenterTarget',false);
-  reftreshold:=config.GetValue('/RefImage/Treshold',128);
-  refcolor:=config.GetValue('/RefImage/Color',0);
   BPMsigma:=config.GetValue('/BadPixel/Sigma',5.0);
   f_preview.StackPreview.Visible:=config.GetValue('/PreviewStack/StackShow',false);
   f_capture.PanelStack.Visible:=f_preview.StackPreview.Visible;
@@ -5560,7 +5536,6 @@ begin
   MinimumMoonDistance:=config.GetValue('/Sequence/MinimumMoonDistance',MinimumMoonDistance);
   SequenceTwilight:=config.GetValue('/Sequence/SequenceTwilight',SequenceTwilight);
   if (autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED) then autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
-  if refmask then SetRefImage;
   if f_focuser<>nil then f_focuser.BtnVcurve.Visible:=(AutoFocusMode=afVcurve);
   LoadHorizon(config.GetValue('/Info/HorizonFile',''));
   ElevationMin:=config.GetValue('/Info/ElevationMin',10.0);
@@ -10175,8 +10150,6 @@ begin
    else
      f_option.CrosshairsR3.Text:='';
    f_option.VideoGroup.Visible:=(camera.CameraInterface=INDI);
-   f_option.RefTreshold.Position:=config.GetValue('/RefImage/Treshold',128);
-   f_option.RefColor.ItemIndex:=config.GetValue('/RefImage/Color',0);
    f_option.ImageCursor.ItemIndex:=screenconfig.GetValue('/Cursor/ImageCursor',0);
    x:=config.GetValue('/Cooler/TemperatureSlope',TemperatureSlope);
    if abs(x)<0.001 then x:=0;
@@ -10775,8 +10748,6 @@ begin
      config.SetValue('/Visu/CrosshairsR1',StrToIntDef(f_option.CrosshairsR1.Text,-1));
      config.SetValue('/Visu/CrosshairsR2',StrToIntDef(f_option.CrosshairsR2.Text,-1));
      config.SetValue('/Visu/CrosshairsR3',StrToIntDef(f_option.CrosshairsR3.Text,-1));
-     config.SetValue('/RefImage/Treshold',f_option.RefTreshold.Position);
-     config.SetValue('/RefImage/Color',f_option.RefColor.ItemIndex);
      screenconfig.SetValue('/Cursor/ImageCursor',f_option.ImageCursor.ItemIndex);
      config.SetValue('/Cooler/TemperatureSlope',f_option.TemperatureSlope.Value);
      config.SetValue('/Cooler/CameraAutoCool',f_option.CameraAutoCool.Checked);
@@ -12989,10 +12960,6 @@ if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
     ImaBmp.Canvas.StretchDraw(rect(0,0,ImaBmp.Width,ImaBmp.Height),tmpbmp.Bitmap);
     tmpbmp.Free;
   end;
-  if refmask then begin
-    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Put ref image mask');{$endif}
-    ImaBmp.StretchPutImage(rect(0,0,ImaBmp.Width,ImaBmp.Height),refbmp,dmLinearBlend);
-  end;
   img_Width:=ImaBmp.Width;
   img_Height:=ImaBmp.Height;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage');{$endif}
@@ -14169,76 +14136,6 @@ if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
       fits.SaveToBitmap(fn,f_visu.FlipHorz,f_visu.FlipVert);
    end;
 end;
-end;
-
-procedure Tf_main.SetRefImage;
-var mem: TMemoryStream;
-    i: integer;
-    p: PBGRAPixel;
-    f: TFits;
-begin
-if refmask then begin
-  refmask:=false;
-  mem:=TMemoryStream.Create;
-  f:=TFits.Create(nil);
-  f.onMsg:=@NewMessage;
-  f.DisableBayer:=true;
-  try
-  mem.LoadFromFile(reffile);
-  f.Stream:=mem;
-  f.LoadStream;
-  if f.HeaderInfo.naxis>0 then begin
-    f.Gamma:=f_visu.Gamma.Value;
-    f.VisuMax:=min(MAXWORD,max(0,round(f_visu.ImgMax)));
-    f.VisuMin:=min(MAXWORD,max(0,round(f_visu.ImgMin)));
-    f.GetBGRABitmap(refbmp);
-    p:=refbmp.data;
-    for i:=0 to refbmp.NbPixels-1 do begin
-     p[i].alpha:=128;
-     case refcolor of
-       0: begin
-          p[i].blue:=0;
-          p[i].green:=0;
-          if p[i].red<reftreshold then
-             p[i].red:=0
-          else
-               p[i].red:=180;
-          end;
-       1: begin
-          p[i].blue:=0;
-          p[i].red:=0;
-          if p[i].green<reftreshold then p[i].green:=0 else p[i].green:=180;
-          end;
-       2: begin
-          p[i].red:=0;
-          p[i].green:=0;
-          if p[i].blue<reftreshold then p[i].blue:=0 else p[i].blue:=180;
-          end;
-       end;
-    end;
-    refbmp.InvalidateBitmap;
-    refmask:=true;
-    AnnotateMain:=false;
-    DrawImage;
-  end;
-  finally
-    f.free;
-  end;
-end;
-end;
-
-procedure Tf_main.MenuRefimageClick(Sender: TObject);
-begin
-  ShowMessage('Warning'+crlf+'The reference image function is deprecated and will be removed in the next version');
-  OpenDialog1.Title:=rsOpenReferenc;
-  if OpenDialog1.Execute then begin
-    OpenRefImage(OpenDialog1.FileName);
-  end;
-end;
-
-procedure Tf_main.MenuClearRefClick(Sender: TObject);
-begin
-  ClearRefImage(Sender);
 end;
 
 procedure Tf_main.MenuFilterClick(Sender: TObject);
@@ -16658,21 +16555,6 @@ begin
    // Free resources
    PictStream.Free;
  end;
-end;
-
-procedure Tf_main.OpenRefImage(fn:string);
-begin
-  reffile:=fn;
-  refmask:=true;
-  SetRefImage;
-end;
-
-procedure Tf_main.ClearRefImage(Sender: TObject);
-begin
-   refmask:=false;
-   reffile:='';
-   refbmp.SetSize(0,0);
-   DrawImage;
 end;
 
 procedure Tf_main.CancelRestartExposure(delay: integer);

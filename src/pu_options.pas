@@ -250,7 +250,6 @@ type
     longsec: TFloatEdit;
     Panel22: TPanel;
     Panel23: TPanel;
-    Panel24: TPanel;
     Panel25: TPanel;
     StartHNSKY: TCheckBox;
     StartSAMP: TCheckBox;
@@ -733,19 +732,16 @@ type
     CaptureDir: TEdit;
     MeridianFlipPauseAfter: TCheckBox;
     GroupBox8: TGroupBox;
-    GroupBox9: TGroupBox;
     Label33: TLabel;
     CygwinPanel: TPanel;
     Label34: TLabel;
     Label35: TLabel;
     Label36: TLabel;
     Label38: TLabel;
-    Label39: TLabel;
     Label40: TLabel;
     MeridianOption: TRadioGroup;
     MeridianFlipPanel2: TPanel;
     PageAsnone: TPage;
-    RefColor: TRadioGroup;
     SelectDirectoryDialog1: TSelectDirectoryDialog;
     GroupBox7: TGroupBox;
     Label30: TLabel;
@@ -809,7 +805,6 @@ type
     GroupBox2: TGroupBox;
     Label1: TLabel;
     Panel1: TPanel;
-    RefTreshold: TTrackBar;
     procedure ASTAPadvancedClick(Sender: TObject);
     procedure AstrometryCameraChange(Sender: TObject);
     procedure BtnClearCrosshairsClick(Sender: TObject);
@@ -1175,8 +1170,6 @@ begin
   BGneutralization.Caption:=rsBackgroundNe;
   ColorizeSpectra.Caption:=rsColorizeSpec;
   GroupBox26.Caption:=rsColorBalance;
-  GroupBox9.Caption := rsReferenceIma;
-  Label39.Caption := rsTreshold;
   VideoGroup.Caption := rsVideo;
   ShowVideo.Caption := rsShowVideoCap;
   Label45.Caption := rsVideoPreview;
@@ -1474,9 +1467,6 @@ begin
   hemis.Items[1]:=rsSouth;
   long.Items[0]:=rsWest;
   long.Items[1]:=rsEast;
-  RefColor.Items[0]:=rsRed;
-  RefColor.Items[1]:=rsGreen;
-  RefColor.Items[2]:=rsBlue;
   FocuserBacklashDirection.Items[0]:=rsIn;
   FocuserBacklashDirection.Items[1]:=rsOut;
   FlatType.Items[0]:=rsNone2;

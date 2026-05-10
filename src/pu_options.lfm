@@ -2340,15 +2340,15 @@ object f_option: Tf_option
         end
         object VideoGroup: TGroupBox
           Left = 0
-          Height = 19
-          Top = 649
+          Height = 113
+          Top = 555
           Width = 555
           Align = alClient
           Caption = 'Video'
-          ClientHeight = 0
+          ClientHeight = 83
           ClientWidth = 551
           ParentFont = False
-          TabOrder = 2
+          TabOrder = 1
           object Label45: TLabel
             AnchorSideTop.Control = VideoPreviewRate
             AnchorSideTop.Side = asrCenter
@@ -2386,14 +2386,14 @@ object f_option: Tf_option
         object GroupBox10: TGroupBox
           Left = 0
           Height = 60
-          Top = 435
+          Top = 341
           Width = 555
           Align = alTop
           Caption = 'Bad pixels detection'
           ClientHeight = 30
           ClientWidth = 551
           ParentFont = False
-          TabOrder = 3
+          TabOrder = 2
           object Label62: TLabel
             AnchorSideTop.Control = BPMsigma
             AnchorSideTop.Side = asrCenter
@@ -2435,14 +2435,14 @@ object f_option: Tf_option
         object GroupBox19: TGroupBox
           Left = 0
           Height = 60
-          Top = 375
+          Top = 281
           Width = 555
           Align = alTop
           Caption = 'Clipping indicator'
           ClientHeight = 30
           ClientWidth = 551
           ParentFont = False
-          TabOrder = 4
+          TabOrder = 3
           object Label37: TLabel
             AnchorSideTop.Control = ClippingHigh
             AnchorSideTop.Side = asrCenter
@@ -2491,93 +2491,16 @@ object f_option: Tf_option
             Value = 65535
           end
         end
-        object GroupBox9: TGroupBox
-          Left = 0
-          Height = 94
-          Top = 281
-          Width = 555
-          Align = alTop
-          Caption = 'Reference image'
-          ClientHeight = 64
-          ClientWidth = 551
-          ParentFont = False
-          TabOrder = 1
-          Visible = False
-          object Label39: TLabel
-            AnchorSideTop.Control = Panel24
-            AnchorSideTop.Side = asrCenter
-            Left = 14
-            Height = 18
-            Top = 21
-            Width = 60
-            Caption = 'Treshold :'
-            ParentColor = False
-            ParentFont = False
-          end
-          object Panel24: TPanel
-            AnchorSideTop.Side = asrCenter
-            Left = 104
-            Height = 21
-            Top = 20
-            Width = 124
-            BevelOuter = bvNone
-            ClientHeight = 21
-            ClientWidth = 124
-            TabOrder = 0
-            object RefTreshold: TTrackBar
-              AnchorSideTop.Control = Panel24
-              AnchorSideTop.Side = asrCenter
-              Left = 0
-              Height = 26
-              Top = -3
-              Width = 124
-              Max = 254
-              Min = 1
-              PageSize = 20
-              Position = 1
-              ShowSelRange = False
-              TickStyle = tsNone
-              Constraints.MaxHeight = 26
-              ParentFont = False
-              TabOrder = 0
-            end
-          end
-          object RefColor: TRadioGroup
-            Left = 285
-            Height = 58
-            Top = 0
-            Width = 248
-            AutoFill = True
-            Caption = 'Image color'
-            ChildSizing.LeftRightSpacing = 6
-            ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
-            ChildSizing.EnlargeVertical = crsHomogenousChildResize
-            ChildSizing.ShrinkHorizontal = crsScaleChilds
-            ChildSizing.ShrinkVertical = crsScaleChilds
-            ChildSizing.Layout = cclLeftToRightThenTopToBottom
-            ChildSizing.ControlsPerLine = 3
-            ClientHeight = 28
-            ClientWidth = 244
-            Columns = 3
-            Items.Strings = (
-              'red'
-              'green'
-              'blue'
-            )
-            ParentFont = False
-            TabOrder = 1
-          end
-        end
         object GroupBox33: TGroupBox
           Left = 0
           Height = 88
-          Top = 495
+          Top = 401
           Width = 555
           Align = alTop
           Caption = 'Image cursor'
           ClientHeight = 58
           ClientWidth = 551
-          TabOrder = 5
+          TabOrder = 4
           object Label153: TLabel
             AnchorSideTop.Control = ImageCursor
             AnchorSideTop.Side = asrCenter
@@ -2618,13 +2541,13 @@ object f_option: Tf_option
         object GroupBox23: TGroupBox
           Left = 0
           Height = 66
-          Top = 583
+          Top = 489
           Width = 555
           Align = alTop
           Caption = 'Additonal crosshairs circle'
           ClientHeight = 36
           ClientWidth = 551
-          TabOrder = 6
+          TabOrder = 5
           object CrosshairsR1: TEdit
             Left = 120
             Height = 32
@@ -2673,7 +2596,7 @@ object f_option: Tf_option
           Caption = 'Noise filter'
           ClientHeight = 35
           ClientWidth = 551
-          TabOrder = 7
+          TabOrder = 6
           object tbFilterstrength: TTrackBar
             Left = 197
             Height = 25
@@ -4528,8 +4451,8 @@ object f_option: Tf_option
               Width = 555
               Align = alClient
               Caption = 'Astrometry.Net'
-              ClientHeight = 480
-              ClientWidth = 551
+              ClientHeight = 498
+              ClientWidth = 543
               ParentFont = False
               TabOrder = 0
               object Panel30: TPanel

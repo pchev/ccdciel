@@ -40,8 +40,6 @@ resourcestring
   rsFocuserCalib = 'Focuser calibration';
   rsOpenFITSFile = 'Open FITS file%s';
   rsSaveFITSFile = 'Save FITS file%s';
-  rsOpenReferenc = 'Open reference image';
-  rsClearReferen = 'Clear reference image';
   rsQuit = 'Quit';
   rsEdit = 'Edit';
   rsPreferences = 'Preferences%s';
@@ -480,7 +478,6 @@ resourcestring
   rsBayerMatrixP = 'Bayer matrix pattern';
   rsDebayerThePr = 'Debayer the preview image';
   rsReferenceIma = 'Reference image';
-  rsTreshold = 'Treshold :';
   rsVideoPreview = 'Video preview frame rate ';
   rsBadPixelsDet = 'Bad pixels detection';
   rsBadPixelThre = 'Bad pixel threshold';
