@@ -3567,7 +3567,7 @@ object f_option: Tf_option
             Height = 91
             Top = 155
             Width = 555
-            PageIndex = 1
+            PageIndex = 0
             Align = alBottom
             TabOrder = 2
             TabStop = True
@@ -5469,11 +5469,10 @@ object f_option: Tf_option
           Columns = 5
           ItemIndex = 0
           Items.Strings = (
-            'PHD2'
-            'Internal'
-            'Lin_Guider'
-            'Dither only'
             'None'
+            'Internal'
+            'PHD2'
+            'Dither only'
           )
           OnClick = AutoguiderBoxClick
           ParentFont = False
@@ -5487,6 +5486,21 @@ object f_option: Tf_option
           PageIndex = 0
           Align = alTop
           TabOrder = 1
+          object PageGuiderNone: TPage
+          end
+          object PageInternal: TPage
+            object Label155: TLabel
+              Left = 0
+              Height = 106
+              Top = 0
+              Width = 555
+              Align = alClient
+              AutoSize = False
+              Caption = 'Label155'
+              ParentColor = False
+              WordWrap = True
+            end
+          end
           object PagePHD: TPage
             object GroupBox3: TGroupBox
               Left = 0
@@ -5558,113 +5572,17 @@ object f_option: Tf_option
               end
             end
           end
-          object PageLinGuider: TPage
-            object GroupBox17: TGroupBox
-              Left = 0
-              Height = 106
-              Top = 0
-              Width = 574
-              Align = alClient
-              Caption = 'Lin_Guider'
-              ClientHeight = 94
-              ClientWidth = 562
-              ParentFont = False
-              TabOrder = 0
-              object LinGuiderSocket: TEdit
-                Left = 162
-                Height = 28
-                Top = 2
-                Width = 188
-                Constraints.MaxHeight = 28
-                ParentFont = False
-                TabOrder = 0
-              end
-              object LinGuiderHostname: TEdit
-                Left = 162
-                Height = 28
-                Top = 36
-                Width = 95
-                Constraints.MaxHeight = 28
-                ParentFont = False
-                TabOrder = 1
-              end
-              object Label89: TLabel
-                Left = 81
-                Height = 18
-                Top = 39
-                Width = 64
-                Caption = 'Hostname'
-                ParentColor = False
-                ParentFont = False
-              end
-              object Label90: TLabel
-                Left = 267
-                Height = 18
-                Top = 39
-                Width = 26
-                Caption = 'Port'
-                ParentColor = False
-                ParentFont = False
-              end
-              object LinGuiderPort: TEdit
-                Left = 323
-                Height = 28
-                Top = 36
-                Width = 69
-                Constraints.MaxHeight = 28
-                ParentFont = False
-                TabOrder = 2
-              end
-              object rbLinUnixSocket: TRadioButton
-                Left = 8
-                Height = 22
-                Top = 4
-                Width = 100
-                Caption = 'Unix Socket'
-                Checked = True
-                OnClick = rbLinSocketChange
-                ParentFont = False
-                TabOrder = 4
-                TabStop = True
-              end
-              object rbLinTCP: TRadioButton
-                Left = 8
-                Height = 22
-                Top = 38
-                Width = 52
-                Caption = 'TCP'
-                OnClick = rbLinSocketChange
-                ParentFont = False
-                TabOrder = 3
-              end
-            end
-          end
-          object PageGuiderNone: TPage
-          end
           object PageDitherOnly: TPage
             object Label120: TLabel
               Left = 0
               Height = 106
               Top = 0
-              Width = 574
+              Width = 555
               Align = alClient
               AutoSize = False
               Caption = 'Set the mean dithering pulse duration in seconds '
               ParentColor = False
               ParentFont = False
-              WordWrap = True
-            end
-          end
-          object PageInternal: TPage
-            object Label155: TLabel
-              Left = 0
-              Height = 106
-              Top = 0
-              Width = 574
-              Align = alClient
-              AutoSize = False
-              Caption = 'Label155'
-              ParentColor = False
               WordWrap = True
             end
           end

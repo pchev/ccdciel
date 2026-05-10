@@ -624,20 +624,13 @@ type
     Label98: TLabel;
     Label99: TLabel;
     GroupBox16: TGroupBox;
-    GroupBox17: TGroupBox;
     Label81: TLabel;
     Label84: TLabel;
     Label85: TLabel;
     Label86: TLabel;
     Label87: TLabel;
-    Label89: TLabel;
-    Label90: TLabel;
     Notebook3: TNotebook;
-    PageLinGuider: TPage;
     PagePHD: TPage;
-    LinGuiderSocket: TEdit;
-    LinGuiderHostname: TEdit;
-    LinGuiderPort: TEdit;
     Label79: TLabel;
     Label80: TLabel;
     Label78: TLabel;
@@ -649,8 +642,6 @@ type
     MeridianFlipCalibrate: TCheckBox;
     PagePs2: TPage;
     PageHNSKY: TPage;
-    rbLinUnixSocket: TRadioButton;
-    rbLinTCP: TRadioButton;
     FolderOptions: TStringGrid;
     PageFlat: TTabSheet;
     TemperatureSlopeActive: TCheckBox;
@@ -867,7 +858,6 @@ type
     procedure StartSAMPChange(Sender: TObject);
     procedure TCPIPportDefaultClick(Sender: TObject);
     procedure PythonDefaultClick(Sender: TObject);
-    procedure rbLinSocketChange(Sender: TObject);
     procedure BalanceChange(Sender: TObject);
     procedure ResolverBoxClick(Sender: TObject);
     procedure SafetyActionsSelectEditor(Sender: TObject; aCol, aRow: Integer; var Editor: TWinControl);
@@ -894,8 +884,6 @@ type
     procedure SetResolver(value:integer);
     procedure SetLatitude(value:double);
     procedure SetLongitude(value:double);
-    procedure SetLinGuiderUseUnixSocket(value: boolean);
-    function  GetLinGuiderUseUnixSocket: boolean;
     procedure FileOrFolderOptionsRenumber(G: TStringGrid);
     procedure SetAutofocusExpTime(val: double);
     procedure SelectPage(Sender: TObject);
@@ -919,7 +907,6 @@ type
     property Resolver: integer read GetResolver write SetResolver;
     property Latitude: double read Flatitude write SetLatitude;
     property Longitude: double read Flongitude write SetLongitude;
-    property LinGuiderUseUnixSocket: boolean read GetLinGuiderUseUnixSocket write SetLinGuiderUseUnixSocket;
     property AutoguiderType: integer read GetAutoguiderType write SetAutoguiderType;
     property onGetMaxADU : TNotifyEvent read FGetMaxADU write FGetMaxADU;
     property onGetPixelSize : TNotifyEvent read FGetPixelSize write FGetPixelSize;
@@ -1402,8 +1389,6 @@ begin
   BtnDisableStarLost.Caption:=rsDisable;
   Label16.Caption := rsServer;
   Label17.Caption := rsPort;
-  Label89.Caption := rsServer;
-  Label90.Caption := rsPort;
   StartPHD.Caption := Format(rsStartS, ['PHD2']);
   GroupBoxDrift.Caption:=rsGuidingDrift;
   Label1119.Caption:=rsPixel;
@@ -1455,9 +1440,9 @@ begin
   MeridianFlipUseSetPierSide.Caption:=rsSetMountPier;
   Label161.Caption:=rsScript;
   Label164.Caption:=rsScriptArgume;
+  AutoguiderBox.Items[0]:=rsNone2;
   AutoguiderBox.Items[1]:=rsInternal;
   AutoguiderBox.Items[3]:=rsDitherOnly;
-  AutoguiderBox.Items[4]:=rsNone2;
   PageWeather.Caption := rsWeatherStati;
   Label118.Caption:=rsPauseSequenc;
   Label116.Caption:=rsRestartAfter2;
@@ -2201,27 +2186,27 @@ begin
 end;
 
 procedure Tf_option.AutoguiderBoxClick(Sender: TObject);
-var i: integer;
+var g: TAutoguiderType;
 begin
-  i:=GetAutoguiderType;
-  Notebook3.PageIndex:=i;
-  groupbox5.Visible:=(i<2)or(i=3)or(i=4);
-  if (i<2)or(i=4) then begin
-    Label23.Caption:=rsPixels;
-    Label122.Caption:='';
-  end
-  else begin
+  g:=TAutoguiderType(GetAutoguiderType);
+  Notebook3.PageIndex:=ord(g);
+  groupbox5.Visible:=(g>agNONE);
+  if g=agDITHER then begin
     Label23.Caption:=rsPulseDuratio;
     Label122.Caption:=rsS;
+  end
+  else begin
+    Label23.Caption:=rsPixels;
+    Label122.Caption:='';
   end;
-  panel14.Visible:=(i<>2);
-  GroupBox11.Visible:=(i=3);
-  groupbox6.Visible:=(i=0)or(i=4);
-  groupbox13.Visible:=(i=0);
-  GroupBoxDrift.Visible:=(i=0);
-  DitherRAonly.Visible:=(i=0)or(i=3)or(i=4);
-  panel29.Visible:=(i=0);
-  EarlyDither.Visible:=(i=0);
+  panel14.Visible:=(g>agNONE);
+  GroupBox11.Visible:=(g=agDITHER);
+  groupbox6.Visible:=(g=agPHD)or(g=agINTERNAL);
+  groupbox13.Visible:=(g=agPHD);
+  GroupBoxDrift.Visible:=(g=agPHD);
+  DitherRAonly.Visible:=(g=agPHD)or(g=agINTERNAL)or(g=agDITHER);
+  panel29.Visible:=(g=agPHD);
+  EarlyDither.Visible:=(g=agPHD);
 end;
 
 procedure Tf_option.BtnDelHdrClick(Sender: TObject);
@@ -2235,27 +2220,13 @@ begin
 end;
 
 function Tf_option.GetAutoguiderType: integer;
-// agPHD,agLINGUIDER,agNONE,agDITHER,agINTERNAL
-// PHD2 Internal Lin_Guider Dither only None
 begin
- case AutoguiderBox.ItemIndex of
-   0: result:=0; // PHD2
-   1: result:=4; // Internal
-   2: result:=1; // Linguider
-   3: result:=3; // Dither
-   4: result:=2; // None
- end;
+  result:=AutoguiderBox.ItemIndex;
 end;
 
 procedure Tf_option.SetAutoguiderType(value: integer);
 begin
- case value of
-   0: AutoguiderBox.ItemIndex:=0; // PHD2
-   1: AutoguiderBox.ItemIndex:=2; // Linguider
-   2: AutoguiderBox.ItemIndex:=4; // None
-   3: AutoguiderBox.ItemIndex:=3; // Dither
-   4: AutoguiderBox.ItemIndex:=1; // Internal
- end;
+ AutoguiderBox.ItemIndex:=value;
 end;
 
 procedure Tf_option.BtnDisableDelayClick(Sender: TObject);
@@ -2643,30 +2614,6 @@ begin
      TemperatureSlope.Value:=0;
      PanelTemperatureSlope.Visible:=false;
   end;
-end;
-
-procedure Tf_option.SetLinGuiderUseUnixSocket(value: boolean);
-begin
-{$ifdef mswindows}
-value:=false;
-{$endif}
-rbLinUnixSocket.Checked:=value;
-rbLinTCP.Checked:=not value;
-end;
-
-function Tf_option.GetLinGuiderUseUnixSocket: boolean;
-begin
-result:=rbLinUnixSocket.Checked;
-end;
-
-procedure Tf_option.rbLinSocketChange(Sender: TObject);
-begin
-{$ifdef mswindows}
-   if rbLinUnixSocket.Checked then begin
-      rbLinUnixSocket.Checked:=false;
-      rbLinTCP.Checked:=true;
-   end;
-{$endif}
 end;
 
 procedure Tf_option.BalanceChange(Sender: TObject);

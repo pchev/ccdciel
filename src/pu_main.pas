@@ -45,7 +45,7 @@ uses
   cu_weather, cu_ascomweather, cu_indiweather, cu_safety, cu_ascomsafety, cu_indisafety, fu_weather, fu_safety,
   cu_dome, cu_ascomdome, cu_indidome, fu_dome, pu_about, pu_goto, pu_photometry, u_libraw, pu_image_sharpness,
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry, pu_autoexposurestep,
-  cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_autoguider_dither, cu_autoguider_internal,
+  cu_autoguider, cu_autoguider_phd, cu_autoguider_none, cu_autoguider_dither, cu_autoguider_internal,
   cu_planetarium, cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, cu_planetarium_none, u_ephem,
   pu_planetariuminfo, indiapi, cu_ascomrestcamera, cu_ascomrestdome, cu_ascomrestfocuser, cu_ascomrestmount, cu_manualwheel,
   cu_ascomrestrotator, cu_ascomrestsafety, cu_ascomrestweather, cu_ascomrestwheel, pu_polaralign, pu_polaralign2, pu_collimation,
@@ -2066,13 +2066,12 @@ begin
   f_finder.onDarkInfo:=@FinderDarkInfo;
   ShowFinderDarkInfo;
 
-  i:=config.GetValue('/Autoguider/Software',2);
+  i:=config.GetValue('/Autoguider/Software',0);
   case TAutoguiderType(i) of
-    agPHD: autoguider:=T_autoguider_phd.Create;
-    agLINGUIDER: autoguider:=T_autoguider_linguider.Create;
     agNONE: autoguider:=T_autoguider_none.Create;
-    agDITHER: autoguider:=T_autoguider_dither.Create;
     agINTERNAL: autoguider:=T_autoguider_internal.Create;
+    agPHD: autoguider:=T_autoguider_phd.Create;
+    agDITHER: autoguider:=T_autoguider_dither.Create;
   end;
   autoguider.onStatusChange:=@AutoguiderStatus;
   autoguider.onConnect:=@AutoguiderConnect;
@@ -3795,17 +3794,18 @@ try
     config.SetValue('/InternalGuider/Camera/ExpDelay',i div 1000);
   end;
   if oldver<'0.9.95' then begin
+    msg:='';
     // Remove Elbrus and reorder the solvers
     i:=config.GetValue('/Astrometry/Resolver',-1);
     if i>=0 then begin
       case i of
         0 : j:=ResolverAstrometryNet;
-        1 : j:=ResolverNone;
+        1 : begin j:=ResolverNone;  msg:=msg+'Elbrus solver removed'+crlf; end;
         2 : j:=ResolverNone;
         3 : j:=ResolverPlateSolve;
         4 : j:=ResolverAstap;
         5 : j:=ResolverPlateSolve3;
-        else j:=0;
+        else j:=ResolverNone;
       end;
       config.SetValue('/Astrometry/Resolver',j);
     end;
@@ -3813,15 +3813,29 @@ try
     i:=config.GetValue('/StarAnalysis/AutoFocusMode',-1);
     if i>=0 then begin
       case i of
-        0 : j:=ord(afNone);
+        0 : begin j:=ord(afNone); msg:=msg+'Vcurve autofocus removed'+crlf; end;
         1 : j:=ord(afDynamic);
-        2 : j:=ord(afNone);
+        2 : begin j:=ord(afNone); msg:=msg+'Iterative autofocus removed'+crlf; end;
         3 : j:=ord(afNone);
         4 : j:=ord(afPlanet);
-        else j:=0;
+        else j:=ord(afNone);
       end;
       config.SetValue('/StarAnalysis/AutoFocusMode',j);
     end;
+    // Remove Linguider
+    i:=config.GetValue('/Autoguider/Software',-1);
+    if i>=0 then begin
+      case i of
+        0 : j:=ord(agPHD);
+        1 : begin j:=ord(agNONE); msg:=msg+'Lin-guider removed'+crlf; end;
+        2 : j:=ord(agNONE);
+        3 : j:=ord(agDITHER);
+        4 : j:=ord(agINTERNAL);
+        else j:=ord(agNONE);
+      end;
+      config.SetValue('/Autoguider/Software',j);
+    end;
+    if msg<>'' then MessageDlg(caption,msg,mtWarning,[mbOK],0);
   end;
   if config.Modified then begin
      config.SetValue('/Configuration/Version',ccdcielver);
@@ -3844,8 +3858,6 @@ begin
   DeprecatedScripts:=TStringList.Create;
   try
   txt:='';
-  if (config.GetValue('/Autoguider/Software',2)=1) then
-    txt:=txt+crlf+'The Lin_Guider autoguider is deprecated, use PHD2 or the Internal guider.';
   if txt<>'' then begin
      NewMessage('Warning!'+txt,1);
      f:=TForm.Create(self);
@@ -5713,20 +5725,19 @@ begin
      seq_scriptengine.Planetarium:=planetarium;
      f_sequence.Planetarium:=planetarium;
   end;
-  if autoguider.AutoguiderType<>TAutoguiderType(config.GetValue('/Autoguider/Software',2)) then begin
+  if autoguider.AutoguiderType<>TAutoguiderType(config.GetValue('/Autoguider/Software',0)) then begin
     try
     autoguider.Terminate;
     autoguider.Connect('');
     f_sequence.AutoguiderDisconnected;
     except
     end;
-    i:=config.GetValue('/Autoguider/Software',2);
+    i:=config.GetValue('/Autoguider/Software',0);
     case TAutoguiderType(i) of
-      agPHD: autoguider:=T_autoguider_phd.Create;
-      agLINGUIDER: autoguider:=T_autoguider_linguider.Create;
       agNONE: autoguider:=T_autoguider_none.Create;
-      agDITHER: autoguider:=T_autoguider_dither.Create;
       agINTERNAL: autoguider:=T_autoguider_internal.Create;
+      agPHD: autoguider:=T_autoguider_phd.Create;
+      agDITHER: autoguider:=T_autoguider_dither.Create;
     end;
     autoguider.Mount:=mount;
     autoguider.Camera:=guidecamera;
@@ -8817,20 +8828,12 @@ Procedure Tf_main.AutoguiderConnectClick(Sender: TObject);
 var i: integer;
 begin
  if f_autoguider.BtnConnect.Caption=rsConnect then begin
-   i:=config.GetValue('/Autoguider/Software',2);
+   i:=config.GetValue('/Autoguider/Software',0);
    case TAutoguiderType(i) of
     agPHD:       autoguider.Connect(config.GetValue('/Autoguider/PHDhostname','localhost'),
                                     config.GetValue('/Autoguider/PHDport','4400'),
                                     config.GetValue('/Autoguider/PHDpath',''),
                                     config.GetValue('/Autoguider/PHDstart',false));
-    agLINGUIDER: begin
-               if config.GetValue('/Autoguider/LinGuiderUseUnixSocket',true) then begin
-                 autoguider.Connect(config.GetValue('/Autoguider/Autoguider/LinGuiderSocket','/tmp/lg_ss'));
-               end
-               else begin
-                autoguider.Connect(config.GetValue('/Autoguider/LinGuiderHostname','localhost'),config.GetValue('/Autoguider/LinGuiderPort','5656'));
-               end;
-    end;
     agNONE: exit;
   end;
  end else begin
@@ -8876,13 +8879,12 @@ begin
    NewMessage(format(rsDisconnected,[rsAutoguider]),1);
    f_sequence.AutoguiderDisconnected;
    // autoguider will be free automatically, create a new one for next connection
-   i:=config.GetValue('/Autoguider/Software',2);
+   i:=config.GetValue('/Autoguider/Software',0);
    case TAutoguiderType(i) of
-     agPHD: autoguider:=T_autoguider_phd.Create;
-     agLINGUIDER: autoguider:=T_autoguider_linguider.Create;
      agNONE: autoguider:=T_autoguider_none.Create;
-     agDITHER: autoguider:=T_autoguider_dither.Create;
      agINTERNAL: autoguider:=T_autoguider_internal.Create;
+     agPHD: autoguider:=T_autoguider_phd.Create;
+     agDITHER: autoguider:=T_autoguider_dither.Create;
    end;
    autoguider.Mount:=mount;
    autoguider.Camera:=guidecamera;
@@ -10019,15 +10021,11 @@ begin
      f_option.MeridianScript.Text:='';
    end;
    f_option.MeridianScriptArgs.Text:=config.GetValue('/Meridian/MeridianScriptArgs','');
-   f_option.AutoguiderType:=config.GetValue('/Autoguider/Software',2);
+   f_option.AutoguiderType:=config.GetValue('/Autoguider/Software',0);
    f_option.PHDhostname.Text:=config.GetValue('/Autoguider/PHDhostname','localhost');
    f_option.PHDport.Text:=config.GetValue('/Autoguider/PHDport','4400');
    f_option.StartPHD.Checked:=config.GetValue('/Autoguider/PHDstart',false);
    f_option.PHDpath.Text:=config.GetValue('/Autoguider/PHDpath',defPHDpath);
-   f_option.LinGuiderUseUnixSocket:=config.GetValue('/Autoguider/LinGuiderUseUnixSocket',true);
-   f_option.LinGuiderSocket.Text:=config.GetValue('/Autoguider/LinGuiderSocket','/tmp/lg_ss');
-   f_option.LinGuiderHostname.Text:=config.GetValue('/Autoguider/LinGuiderHostname','localhost');
-   f_option.LinGuiderPort.Text:=config.GetValue('/Autoguider/LinGuiderPort','5656');
    f_option.DitherPixel.Value:=config.GetValue('/Autoguider/Dither/Pixel',1.0);
    f_option.DitherRAonly.Checked:=config.GetValue('/Autoguider/Dither/RAonly',true);
    f_option.DitherWaitTime.Value:=config.GetValue('/Autoguider/Dither/WaitTime',5);
@@ -10470,10 +10468,6 @@ begin
      config.SetValue('/Autoguider/PHDport',f_option.PHDport.Text);
      config.SetValue('/Autoguider/PHDstart',f_option.StartPHD.Checked);
      config.SetValue('/Autoguider/PHDpath',f_option.PHDpath.Text);
-     config.SetValue('/Autoguider/LinGuiderUseUnixSocket',f_option.LinGuiderUseUnixSocket);
-     config.SetValue('/Autoguider/LinGuiderSocket',f_option.LinGuiderSocket.Text);
-     config.SetValue('/Autoguider/LinGuiderHostname',f_option.LinGuiderHostname.Text);
-     config.SetValue('/Autoguider/LinGuiderPort',f_option.LinGuiderPort.Text);
      config.SetValue('/Autoguider/Dither/Pixel',f_option.DitherPixel.Value);
      config.SetValue('/Autoguider/Dither/RAonly',f_option.DitherRAonly.Checked);
      config.SetValue('/Autoguider/Dither/WaitTime',f_option.DitherWaitTime.Value);
@@ -19859,11 +19853,11 @@ end;
 Procedure Tf_main.SetGuiderCamera;
 var n: integer;
 begin
-  n:=config.GetValue('/Autoguider/Software',2);
+  n:=config.GetValue('/Autoguider/Software',0);
   TBInternalGuider.Visible:=WantGuideCamera and WantMount;
   MenuTabInternalGuider.Visible:=TBInternalGuider.Visible;
-  f_internalguider.Panel1.Visible:=(n=4);
-  f_internalguider.Panel11.Visible:=(n<>4);
+  f_internalguider.Panel1.Visible:=(n=ord(agINTERNAL));
+  f_internalguider.Panel11.Visible:=not f_internalguider.Panel1.Visible;
 end;
 
 procedure Tf_main.InternalguiderSetSpectro(Sender: TObject);
