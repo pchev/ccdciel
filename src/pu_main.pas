@@ -40,7 +40,7 @@ uses
   fu_sequence, fu_planetarium, fu_script, fu_finder, pu_findercalibration, u_ccdconfig, pu_edittargets, pu_scriptengine,
   fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause, cu_tcpserver, cu_waitthread, pu_dark,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI, pu_handpad, pu_downloadscript,
-  cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration, pu_onlineinfo,
+  cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_focusercalibration, pu_onlineinfo,
   fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator, cu_watchdog, cu_indiwatchdog, pu_sensoranalysis,
   cu_weather, cu_ascomweather, cu_indiweather, cu_safety, cu_ascomsafety, cu_indisafety, fu_weather, fu_safety,
   cu_dome, cu_ascomdome, cu_indidome, fu_dome, pu_about, pu_goto, pu_photometry, u_libraw, pu_image_sharpness,
@@ -668,7 +668,6 @@ type
     f_focuser: Tf_focuser;
     f_magnifyer: Tf_magnifyer;
     f_rotator: Tf_rotator;
-    f_vcurve:Tf_vcurve;
     f_mount: Tf_mount;
     f_dome: Tf_dome;
     f_weather: Tf_weather;
@@ -705,7 +704,6 @@ type
     DeviceTimeout: integer;
     MouseMoving, MouseFrame, MouseSpectra, MouseRule, LockTimerPlot, LockMouseWheel, PolarMoving, BullsEyeMoving: boolean;
     LockGuideMouseWheel, LockGuideTimerPlot, LockFinderMouseWheel, LockFinderTimerPlot: boolean;
-    learningvcurve: boolean;
     LogFileOpen,DeviceLogFileOpen: Boolean;
     NeedRestart, GUIready, AppClose: boolean;
     LogFile,DeviceLogFile : UTF8String;
@@ -716,7 +714,6 @@ type
     SaveAutofocusGain, SaveAutofocusOffset, SaveAutofocusPreviewGain, SaveAutofocusPreviewOffset,SaveAutofocusFilter: integer;
     SaveAutofocusExposure,SaveGuiderAutofocusExposure: double;
     SaveGuiderAutofocusGain, SaveGuiderAutofocusOffset: integer;
-    TerminateVcurve: boolean;
     ScrBmp,ScrGuideBmp,ScrFinderBmp: TBGRABitmap;
     ImageSaved: boolean;
     FStatArea: boolean;
@@ -786,12 +783,9 @@ type
     procedure SaveConfig;
     procedure SetSequenceDir(newdir:string);
     procedure ShowActiveTools;
-    procedure SaveVcurve;
-    procedure LoadVcurve;
     procedure CreateBPM(f: TFits);
     procedure LoadBPM;
     procedure ShowBPMInfo;
-    procedure ComputeVcSlope;
     procedure OptionGetMaxADU(Sender: TObject);
     procedure OptionGetPixelSize(Sender: TObject);
     procedure OptionGetFocaleLength(Sender: TObject);
@@ -906,11 +900,6 @@ type
     procedure FocusIN(Sender: TObject);
     procedure FocusOUT(Sender: TObject);
     procedure FocusSetAbsolutePosition(Sender: TObject);
-    procedure FocusVcurveLearning(Sender: TObject);
-    procedure LearnVcurve(Sender: TObject);
-    procedure StopVcurve(Sender: TObject);
-    procedure doSaveVcurve(Sender: TObject);
-    function doVcurve(centerp,hw,n,nsum: integer;exp:double;bin,again,aoffset:integer):boolean;
     procedure MeasureImage(plot: boolean);
     procedure PrintStarList;
     procedure StarSelection(Sender: TObject);
@@ -1623,7 +1612,6 @@ begin
   TemperatureScale:=0;
   TempLabel:=sdeg+'C';
   TemperatureSlope:=0;
-  learningvcurve:=false;
   autofocusing:=false;
   LastROIname:='';
   LastCaptureFile:='';
@@ -1977,7 +1965,6 @@ begin
   f_focuser.onFocusIN:=@FocusIN;
   f_focuser.onFocusOUT:=@FocusOUT;
   f_focuser.onSetAbsolutePosition:=@FocusSetAbsolutePosition;
-  f_focuser.onVcurveLearning:=@FocusVcurveLearning;
 
   f_starprofile:=Tf_starprofile.Create(self);
   f_starprofile.preview:=f_preview;
@@ -2847,7 +2834,6 @@ begin
    if  f_planetariuminfo<>nil then f_planetariuminfo.SetLang;
    if  f_mount<>nil then f_mount.SetLang;
    if  f_pause<>nil then f_pause.setlang;
-   if  f_vcurve<>nil then f_vcurve.SetLang;
    if  f_rotator<>nil then f_rotator.SetLang;
    if  f_focusercalibration<>nil then f_focusercalibration.SetLang;
    if  f_magnifyer<>nil then f_magnifyer.SetLang;
@@ -2876,7 +2862,6 @@ procedure Tf_main.FormShow(Sender: TObject);
 var str,fn,buf: string;
     i,i1,i2: integer;
     usecursor: boolean;
-    ra,de,ph,il: double;
 begin
 
   SetDevices;
@@ -2884,7 +2869,6 @@ begin
   InitCoord;
   SetConfig;
   SetOptions;
-  LoadVcurve;
   LoadBPM;
 
   FocuserLastTemp:=config.GetValue('/StarAnalysis/FocuserLastTemp',NullCoord);
@@ -3345,7 +3329,6 @@ begin
     f_starprofile.HistoryChartHfd.LinePen.Color:=colorRed;
     f_starprofile.HistoryChartImax.LinePen.Color:=colorGreen;
   end;
-  if f_vcurve<>nil then f_vcurve.VcChartRef.LinePen.Color:=colorBlue;
 
   if f_devicesconnection<>nil then f_devicesconnection.SetTitleColor;
   if f_filterwheel<>nil then f_filterwheel.SetTitleColor;
@@ -3830,7 +3813,19 @@ try
       end;
       config.SetValue('/Astrometry/Resolver',j);
     end;
-
+    // remove VCurve and Iterative focus
+    i:=config.GetValue('/StarAnalysis/AutoFocusMode',-1);
+    if i>=0 then begin
+      case i of
+        0 : j:=ord(afNone);
+        1 : j:=ord(afDynamic);
+        2 : j:=ord(afNone);
+        3 : j:=ord(afNone);
+        4 : j:=ord(afPlanet);
+        else j:=0;
+      end;
+      config.SetValue('/StarAnalysis/AutoFocusMode',j);
+    end;
   end;
   if config.Modified then begin
      config.SetValue('/Configuration/Version',ccdcielver);
@@ -3853,10 +3848,6 @@ begin
   DeprecatedScripts:=TStringList.Create;
   try
   txt:='';
-  if (config.GetValue('/StarAnalysis/AutoFocusMode',3)=0) then
-    txt:=txt+crlf+'The Vcurve autofocus method is deprecated, use Dynamic instead.';
-  if (config.GetValue('/StarAnalysis/AutoFocusMode',3)=2) then
-    txt:=txt+crlf+'The Iterative autofocus method is deprecated, use Dynamic instead.';
   if (config.GetValue('/Autoguider/Software',2)=1) then
     txt:=txt+crlf+'The Lin_Guider autoguider is deprecated, use PHD2 or the Internal guider.';
   if txt<>'' then begin
@@ -3938,7 +3929,6 @@ begin
   SaveInternalGuiderSettings;
   SaveConfig;
 
-  TerminateVcurve:=true;
   try
   if autoguider is T_autoguider_internal then begin
     autoguider.Terminate;
@@ -4472,7 +4462,6 @@ end else begin
 end;
 if CanClose then begin
  StopInternalguider:=true;
- TerminateVcurve:=true;
  if f_capture.Running or f_preview.Running then begin
    StopExposure(nil);
  end;
@@ -5107,7 +5096,6 @@ begin
   if f_option<>nil then f_option.ShowHint:=ShowHint;
   if f_setup<>nil then f_setup.ShowHint:=ShowHint;
   if f_EditTargets<>nil then f_EditTargets.ShowHint:=ShowHint;
-  if f_vcurve<>nil then f_vcurve.ShowHint:=ShowHint;
   if f_collimation<>nil then f_collimation.ShowHint:=ShowHint;
   TmpDir:=config.GetValue('/Files/TmpDir',TmpDir);
   if copy(TmpDir,1,1)='.' then TmpDir:=ExpandFileName(slash(Appdir)+TmpDir);
@@ -5277,7 +5265,7 @@ begin
   end;
   CurrentFilterOffset:=0;
   if (wheel.Status=devConnected) then AutofocusExposureFact:=FilterExpFact[wheel.Filter];
-  AutoFocusMode:=TAutoFocusMode(config.GetValue('/StarAnalysis/AutoFocusMode',3)); // default to no autofocus
+  AutoFocusMode:=TAutoFocusMode(config.GetValue('/StarAnalysis/AutoFocusMode',0)); // default to no autofocus
   if AutofocusMode=afPlanet then begin
     f_starprofile.label1.Caption:=rsSharpness+':';
     f_starprofile.Label2.Caption:=rsIntensity+':';
@@ -5294,10 +5282,6 @@ begin
     GuiderAutofocus:=config.GetValue('/StarAnalysis/GuiderAutofocus',false)
   else
     GuiderAutofocus:=false;
-  AutofocusMinSpeed:=config.GetValue('/StarAnalysis/AutofocusMinSpeed',10);
-  AutofocusMaxSpeed:=config.GetValue('/StarAnalysis/AutofocusMaxSpeed',100);
-  AutofocusStartHFD:=config.GetValue('/StarAnalysis/AutofocusStartHFD',20.0);
-  AutofocusNearHFD:=config.GetValue('/StarAnalysis/AutofocusNearHFD',10.0);
   AutofocusExposure:=config.GetValue('/StarAnalysis/AutofocusExposure',5.0);
   AutofocusBinning:=config.GetValue('/StarAnalysis/AutofocusBinning',1);
   AFmedianfilter:=config.GetValue('/StarAnalysis/AFmedianfilter',true);
@@ -5315,7 +5299,6 @@ begin
   if abs(HFM_Threshold)<0.001 then HFM_Threshold:=0;
   AutofocusPeriod:=config.GetValue('/StarAnalysis/AutofocusPeriod',0);
   AutofocusMoveDir:=config.GetValue('/StarAnalysis/AutofocusMoveDir',FocusDirIn);
-  AutofocusNearNum:=config.GetValue('/StarAnalysis/AutofocusNearNum',3);
   AutofocusInPlace:=config.GetValue('/StarAnalysis/AutofocusInPlace',true);
   if GuiderAutofocus then
     AutofocusPauseGuider:=false
@@ -5337,12 +5320,7 @@ begin
   AutofocusPlanetMovement:=config.GetValue('/StarAnalysis/AutofocusPlanetMovement',AutofocusDynamicMovement);
   AutofocusTolerance:=config.GetValue('/StarAnalysis/AutofocusTolerance',99.0);
   AutofocusMinSNR:=config.GetValue('/StarAnalysis/AutofocusMinSNR',3.0);
-  AutofocusSlippageCorrection:=config.GetValue('/StarAnalysis/AutofocusSlippageCorrection',false);
   AutoFocusDefocus:=config.GetValue('/StarAnalysis/AutoFocusDefocus',0);
-  if AutofocusSlippageCorrection then
-     AutofocusSlippageOffset:=config.GetValue('/StarAnalysis/AutofocusSlippageOffset',0)
-  else
-    AutofocusSlippageOffset:=0;
   AutofocusGain:=config.GetValue('/StarAnalysis/AutofocusGain',f_preview.Gain);
   AutofocusOffset:=config.GetValue('/StarAnalysis/AutofocusOffset',f_preview.Offset);
   AutofocusFilter:=config.GetValue('/StarAnalysis/AutofocusFilter',0);
@@ -5525,7 +5503,6 @@ begin
   MinimumMoonDistance:=config.GetValue('/Sequence/MinimumMoonDistance',MinimumMoonDistance);
   SequenceTwilight:=config.GetValue('/Sequence/SequenceTwilight',SequenceTwilight);
   if (autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED) then autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
-  if f_focuser<>nil then f_focuser.BtnVcurve.Visible:=(AutoFocusMode=afVcurve);
   LoadHorizon(config.GetValue('/Info/HorizonFile',''));
   ElevationMin:=config.GetValue('/Info/ElevationMin',10.0);
   AzimuthOrigin:=config.GetValue('/Info/AzimuthOrigin',azNorth);
@@ -8108,7 +8085,7 @@ procedure Tf_main.ReadyForVideo(var v: boolean);
 begin
  v:=(camera.Status=devConnected)and(not f_sequence.Running)and
     (not f_preview.Running)and(not f_capture.Running)and
-    (not autofocusing)and(not learningvcurve);
+    (not autofocusing);
 end;
 
 procedure Tf_main.CameraVideoPreviewChange(Sender: TObject);
@@ -8501,330 +8478,6 @@ begin
    p:=f_focuser.FocusPosition;
    focuser.Position:=p;
  end
-end;
-
-procedure Tf_main.FocusVcurveLearning(Sender: TObject);
-begin
-  if not focuser.hasAbsolutePosition then begin
-    NewMessage(rsCannotGetFoc,1);
-    exit;
-  end;
-  if f_vcurve=nil then begin
-    f_vcurve:=Tf_vcurve.Create(self);
-    f_vcurve.focuser:=f_focuser;
-    f_vcurve.starprofile:=f_starprofile;
-    f_vcurve.preview:=f_preview;
-    f_vcurve.onLearnVcurve:=@LearnVcurve;
-    f_vcurve.onStopVcurve:=@StopVcurve;
-    f_vcurve.onSaveVcurve:=@doSaveVcurve;
-  end;
-  f_vcurve.ShowHint:=ShowHint;
-  if VcCenterpos<>NullCoord then f_vcurve.FocusPos.Value:=VcCenterpos else f_vcurve.FocusPos.Value:=focuser.Position;
-  if VcHalfwidth<>NullCoord then f_vcurve.HalfWidth.Value:=VcHalfwidth else f_vcurve.HalfWidth.Value:=500;
-  f_vcurve.Nsteps.Value:=VcNsteps;
-  formpos(f_vcurve,mouse.CursorPos.x,mouse.CursorPos.y);
-  f_vcurve.Show;
-  f_vcurve.LoadCurve;
-end;
-
-function Tf_main.doVcurve(centerp,hw,n,nsum: integer;exp:double;bin,again,aoffset:integer):boolean;
-var i,j,k,minpos,maxpos,step,sumpos,numpos:integer;
-    hfdmin,hfd:double;
-    hfdlist: array of double;
-begin
- result:=false;
- TerminateVcurve:=false;
- AutofocusVcNum:=-1;
- minpos:=centerp-hw;
- maxpos:=centerp+hw;
- step:=round(2*hw/n);
- PosStartL:=-1;
- PosStartR:=-1;
- PosNearL:=-1;
- PosFocus:=-1;
- PosNearR:=-1;
- f_preview.StackPreview.Checked:=false;
- f_preview.CheckBoxAstrometry.Checked:=false;
- NewMessage(Format(rsFromToBy, [IntToStr(minpos), IntToStr(centerp), IntToStr(step)]),2);
- if focuser.hasTemperature then begin
-    NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]),2);
-    AutofocusVcTemp1:=FocuserTemp;
- end;
- if step<1 then exit;
- hfdmin:=9999;
- SetLength(hfdlist,nsum);
- // main loop for n measurement
- for i:=0 to n do begin
-   // set new focuser position
-   if AutofocusMoveDir=FocusDirOut then begin
-     focuser.Position:=minpos+i*step;
-     k:=i;
-   end
-   else begin
-     focuser.Position:=maxpos-i*step;
-     k:=n-i;
-   end;
-   wait(1);
-   // use bad pixel map
-   fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
-   // use dark
-   fits.DarkOn:=true;
-   // average hfd for nsum exposures
-   for j:=1 to nsum do begin
-     if not camera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeFocus,again,aoffset) then begin
-       NewMessage(rsExposureFail,1);
-       TerminateVcurve:=true;
-     end;
-     if TerminateVcurve then begin
-       NewMessage(rsStopVcurveLe,1);
-       LoadVcurve;
-       f_vcurve.LoadCurve;
-       exit;
-     end;
-     f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
-     hfdlist[j-1]:=f_starprofile.HFD;
-     NewMessage('Measurement '+inttostr(j)+' hfd:'+FormatFloat(f1,f_starprofile.hfd)+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR),2);
-   end;
-   hfd:=SMedian(hfdlist,nsum);
-   // store result always from left to right
-   AutofocusVc[k,1]:=focuser.Position;
-   AutofocusVc[k,2]:=hfd;
-   NewMessage('Vcurve n'+inttostr(i)+' pos:'+FormatFloat(f0,AutofocusVc[k,1])+' hfd:'+FormatFloat(f1,AutofocusVc[k,2])+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR),2);
-   if f_vcurve<>nil then
-      f_vcurve.LearnProgress(i,AutofocusVc[k,1],AutofocusVc[k,2]);
-   // find minimal hfd value
-   if AutofocusVc[k,2]<hfdmin then begin
-     hfdmin:=AutofocusVc[k,2];
-   end;
- end;
- AutofocusVcNum:=n;
- AutofocusVcDir:=AutofocusMoveDir;
- if hfdmin=9999 then begin
-   NewMessage(rsCannotDetect,1);
-   exit;
- end;
- // search the central point of the flat central part of the curve to split right and left curve
- sumpos:=0;
- numpos:=0;
- for i:=0 to n do begin
-   if abs(hfdmin-AutofocusVc[i,2])<(0.1*hfdmin) then begin
-    inc(numpos);
-    sumpos:=sumpos+i;
-   end;
- end;
- PosFocus:=round(sumpos/numpos);
- //  search near focus pos, cancel if we not reach enough defocalisation
- for i:=0 to PosFocus do begin
-   if AutofocusVc[i,2]>=AutofocusNearHFD then PosNearL:=i;
-   if AutofocusVc[i,2]>=AutofocusStartHFD then PosStartL:=i;
- end;
- for i:=n downto PosFocus do begin
-   if AutofocusVc[i,2]>=AutofocusNearHFD then PosNearR:=i;
-   if AutofocusVc[i,2]>=AutofocusStartHFD then PosStartR:=i;
- end;
- if (PosNearL<0)or(PosNearR<0) then begin
-   NewMessage(rsCannotReachN,1);
-   exit;
- end;
- if (PosNearL<0)or(PosNearR<0) then begin
-   NewMessage(rsCannotReachS,1);
-   exit;
- end;
- AutofocusVcNum:=n;
- if focuser.hasTemperature then begin
-   AutofocusVcTemp2:=FocuserTemp;
-   AutofocusVcTemp:=(AutofocusVcTemp1+AutofocusVcTemp2)/2;
-   NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]),2);
- end
- else
-   AutofocusVcTemp:=0;
- NewMessage('Near L:'+inttostr(round(AutofocusVc[PosNearL,1])),2);
- NewMessage('Center:'+inttostr(round(AutofocusVc[PosFocus,1])),2);
- NewMessage('Near R:'+inttostr(round(AutofocusVc[PosNearR,1])),2);
- result:=true;
-end;
-
-procedure Tf_main.LearnVcurve(Sender: TObject);
-var bin: integer;
-    x,y,xc,yc,xc1,yc1,s,s2,s3,s4,savepos: integer;
-    SaveZoom,vmax: double;
-begin
- if not focuser.hasAbsolutePosition then exit;
- // read parameters
- VcCenterpos:=f_vcurve.FocusPos.Value;
- VcHalfwidth:=f_vcurve.HalfWidth.Value;
- VcNsteps:=f_vcurve.Nsteps.Value;
- if VcNsteps>99 then begin
-   VcNsteps:=99;
-   f_vcurve.Nsteps.Text:='99';
- end;
- if (VcCenterpos=NullCoord)or(VcHalfwidth=NullCoord) then exit;
- savepos:=VcCenterpos;
- AutofocusVcFilterOffset:=CurrentFilterOffset;
- try
- // find a bright star
- focuser.Position:=VcCenterpos;
- wait(1);
- bin:=AutofocusBinning;
- // use bad pixel map
- fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
- // use dark
- fits.DarkOn:=true;
- if (not f_starprofile.FindStar) then begin
-   if not camera.ControlExposure(f_preview.Exposure,bin,bin,LIGHT,ReadoutModeFocus,AutofocusGain,AutofocusOffset) then begin
-      NewMessage(rsExposureFail,1);
-      exit;
-   end;
-   x:=fits.HeaderInfo.naxis1 div 2;
-   y:=fits.HeaderInfo.naxis2 div 2;
-   s:=2*min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 3;
-   fits.FindBrightestPixel(x,y,s,starwindow,xc1,yc1,vmax);
-   f_starprofile.FindStar:=(vmax>0);
-   f_starprofile.StarX:=xc1;
-   f_starprofile.StarY:=yc1;
- end
- else begin
-   xc1 := round(f_starprofile.StarX);
-   yc1 := round(f_starprofile.StarY);
- end;
-
- if not f_starprofile.FindStar then begin
-   NewMessage(rsCannotFindAS,1);
-   exit;
- end;
- learningvcurve:=true;
- // set focus frame around the star
- s:=min(Focuswindow,min(fits.HeaderInfo.naxis1 div 2,fits.HeaderInfo.naxis2 div 2));
- s2:=s div 2;
- Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
- Screen2CCD(x,y,f_visu.FlipHorz,f_visu.FlipVert,camera.VerticalFlip,xc,yc);
- if camera.CameraInterface=INDI then begin
-   // INDI frame in unbinned pixel
-   xc:=xc*camera.BinX;
-   yc:=yc*camera.BinY;
-   s3:=s2*camera.BinX;
-   s4:=s*camera.BinX;
-   camera.SetFrame(xc-s3,yc-s3,s4,s4);
- end
- else begin
-   camera.SetFrame(xc-s2,yc-s2,s,s);
- end;
- f_starprofile.StarX:=s2;
- f_starprofile.StarY:=s2;
- SaveZoom:=f_visu.Zoom;
- f_visu.Zoom:=0;
- ImgZoom:=0;
- // do vcurve exposures
- NewMessage(rsStartLearnin,1);
- if not doVcurve(VcCenterpos,VcHalfwidth,VcNsteps,AutofocusNearNum,f_preview.Exposure,bin,AutofocusGain,AutofocusOffset) then begin
-   // error return focuser to initial position
-   focuser.Position:=savepos;
-   wait(1);
-   exit;
- end;
- // compute and save the curve
- ComputeVcSlope;
- SaveVcurve;
- AutofocusSlippageOffset:=0;
- config.SetValue('/StarAnalysis/AutofocusSlippageOffset',AutofocusSlippageOffset);
- // position focuser at new center
- if f_vcurve.Quality>0.9 then
-    focuser.Position:=round((AutofocusVcpiL+AutofocusVcpiR)/2)
- else
-    focuser.Position:=round(AutofocusVc[PosFocus,1]);
- wait(1);
- finally
- // reset camera
- fits.SetBPM(bpm,0,0,0,0);
- fits.DarkOn:=false;
- learningvcurve:=false;
- camera.ResetFrame;
- f_preview.StackPreview.Checked:=false;
- f_preview.CheckBoxAstrometry.Checked:=false;
- f_visu.Zoom:=SaveZoom;
- ImgZoom:=f_visu.Zoom;
- f_starprofile.FindStar:=false; {deselect the star so a new run will search for the new star position}
- StartPreviewExposure(self);
- end;
-end;
-
-procedure Tf_main.StopVcurve(Sender: TObject);
-begin
-  TerminateVcurve:=true;
-end;
-
-procedure Tf_main.ComputeVcSlope;
-begin
- f_vcurve.FindLinearPart;
- f_vcurve.LoadCurve;
-end;
-
-procedure Tf_main.doSaveVcurve(Sender: TObject);
-begin
- SaveVcurve;
-end;
-
-Procedure Tf_main.SaveVcurve;
-var i:integer;
-begin
- if AutofocusVcNum>0 then begin
-  try
-  config.DeletePath('/StarAnalysis/Vcurve');
-  config.SetValue('/StarAnalysis/Vcurve/AutofocusVcDir',AutofocusVcDir);
-  config.SetValue('/StarAnalysis/Vcurve/AutofocusVcBinning',AutofocusBinning);
-  config.SetValue('/StarAnalysis/Vcurve/AutofocusVcTemp',AutofocusVcTemp);
-  config.SetValue('/StarAnalysis/Vcurve/AutofocusVcFilterOffset',AutofocusVcFilterOffset);
-  config.SetValue('/StarAnalysis/Vcurve/VcCenterpos',VcCenterpos);
-  config.SetValue('/StarAnalysis/Vcurve/VcHalfwidth',VcHalfwidth);
-  config.SetValue('/StarAnalysis/Vcurve/VcNsteps',VcNsteps);
-  config.SetValue('/StarAnalysis/Vcurve/AutofocusVcSkipNum',AutofocusVcSkipNum);
-  config.SetValue('/StarAnalysis/Vcurve/AutofocusVcNum',AutofocusVcNum);
-  for i:=0 to AutofocusVcNum do begin
-     config.SetValue('/StarAnalysis/Vcurve/AutofocusVcPos'+inttostr(i),AutofocusVc[i,1]);
-     config.SetValue('/StarAnalysis/Vcurve/AutofocusVcHfd'+inttostr(i),AutofocusVc[i,2]);
-  end;
-  config.SetValue('/StarAnalysis/Vcurve/PosNearL',PosNearL);
-  config.SetValue('/StarAnalysis/Vcurve/PosFocus',PosFocus);
-  config.SetValue('/StarAnalysis/Vcurve/PosNearR',PosNearR);
-  config.SetValue('/StarAnalysis/Vcurve/AutofocusVcSlopeL',AutofocusVcSlopeL);
-  config.SetValue('/StarAnalysis/Vcurve/AutofocusVcSlopeR',AutofocusVcSlopeR);
-  config.SetValue('/StarAnalysis/Vcurve/AutofocusVcPID',AutofocusVcPID);
-  config.SetValue('/StarAnalysis/Vcurve/AutofocusVcpiR',AutofocusVcpiR);
-  config.SetValue('/StarAnalysis/Vcurve/AutofocusVcpiL',AutofocusVcpiL);
-  config.Flush;
-  except
-    on E: Exception do NewMessage('Error saving Vcurve: '+ E.Message,1);
-  end;
- end;
- // move the focuser at the center point as we like this curve
- focuser.Position:=round((AutofocusVcpiL+AutofocusVcpiR)/2);
-end;
-
-Procedure Tf_main.LoadVcurve;
-var i:integer;
-begin
-   AutofocusVcDir:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcDir',AutofocusMoveDir);
-   AutofocusVcTemp:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcTemp',NullCoord);
-   AutofocusVcFilterOffset:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcFilterOffset',0);
-   VcCenterpos:=config.GetValue('/StarAnalysis/Vcurve/VcCenterpos',round(NullCoord));
-   VcHalfwidth:=config.GetValue('/StarAnalysis/Vcurve/VcHalfwidth',round(NullCoord));
-   VcNsteps:=config.GetValue('/StarAnalysis/Vcurve/VcNsteps',30);
-   AutofocusVcSkipNum:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcSkipNum',0);
-   AutofocusVcNum:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcNum',-1);
-   if AutofocusVcNum>0 then begin
-     for i:=0 to AutofocusVcNum do begin
-        AutofocusVc[i,1]:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcPos'+inttostr(i),0);
-        AutofocusVc[i,2]:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcHfd'+inttostr(i),0);
-     end;
-     PosNearL:=config.GetValue('/StarAnalysis/Vcurve/PosNearL',-1);
-     PosFocus:=config.GetValue('/StarAnalysis/Vcurve/PosFocus',-1);
-     PosNearR:=config.GetValue('/StarAnalysis/Vcurve/PosNearR',-1);
-     AutofocusVcSlopeL:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcSlopeL',-1.0);
-     AutofocusVcSlopeR:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcSlopeR',-1.0);
-     AutofocusVcPID:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcPID',-1.0);
-     AutofocusVcpiR:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcpiR',-1.0);
-     AutofocusVcpiL:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcpiL',-1.0);
-   end;
 end;
 
 Procedure Tf_main.RotatorStatus(Sender: TObject);
@@ -10206,10 +9859,6 @@ begin
      f_option.GuiderAutofocus.Visible:=false;
      f_option.GuiderAutofocus.checked:=false;
    end;
-   f_option.AutofocusMinSpeed.Value:=config.GetValue('/StarAnalysis/AutofocusMinSpeed',AutofocusMinSpeed);
-   f_option.AutofocusMaxSpeed.Value:=config.GetValue('/StarAnalysis/AutofocusMaxSpeed',AutofocusMaxSpeed);
-   f_option.AutofocusStartHFD.Value:=config.GetValue('/StarAnalysis/AutofocusStartHFD',AutofocusStartHFD);
-   f_option.AutofocusNearHFD.Value:=config.GetValue('/StarAnalysis/AutofocusNearHFD',AutofocusNearHFD);
    f_option.AutofocusExp:=config.GetValue('/StarAnalysis/AutofocusExposure',AutofocusExposure);
    if hasGainISO then
      f_option.AutofocusISObox.ItemIndex:=config.GetValue('/StarAnalysis/AutofocusGain',AutofocusGain)
@@ -10245,8 +9894,6 @@ begin
    f_option.AutofocusPeriod.Value:=config.GetValue('/StarAnalysis/AutofocusPeriod',AutofocusPeriod);
    f_option.AutofocusTolerance.Value:=config.GetValue('/StarAnalysis/AutofocusTolerance',AutofocusTolerance);
    f_option.AutofocusMinSNR.Value:=config.GetValue('/StarAnalysis/AutofocusMinSNR',AutofocusMinSNR);
-   f_option.AutofocusSlippageCorrection.Checked:=config.GetValue('/StarAnalysis/AutofocusSlippageCorrection',AutofocusSlippageCorrection);
-   f_option.AutofocusSlippageOffset.Value:=config.GetValue('/StarAnalysis/AutofocusSlippageOffset',AutofocusSlippageOffset);
    FocusStarMagIndex:=config.GetValue('/StarAnalysis/AutofocusStarMag',4)-4;
    if (FocusStarMagIndex<0)or(FocusStarMagIndex>4) then FocusStarMagIndex:=0;
    f_option.FocusStarMag.ItemIndex:=FocusStarMagIndex;
@@ -10255,7 +9902,6 @@ begin
    ok:=config.GetValue('/StarAnalysis/AutofocusMoveDir',FocusDirIn);
    f_option.AutofocusMoveDirIn.Checked:=ok;
    f_option.AutofocusMoveDirOut.Checked:=not ok;
-   f_option.AutofocusNearNum.Value:=config.GetValue('/StarAnalysis/AutofocusNearNum',AutofocusNearNum);
    ok:=config.GetValue('/StarAnalysis/AutofocusInPlace',true);
    f_option.AutofocusInPlace.Checked:=ok;
    f_option.AutofocusSlew.Checked:=not ok;
@@ -10625,10 +10271,6 @@ begin
        config.SetValue('/StarAnalysis/GuiderAutofocus',f_option.GuiderAutofocus.checked)
      else
        config.SetValue('/StarAnalysis/GuiderAutofocus',false);
-     config.SetValue('/StarAnalysis/AutofocusMinSpeed',f_option.AutofocusMinSpeed.Value);
-     config.SetValue('/StarAnalysis/AutofocusMaxSpeed',f_option.AutofocusMaxSpeed.Value);
-     config.SetValue('/StarAnalysis/AutofocusStartHFD',f_option.AutofocusStartHFD.Value);
-     config.SetValue('/StarAnalysis/AutofocusNearHFD',f_option.AutofocusNearHFD.Value);
      config.SetValue('/StarAnalysis/AutofocusExposure',f_option.AutofocusExp);
      if hasGainISO then
        config.SetValue('/StarAnalysis/AutofocusGain',f_option.AutofocusISObox.ItemIndex)
@@ -10654,13 +10296,10 @@ begin
      config.SetValue('/StarAnalysis/AutofocusPeriod',f_option.AutofocusPeriod.Value);
      config.SetValue('/StarAnalysis/AutofocusTolerance',f_option.AutofocusTolerance.Value);
      config.SetValue('/StarAnalysis/AutofocusMinSNR',f_option.AutofocusMinSNR.Value);
-     config.SetValue('/StarAnalysis/AutofocusSlippageCorrection',f_option.AutofocusSlippageCorrection.Checked);
-     config.SetValue('/StarAnalysis/AutofocusSlippageOffset',f_option.AutofocusSlippageOffset.Value);
      config.SetValue('/StarAnalysis/FocusStarMagAdjust',f_option.FocusStarMagAdjust.Checked);
      config.SetValue('/StarAnalysis/AutofocusStarMag',f_option.FocusStarMag.ItemIndex+4);
      config.SetValue('/StarAnalysis/AutofocusPrecisionSlew',f_option.AutofocusPrecisionSlew.Value);
      config.SetValue('/StarAnalysis/AutofocusMoveDir',f_option.AutofocusMoveDirIn.Checked);
-     config.SetValue('/StarAnalysis/AutofocusNearNum',f_option.AutofocusNearNum.Value);
      config.SetValue('/StarAnalysis/AutofocusInPlace',f_option.AutofocusInPlace.Checked);
      if f_option.AutofocusInPlace.Checked then
        config.SetValue('/StarAnalysis/AutofocusPauseGuider',f_option.AutofocusPauseGuider.Checked)
@@ -11440,7 +11079,7 @@ var e: double;
     p,binx,biny,i,x,y,w,h,sx,sy,sw,sh: integer;
 begin
 // ! can run out of main thread
-if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) and (not learningvcurve)and(not f_video.Running) then begin
+if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) and(not f_video.Running) then begin
   RunningPreview:=true;
   ExpectedStop:=false;
   // check exposure time
@@ -11452,7 +11091,7 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
     exit;
   end;
   // check focuser temperature compensation
-  if (camera.FrameType=LIGHT) and not (autofocusing or learningvcurve or f_starprofile.ChkAutofocus.Down) then begin
+  if (camera.FrameType=LIGHT) and not (autofocusing or f_starprofile.ChkAutofocus.Down) then begin
     FocuserTemperatureCompensation(true);
   end;
   // set readout first so it can be overridden by specific binning or gain
@@ -11615,7 +11254,7 @@ if not f_capture.Running then begin
   NewMessage(rsCaptureStopp2, 0);
   exit;
 end;
-if (camera.Status=devConnected)and(not autofocusing)and(not learningvcurve)and(not f_video.Running) then begin
+if (camera.Status=devConnected)and(not autofocusing)and(not f_video.Running) then begin
   // do not interrupt the current stack, run prepare only on the start of a new stack
   if (camera.AddFrames)and(not camera.PrepareStack) then begin
      result:=true;
@@ -12128,7 +11767,7 @@ var e: double;
     p,binx,biny,cc: integer;
     ftype:TFrameType;
 begin
-if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) then begin
+if (camera.Status=devConnected)and(not autofocusing) then begin
   if (f_capture.FrameType>=0)and(f_capture.FrameType<=ord(High(TFrameType))) then
     ftype:=TFrameType(f_capture.FrameType)
   else
@@ -13778,7 +13417,7 @@ var
 begin
 {$ifdef mswindows}
   // check no capture is running
-  if  (f_sequence.Running or f_preview.Running or f_capture.Running or autofocusing or learningvcurve) then begin
+  if  (f_sequence.Running or f_preview.Running or f_capture.Running or autofocusing) then begin
     ShowMessage('Cannot open the device configuration now!');
     exit;
   end;
@@ -13862,7 +13501,7 @@ var
 begin
 {$ifdef mswindows}
   // check no capture is running
-  if  (f_sequence.Running or f_preview.Running or f_capture.Running or autofocusing or learningvcurve) then begin
+  if  (f_sequence.Running or f_preview.Running or f_capture.Running or autofocusing) then begin
     ShowMessage('Cannot open the device configuration now!');
     exit;
   end;
@@ -14515,43 +14154,20 @@ begin
     else
       cc:=round(hfd1[0,1]);
     AutofocusBinning:=bin;
-    AutofocusNearHFD:=hfdmin+(hfdmax-hfdmin)/2;
-    AutofocusStartHFD:=AutofocusNearHFD+(hfdmax-AutofocusNearHFD)/2;
     // set safe values
-    AutofocusNearNum:=3;
     AutofocusTolerance:=2*hfd1[0,2];
     AutofocusMinSNR:=3;
     AutofocusInPlace:=True;
-    // vcurve parameters
-    if FocAbsolute then begin
-      // dynamic is more easy for new user, just store vcurve parameters for future use
-      VcCenterpos:=cc;
-      VcHalfwidth:=round(abs((hfdmax-b1)/a1-cc));
-      VcNsteps:=15;
-      AutoFocusMode:=afDynamic;
-    end
-    else
-      AutoFocusMode:=afDynamic;
+    AutoFocusMode:=afDynamic;
     // dynamic
-    hfddyn:=min(AutofocusNearHFD,2.5*hfdmin);
+    hfddyn:=2.5*hfdmin;
     AutofocusDynamicNumPoint:=7;
     AutofocusDynamicMovement:=round(abs(((hfddyn-b1)/a1-cc)/3));
     AutofocusPlanetNumPoint:=AutofocusDynamicNumPoint;
     AutofocusPlanetMovement:=AutofocusDynamicMovement;
-    // iterative
-    AutofocusMaxSpeed:=step;
-    for i:=1 to numhfd1 do begin
-      if (hfd1[i,2]-hfd1[0,2])>(0.1*hfd1[0,2]) then begin
-        AutofocusMinSpeed:=step1[i] div 2;
-        break;
-      end;
-    end;
     // save config
     f_focusercalibration.ValueListEditor1.Clear;
     f_focusercalibration.ValueListEditor1.InsertRow(rsBinning, inttostr(AutofocusBinning)+'x'+inttostr(AutofocusBinning), true);
-    f_focusercalibration.ValueListEditor1.InsertRow(rsStartFocus,inttostr(round(AutofocusStartHFD)),true);
-    f_focusercalibration.ValueListEditor1.InsertRow(rsNearFocus,inttostr(round(AutofocusNearHFD)),true);
-    f_focusercalibration.ValueListEditor1.InsertRow(rsNumberOfExpo,inttostr(AutofocusNearNum),true);
     f_focusercalibration.ValueListEditor1.InsertRow(rsAutofocusTol,FormatFloat(f1,AutofocusTolerance),true);
     f_focusercalibration.ValueListEditor1.InsertRow(rsMinSNR,FormatFloat(f1,AutofocusMinSNR),true);
     f_focusercalibration.ValueListEditor1.InsertRow(rsStarDetectio,inttostr(Starwindow),true);
@@ -14561,20 +14177,10 @@ begin
     else
       f_focusercalibration.ValueListEditor1.InsertRow(rsMoveDirectio,rsOut,true);
     f_focusercalibration.ValueListEditor2.Clear;
-    if AutoFocusMode=afVcurve then
-       f_focusercalibration.ValueListEditor2.InsertRow(rsAutofocusMet,rsVCurve,true)
-    else
-       f_focusercalibration.ValueListEditor2.InsertRow(rsAutofocusMet,rsDynamic,true);
+    f_focusercalibration.ValueListEditor2.InsertRow(rsAutofocusMet,rsDynamic,true);
     f_focusercalibration.ValueListEditor2.InsertRow(rsStayInPlace,BoolToStr(AutofocusInPlace,rsTrue, rsFalse),true);
-    if FocAbsolute then begin
-      f_focusercalibration.ValueListEditor2.InsertRow(rsFocusPositio,inttostr(VcCenterpos),true);
-      f_focusercalibration.ValueListEditor2.InsertRow(rsMaxOffset,inttostr(VcHalfwidth),true);
-      f_focusercalibration.ValueListEditor2.InsertRow(rsNumberOfStep,inttostr(VcNsteps),true);
-    end;
     f_focusercalibration.ValueListEditor2.InsertRow(rsNumberOfDyna,inttostr(AutofocusDynamicNumPoint),true);
     f_focusercalibration.ValueListEditor2.InsertRow(rsMovementBetw,inttostr(AutofocusDynamicMovement),true);
-    f_focusercalibration.ValueListEditor2.InsertRow(rsInitialMovem,inttostr(AutofocusMaxSpeed),true);
-    f_focusercalibration.ValueListEditor2.InsertRow(rsFinalMovemen,inttostr(AutofocusMinSpeed),true);
     finally
       f_starprofile.FindStar:=false;
       if FocAbsolute then
@@ -14814,21 +14420,6 @@ begin
   NewMessage(rsCameraOrFocu,1);
   f_starprofile.ChkAutofocusDown(false);
   exit;
- end;
- if(AutofocusMode=afVcurve) and (config.GetValue('/StarAnalysis/Vcurve/AutofocusVcBinning',AutofocusBinning)<>AutofocusBinning) then begin
-   NewMessage(Format(rsPleaseRunVcu, [inttostr(AutofocusBinning)]),1);
-   f_starprofile.ChkAutofocusDown(false);
-   exit;
- end;
- if (AutofocusMode=afVcurve) and(AutofocusVcNum<=0) then begin
-   NewMessage(rsPleaseRunThe2, 1);
-   f_starprofile.ChkAutofocusDown(false);
-   exit;
- end;
- if (AutofocusMode=afVcurve) and(AutofocusVcDir<>AutofocusMoveDir) then begin
-   NewMessage(rsPleaseRunThe,1);
-   f_starprofile.ChkAutofocusDown(false);
-   exit;
  end;
  if EarlyNextExposure then Application.ProcessMessages; // save previous image
  NewMessage(rsAutofocusNow,1);
@@ -15156,21 +14747,6 @@ begin
   end;
   if (f_capture.Running or f_sequence.Running) and (not autofocusing) then begin
     NewMessage(rsCannotStartA3,1);
-    f_starprofile.ChkAutofocusDown(false);
-    exit;
-  end;
-  if (AutofocusMode=afVcurve) and((AutofocusVcNum<=0)or(AutofocusVcpiL<0)or(AutofocusVcpiR<0)) then begin
-    NewMessage(rsPleaseRunThe2, 1);
-    f_starprofile.ChkAutofocusDown(false);
-    exit;
-  end;
-  if (AutofocusMode=afVcurve) and(AutofocusVcDir<>AutofocusMoveDir) then begin
-    NewMessage(rsPleaseRunThe,1);
-    f_starprofile.ChkAutofocusDown(false);
-    exit;
-  end;
-  if (AutofocusMode=afVcurve) and (config.GetValue('/StarAnalysis/Vcurve/AutofocusVcBinning',AutofocusBinning)<>AutofocusBinning) then begin
-    NewMessage(Format(rsPleaseRunVcu, [inttostr(AutofocusBinning)]),1);
     f_starprofile.ChkAutofocusDown(false);
     exit;
   end;

@@ -103,13 +103,13 @@ object f_focuser: Tf_focuser
         object PageRelPos: TPage
           object PanelRelPos: TPanel
             Left = 0
-            Height = 57
+            Height = 37
             Top = 0
-            Width = 208
+            Width = 184
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 57
-            ClientWidth = 208
+            ClientHeight = 37
+            ClientWidth = 184
             ParentFont = False
             TabOrder = 0
             object Label6: TLabel
@@ -214,19 +214,6 @@ object f_focuser: Tf_focuser
               ParentFont = False
               TabOrder = 1
             end
-            object BtnVcurve: TButton
-              AnchorSideTop.Control = PosIncr
-              AnchorSideTop.Side = asrCenter
-              Left = 128
-              Height = 24
-              Hint = 'V curve learning'
-              Top = 34
-              Width = 80
-              Caption = 'V-learn'
-              OnClick = BtnVcurveClick
-              ParentFont = False
-              TabOrder = 2
-            end
             object Position: TSpinEditEx
               Left = 34
               Height = 32
@@ -234,7 +221,7 @@ object f_focuser: Tf_focuser
               Width = 92
               MaxLength = 0
               ParentFont = False
-              TabOrder = 3
+              TabOrder = 2
               MaxValue = 9999999
               MinValue = -999999
               NullValue = 0

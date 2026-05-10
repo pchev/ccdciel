@@ -288,23 +288,13 @@ begin
   config.SetValue('/StarAnalysis/AutoFocusMode',ord(AutofocusMode));
   config.SetValue('/StarAnalysis/AutofocusInPlace',AutofocusInPlace);
   config.SetValue('/StarAnalysis/AutofocusBinning',AutofocusBinning);
-  config.SetValue('/StarAnalysis/AutofocusStartHFD',AutofocusStartHFD);
-  config.SetValue('/StarAnalysis/AutofocusNearHFD',AutofocusNearHFD);
-  config.SetValue('/StarAnalysis/AutofocusNearNum',AutofocusNearNum);
   config.SetValue('/StarAnalysis/AutofocusTolerance',AutofocusTolerance);
   config.SetValue('/StarAnalysis/AutofocusMinSNR',AutofocusMinSNR);
   config.SetValue('/StarAnalysis/AutofocusMoveDir',AutofocusMoveDir);
-  if FAbsolute then begin
-    config.SetValue('/StarAnalysis/Vcurve/VcCenterpos',VcCenterpos);
-    config.SetValue('/StarAnalysis/Vcurve/VcHalfwidth',VcHalfwidth);
-    config.SetValue('/StarAnalysis/Vcurve/VcNsteps',VcNsteps);
-  end;
   config.SetValue('/StarAnalysis/AutofocusDynamicNumPoint',AutofocusDynamicNumPoint);
   config.SetValue('/StarAnalysis/AutofocusDynamicMovement',AutofocusDynamicMovement);
   config.SetValue('/StarAnalysis/AutofocusPlanetNumPoint',AutofocusPlanetNumPoint);
   config.SetValue('/StarAnalysis/AutofocusPlanetMovement',AutofocusPlanetMovement);
-  config.SetValue('/StarAnalysis/AutofocusMinSpeed',AutofocusMinSpeed);
-  config.SetValue('/StarAnalysis/AutofocusMaxSpeed',AutofocusMaxSpeed);
   config.SetValue('/StarAnalysis/FocuserBacklash',Ffocuser.Backlash);
   config.SetValue('/StarAnalysis/FocuserBacklashActive',Ffocuser.BacklashActive);
   config.SetValue('/StarAnalysis/FocuserBacklashDirection',Ffocuser.BacklashDirection);

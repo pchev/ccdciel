@@ -142,7 +142,6 @@ resourcestring
   rsHFDMeasuring = 'HFD Focus Monitor: Measuring. %d of %d HFD measurements completed.';
   rsHFDActive = 'HFD Focus Monitor: Active. Threshold: %s%%, Reference HFD: %s';
   rsHFMTriggered = 'HFD Focus Monitor: Threshold: %s%%, Ref: %s, %s-Image Avg: %s, HFD Delta: %s%%';
-  rsStopVcurveLe = 'Stop Vcurve learning';
   rsMeasurementH = 'Measurement %s hfd:%s peak:%s snr:%s';
   rsCannotDetect = 'Cannot detect star.';
   rsCannotReachN = 'Cannot reach near focus HFD, please increase Half Width or'
@@ -207,8 +206,6 @@ resourcestring
   rsFocusAidStop = 'Focus aid stopped';
   rsAutofocusAlr = 'Autofocus already running.';
   rsPleaseConfig2 = 'Please configure the Autofocus options.';
-  rsPleaseRunVcu = 'Please run Vcurve learning for binning %s';
-  rsPleaseRunThe = 'Please run the V-curve learning for this focuser direction first. Button V-learn.';
   rsAutofocusNow = 'Autofocus now';
   rsStopAutoguid = 'Stop autoguider';
   rsStayAtTheCur = 'Stay at the current position for autofocus';
@@ -323,7 +320,6 @@ resourcestring
   rsIncr = 'Incr.';
   rsPos = 'Pos.';
   rsStep = 'Step';
-  rsVLearn = 'V-learn';
   rsTemp = 'Temp.';
   rsTelescopePos = 'Telescope position';
   rsRA = 'RA';
@@ -379,7 +375,6 @@ resourcestring
   rsImageInspect = 'Image inspection';
   rsManualFocusA = 'Manual focus aid';
   rsAutofocus = 'Autofocus';
-  rsAutofocusSta3 = 'Autofocus start Vcurve';
   rsAutofocusSta4 = 'Autofocus start Dynamic curve';
   rsAutofocusSta5 = 'Autofocus start Iterative focus';
   rsAutofocusCan2 = 'Autofocus canceled because no star was selected.';
@@ -389,7 +384,6 @@ resourcestring
   rsAutofocusCan5 = 'Autofocus canceled because of low SNR, POS=%s HFD=%s PEAK'
     +':%s SNR:%s';
   rsAutofocusFin = 'Autofocus finished, POS=%s HFD=%s PEAK:%s SNR:%s TEMP:%s';
-  rsFocuserSlipp = 'Focuser slippage offset set to %s';
   rsAutofocusFin2 = 'Autofocus final HFD is higher than %s';
   rsAutofocusRun = 'Autofocus running, hfd=%s peak:%s snr:%s';
   rsStartFocusHF = 'Start focus HFD is outside of current V curve, please '
@@ -413,19 +407,8 @@ resourcestring
   rsAutofocusFoc = 'Autofocus focus in by %s';
   rsAutofocusFoc2 = 'Autofocus focus out by %s';
   rsFocusPositio = 'Focus position';
-  rsMaxOffset = 'Max offset';
-  rsNumberOfStep = 'Number of steps';
-  rsGetCurrent = 'Get current';
-  rsFocusDirecti = 'Focus direction';
-  rsFit = 'Fit';
-  rsQuality = 'Quality:';
-  rsSlope = 'Slope';
   rsCenter = 'Center';
-  rsLearn = 'Learn';
   rsSave = 'Save';
-  rsVCurveQualit = 'V curve quality is low. Do you really want to save this '
-    +'curve?';
-  rsFocusDirecti2 = 'Focus direction: ';
   rsIn = 'In';
   rsOut = 'Out';
   rsInterface = 'Interface';
@@ -512,8 +495,6 @@ resourcestring
   rsAutofocusMet = 'Autofocus method';
   rsSeconds = 'seconds';
   rsMoveDirectio = 'Move direction';
-  rsSlippageCorr = 'Slippage correction ';
-  rsEstimatedSli = 'Estimated slippage since last learning';
   rsNumberOfDyna = 'Number of dynamic points';
   rsMovementBetw = 'Movement between points';
   rsInitialMovem = 'Initial movement (steps)';
@@ -597,9 +578,7 @@ resourcestring
   rsBlue = 'blue';
   rsNone2 = 'None';
   rsTwilightSkyF = 'Twilight sky flat';
-  rsVCurve = 'V curve';
   rsDynamic = 'Dynamic';
-  rsIterative = 'Iterative';
   rsMountSync = 'Mount sync';
   rsPointingOffs = 'Pointing offset';
   rsDoNothing = 'Do nothing';
@@ -822,7 +801,6 @@ resourcestring
   rsPlanStopped = 'Plan %s stopped.';
   rsRepeatStep = 'Repeat step %s/%s %s';
   rsShowINDILog = 'Show INDI log';
-  rsNumberOfExpo = 'Number of exposure per point';
   rsSomeDefinedD = 'Some defined devices are not connected';
   rsOpenPictureF = 'Open FITS or picture file%s';
   rsPauseAutogui = 'Pause autoguider';
@@ -844,7 +822,6 @@ resourcestring
   rsWeAreProbabl = 'We are probably trying to focus on a hot pixel!';
   rsPleaseCreate =
     'Please create a new bad pixel map or select a brighter star';
-  rsItIsSuggestT = 'It is suggest to slew to focus star when using Vcurve';
   rsSystemIsUnde = 'System is undersampled, accept 1 pixel star';
   rsMagnifyer = 'Magnifier';
   rsDomePanel = 'Dome/Panel';

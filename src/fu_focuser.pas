@@ -36,7 +36,6 @@ type
     BtnDown: TButton;
     BtnUp: TButton;
     BtnSetAbsPos: TButton;
-    BtnVcurve: TButton;
     Label5: TLabel;
     lblTemp: TLabel;
     PanelTemp: TPanel;
@@ -65,10 +64,9 @@ type
     procedure BtnDownClick(Sender: TObject);
     procedure BtnSetAbsPosClick(Sender: TObject);
     procedure BtnUpClick(Sender: TObject);
-    procedure BtnVcurveClick(Sender: TObject);
   private
     { private declarations }
-    FonFocusIN, FonFocusOUT, FonSetAbsPos,FonVcurveLearning: TNotifyEvent;
+    FonFocusIN, FonFocusOUT, FonSetAbsPos: TNotifyEvent;
     FBacklashActive: boolean;
     LastAbsolutePosition: integer;
     procedure SetSpeed(value:integer);
@@ -89,7 +87,6 @@ type
     property onFocusIN: TNotifyEvent read FonFocusIN write FonFocusIN;
     property onFocusOUT: TNotifyEvent read FonFocusOUT write FonFocusOUT;
     property onSetAbsolutePosition: TNotifyEvent read FonSetAbsPos write FonSetAbsPos;
-    property onVcurveLearning: TNotifyEvent read FonVcurveLearning write FonVcurveLearning;
   end;
 
 implementation
@@ -132,12 +129,10 @@ begin
   label1.Caption:=rsPos;
   label2.Caption:=rsStep;
   BtnSetAbsPos.Caption:=rsSet;
-  BtnVcurve.Caption:=rsVLearn;
   label5.Caption:=rsTemp;
   RelIncr.Hint:=rsRelativeIncr;
   PosIncr.Hint:=rsIncrementSte;
   BtnSetAbsPos.Hint:=rsSetAbsoluteF;
-  BtnVcurve.Hint:=rsVCurveLearni;
   BtnDown.Hint:=rsMoveFocuserI;
   BtnUp.Hint:=rsMoveFocuserO;
 end;
@@ -156,11 +151,6 @@ end;
 procedure Tf_focuser.BtnUpClick(Sender: TObject);
 begin
   if Assigned(FonFocusOUT) then FonFocusOUT(self);
-end;
-
-procedure Tf_focuser.BtnVcurveClick(Sender: TObject);
-begin
-  if Assigned(FonVcurveLearning) then FonVcurveLearning(self);
 end;
 
 procedure Tf_focuser.SetSpeed(value:integer);

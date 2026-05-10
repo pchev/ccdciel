@@ -14,7 +14,6 @@ resourcestring
   rsStartTheCapt = 'Start the capture sequence';
   rsIncrementSte = 'Increment step for the inward or outward movement';
   rsSetAbsoluteF = 'Set absolute focuser position';
-  rsVCurveLearni = 'V curve learning';
   rsMoveFocuserI = 'Move focuser inward';
   rsMoveFocuserO = 'Move focuser outward';
   rsStartX = 'Start X';
@@ -89,25 +88,14 @@ resourcestring
   rsSaveTheListA = 'Save the list and close this window.';
   rsSaveTheListW = 'Save the list with a new name and close this window.';
   rsUseDynamic2 = 'Dynamic can be use with an absolute or relative position focuser,%s this method require the starting position is near the focus position.%s This is the preferred method.';
-  rsUseVcurveWi2 = 'Vcurve can only work with an absolute position focuser, it require to learn the curve.';
-  rsUseIterati2 = 'Use Iterative if the first two options do not work for you or if you start with really bad focus.%s This is the slowest and less precise method.';
   rsTheDirection = 'The direction the focuser will always finish to move.%sIf '
     +'using auto-focus set the same move direction.';
   rsActivateBack = 'Activate backlash compensation.%sLet this disabled if your'
     +' focuser driver include backlash compensation.';
   rsThePreferedF = 'The preferred focuser direction for autofocus.';
-  rsTryToCorrect = 'Try to correct for focuser slippage since the last Vcurve '
-    +'learning.%sBeware you must set the focuser temperature correction and '
-    +'the filters offset before to use this option.';
   rsTheMagnitude = 'The magnitude of the star used to run the autofocus.%'
     +'sUsing a faint star can minimize the telescope movement but prefer the '
     +'brightest to avoid trouble with nearby stars.';
-  rsStartTheVcur = 'Start the Vcurve learning process';
-  rsIfTheImageIs = 'If the image is now focused, click this button to get the '
-    +'current focuser position';
-  rsAfterLearnin = 'After learning is completed you can use this cursor to '
-    +'better adjust to the linear part of the curve.%sThe fit must be '
-    +'particularly good near the horizontal blue line position.';
   rsTheObjectNam = 'The object name for use in FITS header and file name';
   rsTheNumberOfI = 'The number of images to take';
   rsTheTypeOfFra = 'The type of frame';

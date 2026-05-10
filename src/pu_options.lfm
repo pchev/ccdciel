@@ -3260,16 +3260,14 @@ object f_option: Tf_option
           ChildSizing.ShrinkHorizontal = crsScaleChilds
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
-          ChildSizing.ControlsPerLine = 5
+          ChildSizing.ControlsPerLine = 3
           ClientHeight = 26
           ClientWidth = 551
-          Columns = 5
+          Columns = 3
           Items.Strings = (
-            'Dynamic'
-            'V curve'
-            'Iterative'
-            'Planet'
             'None'
+            'Dynamic'
+            'Planet'
           )
           OnClick = AutofocusmodeClick
           ParentFont = False
@@ -3277,12 +3275,12 @@ object f_option: Tf_option
         end
         object PanelAutofocus: TPanel
           Left = 0
-          Height = 269
+          Height = 246
           Top = 90
           Width = 555
           Align = alTop
           BevelOuter = bvNone
-          ClientHeight = 269
+          ClientHeight = 246
           ClientWidth = 555
           ParentFont = False
           TabOrder = 1
@@ -3295,7 +3293,7 @@ object f_option: Tf_option
             BevelOuter = bvNone
             ClientHeight = 96
             ClientWidth = 555
-            TabOrder = 6
+            TabOrder = 5
             object AutofocusPanelGain: TPanel
               Left = 0
               Height = 32
@@ -3501,43 +3499,6 @@ object f_option: Tf_option
             ParentFont = False
             TabOrder = 0
           end
-          object PanelNearFocus: TPanel
-            Left = 0
-            Height = 31
-            Top = 147
-            Width = 555
-            Align = alBottom
-            BevelOuter = bvNone
-            ClientHeight = 31
-            ClientWidth = 555
-            ParentFont = False
-            TabOrder = 3
-            object Label57: TLabel
-              AnchorSideTop.Control = AutofocusNearNum
-              AnchorSideTop.Side = asrCenter
-              Left = 8
-              Height = 18
-              Top = 5
-              Width = 180
-              Caption = 'Number of exposure by point'
-              ParentColor = False
-              ParentFont = False
-            end
-            object AutofocusNearNum: TSpinEditEx
-              Left = 214
-              Height = 28
-              Top = 0
-              Width = 61
-              Constraints.MaxHeight = 28
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 0
-              MaxValue = 10
-              MinValue = 1
-              NullValue = 0
-              Value = 1
-            end
-          end
           object Label54: TLabel
             AnchorSideTop.Control = AutofocusMinSNR
             AnchorSideTop.Side = asrCenter
@@ -3581,7 +3542,7 @@ object f_option: Tf_option
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
-            TabOrder = 4
+            TabOrder = 3
             Increment = 0.1
             MaxValue = 99
             MinValue = 1
@@ -3595,7 +3556,7 @@ object f_option: Tf_option
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
-            TabOrder = 5
+            TabOrder = 4
             DecimalPlaces = 1
             MaxValue = 99
             MinValue = 1
@@ -3604,12 +3565,14 @@ object f_option: Tf_option
           object AutofocusNotebook: TNotebook
             Left = 0
             Height = 91
-            Top = 178
+            Top = 155
             Width = 555
-            PageIndex = 0
+            PageIndex = 1
             Align = alBottom
             TabOrder = 2
             TabStop = True
+            object PageNone: TPage
+            end
             object PageDynamic: TPage
               object Label64: TLabel
                 AnchorSideTop.Control = AutofocusDynamicNumPoint
@@ -3660,161 +3623,6 @@ object f_option: Tf_option
                 Value = 1
               end
             end
-            object PageVcurve: TPage
-              object Label82: TLabel
-                AnchorSideTop.Control = AutofocusNearHFD
-                AnchorSideTop.Side = asrCenter
-                Left = 8
-                Height = 18
-                Top = 5
-                Width = 66
-                Caption = 'Start focus'
-                ParentColor = False
-                ParentFont = False
-              end
-              object Label83: TLabel
-                AnchorSideTop.Control = AutofocusNearHFD
-                AnchorSideTop.Side = asrCenter
-                Left = 178
-                Height = 18
-                Top = 5
-                Width = 26
-                Caption = 'HFD'
-                ParentColor = False
-                ParentFont = False
-              end
-              object AutofocusSlippageCorrection: TCheckBox
-                Left = 8
-                Height = 22
-                Hint = 'Try to correct for focuser slippage since the last Vcurve learning.'#10'Beware you must set the focuser temperature correction and the filters offset before to use this option.'
-                Top = 32
-                Width = 150
-                Caption = 'Slippage correction '
-                ParentFont = False
-                TabOrder = 0
-              end
-              object Label88: TLabel
-                AnchorSideTop.Control = AutofocusSlippageOffset
-                AnchorSideTop.Side = asrCenter
-                Left = 8
-                Height = 18
-                Top = 59
-                Width = 230
-                Caption = 'Estimated slippage since last learning'
-                ParentColor = False
-                ParentFont = False
-              end
-              object Label48: TLabel
-                AnchorSideTop.Control = AutofocusNearHFD
-                AnchorSideTop.Side = asrCenter
-                Left = 283
-                Height = 18
-                Top = 5
-                Width = 67
-                Caption = 'Near focus'
-                ParentColor = False
-                ParentFont = False
-              end
-              object AutofocusStartHFD: TFloatSpinEditEx
-                AnchorSideTop.Control = AutofocusNearHFD
-                AnchorSideTop.Side = asrCenter
-                Left = 214
-                Height = 28
-                Top = 0
-                Width = 61
-                Constraints.MaxHeight = 28
-                MaxLength = 0
-                ParentFont = False
-                TabOrder = 1
-                OnEditingDone = CheckStartNearHFD
-                DecimalPlaces = 1
-                Increment = 0.1
-                MaxValue = 99
-                MinValue = 1
-                Value = 1
-              end
-              object AutofocusNearHFD: TFloatSpinEditEx
-                Left = 356
-                Height = 28
-                Top = 0
-                Width = 61
-                Constraints.MaxHeight = 28
-                MaxLength = 0
-                ParentFont = False
-                TabOrder = 2
-                OnEditingDone = CheckStartNearHFD
-                DecimalPlaces = 1
-                Increment = 0.1
-                MaxValue = 99
-                MinValue = 1
-                Value = 1
-              end
-              object AutofocusSlippageOffset: TSpinEditEx
-                AnchorSideTop.Control = AutofocusSlippageCorrection
-                AnchorSideTop.Side = asrBottom
-                Left = 356
-                Height = 28
-                Top = 54
-                Width = 61
-                Constraints.MaxHeight = 28
-                MaxLength = 0
-                ParentFont = False
-                TabOrder = 3
-                MaxValue = 10000
-                NullValue = 0
-                Value = 0
-              end
-            end
-            object PageIterative: TPage
-              object Label46: TLabel
-                AnchorSideTop.Control = AutofocusMaxSpeed
-                AnchorSideTop.Side = asrCenter
-                Left = 8
-                Height = 18
-                Top = 7
-                Width = 148
-                Caption = 'Initial movement (steps)'
-                ParentColor = False
-                ParentFont = False
-              end
-              object Label47: TLabel
-                AnchorSideTop.Control = AutofocusMinSpeed
-                AnchorSideTop.Side = asrCenter
-                Left = 8
-                Height = 18
-                Top = 39
-                Width = 142
-                Caption = 'Final movement (steps)'
-                ParentColor = False
-                ParentFont = False
-              end
-              object AutofocusMaxSpeed: TSpinEditEx
-                Left = 214
-                Height = 32
-                Top = 0
-                Width = 61
-                MaxLength = 0
-                ParentFont = False
-                TabOrder = 0
-                MaxValue = 10000
-                MinValue = 10
-                NullValue = 0
-                Value = 10
-              end
-              object AutofocusMinSpeed: TSpinEditEx
-                Left = 214
-                Height = 32
-                Top = 32
-                Width = 61
-                MaxLength = 0
-                ParentFont = False
-                TabOrder = 1
-                MaxValue = 1000
-                MinValue = 2
-                NullValue = 0
-                Value = 2
-              end
-            end
             object PagePlanet: TPage
               object Label141: TLabel
                 Left = 8
@@ -3861,14 +3669,12 @@ object f_option: Tf_option
                 Value = 1
               end
             end
-            object PageNone: TPage
-            end
           end
         end
         object PanelFocusStar: TPanel
           Left = 0
           Height = 217
-          Top = 359
+          Top = 336
           Width = 555
           Align = alTop
           ClientHeight = 217
@@ -3877,12 +3683,12 @@ object f_option: Tf_option
           TabOrder = 2
           object AutofocusSlewStar: TGroupBox
             Left = 1
-            Height = 133
-            Top = 83
+            Height = 160
+            Top = 56
             Width = 553
             Align = alClient
             Caption = 'Focus star selection'
-            ClientHeight = 103
+            ClientHeight = 130
             ClientWidth = 549
             ParentFont = False
             TabOrder = 0
@@ -3966,12 +3772,12 @@ object f_option: Tf_option
           end
           object AutofocusMultistar: TGroupBox
             Left = 1
-            Height = 133
-            Top = 83
+            Height = 160
+            Top = 56
             Width = 553
             Align = alClient
             Caption = 'Focus star selection'
-            ClientHeight = 103
+            ClientHeight = 130
             ClientWidth = 549
             ParentFont = False
             TabOrder = 1
@@ -4040,12 +3846,12 @@ object f_option: Tf_option
           end
           object Panel16: TPanel
             Left = 1
-            Height = 82
+            Height = 55
             Top = 1
             Width = 553
             Align = alTop
             BevelOuter = bvNone
-            ClientHeight = 82
+            ClientHeight = 55
             ClientWidth = 553
             ParentFont = False
             TabOrder = 2
@@ -4087,18 +3893,6 @@ object f_option: Tf_option
               ParentFont = False
               TabOrder = 1
             end
-            object LabelMultistarWarning: TLabel
-              AnchorSideTop.Control = AutofocusInPlace
-              AnchorSideTop.Side = asrBottom
-              Left = 4
-              Height = 18
-              Top = 48
-              Width = 7
-              BorderSpacing.Top = 2
-              Caption = '  '
-              ParentColor = False
-              ParentFont = False
-            end
             object Label67: TLabel
               Left = 1
               Height = 18
@@ -4132,21 +3926,21 @@ object f_option: Tf_option
         end
         object GroupBoxExpert: TGroupBox
           Left = 0
-          Height = 92
-          Top = 576
+          Height = 115
+          Top = 553
           Width = 555
           Align = alClient
           Caption = 'Expert trick'
-          ClientHeight = 62
+          ClientHeight = 85
           ClientWidth = 551
           TabOrder = 4
           object Panel41: TPanel
             Left = 0
-            Height = 62
+            Height = 85
             Top = 0
             Width = 288
             Align = alLeft
-            ClientHeight = 62
+            ClientHeight = 85
             ClientWidth = 288
             TabOrder = 0
             object Label174: TLabel
@@ -4181,11 +3975,11 @@ object f_option: Tf_option
           end
           object PanelAutofocusFilter: TPanel
             Left = 288
-            Height = 62
+            Height = 85
             Top = 0
             Width = 263
             Align = alClient
-            ClientHeight = 62
+            ClientHeight = 85
             ClientWidth = 263
             TabOrder = 1
             object cbAutofocusFilter: TComboBox

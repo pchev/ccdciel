@@ -109,9 +109,12 @@ object f_focusercalibration: Tf_focusercalibration
         Top = 299
         Width = 81
         Constraints.MaxHeight = 28
-        MaxValue = 10000
+        MaxLength = 0
         ParentFont = False
         TabOrder = 2
+        MaxValue = 10000
+        NullValue = 0
+        Value = 0
       end
     end
     object Page3: TPage
@@ -174,9 +177,11 @@ object f_focusercalibration: Tf_focusercalibration
         Top = 154
         Width = 81
         Constraints.MaxHeight = 28
-        MinValue = 5
+        MaxLength = 0
         ParentFont = False
         TabOrder = 1
+        MinValue = 5
+        NullValue = 0
         Value = 5
       end
       object stepmin: TSpinEditEx
@@ -185,10 +190,12 @@ object f_focusercalibration: Tf_focusercalibration
         Top = 212
         Width = 81
         Constraints.MaxHeight = 28
-        MaxValue = 1000
-        MinValue = 1
+        MaxLength = 0
         ParentFont = False
         TabOrder = 2
+        MaxValue = 1000
+        MinValue = 1
+        NullValue = 0
         Value = 1
       end
     end

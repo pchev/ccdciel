@@ -42,7 +42,7 @@ uses
   pu_edittargets, cu_autoguider, cu_planetarium, fu_planetarium, cu_astrometry,
   pu_planetariuminfo, cu_planetarium_cdc, cu_targets, cu_plan, pu_scripteditor,
   pu_scriptengine, fu_mount, enhedit, downldialog, pu_pause, UScaleDPI,
-  fu_video, pu_vcurve, cu_incamerawheel, cu_planetarium_hnsky, cu_indirotator,
+  fu_video, cu_incamerawheel, cu_planetarium_hnsky, cu_indirotator,
   cu_ascomrotator, cu_rotator, fu_rotator, cu_autoguider_linguider, cu_watchdog,
   cu_indiwatchdog, pu_focusercalibration, cu_tcpserver, u_translation,
   pu_hyperbola, fu_magnifyer, u_annotation, cu_safety, cu_weather,

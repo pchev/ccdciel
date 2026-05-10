@@ -519,7 +519,6 @@ type
     Label52: TLabel;
     Label56: TLabel;
     Label61: TLabel;
-    LabelMultistarWarning: TLabel;
     MaxAduFromCamera: TCheckBox;
     ElevationMin: TFloatSpinEditEx;
     ClippingLow: TFloatSpinEditEx;
@@ -532,8 +531,6 @@ type
     FlatLevelMax: TSpinEditEx;
     AutofocusTolerance: TFloatSpinEditEx;
     AutofocusMinSNR: TFloatSpinEditEx;
-    AutofocusStartHFD: TFloatSpinEditEx;
-    AutofocusNearHFD: TFloatSpinEditEx;
     AutofocusPrecisionSlew: TFloatSpinEditEx;
     Downsample: TSpinEditEx;
     DitherPixel: TFloatSpinEditEx;
@@ -574,12 +571,8 @@ type
     FocuserBacklash: TSpinEditEx;
     FocuserDelay: TSpinEditEx;
     AutofocusBinning: TSpinEditEx;
-    AutofocusNearNum: TSpinEditEx;
-    AutofocusSlippageOffset: TSpinEditEx;
     AutofocusDynamicNumPoint: TSpinEditEx;
     AutofocusDynamicMovement: TSpinEditEx;
-    AutofocusMaxSpeed: TSpinEditEx;
-    AutofocusMinSpeed: TSpinEditEx;
     AstrometryTimeout: TSpinEditEx;
     TemperatureSlope: TFloatSpinEditEx;
     Languages: TComboBox;
@@ -616,7 +609,6 @@ type
     AstCustScript: TFileNameEdit;
     ButtonTempDir: TButton;
     CameraAutoCool: TCheckBox;
-    AutofocusSlippageCorrection: TCheckBox;
     TempDir: TEdit;
     FlatAutoExposure: TCheckBox;
     FileOptions: TStringGrid;
@@ -634,13 +626,10 @@ type
     GroupBox16: TGroupBox;
     GroupBox17: TGroupBox;
     Label81: TLabel;
-    Label82: TLabel;
-    Label83: TLabel;
     Label84: TLabel;
     Label85: TLabel;
     Label86: TLabel;
     Label87: TLabel;
-    Label88: TLabel;
     Label89: TLabel;
     Label90: TLabel;
     Notebook3: TNotebook;
@@ -684,16 +673,12 @@ type
     GroupCorrection: TGroupBox;
     AutofocusSlewStar: TGroupBox;
     GroupBox12: TGroupBox;
-    Label46: TLabel;
-    Label47: TLabel;
-    Label48: TLabel;
     Label49: TLabel;
     Label50: TLabel;
     Label51: TLabel;
     Label53: TLabel;
     Label54: TLabel;
     Label55: TLabel;
-    Label57: TLabel;
     Label58: TLabel;
     AutofocusNotebook: TNotebook;
     Label59: TLabel;
@@ -705,9 +690,6 @@ type
     Label66: TLabel;
     PageDynamic: TPage;
     PageNone: TPage;
-    PageVcurve: TPage;
-    PageIterative: TPage;
-    PanelNearFocus: TPanel;
     PanelAutofocus: TPanel;
     AutofocusMoveDirIn: TRadioButton;
     AutofocusMoveDirOut: TRadioButton;
@@ -852,7 +834,6 @@ type
     procedure ButtonVoiceTestClick(Sender: TObject);
     procedure ChangeAutofocusInPlace(Sender: TObject);
     procedure CheckFocuserDirection(Sender: TObject);
-    procedure CheckStartNearHFD(Sender: TObject);
     procedure ButtonDirClick(Sender: TObject);
     procedure CheckBoxLocalCdcChange(Sender: TObject);
     procedure DomeSlaveToMountChange(Sender: TObject);
@@ -1305,15 +1286,8 @@ begin
   Label58.Caption := rsMoveDirectio;
   AutofocusMoveDirIn.Caption := rsIn;
   AutofocusMoveDirOut.Caption := rsOut;
-  Label82.Caption := rsStartFocus;
-  AutofocusSlippageCorrection.Caption := rsSlippageCorr;
-  Label88.Caption := rsEstimatedSli;
   Label64.Caption := rsNumberOfDyna;
   Label65.Caption := rsMovementBetw;
-  Label46.Caption := rsInitialMovem;
-  Label47.Caption := rsFinalMovemen;
-  Label48.Caption := rsNearFocus;
-  Label57.Caption := rsNumberOfExpo;
   Label50.Caption := rsBinning;
   cbAFmedianfilter.Caption:=rsNoiseFilter;
   Label54.Caption := rsAutofocusTol;
@@ -1468,11 +1442,9 @@ begin
   FlatType.Items[0]:=rsNone2;
   FlatType.Items[1]:=rsTwilightSkyF;
   FlatType.Items[2]:=rsDomePanel;
-  Autofocusmode.items[0]:=rsDynamic;
-  Autofocusmode.items[1]:=rsVCurve;
-  Autofocusmode.items[2]:=rsIterative;
-  Autofocusmode.items[3]:=rsPlanet;
-  Autofocusmode.items[4]:=rsNone2;
+  Autofocusmode.items[0]:=rsNone2;
+  Autofocusmode.items[1]:=rsDynamic;
+  Autofocusmode.items[2]:=rsPlanet;
   ResolverBox.Items[0]:=rsNone2;
   PrecSlewBox.Items[0]:=rsMountSync;
   PrecSlewBox.Items[1]:=rsPointingOffs;
@@ -1582,8 +1554,7 @@ begin
   FocuserBacklashActive.Hint:=Format(rsActivateBack, [crlf]);
   AutofocusMoveDirIn.Hint:=rsThePreferedF;
   AutofocusMoveDirOut.Hint:=rsThePreferedF;
-  Autofocusmode.Hint:='- '+Format(rsUseDynamic2,[crlf+blank,crlf+blank])+crlf+'- '+rsUseVcurveWi2+crlf+'- '+Format(rsUseIterati2,[crlf+blank]);
-  AutofocusSlippageCorrection.Hint:=Format(rsTryToCorrect, [crlf]);
+  Autofocusmode.Hint:='- '+Format(rsUseDynamic2,[crlf+blank,crlf+blank]);
   FocusStarMag.Hint:=Format(rsTheMagnitude, [crlf]);
   AutofocusPauseGuider.Hint:=rsBeSureToPaus;
   AstrometryPath.Hint := rsLetBlankForD;
@@ -2059,17 +2030,12 @@ end;
 
 procedure Tf_option.ChangeAutofocusInPlace(Sender: TObject);
 begin
-  if (Autofocusmode.ItemIndex=3) then begin
+  if (Autofocusmode.ItemIndex=0) then begin
     AutofocusInPlace.Checked:=true;
     AutofocusSlew.Checked:=false;
   end;
   AutofocusMultistar.Visible:=AutofocusInPlace.Checked;
   AutofocusSlewStar.Visible:=not AutofocusMultistar.Visible;
-  PanelNearFocus.Visible:=AutofocusSlewStar.Visible;
-  if AutofocusInPlace.Checked and (Autofocusmode.ItemIndex=1) then
-     LabelMultistarWarning.Caption:=rsItIsSuggestT
-  else
-    LabelMultistarWarning.Caption:='';
 end;
 
 procedure Tf_option.CheckFocuserDirection(Sender: TObject);
@@ -2145,34 +2111,28 @@ end;
 procedure Tf_option.SetAutofocusMode(value: TAutofocusMode);
 begin
   case value of
-  afVcurve    : Autofocusmode.ItemIndex:=1;
-  afDynamic   : Autofocusmode.ItemIndex:=0;
-  afIterative : Autofocusmode.ItemIndex:=2;
-  afNone      : Autofocusmode.ItemIndex:=4;
-  afPlanet    : Autofocusmode.ItemIndex:=3;
+  afNone      : Autofocusmode.ItemIndex:=0;
+  afDynamic   : Autofocusmode.ItemIndex:=1;
+  afPlanet    : Autofocusmode.ItemIndex:=2;
   end;
 end;
 
 function  Tf_option.GetAutofocusMode: TAutofocusMode;
 begin
  case Autofocusmode.ItemIndex of
-   0 : result:=afDynamic;
-   1 : result:=afVcurve;
-   2 : result:=afIterative;
-   3 : result:=afPlanet;
-   4 : result:=afNone;
+   0 : result:=afNone;
+   1 : result:=afDynamic;
+   2 : result:=afPlanet;
  end;
-
 end;
 
 procedure Tf_option.AutofocusmodeClick(Sender: TObject);
 begin
-  if Autofocusmode.ItemIndex<>0 then GuiderAutofocus.Checked:=false;
+  if Autofocusmode.ItemIndex<>1 then GuiderAutofocus.Checked:=false;
   AutofocusNotebook.PageIndex:=Autofocusmode.ItemIndex;
-  PanelAutofocus.Visible:=(Autofocusmode.ItemIndex<4);
+  PanelAutofocus.Visible:=(Autofocusmode.ItemIndex>0);
   PanelFocusStar.Visible:=PanelAutofocus.Visible;
-  GroupBoxExpert.Visible:=(Autofocusmode.ItemIndex=0);
-  PanelNearFocus.Visible:=true;
+  GroupBoxExpert.Visible:=(Autofocusmode.ItemIndex=1);
   CheckFocuserDirection(Sender);
   ChangeAutofocusInPlace(Sender);
 end;
@@ -2537,15 +2497,6 @@ end;
 procedure Tf_option.ButtonHelpClick(Sender: TObject);
 begin
   if Assigned(FShowHelp) then FShowHelp(self);
-end;
-
-procedure Tf_option.CheckStartNearHFD(Sender: TObject);
-var a,b: double;
-begin
-  msg('');
-  a:=AutofocusStartHFD.Value;
-  b:=AutofocusNearHFD.Value;
-  if a<=b then msg(rsNearHFDMustB);
 end;
 
 function Tf_option.GetResolver: integer;
