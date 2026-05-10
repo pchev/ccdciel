@@ -34,7 +34,7 @@ uses  u_global, u_utils, cu_fits,
 type
 TAstrometry_engine = class(TThread)
    private
-     FInFile, FOutFile, FLogFile, FElbrusFile, FElbrusDir, FElbrusFolder, FElbrusUnixpath, FCygwinPath, wcsfile, apmfile, ps3file: string;
+     FInFile, FOutFile, FLogFile, FCygwinPath, wcsfile, apmfile, ps3file: string;
      FPlateSolveFolder,FPlateSolve3Cmd,FASTAPFolder,FAstrometryPath,FAstapLogFile: string;
      Fscalelow,Fscalehigh,Fra,Fde,Fradius,FTimeout,FXsize,FYsize: double;
      FObjs,FDown,FResolver,FPlateSolveWait,Fiwidth,Fiheight: integer;
@@ -84,8 +84,6 @@ TAstrometry_engine = class(TThread)
      property param: TStringList read Fparam write Fparam;
      property AstrometryPath: string read FAstrometryPath write FAstrometryPath;
      property CygwinPath: string read FCygwinPath write FCygwinPath;
-     property ElbrusFolder: string read FElbrusFolder write FElbrusFolder;
-     property ElbrusUnixpath: string read FElbrusUnixpath write FElbrusUnixpath;
      property PlateSolveFolder: string read FPlateSolveFolder write FPlateSolveFolder;
      property PlateSolve3Cmd: string read FPlateSolve3Cmd write FPlateSolve3Cmd;
      property PlateSolveWait:integer read FPlateSolveWait write FPlateSolveWait;
@@ -135,8 +133,6 @@ begin
 Resolver:=Source.Resolver ;
 AstrometryPath:=Source.AstrometryPath ;
 CygwinPath:=Source.CygwinPath ;
-ElbrusFolder:=Source.ElbrusFolder ;
-ElbrusUnixpath:=Source.ElbrusUnixpath ;
 PlateSolve3Cmd:=Source.PlateSolve3Cmd ;
 PlateSolveFolder:=Source.PlateSolveFolder ;
 PlateSolveWait:=Source.PlateSolveWait ;
@@ -408,18 +404,6 @@ if (FResolver=ResolverAstrometryNet)or Fretry then begin
   Start;
  end;
 end
-else if FResolver=ResolverElbrus then begin
-  FElbrusFile:=ExtractFileName(FInFile);
-  {$ifdef mswindows}
-    FElbrusDir:=FElbrusFolder;
-  {$else}
-    FElbrusDir:=FElbrusUnixpath;
-  {$endif}
-  DeleteFileUTF8(slash(FElbrusDir)+'elbrus.pos');
-  DeleteFileUTF8(slash(FElbrusDir)+'elbrus.sta');
-  Copyfile(FInFile,slash(FElbrusDir)+FElbrusFile,[cffOverwriteFile]);
-  Start;
-end
 else if FResolver=ResolverPlateSolve then begin
   {$ifdef mswindows}
     Fcmd:=slash(FPlateSolveFolder)+'PlateSolve2.exe';
@@ -608,71 +592,6 @@ if (FResolver=ResolverAstrometryNet)or Fretry then begin
     finally
       Ftmpfits.Free;
       mwcs.Free;
-    end;
-  end;
-  PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, PtrInt(strnew(PChar(err))));
-end
-else if FResolver=ResolverElbrus then begin
-  fn:=slash(FElbrusDir)+'elbrus.txt';
-  imgdir:=trim(FElbrusFolder);
-  if copy(imgdir,length(imgdir),1)<>'\' then imgdir:=imgdir+'\';
-  AssignFile(ft,fn);
-  rewrite(ft);
-  write(ft,'1.- Elbrus command file'+crlf);    // CR+LF also on Linux
-  write(ft,'2.- commands from CCDciel'+crlf);
-  write(ft,'**SET imagePath'+crlf);
-  write(ft,imgdir+FElbrusFile+crlf);
-  write(ft,'**SET searchingCoordinatesFrom'+crlf);
-  write(ft,'1'+crlf);
-  write(ft,'**EXE analyze'+crlf);
-  write(ft,'space'+crlf);
-  CloseFile(ft);
-  endtime:=now+FTimeout/secperday;
-  repeat
-    sleep(500);
-  until FileExistsUTF8(slash(FElbrusDir)+'elbrus.sta') or (now>endtime);
-  if (now>endtime) then err:=rsTimeout+'!';
-  sleep(1000);
-  if (FLogFile<>'') then begin
-    if FileExistsUTF8(slash(FElbrusDir)+'elbrus.sta') then begin
-       AssignFile(ft,slash(FElbrusDir)+'elbrus.sta');
-       AssignFile(fl,FLogFile);
-       Reset(ft);
-       Rewrite(fl);
-       repeat
-         ReadLn(ft,txt);
-         txt:=StringReplace(txt,#$b0,'d',[rfReplaceAll]);
-         writeln(fl,txt);
-       until eof(ft);
-       CloseFile(ft);
-       CloseFile(fl);
-    end;
-  end;
-  if FileExistsUTF8(slash(FElbrusDir)+'elbrus.pos') then begin
-    AssignFile(ft,slash(FElbrusDir)+'elbrus.pos');
-    reset(ft);
-    ReadLn(ft,txt);
-    CloseFile(ft);
-    nside:=StrToIntDef(copy(txt,1,3),0);
-    if nside>=10 then begin
-      Copyfile(slash(FElbrusDir)+FElbrusFile,FOutFile,[cffOverwriteFile]);
-      fn:=ChangeFileExt(FInFile,'.solved');
-      AssignFile(ft,fn);
-      rewrite(ft);
-      write(ft,' ');
-      CloseFile(ft);
-    end;
-  end else begin
-    if (FLogFile<>'') then begin
-      AssignFile(ft,FLogFile);
-      if FileExistsUTF8(slash(FElbrusDir)+'elbrus.sta') then
-        Append(ft)
-      else
-        Rewrite(ft);
-      WriteLn(ft, rsTimeout+'!');
-      WriteLn(ft,'No response from Elbrus after 10 seconds.');
-      WriteLn(ft,'Is Elbrus running and waiting for messages?');
-      CloseFile(ft);
     end;
   end;
   PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, PtrInt(strnew(PChar(err))));

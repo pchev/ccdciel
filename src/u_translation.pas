@@ -542,11 +542,6 @@ resourcestring
   rsOtherOptions = 'Other options ';
   rsCygwinPath = 'Cygwin path';
   rsUseCustomScr = 'Use custom script';
-  rsElbrusImages = 'Elbrus Images folder ';
-  rsImagesFolder = 'Images folder Unix path';
-  rsBeforeYouCan = 'Before you can use this option the Elbrus program must be '
-    +'calibrated for your images. Then select File / E-Wait for message.%sAlso'
-    +' be sure to set the parameter: "Add the WCS in the FITS header".';
   rsManyFunction = 'Many functions will not work reliably without an '
     +'astrometry software.';
   rsProgramFolde = 'Program folder ';

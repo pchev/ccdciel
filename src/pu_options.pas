@@ -75,7 +75,7 @@ type
     Panel40: TPanel;
     PlateSolve3Cmd: TFileNameEdit;
     Label189: TLabel;
-    Page6: TPage;
+    PagePs3: TPage;
     PanelRotator: TPanel;
     platesolve3: TGroupBox;
     SequenceTwilight: TFloatSpinEditEx;
@@ -544,7 +544,7 @@ type
     GroupBox20: TGroupBox;
     Label19: TLabel;
     Label3: TLabel;
-    Page5: TPage;
+    PageAstap: TPage;
     PageGuiderNone: TPage;
     PanelFocusStar: TPanel;
     PixelSize: TFloatSpinEditEx;
@@ -661,7 +661,7 @@ type
     Label77: TLabel;
     MeridianFlipAutofocus: TCheckBox;
     MeridianFlipCalibrate: TCheckBox;
-    Page4: TPage;
+    PagePs2: TPage;
     PageHNSKY: TPage;
     rbLinUnixSocket: TRadioButton;
     rbLinTCP: TRadioButton;
@@ -744,7 +744,7 @@ type
     Label40: TLabel;
     MeridianOption: TRadioGroup;
     MeridianFlipPanel2: TPanel;
-    Page3: TPage;
+    PageAsnone: TPage;
     RefColor: TRadioGroup;
     SelectDirectoryDialog1: TSelectDirectoryDialog;
     GroupBox7: TGroupBox;
@@ -776,19 +776,13 @@ type
     Label22: TLabel;
     PHDhostname: TEdit;
     PHDport: TEdit;
-    ElbrusFolder: TEdit;
-    ElbrusUnixpath: TEdit;
     GroupBox3: TGroupBox;
-    Label12: TLabel;
-    Label13: TLabel;
-    Label15: TLabel;
     Label16: TLabel;
     Label17: TLabel;
     Notebook1: TNotebook;
     ObserverName: TEdit;
     ObservatoryName: TEdit;
-    Page1: TPage;
-    Page2: TPage;
+    PageAsnet: TPage;
     AutoguiderBox: TRadioGroup;
     PageGuide: TTabSheet;
     PagePlanetarium: TTabSheet;
@@ -797,7 +791,6 @@ type
     PageMeridian: TTabSheet;
     TelescopeName: TEdit;
     GroupBox4: TGroupBox;
-    elbrus: TGroupBox;
     Label10: TLabel;
     Label11: TLabel;
     Label5: TLabel;
@@ -977,8 +970,6 @@ var i: integer;
 begin
   {$ifdef mswindows}
     CygwinPanel.Visible:=true;
-    ElbrusUnixpath.Visible:=false;
-    Label13.Visible:=false;
   {$else}
   AstrometryPathPanel.Visible:=true;
   {$endif}
@@ -1377,9 +1368,6 @@ begin
   AstUseScript.Caption := rsUseCustomScr;
   label129.Caption := rsCommandPath;
   AstrometryFallback.Caption:=rsUseAsFallbac;
-  Label12.Caption := rsElbrusImages;
-  Label13.Caption := rsImagesFolder;
-  Label15.Caption := Format(rsBeforeYouCan, [#10]);
   Label44.Caption := rsManyFunction;
   Label78.Caption := rsProgramFolde;
   Label79.Caption := rsWaitAfterSol;
@@ -1499,7 +1487,7 @@ begin
   Autofocusmode.items[2]:=rsIterative;
   Autofocusmode.items[3]:=rsPlanet;
   Autofocusmode.items[4]:=rsNone2;
-  ResolverBox.Items[2]:=rsNone2;
+  ResolverBox.Items[0]:=rsNone2;
   PrecSlewBox.Items[0]:=rsMountSync;
   PrecSlewBox.Items[1]:=rsPointingOffs;
   MeridianOption.Items[0]:=rsDoNothing;
@@ -1614,8 +1602,6 @@ begin
   FocusStarMag.Hint:=Format(rsTheMagnitude, [crlf]);
   AutofocusPauseGuider.Hint:=rsBeSureToPaus;
   AstrometryPath.Hint := rsLetBlankForD;
-  ElbrusFolder.Hint:=rsTheElbrusIma;
-  ElbrusUnixpath.Hint:=rsTheUnixPathE;
   CheckRecenterTarget.Hint:=Format(rsActiveOnlyIf, [crlf]);
 
   for i:=0 to PanelLeft.ControlCount-1 do begin

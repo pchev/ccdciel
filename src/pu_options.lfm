@@ -4344,11 +4344,10 @@ object f_option: Tf_option
             Columns = 3
             ItemIndex = 0
             Items.Strings = (
-              'Astrometry.Net'
-              'Elbrus Star Locator'
               'None'
-              'PlateSolve2'
               'ASTAP'
+              'Astrometry.Net'
+              'PlateSolve2'
               'PlateSolve3'
             )
             OnClick = ResolverBoxClick
@@ -4405,11 +4404,123 @@ object f_option: Tf_option
           Height = 510
           Top = 158
           Width = 555
-          PageIndex = 0
+          PageIndex = 1
           Align = alClient
           TabOrder = 1
           TabStop = True
-          object Page1: TPage
+          object PageAsnone: TPage
+            object Label44: TLabel
+              Left = 0
+              Height = 502
+              Top = 8
+              Width = 555
+              Align = alClient
+              AutoSize = False
+              BorderSpacing.Top = 8
+              Caption = 'Many functions will not work reliably without an astrometry software.'
+              ParentColor = False
+              ParentFont = False
+              WordWrap = True
+            end
+          end
+          object PageAstap: TPage
+            object astap: TGroupBox
+              Left = 0
+              Height = 510
+              Top = 0
+              Width = 555
+              Align = alClient
+              Caption = 'ASTAP'
+              ClientHeight = 480
+              ClientWidth = 551
+              ParentFont = False
+              TabOrder = 0
+              object Label105: TLabel
+                AnchorSideTop.Control = ASTAPFolder
+                AnchorSideTop.Side = asrCenter
+                Left = 8
+                Height = 18
+                Top = 29
+                Width = 97
+                Caption = 'Program folder '
+                ParentColor = False
+                ParentFont = False
+              end
+              object ASTAPSearchRadius: TSpinEditEx
+                Left = 178
+                Height = 28
+                Top = 73
+                Width = 105
+                Constraints.MaxHeight = 28
+                MaxLength = 0
+                ParentFont = False
+                TabOrder = 0
+                MaxValue = 180
+                MinValue = 1
+                NullValue = 0
+                Value = 1
+              end
+              object Label107: TLabel
+                AnchorSideTop.Control = ASTAPdownsample
+                AnchorSideTop.Side = asrCenter
+                Left = 8
+                Height = 18
+                Top = 126
+                Width = 80
+                Caption = 'Downsample'
+                ParentColor = False
+                ParentFont = False
+              end
+              object Label109: TLabel
+                Left = 8
+                Height = 38
+                Top = 78
+                Width = 167
+                AutoSize = False
+                Caption = 'Maximum search radius'
+                ParentColor = False
+                ParentFont = False
+                WordWrap = True
+              end
+              object ASTAPFolder: TDirectoryEdit
+                Left = 180
+                Height = 28
+                Top = 24
+                Width = 241
+                ShowHidden = False
+                ButtonWidth = 23
+                Constraints.MaxHeight = 28
+                NumGlyphs = 1
+                MaxLength = 0
+                ParentFont = False
+                TabOrder = 1
+              end
+              object ASTAPdownsample: TSpinEditEx
+                Left = 180
+                Height = 28
+                Top = 121
+                Width = 103
+                Constraints.MaxHeight = 28
+                MaxLength = 0
+                ParentFont = False
+                TabOrder = 2
+                MaxValue = 4
+                NullValue = 0
+                Value = 1
+              end
+              object ASTAPadvanced: TButton
+                Left = 180
+                Height = 25
+                Top = 176
+                Width = 212
+                Caption = 'Advanced settings'
+                OnClick = ASTAPadvancedClick
+                ParentFont = False
+                TabOrder = 3
+              end
+            end
+          end
+          object PageAsnet: TPage
             object astrometrynet: TGroupBox
               Left = 0
               Height = 510
@@ -4707,93 +4818,15 @@ object f_option: Tf_option
               end
             end
           end
-          object Page2: TPage
-            object elbrus: TGroupBox
-              Left = 0
-              Height = 476
-              Top = 0
-              Width = 555
-              Align = alClient
-              Caption = 'Elbrus Star Locator'
-              ClientHeight = 464
-              ClientWidth = 543
-              ParentFont = False
-              TabOrder = 0
-              object ElbrusFolder: TEdit
-                Left = 210
-                Height = 28
-                Hint = 'The Elbrus Images folder as set in the Elbrus parameters.'
-                Top = 10
-                Width = 194
-                Constraints.MaxHeight = 28
-                ParentFont = False
-                TabOrder = 0
-              end
-              object Label12: TLabel
-                Left = 8
-                Height = 18
-                Top = 14
-                Width = 130
-                Caption = 'Elbrus Images folder '
-                ParentColor = False
-                ParentFont = False
-              end
-              object Label13: TLabel
-                Left = 10
-                Height = 18
-                Top = 45
-                Width = 148
-                Caption = 'Images folder Unix path'
-                ParentColor = False
-                ParentFont = False
-              end
-              object ElbrusUnixpath: TEdit
-                Left = 210
-                Height = 28
-                Hint = 'The Unix path equivalent to the Elbrus Images folder.'
-                Top = 43
-                Width = 194
-                Constraints.MaxHeight = 28
-                ParentFont = False
-                TabOrder = 1
-              end
-              object Label15: TLabel
-                Left = 10
-                Height = 113
-                Top = 97
-                Width = 402
-                AutoSize = False
-                Caption = 'Before you can use this option the Elbrus program must be calibrated for your images. Then select File / E-Wait for message.'#10'Also be sure to set the parameter: "Add the WCS in the FITS header".'
-                ParentColor = False
-                ParentFont = False
-                WordWrap = True
-              end
-            end
-          end
-          object Page3: TPage
-            object Label44: TLabel
-              Left = 0
-              Height = 468
-              Top = 8
-              Width = 555
-              Align = alClient
-              AutoSize = False
-              BorderSpacing.Top = 8
-              Caption = 'Many functions will not work reliably without an astrometry software.'
-              ParentColor = False
-              ParentFont = False
-              WordWrap = True
-            end
-          end
-          object Page4: TPage
+          object PagePs2: TPage
             object platesolve: TGroupBox
               Left = 0
-              Height = 476
+              Height = 510
               Top = 0
               Width = 555
               Align = alClient
               Caption = 'PlateSolve 2'
-              ClientHeight = 464
+              ClientHeight = 498
               ClientWidth = 543
               ParentFont = False
               TabOrder = 0
@@ -4852,112 +4885,15 @@ object f_option: Tf_option
               end
             end
           end
-          object Page5: TPage
-            object astap: TGroupBox
-              Left = 0
-              Height = 476
-              Top = 0
-              Width = 555
-              Align = alClient
-              Caption = 'ASTAP'
-              ClientHeight = 464
-              ClientWidth = 543
-              ParentFont = False
-              TabOrder = 0
-              object Label105: TLabel
-                AnchorSideTop.Control = ASTAPFolder
-                AnchorSideTop.Side = asrCenter
-                Left = 8
-                Height = 18
-                Top = 29
-                Width = 97
-                Caption = 'Program folder '
-                ParentColor = False
-                ParentFont = False
-              end
-              object ASTAPSearchRadius: TSpinEditEx
-                Left = 178
-                Height = 28
-                Top = 73
-                Width = 105
-                Constraints.MaxHeight = 28
-                MaxLength = 0
-                ParentFont = False
-                TabOrder = 0
-                MaxValue = 180
-                MinValue = 1
-                NullValue = 0
-                Value = 1
-              end
-              object Label107: TLabel
-                AnchorSideTop.Control = ASTAPdownsample
-                AnchorSideTop.Side = asrCenter
-                Left = 8
-                Height = 18
-                Top = 126
-                Width = 80
-                Caption = 'Downsample'
-                ParentColor = False
-                ParentFont = False
-              end
-              object Label109: TLabel
-                Left = 8
-                Height = 38
-                Top = 78
-                Width = 167
-                AutoSize = False
-                Caption = 'Maximum search radius'
-                ParentColor = False
-                ParentFont = False
-                WordWrap = True
-              end
-              object ASTAPFolder: TDirectoryEdit
-                Left = 180
-                Height = 28
-                Top = 24
-                Width = 241
-                ShowHidden = False
-                ButtonWidth = 23
-                Constraints.MaxHeight = 28
-                NumGlyphs = 1
-                MaxLength = 0
-                ParentFont = False
-                TabOrder = 1
-              end
-              object ASTAPdownsample: TSpinEditEx
-                Left = 180
-                Height = 28
-                Top = 121
-                Width = 103
-                Constraints.MaxHeight = 28
-                MaxLength = 0
-                ParentFont = False
-                TabOrder = 2
-                MaxValue = 4
-                NullValue = 0
-                Value = 1
-              end
-              object ASTAPadvanced: TButton
-                Left = 180
-                Height = 25
-                Top = 176
-                Width = 212
-                Caption = 'Advanced settings'
-                OnClick = ASTAPadvancedClick
-                ParentFont = False
-                TabOrder = 3
-              end
-            end
-          end
-          object Page6: TPage
+          object PagePs3: TPage
             object platesolve3: TGroupBox
               Left = 0
-              Height = 476
+              Height = 510
               Top = 0
               Width = 555
               Align = alClient
               Caption = 'PlateSolve 3'
-              ClientHeight = 464
+              ClientHeight = 498
               ClientWidth = 543
               ParentFont = False
               TabOrder = 0

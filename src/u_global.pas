@@ -243,7 +243,7 @@ type
   {$i revision.inc}
 
 const
-  ccdcielver = '0.9.94';
+  ccdcielver = '0.9.95';
   ccdciel_version='Version beta '+ccdcielver;
   TargetFileVersion = 5;
   Maxclient = 100;
@@ -317,13 +317,12 @@ const
   PierSideName: array[0..3] of string=('pierEast', 'pierWest', 'pierUnknown','pierNotImplemented');
   TrackRateName :array [0..3] of string = ('TRACK_SIDEREAL','TRACK_LUNAR','TRACK_SOLAR','TRACK_CUSTOM');
   HFM_HIST_SIZE=3;       // HFD Focus Monitoring (HFM) size of array of HFD measurements
-  ResolverAstrometryNet=0;
-  ResolverElbrus=1;
-  ResolverNone=2;
+  ResolverNone=0;
+  ResolverAstap=1;
+  ResolverAstrometryNet=2;
   ResolverPlateSolve=3;
-  ResolverAstap=4;
-  ResolverPlateSolve3=5;
-  ResolverName: array[0..5] of string =('Astrometry.Net','Elbrus','No resolver','PlateSolve','ASTAP','PlateSolve3');
+  ResolverPlateSolve3=4;
+  ResolverName: array[0..4] of string =('No resolver','ASTAP','Astrometry.Net','PlateSolve','PlateSolve3');
   PlanetariumName: array[0..2] of string =('Cartes du Ciel', 'SAMP', 'HNSKY');
   SafetyActionName: array[0..ord(high(TSafetyAction))] of string=('','','','','','','','','','','','','','');
   DomeOpenActionName: array[0..ord(high(TDomeOpenAction))] of string=('','','','','','');

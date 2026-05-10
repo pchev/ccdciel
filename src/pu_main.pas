@@ -3705,7 +3705,7 @@ end;
 
 procedure Tf_main.UpdConfig(oldver:string);
 var ok,b1,b2,b3:boolean;
-    i: integer;
+    i,j: integer;
     f: double;
     bm: TBayerMode;
     msg,buf: string;
@@ -3836,6 +3836,23 @@ try
     i:=config.GetValue('/InternalGuider/Camera/ExpDelay',0);
     config.SetValue('/InternalGuider/Camera/ExpDelay',i div 1000);
   end;
+  if oldver<'0.9.95' then begin
+    // Remove Elbrus and reorder the solvers
+    i:=config.GetValue('/Astrometry/Resolver',-1);
+    if i>=0 then begin
+      case i of
+        0 : j:=ResolverAstrometryNet;
+        1 : j:=ResolverNone;
+        2 : j:=ResolverNone;
+        3 : j:=ResolverPlateSolve;
+        4 : j:=ResolverAstap;
+        5 : j:=ResolverPlateSolve3;
+        else j:=0;
+      end;
+      config.SetValue('/Astrometry/Resolver',j);
+    end;
+
+  end;
   if config.Modified then begin
      config.SetValue('/Configuration/Version',ccdcielver);
      SaveConfig;
@@ -3863,8 +3880,6 @@ begin
     txt:=txt+crlf+'The Vcurve autofocus method is deprecated, use Dynamic instead.';
   if (config.GetValue('/StarAnalysis/AutoFocusMode',3)=2) then
     txt:=txt+crlf+'The Iterative autofocus method is deprecated, use Dynamic instead.';
-  if (config.GetValue('/Astrometry/Resolver',ResolverAstap)=ResolverElbrus) then
-    txt:=txt+crlf+'The Elbrus astrometry resolver is deprecated, use ASTAP.';
   if (config.GetValue('/Autoguider/Software',2)=1) then
     txt:=txt+crlf+'The Lin_Guider autoguider is deprecated, use PHD2 or the Internal guider.';
   if config.GetValue('/ASCOMcamera/FixPixelRange',false) then
@@ -10350,10 +10365,6 @@ begin
    f_option.CygwinPath.Text:=config.GetValue('/Astrometry/CygwinPath','C:\cygwin');
    f_option.AstrometryPath.Text:=config.GetValue('/Astrometry/AstrometryPath','');
    f_option.AstrometryFallback.Checked:=config.GetValue('/Astrometry/Fallback',false);
-   f_option.ElbrusFolder.Text:=config.GetValue('/Astrometry/ElbrusFolder','C:\Elbrus\Images');
-   {$ifdef unix}
-   f_option.ElbrusUnixpath.Text:=config.GetValue('/Astrometry/ElbrusUnixpath',ExpandFileName('~/Elbrus/Images'));
-   {$endif}
    f_option.PlateSolve3Cmd.Text:=config.GetValue('/Astrometry/PlateSolve3Cmd','');
    f_option.PlatesolveFolder.Text:=config.GetValue('/Astrometry/PlatesolveFolder','C:\PlateSolve2.28');
    f_option.PlatesolveWait.Value:=config.GetValue('/Astrometry/PlatesolveWait',0);
@@ -10846,10 +10857,6 @@ begin
      config.SetValue('/Astrometry/AstrometryPath',trim(f_option.AstrometryPath.Text));
      config.SetValue('/Astrometry/CygwinPath',f_option.CygwinPath.Text);
      config.SetValue('/Astrometry/Fallback',f_option.AstrometryFallback.Checked);
-     config.SetValue('/Astrometry/ElbrusFolder',f_option.ElbrusFolder.Text);
-     {$ifdef unix}
-     config.SetValue('/Astrometry/ElbrusUnixpath',f_option.ElbrusUnixpath.Text);
-     {$endif}
      config.SetValue('/Astrometry/PlateSolve3Cmd',f_option.PlateSolve3Cmd.Text);
      config.SetValue('/Astrometry/PlatesolveFolder',f_option.PlatesolveFolder.Text);
      config.SetValue('/Astrometry/PlatesolveWait',f_option.PlatesolveWait.Value);

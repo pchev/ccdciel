@@ -102,8 +102,6 @@ resourcestring
   rsTheMagnitude = 'The magnitude of the star used to run the autofocus.%'
     +'sUsing a faint star can minimize the telescope movement but prefer the '
     +'brightest to avoid trouble with nearby stars.';
-  rsTheElbrusIma = 'The Elbrus Images folder as set in the Elbrus parameters.';
-  rsTheUnixPathE = 'The Unix path equivalent to the Elbrus Images folder.';
   rsStartTheVcur = 'Start the Vcurve learning process';
   rsIfTheImageIs = 'If the image is now focused, click this button to get the '
     +'current focuser position';
