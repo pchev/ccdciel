@@ -3859,8 +3859,6 @@ begin
     txt:=txt+crlf+'The Iterative autofocus method is deprecated, use Dynamic instead.';
   if (config.GetValue('/Autoguider/Software',2)=1) then
     txt:=txt+crlf+'The Lin_Guider autoguider is deprecated, use PHD2 or the Internal guider.';
-  if config.GetValue('/ASCOMcamera/FixPixelRange',false) then
-    txt:=txt+crlf+'The option to match the camera ADU range to A/D bit depth is deprecated.';
   if txt<>'' then begin
      NewMessage('Warning!'+txt,1);
      f:=TForm.Create(self);
@@ -6624,12 +6622,10 @@ begin
            end;
     ASCOM: begin
            camera.UseCameraStartTime:=config.GetValue('/ASCOMcamera/CameraDateObs',false);
-           camera.FixPixelRange:=config.GetValue('/ASCOMcamera/FixPixelRange',false);
            camera.Connect(config.GetValue('/ASCOMcamera/Device',''));
            end;
     ASCOMREST: begin
            camera.UseCameraStartTime:=config.GetValue('/ASCOMRestcamera/CameraDateObs',false);
-           camera.FixPixelRange:=config.GetValue('/ASCOMRestcamera/FixPixelRange',false);
            camera.Connect(config.GetValue('/ASCOMRestcamera/Host',''),
                           IntToStr(config.GetValue('/ASCOMRestcamera/Port',0)),
                           ProtocolName[config.GetValue('/ASCOMRestcamera/Protocol',0)],
@@ -7044,12 +7040,10 @@ begin
            end;
     ASCOM: begin
            guidecamera.UseCameraStartTime:=false;
-           guidecamera.FixPixelRange:=false;
            guidecamera.Connect(config.GetValue('/ASCOMguidecamera/Device',''));
            end;
     ASCOMREST: begin
            guidecamera.UseCameraStartTime:=false;
-           guidecamera.FixPixelRange:=false;
            guidecamera.Connect(config.GetValue('/ASCOMRestguidecamera/Host',''),
                           IntToStr(config.GetValue('/ASCOMRestguidecamera/Port',0)),
                           ProtocolName[config.GetValue('/ASCOMRestguidecamera/Protocol',0)],
@@ -7129,7 +7123,6 @@ begin
           end;
    ASCOM: begin
           findercamera.UseCameraStartTime:=false;
-          findercamera.FixPixelRange:=false;
           {$ifdef mswindows}
           if (FinderCamera.CameraInterface=GuideCamera.CameraInterface) and
              (FinderCameraName=GuideCameraName) and
@@ -7142,7 +7135,6 @@ begin
           end;
    ASCOMREST: begin
           findercamera.UseCameraStartTime:=false;
-          findercamera.FixPixelRange:=false;
           findercamera.Connect(config.GetValue('/ASCOMRestfindercamera/Host',''),
                          IntToStr(config.GetValue('/ASCOMRestfindercamera/Port',0)),
                          ProtocolName[config.GetValue('/ASCOMRestfindercamera/Protocol',0)],
@@ -9717,14 +9709,12 @@ begin
     config.SetValue('/ASCOMcamera/Device',f_setup.AscomCamera.Text);
     config.SetValue('/ASCOMcamera/FlipImage',f_setup.FlipImage.Checked);
     config.SetValue('/ASCOMcamera/CameraDateObs',f_setup.CameraDateObs.Checked);
-    config.SetValue('/ASCOMcamera/FixPixelRange',f_setup.FixPixelRange.Checked);
     config.SetValue('/ASCOMRestcamera/Protocol',f_setup.CameraARestProtocol.ItemIndex);
     config.SetValue('/ASCOMRestcamera/Host',f_setup.CameraARestHost.Text);
     config.SetValue('/ASCOMRestcamera/Port',f_setup.CameraARestPort.Value);
     config.SetValue('/ASCOMRestcamera/Device',f_setup.CameraARestDevice.Value);
     config.SetValue('/ASCOMRestcamera/FlipImage',f_setup.FlipImage1.Checked);
     config.SetValue('/ASCOMRestcamera/CameraDateObs',f_setup.CameraDateObs1.Checked);
-    config.SetValue('/ASCOMRestcamera/FixPixelRange',f_setup.FixPixelRange1.Checked);
 
     config.SetValue('/GuideCameraInterface',ord(f_setup.GuideCameraConnection));
     config.SetValue('/INDIguidecamera/Server',f_setup.GuideCameraIndiServer.Text);

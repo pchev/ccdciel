@@ -100,7 +100,6 @@ T_camera = class(TComponent)
     Ftimestart,Ftimeend,FMidExposureTime: double;
     FImgNum:PtrInt;
     Fexptime: double;
-    FFixPixelRange: boolean;
     FGuideCamera,FFinderCamera: boolean;
     FGuidePixelScale,FGuideLockX,FGuideLockY: double;
     FsequenceRunning, FTargetCoord: boolean;
@@ -335,7 +334,6 @@ T_camera = class(TComponent)
     property UseCameraStartTime: boolean read FUseCameraStartTime write FUseCameraStartTime;
     property VideoEncoders: TStringList read FVideoEncoder;
     property VideoEncoder: Integer read GetVideoEncoder write SetVideoEncoder;
-    property FixPixelRange: boolean read FFixPixelRange write FFixPixelRange;
     property FinderCamera: boolean read FFinderCamera write FFinderCamera;
     property GuideCamera: boolean read FGuideCamera write FGuideCamera;
     property GuidePixelScale: double read FGuidePixelScale write FGuidePixelScale;
@@ -440,7 +438,6 @@ begin
   FUseCameraStartTime:=false;
   FhasLastExposureStartTime:=false;
   FhasLastExposureDuration:=false;
-  FFixPixelRange:=false;
   FImageFormat:='.fits';
   Fexptime:=0;
   FhasCoolerPower:=false;

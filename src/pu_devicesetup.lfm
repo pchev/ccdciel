@@ -821,15 +821,6 @@ object f_setup: Tf_setup
                 ParentFont = False
                 TabOrder = 5
               end
-              object FixPixelRange: TCheckBox
-                Left = 13
-                Height = 22
-                Top = 192
-                Width = 354
-                Caption = 'Try to fix pixel range to match CMOS camera bit depth'
-                ParentFont = False
-                TabOrder = 6
-              end
             end
           end
           object CameraAscomRest: TTabSheet
@@ -1018,15 +1009,6 @@ object f_setup: Tf_setup
                 ParentFont = False
                 TabOrder = 8
               end
-              object FixPixelRange1: TCheckBox
-                Left = 16
-                Height = 22
-                Top = 304
-                Width = 354
-                Caption = 'Try to fix pixel range to match CMOS camera bit depth'
-                ParentFont = False
-                TabOrder = 9
-              end
               object Label7: TLabel
                 Cursor = crHandPoint
                 Left = 291
@@ -1074,7 +1056,7 @@ object f_setup: Tf_setup
                 Caption = 'Discover'
                 OnClick = BtnDiscoverClick
                 ParentFont = False
-                TabOrder = 10
+                TabOrder = 9
               end
             end
           end

@@ -1229,7 +1229,6 @@ resourcestring
   rsCenterABrigh = 'Center a bright star. Defocus until the rings are clearly visible. Click the Start button. %s Slowly adjust the position of the star in the image field using the telescope fine movement until all the circles are concentric. %s Then move the star to the image center using the mirror adjustment screws.';
   rsTargetSCoord = 'Target %s coordinates not updated';
   rsDATEOBSFromC = 'DATE-OBS from camera driver';
-  rsTryToFixPixe = 'Try to fix pixel range to match CMOS camera bit depth';
   rsImages = 'images';
   rsCoolTheCamer = 'Cool the camera';
   rsStartOptions = 'Start options';
