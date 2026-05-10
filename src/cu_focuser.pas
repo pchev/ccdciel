@@ -40,8 +40,6 @@ T_focuser = class(TComponent)
     FStatus: TDeviceStatus;
     FonMsg,FonDeviceMsg: TNotifyMsg;
     FonPositionChange: TNotifyNum;
-    FonTimerChange: TNotifyNum;
-    FonSpeedChange: TNotifyNum;
     FonTemperatureChange: TNotifyNum;
     FonStatusChange: TNotifyEvent;
     Fdevice: string;
@@ -61,13 +59,8 @@ T_focuser = class(TComponent)
     procedure SetRelPosition(p:integer); virtual; abstract;
     function  GetPositionRange: TNumRange; virtual; abstract;
     function  GetRelPositionRange: TNumRange; virtual; abstract;
-    procedure SetSpeed(p:integer); virtual; abstract;
-    function  GetSpeed:integer; virtual; abstract;
-    procedure SetTimer(p:integer); virtual; abstract;
-    function  GetTimer:integer; virtual; abstract;
     function  GethasAbsolutePosition: boolean; virtual; abstract;
     function  GethasRelativePosition: boolean; virtual; abstract;
-    function  GethasTimerSpeed: boolean; virtual; abstract;
     procedure SetTimeout(num:integer); virtual; abstract;
     function  GetTemperature:double; virtual; abstract;
     function  GetTemperatureInt:double;
@@ -85,15 +78,12 @@ T_focuser = class(TComponent)
     property Status: TDeviceStatus read FStatus;
     property hasAbsolutePosition: boolean read GethasAbsolutePosition;
     property hasRelativePosition: boolean read GethasRelativePosition;
-    property hasTimerSpeed: boolean read GethasTimerSpeed;
     property hasTemperature: boolean read FhasTemperature;
     property Temperature: double read GetTemperatureInt;
     property Position: integer read GetPosition write SetPositionInt;
     property RelPosition: integer read GetRelPosition write SetRelPositionInt;
     property PositionRange: TNumRange read GetPositionRange;
     property RelPositionRange: TNumRange read GetRelPositionRange;
-    property Speed: integer read GetSpeed write SetSpeed;
-    property Timer: integer read GetTimer write SetTimer;
     property Timeout: integer read FTimeout write SetTimeout;
     property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
     property BacklashDirection: boolean read FBacklashDirection write FBacklashDirection;
@@ -104,8 +94,6 @@ T_focuser = class(TComponent)
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onPositionChange: TNotifyNum read FonPositionChange write FonPositionChange;
-    property onSpeedChange: TNotifyNum read FonSpeedChange write FonSpeedChange;
-    property onTimerChange: TNotifyNum read FonTimerChange write FonTimerChange;
     property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
     property onTemperatureChange: TNotifyNum read FonTemperatureChange write FonTemperatureChange;
 end;

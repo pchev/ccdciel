@@ -894,8 +894,6 @@ type
     Procedure FocuserStatus(Sender: TObject);
     function  FocuserTemperatureCompensation(canwait:boolean):boolean;
     procedure FocuserPositionChange(n:double);
-    procedure FocuserSpeedChange(n:double);
-    procedure FocuserTimerChange(n:double);
     procedure FocuserTemperatureChange(n:double);
     procedure FocusIN(Sender: TObject);
     procedure FocusOUT(Sender: TObject);
@@ -2213,8 +2211,6 @@ begin
    focuser.onMsg:=@NewMessage;
    focuser.onDeviceMsg:=@DeviceMessage;
    focuser.onPositionChange:=@FocuserPositionChange;
-   focuser.onSpeedChange:=@FocuserSpeedChange;
-   focuser.onTimerChange:=@FocuserTimerChange;
    focuser.onStatusChange:=@FocuserStatus;
    focuser.onTemperatureChange:=@FocuserTemperatureChange;
 
@@ -7236,13 +7232,9 @@ begin
    else
       f_focuser.PanelTemp.Visible:=false;
   if focuser.hasAbsolutePosition then begin
-     f_focuser.Notebook1.PageIndex:=2;
-  end
-  else if focuser.hasRelativePosition then begin
      f_focuser.Notebook1.PageIndex:=1;
   end
-  else begin
-     ShowMessage('Warning'+crlf+'Timer controled focuser are deprecated and will be removed in the next version');
+  else if focuser.hasRelativePosition then begin
      f_focuser.Notebook1.PageIndex:=0;
   end;
   f_focuser.FocusPosition:=focuser.Position;
@@ -7256,8 +7248,6 @@ begin
                    IntToStr(round(r.min))+ellipsis+IntToStr(round(r.max)) ;
     f_focuser.PosIncr.ItemIndex:=2;
   end;
-  f_focuser.speed.Value:=focuser.Speed;
-  f_focuser.timer.Value:=focuser.Timer;
   r:=focuser.RelPositionRange;
   if r.step>0 then begin
     f_focuser.RelIncr.Hint:=rsRelativeIncr+', '+
@@ -8371,16 +8361,6 @@ begin
   f_focuser.FocusPosition:=round(n);
 end;
 
-procedure Tf_main.FocuserSpeedChange(n:double);
-begin
-  f_focuser.speed.Value:=round(n);
-end;
-
-procedure Tf_main.FocuserTimerChange(n:double);
-begin
-  f_focuser.timer.Value:=round(n);
-end;
-
 procedure Tf_main.FocuserTemperatureChange(n:double);
 begin
 if n<>NullCoord then begin
@@ -8433,13 +8413,6 @@ begin
       focuser.FocusIn;
       focuser.RelPosition:=p;
     end;
- end
- else begin
-    p:=f_focuser.speed.Value;
-    focuser.Speed:=p;
-    focuser.FocusIn;
-    p:=f_focuser.timer.Value;
-    focuser.Timer:=p;
  end;
  if n<>0 then NewMessage(rsInvalidNumer,1);
 end;
@@ -8460,13 +8433,6 @@ begin
       focuser.FocusOut;
       focuser.RelPosition:=p;
     end;
- end
- else begin
-    p:=f_focuser.speed.Value;
-    focuser.Speed:=p;
-    focuser.FocusOut;
-    p:=f_focuser.timer.Value;
-    focuser.Timer:=p;
  end;
  if n<>0 then NewMessage(rsInvalidNumer,1);
 end;

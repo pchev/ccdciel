@@ -316,7 +316,6 @@ resourcestring
   rsSetpoint = 'Setpoint';
   rsFilter = 'Filter';
   rsSpeed = 'Speed';
-  rsTimer = 'Timer';
   rsIncr = 'Incr.';
   rsPos = 'Pos.';
   rsStep = 'Step';

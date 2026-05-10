@@ -41,8 +41,6 @@ T_indifocuser = class(T_focuser)
    connecton,connectoff: ISwitch;
    FocusMotion: ISwitchVectorProperty;
    FocusInward,FocusOutward: ISwitch;
-   FocusSpeed: INumberVectorProperty;
-   FocusTimer: INumberVectorProperty;
    FocusRelativePosition: INumberVectorProperty;
    FocusAbsolutePosition: INumberVectorProperty;
    FocusAbort: ISwitchVectorProperty;
@@ -76,13 +74,8 @@ T_indifocuser = class(T_focuser)
    function  GetPosition:integer; override;
    procedure SetRelPosition(p:integer); override;
    function  GetRelPosition:integer; override;
-   procedure SetSpeed(p:integer); override;
-   function  GetSpeed:integer; override;
-   procedure SetTimer(p:integer); override;
-   function  GetTimer:integer; override;
    function  GethasAbsolutePosition: boolean; override;
    function  GethasRelativePosition: boolean; override;
-   function  GethasTimerSpeed: boolean; override;
    function  GetPositionRange: TNumRange; override;
    function  GetRelPositionRange: TNumRange; override;
    procedure SetTimeout(num:integer); override;
@@ -157,8 +150,6 @@ begin
     FocusMotion:=nil;
     FocusInward:=nil;
     FocusOutward:=nil;
-    FocusSpeed:=nil;
-    FocusTimer:=nil;
     FocusRelativePosition:=nil;
     FocusAbsolutePosition:=nil;
     FocusAbort:=nil;
@@ -179,7 +170,7 @@ procedure T_indifocuser.CheckStatus;
 begin
     if Fconnected and
        (FocusMotion<>nil) and
-       ((FocusAbsolutePosition<>nil)or(FocusRelativePosition<>nil)or(FocusTimer<>nil))
+       ((FocusAbsolutePosition<>nil)or(FocusRelativePosition<>nil))
     then begin
       ReadyTimer.Enabled := false;
       ReadyTimer.Enabled := true;
@@ -231,8 +222,8 @@ begin
        msg('Missing property CONFIG_PROCESS',0)
     else if (FocusMotion=nil) then
        msg('Missing property FOCUS_MOTION',0)
-    else if ((FocusAbsolutePosition=nil)and(FocusRelativePosition=nil)and(FocusTimer=nil)) then
-       msg('One of the properties ABS_FOCUS_POSITION, REL_FOCUS_POSITION, FOCUS_TIMER is required',0);
+    else if ((FocusAbsolutePosition=nil)and(FocusRelativePosition=nil)) then
+       msg('One of the properties ABS_FOCUS_POSITION, REL_FOCUS_POSITION is required',0);
     Disconnect;
   end;
 end;
@@ -345,12 +336,6 @@ begin
      FocusOutward:=IUFindSwitch(FocusMotion,'FOCUS_OUTWARD');
      if (FocusInward=nil)or(FocusOutward=nil) then FocusMotion:=nil;
   end
-  else if (proptype=INDI_NUMBER)and(FocusSpeed=nil)and(propname='FOCUS_SPEED') then begin
-     FocusSpeed:=indiProp.getNumber;
-  end
-  else if (proptype=INDI_NUMBER)and(FocusTimer=nil)and(propname='FOCUS_TIMER') then begin
-     FocusTimer:=indiProp.getNumber;
-  end
   else if (proptype=INDI_NUMBER)and(FocusRelativePosition=nil)and(propname='REL_FOCUS_POSITION') then begin
      FocusRelativePosition:=indiProp.getNumber;
   end
@@ -380,12 +365,6 @@ begin
   end
   else if (FocusAbsolutePosition=nil)and(nvp=FocusRelativePosition) then begin
      if Assigned(FonPositionChange) then FonPositionChange(nvp.np[0].value);
-  end
-  else if nvp=FocusSpeed then begin
-     if Assigned(FonSpeedChange) then FonSpeedChange(nvp.np[0].value);
-  end
-  else if nvp=FocusTimer then begin
-     if Assigned(FonTimerChange) then FonTimerChange(nvp.np[0].value);
   end
   else if nvp=FocusTemperature then begin
      if Assigned(FonTemperatureChange) then FonTemperatureChange(nvp.np[0].value);
@@ -481,40 +460,6 @@ end
 else result:=NullRange;
 end;
 
-procedure T_indifocuser.SetSpeed(p:integer);
-begin
-if (FocusSpeed<>nil)and(FocusSpeed.np[0].value<>p) then begin
-  FocusSpeed.np[0].value:=p;
-  indiclient.sendNewNumber(FocusSpeed);
-  indiclient.WaitBusy(FocusSpeed);
-end;
-end;
-
-function  T_indifocuser.GetSpeed:integer;
-begin
-if FocusSpeed<>nil then begin;
-  result:=round(FocusSpeed.np[0].value);
-end
-else result:=0;
-end;
-
-procedure T_indifocuser.SetTimer(p:integer);
-begin
-if (FocusTimer<>nil) then begin
-  FocusTimer.np[0].value:=p;
-  indiclient.sendNewNumber(FocusTimer);
-  indiclient.WaitBusy(FocusTimer);
-  if FDelay>0 then wait(FDelay);
-end;
-end;
-
-function  T_indifocuser.GetTimer:integer;
-begin
-if FocusTimer<>nil then begin;
-  result:=round(FocusTimer.np[0].value);
-end
-else result:=0;
-end;
 
 procedure T_indifocuser.FocusIn;
 begin
@@ -548,11 +493,6 @@ end;
 function  T_indifocuser.GethasRelativePosition: boolean;
 begin
   result:=FocusRelativePosition<>nil;
-end;
-
-function  T_indifocuser.GethasTimerSpeed: boolean;
-begin
-  result:=(FocusSpeed<>nil)and(FocusTimer<>nil);
 end;
 
 procedure T_indifocuser.SetTimeout(num:integer);

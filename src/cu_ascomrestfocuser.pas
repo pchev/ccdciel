@@ -54,15 +54,10 @@ T_ascomrestfocuser = class(T_focuser)
    function  GetPositionReal:integer;
    procedure SetRelPosition(p:integer); override;
    function  GetRelPosition:integer; override;
-   procedure SetSpeed(p:integer); override;
-   function  GetSpeed:integer; override;
-   procedure SetTimer(p:integer); override;
-   function  GetTimer:integer; override;
    function  GethasAbsolutePositionReal: boolean;
    function  GethasAbsolutePosition: boolean; override;
    function  GethasRelativePositionReal: boolean;
    function  GethasRelativePosition: boolean; override;
-   function  GethasTimerSpeed: boolean; override;
    function  GetPositionRange: TNumRange; override;
    function  GetRelPositionRange: TNumRange; override;
    procedure SetTimeout(num:integer); override;
@@ -470,28 +465,6 @@ begin
  end;
 end;
 
-procedure T_ascomrestfocuser.SetSpeed(p:integer);
-begin
-  // not implemented in ASCOM
-end;
-
-function  T_ascomrestfocuser.GetSpeed:integer;
-begin
- // not implemented in ASCOM
- result:=0;
-end;
-
-procedure T_ascomrestfocuser.SetTimer(p:integer);
-begin
- // not implemented in ASCOM
-end;
-
-function  T_ascomrestfocuser.GetTimer:integer;
-begin
- // not implemented in ASCOM
- result:=0;
-end;
-
 function  T_ascomrestfocuser.GethasAbsolutePositionReal: boolean;
 begin
  result:=False;
@@ -528,11 +501,6 @@ begin
  result:=False;
  if FStatus<>devConnected then exit;
  result:=FhasRelativePosition;
-end;
-
-function  T_ascomrestfocuser.GethasTimerSpeed: boolean;
-begin
- result:=false;
 end;
 
 procedure T_ascomrestfocuser.SetTimeout(num:integer);

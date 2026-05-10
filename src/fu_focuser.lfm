@@ -37,69 +37,11 @@ object f_focuser: Tf_focuser
         Height = 60
         Top = 0
         Width = 208
-        PageIndex = 2
+        PageIndex = 1
         Align = alClient
         AutoSize = True
         TabOrder = 0
         TabStop = True
-        object PageTimerMove: TPage
-          object PanelTimerMove: TPanel
-            Left = 0
-            Height = 55
-            Top = 0
-            Width = 145
-            Align = alClient
-            BevelOuter = bvNone
-            ClientHeight = 55
-            ClientWidth = 145
-            ParentFont = False
-            TabOrder = 0
-            object Label3: TLabel
-              Left = 6
-              Height = 18
-              Top = 4
-              Width = 38
-              Caption = 'Speed'
-              ParentColor = False
-              ParentFont = False
-            end
-            object Label4: TLabel
-              Left = 6
-              Height = 18
-              Top = 27
-              Width = 37
-              Caption = 'Timer'
-              ParentColor = False
-              ParentFont = False
-            end
-            object speed: TSpinEditEx
-              Left = 64
-              Height = 28
-              Top = 0
-              Width = 81
-              Constraints.MaxHeight = 28
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 0
-              MaxValue = 999999999
-              NullValue = 0
-              Value = 0
-            end
-            object timer: TSpinEditEx
-              Left = 64
-              Height = 28
-              Top = 27
-              Width = 81
-              Constraints.MaxHeight = 28
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 1
-              MaxValue = 999999999
-              NullValue = 0
-              Value = 0
-            end
-          end
-        end
         object PageRelPos: TPage
           object PanelRelPos: TPanel
             Left = 0

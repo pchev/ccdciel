@@ -39,13 +39,10 @@ type
     Label5: TLabel;
     lblTemp: TLabel;
     PanelTemp: TPanel;
-    speed: TSpinEditEx;
     Position: TSpinEditEx;
-    timer: TSpinEditEx;
     Temp: TEdit;
     Label6: TLabel;
     Notebook1: TNotebook;
-    PageTimerMove: TPage;
     PageRelPos: TPage;
     PageAbsPos: TPage;
     PanelRelPos: TPanel;
@@ -53,10 +50,7 @@ type
     RelIncr: TComboBox;
     Label1: TLabel;
     Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
     PanelAbsPos: TPanel;
-    PanelTimerMove: TPanel;
     PosIncr: TComboBox;
     PanelBtn: TPanel;
     Panel1: TPanel;
@@ -102,7 +96,7 @@ begin
  Panel1.ChildSizing.LeftRightSpacing:=8;
  Panel1.ChildSizing.VerticalSpacing:=4;
  {$endif}
- Notebook1.PageIndex:=2;
+ Notebook1.PageIndex:=1;
  ScaleDPI(Self);
  SetLang;
  Ready:=false;
@@ -123,8 +117,6 @@ end;
 procedure Tf_focuser.SetLang;
 begin
   Title.Caption:=rsFocuser;
-  label3.Caption:=rsSpeed;
-  label4.Caption:=rsTimer;
   label6.Caption:=rsIncr;
   label1.Caption:=rsPos;
   label2.Caption:=rsStep;
@@ -156,18 +148,16 @@ end;
 procedure Tf_focuser.SetSpeed(value:integer);
 begin
   case Notebook1.PageIndex of
-    0: timer.Value:=value;  // Timer
-    1: RelIncr.Text:=inttostr(value);// Relative
-    2: PosIncr.Text:=inttostr(value);// Absolute
+    0: RelIncr.Text:=inttostr(value);// Relative
+    1: PosIncr.Text:=inttostr(value);// Absolute
   end;
 end;
 
 function Tf_focuser.GetSpeed:integer;
 begin
  case Notebook1.PageIndex of
-   0: result:=timer.Value;  // Timer
-   1: result:=Strtointdef(RelIncr.Text,-1);// Relative
-   2: result:=Strtointdef(PosIncr.Text,-1);// Absolute
+   0: result:=Strtointdef(RelIncr.Text,-1);// Relative
+   1: result:=Strtointdef(PosIncr.Text,-1);// Absolute
  end;
 end;
 
@@ -175,7 +165,7 @@ procedure Tf_focuser.SetPosition(value:integer);
 begin
  begin
    case Notebook1.PageIndex of
-     2: begin
+     1: begin
          if LastAbsolutePosition<>value then begin
            LastAbsolutePosition:=value;
            Position.Value:=value;// Absolute
@@ -188,7 +178,7 @@ end;
 function Tf_focuser.GetPosition:integer;
 begin
  case Notebook1.PageIndex of
-   2: result:=LastAbsolutePosition;// Absolute
+   1: result:=LastAbsolutePosition;// Absolute
    else result:=-1;
  end;
 end;
