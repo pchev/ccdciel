@@ -3849,7 +3849,6 @@ procedure Tf_main.CheckDeprecated;
 var txt,buf: string;
     i: integer;
     fs : TSearchRec;
-    st: TScriptType;
     f: Tform;
     p: TPanel;
     l,li: TLabel;
@@ -3870,17 +3869,6 @@ begin
     txt:=txt+crlf+'The Lin_Guider autoguider is deprecated, use PHD2 or the Internal guider.';
   if config.GetValue('/ASCOMcamera/FixPixelRange',false) then
     txt:=txt+crlf+'The option to match the camera ADU range to A/D bit depth is deprecated.';
-  i:=FindFirst(slash(ConfigDir)+'*.script',0,fs);
-  while i=0 do begin
-    buf:=slash(ConfigDir)+fs.Name;
-    st:=f_scriptengine.ScriptType(buf);
-    if st=stPascal then
-      DeprecatedScripts.add(fs.Name);
-    i:=FindNext(fs);
-  end;
-  FindClose(fs);
-  if DeprecatedScripts.Count>0 then
-    txt:=txt+crlf+'Script writen in Pascal language are deprecated, please convert them to Python.';
   if txt<>'' then begin
      NewMessage('Warning!'+txt,1);
      f:=TForm.Create(self);
@@ -18351,7 +18339,6 @@ try
   else if method='PLANETARIUM_SHOWIMAGE' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_PlanetariumShowImage+'"}'
   else if method='PLANETARIUM_SHUTDOWN' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_PlanetariumShutdown+'"}'
   else if method='PROGRAM_SHUTDOWN' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_ProgramShutdown+'"}'
-  else if method='CLEAR_REFERENCE_IMAGE' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_ClearReferenceImage+'"}'
   else if method='AUTOFOCUS' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutoFocus+'"}'
   else if method='AUTOMATICAUTOFOCUS' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutomaticAutoFocus+'"}'
   else if method='COVER_OPEN' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_coveropen+'"}'
@@ -18565,12 +18552,6 @@ try
     CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_OpenFitsFile(buf1);
-    result:=result+'"result":{"status": "'+buf+'"}';
-  end
-  else if method='OPEN_REFERENCE_IMAGE' then begin
-    CheckParamCount(1);
-    buf1:=trim(value[attrib.IndexOf('params.0')]);
-    buf:=f_scriptengine.cmd_OpenReferenceImage(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='LOGMSG' then begin

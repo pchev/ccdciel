@@ -6,71 +6,16 @@ object f_scriptengine: Tf_scriptengine
   Caption = 'f_scriptengine'
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  object TplPSScript: TPSScript
-    CompilerOptions = []
-    OnLine = TplPSScriptLine
-    OnCompile = TplPSScriptCompile
-    OnExecute = TplPSScriptExecute
-    OnAfterExecute = TplPSScriptAfterExecute
-    Plugins = <    
-      item
-        Plugin = PSImport_Classes1
-      end    
-      item
-        Plugin = PSImport_Controls1
-      end    
-      item
-        Plugin = PSImport_DateUtils1
-      end    
-      item
-        Plugin = PSImport_Forms1
-      end    
-      item
-        Plugin = PSImport_StdCtrls1
-      end>
-    UsePreProcessor = False
-    Left = 49
-    Top = 29
-  end
-  object PSImport_Classes1: TPSImport_Classes
-    EnableStreams = True
-    EnableClasses = True
-    Left = 57
-    Top = 105
-  end
-  object PSImport_DateUtils1: TPSImport_DateUtils
-    Left = 57
-    Top = 178
-  end
-  object PSImport_Forms1: TPSImport_Forms
-    EnableForms = True
-    EnableMenus = True
-    Left = 57
-    Top = 243
-  end
-  object PSImport_Controls1: TPSImport_Controls
-    EnableStreams = True
-    EnableGraphics = True
-    EnableControls = True
-    Left = 226
-    Top = 105
-  end
-  object PSImport_StdCtrls1: TPSImport_StdCtrls
-    EnableExtCtrls = True
-    EnableButtons = True
-    Left = 226
-    Top = 178
-  end
   object ShutdownTimer: TTimer
     Enabled = False
     OnTimer = ShutdownTimerTimer
-    Left = 211
-    Top = 37
+    Left = 96
+    Top = 41
   end
   object DelayedAsyncTimer: TTimer
     Enabled = False
     OnTimer = DelayedAsyncTimerTimer
-    Left = 324
+    Left = 240
     Top = 41
   end
 end

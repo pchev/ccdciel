@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation, pu_keyboard, pu_newscript, pu_onlineinfo,
+uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_scripteditor, u_annotation, pu_keyboard, pu_newscript, pu_onlineinfo,
   pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math, cu_targets, pu_viewtext, cu_switch, pu_autoexposurestep,
   SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI, cu_plan, LCLType,
   LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, SpinEx, Buttons, Menus, CheckLst, Types;
@@ -674,7 +674,7 @@ begin
   BtnSave.Hint:=rsSaveTheListA;
   BtnSaveAs.Hint:=rsSaveTheListW;
   PanelTermination.Hint:=rsSetHereTheAc;
-  if f_pascaleditor<>nil then f_pascaleditor.SetLang;
+  if f_scripteditor<>nil then f_scripteditor.SetLang;
   if f_selectscript<>nil then f_selectscript.SetLang;
 end;
 
@@ -1880,14 +1880,12 @@ var txt,fn: string;
     newscript: boolean;
     s: TStringList;
     ns: Tf_newscript;
-    st: TScriptType;
 begin
   n:=TargetList.Row;
   newscript:=(Sender=BtnEditNewScript)or(ScriptList.Text='');
   s:=TStringList.Create;
-  if f_pascaleditor=nil then begin
-     f_pascaleditor:=Tf_pascaleditor.Create(self);
-     f_pascaleditor.DebugScript:=f_scriptengine.dbgscr;
+  if f_scripteditor=nil then begin
+     f_scripteditor:=Tf_scripteditor.Create(self);
   end;
   if newscript then begin
     s.Clear;
@@ -1896,9 +1894,7 @@ begin
     if ns.ModalResult<>mrOK then exit;
     txt:=trim(ns.Edit1.text);
     if txt='' then exit;
-    st:=TScriptType(ns.ScriptLanguage.ItemIndex+1);
     ns.free;
-    if copy(txt,1,2)='T_' then delete(txt,1,2);
     fn:=slash(ConfigDir)+txt+'.script';
     if FileExistsUTF8(fn) then begin
        if MessageDlg(Format(rsScriptAlread2, [fn]), mtConfirmation, mbYesNo, 0)=mrYes then
@@ -1907,25 +1903,13 @@ begin
          exit;
     end
     else begin
-      if st=stPascal then begin
-        s.Add('{');
-        s.Add('Pascal script for CCDciel');
-        s.Add('see: https://www.ap-i.net/ccdciel/en/documentation/script_reference');
-        s.Add('}');
-        s.Add('begin');
-        s.Add('');
-        s.Add('end.');
-      end
-      else if st=stPython then begin
-        s.Add('# Python program for CCDciel');
-        s.Add('# see: https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference');
-        s.Add('');
-        s.Add('from ccdciel import ccdciel');
-        s.Add('');
-      end;
+      s.Add('# Python program for CCDciel');
+      s.Add('# see: https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference');
+      s.Add('');
+      s.Add('from ccdciel import ccdciel');
+      s.Add('');
     end;
-    f_pascaleditor.ScriptName:=txt;
-    f_pascaleditor.ScriptType:=st;
+    f_scripteditor.ScriptName:=txt;
   end
   else begin
     i:=ScriptList.ItemIndex;
@@ -1934,18 +1918,17 @@ begin
     if (txt='') then exit;
     fn:=slash(ConfigDir)+txt+'.script';
     s.LoadFromFile(fn);
-    f_pascaleditor.ScriptType:=f_scriptengine.ScriptType(fn);
-    f_pascaleditor.ScriptName:=txt;
+    f_scripteditor.ScriptName:=txt;
   end;
-  f_pascaleditor.SynEdit1.Lines.Assign(s);
-  FormPos(f_pascaleditor,mouse.CursorPos.X,mouse.CursorPos.Y);
-  f_pascaleditor.ShowModal;
-  if f_pascaleditor.ModalResult=mrOK then begin
-    s.Assign(f_pascaleditor.SynEdit1.Lines);
+  f_scripteditor.SynEdit1.Lines.Assign(s);
+  FormPos(f_scripteditor,mouse.CursorPos.X,mouse.CursorPos.Y);
+  f_scripteditor.ShowModal;
+  if f_scripteditor.ModalResult=mrOK then begin
+    s.Assign(f_scripteditor.SynEdit1.Lines);
     s.SaveToFile(fn);
     if newscript then begin
      LoadScriptList;
-     SetScriptList(n,f_pascaleditor.ScriptName,ScriptParam.Text);
+     SetScriptList(n,f_scripteditor.ScriptName,ScriptParam.Text);
      TargetChange(nil);
     end;
   end;
@@ -1958,14 +1941,12 @@ var txt,fn: string;
     newscript: boolean;
     s: TStringList;
     ns: Tf_newscript;
-    st: TScriptType;
 begin
   n:=StepList.Row;
   newscript:=(Sender=BtnEditNewScript1)or(ScriptList1.Text='');
   s:=TStringList.Create;
-  if f_pascaleditor=nil then begin
-     f_pascaleditor:=Tf_pascaleditor.Create(self);
-     f_pascaleditor.DebugScript:=f_scriptengine.dbgscr;
+  if f_scripteditor=nil then begin
+     f_scripteditor:=Tf_scripteditor.Create(self);
   end;
   if newscript then begin
     s.Clear;
@@ -1974,9 +1955,7 @@ begin
     if ns.ModalResult<>mrOK then exit;
     txt:=trim(ns.Edit1.text);
     if txt='' then exit;
-    st:=TScriptType(ns.ScriptLanguage.ItemIndex+1);
     ns.free;
-    if copy(txt,1,2)='T_' then delete(txt,1,2);
     fn:=slash(ConfigDir)+txt+'.script';
     if FileExistsUTF8(fn) then begin
        if MessageDlg(Format(rsScriptAlread2, [fn]), mtConfirmation, mbYesNo, 0)=mrYes then
@@ -1985,25 +1964,13 @@ begin
          exit;
     end
     else begin
-      if st=stPascal then begin
-        s.Add('{');
-        s.Add('Pascal script for CCDciel');
-        s.Add('see: https://www.ap-i.net/ccdciel/en/documentation/script_reference');
-        s.Add('}');
-        s.Add('begin');
-        s.Add('');
-        s.Add('end.');
-      end
-      else if st=stPython then begin
-        s.Add('# Python program for CCDciel');
-        s.Add('# see: https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference');
-        s.Add('');
-        s.Add('from ccdciel import ccdciel');
-        s.Add('');
-      end;
+      s.Add('# Python program for CCDciel');
+      s.Add('# see: https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference');
+      s.Add('');
+      s.Add('from ccdciel import ccdciel');
+      s.Add('');
     end;
-    f_pascaleditor.ScriptName:=txt;
-    f_pascaleditor.ScriptType:=st;
+    f_scripteditor.ScriptName:=txt;
   end
   else begin
     i:=ScriptList1.ItemIndex;
@@ -2012,18 +1979,17 @@ begin
     if (txt='') then exit;
     fn:=slash(ConfigDir)+txt+'.script';
     s.LoadFromFile(fn);
-    f_pascaleditor.ScriptType:=f_scriptengine.ScriptType(fn);
-    f_pascaleditor.ScriptName:=txt;
+    f_scripteditor.ScriptName:=txt;
   end;
-  f_pascaleditor.SynEdit1.Lines.Assign(s);
-  FormPos(f_pascaleditor,mouse.CursorPos.X,mouse.CursorPos.Y);
-  f_pascaleditor.ShowModal;
-  if f_pascaleditor.ModalResult=mrOK then begin
-    s.Assign(f_pascaleditor.SynEdit1.Lines);
+  f_scripteditor.SynEdit1.Lines.Assign(s);
+  FormPos(f_scripteditor,mouse.CursorPos.X,mouse.CursorPos.Y);
+  f_scripteditor.ShowModal;
+  if f_scripteditor.ModalResult=mrOK then begin
+    s.Assign(f_scripteditor.SynEdit1.Lines);
     s.SaveToFile(fn);
     if newscript then begin
      LoadScriptList;
-     SetScriptList1(n,ConfigDir,f_pascaleditor.ScriptName,ScriptParam1.Text);
+     SetScriptList1(n,ConfigDir,f_scripteditor.ScriptName,ScriptParam1.Text);
      StepChange(nil);
     end;
   end;

@@ -101,8 +101,6 @@ type
                  range: TNumRange;
                end;
 
-  TScriptType = (stUnknown, stPascal, stPython);
-
   TFilterExp = Class(TObject)
                public
                  ExpFact: double;

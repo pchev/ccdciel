@@ -725,8 +725,6 @@ resourcestring
   rsNotAnEqmodMo = '%s not an eqmod mount';
   rsScriptEditor = 'Script editor';
   rsStepInto = 'Step Into';
-  rsStepOver = 'Step Over';
-  rsRemoveAllBre = 'Remove all breakpoints';
   rsCannotFindAp = 'Cannot find approximate coordinates for this image.%sThe '
     +'astrometry resolution may take a very long time.';
   rsResolvingUsi = 'Resolving using %s ...';
@@ -1302,7 +1300,6 @@ resourcestring
   rsCalibrator = 'Calibrator';
   rsMeridianFlip11 = 'Meridian flip aborted after %d retries';
   rsWaitDSeconds = 'Wait %d seconds and retry';
-  rsScriptLangua = 'Script language';
   rsTCPIPServerP = 'TCP/IP server port';
   rsFoundDStars = 'Found %d stars';
   rsViewLastAuto = 'View last autofocus';

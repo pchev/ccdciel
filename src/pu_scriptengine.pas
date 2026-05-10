@@ -33,12 +33,7 @@ uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp, fu_device
   fu_capture, fu_preview, fu_mount, cu_wheel, cu_mount, cu_camera, cu_focuser, cu_autoguider, cu_astrometry,
   cu_dome, cu_rotator, cu_safety, cu_weather,
   fu_cover, cu_cover, fu_internalguider, fu_finder, cu_switch, fu_starprofile,
-  Classes, SysUtils, FileUtil, uPSComponent, uPSComponent_Default, LazFileUtils,
-  uPSComponent_Forms, uPSComponent_Controls, uPSComponent_StdCtrls, Forms, process,
-  {$ifdef mswindows}
-   uPSComponent_COM, cu_ascommount, cu_ascomcamera, cu_ascomcover, cu_ascomdome, cu_ascomfocuser, cu_ascomrotator,
-   cu_ascomsafety, cu_ascomswitch, cu_ascomweather, cu_ascomwheel,
-  {$endif}
+  Classes, SysUtils, FileUtil, LazFileUtils, Forms, process,
   u_translation, Controls, Graphics, Dialogs, ExtCtrls;
 
 const
@@ -72,22 +67,12 @@ type
   { Tf_scriptengine }
 
   Tf_scriptengine = class(TForm)
-    PSImport_Classes1: TPSImport_Classes;
-    PSImport_Controls1: TPSImport_Controls;
-    PSImport_DateUtils1: TPSImport_DateUtils;
-    PSImport_Forms1: TPSImport_Forms;
-    PSImport_StdCtrls1: TPSImport_StdCtrls;
     ShutdownTimer: TTimer;
     DelayedAsyncTimer: TTimer;
-    TplPSScript: TPSScript;
     procedure DelayedAsyncTimerTimer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure ShutdownTimerTimer(Sender: TObject);
-    procedure TplPSScriptCompile(Sender: TPSScript);
-    procedure TplPSScriptExecute(Sender: TPSScript);
-    procedure TplPSScriptAfterExecute(Sender: TPSScript);
-    procedure TplPSScriptLine(Sender: TObject);
   private
     { private declarations }
     Ffits : TFits;
@@ -129,12 +114,6 @@ type
     FonAutofocus: TNotifyBool;
     FonAutomaticAutofocus: TNotifyBool;
     FonConnectDevice,FonDisconnectDevice: TNotifyNum;
-    ilist: array of Integer;
-    dlist: array of Double;
-    slist: array of String;
-    vlist: array of variant;
-    LastErr:string;
-    strllist: array of TStringList;
     Waitrunning, cancelWait, ScriptCancel: boolean;
     FAstrometryGotoRunning, FAstrometryGotoResult: boolean;
     FParamStr: TStringList;
@@ -142,59 +121,11 @@ type
     FAsyncMethod: TDataEvent;
     FAsyncData: PtrInt;
     radec: Tradec;
-    {$ifdef mswindows}
-     PSImport_ComObj1: TPSImport_ComObj;
-    {$endif}
     procedure msg(str:string);
-    function doGetS(varname:string; var str: string):Boolean;
-    function doSetS(varname:string; str: string):Boolean;
-    function doGetSL(varname:string; var strl: TStringList):Boolean;
-    function doSetSL(varname:string; strl: TStringList):Boolean;
-    function doSaveSL(fn:string; strl: TStringList):Boolean;
-    function doGetI(varname:string; var i: Integer):Boolean;
-    function doSetI(varname:string; i: Integer):Boolean;
-    function doGetD(varname:string; var x: Double):Boolean;
-    function doSetD(varname:string; x: Double):Boolean;
-    function doGetV(varname: string; var v: variant): boolean;
-    function doSetV(varname: string; v: variant): boolean;
-    function doGetB(varname:string; var x: Boolean):Boolean;
-    function doOpenFile(fn:string):boolean;
-    function doRun(cmdline:string):boolean;
-    Function ExecPr(cmd: string; output: TStringList; ShowConsole:boolean=false): integer;
-    function doRunWait(cmdline:string):boolean;
-    function doRunOutput(cmdline:string; var output:TStringlist):boolean;
-    Function doJDtoStr(var jd: Double) : string;
-    Function doStrtoJD(dt:string; var jdt: Double) : boolean;
-    Function doARtoStr(var ar: Double) : string;
-    Function doDEtoStr(var de: Double) : string;
-    Function doStrtoAR(str:string; var ar: Double) : boolean;
-    Function doStrtoDE(str:string; var de: Double) : boolean;
-    Procedure doEq2Hz(var ra,de,a,h : double);
-    Procedure doHz2Eq(var a,h,ra,de : double);
-    function doFormatFloat(Const Format : String; var Value : double) : String;
-    function doFormat(Const Fmt : String; const Args : Array of const) : String;
-    Procedure doStrtoFloatD(str:string; var defval: Double; var val: Double);
-    function doStringReplace(str,s1,s2: String): string;
-    function doIsNumber(str: String): boolean;
-    function doMsgBox(const aMsg: string):boolean;
-    Procedure doShowMessage(const aMsg: string);
-    procedure doLogmsg(str:string);
-    procedure doWait(wt:integer);
-    function doWaitTill(hour:string; showdialog: boolean):boolean;
-    function doDeleteFile(FileName: String): Boolean;
-    function doRenameFile(OldName, NewName: String): Boolean;
-    function doCreateDir(NewDir: String): Boolean;
-    function Cmd(cname:string):string;
-    function CmdArg(cname:string; var arg:Tstringlist):string;
-    function CompileScripts: boolean;
-    function doParamstr: Tstringlist;
-    function doParamCount: Integer;
     procedure LockSwitch;
     procedure UnLockSwitch;
   public
     { public declarations }
-    dbgscr: TPSScriptDebugger;
-    scr: TPSScript;
     PythonScr: array[1..MaxPythonScr] of TPythonThread;
     PythonResult: array[1..MaxPythonScr] of integer;
     PythonOutput: array[1..MaxPythonScr] of TStringList;
@@ -273,13 +204,10 @@ type
     function cmd_SequenceStop:string;
     function cmd_SaveFitsFile(fn:string):string;
     function cmd_OpenFitsFile(fn:string):string;
-    function cmd_OpenReferenceImage(fn:string):string;
-    function cmd_ClearReferenceImage:string;
     function cmd_AutoFocus:string;
     function cmd_AutomaticAutoFocus:string;
     function cmd_setFocusXY(x,y: string):string;
     function cmd_setFocusXYhfd(x,y: string):string;
-    function cmd_ListFiles(var lf:TStringList):string;
     function cmd_coverstatus: string;
     function cmd_coveropen: string;
     function cmd_coverclose: string;
@@ -319,7 +247,6 @@ type
     function cmd_runscriptasync(sname,path,args: string):string;
     function cmd_scriptrunning(num: string): boolean;
     function cmd_scriptstop(num: string): string;
-    function ScriptType(fn: string): TScriptType;
     function  RunScriptAsync(sname,path,args: string; notify:boolean=True):integer;
     function  RunScript(sname,path,args: string; notify:boolean=True):boolean;
     function ScriptRunning: boolean;
@@ -387,31 +314,11 @@ procedure Tf_scriptengine.FormCreate(Sender: TObject);
 var i: integer;
 begin
   for i:=1 to MaxPythonScr do PythonOutput[i]:=TStringList.Create;
-  SetLength(ilist,10);
-  SetLength(dlist,10);
-  SetLength(slist,10);
-  SetLength(vlist, 10);
-  SetLength(strllist,10);
-  for i:=0 to 9 do strllist[i]:=TStringList.Create;
   Waitrunning:=false;
   cancelWait:=false;
   radec:=Tradec.Create;
   FAstrometryGotoRunning:=false;
   FAstrometryGotoResult:=false;
-  {$ifdef mswindows}
-   PSImport_ComObj1 := TPSImport_ComObj.Create(self);
-   TPSPluginItem(TplPSScript.Plugins.Add).Plugin := PSImport_ComObj1;
-  {$endif}
-  scr:=TPSScriptDebugger.Create(self);
-  scr.OnCompile:=@TplPSScriptCompile;
-  scr.OnExecute:=@TplPSScriptExecute;
-  scr.OnAfterExecute:=@TplPSScriptAfterExecute;
-  scr.OnLine:=@TplPSScriptLine;
-  scr.Plugins.Assign(TplPSScript.Plugins);
-  dbgscr:=TPSScriptDebugger.Create(self);
-  dbgscr.OnCompile:=@TplPSScriptCompile;
-  dbgscr.OnLine:=@TplPSScriptLine;
-  dbgscr.Plugins.Assign(TplPSScript.Plugins);
 end;
 
 procedure Tf_scriptengine.DelayedAsyncTimerTimer(Sender: TObject);
@@ -424,634 +331,19 @@ procedure Tf_scriptengine.FormDestroy(Sender: TObject);
 var i: integer;
 begin
   for i:=1 to MaxPythonScr do PythonOutput[i].Free;
-  scr.Free;
-  dbgscr.Free;
   radec.Free;
-  SetLength(ilist,0);
-  SetLength(dlist,0);
-  SetLength(slist,0);
-  SetLength(vlist, 0);
-  for i:=0 to 9 do strllist[i].Free;
-  SetLength(strllist,0);
 end;
 
-procedure Tf_scriptengine.TplPSScriptLine(Sender: TObject);
-begin
-  if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-end;
-
-   function Tf_scriptengine.doGetS(varname:string; var str: string):Boolean;
-begin
-  result:=true;
-  varname:=uppercase(varname);
-  if varname='LASTERROR' then str:=LastErr
-  else if varname='DIRECTORYSEPARATOR' then str:=DirectorySeparator
-  else if varname='APPDIR' then str:=Appdir
-  else if varname='TMPDIR' then str:=TmpDir
-  else if varname='CAPTUREDIR' then str:=config.GetValue('/Files/CapturePath',defCapturePath)
-  else if varname='LIGHTDIR' then str:=trim(FrameName[0])
-  else if varname='BIASDIR' then str:=trim(FrameName[1])
-  else if varname='DARKDIR' then str:=trim(FrameName[2])
-  else if varname='FLATDIR' then str:=trim(FrameName[3])
-  else if varname='HOSTOS' then str:=hostOS
-  else if varname='COVERSTATUS' then str:=cmd_coverstatus
-  else if varname='CALIBRATORSTATUS' then str:=cmd_calibratorstatus
-  else if varname='TELESCOPE_PIERSIDE' then str:=PierSideName[ord(mount.PierSide)]
-  else if varname='PREVIEW_GETBINNING' then str:=Preview.Binning.Text
-  else if varname='CAPTURE_GETBINNING' then str:=Capture.Binning.Text
-  else if varname='CAPTURE_GETOBJECTNAME' then str:=Capture.Fname.Text
-  else if varname='CAPTURE_GETFRAMETYPE' then str:=Capture.cbFrameType.Text
-  else if varname='STR1' then str:=slist[0]
-  else if varname='STR2' then str:=slist[1]
-  else if varname='STR3' then str:=slist[2]
-  else if varname='STR4' then str:=slist[3]
-  else if varname='STR5' then str:=slist[4]
-  else if varname='STR6' then str:=slist[5]
-  else if varname='STR7' then str:=slist[6]
-  else if varname='STR8' then str:=slist[7]
-  else if varname='STR9' then str:=slist[8]
-  else if varname='STR10' then str:=slist[9]
-  else result:=false;
-end;
-
-function Tf_scriptengine.doSetS(varname:string; str: string):Boolean;
-begin
-  result:=true;
-  varname:=uppercase(varname);
-  if varname='STR1' then slist[0]:=str
-  else if varname='STR2' then slist[1]:=str
-  else if varname='STR3' then slist[2]:=str
-  else if varname='STR4' then slist[3]:=str
-  else if varname='STR5' then slist[4]:=str
-  else if varname='STR6' then slist[5]:=str
-  else if varname='STR7' then slist[6]:=str
-  else if varname='STR8' then slist[7]:=str
-  else if varname='STR9' then slist[8]:=str
-  else if varname='STR10' then slist[9]:=str
-  else result:=false;
-end;
-
-function Tf_scriptengine.doGetSL(varname:string; var strl: TStringList):Boolean;
-begin
-result:=true;
-varname:=uppercase(varname);
-if varname='STRL1' then strl:=strllist[0]
-else if varname='STRL2' then strl:=strllist[1]
-else if varname='STRL3' then strl:=strllist[2]
-else if varname='STRL4' then strl:=strllist[3]
-else if varname='STRL5' then strl:=strllist[4]
-else if varname='STRL6' then strl:=strllist[5]
-else if varname='STRL7' then strl:=strllist[6]
-else if varname='STRL8' then strl:=strllist[7]
-else if varname='STRL9' then strl:=strllist[8]
-else if varname='STRL10' then strl:=strllist[9]
-else result:=false;
-end;
-
-function Tf_scriptengine.doSetSL(varname:string; strl: TStringList):Boolean;
-begin
-result:=true;
-varname:=uppercase(varname);
-if varname='STRL1' then strllist[0]:=strl
-else if varname='STRL2' then strllist[1]:=strl
-else if varname='STRL3' then strllist[2]:=strl
-else if varname='STRL4' then strllist[3]:=strl
-else if varname='STRL5' then strllist[4]:=strl
-else if varname='STRL6' then strllist[5]:=strl
-else if varname='STRL7' then strllist[6]:=strl
-else if varname='STRL8' then strllist[7]:=strl
-else if varname='STRL9' then strllist[8]:=strl
-else if varname='STRL10' then strllist[9]:=strl
-else result:=false;
-end;
-
-function Tf_scriptengine.doSaveSL(fn:string; strl: TStringList):Boolean;
-var f: textfile;
-    i: integer;
-begin
-// save a stringlist with Unix line ending
- try
- AssignFile(f,fn);
- SetTextLineEnding(f,lf);
- Rewrite(f);
- for i:=0 to strl.Count-1 do begin
-   WriteLn(f,strl[i]);
- end;
- CloseFile(f);
- result:=true;
- except
-   result:=false;
- end;
-end;
-
-function  Tf_scriptengine.doGetD(varname:string; var x: double):boolean;
-begin
-  result:=true;
-  varname:=uppercase(varname);
-  if varname='TELESCOPERA' then x:=f_mount.CurrentRA
-  else if varname='TELESCOPEDE' then x:=f_mount.CurrentDec
-  else if varname='CCDTEMP' then x:=TempDisplay(TemperatureScale,Fccdtemp.CurrentTemperature)
-  else if varname='CCDCOOLER_POWER' then x:=Fccdtemp.CurrentCoolerPower
-  else if varname='TIMENOW' then x:=now
-  else if varname='OBS_LATITUDE' then x:=ObsLatitude
-  else if varname='OBS_LONGITUDE' then x:=-ObsLongitude
-  else if varname='OBS_ELEVATION' then x:=ObsElevation
-  else if varname='PREVIEW_GETEXPOSURE' then x:=Preview.Exposure
-  else if varname='CAPTURE_GETEXPOSURE' then x:=Capture.ExposureTime
-  else if varname='DOUBLE1' then x:=dlist[0]
-  else if varname='DOUBLE2' then x:=dlist[1]
-  else if varname='DOUBLE3' then x:=dlist[2]
-  else if varname='DOUBLE4' then x:=dlist[3]
-  else if varname='DOUBLE5' then x:=dlist[4]
-  else if varname='DOUBLE6' then x:=dlist[5]
-  else if varname='DOUBLE7' then x:=dlist[6]
-  else if varname='DOUBLE8' then x:=dlist[7]
-  else if varname='DOUBLE9' then x:=dlist[8]
-  else if varname='DOUBLE10' then x:=dlist[9]
-  else result:=false;
-end;
-
-function Tf_scriptengine.doSetD(varname:string; x: Double):Boolean;
-begin
-  result:=true;
-  varname:=uppercase(varname);
-  if varname='DOUBLE1' then dlist[0]:=x
-  else if varname='DOUBLE2' then dlist[1]:=x
-  else if varname='DOUBLE3' then dlist[2]:=x
-  else if varname='DOUBLE4' then dlist[3]:=x
-  else if varname='DOUBLE5' then dlist[4]:=x
-  else if varname='DOUBLE6' then dlist[5]:=x
-  else if varname='DOUBLE7' then dlist[6]:=x
-  else if varname='DOUBLE8' then dlist[7]:=x
-  else if varname='DOUBLE9' then dlist[8]:=x
-  else if varname='DOUBLE10' then dlist[9]:=x
-  else result:=false;
-end;
-
-function  Tf_scriptengine.doGetI(varname:string; var i: Integer):Boolean;
-begin
-  result:=true;
-  varname:=uppercase(varname);
-  if varname='FOCUSERPOSITION' then i:=FFocuser.Position
-  else if varname='CALIBRATORBRIGHTNESS' then i:=cmd_getcalibratorbrightness
-  else if varname='CAPTURE_GETCOUNT' then i:=Capture.SeqNum.Value
-  else if varname='CAPTURE_GETDITHER' then i:=Capture.DitherCount.Value
-  else if varname='INT1' then i:=ilist[0]
-  else if varname='INT2' then i:=ilist[1]
-  else if varname='INT3' then i:=ilist[2]
-  else if varname='INT4' then i:=ilist[3]
-  else if varname='INT5' then i:=ilist[4]
-  else if varname='INT6' then i:=ilist[5]
-  else if varname='INT7' then i:=ilist[6]
-  else if varname='INT8' then i:=ilist[7]
-  else if varname='INT9' then i:=ilist[8]
-  else if varname='INT10' then i:=ilist[9]
-  else result:=false;
-end;
-
-function Tf_scriptengine.doSetI(varname:string; i: Integer):Boolean;
-begin
-  result:=true;
-  varname:=uppercase(varname);
-  if varname='INT1' then ilist[0]:=i
-  else if varname='INT2' then ilist[1]:=i
-  else if varname='INT3' then ilist[2]:=i
-  else if varname='INT4' then ilist[3]:=i
-  else if varname='INT5' then ilist[4]:=i
-  else if varname='INT6' then ilist[5]:=i
-  else if varname='INT7' then ilist[6]:=i
-  else if varname='INT8' then ilist[7]:=i
-  else if varname='INT9' then ilist[8]:=i
-  else if varname='INT10' then ilist[9]:=i
-  else result:=false;
-end;
-
-function Tf_scriptengine.doGetB(varname:string; var x: Boolean):Boolean;
-begin
-  result:=true;
-  varname:=uppercase(varname);
-  if varname='TELESCOPE_CONNECTED' then x:=(mount.Status=devConnected)
-  else if varname='TELESCOPE_PARKED' then x:=mount.Park
-  else if varname='TELESCOPE_TRACKING' then x:=mount.Tracking
-  else if varname='TELESCOPE_SLEWING' then x:=mount.MountSlewing
-  else if varname='TELESCOPE_EQMOD' then x:=mount.IsEqmod
-  else if varname='AUTOGUIDER_CONNECTED' then x:=(Autoguider.State<>GUIDER_DISCONNECTED)
-  else if varname='AUTOGUIDER_RUNNING' then x:=Autoguider.Running
-  else if varname='AUTOGUIDER_GUIDING' then x:=(Autoguider.State=GUIDER_GUIDING)
-  else if varname='WHEEL_CONNECTED' then x:=(Filter.Status=devConnected)
-  else if varname='FOCUSER_CONNECTED' then x:=(Focuser.Status=devConnected)
-  else if varname='CAMERA_CONNECTED' then x:=(Camera.Status=devConnected)
-  else if varname='PLANETARIUM_CONNECTED' then x:=Planetarium.Connected
-  else if varname='PREVIEW_RUNNING' then x:=Preview.Running
-  else if varname='PREVIEW_LOOP' then x:=Preview.Loop
-  else if varname='CAPTURE_RUNNING' then x:=Capture.Running
-  else result:=false;
-end;
-
-function Tf_scriptengine.doGetV(varname: string; var v: variant): boolean;
-begin
-{$ifdef mswindows}
- Result := True;
- varname := uppercase(varname);
- if (varname = 'TELESCOPE') and (Fmount<>nil) and (Fmount.MountInterface=ASCOM) then
-   v := T_ascommount(Fmount).GetV
- else if (varname = 'DOME') and (FDome<>nil) and (Fdome.DomeInterface=ASCOM) then
-   v := T_ascomdome(FDome).GetV
- else if (varname = 'CAMERA') and (Fcamera<>nil) and (Fcamera.CameraInterface=ASCOM) then
-   v := T_ascomcamera(Fcamera).GetV
- else if (varname = 'GUIDERCAMERA') and (Fguidercamera<>nil) and (Fguidercamera.CameraInterface=ASCOM) then
-   v := T_ascomcamera(Fguidercamera).GetV
- else if (varname = 'FINDERCAMERA') and (Ffindercamera<>nil) and (Ffindercamera.CameraInterface=ASCOM) then
-   v := T_ascomcamera(Ffindercamera).GetV
- else if (varname = 'FOCUSER') and (FFocuser<>nil) and (FFocuser.FocuserInterface=ASCOM) then
-   v := T_ascomfocuser(FFocuser).GetV
- else if (varname = 'FILTER') and (Ffilter<>nil) and (Ffilter.WheelInterface=ASCOM) then
-   v := T_ascomwheel(Ffilter).GetV
- else if (varname = 'ROTATOR') and (Frotator<>nil) and (Frotator.RotatorInterface=ASCOM) then
-   v := T_ascomrotator(Frotator).GetV
- else if (varname = 'COVER') and (Fcover<>nil) and (Fcover.CoverInterface=ASCOM) then
-   v := T_ascomcover(Fcover).GetV
- else if (varname = 'SAFETY') and (Fsafety<>nil) and (Fsafety.SafetyInterface=ASCOM) then
-   v := T_ascomsafety(Fsafety).GetV
- else if (varname = 'WEATHER') and (Fweather<>nil) and (Fweather.WeatherInterface=ASCOM) then
-   v := T_ascomweather(Fweather).GetV
- else if varname = 'VARIANT1' then
-   v := vlist[0]
- else if varname = 'VARIANT2' then
-   v := vlist[1]
- else if varname = 'VARIANT3' then
-   v := vlist[2]
- else if varname = 'VARIANT4' then
-   v := vlist[3]
- else if varname = 'VARIANT5' then
-   v := vlist[4]
- else if varname = 'VARIANT6' then
-   v := vlist[5]
- else if varname = 'VARIANT7' then
-   v := vlist[6]
- else if varname = 'VARIANT8' then
-   v := vlist[7]
- else if varname = 'VARIANT9' then
-   v := vlist[8]
- else if varname = 'VARIANT10' then
-   v := vlist[9]
- else
-{$endif}
-   Result := False;
-end;
-
-function Tf_scriptengine.doSetV(varname: string; v: variant): boolean;
-begin
-{$ifdef mswindows}
- Result := True;
- varname := uppercase(varname);
- if varname = 'VARIANT1' then
-   vlist[0] := v
- else if varname = 'VARIANT2' then
-   vlist[1] := v
- else if varname = 'VARIANT3' then
-   vlist[2] := v
- else if varname = 'VARIANT4' then
-   vlist[3] := v
- else if varname = 'VARIANT5' then
-   vlist[4] := v
- else if varname = 'VARIANT6' then
-   vlist[5] := v
- else if varname = 'VARIANT7' then
-   vlist[6] := v
- else if varname = 'VARIANT8' then
-   vlist[7] := v
- else if varname = 'VARIANT9' then
-   vlist[8] := v
- else if varname = 'VARIANT10' then
-   vlist[9] := v
- else
- {$endif}
-   Result := False;
-end;
-
-Procedure Tf_scriptengine.doEq2Hz(var ra,de,a,h : double);
-begin
- cmdEq2Hz(ra,de,a,h);
-end;
-
-Procedure Tf_scriptengine.doHz2Eq(var a,h,ra,de : double);
-begin
- cmdHz2Eq(a,h,ra,de);
-end;
-
-function Tf_scriptengine.doFormatFloat(Const Format : String; var Value : double) : String;
-begin
-  result:=FormatFloat(format, Value);
-end;
-
-Procedure Tf_scriptengine.doStrtoFloatD(str:string; var defval: Double; var val: Double);
-begin
-  val:=StrToFloatDef(str,defval);
-end;
-
-function Tf_scriptengine.doStringReplace(str,s1,s2: String): string;
-begin
-  result:=StringReplace(str,s1,s2,[rfReplaceAll]);
-end;
-
-function Tf_scriptengine.doFormat(Const Fmt : String; const Args : Array of const) : String;
-begin
- result:=Format(Fmt,Args);
-end;
-
-function Tf_scriptengine.doIsNumber(str: String): boolean;
-begin
-  result:=IsNumber(str);
-end;
-
-function Tf_scriptengine.doMsgBox(const aMsg: string):boolean;
-begin
-  result:=MessageDlg(aMsg,mtConfirmation,mbYesNo,0)=mrYes;
-end;
-
-Procedure Tf_scriptengine.doShowMessage(const aMsg: string);
-begin
-  ShowMessage(aMsg);
-end;
 
 procedure Tf_scriptengine.msg(str:string);
 begin
-  doLogmsg(str);
-end;
-
-procedure Tf_scriptengine.doLogmsg(str:string);
-begin
   if Assigned(FonMsg) then FonMsg(str);
-end;
-
-function Tf_scriptengine.doOpenFile(fn:string):boolean;
-var i: integer;
-begin
-  i:=ExecuteFile(fn);
-  result:=(i=0);
-end;
-
-function Tf_scriptengine.doRun(cmdline:string):boolean;
-begin
-  ExecNoWait(cmdline,'',true);
-  wait(1);
-  result:=true;
-end;
-
-Function Tf_scriptengine.ExecPr(cmd: string; output: TStringList; ShowConsole:boolean=false): integer;
-var
-  M: TMemoryStream;
-  param: TStringList;
-  n,s: LongInt;
-  BytesRead: LongInt;
-begin
-M := TMemoryStream.Create;
-RunProcess := TProcess.Create(nil);
-param:=TStringList.Create;
-result:=1;
-try
-  BytesRead := 0;
-  SplitCmd(cmd,param);
-  cmd:= param[0];
-  param.Delete(0);
-  RunProcess.Executable:=cmd;
-  RunProcess.Parameters:=param;
-  if ShowConsole then begin
-     RunProcess.ShowWindow:=swoShowNormal;
-     RunProcess.StartupOptions:=[suoUseShowWindow];
-  end else begin
-     RunProcess.ShowWindow:=swoHIDE;
-  end;
-  if output<>nil then RunProcess.Options := [poUsePipes, poStdErrToOutPut];
-  RunProcess.Execute;
-  while RunProcess.Running do begin
-    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-    if (output<>nil) and (RunProcess.Output<>nil) then begin
-      s:=RunProcess.Output.NumBytesAvailable;
-      if s>0 then begin
-        M.SetSize(BytesRead + s);
-        n := RunProcess.Output.Read((M.Memory + BytesRead)^, s);
-        if n > 0 then inc(BytesRead, n);
-      end;
-    end;
-  end;
-  result:=RunProcess.ExitStatus;
-  if (output<>nil) and (result<>127)and(RunProcess.Output<>nil) then repeat
-    s:=RunProcess.Output.NumBytesAvailable;
-    if s>0 then begin
-      M.SetSize(BytesRead + s);
-      n := RunProcess.Output.Read((M.Memory + BytesRead)^, s);
-      if n > 0 then Inc(BytesRead, n);
-    end;
-  until (n<=0)or(s<=0)or(RunProcess.Output=nil);
-  if (output<>nil) then begin
-    M.SetSize(BytesRead);
-    output.LoadFromStream(M);
-  end;
-  FreeAndNil(RunProcess);
-  M.Free;
-  param.Free;
-except
-  on E: Exception do begin
-    result:=-1;
-    if (output<>nil) then output.add(E.Message);
-    FreeAndNil(RunProcess);
-    M.Free;
-    param.Free;
-  end;
-end;
-end;
-
-function Tf_scriptengine.doRunWait(cmdline:string):boolean;
-var i: integer;
-begin
-  i:=ExecPr(cmdline,nil,false);
-  wait(1);
-  result:=(i=0);
-end;
-
-function Tf_scriptengine.doRunOutput(cmdline:string; var output:TStringlist):boolean;
-var i: integer;
-begin
-  i:=ExecPr(cmdline,output,false);
-  wait(1);
-  result:=(i=0);
-end;
-
-Function Tf_scriptengine.doARtoStr(var ar: Double) : string;
-begin
-  // script do not work if a float parameter is not var.
-  result:=ARtoStr3(ar);
-end;
-
-Function Tf_scriptengine.doDEtoStr(var de: Double) : string;
-begin
-  result:=DEtoStr3(de);
-end;
-
-Function Tf_scriptengine.doStrtoAR(str:string; var ar: Double) : boolean;
-begin
-  if trim(str)<>'' then begin
-    ar:=Str3ToAR(str);
-    result:=(ar<>0);
-  end
-  else result:=false;
-end;
-
-Function Tf_scriptengine.doStrtoDE(str:string; var de: Double) : boolean;
-begin
-  if trim(str)<>'' then begin
-    str:=StringReplace(str,ldeg,'d',[rfReplaceAll]);
-    str:=StringReplace(str,lmin,'m',[rfReplaceAll]);
-    str:=StringReplace(str,lsec,'s',[rfReplaceAll]);
-    de:=Str3ToDE(str);
-    result:=(de<>0);
-  end
-  else result:=false;
-end;
-
-Function Tf_scriptengine.doJDtoStr(var jd: Double) : string;
-begin
-  result:=jddate(jd);
-end;
-
-Function Tf_scriptengine.doStrtoJD(dt:string; var jdt: Double) : boolean;
-var sy,y,m,d,p: integer;
-    h:double;
-begin
-result:=false;
-sy:=1;
-h:=0;
-dt:=trim(dt);
-if length(dt)>2 then begin
- if dt[1]='-' then begin sy:=-1; delete(dt,1,1); end;
- if dt[1]='+' then begin sy:=1; delete(dt,1,1); end;
-end;
-p:=pos('-',dt);
-if p=0 then exit;
-y:=sy*strtoint(trim(copy(dt,1,p-1)));
-dt:=copy(dt,p+1,999);
-p:=pos('-',dt);
-if p=0 then exit;
-m:=strtoint(trim(copy(dt,1,p-1)));
-dt:=copy(dt,p+1,999);
-p:=pos('T',dt);
-if p=0 then p:=pos(' ',dt);
-if p=0 then d:=strtoint(trim(dt))     // no time part
-   else begin
-    d:=strtoint(trim(copy(dt,1,p-1)));
-
-   end;
-jdt:=jd(y,m,d,h);
-end;
-
-procedure Tf_scriptengine.doWait(wt:integer);
-var endt: TDateTime;
-begin
-  endt:=now+wt/secperday;
-  try
-  Waitrunning:=true;
-  while now<endt do begin
-    Sleep(100);
-    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-    if cancelWait then begin
-      Waitrunning:=false;
-      cancelWait:=false;
-      exit;
-    end;
-  end;
-  finally
-    Waitrunning:=false;
-  end;
-end;
-
-function Tf_scriptengine.doWaitTill(hour:string; showdialog: boolean):boolean;
-begin
- result:=WaitTill(hour,showdialog);
-end;
-
-function Tf_scriptengine.doDeleteFile(FileName: String): Boolean;
-var lf:TStringList;
-    i: integer;
-    dir:string;
-begin
-  result:=false;
-  if pos('*',FileName)>1 then begin
-    dir:=slash(ExtractFilePath(FileName));
-    lf:=TStringList.Create;
-    lf.Add(FileName);
-    cmd_ListFiles(lf);
-    if lf.Count>0 then begin
-      result:=true;
-      for i:=0 to lf.Count-1 do begin
-        result:=result and DeleteFileUTF8(dir+lf[i]);
-      end;
-    end;
-    lf.Free;
-  end
-  else begin
-    result:=DeleteFileUTF8(FileName);
-  end;
-end;
-
-function Tf_scriptengine.doRenameFile(OldName, NewName: String): Boolean;
-begin
-  result:=RenameFileUTF8(OldName, NewName);
-end;
-
-function Tf_scriptengine.doCreateDir(NewDir: String): Boolean;
-begin
-  result:=CreateDirUTF8(NewDir);
-end;
-
-function Tf_scriptengine.doParamstr: Tstringlist;
-begin
-  result:=FParamStr;
-end;
-
-function Tf_scriptengine.doParamCount: Integer;
-begin
-  if FParamStr=nil then
-    result:=0
-  else
-    result:=FParamStr.Count;
-end;
-
-function Tf_scriptengine.ScriptType(fn: string): TScriptType;
-var
- f: textfile;
- buf: string;
- p: integer;
-begin
- try
- result:=stUnknown;
- AssignFile(f,fn);
- Reset(f);
- repeat
-   ReadLn(f,buf);
-   p:=pos('begin',LowerCase(buf));
-   if p>0 then begin
-     result:=stPascal;
-     break;
-   end;
-   p:=pos('import',buf);
-   if p>0 then begin
-     result:=stPython;
-     break;
-   end;
- until eof(f);
- CloseFile(f);
- except
-   result:=stUnknown;
- end;
 end;
 
 function Tf_scriptengine.RunScriptAsync(sname,path,args: string; notify:boolean=True):integer;
 var fn: string;
     i,n: integer;
     ok: boolean;
-    st: TScriptType;
 begin
  try
   LockSwitch;
@@ -1063,52 +355,9 @@ begin
     msg(Format(rsFileNotFound,[fn]));
     exit;
   end;
-  st:=ScriptType(fn);
-  if st=stPython then begin
-    ScriptCancel:=false;
-    ok:=RunPythonAsync(PythonCmd, fn, slash(ScriptsDir),args,notify,n);
-    if ok then result:=n;
-  end
-  else if st=stPascal then begin
-    {$if defined(CPUARM) or defined(CPUAARCH64)}
-      msg('Pascal language script are not supported on ARM processor');
-      exit;
-    {$endif}
-    msg('Script writen in Pascal language are deprecated, please convert them to Python.');
-    FParamStr:=TStringList.Create;
-    FParamStr.Add(fn);
-    if args<>'' then begin
-      SplitCmdLineParams(args,FParamStr,true);
-    end;
-    scr.Script.LoadFromFile(fn);
-    ok:=scr.Compile;
-    ScriptCancel:=false;
-    if ok then begin
-      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-      ok:=scr.Execute;
-      wait(2);
-      ok:=ok and (not ScriptCancel);
-      if ok then begin
-         result:=0;
-         msg(Format(rsScriptFinish, [sname]))
-      end
-      else begin
-         result:=1;
-         msg(Format(rsScriptExecut, [inttostr(scr.ExecErrorRow), scr.ExecErrorToString]));
-         msg(Format(rsScriptFinish, [sname]));
-      end;
-    end else begin
-      for i:=0 to scr.CompilerMessageCount-1 do begin
-         msg(Format(rsCompilationE, [scr.CompilerErrorToStr(i)]));
-      end;
-      result:=1;
-    end;
-    FParamStr.Free;
-  end
-  else begin
-    result:=-1;
-    msg('Unknown script language '+fn);
-  end;
+  ScriptCancel:=false;
+  ok:=RunPythonAsync(PythonCmd, fn, slash(ScriptsDir),args,notify,n);
+  if ok then result:=n;
  except
    on E: Exception do begin
     msg(Format(rsScriptError, [E.Message]));
@@ -1122,7 +371,6 @@ function Tf_scriptengine.RunScript(sname,path,args: string; notify:boolean=True)
 var fn: string;
     i,n: integer;
     ok: boolean;
-    st: TScriptType;
 begin
  try
   LockSwitch;
@@ -1130,50 +378,9 @@ begin
   n:=1;
   msg(Format(rsRunScript2, [sname+blank+args]));
   fn:=slash(path)+sname+'.script';
-  st:=ScriptType(fn);
-  if st=stPython then begin
-    ScriptCancel:=false;
-    result:=RunPython(PythonCmd, fn, slash(ScriptsDir),args,notify,n);
-    result:=result and (not ScriptCancel);
-  end
-  else if st=stPascal then begin
-    {$if defined(CPUARM) or defined(CPUAARCH64)}
-      msg('Pascal language script are not supported on ARM processor');
-      exit;
-    {$endif}
-    msg('Script writen in Pascal language are deprecated, please convert them to Python.');
-    FParamStr:=TStringList.Create;
-    FParamStr.Add(fn);
-    if args<>'' then begin
-      SplitCmdLineParams(args,FParamStr,true);
-    end;
-    scr.Script.LoadFromFile(fn);
-    ok:=scr.Compile;
-    ScriptCancel:=false;
-    if ok then begin
-      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-      result:=scr.Execute;
-      wait(2);
-      result:=result and (not ScriptCancel);
-      if result then
-         msg(Format(rsScriptFinish, [sname]))
-      else begin
-         msg(Format(rsScriptExecut, [inttostr(scr.ExecErrorRow),
-           scr.ExecErrorToString]));
-         msg(Format(rsScriptFinish, [sname]));
-      end;
-    end else begin
-      for i:=0 to scr.CompilerMessageCount-1 do begin
-         msg(Format(rsCompilationE, [scr.CompilerErrorToStr(i)]));
-      end;
-      result:=false;
-    end;
-    FParamStr.Free;
-  end
-  else begin
-    result:=false;
-    msg('Unknown script language '+fn);
-  end;
+  ScriptCancel:=false;
+  result:=RunPython(PythonCmd, fn, slash(ScriptsDir),args,notify,n);
+  result:=result and (not ScriptCancel);
  except
    on E: Exception do begin
     msg(Format(rsScriptError, [E.Message]));
@@ -1184,194 +391,16 @@ end;
 
 function Tf_scriptengine.ScriptRunning: boolean;
 begin
- result:= (scr.Running or PythonRunning);
+ result:= PythonRunning;
 end;
 
 Procedure Tf_scriptengine.StopScript;
 begin
-  if scr.Running then begin
-    msg(rsScriptTermin);
-    ScriptCancel:=true;
-    scr.Stop;
-    if RunProcess<>nil then RunProcess.Active:=false;
-  end
-  else if PythonRunning then begin
+  if PythonRunning then begin
      msg(rsScriptTermin);
      ScriptCancel:=true;
      StopPython;
   end;
-end;
-
-function Tf_scriptengine.CompileScripts: boolean;
-begin
- result:=scr.Compile;
-end;
-
-procedure Tf_scriptengine.TplPSScriptExecute(Sender: TPSScript);
-begin
- if assigned(FonScriptExecute) then FonScriptExecute(self);
-end;
-
-procedure Tf_scriptengine.TplPSScriptAfterExecute(Sender: TPSScript);
-begin
- if assigned(FonScriptAfterExecute) then FonScriptAfterExecute(self);
-end;
-
-procedure Tf_scriptengine.TplPSScriptCompile(Sender: TPSScript);
-begin
-with Sender as TPSScript do begin
-  comp.AddConstantN('deg2rad', 'extended').SetExtended(deg2rad);
-  comp.AddConstantN('rad2deg', 'extended').SetExtended(rad2deg);
-  comp.AddConstantN('msgOK', 'string').SetString(msgOK);
-  comp.AddConstantN('msgFailed', 'string').SetString(msgFailed);
-  AddMethod(self, @Tf_scriptengine.Cmd, 'function Cmd(cname:string):string;');
-  AddMethod(self, @Tf_scriptengine.CmdArg, 'function CmdArg(cname:string; var arg:Tstringlist):string;');
-  AddMethod(self, @Tf_scriptengine.doGetS, 'function GetS(varname:string; var str: string):Boolean;');
-  AddMethod(self, @Tf_scriptengine.doSetS, 'function SetS(varname:string; str: string):Boolean;');
-  AddMethod(self, @Tf_scriptengine.doSetSL, 'function SetSL(varname:string; strl: TStringList):Boolean;');
-  AddMethod(self, @Tf_scriptengine.doGetSL, 'function GetSL(varname:string; var strl: TStringList):Boolean;');
-  AddMethod(self, @Tf_scriptengine.doGetI, 'function GetI(varname:string; var i: Integer):Boolean;');
-  AddMethod(self, @Tf_scriptengine.doSetI, 'function SetI(varname:string; i: Integer):Boolean;');
-  AddMethod(self, @Tf_scriptengine.doGetD, 'function GetD(varname:string; var x: double):boolean;');
-  AddMethod(self, @Tf_scriptengine.doSetD, 'function SetD(varname:string; x: Double):Boolean;');
-  {$ifdef mswindows}
-  AddMethod(self, @Tf_scriptengine.doGetV, 'function GetV(varname:string; var v: variant):boolean;');
-  AddMethod(self, @Tf_scriptengine.doSetV, 'function SetV(varname:string; v: variant):Boolean;');
-  {$endif}
-  AddMethod(self, @Tf_scriptengine.doGetB, 'function GetB(varname:string; var x: Boolean):Boolean;');
-  AddMethod(self, @Tf_scriptengine.doARtoStr, 'Function ARtoStr(var ar: Double) : string;');
-  AddMethod(self, @Tf_scriptengine.doDEtoStr, 'Function DEtoStr(var de: Double) : string;');
-  AddMethod(self, @Tf_scriptengine.doStrtoAR, 'Function StrtoAR(str:string; var ar: Double) : boolean;');
-  AddMethod(self, @Tf_scriptengine.doStrtoDE, 'Function StrtoDE(str:string; var de: Double) : boolean;');
-  AddMethod(self, @Tf_scriptengine.doJDtoStr, 'Function JDtoStr(var jd: Double) : string;');
-  AddMethod(self, @Tf_scriptengine.doStrtoJD, 'Function StrtoJD(dt:string; var jdt: Double) : boolean;');
-  AddMethod(self, @Tf_scriptengine.doEq2Hz, 'Procedure Eq2Hz(var ra,de,a,h : double);');
-  AddMethod(self, @Tf_scriptengine.doHz2Eq, 'Procedure Hz2Eq(var a,h,ra,de : double);');
-  AddMethod(self, @Tf_scriptengine.doFormatFloat, 'function FormatFloat(Const Format : String; var Value : double) : String;');
-  AddMethod(self, @Tf_scriptengine.doStrtoFloatD, 'Procedure StrtoFloatD(str:string; var defval: Double; var val: Double);');
-  AddMethod(self, @Tf_scriptengine.doStringReplace, 'function StringReplace(str,s1,s2: String): string;');
-  AddMethod(self, @Tf_scriptengine.doFormat, 'Function Format(Const Fmt : String; const Args : Array of const) : String;');
-  AddMethod(self, @Tf_scriptengine.doIsNumber, 'function IsNumber(str: String): boolean;');
-  AddMethod(self, @Tf_scriptengine.doMsgBox,'function MsgBox(const aMsg: string):boolean;');
-  AddMethod(self, @Tf_scriptengine.doShowMessage,'Procedure ShowMessage(const aMsg: string);');
-  AddMethod(self, @Tf_scriptengine.doLogmsg,'procedure Logmsg(str:string);');
-  AddMethod(self, @Tf_scriptengine.doOpenFile,'function OpenFile(fn:string):boolean;');
-  AddMethod(self, @Tf_scriptengine.doRun,'function Run(cmdline:string):boolean;');
-  AddMethod(self, @Tf_scriptengine.doRunWait,'function RunWait(cmdline:string):boolean;');
-  AddMethod(self, @Tf_scriptengine.doRunOutput,'function RunOutput(cmdline:string; var output:TStringlist):boolean;');
-  AddMethod(self, @Tf_scriptengine.doWait,'procedure Wait(wt:integer);');
-  AddMethod(self, @Tf_scriptengine.doWaitTill,'function WaitTill(hour:string; showdialog: boolean):boolean;');
-  AddMethod(self, @Tf_scriptengine.doDeleteFile,'function DeleteFile(FileName: String): Boolean;');
-  AddMethod(self, @Tf_scriptengine.doRenameFile,'function RenameFile(OldName, NewName: String): Boolean;');
-  AddMethod(self, @Tf_scriptengine.doCreateDir,'function CreateDir(NewDir: String): Boolean;');
-  AddMethod(self, @Tf_scriptengine.doSaveSL,'function SaveSL(fn:string; strl: TStringList):Boolean;');
-  AddMethod(self, @Tf_scriptengine.doParamstr,'function Paramstr: Tstringlist;');
-  AddMethod(self, @Tf_scriptengine.doParamCount,'function ParamCount: Integer;');
-end;
-end;
-
-function Tf_scriptengine.Cmd(cname:string):string;
-var buf,buf1,buf2: string;
-begin
-cname:=uppercase(cname);
-result:=msgFailed;
-if cname='TELESCOPE_ABORTMOTION' then result:=cmd_MountAbortMotion
-else if cname='TELESCOPE_TRACK' then result:=cmd_MountTrack
-else if cname='EQMOD_CLEARPOINTS' then result:= cmd_EqmodClearPoints
-else if cname='EQMOD_CLEARSYNCDELTA' then result:= cmd_EqmodClearSyncDelta
-else if cname='EQMOD_STDSYNC' then result:= cmd_EqmodStdSync
-else if cname='EQMOD_APPENDSYNC' then result:= cmd_EqmodAppendSync
-else if cname='AUTOGUIDER_CONNECT' then result:=cmd_AutoguiderConnect
-else if cname='AUTOGUIDER_CALIBRATE' then result:=cmd_AutoguiderCalibrate
-else if cname='AUTOGUIDER_STARTGUIDING' then result:=cmd_AutoguiderStartGuiding
-else if cname='AUTOGUIDER_STOPGUIDING' then result:=cmd_AutoguiderStopGuiding
-else if cname='AUTOGUIDER_PAUSE' then result:=cmd_AutoguiderPause
-else if cname='AUTOGUIDER_UNPAUSE' then result:=cmd_AutoguiderUnPause
-else if cname='AUTOGUIDER_DITHER' then result:=cmd_AutoguiderDither
-else if cname='AUTOGUIDER_SHUTDOWN' then result:=cmd_AutoguiderShutdown
-else if cname='AUTOGUIDER_GETLOCKPOSITION' then begin
-  buf:=cmd_AutoguiderGetLockPosition(buf1,buf2);
-  if buf=msgOK then
-     result:=buf1+','+buf2
-  else
-     result:=buf;
-end
-else if cname='WHEEL_GETFILTER' then result:=cmd_Wheel_GetFilter
-else if cname='PREVIEW_SINGLE' then result:=cmd_Preview_Single
-else if cname='PREVIEW_LOOP' then result:=cmd_Preview_Loop
-else if cname='PREVIEW_WAITLOOP' then result:=cmd_Preview_WaitLoop
-else if cname='PREVIEW_STOP' then result:=cmd_Preview_Stop
-else if cname='CAPTURE_START' then result:=cmd_Capture_Start
-else if cname='CAPTURE_STOP' then result:=cmd_Capture_Stop
-else if cname='ASTROMETRY_SOLVE' then result:=cmd_AstrometrySolve
-else if cname='ASTROMETRY_SYNC' then result:=cmd_AstrometrySync
-else if cname='ASTROMETRY_SLEW_IMAGE_CENTER' then result:=cmd_AstrometrySlewImageCenter
-else if cname='ASTROMETRY_PLOT_DSO' then result:=cmd_AstrometryPlotDSO
-else if cname='ASTROMETRY_PLOT_HYPERLEDA' then result:=cmd_AstrometryPlotHyperleda
-else if cname='PLANETARIUM_CONNECT' then result:=cmd_PlanetariumConnect
-else if cname='PLANETARIUM_SHOWIMAGE' then result:=cmd_PlanetariumShowImage
-else if cname='PLANETARIUM_SHUTDOWN' then result:=cmd_PlanetariumShutdown
-else if cname='PROGRAM_SHUTDOWN' then result:=cmd_ProgramShutdown
-else if cname='CLEAR_REFERENCE_IMAGE' then result:=cmd_ClearReferenceImage
-else if cname='AUTOFOCUS' then result:=cmd_AutoFocus
-else if cname='AUTOMATICAUTOFOCUS' then result:=cmd_AutomaticAutoFocus
-else if cname='COVER_OPEN' then result:=cmd_coveropen
-else if cname='COVER_CLOSE' then result:=cmd_coverclose
-else if cname='CALIBRATOR_LIGHT_OFF' then result:=cmd_calibratorlightoff
-else if cname='CUSTOMHEADER_CLEAR' then result:=cmd_customheader_clear
-else if cname='FINDER_STOPLOOP' then result:=cmd_FinderStopLoop
-else if cname='CAMERA_RESETFRAME' then result:=cmd_cameraresetframe
-;
-LastErr:='cmd('+cname+'): '+result;
-end;
-
-function Tf_scriptengine.CmdArg(cname:string; var arg:Tstringlist):string;
-var i: integer;
-begin
-cname:=uppercase(cname);
-for i:=arg.count to MaxCmdArg do arg.add('');
-result:=msgFailed;
-if cname='DEVICES_CONNECTION' then result:=cmd_DevicesConnection(arg[0])
-else if cname='TELESCOPE_SLEW' then result:=cmd_MountSlew(arg[0],arg[1])
-else if cname='TELESCOPE_SLEWASYNC' then result:=cmd_MountSlewAsync(arg[0],arg[1])
-else if cname='TELESCOPE_SYNC' then result:=cmd_MountSync(arg[0],arg[1])
-else if cname='TELESCOPE_PARK' then result:=cmd_MountPark(arg[0])
-else if cname='WHEEL_SETFILTER' then result:=cmd_Wheel_SetFilter(arg[0])
-else if cname='WHEEL_GETFILTERSNAME' then result:=cmd_Wheel_GetFiltersName(arg)
-else if cname='WHEEL_SETFILTERSNAME' then result:=cmd_Wheel_SetFiltersName(arg)
-else if cname='FOCUSER_SETPOSITION' then result:=cmd_Focuser_SetPosition(arg[0])
-else if cname='SETFOCUSXY' then result:=cmd_setFocusXY(arg[0],arg[1])
-else if cname='CCD_SETTEMPERATURE' then result:=cmd_Ccd_SetTemperature(arg[0])
-else if cname='PREVIEW_SETEXPOSURE' then result:=cmd_Preview_SetExposure(arg[0])
-else if cname='PREVIEW_SETBINNING' then result:=cmd_Preview_SetBinning(arg[0])
-else if cname='CAPTURE_SETEXPOSURE' then result:=cmd_Capture_SetExposure(arg[0])
-else if cname='CAPTURE_SETBINNING' then result:=cmd_Capture_SetBinning(arg[0])
-else if cname='CAPTURE_SETOBJECTNAME' then result:=cmd_Capture_SetObjectName(arg[0])
-else if cname='CAPTURE_SETCOUNT' then result:=cmd_Capture_SetCount(arg[0])
-else if cname='CAPTURE_SETFRAMETYPE' then result:=cmd_Capture_SetFrameType(arg[0])
-else if cname='CAPTURE_SETDITHER' then result:=cmd_Capture_SetDither(arg[0])
-else if cname='SEQUENCE_START' then result:=cmd_SequenceStart(arg[0])
-else if cname='SAVE_FITS_FILE' then result:=cmd_SaveFitsFile(arg[0])
-else if cname='OPEN_FITS_FILE' then result:=cmd_OpenFitsFile(arg[0])
-else if cname='OPEN_REFERENCE_IMAGE' then result:=cmd_OpenReferenceImage(arg[0])
-else if cname='LIST_FILES' then result:=cmd_ListFiles(arg)
-else if cname='PLANETARIUM_SHOWIMAGE_FOV' then result:=cmd_PlanetariumShowImage(arg[0])
-else if cname='CALIBRATOR_LIGHT_ON' then result:=cmd_calibratorlighton(arg[0])
-else if cname='CUSTOMHEADER' then result:=cmd_customheader(arg[0])
-else if cname='CUSTOMHEADER_ADD' then result:=cmd_customheader_add(arg[0],arg[1])
-else if cname='CUSTOMHEADER_DEL' then result:=cmd_customheader_del(arg[0])
-else if cname='AUTOGUIDER_SETLOCKPOSITION' then result:=cmd_AutoguiderSetLockPosition(arg[0],arg[1])
-else if cname='AUTOGUIDER_STORELOCKPOSITION' then result:=cmd_AutoguiderStoreLockPosition(arg[0],arg[1])
-else if cname='FINDER_SAVEIMAGES' then result:=cmd_FinderSaveImages(arg[0])
-else if cname='FINDER_STARTLOOP' then result:=cmd_FinderStartLoop(arg[0])
-else if cname='FINDER_SNAPSHOT' then result:=cmd_FinderSnapshot(arg[0],arg[1],arg[2])
-else if cname='INTERNALGUIDER_SNAPSHOT' then result:=cmd_InternalGuiderSnapshot(arg[0],arg[1],arg[2])
-else if cname='INTERNALGUIDER_SAVE_FITS_FILE' then result:=cmd_InternalGuiderSaveFitsFile(arg[0])
-else if cname='GET_SWITCH' then result:=cmd_getswitch(arg[0],arg[1])
-else if cname='SET_SWITCH' then result:=cmd_setswitch(arg[0],arg[1],arg[2])
-else if cname='CAMERA_SETFRAME' then result:=cmd_camerasetframe(arg[0],arg[1],arg[2],arg[3])
-;
-LastErr:='cmdarg('+cname+'): '+result;
 end;
 
 function Tf_scriptengine.cmd_DevicesConnection(onoff:string; dev:string=''):string;
@@ -2523,18 +1552,6 @@ begin
   result:=msgOK;
 end;
 
-function Tf_scriptengine.cmd_OpenReferenceImage(fn:string):string;
-begin
-  if Assigned(FonOpenReferenceImage) then FonOpenReferenceImage(fn);
-  result:=msgOK;
-end;
-
-function Tf_scriptengine.cmd_ClearReferenceImage:string;
-begin
-  if Assigned(FonClearReferenceImage) then FonClearReferenceImage(self);
-  result:=msgOK;
-end;
-
 function Tf_scriptengine.cmd_AutoFocus: string;
 var ok:boolean;
 begin
@@ -2608,25 +1625,6 @@ procedure Tf_scriptengine.ShutdownTimerTimer(Sender: TObject);
 begin
  ShutdownTimer.Enabled:=false;
  Application.MainForm.Close;
-end;
-
-function Tf_scriptengine.cmd_ListFiles(var lf:TStringList):string;
-var fs : TSearchRec;
-    i: integer;
-    dir: string;
-begin
- dir:=lf[0];
- lf.Clear;
- i:=FindFirstUTF8(dir,0,fs);
- while i=0 do begin
-   lf.Add(fs.Name);
-   i:=FindNextUTF8(fs);
- end;
- FindCloseUTF8(fs);
- if lf.Count>0 then
-   result:=msgOK
- else
-  result:=msgFailed;
 end;
 
 function Tf_scriptengine.cmd_coverstatus: string;

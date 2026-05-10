@@ -17,13 +17,10 @@ type
     ButtonDownload: TButton;
     Edit1: TEdit;
     Label1: TLabel;
-    Label2: TLabel;
     Label3: TLabel;
     PanelScriptname: TPanel;
     PanelBottom: TPanel;
-    PanelLanguage: TPanel;
     PanelDownload: TPanel;
-    ScriptLanguage: TRadioGroup;
     procedure ButtonDownloadClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -47,7 +44,6 @@ implementation
 procedure Tf_newscript.SetLang;
 begin
   label1.caption:=rsNewScript;
-  label2.Caption:=rsScriptLangua;
   BtnOK.Caption:=rsOK;
   BtnCancel.Caption:=rsCancel;
   Label3.Caption:=rsExampleAndTe;

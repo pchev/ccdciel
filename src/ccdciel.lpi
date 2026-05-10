@@ -333,7 +333,7 @@
     <RunParams>
       <FormatVersion Value="2"/>
     </RunParams>
-    <RequiredPackages Count="13">
+    <RequiredPackages Count="12">
       <Item1>
         <PackageName Value="downldialog"/>
       </Item1>
@@ -353,26 +353,23 @@
         <PackageName Value="enhedit"/>
       </Item6>
       <Item7>
-        <PackageName Value="pascalscript"/>
+        <PackageName Value="SynEdit"/>
       </Item7>
       <Item8>
-        <PackageName Value="SynEdit"/>
+        <PackageName Value="vosamp"/>
       </Item8>
       <Item9>
-        <PackageName Value="vosamp"/>
+        <PackageName Value="LazUtils"/>
       </Item9>
       <Item10>
-        <PackageName Value="LazUtils"/>
+        <PackageName Value="FCL"/>
       </Item10>
       <Item11>
-        <PackageName Value="FCL"/>
+        <PackageName Value="indiclient"/>
       </Item11>
       <Item12>
-        <PackageName Value="indiclient"/>
-      </Item12>
-      <Item13>
         <PackageName Value="LCL"/>
-      </Item13>
+      </Item12>
     </RequiredPackages>
     <Units Count="135">
       <Unit0>
@@ -624,9 +621,9 @@
         <IsPartOfProject Value="True"/>
       </Unit46>
       <Unit47>
-        <Filename Value="pu_pascaleditor.pas"/>
+        <Filename Value="pu_scripteditor.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="f_pascaleditor"/>
+        <ComponentName Value="f_scripteditor"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit47>

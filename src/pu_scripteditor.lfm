@@ -1,4 +1,4 @@
-object f_pascaleditor: Tf_pascaleditor
+object f_scripteditor: Tf_scripteditor
   Left = 407
   Height = 505
   Top = 175
@@ -108,12 +108,11 @@ object f_pascaleditor: Tf_pascaleditor
     ParentFont = False
     PopupMenu = PopupMenu1
     TabOrder = 1
-    OnMouseUp = SynEdit1MouseUp
     Gutter.Width = 43
     Gutter.MouseActions = <>
     RightGutter.Width = 0
     RightGutter.MouseActions = <>
-    Highlighter = SynPasSyn1
+    Highlighter = SynPythonSyn1
     Keystrokes = <    
       item
         Command = ecUp
@@ -560,7 +559,6 @@ object f_pascaleditor: Tf_pascaleditor
     MouseLinkColor.Foreground = clBlue
     LineHighlightColor.Background = clNone
     LineHighlightColor.Foreground = clNone
-    OnGutterClick = SynEdit1GutterClick
     OnSpecialLineColors = SynEdit1SpecialLineColors
     OnStatusChange = SynEdit1StatusChange
     inline SynLeftGutterPartList1: TSynGutterPartList
@@ -617,16 +615,8 @@ object f_pascaleditor: Tf_pascaleditor
         ImageIndex = 2
         OnClick = ButtonRunClick
       end
-      object ToolButton2: TToolButton
-        Left = 40
-        Hint = 'Pause'
-        Top = 2
-        Caption = 'ToolButton2'
-        ImageIndex = 1
-        OnClick = ButtonPauseClick
-      end
       object ToolButton3: TToolButton
-        Left = 63
+        Left = 40
         Hint = 'Stop'
         Top = 2
         Caption = 'ToolButton3'
@@ -634,28 +624,12 @@ object f_pascaleditor: Tf_pascaleditor
         OnClick = ButtonStopClick
       end
       object ToolButton4: TToolButton
-        Left = 94
+        Left = 71
         Hint = 'Step Into'
         Top = 2
         Caption = 'ToolButton4'
         ImageIndex = 3
         OnClick = ButtonStepIntoClick
-      end
-      object ToolButton5: TToolButton
-        Left = 117
-        Hint = 'Step Over'
-        Top = 2
-        Caption = 'ToolButton5'
-        ImageIndex = 4
-        OnClick = ButtonStepOverClick
-      end
-      object ToolButton6: TToolButton
-        Left = 148
-        Hint = 'Remove all breakpoints'
-        Top = 2
-        Caption = 'ToolButton6'
-        ImageIndex = 6
-        OnClick = ButtonRemoveBreakpoints
       end
       object ToolButton7: TToolButton
         Left = 1
@@ -672,28 +646,28 @@ object f_pascaleditor: Tf_pascaleditor
         Style = tbsSeparator
       end
       object ToolButton9: TToolButton
-        Left = 86
+        Left = 63
         Height = 22
         Top = 2
         Caption = 'ToolButton9'
         Style = tbsSeparator
       end
       object ToolButton10: TToolButton
-        Left = 140
+        Left = 94
         Height = 22
         Top = 2
         Caption = 'ToolButton10'
         Style = tbsSeparator
       end
       object ToolButton11: TToolButton
-        Left = 171
+        Left = 102
         Height = 22
         Top = 2
         Caption = 'ToolButton11'
         Style = tbsSeparator
       end
       object Panel4: TPanel
-        Left = 179
+        Left = 110
         Height = 22
         Top = 2
         Width = 423
@@ -723,18 +697,6 @@ object f_pascaleditor: Tf_pascaleditor
         end
       end
     end
-  end
-  object SynPasSyn1: TSynPasSyn
-    Enabled = False
-    CommentAttri.Foreground = clBlue
-    NumberAttri.Foreground = clNavy
-    StringAttri.Foreground = clBlue
-    SymbolAttri.Foreground = clRed
-    CompilerMode = pcmDelphi
-    NestedComments = False
-    TypeHelpers = True
-    Left = 57
-    Top = 49
   end
   object PopupMenu1: TPopupMenu
     Left = 146

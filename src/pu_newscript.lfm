@@ -1,10 +1,10 @@
 object f_newscript: Tf_newscript
   Left = 375
-  Height = 180
+  Height = 134
   Top = 250
   Width = 320
   AutoSize = True
-  ClientHeight = 180
+  ClientHeight = 134
   ClientWidth = 320
   OnCreate = FormCreate
   OnShow = FormShow
@@ -17,7 +17,7 @@ object f_newscript: Tf_newscript
     BevelOuter = bvNone
     ClientHeight = 50
     ClientWidth = 320
-    TabOrder = 3
+    TabOrder = 2
     object ButtonDownload: TButton
       Left = 120
       Height = 25
@@ -67,57 +67,10 @@ object f_newscript: Tf_newscript
       TabOrder = 0
     end
   end
-  object PanelLanguage: TPanel
-    Left = 0
-    Height = 46
-    Top = 92
-    Width = 320
-    Align = alTop
-    BevelOuter = bvNone
-    ClientHeight = 46
-    ClientWidth = 320
-    TabOrder = 2
-    object ScriptLanguage: TRadioGroup
-      Left = 120
-      Height = 46
-      Top = 0
-      Width = 196
-      Align = alRight
-      AutoFill = True
-      BorderSpacing.Right = 4
-      ChildSizing.LeftRightSpacing = 6
-      ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
-      ChildSizing.EnlargeVertical = crsHomogenousChildResize
-      ChildSizing.ShrinkHorizontal = crsScaleChilds
-      ChildSizing.ShrinkVertical = crsScaleChilds
-      ChildSizing.Layout = cclLeftToRightThenTopToBottom
-      ChildSizing.ControlsPerLine = 2
-      ClientHeight = 42
-      ClientWidth = 192
-      Columns = 2
-      ItemIndex = 1
-      Items.Strings = (
-        'Pascal'
-        'Python'
-      )
-      OnClick = ScriptLanguageClick
-      TabOrder = 0
-    end
-    object Label2: TLabel
-      AnchorSideTop.Control = ScriptLanguage
-      AnchorSideTop.Side = asrCenter
-      Left = 6
-      Height = 18
-      Top = 14
-      Width = 96
-      Caption = 'Script language'
-      ParentColor = False
-    end
-  end
   object PanelBottom: TPanel
     Left = 0
     Height = 42
-    Top = 138
+    Top = 92
     Width = 320
     Align = alTop
     BevelOuter = bvNone
