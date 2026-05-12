@@ -18,10 +18,6 @@ msgstr ""
 msgid "Set absolute focuser position"
 msgstr ""
 
-#: u_hints:rsvcurvelearni
-msgid "V curve learning"
-msgstr ""
-
 #: u_hints:rsmovefocuseri
 msgid "Move focuser inward"
 msgstr ""
@@ -266,14 +262,6 @@ msgstr ""
 msgid "Dynamic can be use with an absolute or relative position focuser,%s this method require the starting position is near the focus position.%s This is the preferred method."
 msgstr ""
 
-#: u_hints:rsusevcurvewi2
-msgid "Vcurve can only work with an absolute position focuser, it require to learn the curve."
-msgstr ""
-
-#: u_hints:rsuseiterati2
-msgid "Use Iterative if the first two options do not work for you or if you start with really bad focus.%s This is the slowest and less precise method."
-msgstr ""
-
 #: u_hints:rsthedirection
 msgid "The direction the focuser will always finish to move.%sIf using auto-focus set the same move direction."
 msgstr ""
@@ -286,32 +274,8 @@ msgstr ""
 msgid "The preferred focuser direction for autofocus."
 msgstr ""
 
-#: u_hints:rstrytocorrect
-msgid "Try to correct for focuser slippage since the last Vcurve learning.%sBeware you must set the focuser temperature correction and the filters offset before to use this option."
-msgstr ""
-
 #: u_hints:rsthemagnitude
 msgid "The magnitude of the star used to run the autofocus.%sUsing a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars."
-msgstr ""
-
-#: u_hints:rstheelbrusima
-msgid "The Elbrus Images folder as set in the Elbrus parameters."
-msgstr ""
-
-#: u_hints:rstheunixpathe
-msgid "The Unix path equivalent to the Elbrus Images folder."
-msgstr ""
-
-#: u_hints:rsstartthevcur
-msgid "Start the Vcurve learning process"
-msgstr ""
-
-#: u_hints:rsiftheimageis
-msgid "If the image is now focused, click this button to get the current focuser position"
-msgstr ""
-
-#: u_hints:rsafterlearnin
-msgid "After learning is completed you can use this cursor to better adjust to the linear part of the curve.%sThe fit must be particularly good near the horizontal blue line position."
 msgstr ""
 
 #: u_hints:rstheobjectnam
@@ -516,10 +480,6 @@ msgstr ""
 
 #: u_hints:rscameraoffset
 msgid "Camera offset"
-msgstr ""
-
-#: u_hints:rsifnotchecked
-msgid "If not checked the program will never change the gain/offset value set in the driver setup"
 msgstr ""
 
 #: u_hints:rshistogramful

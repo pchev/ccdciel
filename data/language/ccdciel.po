@@ -26,14 +26,6 @@ msgstr ""
 msgid "Save FITS file%s"
 msgstr ""
 
-#: u_translation:rsopenreferenc
-msgid "Open reference image"
-msgstr ""
-
-#: u_translation:rsclearreferen
-msgid "Clear reference image"
-msgstr ""
-
 #: u_translation:rsquit
 msgid "Quit"
 msgstr ""
@@ -406,14 +398,6 @@ msgstr ""
 msgid "Invalid numeric value"
 msgstr ""
 
-#: u_translation:rscannotgetfoc
-msgid "Cannot get focuser absolute position"
-msgstr ""
-
-#: u_translation:rsfromtoby
-msgid "From: %s to %s by %s"
-msgstr ""
-
 #: u_translation:rsfocusertempe
 msgid "Focuser temperature: %s"
 msgstr ""
@@ -432,34 +416,6 @@ msgstr ""
 
 #: u_translation:rshfmtriggered
 msgid "HFD Focus Monitor: Threshold: %s%%, Ref: %s, %s-Image Avg: %s, HFD Delta: %s%%"
-msgstr ""
-
-#: u_translation:rsstopvcurvele
-msgid "Stop Vcurve learning"
-msgstr ""
-
-#: u_translation:rsmeasurementh
-msgid "Measurement %s hfd:%s peak:%s snr:%s"
-msgstr ""
-
-#: u_translation:rscannotdetect
-msgid "Cannot detect star."
-msgstr ""
-
-#: u_translation:rscannotreachn
-msgid "Cannot reach near focus HFD, please increase Half Width or better center the curve."
-msgstr ""
-
-#: u_translation:rscannotreachs
-msgid "Cannot reach start focus HFD, please increase Half Width or decrease the start HFD"
-msgstr ""
-
-#: u_translation:rscannotfindas
-msgid "Cannot find a star at his position. Move to a bright star or increase the preview exposure time, or the autofocus binning."
-msgstr ""
-
-#: u_translation:rsstartlearnin
-msgid "Start learning V curve"
 msgstr ""
 
 #: u_translation:rseastpointing
@@ -508,10 +464,6 @@ msgstr ""
 
 #: u_translation:rsexposurefact
 msgid "Exposure factor"
-msgstr ""
-
-#: u_translation:rsabortexposur
-msgid "Abort exposure"
 msgstr ""
 
 #: u_translation:rsinvalidexpos
@@ -606,40 +558,8 @@ msgstr ""
 msgid "The focuser do not support Absolute or Relative movement, autofocus calibration is not possible."
 msgstr ""
 
-#: u_translation:rscannotruncal
-msgid "Cannot run calibration now, stop capture and retry"
-msgstr ""
-
-#: u_translation:rscannotruncal2
-msgid "Cannot run calibration now, stop preview and retry"
-msgstr ""
-
-#: u_translation:rsfocusercalib2
-msgid "Focuser calibration started"
-msgstr ""
-
-#: u_translation:rssetfocusdire
-msgid "Set focus direction inward"
-msgstr ""
-
-#: u_translation:rssetfocusdire2
-msgid "Set focus direction outward"
-msgstr ""
-
 #: u_translation:rsrequesttosto
 msgid "Request to stop focuser calibration"
-msgstr ""
-
-#: u_translation:rsthefocuserdo2
-msgid "The focuser do not move enough after 30 steps! please check if the focuser is moving at all or increase the minimum movement"
-msgstr ""
-
-#: u_translation:rsthefocuserdo3
-msgid "The focuser do not move enough after 30 steps! please check if the focuser is moving at all or decrease the maximum HFD"
-msgstr ""
-
-#: u_translation:rsreachfocuser
-msgid "Reach focuser range limit! please better position the focuser half way on it's mechanical travel or decrease the maximum HFD"
 msgstr ""
 
 #: u_translation:rsselectastarf
@@ -664,14 +584,6 @@ msgstr ""
 
 #: u_translation:rspleaseconfig2
 msgid "Please configure the Autofocus options."
-msgstr ""
-
-#: u_translation:rspleaserunvcu
-msgid "Please run Vcurve learning for binning %s"
-msgstr ""
-
-#: u_translation:rspleaserunthe
-msgid "Please run the V-curve learning for this focuser direction first. Button V-learn."
 msgstr ""
 
 #: u_translation:rsautofocusnow
@@ -830,28 +742,8 @@ msgstr ""
 msgid "Disconnected"
 msgstr ""
 
-#: u_translation:rsmovetonewpla
-msgid "Move to new planetarium object %s"
-msgstr ""
-
-#: u_translation:rspleaseconfir
-msgid "Please confirm you want to slew the telescope to %s at coordinates %s/%s"
-msgstr ""
-
-#: u_translation:rsplanetariumt
-msgid "Planetarium target set to %s"
-msgstr ""
-
-#: u_translation:rsplanetariumt2
-msgid "Planetarium target slew fail"
-msgstr ""
-
 #: u_translation:rsinvalidcoord
 msgid "Invalid coordinates"
-msgstr ""
-
-#: u_translation:rsbeforetouset
-msgid "Before to use this tool you must connect the camera, the mount and the planetarium"
 msgstr ""
 
 #: u_translation:rsopenfile
@@ -1086,10 +978,6 @@ msgstr ""
 msgid "Speed"
 msgstr ""
 
-#: u_translation:rstimer
-msgid "Timer"
-msgstr ""
-
 #: u_translation:rsincr
 msgid "Incr."
 msgstr ""
@@ -1100,10 +988,6 @@ msgstr ""
 
 #: u_translation:rsstep
 msgid "Step"
-msgstr ""
-
-#: u_translation:rsvlearn
-msgid "V-learn"
 msgstr ""
 
 #: u_translation:rstemp
@@ -1150,10 +1034,6 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
-#: u_translation:rsanotherscrip
-msgid "Another script is already running"
-msgstr ""
-
 #: u_translation:rspleaseselect
 msgid "Please select a script!"
 msgstr ""
@@ -1180,10 +1060,6 @@ msgstr ""
 
 #: u_translation:rsscriptalread2
 msgid "Script %s already exist. Do you want to edit this script?"
-msgstr ""
-
-#: u_translation:rsscriptalread3
-msgid "Script %s already exist. Do you want to replace this custom script by the template?"
 msgstr ""
 
 #: u_translation:rsplan
@@ -1302,16 +1178,8 @@ msgstr ""
 msgid "Autofocus"
 msgstr ""
 
-#: u_translation:rsautofocussta3
-msgid "Autofocus start Vcurve"
-msgstr ""
-
 #: u_translation:rsautofocussta4
 msgid "Autofocus start Dynamic curve"
-msgstr ""
-
-#: u_translation:rsautofocussta5
-msgid "Autofocus start Iterative focus"
 msgstr ""
 
 #: u_translation:rsautofocuscan2
@@ -1326,10 +1194,6 @@ msgstr ""
 msgid "Autofocus canceled because the HFD cannot be measured"
 msgstr ""
 
-#: u_translation:rsautofocusmea
-msgid "Autofocus mean frame %s/%s, hfd=%s peak:%s snr:%s"
-msgstr ""
-
 #: u_translation:rsautofocuscan5
 msgid "Autofocus canceled because of low SNR, POS=%s HFD=%s PEAK:%s SNR:%s"
 msgstr ""
@@ -1338,36 +1202,12 @@ msgstr ""
 msgid "Autofocus finished, POS=%s HFD=%s PEAK:%s SNR:%s TEMP:%s"
 msgstr ""
 
-#: u_translation:rsfocuserslipp
-msgid "Focuser slippage offset set to %s"
-msgstr ""
-
 #: u_translation:rsautofocusfin2
 msgid "Autofocus final HFD is higher than %s"
 msgstr ""
 
 #: u_translation:rsautofocusrun
 msgid "Autofocus running, hfd=%s peak:%s snr:%s"
-msgstr ""
-
-#: u_translation:rsstartfocushf
-msgid "Start focus HFD is outside of current V curve, please decrease the start HFD value"
-msgstr ""
-
-#: u_translation:rsautofocusmov
-msgid "Autofocus move to start position %s"
-msgstr ""
-
-#: u_translation:rsautofocusmov2
-msgid "Autofocus move to near focus %s"
-msgstr ""
-
-#: u_translation:rsautofocusmea2
-msgid "Autofocus measurement %s : HFD=%s position=%s"
-msgstr ""
-
-#: u_translation:rsautofocusmov3
-msgid "Autofocus move to focus position %s"
 msgstr ""
 
 #: u_translation:rsnotenoughpoi
@@ -1386,72 +1226,16 @@ msgstr ""
 msgid "Too small HFD difference, try to increase the number of point or the movement, or run the focuser calibration tool to measure this parameters."
 msgstr ""
 
-#: u_translation:rstoosmallhfdd2
-msgid "Too small HFD difference."
-msgstr ""
-
-#: u_translation:rsfocusquality
-msgid "Focus quality = %s"
-msgstr ""
-
-#: u_translation:rsautofocusfoc
-msgid "Autofocus focus in by %s"
-msgstr ""
-
-#: u_translation:rsautofocusfoc2
-msgid "Autofocus focus out by %s"
-msgstr ""
-
 #: u_translation:rsfocuspositio
 msgid "Focus position"
-msgstr ""
-
-#: u_translation:rsmaxoffset
-msgid "Max offset"
-msgstr ""
-
-#: u_translation:rsnumberofstep
-msgid "Number of steps"
-msgstr ""
-
-#: u_translation:rsgetcurrent
-msgid "Get current"
-msgstr ""
-
-#: u_translation:rsfocusdirecti
-msgid "Focus direction"
-msgstr ""
-
-#: u_translation:rsfit
-msgid "Fit"
-msgstr ""
-
-#: u_translation:rsquality
-msgid "Quality:"
-msgstr ""
-
-#: u_translation:rsslope
-msgid "Slope"
 msgstr ""
 
 #: u_translation:rscenter
 msgid "Center"
 msgstr ""
 
-#: u_translation:rslearn
-msgid "Learn"
-msgstr ""
-
 #: u_translation:rssave
 msgid "Save"
-msgstr ""
-
-#: u_translation:rsvcurvequalit
-msgid "V curve quality is low. Do you really want to save this curve?"
-msgstr ""
-
-#: u_translation:rsfocusdirecti2
-msgid "Focus direction: "
 msgstr ""
 
 #: u_translation:rsin
@@ -1554,14 +1338,6 @@ msgstr ""
 msgid "Use watchdog"
 msgstr ""
 
-#: u_translation:rsascominterfa
-msgid "ASCOM interface is only available on Windows."
-msgstr ""
-
-#: u_translation:rsfounddevices
-msgid "Found %s devices"
-msgstr ""
-
 #: u_translation:rscopycurrentp
 msgid "Copy current profile to"
 msgstr ""
@@ -1662,10 +1438,6 @@ msgstr ""
 msgid "Reference image"
 msgstr ""
 
-#: u_translation:rstreshold
-msgid "Treshold :"
-msgstr ""
-
 #: u_translation:rsvideopreview
 msgid "Video preview frame rate "
 msgstr ""
@@ -1754,10 +1526,6 @@ msgstr ""
 msgid "Automatic flat exposure is required for the twilight flat."
 msgstr ""
 
-#: u_translation:rsstardetectio
-msgid "Star detection window size "
-msgstr ""
-
 #: u_translation:rsfocuswindows
 msgid "Focus window size"
 msgstr ""
@@ -1802,32 +1570,12 @@ msgstr ""
 msgid "Move direction"
 msgstr ""
 
-#: u_translation:rsslippagecorr
-msgid "Slippage correction "
-msgstr ""
-
-#: u_translation:rsestimatedsli
-msgid "Estimated slippage since last learning"
-msgstr ""
-
 #: u_translation:rsnumberofdyna
 msgid "Number of dynamic points"
 msgstr ""
 
 #: u_translation:rsmovementbetw
 msgid "Movement between points"
-msgstr ""
-
-#: u_translation:rsinitialmovem
-msgid "Initial movement (steps)"
-msgstr ""
-
-#: u_translation:rsfinalmovemen
-msgid "Final movement (steps)"
-msgstr ""
-
-#: u_translation:rsnearfocus
-msgid "Near focus"
 msgstr ""
 
 #: u_translation:rsbinning
@@ -1864,10 +1612,6 @@ msgstr ""
 
 #: u_translation:rsfocalelength
 msgid "Focal length"
-msgstr ""
-
-#: u_translation:rsstartfocus
-msgid "Start focus"
 msgstr ""
 
 #: u_translation:rspixelsize
@@ -1908,18 +1652,6 @@ msgstr ""
 
 #: u_translation:rsusecustomscr
 msgid "Use custom script"
-msgstr ""
-
-#: u_translation:rselbrusimages
-msgid "Elbrus Images folder "
-msgstr ""
-
-#: u_translation:rsimagesfolder
-msgid "Images folder Unix path"
-msgstr ""
-
-#: u_translation:rsbeforeyoucan
-msgid "Before you can use this option the Elbrus program must be calibrated for your images. Then select File / E-Wait for message.%sAlso be sure to set the parameter: \"Add the WCS in the FITS header\"."
 msgstr ""
 
 #: u_translation:rsmanyfunction
@@ -2054,10 +1786,6 @@ msgstr ""
 msgid "The program need to be restarted"
 msgstr ""
 
-#: u_translation:rsnearhfdmustb
-msgid "Near HFD must be smaller than Start HFD!"
-msgstr ""
-
 #: u_translation:rsdestroyallba
 msgid "Destroy all Bad Pixel Map data?"
 msgstr ""
@@ -2150,16 +1878,8 @@ msgstr ""
 msgid "Twilight sky flat"
 msgstr ""
 
-#: u_translation:rsvcurve
-msgid "V curve"
-msgstr ""
-
 #: u_translation:rsdynamic
 msgid "Dynamic"
-msgstr ""
-
-#: u_translation:rsiterative
-msgid "Iterative"
 msgstr ""
 
 #: u_translation:rsmountsync
@@ -2180,10 +1900,6 @@ msgstr ""
 
 #: u_translation:rsabort
 msgid "Abort"
-msgstr ""
-
-#: u_translation:rsnotenoughmea
-msgid "Not enough measurement points! Try to increase the maximum HFD or decrease the minimum start movement"
 msgstr ""
 
 #: u_translation:rspleaseconnec
@@ -2250,10 +1966,6 @@ msgstr ""
 msgid "Any time"
 msgstr ""
 
-#: u_translation:rsendtime
-msgid "End time"
-msgstr ""
-
 #: u_translation:rsstarttime
 msgid "Start time"
 msgstr ""
@@ -2282,10 +1994,6 @@ msgstr ""
 msgid "Stay in place%sfor autofocus"
 msgstr ""
 
-#: u_translation:rssetrotatoran
-msgid "Set rotator angle"
-msgstr ""
-
 #: u_translation:rsflattime
 msgid "Flat time"
 msgstr ""
@@ -2310,14 +2018,6 @@ msgstr ""
 msgid "This object is never above the requested elevation"
 msgstr ""
 
-#: u_translation:rsplanalreadye
-msgid "Plan %s already exist. Do you want to replace this file?"
-msgstr ""
-
-#: u_translation:rsplanalreadye2
-msgid "Plan %s already exist. Do you want to edit this plan?"
-msgstr ""
-
 #: u_translation:rsyoumustconfi
 msgid "You must configure your flat preference."
 msgstr ""
@@ -2338,20 +2038,12 @@ msgstr ""
 msgid "There is already a dawn flat plan"
 msgstr ""
 
-#: u_translation:rseditplan
-msgid "Edit plan"
-msgstr ""
-
 #: u_translation:rsdescription
 msgid "Description"
 msgstr ""
 
 #: u_translation:rsexposure
 msgid "Exposure"
-msgstr ""
-
-#: u_translation:rsrepeatthisst
-msgid "Repeat this step"
 msgstr ""
 
 #: u_translation:rsautofocusbef
@@ -2442,42 +2134,6 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: u_translation:rsthisprocedur
-msgid "This procedure will help you to  find the focuser parameters for auto-focus.%sYou only need to run it once to set this parameters.%sCenter a star with a high elevation and do a manual focusing to be as close as possible of the focus point. Use the Manual focus tool for that.%sUse the Star profile tool to check the star peak intensity is about three fourth of the camera maximum ADU but not saturated. %sAfter focusing, your focuser must be positioned about half way of it's mechanical travel. If this is not the case please adjust it now.%sThe binning you set in the Preview now will be used for the autofocusing operation. If you want to change the focusing binning later you have to run this procedure again."
-msgstr ""
-
-#: u_translation:rsglobalfocuse
-msgid "Global focuser parameters.%sSet the focuser direction IN or OUT to the one that give the best result for your setup. If you plan to use temperature compensation, set the direction it need to move when the temperature drop during the night."
-msgstr ""
-
-#: u_translation:rspreferedfocu
-msgid "Prefered focuser direction"
-msgstr ""
-
-#: u_translation:rsifyourfocuse
-msgid "If your focuser driver do not offer this option, set here the number of steps necessary to clean the backlash when the direction change. This not need to be a precise value, it is better to set it higher than the actual backlash."
-msgstr ""
-
-#: u_translation:rsnobacklash
-msgid "No backlash"
-msgstr ""
-
-#: u_translation:rsclicknexttos
-msgid "Click Next to start the measurement."
-msgstr ""
-
-#: u_translation:rsmaximumdefoc
-msgid "Maximum defocused HFD the focuser can safely reach"
-msgstr ""
-
-#: u_translation:rsminimumstart
-msgid "Minimum, starting point,  focuser movement"
-msgstr ""
-
-#: u_translation:rsyoucansetthe
-msgid "You can set the parameters to define how the focuser will move.%sTry first with the default values and adjust them only if you receive an error message on the next step."
-msgstr ""
-
 #: u_translation:rsparameter
 msgid "Parameter"
 msgstr ""
@@ -2486,36 +2142,12 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
-#: u_translation:rsclicknexttos2
-msgid "Click Next to save this values to the configuration for this profile."
-msgstr ""
-
-#: u_translation:rsthedataare2
-msgid "The data are now recorded in the profile.%sYou can review the other auto-focus options using the menu %sEdit / Preferences / Autofocus"
-msgstr ""
-
-#: u_translation:rsstartpositio
-msgid "Start position  pos:%s hfd:%s peak:%s snr:%s"
-msgstr ""
-
-#: u_translation:rsmeasurementp
-msgid "Measurement %s pos:%s step:%s hfd:%s peak:%s snr:%s"
-msgstr ""
-
 #: u_translation:rsrunscript2
 msgid "Run script %s"
 msgstr ""
 
 #: u_translation:rsscriptfinish
 msgid "Script %s finished"
-msgstr ""
-
-#: u_translation:rsscriptexecut
-msgid "Script execution error, row %s: %s"
-msgstr ""
-
-#: u_translation:rscompilatione
-msgid "Compilation error: %s"
 msgstr ""
 
 #: u_translation:rsscripterror
@@ -2540,14 +2172,6 @@ msgstr ""
 
 #: u_translation:rsstepinto
 msgid "Step Into"
-msgstr ""
-
-#: u_translation:rsstepover
-msgid "Step Over"
-msgstr ""
-
-#: u_translation:rsremoveallbre
-msgid "Remove all breakpoints"
 msgstr ""
 
 #: u_translation:rscannotfindap
@@ -2934,24 +2558,12 @@ msgstr ""
 msgid "Start step %s"
 msgstr ""
 
-#: u_translation:rswaitsecondsb2
-msgid "Wait %s seconds before repeated sequence %s"
-msgstr ""
-
 #: u_translation:rsplanstopped
 msgid "Plan %s stopped."
 msgstr ""
 
-#: u_translation:rsrepeatstep
-msgid "Repeat step %s/%s %s"
-msgstr ""
-
 #: u_translation:rsshowindilog
 msgid "Show INDI log"
-msgstr ""
-
-#: u_translation:rsnumberofexpo
-msgid "Number of exposure per point"
 msgstr ""
 
 #: u_translation:rssomedefinedd
@@ -3028,10 +2640,6 @@ msgstr ""
 
 #: u_translation:rspleasecreate
 msgid "Please create a new bad pixel map or select a brighter star"
-msgstr ""
-
-#: u_translation:rsitissuggestt
-msgid "It is suggest to slew to focus star when using Vcurve"
 msgstr ""
 
 #: u_translation:rssystemisunde
@@ -3168,10 +2776,6 @@ msgstr ""
 
 #: u_translation:rsaddstep
 msgid "Add step"
-msgstr ""
-
-#: u_translation:rstheplanismod
-msgid "The plan %s is modified. Do you want to save the change ?"
 msgstr ""
 
 #: u_translation:rsnoastronomic
@@ -3364,10 +2968,6 @@ msgstr ""
 
 #: u_translation:rsidle
 msgid "Idle"
-msgstr ""
-
-#: u_translation:rspleaserunthe2
-msgid "Please run the Focuser Calibration procedure first"
 msgstr ""
 
 #: u_translation:rsdarkframe
@@ -3686,14 +3286,6 @@ msgstr ""
 msgid "the mount indicate %s"
 msgstr ""
 
-#: u_translation:rsdonotrunasad
-msgid "Do not run %s as %s!"
-msgstr ""
-
-#: u_translation:rsadministrato
-msgid "administrator"
-msgstr ""
-
 #: u_translation:rsdontswait
 msgid "Don't%swait"
 msgstr ""
@@ -3880,14 +3472,6 @@ msgstr ""
 
 #: u_translation:rsimage
 msgid "Image"
-msgstr ""
-
-#: u_translation:rsthecameraima
-msgid "The camera image format is"
-msgstr ""
-
-#: u_translation:rspleasesetthe
-msgid "Please set the format to %s before to start the sequence."
 msgstr ""
 
 #: u_translation:rswarningimage
@@ -4558,10 +4142,6 @@ msgstr ""
 msgid "DATE-OBS from camera driver"
 msgstr ""
 
-#: u_translation:rstrytofixpixe
-msgid "Try to fix pixel range to match CMOS camera bit depth"
-msgstr ""
-
 #: u_translation:rsimages
 msgid "images"
 msgstr ""
@@ -4592,10 +4172,6 @@ msgstr ""
 
 #: u_translation:rsoffset2
 msgid "Offset"
-msgstr ""
-
-#: u_translation:rsmanagethegai
-msgid "Manage the Gain and Offset if available."
 msgstr ""
 
 #: u_translation:rspleasebecare
@@ -4808,10 +4384,6 @@ msgstr ""
 
 #: u_translation:rswaitdseconds
 msgid "Wait %d seconds and retry"
-msgstr ""
-
-#: u_translation:rsscriptlangua
-msgid "Script language"
 msgstr ""
 
 #: u_translation:rstcpipserverp
@@ -5194,10 +4766,6 @@ msgstr ""
 msgid "Gamma"
 msgstr ""
 
-#: u_translation:rsluminosity
-msgid "Luminosity"
-msgstr ""
-
 #: u_translation:rscalibrationr
 msgid "Calibration results:"
 msgstr ""
@@ -5354,10 +4922,6 @@ msgstr ""
 msgid "Calibration"
 msgstr ""
 
-#: u_translation:rscalibration2
-msgid "Special calibration"
-msgstr ""
-
 #: u_translation:rsguidercalibr
 msgid "Guider calibration"
 msgstr ""
@@ -5494,10 +5058,6 @@ msgstr ""
 msgid "Find."
 msgstr ""
 
-#: u_translation:rssolvedimage
-msgid "Solved image"
-msgstr ""
-
 #: u_translation:rsnewfindercal
 msgid "New finder calibration is successful"
 msgstr ""
@@ -5624,14 +5184,6 @@ msgstr ""
 
 #: u_translation:rsdeclinationb
 msgid "Declination backlash"
-msgstr ""
-
-#: u_translation:rsinversedsola
-msgid "Inversed solar guide control"
-msgstr ""
-
-#: u_translation:rspulseguiding
-msgid "Pulse guiding %s is reversed after meridian flip"
 msgstr ""
 
 #: u_translation:rspredefinedro
@@ -6315,5 +5867,13 @@ msgstr ""
 
 #: u_translation:rsrunscriptatt
 msgid "Run script at the end of the series"
+msgstr ""
+
+#: u_translation:rsclicksavetos
+msgid "Click Save to set this values to the configuration for this profile."
+msgstr ""
+
+#: u_translation:rsstepsize
+msgid "Step size"
 msgstr ""
 

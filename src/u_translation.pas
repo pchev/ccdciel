@@ -135,22 +135,11 @@ resourcestring
   rsCameraCooler = 'Camera cooler %s';
   rsPleaseActiva = 'Please activate the log file in the preference.';
   rsInvalidNumer = 'Invalid numeric value';
-  rsCannotGetFoc = 'Cannot get focuser absolute position';
-  rsFromToBy = 'From: %s to %s by %s';
   rsFocuserTempe = 'Focuser temperature: %s';
   rsHFDReset = 'HFD Focus Monitor: Reset. Clearing reference HFD and measurements.';
   rsHFDMeasuring = 'HFD Focus Monitor: Measuring. %d of %d HFD measurements completed.';
   rsHFDActive = 'HFD Focus Monitor: Active. Threshold: %s%%, Reference HFD: %s';
   rsHFMTriggered = 'HFD Focus Monitor: Threshold: %s%%, Ref: %s, %s-Image Avg: %s, HFD Delta: %s%%';
-  rsMeasurementH = 'Measurement %s hfd:%s peak:%s snr:%s';
-  rsCannotDetect = 'Cannot detect star.';
-  rsCannotReachN = 'Cannot reach near focus HFD, please increase Half Width or'
-    +' better center the curve.';
-  rsCannotReachS = 'Cannot reach start focus HFD, please increase Half Width '
-    +'or decrease the start HFD';
-  rsCannotFindAS = 'Cannot find a star at his position. Move to a bright star '
-    +'or increase the preview exposure time, or the autofocus binning.';
-  rsStartLearnin = 'Start learning V curve';
   rsEastPointing = 'East (Pointing West)';
   rsWestPointing = 'West (Pointing East)';
   rsUnknowPierSi = 'Unknown pier side';
@@ -163,7 +152,6 @@ resourcestring
   rsFilterName = 'Filter name';
   rsFocuserOffse = 'Focuser offset';
   rsExposureFact = 'Exposure factor';
-  rsAbortExposur = 'Abort exposure';
   rsInvalidExpos = 'Invalid exposure time %s';
   rsFocuserTempe2 = 'Focuser temperature: %s , adjust position by %s';
   rsInvalidBinni = 'Invalid binning %s';
@@ -188,11 +176,6 @@ resourcestring
   rsNotConnected = '%s not connected!';
   rsTheFocuserDo = 'The focuser do not support Absolute or Relative movement, '
     +'autofocus calibration is not possible.';
-  rsCannotRunCal = 'Cannot run calibration now, stop capture and retry';
-  rsCannotRunCal2 = 'Cannot run calibration now, stop preview and retry';
-  rsFocuserCalib2 = 'Focuser calibration started';
-  rsSetFocusDire = 'Set focus direction inward';
-  rsSetFocusDire2 = 'Set focus direction outward';
   rsRequestToSto = 'Request to stop focuser calibration';
   rsSelectAStarF = 'Select a star first!';
   rsCannotStartM = 'Cannot start manual focus now, stop capture and retry';
@@ -242,14 +225,7 @@ resourcestring
   rsCCDFrameSent = 'CCD frame sent to planetarium.';
   rsConnected2 = 'Connected %s';
   rsDisconnected3 = 'Disconnected';
-  rsMoveToNewPla = 'Move to new planetarium object %s';
-  rsPleaseConfir = 'Please confirm you want to slew the telescope to %s at '
-    +'coordinates %s/%s';
-  rsPlanetariumT = 'Planetarium target set to %s';
-  rsPlanetariumT2 = 'Planetarium target slew fail';
   rsInvalidCoord = 'Invalid coordinates';
-  rsBeforeToUseT = 'Before to use this tool you must connect the camera, the '
-    +'mount and the planetarium';
   rsOpenFile = 'Open file %s';
   rsInvalidOrUns = 'Invalid or unsupported FITS file %s';
   rsReceiveUnkno = 'Receive unknown message: %s';
@@ -324,7 +300,6 @@ resourcestring
   rsHalt = 'Halt';
   rsRunScript = 'Run script';
   rsCopy = 'Copy';
-  rsAnotherScrip = 'Another script is already running';
   rsPleaseSelect = 'Please select a script!';
   rsNoScriptAreR = 'No script are running.';
   rsDoYouWantToD = 'Do you want to delete file %s ?';
@@ -332,8 +307,6 @@ resourcestring
   rsScriptAlread = 'Script %s already exist. Do you want to replace this file?';
   rsNewScript = 'New script';
   rsScriptAlread2 = 'Script %s already exist. Do you want to edit this script?';
-  rsScriptAlread3 = 'Script %s already exist. Do you want to replace this '
-    +'custom script by the template?';
   rsPlan = 'Plan';
   rsEnd = 'End';
   rsDesc = 'Desc.';
@@ -369,22 +342,14 @@ resourcestring
   rsManualFocusA = 'Manual focus aid';
   rsAutofocus = 'Autofocus';
   rsAutofocusSta4 = 'Autofocus start Dynamic curve';
-  rsAutofocusSta5 = 'Autofocus start Iterative focus';
   rsAutofocusCan2 = 'Autofocus canceled because no star was selected.';
   rsAutofocusCan3 = 'Autofocus canceled because no star was found.';
   rsAutofocusCan4 = 'Autofocus canceled because the HFD cannot be measured';
-  rsAutofocusMea = 'Autofocus mean frame %s/%s, hfd=%s peak:%s snr:%s';
   rsAutofocusCan5 = 'Autofocus canceled because of low SNR, POS=%s HFD=%s PEAK'
     +':%s SNR:%s';
   rsAutofocusFin = 'Autofocus finished, POS=%s HFD=%s PEAK:%s SNR:%s TEMP:%s';
   rsAutofocusFin2 = 'Autofocus final HFD is higher than %s';
   rsAutofocusRun = 'Autofocus running, hfd=%s peak:%s snr:%s';
-  rsStartFocusHF = 'Start focus HFD is outside of current V curve, please '
-    +'decrease the start HFD value';
-  rsAutofocusMov = 'Autofocus move to start position %s';
-  rsAutofocusMov2 = 'Autofocus move to near focus %s';
-  rsAutofocusMea2 = 'Autofocus measurement %s : HFD=%s position=%s';
-  rsAutofocusMov3 = 'Autofocus move to focus position %s';
   rsNotEnoughPoi = 'Not enough points in or out of focus position after two '
     +'try. Start with a better focus position and run the focuser calibration '
     +'tool.';
@@ -395,10 +360,6 @@ resourcestring
   rsTooSmallHFDD = 'Too small HFD difference, try to increase the number of '
     +'point or the movement, or run the focuser calibration tool to measure '
     +'this parameters.';
-  rsTooSmallHFDD2 = 'Too small HFD difference.';
-  rsFocusQuality = 'Focus quality = %s';
-  rsAutofocusFoc = 'Autofocus focus in by %s';
-  rsAutofocusFoc2 = 'Autofocus focus out by %s';
   rsFocusPositio = 'Focus position';
   rsCenter = 'Center';
   rsSave = 'Save';
@@ -427,8 +388,6 @@ resourcestring
   rsUseMount = 'Use mount';
   rsHeartBeatThr = 'Heart beat threshold [minutes]';
   rsUseWatchdog = 'Use watchdog';
-  rsASCOMInterfa = 'ASCOM interface is only available on Windows.';
-  rsFoundDevices = 'Found %s devices';
   rsCopyCurrentP = 'Copy current profile to';
   rsCreateNewEmp = 'Create new empty profile';
   rsHeight = 'Height';
@@ -476,7 +435,6 @@ resourcestring
   rsMin2 = 'Min:';
   rsFlatImageMea = 'Flat image mean level';
   rsAutomaticFla = 'Automatic flat exposure is required for the twilight flat.';
-  rsStarDetectio = 'Star detection window size ';
   rsFocusWindowS = 'Focus window size';
   rsFocuserCorre = 'Focuser correction';
   rsStabilizatio = 'Stabilization delay after move';
@@ -490,9 +448,6 @@ resourcestring
   rsMoveDirectio = 'Move direction';
   rsNumberOfDyna = 'Number of dynamic points';
   rsMovementBetw = 'Movement between points';
-  rsInitialMovem = 'Initial movement (steps)';
-  rsFinalMovemen = 'Final movement (steps)';
-  rsNearFocus = 'Near focus';
   rsBinning = 'Binning';
   rsAutofocusTol = 'Autofocus tolerance ';
   rsMinSNR = 'min.SNR';
@@ -502,7 +457,6 @@ resourcestring
   rsAstrometryOp = 'Astrometry options';
   rsFromDriver = 'From driver';
   rsFocaleLength = 'Focal length';
-  rsStartFocus = 'Start focus';
   rsPixelSize = 'Pixel size';
   rsFromCameraDr = 'From camera driver';
   rsSoftware = 'Software';
@@ -547,7 +501,6 @@ resourcestring
   rsAbortAfter = 'Abort after';
   rsSkychartOnLo = 'Skychart on local computer';
   rsTheProgramNe = 'The program need to be restarted';
-  rsNearHFDMustB = 'Near HFD must be smaller than Start HFD!';
   rsDestroyAllBa = 'Destroy all Bad Pixel Map data?';
   rsCreateFromCa = 'Create from camera';
   rsCreateFromDa = 'Create from dark file';
@@ -577,8 +530,6 @@ resourcestring
   rsDoNothing = 'Do nothing';
   rsAutomaticFli = 'Automatic flip';
   rsAbort = 'Abort';
-  rsNotEnoughMea = 'Not enough measurement points! Try to increase the '
-    +'maximum HFD or decrease the minimum start movement';
   rsPleaseConnec = 'Please connect the planetarium first';
   rsPlanetariumP = 'Planetarium position';
   rsCenterRA = 'Center RA';
@@ -595,7 +546,6 @@ resourcestring
   rsSeconds2 = '[seconds]';
   rsInterval = 'Interval';
   rsAnyTime = 'Any time';
-  rsEndTime = 'End time';
   rsStartTime = 'Start time';
   rsRise = 'rise';
   rsSet2 = 'set';
@@ -603,24 +553,19 @@ resourcestring
   rsCurrentImage = 'Current image';
   rsUpdateRADec2 = 'Update RA+Dec%sfrom Planetarium';
   rsStayInPlace2 = 'Stay in place%sfor autofocus';
-  rsSetRotatorAn = 'Set rotator angle';
   rsFlatTime = 'Flat time';
   rsAtDusk = 'at dusk';
   rsAtDawn = 'at dawn';
   rsInvalidObjec = 'Invalid object coordinates!';
   rsThisObjectIs = 'This object is never below the requested elevation';
   rsThisObjectIs2 = 'This object is never above the requested elevation';
-  rsPlanAlreadyE = 'Plan %s already exist. Do you want to replace this file?';
-  rsPlanAlreadyE2 = 'Plan %s already exist. Do you want to edit this plan?';
   rsYouMustConfi = 'You must configure your flat preference.';
   rsCanOnlyAddOn = 'Can only add one flat serie at dusk and one at dawn';
   rsDeleteSequen = 'Delete sequence %s ?';
   rsThereIsAlrea = 'There is already a dusk flat plan';
   rsThereIsAlrea2 = 'There is already a dawn flat plan';
-  rsEditPlan = 'Edit plan';
   rsDescription = 'Description';
   rsExposure = 'Exposure';
-  rsRepeatThisSt = 'Repeat this step';
   rsAutofocusBef = 'Autofocus%sbefore to start';
   rsAutofocusEve = 'Autofocus%severy';
   rsAdd = 'Add';
@@ -646,12 +591,8 @@ resourcestring
   rsBack = 'Back';
   rsParameter = 'Parameter';
   rsValue = 'Value';
-  rsStartPositio = 'Start position  pos:%s hfd:%s peak:%s snr:%s';
-  rsMeasurementP = 'Measurement %s pos:%s step:%s hfd:%s peak:%s snr:%s';
   rsRunScript2 = 'Run script %s';
   rsScriptFinish = 'Script %s finished';
-  rsScriptExecut = 'Script execution error, row %s: %s';
-  rsCompilationE = 'Compilation error: %s';
   rsScriptError = 'Script error: %s';
   rsScriptTermin = 'Script terminating...';
   rsOutOfRange = '%s out of range';
@@ -759,9 +700,7 @@ resourcestring
   rsObjectPlanFi = 'Object %s, plan %s finished.';
   rsPlanFinished = 'Plan %s finished.';
   rsStartStep = 'Start step %s';
-  rsWaitSecondsB2 = 'Wait %s seconds before repeated sequence %s';
   rsPlanStopped = 'Plan %s stopped.';
-  rsRepeatStep = 'Repeat step %s/%s %s';
   rsShowINDILog = 'Show INDI log';
   rsSomeDefinedD = 'Some defined devices are not connected';
   rsOpenPictureF = 'Open FITS or picture file%s';
@@ -818,7 +757,6 @@ resourcestring
   rsSaveTemplAs = 'Save template as...';
   rsRemoveStep = 'Remove step';
   rsAddStep = 'Add step';
-  rsThePlanIsMod = 'The plan %s is modified. Do you want to save the change ?';
   rsNoAstronomic = 'No astronomical twilight at this location today';
   rsDeleteStep = 'Delete step %s ?';
   rsStepDescript = 'Step description';
@@ -868,7 +806,6 @@ resourcestring
   rsReadCCD = 'Read CCD';
   rsWaitStart = 'Wait start';
   rsIdle = 'Idle';
-  rsPleaseRunThe2 = 'Please run the Focuser Calibration procedure first';
   rsDarkFrame = 'Dark frame';
   rsLoadDarkFile = 'Load dark file';
   rsClearDarkFra = 'Clear Dark frame';
@@ -948,8 +885,6 @@ resourcestring
   rsUserName = 'User name';
   rsPassword = 'Password';
   rsTheMountIndi = 'the mount indicate %s';
-  rsDoNotRunAsAd = 'Do not run %s as %s!';
-  rsAdministrato = 'administrator';
   rsDonTSwait = 'Don''t%swait';
   rs32bitdriver = 'This driver work only in 32bit, please install the 32bit version of CCDciel.';
   rsSlave = 'Slave';
@@ -998,8 +933,6 @@ resourcestring
   rsFromPlateSol = 'From plate solving';
   rsImageScale = 'Image scale';
   rsImage = 'Image';
-  rsTheCameraIma = 'The camera image format is';
-  rsPleaseSetThe = 'Please set the format to %s before to start the sequence.';
   rsWarningImage = 'Warning! %s image received';
   rsAutofocusGra = 'Autofocus graph';
   rsCannotChange = 'Cannot change start time. Sequence will start in time for the dusk flat.';
@@ -1325,7 +1258,6 @@ resourcestring
   rsHysteresis = 'Hysteresis';
   rsDark = 'Dark';
   rsGamma = 'Gamma';
-  rsLuminosity = 'Luminosity';
   rsCalibrationR = 'Calibration results:';
   rsCameraAngle = 'Camera angle';
   rsPulseGain = 'pulse gain';
@@ -1365,7 +1297,6 @@ resourcestring
   rsPressTheButt = 'Press the button "Calibration" to start the automatic calibration of the guider at the current position.';
   rsPressTheButt2 = 'Press the button "Backlash calibration" to measure the declination backlash and store the measured value in tab options.';
   rsCalibration = 'Calibration';
-  rscalibration2 ='Special calibration';
   rsGuiderCalibr = 'Guider calibration';
   rsWarningDoNot = 'Warning! to use a negative value, be sure the mount driver allow to set SideOfPier before the meridian.';
   rsChangedTo = '%s changed to %s';
@@ -1400,7 +1331,6 @@ resourcestring
   rsUseFinderCam = 'Use finder camera';
   rsUseThisDevic = 'Use this device if the main camera cannot be used for plate solving. Also configure the camera to use in Preferences/Slewing';
   rsFind = 'Find.';
-  rsSolvedImage = 'Solved image';
   rsNewFinderCal = 'New finder calibration is successful';
   rsMainImageCen = 'Main image center is at finder image X=%s, Y=%s';
   rsMainCamera = 'Main camera';
@@ -1433,8 +1363,6 @@ resourcestring
   rsAdjustTheCha = 'Adjust the chart for the image or frame';
   rsUseBacklashC = 'Use backlash compensation';
   rsDeclinationB = 'Declination backlash';
-  rsInversedSola = 'Inversed solar guide control';
-  rsPulseGuiding = 'Pulse guiding %s is reversed after meridian flip';
   rsPredefinedRO = 'Predefined ROI';
   rsModify = 'Modify';
   rsSwitchConnec = 'Switch connection';

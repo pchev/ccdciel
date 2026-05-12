@@ -45,10 +45,6 @@ msgstr ""
 msgid "Abort dome %s"
 msgstr ""
 
-#: u_translation.rsabortexposur
-msgid "Abort exposure"
-msgstr "Annulla esposizione"
-
 #: u_translation.rsabortmount
 #, object-pascal-format
 msgid "Abort mount%s"
@@ -132,10 +128,6 @@ msgstr ""
 msgid "Adjust to window"
 msgstr "Imposta alla finestra"
 
-#: u_translation.rsadministrato
-msgid "administrator"
-msgstr ""
-
 #: u_translation.rsadvanced
 msgid "Advanced"
 msgstr ""
@@ -175,10 +167,6 @@ msgstr ""
 
 #: u_translation.rsalt
 msgid "Alt"
-msgstr ""
-
-#: u_translation.rsanotherscrip
-msgid "Another script is already running"
 msgstr ""
 
 #: u_translation.rsanytime
@@ -228,10 +216,6 @@ msgstr ""
 #: u_translation.rsareyousureyo
 msgid "Are you sure you want to disconnect all the devices now?"
 msgstr "Sei sicuro di voler scollegare tutti i dispositivi ora?"
-
-#: u_translation.rsascominterfa
-msgid "ASCOM interface is only available on Windows."
-msgstr ""
 
 #: u_translation.rsasequenceisa
 msgid "A sequence is already running, cannot load a new one."
@@ -352,16 +336,6 @@ msgstr ""
 msgid "Autofocus final HFD is higher than %s"
 msgstr ""
 
-#: u_translation.rsautofocusfoc
-#, object-pascal-format
-msgid "Autofocus focus in by %s"
-msgstr ""
-
-#: u_translation.rsautofocusfoc2
-#, object-pascal-format
-msgid "Autofocus focus out by %s"
-msgstr ""
-
 #: u_translation.rsautofocusgra
 msgid "Autofocus graph"
 msgstr ""
@@ -374,34 +348,9 @@ msgstr ""
 msgid "Autofocus location"
 msgstr ""
 
-#: u_translation.rsautofocusmea
-#, object-pascal-format
-msgid "Autofocus mean frame %s/%s, hfd=%s peak:%s snr:%s"
-msgstr ""
-
-#: u_translation.rsautofocusmea2
-#, object-pascal-format
-msgid "Autofocus measurement %s : HFD=%s position=%s"
-msgstr ""
-
 #: u_translation.rsautofocusmet
 msgid "Autofocus method"
 msgstr "Metodo autofocus"
-
-#: u_translation.rsautofocusmov
-#, object-pascal-format
-msgid "Autofocus move to start position %s"
-msgstr ""
-
-#: u_translation.rsautofocusmov2
-#, object-pascal-format
-msgid "Autofocus move to near focus %s"
-msgstr ""
-
-#: u_translation.rsautofocusmov3
-#, object-pascal-format
-msgid "Autofocus move to focus position %s"
-msgstr ""
 
 #: u_translation.rsautofocusnow
 msgid "Autofocus now"
@@ -421,17 +370,9 @@ msgstr "Autofocus avviato, posizione iniziale: %s"
 msgid "AutoFocus started"
 msgstr "Autofocus avviato"
 
-#: u_translation.rsautofocussta3
-msgid "Autofocus start Vcurve"
-msgstr ""
-
 #: u_translation.rsautofocussta4
 msgid "Autofocus start Dynamic curve"
 msgstr "Inizio autofocus con curva dinamica"
-
-#: u_translation.rsautofocussta5
-msgid "Autofocus start Iterative focus"
-msgstr ""
 
 #: u_translation.rsautofocussta6
 msgid "Autofocus start Planet focus"
@@ -597,15 +538,6 @@ msgstr "Schema matrice Bayer"
 msgid "Be careful of the longitude East/West setting."
 msgstr ""
 
-#: u_translation.rsbeforetouset
-msgid "Before to use this tool you must connect the camera, the mount and the planetarium"
-msgstr ""
-
-#: u_translation.rsbeforeyoucan
-#, object-pascal-format
-msgid "Before you can use this option the Elbrus program must be calibrated for your images. Then select File / E-Wait for message.%sAlso be sure to set the parameter: \"Add the WCS in the FITS header\"."
-msgstr "Prima di poter usare questa opzione, il programma Elbrus deve essere calibrato per le tue immagini. Poi seleziona File / E-Attendi messaggio.%sAssicurati anche di selezionare l'opzione: \"Aggiungi WCS nell'header FITS\"."
-
 #: u_translation.rsbegin
 msgid "Begin"
 msgstr "Inizia"
@@ -652,10 +584,6 @@ msgstr "Calibra autoguida dopo il passaggio al meridiano"
 
 #: u_translation.rscalibration
 msgid "Calibration"
-msgstr ""
-
-#: u_translation.rscalibration2
-msgid "Special calibration"
 msgstr ""
 
 #: u_translation.rscalibrationd
@@ -767,10 +695,6 @@ msgstr ""
 msgid "Cannot delete the running sequence!"
 msgstr ""
 
-#: u_translation.rscannotdetect
-msgid "Cannot detect star."
-msgstr "Impossibile rilevare la stella."
-
 #: u_translation.rscannoteditan
 msgid "Cannot edit an active sequence without completion status."
 msgstr ""
@@ -792,14 +716,6 @@ msgstr "Impossibile rilevare una stella di messa a fuoco"
 msgid "Cannot find approximate coordinates for this image.%sThe astrometry resolution may take a very long time."
 msgstr ""
 
-#: u_translation.rscannotfindas
-msgid "Cannot find a star at his position. Move to a bright star or increase the preview exposure time, or the autofocus binning."
-msgstr "Impossibile trovare una stella a questa posizione. Spostati su una stella luminosa o aumenta il tempo di esposizione dell'anteprima o il binning autofocus."
-
-#: u_translation.rscannotgetfoc
-msgid "Cannot get focuser absolute position"
-msgstr "Impossibile rilevare la posizione assoluta del focheggiatore"
-
 #: u_translation.rscannotinterp
 #, object-pascal-format
 msgid "Cannot interpret the text \"%s\" as RA DEC values"
@@ -808,22 +724,6 @@ msgstr ""
 #: u_translation.rscannotoverwr
 msgid "Cannot overwrite the running sequence!"
 msgstr ""
-
-#: u_translation.rscannotreachn
-msgid "Cannot reach near focus HFD, please increase Half Width or better center the curve."
-msgstr "Impossibile raggiungere messa a fuoco HFD, incrementa valore Half Width o centra meglio la curva."
-
-#: u_translation.rscannotreachs
-msgid "Cannot reach start focus HFD, please increase Half Width or decrease the start HFD"
-msgstr ""
-
-#: u_translation.rscannotruncal
-msgid "Cannot run calibration now, stop capture and retry"
-msgstr "Impossibile effettuare la calibrazione, ferma l'acquisizione e riprova"
-
-#: u_translation.rscannotruncal2
-msgid "Cannot run calibration now, stop preview and retry"
-msgstr "Impossibile effettuare la calibrazione, ferma l'anteprima e riprova"
 
 #: u_translation.rscannotsolvec
 msgid "Cannot solve current image."
@@ -970,10 +870,6 @@ msgstr ""
 msgid "Clear Flat frame"
 msgstr ""
 
-#: u_translation.rsclearreferen
-msgid "Clear reference image"
-msgstr "Pulisci immagine di riferimento"
-
 #: u_translation.rsclearrestart
 msgid "Clear restart information on repeat"
 msgstr ""
@@ -1002,20 +898,16 @@ msgstr "Clicca su Continua quando sei pronto."
 msgid "Click Continue when ready"
 msgstr "Seleziona Continua quando pronto"
 
-#: u_translation.rsclicknexttos
-msgid "Click Next to start the measurement."
-msgstr ""
-
-#: u_translation.rsclicknexttos2
-msgid "Click Next to save this values to the configuration for this profile."
-msgstr ""
-
 #: u_translation.rsclickonimage
 msgid "Click on image to set"
 msgstr ""
 
 #: u_translation.rsclickontheim
 msgid "Click on the image to set the offset and guide"
+msgstr ""
+
+#: u_translation.rsclicksavetos
+msgid "Click Save to set this values to the configuration for this profile."
 msgstr ""
 
 #: u_translation.rsclicktheobje
@@ -1073,11 +965,6 @@ msgstr ""
 #: u_translation.rscommands
 msgid "Commands"
 msgstr "Comandi"
-
-#: u_translation.rscompilatione
-#, object-pascal-format
-msgid "Compilation error: %s"
-msgstr ""
 
 #: u_translation.rscompiledwith
 msgid "Compiled with"
@@ -1609,11 +1496,6 @@ msgstr ""
 msgid "Do not modify the INDI header"
 msgstr ""
 
-#: u_translation.rsdonotrunasad
-#, object-pascal-format
-msgid "Do not run %s as %s!"
-msgstr ""
-
 #: u_translation.rsdonotstartau
 msgid "Do not start autoguiding"
 msgstr ""
@@ -1710,17 +1592,9 @@ msgstr "Modifica"
 msgid "Edit a sequence"
 msgstr ""
 
-#: u_translation.rseditplan
-msgid "Edit plan"
-msgstr ""
-
 #: u_translation.rsedittargetli
 msgid "Edit target list"
 msgstr ""
-
-#: u_translation.rselbrusimages
-msgid "Elbrus Images folder "
-msgstr "Cartella immagini Elbrus "
 
 #: u_translation.rselevation
 msgid "Elevation"
@@ -1753,10 +1627,6 @@ msgstr ""
 #: u_translation.rsendpreview
 msgid "End preview"
 msgstr "Fine anteprima"
-
-#: u_translation.rsendtime
-msgid "End time"
-msgstr ""
 
 #: u_translation.rsenlargeguide
 msgid "Enlarge guide image"
@@ -1815,10 +1685,6 @@ msgstr ""
 #, object-pascal-format
 msgid "Error updating the sequence:%s"
 msgstr ""
-
-#: u_translation.rsestimatedsli
-msgid "Estimated slippage since last learning"
-msgstr "Scivolamento stimato dall'ultimo apprendimento"
 
 #: u_translation.rsexampleandte
 msgid "Example and template"
@@ -1972,10 +1838,6 @@ msgstr "Filtri"
 msgid "Filter wheel"
 msgstr "Ruota dei filtri"
 
-#: u_translation.rsfinalmovemen
-msgid "Final movement (steps)"
-msgstr "Movimento finale (passi)"
-
 #: u_translation.rsfind
 msgid "Find."
 msgstr ""
@@ -1986,10 +1848,6 @@ msgstr ""
 
 #: u_translation.rsfindercamera
 msgid "Finder camera"
-msgstr ""
-
-#: u_translation.rsfit
-msgid "Fit"
 msgstr ""
 
 #: u_translation.rsfitsfileexte
@@ -2077,14 +1935,6 @@ msgstr "Aiuto fuoco iniziato"
 msgid "Focus aid stopped"
 msgstr "Aiuto fuoco fermato"
 
-#: u_translation.rsfocusdirecti
-msgid "Focus direction"
-msgstr ""
-
-#: u_translation.rsfocusdirecti2
-msgid "Focus direction: "
-msgstr ""
-
 #: u_translation.rsfocuser
 msgid "Focuser"
 msgstr "Focheggiatore"
@@ -2092,10 +1942,6 @@ msgstr "Focheggiatore"
 #: u_translation.rsfocusercalib
 msgid "Focuser calibration"
 msgstr "Calibrazione focheggiatore"
-
-#: u_translation.rsfocusercalib2
-msgid "Focuser calibration started"
-msgstr "Calibrazione focheggiatore avviata"
 
 #: u_translation.rsfocusercalib3
 msgid "Focuser calibration started, please wait..."
@@ -2123,11 +1969,6 @@ msgstr ""
 msgid "Focuser offset"
 msgstr "Correzione focheggiatore"
 
-#: u_translation.rsfocuserslipp
-#, object-pascal-format
-msgid "Focuser slippage offset set to %s"
-msgstr "Correzione scivolamento focheggiatore impostata a %s"
-
 #: u_translation.rsfocusertempe
 #, object-pascal-format
 msgid "Focuser temperature: %s"
@@ -2150,11 +1991,6 @@ msgstr "Fuoco ogni"
 msgid "Focus position"
 msgstr ""
 
-#: u_translation.rsfocusquality
-#, object-pascal-format
-msgid "Focus quality = %s"
-msgstr ""
-
 #: u_translation.rsfocusstarsel
 msgid "Focus star selection"
 msgstr "Selezione stella di messa a fuoco"
@@ -2173,11 +2009,6 @@ msgstr ""
 
 #: u_translation.rsforreflector
 msgid "For reflector collimation."
-msgstr ""
-
-#: u_translation.rsfounddevices
-#, object-pascal-format
-msgid "Found %s devices"
 msgstr ""
 
 #: u_translation.rsfounddstars
@@ -2242,11 +2073,6 @@ msgstr ""
 msgid "From plate solving"
 msgstr ""
 
-#: u_translation.rsfromtoby
-#, object-pascal-format
-msgid "From: %s to %s by %s"
-msgstr "Da: %s a %s tramite %s"
-
 #: u_translation.rsfstop
 msgid "F-stop"
 msgstr ""
@@ -2271,10 +2097,6 @@ msgstr ""
 msgid "Get"
 msgstr ""
 
-#: u_translation.rsgetcurrent
-msgid "Get current"
-msgstr ""
-
 #: u_translation.rsgetcurrentpo
 msgid "Get current position from current target"
 msgstr "Rileva posizione corrente dall'obiettivo attuale"
@@ -2297,11 +2119,6 @@ msgstr ""
 
 #: u_translation.rsglobalaction
 msgid "Global actions when a sequence is running"
-msgstr ""
-
-#: u_translation.rsglobalfocuse
-#, object-pascal-format
-msgid "Global focuser parameters.%sSet the focuser direction IN or OUT to the one that give the best result for your setup. If you plan to use temperature compensation, set the direction it need to move when the temperature drop during the night."
 msgstr ""
 
 #: u_translation.rsglobalrepeat
@@ -2489,10 +2306,6 @@ msgstr ""
 msgid "If no bright star is visible click MOVE."
 msgstr ""
 
-#: u_translation.rsifyourfocuse
-msgid "If your focuser driver do not offer this option, set here the number of steps necessary to clean the backlash when the direction change. This not need to be a precise value, it is better to set it higher than the actual backlash."
-msgstr ""
-
 #: u_translation.rsignoreweathe
 #, object-pascal-format
 msgid "Ignore weather condition for image type=%s"
@@ -2530,10 +2343,6 @@ msgstr ""
 #: u_translation.rsimagescale
 msgid "Image scale"
 msgstr ""
-
-#: u_translation.rsimagesfolder
-msgid "Images folder Unix path"
-msgstr "Percorso cartella immagini Unix"
 
 #: u_translation.rsimagesharpne
 #, object-pascal-format
@@ -2596,10 +2405,6 @@ msgstr ""
 #, object-pascal-format
 msgid "Initialize target %s"
 msgstr ""
-
-#: u_translation.rsinitialmovem
-msgid "Initial movement (steps)"
-msgstr "Movimento iniziale (passi)"
 
 #: u_translation.rsinmount
 msgid "In mount"
@@ -2705,21 +2510,9 @@ msgstr ""
 msgid "Invalid or unsupported FITS file %s"
 msgstr "File FITS %s non valido o non supportato"
 
-#: u_translation.rsinversedsola
-msgid "Inversed solar guide control"
-msgstr ""
-
 #: u_translation.rsissue
 msgid "Issue"
 msgstr ""
-
-#: u_translation.rsiterative
-msgid "Iterative"
-msgstr "Iterativo"
-
-#: u_translation.rsitissuggestt
-msgid "It is suggest to slew to focus star when using Vcurve"
-msgstr "E' consigliato muovere a una stella di messa a fuoco quando si usa la curva V"
 
 #: u_translation.rsitwillcontin
 msgid "It will continue after the last checkpoint."
@@ -2740,10 +2533,6 @@ msgstr ""
 #: u_translation.rslatitude
 msgid "Latitude"
 msgstr "Latitudine"
-
-#: u_translation.rslearn
-msgid "Learn"
-msgstr ""
 
 #: u_translation.rslength
 msgid "Length"
@@ -2826,10 +2615,6 @@ msgstr ""
 msgid "Low quality image scaling"
 msgstr ""
 
-#: u_translation.rsluminosity
-msgid "Luminosity"
-msgstr ""
-
 #: u_translation.rsmagn
 msgid "Magn."
 msgstr ""
@@ -2866,10 +2651,6 @@ msgstr ""
 
 #: u_translation.rsmanage
 msgid "Manage"
-msgstr ""
-
-#: u_translation.rsmanagethegai
-msgid "Manage the Gain and Offset if available."
 msgstr ""
 
 #: u_translation.rsmandatorysta
@@ -2916,10 +2697,6 @@ msgstr ""
 msgid "Maximum ADU"
 msgstr "ADU massimo"
 
-#: u_translation.rsmaximumdefoc
-msgid "Maximum defocused HFD the focuser can safely reach"
-msgstr ""
-
 #: u_translation.rsmaximumdrift
 msgid "Maximum drift"
 msgstr ""
@@ -2948,10 +2725,6 @@ msgstr "Sorgenti massime"
 msgid "Maximum temperature change "
 msgstr "Massima variazione di temperatura "
 
-#: u_translation.rsmaxoffset
-msgid "Max offset"
-msgstr ""
-
 #: u_translation.rsmean
 msgid "Mean:"
 msgstr ""
@@ -2976,18 +2749,8 @@ msgstr ""
 msgid "Measurement"
 msgstr ""
 
-#: u_translation.rsmeasurementh
-#, object-pascal-format
-msgid "Measurement %s hfd:%s peak:%s snr:%s"
-msgstr "Misura hfd di %s:%s picco:%s snr:%s"
-
 #: u_translation.rsmeasuremento
 msgid "Measurement on new images"
-msgstr ""
-
-#: u_translation.rsmeasurementp
-#, object-pascal-format
-msgid "Measurement %s pos:%s step:%s hfd:%s peak:%s snr:%s"
 msgstr ""
 
 #: u_translation.rsmeasurepixel
@@ -3119,10 +2882,6 @@ msgstr ""
 #: u_translation.rsminimumobser
 msgid "Minimum observing elevation "
 msgstr "Minima elevazione di osservazione "
-
-#: u_translation.rsminimumstart
-msgid "Minimum, starting point,  focuser movement"
-msgstr ""
 
 #: u_translation.rsminsnr
 msgid "min.SNR"
@@ -3256,11 +3015,6 @@ msgstr ""
 msgid "Move to bright focus star now?"
 msgstr ""
 
-#: u_translation.rsmovetonewpla
-#, object-pascal-format
-msgid "Move to new planetarium object %s"
-msgstr "Muovi a nuovo oggetto %s da planetario"
-
 #: u_translation.rsmovetostartp
 msgid "Move to start position"
 msgstr ""
@@ -3307,14 +3061,6 @@ msgstr ""
 
 #: u_translation.rsname
 msgid "Name"
-msgstr ""
-
-#: u_translation.rsnearfocus
-msgid "Near focus"
-msgstr "Fuoco vicino"
-
-#: u_translation.rsnearhfdmustb
-msgid "Near HFD must be smaller than Start HFD!"
 msgstr ""
 
 #: u_translation.rsnearthepole
@@ -3382,10 +3128,6 @@ msgstr ""
 #: u_translation.rsnoautoguidin
 msgid "No auto-guiding, only dither by sending pulse guide directly to the mount."
 msgstr ""
-
-#: u_translation.rsnobacklash
-msgid "No backlash"
-msgstr "Nessun gioco"
 
 #: u_translation.rsnobadpixelma
 msgid "No bad pixel map"
@@ -3485,10 +3227,6 @@ msgstr "Autoguida spenta! Retinatura ignorata."
 msgid "%s not connected!"
 msgstr "%s non connesso!"
 
-#: u_translation.rsnotenoughmea
-msgid "Not enough measurement points! Try to increase the maximum HFD or decrease the minimum start movement"
-msgstr ""
-
 #: u_translation.rsnotenoughpoi
 msgid "Not enough points in or out of focus position after two try. Start with a better focus position and run the focuser calibration tool."
 msgstr ""
@@ -3530,16 +3268,8 @@ msgstr ""
 msgid "Number of dynamic points"
 msgstr "Numero di punti dinamici"
 
-#: u_translation.rsnumberofexpo
-msgid "Number of exposure per point"
-msgstr "Numero di esposizioni per punto"
-
 #: u_translation.rsnumberofslot
 msgid "Number of slot"
-msgstr ""
-
-#: u_translation.rsnumberofstep
-msgid "Number of steps"
 msgstr ""
 
 #: u_translation.rsnumberofswit
@@ -3656,10 +3386,6 @@ msgstr ""
 #, object-pascal-format
 msgid "Open FITS or picture file%s"
 msgstr ""
-
-#: u_translation.rsopenreferenc
-msgid "Open reference image"
-msgstr "Apri immagine di riferimento"
 
 #: u_translation.rsopenthedomes
 msgid "Open the Dome shutter"
@@ -3824,16 +3550,6 @@ msgstr "Dimensione pixel"
 msgid "Plan"
 msgstr ""
 
-#: u_translation.rsplanalreadye
-#, object-pascal-format
-msgid "Plan %s already exist. Do you want to replace this file?"
-msgstr ""
-
-#: u_translation.rsplanalreadye2
-#, object-pascal-format
-msgid "Plan %s already exist. Do you want to edit this plan?"
-msgstr ""
-
 #: u_translation.rsplanet
 msgid "Planet"
 msgstr ""
@@ -3860,15 +3576,6 @@ msgstr ""
 
 #: u_translation.rsplanetariums
 msgid "Planetarium shutdown"
-msgstr ""
-
-#: u_translation.rsplanetariumt
-#, object-pascal-format
-msgid "Planetarium target set to %s"
-msgstr "Obiettivo planetario impostato a %s"
-
-#: u_translation.rsplanetariumt2
-msgid "Planetarium target slew fail"
 msgstr ""
 
 #: u_translation.rsplanfinished
@@ -3914,11 +3621,6 @@ msgstr "Per favore configura le opzioni autofocus."
 msgid "Please configure the observatory location."
 msgstr ""
 
-#: u_translation.rspleaseconfir
-#, object-pascal-format
-msgid "Please confirm you want to slew the telescope to %s at coordinates %s/%s"
-msgstr "Conferma il movimento del telescopio da %s alle coordinate %s/%s"
-
 #: u_translation.rspleaseconnec
 msgid "Please connect the planetarium first"
 msgstr ""
@@ -3935,19 +3637,6 @@ msgstr "Per favore aumenta la soglia."
 msgid "Please load or create a target list first."
 msgstr ""
 
-#: u_translation.rspleaserunthe
-msgid "Please run the V-curve learning for this focuser direction first. Button V-learn."
-msgstr "Esegui prima l'apprendimento della curva V per questa direzione del focheggiatore. Pulsante V-learn."
-
-#: u_translation.rspleaserunthe2
-msgid "Please run the Focuser Calibration procedure first"
-msgstr ""
-
-#: u_translation.rspleaserunvcu
-#, object-pascal-format
-msgid "Please run Vcurve learning for binning %s"
-msgstr "Esegui l'apprendimento della curva V per il binning %s"
-
 #: u_translation.rspleaseseethe
 msgid "Please see the documentation for important security information"
 msgstr ""
@@ -3958,11 +3647,6 @@ msgstr ""
 
 #: u_translation.rspleaseselect2
 msgid "Please select a temporary folder without space in the path name."
-msgstr ""
-
-#: u_translation.rspleasesetthe
-#, object-pascal-format
-msgid "Please set the format to %s before to start the sequence."
 msgstr ""
 
 #: u_translation.rspleasestopth
@@ -4023,10 +3707,6 @@ msgstr ""
 
 #: u_translation.rspredefinedro
 msgid "Predefined ROI"
-msgstr ""
-
-#: u_translation.rspreferedfocu
-msgid "Prefered focuser direction"
 msgstr ""
 
 #: u_translation.rspreferences
@@ -4103,17 +3783,8 @@ msgstr ""
 msgid "pulse gain"
 msgstr ""
 
-#: u_translation.rspulseguiding
-#, object-pascal-format
-msgid "Pulse guiding %s is reversed after meridian flip"
-msgstr ""
-
 #: u_translation.rspythoncomman
 msgid "Python command"
-msgstr ""
-
-#: u_translation.rsquality
-msgid "Quality:"
 msgstr ""
 
 #: u_translation.rsquit
@@ -4147,10 +3818,6 @@ msgstr "Raggiunto il minimo tempo di esposizione configurato per il Flat!"
 #: u_translation.rsreachconfigu2
 msgid "Reach configured maximum flat exposure time!"
 msgstr "Raggiunto il massimo tempo di esposizione configurato per il Flat!"
-
-#: u_translation.rsreachfocuser
-msgid "Reach focuser range limit! please better position the focuser half way on it's mechanical travel or decrease the maximum HFD"
-msgstr "Raggiunto il limite di escursione del focheggiatore! Posiziona il focheggiatore a metà della sua escursione o diminuisci il massimo valore HFD"
 
 #: u_translation.rsreadccd
 msgid "Read CCD"
@@ -4234,10 +3901,6 @@ msgstr "Incremento relativo del movimento in dentro o all'infuori"
 msgid "Remote device number"
 msgstr ""
 
-#: u_translation.rsremoveallbre
-msgid "Remove all breakpoints"
-msgstr ""
-
 #: u_translation.rsremoverow
 msgid "Remove row"
 msgstr ""
@@ -4258,11 +3921,6 @@ msgstr ""
 msgid "Repeat"
 msgstr ""
 
-#: u_translation.rsrepeatstep
-#, object-pascal-format
-msgid "Repeat step %s/%s %s"
-msgstr ""
-
 #: u_translation.rsrepeattarget
 #, object-pascal-format
 msgid "Repeat target%s/%s %s"
@@ -4270,10 +3928,6 @@ msgstr ""
 
 #: u_translation.rsrepeatthewho
 msgid "Repeat the whole list"
-msgstr ""
-
-#: u_translation.rsrepeatthisst
-msgid "Repeat this step"
 msgstr ""
 
 #: u_translation.rsreplaceby
@@ -4651,11 +4305,6 @@ msgstr ""
 msgid "Script %s already exist. Do you want to edit this script?"
 msgstr ""
 
-#: u_translation.rsscriptalread3
-#, object-pascal-format
-msgid "Script %s already exist. Do you want to replace this custom script by the template?"
-msgstr ""
-
 #: u_translation.rsscriptargume
 msgid "Script arguments"
 msgstr ""
@@ -4669,11 +4318,6 @@ msgstr ""
 msgid "Script error: %s"
 msgstr ""
 
-#: u_translation.rsscriptexecut
-#, object-pascal-format
-msgid "Script execution error, row %s: %s"
-msgstr ""
-
 #: u_translation.rsscriptfailed
 #, object-pascal-format
 msgid "Script %s failed!"
@@ -4682,10 +4326,6 @@ msgstr ""
 #: u_translation.rsscriptfinish
 #, object-pascal-format
 msgid "Script %s finished"
-msgstr ""
-
-#: u_translation.rsscriptlangua
-msgid "Script language"
 msgstr ""
 
 #: u_translation.rsscripttermin
@@ -4919,14 +4559,6 @@ msgstr "Imposta raffrescatore %s"
 msgid "Set filter position %s"
 msgstr ""
 
-#: u_translation.rssetfocusdire
-msgid "Set focus direction inward"
-msgstr "Imposta direzione verso l'interno del focheggiatore"
-
-#: u_translation.rssetfocusdire2
-msgid "Set focus direction outward"
-msgstr "Imposta direzione verso l'esterno del focheggiatore"
-
 #: u_translation.rssetframetype
 #, object-pascal-format
 msgid "Set frame type %s"
@@ -4959,10 +4591,6 @@ msgstr "Imposta data della montatura dal PC"
 #: u_translation.rssetpoint
 msgid "Setpoint"
 msgstr "Setpoint"
-
-#: u_translation.rssetrotatoran
-msgid "Set rotator angle"
-msgstr "Imposta angolo del rotatore"
 
 #: u_translation.rssettemperatu
 #, object-pascal-format
@@ -5187,10 +4815,6 @@ msgstr "Muovi con una precisione di "
 msgid "Slew with offset %s/%s"
 msgstr ""
 
-#: u_translation.rsslippagecorr
-msgid "Slippage correction "
-msgstr "Correzione scivolamento "
-
 #: u_translation.rsslit
 msgid "Slit"
 msgstr ""
@@ -5201,10 +4825,6 @@ msgstr ""
 
 #: u_translation.rsslitorientat
 msgid "Slit orientation"
-msgstr ""
-
-#: u_translation.rsslope
-msgid "Slope"
 msgstr ""
 
 #: u_translation.rsslot
@@ -5231,10 +4851,6 @@ msgstr "Socket error %s.  %s"
 #: u_translation.rssoftware
 msgid "Software"
 msgstr "Programma"
-
-#: u_translation.rssolvedimage
-msgid "Solved image"
-msgstr ""
 
 #: u_translation.rssolvedinseco
 #, object-pascal-format
@@ -5321,10 +4937,6 @@ msgstr ""
 msgid "Star database is empty, check path to star database files!!"
 msgstr "Il database delle stelle è vuoto, controlla il percorso dei file di database!"
 
-#: u_translation.rsstardetectio
-msgid "Star detection window size "
-msgstr "Dimensioni finestra di rilevamento stella "
-
 #: u_translation.rsstarfwhm
 msgid "Star FWHM"
 msgstr ""
@@ -5366,14 +4978,6 @@ msgstr ""
 msgid "Start exposure error: %s"
 msgstr ""
 
-#: u_translation.rsstartfocus
-msgid "Start focus"
-msgstr "Fuoco iniziale"
-
-#: u_translation.rsstartfocushf
-msgid "Start focus HFD is outside of current V curve, please decrease the start HFD value"
-msgstr "Il valore HFD della messa a fuoco iniziale è fuori dall'attuale curva V, per favore diminuisci il valore HFD iniziale."
-
 #: u_translation.rsstartingexpo
 #, object-pascal-format
 msgid "Starting %s exposure %s for %s seconds"
@@ -5388,10 +4992,6 @@ msgstr ""
 #, object-pascal-format
 msgid "Starting sequence %s repeat %s/%s"
 msgstr ""
-
-#: u_translation.rsstartlearnin
-msgid "Start learning V curve"
-msgstr "Inizia apprendimento curva V"
 
 #: u_translation.rsstartnewexpo
 msgid "Start new exposure as early as possible"
@@ -5408,11 +5008,6 @@ msgstr ""
 #: u_translation.rsstartplan
 #, object-pascal-format
 msgid "Start plan %s"
-msgstr ""
-
-#: u_translation.rsstartpositio
-#, object-pascal-format
-msgid "Start position  pos:%s hfd:%s peak:%s snr:%s"
 msgstr ""
 
 #: u_translation.rsstartpreview
@@ -5500,8 +5095,8 @@ msgstr ""
 msgid "Step Into"
 msgstr ""
 
-#: u_translation.rsstepover
-msgid "Step Over"
+#: u_translation.rsstepsize
+msgid "Step size"
 msgstr ""
 
 #: u_translation.rsstop
@@ -5583,10 +5178,6 @@ msgstr ""
 #, object-pascal-format
 msgid "Stop time %s already passed"
 msgstr ""
-
-#: u_translation.rsstopvcurvele
-msgid "Stop Vcurve learning"
-msgstr "Ferma apprendimento Vcurve"
 
 #: u_translation.rssubfolderbyb
 msgid "Subfolder by binning"
@@ -5835,10 +5426,6 @@ msgstr ""
 msgid "Test email from CCDciel"
 msgstr ""
 
-#: u_translation.rsthecameraima
-msgid "The camera image format is"
-msgstr ""
-
 #: u_translation.rsthecameraisc
 msgid "The camera is connected. Do you want to exit the program now?"
 msgstr "La fotocamera è disconnessa. Vuoi uscire dal programma adesso?"
@@ -5853,22 +5440,9 @@ msgstr ""
 msgid "The cone error results in a slew error of: %s arcmin at zenith. If error is positive then move telescope light inlet closer to the mount. If negative move telescope light inlet away from the mount,"
 msgstr ""
 
-#: u_translation.rsthedataare2
-#, object-pascal-format
-msgid "The data are now recorded in the profile.%sYou can review the other auto-focus options using the menu %sEdit / Preferences / Autofocus"
-msgstr "I dati sono ora memorizzati nel profilo.%sPuoi rivedere le altre impostazioni autofocus dal menu %sModifica / Preferenze / Autofocus"
-
 #: u_translation.rsthefocuserdo
 msgid "The focuser do not support Absolute or Relative movement, autofocus calibration is not possible."
 msgstr "Il focheggiatore non supporta movimenti assoluti o relativi, la calibrazione dell'autofocus non è possibile."
-
-#: u_translation.rsthefocuserdo2
-msgid "The focuser do not move enough after 30 steps! please check if the focuser is moving at all or increase the minimum movement"
-msgstr "Il focheggiatore non si è mosso a sufficienza dopo 30 passi! Controlla se si muove o incrementa il movimento minimo"
-
-#: u_translation.rsthefocuserdo3
-msgid "The focuser do not move enough after 30 steps! please check if the focuser is moving at all or decrease the maximum HFD"
-msgstr "Il focheggiatore non si è mosso a sufficienza dopo 30 passi! Controlla se si muove o diminuisci il massimo valore HFD"
 
 #: u_translation.rsthefocuseris
 msgid "The focuser is now positioned at the best observed HFD position."
@@ -5893,11 +5467,6 @@ msgstr ""
 
 #: u_translation.rstheobjectnam2
 msgid "The object name is not defined, do you want to continue?"
-msgstr ""
-
-#: u_translation.rstheplanismod
-#, object-pascal-format
-msgid "The plan %s is modified. Do you want to save the change ?"
 msgstr ""
 
 #: u_translation.rstheprogramne
@@ -5946,11 +5515,6 @@ msgstr ""
 msgid "This options are in addition to the autofocus frequency available in the Plan definition"
 msgstr ""
 
-#: u_translation.rsthisprocedur
-#, object-pascal-format
-msgid "This procedure will help you to  find the focuser parameters for auto-focus.%sYou only need to run it once to set this parameters.%sCenter a star with a high elevation and do a manual focusing to be as close as possible of the focus point. Use the Manual focus tool for that.%sUse the Star profile tool to check the star peak intensity is about three fourth of the camera maximum ADU but not saturated. %sAfter focusing, your focuser must be positioned about half way of it's mechanical travel. If this is not the case please adjust it now.%sThe binning you set in the Preview now will be used for the autofocusing operation. If you want to change the focusing binning later you have to run this procedure again."
-msgstr "Questa procedura ti aiuterà a inserire i parametri del focheggiatore per l'autofocus.%sBasta compierla solo una volta per impostare i parametri.%sCentra il campo inquadrato su una stella alta sull'orizzonte e metti a fuoco manualmente il più possibile. Puoi usare lo strumento di aiuto alla messa a fuoco manuale per aiutarti.%sUsa lo strumento di analisi del profilo stellare per controllare che il picco di intensità sia circa tre quarti del massimo ADU della fotocamera, ma non saturata.%sDopo di ciò il focheggiatore deve essere posizionato a circa metà della sua capacità di escursione. Se non è così sistemalo.%sIl binning che hai impostato nell'anteprima verrà utilizzato per le operazioni di autofocus. Se in seguito vuoi cambiare il binning dell'autofocus dovrai ricordarti di ripetere questa procedura."
-
 #: u_translation.rsthisprocedur2
 msgid "This procedure measure the position of the main instrument target in the finder camera image."
 msgstr ""
@@ -5991,10 +5555,6 @@ msgstr ""
 msgid "Timeout"
 msgstr "Timeout"
 
-#: u_translation.rstimer
-msgid "Timer"
-msgstr ""
-
 #: u_translation.rstimesendtote
 msgid "Time send to telescope."
 msgstr "Data inviata al telescopio"
@@ -6021,10 +5581,6 @@ msgstr "Troppi pixel caldi rilevati!"
 
 #: u_translation.rstoosmallhfdd
 msgid "Too small HFD difference, try to increase the number of point or the movement, or run the focuser calibration tool to measure this parameters."
-msgstr ""
-
-#: u_translation.rstoosmallhfdd2
-msgid "Too small HFD difference."
 msgstr ""
 
 #: u_translation.rstotalexecuti
@@ -6054,10 +5610,6 @@ msgstr ""
 #: u_translation.rstrend
 msgid "Trend"
 msgstr ""
-
-#: u_translation.rstreshold
-msgid "Treshold :"
-msgstr "Soglia :"
 
 #: u_translation.rstriangle
 msgid "Triangle"
@@ -6089,10 +5641,6 @@ msgstr ""
 
 #: u_translation.rstrytoconnect
 msgid "Try to connect to autoguider"
-msgstr ""
-
-#: u_translation.rstrytofixpixe
-msgid "Try to fix pixel range to match CMOS camera bit depth"
 msgstr ""
 
 #: u_translation.rstwilightisat
@@ -6331,14 +5879,6 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
-#: u_translation.rsvcurve
-msgid "V curve"
-msgstr "Curva V"
-
-#: u_translation.rsvcurvequalit
-msgid "V curve quality is low. Do you really want to save this curve?"
-msgstr "La qualità della curva V è bassa. Vuoi veramente salvare questa curva?"
-
 #: u_translation.rsverbosedevic
 msgid "Verbose device log"
 msgstr ""
@@ -6378,10 +5918,6 @@ msgstr ""
 #: u_translation.rsvisualisatio
 msgid "Visualisation"
 msgstr "Visualizzazione"
-
-#: u_translation.rsvlearn
-msgid "V-learn"
-msgstr "V-learn"
 
 #: u_translation.rsvoiceconfigu
 msgid "Voice configuration"
@@ -6443,11 +5979,6 @@ msgstr "Attendi il ribaltamento al passaggio del meridiano"
 #: u_translation.rswaitsecondsb
 #, object-pascal-format
 msgid "Wait %s seconds before repeated target %s"
-msgstr ""
-
-#: u_translation.rswaitsecondsb2
-#, object-pascal-format
-msgid "Wait %s seconds before repeated sequence %s"
 msgstr ""
 
 #: u_translation.rswaitstart
@@ -6565,11 +6096,6 @@ msgstr ""
 
 #: u_translation.rsyes
 msgid "Yes"
-msgstr ""
-
-#: u_translation.rsyoucansetthe
-#, object-pascal-format
-msgid "You can set the parameters to define how the focuser will move.%sTry first with the default values and adjust them only if you receive an error message on the next step."
 msgstr ""
 
 #: u_translation.rsyoumustconfi

@@ -35,11 +35,6 @@ msgstr "Aktivní pouze v případě, že cíl použije umístění astrometrie%s
 msgid "A description for this step"
 msgstr "Popis tohoto kroku"
 
-#: u_hints.rsafterlearnin
-#, object-pascal-format
-msgid "After learning is completed you can use this cursor to better adjust to the linear part of the curve.%sThe fit must be particularly good near the horizontal blue line position."
-msgstr "Po dokončení učení můžete pomocí tohoto kurzoru lépe přizpůsobit lineární část křivky.%sPřizpůsobení musí být obzvláště dobré blízko vodorovné polohy modré čáry."
-
 #: u_hints.rsatemporarydi
 msgid "A temporary directory for work files. Be sure it contain only ASCII character and no space"
 msgstr "Dočasný adresář pro pracovní soubory. Ujistěte se, že obsahuje pouze znak ASCII a žádné mezery"
@@ -207,14 +202,6 @@ msgstr "Historie posledního měření FWHM a intenzity"
 #: u_hints.rsifcheckednoc
 msgid "If checked no confirmation dialog will be presented and failed operation will abort the current step."
 msgstr "Pokud je zaškrtnuto, nebude zobrazen žádný potvrzovací dialog a neúspěšná operace přeruší aktuální krok."
-
-#: u_hints.rsifnotchecked
-msgid "If not checked the program will never change the gain/offset value set in the driver setup"
-msgstr "Pokud není zaškrtnuto, program nezmění hodnotu zesílení/offsetu nastavenou ovladačem"
-
-#: u_hints.rsiftheimageis
-msgid "If the image is now focused, click this button to get the current focuser position"
-msgstr "Pokud je teď snímek zaostřen, kliknutím na toto tlačítko získáte aktuální polohu zaostřovače"
 
 #: u_hints.rsincrementste
 msgid "Increment step for the inward or outward movement"
@@ -396,10 +383,6 @@ msgstr "Spustit sekvenci snímání"
 msgid "Start the sequence execution"
 msgstr "Zahájení provádění sekvence"
 
-#: u_hints.rsstartthevcur
-msgid "Start the Vcurve learning process"
-msgstr "Spustit proces učení V-křivky"
-
 #: u_hints.rsstarttimecap
 msgid "Start time capturing (MC=Meridian crossing)"
 msgstr "Čas začátku záznamu (MC = průchod poledníku)"
@@ -446,10 +429,6 @@ msgstr "Základní složka pro ukládají snímky"
 #, object-pascal-format
 msgid "The direction the focuser will always finish to move.%sIf using auto-focus set the same move direction."
 msgstr "Směr ostření vždy dokončí pohyb.%sPokud používáte automatické ostření, nastavte stejný směr pohybu."
-
-#: u_hints.rstheelbrusima
-msgid "The Elbrus Images folder as set in the Elbrus parameters."
-msgstr "Složka Snímků Elbrus, jak je nastavena v parametrech Elbrus."
 
 #: u_hints.rsthefullwidth
 msgid "The Full Width at Half Maximum value in pixels / arc seconds"
@@ -544,10 +523,6 @@ msgstr "Dočasný disk RAM používaný k přenosu obrazů ze serveru Indi"
 msgid "The type of frame"
 msgstr "Typ snímku"
 
-#: u_hints.rstheunixpathe
-msgid "The Unix path equivalent to the Elbrus Images folder."
-msgstr "Cesta Unix ekvivalentní ke složce Elbrus Images."
-
 #: u_hints.rstheupperlimi
 msgid "The upper limit of histogram truncation"
 msgstr "Horní hranice zkrácení histogramu"
@@ -564,32 +539,14 @@ msgstr "Tato možnost je normálně nezaškrtnutá, použijte ji pouze v přípa
 msgid "Time from meridian transit (hour angle)"
 msgstr "Čas od průchodu poledníku (hodinový úhel)"
 
-#: u_hints.rstrytocorrect
-#, object-pascal-format, fuzzy, badformat
-msgid "Try to correct for focuser slippage since the last Vcurve learning.%sBeware you must set the focuser temperature correction and the filters offset before to use this option."
-msgstr "Pokuste se opravit posun ostření od posledního učení V-křivky.% Před použitím této možnosti se ujistěte, že jste nastavili korekci teploty ostření a posun filtru."
-
 #: u_hints.rsusedynamic2
 #, object-pascal-format
 msgid "Dynamic can be use with an absolute or relative position focuser,%s this method require the starting position is near the focus position.%s This is the preferred method."
 msgstr "Dynamickou metodu lze použít s absolutním nebo relativním ostřením polohy,%s tato metoda vyžaduje, aby počáteční pozice byla blízko zaostřovací pozice.%sToto je upřednostňovaná metoda."
 
-#: u_hints.rsuseiterati2
-#, object-pascal-format
-msgid "Use Iterative if the first two options do not work for you or if you start with really bad focus.%s This is the slowest and less precise method."
-msgstr "Použít Iterativní metodu, je vhodné, pokud první dvě možnosti nefungují nebo pokud začínáte se skutečně špatným zaostřením.%s Toto je nejpomalejší a nejméně přesná metoda."
-
 #: u_hints.rsuseplatesolv
 msgid "Use astrometric (plate) solving to improve telescope pointing accuracy"
 msgstr "Použití astrometrického řešení ke zlepšení přesnosti zaměření dalekohledu"
-
-#: u_hints.rsusevcurvewi2
-msgid "Vcurve can only work with an absolute position focuser, it require to learn the curve."
-msgstr "Metoda V-křivky může pracovat pouze s absolutním ostřičem polohy, vyžaduje se naučit křivku."
-
-#: u_hints.rsvcurvelearni
-msgid "V curve learning"
-msgstr "V křivka učení"
 
 #: u_hints.rswaitforfulld
 msgid "Wait for a moonless night"

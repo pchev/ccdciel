@@ -38,11 +38,6 @@ msgstr "Actif uniquement si la cible utilise le positionnement astrométrique%se
 msgid "A description for this step"
 msgstr "La description de cette étape"
 
-#: u_hints.rsafterlearnin
-#, object-pascal-format
-msgid "After learning is completed you can use this cursor to better adjust to the linear part of the curve.%sThe fit must be particularly good near the horizontal blue line position."
-msgstr "Une fois l'apprentissage terminé, vous pouvez utiliser ce curseur pour mieux ajuster la partie linéaire de la courbe. %sL'ajustement doit être particulièrement bon près de la position de la ligne bleue horizontale."
-
 #: u_hints.rsatemporarydi
 msgid "A temporary directory for work files. Be sure it contain only ASCII character and no space"
 msgstr "Un répertoire temporaire pour les fichiers de travail. Assurez-vous qu'il ne contient que des caractères ASCII et qu'il n'y a pas d'espace"
@@ -210,14 +205,6 @@ msgstr "Historique des dernières mesures de FWHM et d'intensité"
 #: u_hints.rsifcheckednoc
 msgid "If checked no confirmation dialog will be presented and failed operation will abort the current step."
 msgstr "Si coché, aucune boîte de dialogue de confirmation ne s'affiche et une opération en erreur annule l'étape en cours"
-
-#: u_hints.rsifnotchecked
-msgid "If not checked the program will never change the gain/offset value set in the driver setup"
-msgstr "Si ce n'est pas coché le programme ne modifiera pas le gain/offset réglé dans la configuration du driver"
-
-#: u_hints.rsiftheimageis
-msgid "If the image is now focused, click this button to get the current focuser position"
-msgstr "Si l'image est maintenant mise au point, cliquez sur ce bouton pour obtenir la position actuelle du focuser"
 
 #: u_hints.rsincrementste
 msgid "Increment step for the inward or outward movement"
@@ -399,10 +386,6 @@ msgstr "Démarrer la séquence de capture"
 msgid "Start the sequence execution"
 msgstr "Lancer l'exécution de la séquence"
 
-#: u_hints.rsstartthevcur
-msgid "Start the Vcurve learning process"
-msgstr "Démarrer le processus d'apprentissage de la courbe en V"
-
 #: u_hints.rsstarttimecap
 msgid "Start time capturing (MC=Meridian crossing)"
 msgstr "Heure de début de la capture (MC=passage au méridien)"
@@ -449,10 +432,6 @@ msgstr "Le dossier de base où les images sont enregistrées"
 #, object-pascal-format
 msgid "The direction the focuser will always finish to move.%sIf using auto-focus set the same move direction."
 msgstr "La direction dans laquelle la mise au point se terminera toujours.%sUtilisez la même direction pour l'autofocus."
-
-#: u_hints.rstheelbrusima
-msgid "The Elbrus Images folder as set in the Elbrus parameters."
-msgstr "Le dossier des images Elbrus tel que défini dans les paramètres Elbrus"
 
 #: u_hints.rsthefullwidth
 msgid "The Full Width at Half Maximum value in pixels / arc seconds"
@@ -547,10 +526,6 @@ msgstr "Le disque RAM temporaire utilisé pour transférer les images du serveur
 msgid "The type of frame"
 msgstr "Le type d'image"
 
-#: u_hints.rstheunixpathe
-msgid "The Unix path equivalent to the Elbrus Images folder."
-msgstr "Le chemin Unix équivalent au dossier des images Elbrus"
-
 #: u_hints.rstheupperlimi
 msgid "The upper limit of histogram truncation"
 msgstr "La limite haute de la troncation de l'histogramme"
@@ -567,32 +542,14 @@ msgstr "Cette option est normalement décochée, utilisez-la uniquement si vous 
 msgid "Time from meridian transit (hour angle)"
 msgstr "Temps restant pour le transit méridien (angle horaire)"
 
-#: u_hints.rstrytocorrect
-#, object-pascal-format
-msgid "Try to correct for focuser slippage since the last Vcurve learning.%sBeware you must set the focuser temperature correction and the filters offset before to use this option."
-msgstr "Essaye de corriger le glissement de la mise au point depuis le dernier apprentissage Vcurve.%s Attention, vous devez régler la correction de température de la mise au point et le décalage des filtres avant d'utiliser cette option."
-
 #: u_hints.rsusedynamic2
 #, object-pascal-format
 msgid "Dynamic can be use with an absolute or relative position focuser,%s this method require the starting position is near the focus position.%s This is the preferred method."
 msgstr "Dynamique peut être utilisé avec un focuser à position absolue ou relative,%s cette méthode exige que vous commenciez avec une bonne position de mise au point.%s C'est la méthode préférée."
 
-#: u_hints.rsuseiterati2
-#, object-pascal-format
-msgid "Use Iterative if the first two options do not work for you or if you start with really bad focus.%s This is the slowest and less precise method."
-msgstr "Utiliser Itératif si les deux premières options ne fonctionnent pas pour vous ou si vous commencez avec une très mauvaise focalisation.%s C'est la méthode la plus lente et la moins précise."
-
 #: u_hints.rsuseplatesolv
 msgid "Use astrometric (plate) solving to improve telescope pointing accuracy"
 msgstr "Utiliser la résolution astrométrique pour augmenter la précision de la position du télescope"
-
-#: u_hints.rsusevcurvewi2
-msgid "Vcurve can only work with an absolute position focuser, it require to learn the curve."
-msgstr "La Courbe en V ne peut être utilisée qu'avec un focuser à position absolue, il faut ensuite apprendre la courbe."
-
-#: u_hints.rsvcurvelearni
-msgid "V curve learning"
-msgstr "Apprentissage de la courbe en V"
 
 #: u_hints.rswaitforfulld
 msgid "Wait for a moonless night"
