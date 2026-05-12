@@ -1223,7 +1223,7 @@ begin
                  end;
                  exit;
               end;
-              if (amaxhfd<(1.5*aminhfd)) then begin
+              if (amaxhfd-aminhfd)<2 then begin
                  // not enough difference between min and max HFD, abort
                  msg(rsTooSmallHFDD,0);
                  msg(rsTheFocuserIs,1);
