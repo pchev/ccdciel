@@ -5877,3 +5877,27 @@ msgstr ""
 msgid "Step size"
 msgstr ""
 
+#: u_translation:rshfdfluctuati
+msgid "HFD fluctuation measurement in progress"
+msgstr ""
+
+#: u_translation:rshfdfluctuati2
+msgid "HFD fluctuation px=%s"
+msgstr ""
+
+#: u_translation:rsincreasestep
+msgid "Increase step:"
+msgstr ""
+
+#: u_translation:rsreversedirec
+msgid "Reverse direction"
+msgstr ""
+
+#: u_translation:rsminimumhfdfo
+msgid "Minimum HFD found"
+msgstr ""
+
+#: u_translation:rsfocusercalib2
+msgid "Focuser calibration using the %s"
+msgstr ""
+

@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-05-08 18:18+0000\n"
+"POT-Creation-Date: 2026-05-12 16:00+0000\n"
 "PO-Revision-Date: 2025-10-21 04:57+0000\n"
 "Last-Translator: boneni <Unknown>\n"
 "Language-Team: Lao <lo@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-05-08 18:24+0000\n"
+"X-Launchpad-Export-Date: 2026-05-12 16:04+0000\n"
 "X-Generator: Launchpad (build 91d5f4cbcbec62cc98ca9991c8ad99af4e21f85a)\n"
 
 #: u_translation.rs2d
@@ -1946,6 +1946,11 @@ msgstr "ໂຕປັບຈຸດສຸມ"
 msgid "Focuser calibration"
 msgstr "ການປັບທຽບໂຕປັບຈຸດສຸມ"
 
+#: u_translation.rsfocusercalib2
+#, object-pascal-format
+msgid "Focuser calibration using the %s"
+msgstr ""
+
 #: u_translation.rsfocusercalib3
 msgid "Focuser calibration started, please wait..."
 msgstr "ເລີ່ມການປັບທຽບໂຕປັບຈຸດສຸມແລ້ວ, ກະລຸນາລໍຖ້າ..."
@@ -2234,6 +2239,15 @@ msgstr "HFD"
 msgid "HFD Focus Monitor: Active. Threshold: %s%%, Reference HFD: %s"
 msgstr "ໂຕຕິດຕາມຈຸດສຸມ HFD: ເຮັດວຽກຢູ່. ຄ່າເກນ: %s%%, HFD ອ້າງອີງ: %s"
 
+#: u_translation.rshfdfluctuati
+msgid "HFD fluctuation measurement in progress"
+msgstr ""
+
+#: u_translation.rshfdfluctuati2
+#, object-pascal-format
+msgid "HFD fluctuation px=%s"
+msgstr ""
+
 #: u_translation.rshfdmeasuring
 #, object-pascal-format
 msgid "HFD Focus Monitor: Measuring. %d of %d HFD measurements completed."
@@ -2391,6 +2405,10 @@ msgstr "ໃນກ້ອງ"
 #: u_translation.rsincr
 msgid "Incr."
 msgstr "ເພີ່ມ."
+
+#: u_translation.rsincreasestep
+msgid "Increase step:"
+msgstr ""
 
 #: u_translation.rsindisettings
 msgid "INDI settings"
@@ -2877,6 +2895,10 @@ msgstr "ຕ່ຳສຸດ"
 #: u_translation.rsminimumdista
 msgid "Minimum distance to the Moon"
 msgstr "ໄລຍະຫ່າງຕ່ຳສຸດຈາກດວງຈັນ"
+
+#: u_translation.rsminimumhfdfo
+msgid "Minimum HFD found"
+msgstr ""
 
 #: u_translation.rsminimummove
 msgid "Minimum move"
@@ -4089,6 +4111,10 @@ msgstr "ກັບຄືນສູ່ຕຳແໜ່ງເປົ້າໝາຍ"
 #: u_translation.rsreverse
 msgid "Reverse"
 msgstr "ປີ້ນກັບ"
+
+#: u_translation.rsreversedirec
+msgid "Reverse direction"
+msgstr ""
 
 #: u_translation.rsrise
 msgid "rise"

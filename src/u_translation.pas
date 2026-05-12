@@ -1536,6 +1536,12 @@ resourcestring
   rsRunScriptAtT = 'Run script at the end of the series';
   rsClickSaveToS = 'Click Save to set this values to the configuration for this profile.';
   rsStepSize = 'Step size';
+  rsHFDFluctuati = 'HFD fluctuation measurement in progress';
+  rsHFDFluctuati2 = 'HFD fluctuation px=%s';
+  rsIncreaseStep = 'Increase step:';
+  rsReverseDirec = 'Reverse direction';
+  rsMinimumHFDFo = 'Minimum HFD found';
+  rsFocuserCalib2 = 'Focuser calibration using the %s';
 
 implementation
 

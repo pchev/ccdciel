@@ -268,8 +268,8 @@ begin
 end;
 
 procedure Tf_focusercalibration.NextExposure(data: PtrInt);
-var i,s,rx,ry,ns,dpos,dynstep: integer;
-  meanhfd,dhfd,minseeing,maxseeing: double;
+var i,s,rx,ry,ns: integer;
+  meanhfd,minseeing,maxseeing: double;
   hfdlist: array of double;
 begin
 try
@@ -317,7 +317,7 @@ try
         numseeing:=1;
         SetLength(seeinglist,5);
         seeinglist[numseeing-1]:=meanhfd;
-        msg('HFD fluctuation measurement in progress');
+        msg(rsHFDFluctuati);
         // plot
         Progress(curpos,meanhfd);
         Fcamera.ControlExposure(FExp,FBin,FBin,LIGHT,ReadoutModeFocus,FGain,FOffset,true);
@@ -346,7 +346,7 @@ try
               maxseeing:=max(maxseeing,seeinglist[i]);
            end;
            seeing:=max(0.1,maxseeing-minseeing);
-           msg('HFD fluctuation px='+FormatFloat(f1,seeing));
+           msg(Format(rsHFDFluctuati2, [FormatFloat(f1, seeing)]));
            SeeingFound:=true;
          end;
          Progress(curpos,meanhfd);
@@ -401,7 +401,7 @@ try
            if (not StepFound)and(abs(curhfd-lasthfd)<(3*seeing)) then begin
              step:=round(1.5*step);
              if step>spStartStep.Value then
-                msg('Increase step: '+inttostr(step));
+                msg(rsIncreaseStep+' '+inttostr(step));
            end
            else
              StepFound:=true;
@@ -409,7 +409,7 @@ try
              // reverse direction when we are moving out of focus
              Direction:=not Direction;
              Reverse:=true;
-             msg('Reverse direction');
+             msg(rsReverseDirec);
            end
            else if (not MinHfdFound)and(Reverse)and((curhfd-lasthfd)>(2*seeing)) then begin
               // we reversed and now the hfd increase, this indicate we just pass the minimum
@@ -423,7 +423,7 @@ try
               maxhfd:=curhfd;
               maxhfdpos:=curpos;
               MinHfdFound:=true;
-              msg('Minimum HFD found '+FormatFloat(f1,minhfd));
+              msg(rsMinimumHFDFo+' '+FormatFloat(f1, minhfd));
            end;
            if SeeingFound then begin
              // move focuser to new position
@@ -491,10 +491,8 @@ begin
 end;
 
 procedure Tf_focusercalibration.ComputeResult;
-var dhfd: double;
-    dpos: integer;
+var  dpos: integer;
 begin
-  dhfd:=maxhfd-minhfd;
   dpos:=abs(minhfdpos-maxhfdpos);
   Fdynstep:=round(dpos/3);
   ValueListEditor1.Clear;

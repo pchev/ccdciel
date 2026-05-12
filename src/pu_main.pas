@@ -13760,7 +13760,7 @@ begin
   f_focusercalibration.focuser:=focuser;
   if GuiderAutofocus then begin
     f_focusercalibration.camera:=guidecamera;
-    f_focusercalibration.Label4.Caption:='Focuser calibration using the guide camera';
+    f_focusercalibration.Label4.Caption:=Format(rsFocuserCalib2,[rsGuideCamera]);
     f_focusercalibration.spExp.Value:=f_internalguider.Exposure.Value;
     f_focusercalibration.spBin.Value:=f_internalguider.Binning.Value;
     if guidecamera.hasGain then begin
@@ -13779,7 +13779,7 @@ begin
   end
   else begin
     f_focusercalibration.camera:=camera;
-    f_focusercalibration.Label4.Caption:='Focuser calibration using the main camera';
+    f_focusercalibration.Label4.Caption:=Format(rsFocuserCalib2,[rsMainCamera]);
     f_focusercalibration.spExp.Value:=f_preview.Exposure;
     f_focusercalibration.spBin.Value:=f_preview.Bin;
     if camera.hasGain then begin
