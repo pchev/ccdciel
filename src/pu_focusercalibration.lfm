@@ -1,205 +1,25 @@
 object f_focusercalibration: Tf_focusercalibration
   Left = 0
-  Height = 428
+  Height = 498
   Top = 0
-  Width = 633
+  Width = 597
   Caption = 'Focuser calibration'
-  ClientHeight = 428
-  ClientWidth = 633
+  ClientHeight = 498
+  ClientWidth = 597
   FormStyle = fsStayOnTop
+  OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnShow = FormShow
   object Notebook1: TNotebook
     Left = 0
-    Height = 378
+    Height = 464
     Top = 0
-    Width = 633
+    Width = 597
     PageIndex = 0
     Align = alClient
     TabOrder = 0
-    object Page1: TPage
-      object Label1: TLabel
-        Left = 8
-        Height = 372
-        Top = 8
-        Width = 614
-        AutoSize = False
-        Caption = 'This procedure will help you to  find the focuser parameters for auto-focus.'#10'You only need to run it once to set this parameters.'#10#10'Center a star with a high elevation and do a manual focusing to be as close as possible of the focus point. Use the Manual focus tool for that.'#10'Use the Star profile tool to check the star peak intensity is about three fourth of the camera maximum ADU but not saturated. '#10#10'After focusing, your focuser must be positioned about half way of it''s mechanical travel. If this is not the case please adjust it now.'#10#10'The binning you set in the Preview now will be used for the autofocusing operation. If you want to change the focusing binning later you have to run this procedure again.'
-        ParentColor = False
-        ParentFont = False
-        WordWrap = True
-      end
-    end
-    object Page2: TPage
-      object Label2: TLabel
-        Left = 8
-        Height = 113
-        Top = 8
-        Width = 614
-        AutoSize = False
-        Caption = 'Global focuser parameters.'#10#10'Set the focuser direction IN or OUT to the one that give the best result for your setup. If you plan to use temperature compensation, set the direction it need to move when the temperature drop during the night.'
-        ParentColor = False
-        ParentFont = False
-        WordWrap = True
-      end
-      object Focusdir: TComboBox
-        Left = 267
-        Height = 28
-        Top = 137
-        Width = 129
-        Constraints.MaxHeight = 28
-        ItemHeight = 0
-        ItemIndex = 0
-        Items.Strings = (
-          'IN'
-          'OUT'
-        )
-        ParentFont = False
-        Style = csDropDownList
-        TabOrder = 0
-        Text = 'IN'
-      end
-      object Label10: TLabel
-        Left = 8
-        Height = 40
-        Top = 137
-        Width = 243
-        AutoSize = False
-        Caption = 'Prefered focuser direction'
-        ParentColor = False
-        ParentFont = False
-        WordWrap = True
-      end
-      object Label11: TLabel
-        Left = 8
-        Height = 89
-        Top = 202
-        Width = 614
-        AutoSize = False
-        Caption = 'If your focuser driver do not offer this option, set here the number of steps necessary to clean the backlash when the direction change. This not need to be a precise value, it is better to set it higher than the actual backlash.'
-        ParentColor = False
-        ParentFont = False
-        WordWrap = True
-      end
-      object Label12: TLabel
-        Left = 8
-        Height = 40
-        Top = 299
-        Width = 243
-        AutoSize = False
-        Caption = 'Backlash compensation'
-        ParentColor = False
-        ParentFont = False
-        WordWrap = True
-      end
-      object BtnNoBacklash: TButton
-        Left = 372
-        Height = 25
-        Top = 301
-        Width = 105
-        Caption = 'No backlash'
-        OnClick = BtnNoBacklashClick
-        ParentFont = False
-        TabOrder = 1
-      end
-      object Backlash: TSpinEditEx
-        Left = 267
-        Height = 28
-        Top = 299
-        Width = 81
-        Constraints.MaxHeight = 28
-        MaxLength = 0
-        ParentFont = False
-        TabOrder = 2
-        MaxValue = 10000
-        NullValue = 0
-        Value = 0
-      end
-    end
-    object Page3: TPage
-      object Label3: TLabel
-        Left = 8
-        Height = 17
-        Top = 331
-        Width = 220
-        Caption = 'Click Next to start the measurement.'
-        ParentColor = False
-        ParentFont = False
-        WordWrap = True
-      end
-      object Label5: TLabel
-        Left = 8
-        Height = 49
-        Top = 154
-        Width = 251
-        AutoSize = False
-        Caption = 'Maximum defocused HFD the focuser can safely reach'
-        ParentColor = False
-        ParentFont = False
-        WordWrap = True
-      end
-      object Label6: TLabel
-        Left = 8
-        Height = 49
-        Top = 212
-        Width = 251
-        AutoSize = False
-        Caption = 'Minimum, starting point,  focuser movement'
-        ParentColor = False
-        ParentFont = False
-        WordWrap = True
-      end
-      object Label7: TLabel
-        Left = 8
-        Height = 113
-        Top = 8
-        Width = 558
-        AutoSize = False
-        Caption = 'You can set the parameters to define how the focuser will move.'#10#10'Try first with the default values and adjust them only if you receive an error message on the next step.'
-        ParentColor = False
-        ParentFont = False
-        WordWrap = True
-      end
-      object BtnDefault: TButton
-        Left = 372
-        Height = 25
-        Top = 212
-        Width = 75
-        Caption = 'Default'
-        OnClick = BtnDefaultClick
-        ParentFont = False
-        TabOrder = 0
-      end
-      object hfdmax: TSpinEditEx
-        Left = 267
-        Height = 28
-        Top = 154
-        Width = 81
-        Constraints.MaxHeight = 28
-        MaxLength = 0
-        ParentFont = False
-        TabOrder = 1
-        MinValue = 5
-        NullValue = 0
-        Value = 5
-      end
-      object stepmin: TSpinEditEx
-        Left = 267
-        Height = 28
-        Top = 212
-        Width = 81
-        Constraints.MaxHeight = 28
-        MaxLength = 0
-        ParentFont = False
-        TabOrder = 2
-        MaxValue = 1000
-        MinValue = 1
-        NullValue = 0
-        Value = 1
-      end
-    end
-    object Page4: TPage
+    object PageMeasure: TPage
       object Label4: TLabel
         Left = 16
         Height = 38
@@ -214,7 +34,7 @@ object f_focusercalibration: Tf_focusercalibration
         Left = 4
         Height = 311
         Top = 4
-        Width = 521
+        Width = 583
         AntialiasingMode = amOn
         AxisList = <        
           item
@@ -252,7 +72,6 @@ object f_focusercalibration: Tf_focusercalibration
           Pointer.Style = psCircle
           Pointer.Visible = True
           ShowPoints = True
-          Source = PtSourceL
         end
         object VcChartPtR: TLineSeries
           LinePen.Color = clNone
@@ -262,23 +81,205 @@ object f_focusercalibration: Tf_focusercalibration
           Pointer.Style = psCircle
           Pointer.Visible = True
           ShowPoints = True
-          Source = PtSourceR
+          Source = PtSource
         end
         object VcChartRegL: TLineSeries
-          Source = FitSourceL
         end
         object VcChartRegR: TLineSeries
-          Source = FitSourceR
+          Source = FitSource
         end
       end
+      object PanelBinning: TPanel
+        AnchorSideLeft.Control = PanelExp
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = PanelExp
+        Left = 195
+        Height = 28
+        Top = 376
+        Width = 191
+        BorderSpacing.Left = 4
+        BevelOuter = bvNone
+        ClientHeight = 28
+        ClientWidth = 191
+        ParentFont = False
+        TabOrder = 1
+        object Label2: TLabel
+          Left = 6
+          Height = 18
+          Top = 4
+          Width = 48
+          Caption = 'Binning'
+          ParentColor = False
+          ParentFont = False
+        end
+        object spBin: TSpinEditEx
+          Left = 100
+          Height = 28
+          Hint = 'Camera binning'
+          Top = 0
+          Width = 90
+          Constraints.MaxHeight = 28
+          MaxLength = 0
+          ParentFont = False
+          TabOrder = 0
+          MaxValue = 8
+          MinValue = 1
+          NullValue = 0
+          Value = 1
+        end
+      end
+      object PanelExp: TPanel
+        Left = 0
+        Height = 28
+        Top = 376
+        Width = 191
+        BevelOuter = bvNone
+        ClientHeight = 28
+        ClientWidth = 191
+        ParentFont = False
+        TabOrder = 2
+        object Label1: TLabel
+          AnchorSideTop.Side = asrCenter
+          Left = 6
+          Height = 18
+          Top = 5
+          Width = 57
+          Caption = 'Exposure'
+          ParentColor = False
+          ParentFont = False
+        end
+        object spExp: TFloatSpinEditEx
+          Left = 101
+          Height = 28
+          Hint = 'Exposure time in seconds'
+          Top = 0
+          Width = 90
+          Constraints.MaxHeight = 28
+          MaxLength = 0
+          ParentFont = False
+          TabOrder = 0
+          MaxValue = 60
+          MinValue = 0.1
+          Value = 1
+        end
+      end
+      object PanelGain: TPanel
+        AnchorSideLeft.Control = PanelExp
+        AnchorSideTop.Control = PanelExp
+        AnchorSideTop.Side = asrBottom
+        Left = 0
+        Height = 34
+        Top = 412
+        Width = 384
+        BorderSpacing.Top = 8
+        BevelOuter = bvNone
+        ClientHeight = 34
+        ClientWidth = 384
+        ParentFont = False
+        TabOrder = 3
+        Visible = False
+        object ISObox: TComboBox
+          Left = 100
+          Height = 32
+          Top = 0
+          Width = 91
+          ItemHeight = 18
+          ParentFont = False
+          Style = csDropDownList
+          TabOrder = 0
+          Visible = False
+        end
+        object LabelGain: TLabel
+          AnchorSideTop.Control = spGain
+          AnchorSideTop.Side = asrCenter
+          Left = 6
+          Height = 18
+          Top = 7
+          Width = 29
+          Caption = 'Gain'
+          ParentColor = False
+          ParentFont = False
+        end
+        object spGain: TSpinEditEx
+          Left = 100
+          Height = 32
+          Top = 0
+          Width = 90
+          MaxLength = 0
+          ParentFont = False
+          TabOrder = 1
+          MaxValue = 32767
+          MinValue = -32768
+          NullValue = 0
+          Value = 0
+        end
+        object PanelOffset: TPanel
+          AnchorSideLeft.Control = spGain
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = PanelGain
+          Left = 201
+          Height = 32
+          Top = 0
+          Width = 184
+          BorderSpacing.Left = 11
+          BevelOuter = bvNone
+          ClientHeight = 32
+          ClientWidth = 184
+          TabOrder = 2
+          object LabelOffset: TLabel
+            AnchorSideTop.Control = spOffset
+            AnchorSideTop.Side = asrCenter
+            Left = 0
+            Height = 18
+            Top = 7
+            Width = 38
+            Caption = 'Offset'
+            ParentColor = False
+          end
+          object spOffset: TSpinEditEx
+            Left = 96
+            Height = 32
+            Top = 0
+            Width = 90
+            MaxLength = 0
+            TabOrder = 0
+            MaxValue = 32767
+            MinValue = -32768
+            NullValue = 0
+            Value = 0
+          end
+        end
+      end
+      object spStartStep: TSpinEdit
+        AnchorSideTop.Control = PanelExp
+        AnchorSideTop.Side = asrCenter
+        Left = 505
+        Height = 32
+        Top = 374
+        Width = 82
+        MaxValue = 1000
+        MinValue = 1
+        TabOrder = 4
+        Value = 10
+      end
+      object Label3: TLabel
+        AnchorSideTop.Control = PanelExp
+        AnchorSideTop.Side = asrCenter
+        Left = 404
+        Height = 18
+        Top = 381
+        Width = 54
+        Caption = 'Step size'
+        ParentColor = False
+      end
     end
-    object Page5: TPage
+    object PageResult: TPage
       object ValueListEditor1: TValueListEditor
         Left = 8
         Height = 315
         Top = 8
-        Width = 283
-        DefaultColWidth = 172
+        Width = 584
+        DefaultColWidth = 250
         FixedCols = 0
         ParentFont = False
         RowCount = 10
@@ -300,123 +301,79 @@ object f_focusercalibration: Tf_focusercalibration
           'Value'
         )
         ColWidths = (
-          172
-          111
+          250
+          334
         )
       end
       object Label8: TLabel
         Left = 8
-        Height = 17
+        Height = 18
         Top = 348
-        Width = 387
-        Caption = 'Click Next to save this values to the configuration for this profile.'
+        Width = 384
+        Caption = 'Click Save to set this values to the configuration for this profile.'
         ParentColor = False
         ParentFont = False
-      end
-      object ValueListEditor2: TValueListEditor
-        Left = 307
-        Height = 315
-        Top = 8
-        Width = 283
-        DefaultColWidth = 172
-        FixedCols = 0
-        ParentFont = False
-        RowCount = 9
-        TabOrder = 1
-        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goThumbTracking]
-        Strings.Strings = (
-          ''
-          ''
-          ''
-          ''
-          ''
-          ''
-          ''
-          ''
-        )
-        TitleCaptions.Strings = (
-          'Param'
-          'Value'
-        )
-        ColWidths = (
-          172
-          111
-        )
-      end
-    end
-    object Page6: TPage
-      object Label9: TLabel
-        Left = 8
-        Height = 356
-        Top = 8
-        Width = 614
-        AutoSize = False
-        Caption = 'The data are now recorded in the profile.'#10#10'You can review the other auto-focus options using the menu '#10'Edit / Preferences / Autofocus.'#10#10'If the Vcurve method is active, you need to learn the curve using the next window that will open after you close this one.'#10'You can also do this learning later using the button V-learn in the focuser tool.'
-        ParentColor = False
-        ParentFont = False
-        WordWrap = True
       end
     end
   end
   object Panel1: TPanel
     Left = 0
-    Height = 50
-    Top = 378
-    Width = 633
+    Height = 34
+    Top = 464
+    Width = 597
     Align = alBottom
-    ClientHeight = 50
-    ClientWidth = 633
+    ClientHeight = 34
+    ClientWidth = 597
     ParentFont = False
     TabOrder = 1
-    object BtnCancel: TButton
-      Left = 547
+    object btnCancel: TButton
+      Left = 504
       Height = 25
-      Top = 14
+      Top = 4
       Width = 75
-      Anchors = [akTop, akRight]
       Cancel = True
       Caption = 'Cancel'
-      OnClick = BtnCancelClick
+      OnClick = btnCancelClick
       ParentFont = False
       TabOrder = 0
     end
-    object BtnNext: TButton
-      Left = 442
+    object btnNext: TButton
+      Left = 400
       Height = 25
-      Top = 14
+      Top = 4
       Width = 75
-      Anchors = [akTop, akRight]
       Caption = 'Next'
-      OnClick = BtnNextClick
-      ParentFont = False
+      OnClick = btnNextClick
       TabOrder = 1
     end
-    object BtnBack: TButton
-      Left = 333
+    object btnSave: TButton
+      Left = 400
       Height = 25
-      Top = 16
+      Top = 4
       Width = 75
-      Anchors = [akTop, akRight]
-      Caption = 'Back'
-      OnClick = BtnBackClick
-      ParentFont = False
+      Caption = 'Save'
+      OnClick = btnSaveClick
       TabOrder = 2
     end
+    object btnStart: TButton
+      AnchorSideLeft.Control = spStartStep
+      AnchorSideTop.Control = PanelGain
+      AnchorSideTop.Side = asrCenter
+      Left = 400
+      Height = 25
+      Top = 4
+      Width = 75
+      Caption = 'Start'
+      OnClick = btnStartClick
+      TabOrder = 3
+    end
   end
-  object PtSourceL: TListChartSource
-    Left = 73
-    Top = 388
+  object FitSource: TListChartSource
+    Left = 80
+    Top = 72
   end
-  object FitSourceL: TListChartSource
-    Left = 16
-    Top = 388
-  end
-  object FitSourceR: TListChartSource
-    Left = 121
-    Top = 388
-  end
-  object PtSourceR: TListChartSource
-    Left = 170
-    Top = 388
+  object PtSource: TListChartSource
+    Left = 152
+    Top = 72
   end
 end

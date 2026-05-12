@@ -194,12 +194,6 @@ resourcestring
   rsSetFocusDire = 'Set focus direction inward';
   rsSetFocusDire2 = 'Set focus direction outward';
   rsRequestToSto = 'Request to stop focuser calibration';
-  rsTheFocuserDo2 = 'The focuser do not move enough after 30 steps! please '
-    +'check if the focuser is moving at all or increase the minimum movement';
-  rsTheFocuserDo3 = 'The focuser do not move enough after 30 steps! please '
-    +'check if the focuser is moving at all or decrease the maximum HFD';
-  rsReachFocuser = 'Reach focuser range limit! please better position the '
-    +'focuser half way on it''s mechanical travel or decrease the maximum HFD';
   rsSelectAStarF = 'Select a star first!';
   rsCannotStartM = 'Cannot start manual focus now, stop capture and retry';
   rsFocusAidStar = 'Focus aid started';
@@ -650,39 +644,8 @@ resourcestring
     +'result.';
   rsNext = 'Next';
   rsBack = 'Back';
-  rsThisProcedur = 'This procedure will help you to  find the focuser '
-    +'parameters for auto-focus.%sYou only need to run it once to set this '
-    +'parameters.%sCenter a star with a high elevation and do a manual '
-    +'focusing to be as close as possible of the focus point. Use the Manual '
-    +'focus tool for that.%sUse the Star profile tool to check the star peak '
-    +'intensity is about three fourth of the camera maximum ADU but not '
-    +'saturated. %sAfter focusing, your focuser must be positioned about half '
-    +'way of it''s mechanical travel. If this is not the case please adjust it'
-    +' now.%sThe binning you set in the Preview now will be used for the '
-    +'autofocusing operation. If you want to change the focusing binning later'
-    +' you have to run this procedure again.';
-  rsGlobalFocuse = 'Global focuser parameters.%sSet the focuser direction IN '
-    +'or OUT to the one that give the best result for your setup. If you plan '
-    +'to use temperature compensation, set the direction it need to move when '
-    +'the temperature drop during the night.';
-  rsPreferedFocu = 'Prefered focuser direction';
-  rsIfYourFocuse = 'If your focuser driver do not offer this option, set here '
-    +'the number of steps necessary to clean the backlash when the direction '
-    +'change. This not need to be a precise value, it is better to set it '
-    +'higher than the actual backlash.';
-  rsNoBacklash = 'No backlash';
-  rsClickNextToS = 'Click Next to start the measurement.';
-  rsMaximumDefoc = 'Maximum defocused HFD the focuser can safely reach';
-  rsMinimumStart = 'Minimum, starting point,  focuser movement';
-  rsYouCanSetThe = 'You can set the parameters to define how the focuser will '
-    +'move.%sTry first with the default values and adjust them only if you '
-    +'receive an error message on the next step.';
   rsParameter = 'Parameter';
   rsValue = 'Value';
-  rsClickNextToS2 = 'Click Next to save this values to the configuration for '
-    +'this profile.';
-  rsTheDataAre2 = 'The data are now recorded in the profile.%sYou can review '
-    +'the other auto-focus options using the menu %sEdit / Preferences / Autofocus';
   rsStartPositio = 'Start position  pos:%s hfd:%s peak:%s snr:%s';
   rsMeasurementP = 'Measurement %s pos:%s step:%s hfd:%s peak:%s snr:%s';
   rsRunScript2 = 'Run script %s';
@@ -1643,6 +1606,8 @@ resourcestring
   rsRunScriptBef = 'Run script before each exposure';
   rsRunScriptAft = 'Run script after an image is saved';
   rsRunScriptAtT = 'Run script at the end of the series';
+  rsClickSaveToS = 'Click Save to set this values to the configuration for this profile.';
+  rsStepSize = 'Step size';
 
 implementation
 

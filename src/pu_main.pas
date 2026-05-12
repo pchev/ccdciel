@@ -875,8 +875,6 @@ type
     Procedure WheelStatus(Sender: TObject);
     procedure FilterChange(n:double);
     procedure FilterNameChange(Sender: TObject);
-    Procedure FocuserCalibration(Sender: TObject);
-    Procedure FocuserCalibrationClose(Sender: TObject);
     Procedure FocusStart(Sender: TObject);
     Procedure FocusStop(Sender: TObject);
     Procedure AutoAutoFocusStart(Sender: TObject);
@@ -13720,31 +13718,6 @@ begin
   f_starprofile.ChkFocus.Down:=not f_starprofile.ChkFocus.Down;
 end;
 
-procedure Tf_main.MenuFocuserCalibrationClick(Sender: TObject);
-begin
-  if focuser.Status<>devConnected then begin
-    ShowMessage(Format(rsNotConnected, [rsFocuser]));
-    exit;
-  end;
-  if camera.Status<>devConnected then begin
-    ShowMessage(Format(rsNotConnected, [rsCamera]));
-    exit;
-  end;
-  if not(focuser.hasRelativePosition or focuser.hasAbsolutePosition) then begin
-    ShowMessage(rsTheFocuserDo);
-    exit;
-  end;
-  if not AllDevicesConnected then begin
-    ShowMessage(rsSomeDefinedD);
-    exit;
-  end;
-  f_focusercalibration.focuser:=focuser;
-  f_focusercalibration.onCalibration:=@FocuserCalibration;
-  f_focusercalibration.onCalibrationClose:=@FocuserCalibrationClose;
-  formpos(f_focusercalibration,mouse.CursorPos.x,mouse.CursorPos.y);
-  f_focusercalibration.Show;
-end;
-
 procedure Tf_main.MenuFocuserInClick(Sender: TObject);
 begin
   FocusIN(Sender);
@@ -13765,409 +13738,69 @@ begin
   SetFrame(Sender);
 end;
 
-Procedure Tf_main.FocuserCalibration(Sender: TObject);
-var i,j,k,x,y,xc,yc,rs,s,s2,s3,s4,bin,fgain,foffset,cc: integer;
-    savepos,step,minstep,maxstep,newpos,initj,numhfd1,numhfd2: integer;
-    vmax,exp,a1,a2,b1,b2,r1,r2,pi1,pi2,hfdmax,hfdmin,hfddyn:double;
-    FocAbsolute,initstep,OutOfRange: boolean;
-    hfd1,hfd2: array[0..100]of array[1..2] of double;
-    step1: array[0..100] of integer;
-    p:array of TDouble2;
-    buf: string;
-
- procedure relIn(p:integer);
- begin
-   if p>maxstep then p:=maxstep;
-   if p<minstep then p:=minstep;
-   focuser.FocusIn;
-   focuser.RelPosition:=p;
-   savepos:=savepos-p;
- end;
- procedure relOut(p:integer);
- begin
-   if p>maxstep then p:=maxstep;
-   if p<minstep then p:=minstep;
-   focuser.FocusOut;
-   focuser.RelPosition:=p;
-   savepos:=savepos+p;
- end;
-
+procedure Tf_main.MenuFocuserCalibrationClick(Sender: TObject);
 begin
-  FocAbsolute:=focuser.hasAbsolutePosition;
-  if FocAbsolute then begin
-      minstep:=round(focuser.PositionRange.min);
-      maxstep:=round(focuser.PositionRange.max);
-  end
-  else begin
-    if focuser.hasRelativePosition then begin
-      minstep:=round(focuser.RelPositionRange.min);
-      maxstep:=round(focuser.RelPositionRange.max);
-    end
-    else begin
-      buf:=rsTheFocuserDo;
-      NewMessage(buf,1);
-      f_focusercalibration.CalibrationCancel(buf);
-      exit;
-    end;
-  end;
-  f_focusercalibration.FocAbsolute:=FocAbsolute;
-  if  f_capture.Running  then begin
-    buf:=rsCannotRunCal;
-    NewMessage(buf,1);
-    f_focusercalibration.CalibrationCancel(buf);
+  if focuser.Status<>devConnected then begin
+    ShowMessage(Format(rsNotConnected, [rsFocuser]));
     exit;
   end;
-  if f_preview.Running then begin
-    StopPreview;
+  if camera.Status<>devConnected then begin
+    ShowMessage(Format(rsNotConnected, [rsCamera]));
+    exit;
   end;
-  OutOfRange:=false;
-  if FocAbsolute then
-    savepos:=focuser.Position
-  else
-    savepos:=0;
-  step:=f_focusercalibration.MinStep;
-  hfdmax:=f_focusercalibration.MaxHfd;
-  // check window size is enough to reach hfd=20
-  if Focuswindow < (4*max(20,round(2.5*hfdmax))) then
-    Focuswindow:=4*max(20,round(2.5*hfdmax));
-  if (not f_starprofile.FindStar)and(fits.HeaderInfo.valid) then begin
-    x:=fits.HeaderInfo.naxis1 div 2;
-    y:=fits.HeaderInfo.naxis2 div 2;
-    rs:=2*min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 3;
-    fits.FindBrightestPixel(x,y,rs,starwindow,xc,yc,vmax);
-    f_starprofile.FindStar:=(vmax>0);
-    f_starprofile.StarX:=xc;
-    f_starprofile.StarY:=yc;
+  if not(focuser.hasRelativePosition or focuser.hasAbsolutePosition) then begin
+    ShowMessage(rsTheFocuserDo);
+    exit;
   end;
-  if f_starprofile.FindStar then begin
-    try
-     bin:=camera.BinX;
-     exp:=f_preview.Exposure;
-     fgain:=f_preview.Gain;
-     foffset:=f_preview.Offset;
-     s:=min(Focuswindow,min(fits.HeaderInfo.naxis1 div 2,fits.HeaderInfo.naxis2 div 2));
-     s2:=s div 2;
-     Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
-     Screen2CCD(x,y,f_visu.FlipHorz,f_visu.FlipVert,camera.VerticalFlip,xc,yc);
-     if camera.CameraInterface=INDI then begin
-       // INDI frame in unbinned pixel
-       xc:=xc*camera.BinX;
-       yc:=yc*camera.BinY;
-       s3:=s2*camera.BinX;
-       s4:=s*camera.BinX;
-       camera.SetFrame(xc-s3,yc-s3,s4,s4);
-     end
-     else begin
-       camera.SetFrame(xc-s2,yc-s2,s,s);
-     end;
-     f_starprofile.StarX:=s2;
-     f_starprofile.StarY:=s2;
-     SaveFocusZoom:=f_visu.Zoom;
-     f_visu.Zoom:=0;
-     ImgZoom:=0;
-     f_preview.StackPreview.Checked:=false;
-     f_preview.CheckBoxAstrometry.Checked:=false;
-     NewMessage(rsFocuserCalib2,1);
-     hfdmin:=9999;
-     j:=0;
-     initstep:=true;
-     initj:=0;
-     numhfd1:=0;
-     TerminateFocuserCalibration:=false;
-     // measure in AutofocusMoveDir direction
-     if AutofocusMoveDir then
-       NewMessage(rsSetFocusDire,2)
-     else
-       NewMessage(rsSetFocusDire2,2);
-     repeat
-       if not camera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeFocus,fgain,foffset) then begin
-          buf:=rsExposureFail;
-          NewMessage(buf,1);
-          f_focusercalibration.CalibrationCancel(buf);
-          exit;
-       end;
-       if TerminateFocuserCalibration then begin
-         buf:=rsRequestToSto;
-         NewMessage(buf,1);
-         f_focusercalibration.CalibrationCancel(buf);
-         exit;
-       end;
-       f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
-       if j=0 then begin
-         if FocAbsolute then
-           NewMessage(Format(rsStartPositio, [IntToStr(focuser.Position),
-             FormatFloat(f1, f_starprofile.hfd), FormatFloat(f1,
-             f_starprofile.ValMaxCalibrated), FormatFloat(f1, f_starprofile.SNR)]),2)
-         else
-           NewMessage(Format(rsStartPositio, [IntToStr(savepos), FormatFloat(
-             f1, f_starprofile.hfd), FormatFloat(f1, f_starprofile.ValMaxCalibrated),
-             FormatFloat(f1, f_starprofile.SNR)]),2);
-       end
-       else begin
-         if FocAbsolute then
-           NewMessage(Format(rsMeasurementP, [inttostr(j), IntToStr(
-             focuser.Position), IntToStr(step), FormatFloat(f1,
-             f_starprofile.hfd), FormatFloat(f1, f_starprofile.ValMaxCalibrated),
-             FormatFloat(f1, f_starprofile.SNR)]),2)
-         else
-           NewMessage(Format(rsMeasurementP, [inttostr(j), IntToStr(savepos),
-             IntToStr(step), FormatFloat(f1, f_starprofile.hfd), FormatFloat(
-             f1, f_starprofile.ValMaxCalibrated), FormatFloat(f1, f_starprofile.SNR)]),2);
-       end;
-       if FocAbsolute then
-          hfd1[j,1]:=focuser.Position
-       else
-          hfd1[j,1]:=savepos;
-       hfd1[j,2]:=f_starprofile.hfd;
-       step1[j]:=step;
-       if f_starprofile.hfd<hfdmin then hfdmin:=f_starprofile.hfd;
-       numhfd1:=j;
-       f_focusercalibration.ProgressR(j,hfd1[j,1],hfd1[j,2]);
-       if initstep and (j>0) then begin
-         if (hfd1[j,2]-hfd1[0,2])>hfd1[0,2] then begin
-            initstep:=false;
-            initj:=j;
-         end
-         else begin
-            if step<10 then
-              step:=2*step
-            else
-              step:=round(1.5*step);
-         end;
-       end;
-       inc(j);
-       if (f_starprofile.hfd<hfdmax) then begin
-         // set new focuser position
-         if AutofocusMoveDir then begin
-           if FocAbsolute then begin
-             newpos:=focuser.Position-step;
-             if newpos>minstep then
-                focuser.Position:=newpos
-             else
-                OutOfRange:=true;
-           end
-           else begin
-             relIn(step);
-           end;
-         end
-         else begin
-            if FocAbsolute then begin
-              newpos:=focuser.Position+step;
-              if newpos<maxstep then
-                 focuser.Position:=newpos
-              else
-                 OutOfRange:=true;
-            end
-            else begin
-              relOut(step);
-            end;
-         end;
-         wait(1);
-       end;
-    until (f_starprofile.hfd>=hfdmax)or(OutOfRange)or(initstep and(j>30));
-    if (initstep) then begin
-      buf:=rsTheFocuserDo2;
-      NewMessage(buf,1);
-      f_focusercalibration.CalibrationCancel(buf);
-      exit;
-    end;
-    if OutOfRange then begin
-      buf:=rsReachFocuser;
-      NewMessage(buf,1);
-      f_focusercalibration.CalibrationCancel(buf);
-      exit;
-    end;
-    // measure in reverse direction
-    if AutofocusMoveDir then begin
-      NewMessage(rsSetFocusDire2,2);
-      if FocAbsolute then begin
-        focuser.Position:=round(hfd1[0,1]);
+  if not AllDevicesConnected then begin
+    ShowMessage(rsSomeDefinedD);
+    exit;
+  end;
+  f_focusercalibration.onMsg:=@NewMessage;
+  f_focusercalibration.focuser:=focuser;
+  if GuiderAutofocus then begin
+    f_focusercalibration.camera:=guidecamera;
+    f_focusercalibration.Label4.Caption:='Focuser calibration using the guide camera';
+    f_focusercalibration.spExp.Value:=f_internalguider.Exposure.Value;
+    f_focusercalibration.spBin.Value:=f_internalguider.Binning.Value;
+    if guidecamera.hasGain then begin
+      f_focusercalibration.PanelGain.Visible:=true;
+      f_focusercalibration.spGain.Value:=f_internalguider.Gain.Value;
+      if guidecamera.hasOffset then begin
+        f_focusercalibration.PanelOffset.Visible:=true;
+        f_focusercalibration.spOffset.Value:=f_internalguider.Offset.Value;
       end
       else begin
-        relOut(savepos);
+        f_focusercalibration.PanelOffset.Visible:=false;
       end;
     end
-    else begin
-      NewMessage(rsSetFocusDire,2);
-      if FocAbsolute then begin
-        focuser.Position:=round(hfd1[0,1]);
-      end
-      else begin
-        relIn(savepos);
-      end;
-    end;
-    wait(1);
-    numhfd2:=0;
-    j:=0;
-    repeat
-      if not camera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeFocus,fgain,foffset) then begin
-         buf:=rsExposureFail;
-         NewMessage(buf,1);
-         f_focusercalibration.CalibrationCancel(buf);
-         exit;
-      end;
-      if TerminateFocuserCalibration then begin
-        buf:=rsRequestToSto;
-        NewMessage(buf,1);
-        f_focusercalibration.CalibrationCancel(buf);
-        exit;
-      end;
-      f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
-      if j=0 then begin
-        if FocAbsolute then
-          NewMessage(Format(rsStartPositio, [IntToStr(focuser.Position),
-            FormatFloat(f1, f_starprofile.hfd), FormatFloat(f1,
-            f_starprofile.ValMaxCalibrated), FormatFloat(f1, f_starprofile.SNR)]),2)
-        else
-          NewMessage(Format(rsStartPositio, [IntToStr(savepos), FormatFloat(f1,
-            f_starprofile.hfd), FormatFloat(f1, f_starprofile.ValMaxCalibrated),
-            FormatFloat(f1, f_starprofile.SNR)]),2);
-      end
-      else begin
-        if FocAbsolute then
-          NewMessage(Format(rsMeasurementP, [inttostr(j), IntToStr(
-            focuser.Position), IntToStr(step), FormatFloat(f1, f_starprofile.hfd
-            ), FormatFloat(f1, f_starprofile.ValMaxCalibrated), FormatFloat(f1,
-            f_starprofile.SNR)]),2)
-        else
-          NewMessage(Format(rsMeasurementP, [inttostr(j), IntToStr(savepos),
-            IntToStr(step), FormatFloat(f1, f_starprofile.hfd), FormatFloat(f1,
-            f_starprofile.ValMaxCalibrated), FormatFloat(f1, f_starprofile.SNR)]),2);
-      end;
-      if FocAbsolute then
-         hfd2[j,1]:=focuser.Position
-      else
-         hfd2[j,1]:=savepos;
-      hfd2[j,2]:=f_starprofile.hfd;
-      if f_starprofile.hfd<hfdmin then hfdmin:=f_starprofile.hfd;
-      numhfd2:=j;
-      f_focusercalibration.ProgressL(j,hfd2[j,1],hfd2[j,2]);
-      inc(j);
-      if (f_starprofile.hfd<hfdmax) then begin
-        // set new focuser position
-        if AutofocusMoveDir then begin
-          if FocAbsolute then begin
-            newpos:=focuser.Position+step;
-            if newpos<focuser.PositionRange.max then
-               focuser.Position:=newpos
-            else
-               OutOfRange:=true;
-          end
-          else begin
-            relOut(step);
-          end;
-        end
-        else begin
-          if FocAbsolute then begin
-            newpos:=focuser.Position-step;
-            if newpos>focuser.PositionRange.min then
-               focuser.Position:=newpos
-            else
-               OutOfRange:=true;
-          end
-          else begin
-            relIn(step);
-          end;
-        end;
-        wait(1);
-      end;
-   until (f_starprofile.hfd>=hfdmax)or(OutOfRange)or(j>30);
-    if (j>30) then begin
-      buf:=rsTheFocuserDo3;
-      NewMessage(buf,1);
-      f_focusercalibration.CalibrationCancel(buf);
-      exit;
-    end;
-    if OutOfRange then begin
-      buf:=rsReachFocuser;
-      NewMessage(buf,1);
-      f_focusercalibration.CalibrationCancel(buf);
-      exit;
-    end;
-
-    // compute values
-    k:=numhfd1-initj+1;
-    if k<3 then begin
-      buf:=rsNotEnoughMea;
-      NewMessage(buf,1);
-      f_focusercalibration.CalibrationCancel(buf);
-      exit;
-    end;
-    SetLength(p,k);
-    for i:=0 to k-1 do begin
-       p[i,1]:=hfd1[initj+i,1];
-       p[i,2]:=hfd1[initj+i,2];
-    end;
-    LeastSquares(p,a1,b1,r1);
-    pi1:=-b1/a1;
-    k:=min(3,numhfd2+1);
-    if k>2 then begin
-      SetLength(p,k);
-      for i:=0 to k-1 do begin
-         p[i,1]:=hfd2[(numhfd2-k+1)+i,1];
-         p[i,2]:=hfd2[(numhfd2-k+1)+i,2];
-      end;
-      LeastSquares(p,a2,b2,r2);
-      pi2:=-b2/a2;
-      cc:=round((pi1+pi2)/2);
-    end
     else
-      cc:=round(hfd1[0,1]);
-    AutofocusBinning:=bin;
-    // set safe values
-    AutofocusTolerance:=2*hfd1[0,2];
-    AutofocusMinSNR:=3;
-    AutofocusInPlace:=True;
-    AutoFocusMode:=afDynamic;
-    // dynamic
-    hfddyn:=2.5*hfdmin;
-    AutofocusDynamicNumPoint:=7;
-    AutofocusDynamicMovement:=round(abs(((hfddyn-b1)/a1-cc)/3));
-    AutofocusPlanetNumPoint:=AutofocusDynamicNumPoint;
-    AutofocusPlanetMovement:=AutofocusDynamicMovement;
-    // save config
-    f_focusercalibration.ValueListEditor1.Clear;
-    f_focusercalibration.ValueListEditor1.InsertRow(rsBinning, inttostr(AutofocusBinning)+'x'+inttostr(AutofocusBinning), true);
-    f_focusercalibration.ValueListEditor1.InsertRow(rsAutofocusTol,FormatFloat(f1,AutofocusTolerance),true);
-    f_focusercalibration.ValueListEditor1.InsertRow(rsMinSNR,FormatFloat(f1,AutofocusMinSNR),true);
-    f_focusercalibration.ValueListEditor1.InsertRow(rsStarDetectio,inttostr(Starwindow),true);
-    f_focusercalibration.ValueListEditor1.InsertRow(rsFocusWindowS,inttostr(Focuswindow),true);
-    if AutofocusMoveDir then
-      f_focusercalibration.ValueListEditor1.InsertRow(rsMoveDirectio,rsIn,true)
-    else
-      f_focusercalibration.ValueListEditor1.InsertRow(rsMoveDirectio,rsOut,true);
-    f_focusercalibration.ValueListEditor2.Clear;
-    f_focusercalibration.ValueListEditor2.InsertRow(rsAutofocusMet,rsDynamic,true);
-    f_focusercalibration.ValueListEditor2.InsertRow(rsStayInPlace,BoolToStr(AutofocusInPlace,rsTrue, rsFalse),true);
-    f_focusercalibration.ValueListEditor2.InsertRow(rsNumberOfDyna,inttostr(AutofocusDynamicNumPoint),true);
-    f_focusercalibration.ValueListEditor2.InsertRow(rsMovementBetw,inttostr(AutofocusDynamicMovement),true);
-    finally
-      f_starprofile.FindStar:=false;
-      if FocAbsolute then
-         focuser.Position:=savepos
-      else begin
-        if focuser.LastDirection=FocusDirIn then
-           relout(abs(savepos))
-        else
-           relin(abs(savepos));
-      end;
-      wait(1);
-      camera.ResetFrame;
-      f_preview.Loop:=false;
-      f_preview.CheckBoxAstrometry.Checked:=false;
-      f_preview.BtnPreviewClick(nil);
-    end;
+      f_focusercalibration.PanelGain.Visible:=false;
   end
   else begin
-    buf:=rsSelectAStarF;
-    NewMessage(buf,1);
-    f_focusercalibration.CalibrationCancel(buf);
+    f_focusercalibration.camera:=camera;
+    f_focusercalibration.Label4.Caption:='Focuser calibration using the main camera';
+    f_focusercalibration.spExp.Value:=f_preview.Exposure;
+    f_focusercalibration.spBin.Value:=f_preview.Bin;
+    if camera.hasGain then begin
+      f_focusercalibration.PanelGain.Visible:=true;
+      f_focusercalibration.spGain.Value:=f_preview.Gain;
+      if camera.hasOffset then begin
+        f_focusercalibration.PanelOffset.Visible:=true;
+        f_focusercalibration.spOffset.Value:=f_preview.Offset;
+      end
+      else begin
+        f_focusercalibration.PanelOffset.Visible:=false;
+      end;
+    end
+    else
+      f_focusercalibration.PanelGain.Visible:=false;
   end;
-end;
-
-Procedure Tf_main.FocuserCalibrationClose(Sender: TObject);
-begin
- SetOptions;
+  SelectTab(TBFocus);
+  formpos(f_focusercalibration,mouse.CursorPos.x,mouse.CursorPos.y);
+  f_focusercalibration.ShowModal;
+  if f_focusercalibration.ModalResult=mrOK then
+    SetOptions;
 end;
 
 Procedure Tf_main.FocusStart(Sender: TObject);
