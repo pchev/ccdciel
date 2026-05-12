@@ -24,7 +24,6 @@ type
     procedure ButtonDownloadClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure ScriptLanguageClick(Sender: TObject);
   private
     FDownloaded: boolean;
     procedure SetLang;
@@ -68,13 +67,6 @@ begin
     FDownloaded:=true;
     ModalResult:=mrOK;
   end;
-end;
-
-procedure Tf_newscript.ScriptLanguageClick(Sender: TObject);
-begin
-{$if defined(CPUARM) or defined(CPUAARCH64)}
-  ScriptLanguage.ItemIndex:=1;  // Pascalscript do not work on ARM
-{$endif}
 end;
 
 end.
