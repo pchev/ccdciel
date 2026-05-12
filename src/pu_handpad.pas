@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, UScaleDPI, u_hints, u_translation, cu_mount, u_utils, indiapi, LCLType,
+uses u_global, UScaleDPI, u_translation, cu_mount, indiapi, LCLType,
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, SpinEx, Arrow;
 
 type

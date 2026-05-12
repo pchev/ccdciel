@@ -737,8 +737,6 @@ type
     HFM_MeasIdx: integer;      // index location for next element in array
     HFM_RefHFD, HFM_MeasAvg: double;
 
-    DeprecatedScripts: TStringList;
-
     procedure CreateDevices;
     procedure SetDevices;
     procedure DestroyDevices;
@@ -770,10 +768,6 @@ type
     Procedure PurgeOldLog;
     procedure SetTool(tool:TFrame; configname: string; defaultParent: TPanel; defaultpos: integer; chkmenu,toolmenu: TMenuItem; DeviceSelected:boolean; ForceDefault:boolean=false);
     procedure UpdConfig(oldver:string);
-    procedure CheckDeprecated;
-    procedure DeprecatedClose(Sender: TObject);
-    procedure DeprecatedClick(Sender: TObject);
-    procedure DeprecatedScriptList(Sender: TObject);
     procedure SetConfig;
     procedure SetOptions;
     procedure OpenConfig(n: string);
@@ -1858,8 +1852,6 @@ begin
 
   if not open_de(slash(Appdir) + slash('data') + 'jpleph') then
     NewMessage('Warning! Using low precision ephemeris');
-
-  CheckDeprecated;
 
   fits:=TFits.Create(self);
   fits.onMsg:=@NewMessage;
@@ -3662,7 +3654,6 @@ procedure Tf_main.UpdConfig(oldver:string);
 var ok,b1,b2,b3:boolean;
     i,j: integer;
     f: double;
-    bm: TBayerMode;
     msg,buf: string;
 procedure movetoolconfig(tool:string; defaultParent: TPanel);
 begin
@@ -3844,88 +3835,6 @@ except
 end;
 end;
 
-procedure Tf_main.CheckDeprecated;
-var txt,buf: string;
-    i: integer;
-    fs : TSearchRec;
-    f: Tform;
-    p: TPanel;
-    l,li: TLabel;
-    b1,b2: TButton;
-begin
-  DeprecatedScripts:=TStringList.Create;
-  try
-  txt:='';
-  if txt<>'' then begin
-     NewMessage('Warning!'+txt,1);
-     f:=TForm.Create(self);
-     f.Constraints.MinWidth:=DoScaleY(500);
-     f.AutoSize:=true;
-     f.Position:=poScreenCenter;
-     l:=tlabel.Create(f);
-     l.BorderSpacing.Around:=DoScaleX(5);
-     l.Parent:=f;
-     l.Top:=0;
-     l.Left:=0;
-     l.WordWrap:=true;
-     l.AutoSize:=true;
-     l.Caption:='Warning!'+crlf+txt+crlf+crlf+'Please fix it now because this will be removed in the next version.'+crlf+'For more details see:';
-     l.Align:=alClient;
-     li:=tlabel.Create(f);
-     li.Parent:=f;
-     li.BorderSpacing.Left:=DoScaleX(5);
-     li.BorderSpacing.Bottom:=DoScaleX(5);
-     li.Align:=alBottom;
-     li.Caption:='https://groups.io/g/ccdciel/topic/removal_of_some_redundant/118169275';
-     li.Font.Color:=clBlue;
-     li.Cursor:=crHandPoint;
-     li.OnClick:=@DeprecatedClick;
-     p:=TPanel.Create(f);
-     p.Parent:=f;
-     p.Caption:=rsContinue;
-     p.Height:=DoScaleX(30);
-     p.Align:=alBottom;
-     p.OnClick:=@DeprecatedClose;
-     if DeprecatedScripts.Count>0 then begin
-       b1:=TButton.Create(f);
-       b1.Parent:=p;
-       b1.AutoSize:=true;
-       b1.Caption:='Pascal script list';
-       b1.left:=DoScaleX(4);
-       b1.OnClick:=@DeprecatedScriptList;
-     end;
-     f.ShowModal;
-  end;
-  finally
-   DeprecatedScripts.Free;
-  end;
-end;
-
-procedure Tf_main.DeprecatedClick(Sender: TObject);
-begin
-  ExecuteFile('https://groups.io/g/ccdciel/topic/removal_of_some_redundant/118169275');
-end;
-
-procedure Tf_main.DeprecatedScriptList(Sender: TObject);
-var f: Tf_viewtext;
-begin
- if DeprecatedScripts.Count>0 then begin
-   DeprecatedScripts.Sort;
-   f:=Tf_viewtext.Create(self);
-   f.FormStyle:=fsStayOnTop;
-   f.Caption:='Pascal script list';
-   f.Memo1.Lines.Assign(DeprecatedScripts);
-   FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
-   f.ShowModal;
- end;
-end;
-
-procedure Tf_main.DeprecatedClose(Sender: TObject);
-begin
-  TForm(TPanel(sender).Parent).Close;
-end;
-
-
 procedure Tf_main.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   if AppClose then exit;
@@ -3970,7 +3879,6 @@ begin
 end;
 
 procedure Tf_main.FormDestroy(Sender: TObject);
-var i: integer;
 begin
   try
   DestroyDevices;
@@ -5096,7 +5004,6 @@ var i,n: integer;
     roi:TRoi;
     so: TSlitOffset;
     ref: TStarAutoexposureRef;
-    ReverseDec, InverseSolarTracking : boolean;
 begin
   ShowHint:=screenconfig.GetValue('/Hint/Show',true);
   if f_option<>nil then f_option.ShowHint:=ShowHint;
@@ -9256,8 +9163,6 @@ begin
       f_devicesconnection.ProfileLabel.Caption:=profile;
       caption:='CCDciel '+ccdcielver+'-'+ShortRevisionStr+blank+profile;
 
-      CheckDeprecated;
-
       ConfigFlatFile:=slash(ConfigDir)+'flatframe_'+profile+'.fits';
       if FileExists(ConfigFlatFile) then begin
         fits.LoadFlat(ConfigFlatFile);
@@ -10604,8 +10509,6 @@ begin
 
      SetOptions;
 
-     CheckDeprecated;
-
      if (lang<>config.GetValue('/Language',lang)) then begin
        lang:=config.GetValue('/Language',lang);
        lang:=u_translation.translate(lang);
@@ -11034,7 +10937,7 @@ end;
 Procedure Tf_main.StartPreviewExposure(Sender: TObject);
 var e: double;
     buf,f: string;
-    p,binx,biny,i,x,y,w,h,sx,sy,sw,sh: integer;
+    p,binx,biny: integer;
 begin
 // ! can run out of main thread
 if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) and(not f_video.Running) then begin
@@ -12464,7 +12367,6 @@ end;
 procedure Tf_main.SpectraColor(bmp:TBGRABitmap; wmin,wmax:double);
 var x,y,r,g,b: integer;
     f: double;
-    c: TBGRAPixel;
     p: PBGRAPixel;
 begin
   for y:=0 to bmp.Height-1 do begin
@@ -12483,8 +12385,6 @@ end;
 
 Procedure Tf_main.DrawImage(WaitCursor:boolean=false; videoframe:boolean=false);
 var tmpbmp:TBGRABitmap;
-    co: TBGRAPixel;
-    s,cx,cy: integer;
 begin
 if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
   try
@@ -14300,7 +14200,7 @@ end;
 Procedure Tf_main.AutoFocusStart(Sender: TObject);
 var x,y,rx,ry,xc,yc,ns,n,i,s,s2,s3,s4,fs : integer;
     hfdlist: array of double;
-    vmax,meanhfd, med, pctsize, maxsize: double;
+    vmax,meanhfd, med: double;
     buf: string;
     fx,fy,fw,fh:TNumRange;
 begin
@@ -15576,7 +15476,7 @@ end;
 
 procedure Tf_main.LoadFitsFile(fn:string);
 var imgsize: string;
-    n,oldw,oldh:integer;
+    oldw,oldh:integer;
     oldmean,oldsigma: double;
 begin
    AnnotateMain:=false;
@@ -16192,8 +16092,7 @@ var
   nhfd_11,nhfd_21,nhfd_31,
   nhfd_12,nhfd_22,nhfd_32,
   nhfd_13,nhfd_23,nhfd_33 : integer;
-
-  hfd1,xc,yc, median_worst,median_best,scale_factor,med, theangle,theradius,screw1,screw2,screw3,sqrradius: double;
+  hfd1,xc,yc, median_worst,median_best,scale_factor,theangle,theradius,screw1,screw2,screw3,sqrradius: double;
   hfd_median, median_outer_ring  : double;
   hfdlist, hfdlist_outer_ring,
   hfdlist_11,hfdlist_21,hfdlist_31,
@@ -17198,7 +17097,7 @@ end;
 
 function Tf_main.TCPjsoncmd(id:string; attrib,value:Tstringlist):string;
 var p,i,nparms: integer;
-    rpcversion,method,buf,buf1,buf2,buf3,buf4,buf5:string;
+    rpcversion,method,buf,buf1,buf2,buf3,buf4:string;
     sl:Tstringlist;
     x1,x2,x3,x4: double;
     i1,i2,i3,i4: integer;
@@ -19886,7 +19785,7 @@ end;
 end;
 
 procedure Tf_main.ImageFinderDblClick(Sender: TObject);
-var x,y,px,py,dx,dy: integer;
+var px,py,dx,dy: integer;
     xc,yc,ri:integer;
     vmax,bg,sd: double;
 begin

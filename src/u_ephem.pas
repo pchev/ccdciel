@@ -111,7 +111,6 @@ end;
 procedure SunRect(jdtt: double; out x, y, z: double);
 var
   planet_arr: Array_5D;
-  i: integer;
 begin
   Calc_Planet_de(jdtt, 11, planet_arr, True, 3, False);
   x := planet_arr[0];
@@ -131,7 +130,6 @@ procedure MoonGeocentric(jdtt : double; out alpha,delta,dist,dkm,diam,phase,illu
 	illum	:  Illuminated percentage
 }
 var
-   q : double;
    t,sm,mm,md : double;
    w: array[1..3] of double;
    planet_arr, sun_arr: Array_5D;

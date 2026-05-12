@@ -894,7 +894,7 @@ Fhfd:=-1;
 end;
 
 procedure Tf_starprofile.Autofocus(f: TFits; x,y,s: integer);
-var bg,bgdev,star_fwhm,focuspos,tempcomp: double;
+var bg,bgdev,star_fwhm: double;
   xg,yg,flux,med: double;
   xm,ym,ri,ns,i,nhfd : integer;
   hfdlist: array of double;

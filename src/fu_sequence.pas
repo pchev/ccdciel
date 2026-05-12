@@ -1114,7 +1114,7 @@ end;
 
 procedure Tf_sequence.StatusTimerTimer(Sender: TObject);
 var r:string;
-    i,newtarget,newplan:integer;
+    newtarget,newplan:integer;
     p: T_Plan;
     agAlerttime, trAlerttime, msgtime: integer;
 const

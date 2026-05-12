@@ -149,8 +149,7 @@ begin
 end;
 
 procedure T_ascomrestmount.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
-var buf: string;
-    j: double;
+var j: double;
 begin
   try
   FStatus := devConnecting;

@@ -657,7 +657,6 @@ end;
 
 function T_ascomrestweather.GetWeatherDetail: string;
 var x: double;
-    ok: boolean;
 begin
  result:='';
  if FStatus<>devConnected then exit;

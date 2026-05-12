@@ -3599,8 +3599,6 @@ procedure TFits.FindStarPos2(x,y,s: integer; out xc,yc,vmax,bg,sd: double);
 // center of gravity in area s*s centered on x,y
 // same as FindStarPos but with floating point xc,yc and without the radius computation
 // this is used for autoguiding on spectro slit, with possible split star image
-const
-    max_ri=100;
 var i,j,rs :integer;
     SumVal,SumValX,SumValY, val,xg,yg : double;
 begin

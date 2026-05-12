@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  cu_camera, cu_ascomrest, u_global,
-    u_translation, u_utils, cu_fits, indiapi, math,
+    u_translation, u_utils, cu_fits, indiapi,
     LazSysUtils,
    Forms, ExtCtrls, Classes, SysUtils, LCLType;
 
@@ -209,7 +209,7 @@ end;
 
 procedure T_ascomrestcamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 var rlist: array of string;
-    i,n,x,y: integer;
+    i,n: integer;
     buf: string;
 begin
  try

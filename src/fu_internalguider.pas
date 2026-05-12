@@ -1483,7 +1483,7 @@ end;
 
 procedure Tf_internalguider.draw_xy(xy_trend :xy_guiderlist; dither_position :dither_positionarray);
 var
- i,j,w2,h2,diameter, lenb,x,y,counter :integer;
+ i,w2,h2,diameter, lenb,x,y,counter :integer;
  rms_ra,rms_dec,mean_ra,mean_dec,scale,scale2 :double;
  scaleunit : string;
  firstplot: boolean;

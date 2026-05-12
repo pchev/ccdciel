@@ -733,7 +733,7 @@ begin
 end;
 
 procedure Tf_EditTargets.LoadScriptList;
-var i,k: integer;
+var i: integer;
     fs : TSearchRec;
     s: TStringlist;
     scr: string;
@@ -744,14 +744,9 @@ begin
   ScriptList2.Clear;
   i:=FindFirstUTF8(slash(ConfigDir)+'*.script',0,fs);
   while i=0 do begin
-    {$if defined(CPUARM) or defined(CPUAARCH64)}
-    if f_scriptengine.ScriptType(slash(ConfigDir)+fs.name)<>stPascal then
-    {$endif}
-    begin
-      scr:=ExtractFileNameOnly(fs.Name);
-      if s.IndexOf(scr)<0 then begin
-        s.Add(scr);
-      end;
+    scr:=ExtractFileNameOnly(fs.Name);
+    if s.IndexOf(scr)<0 then begin
+      s.Add(scr);
     end;
     i:=FindNextUTF8(fs);
   end;
@@ -1609,7 +1604,7 @@ procedure Tf_EditTargets.MenuImportCSVClick(Sender: TObject);
 var fn,buf: string;
     f: textfile;
     rec: Tstringlist;
-    i,n:integer;
+    i:integer;
     t:TTarget;
 begin
   if OpenDialog1.InitialDir='' then OpenDialog1.InitialDir:=HomeDir;
@@ -2174,13 +2169,11 @@ begin
 end;
 
 procedure Tf_EditTargets.BtnInsertPlanetariumClick(Sender: TObject);
-var n: integer;
 begin
   if (f_planetariuminfo.planetarium=nil) or (not f_planetariuminfo.planetarium.Connected) then begin
     ShowMessage(rsPleaseConnec);
     exit;
   end;
-  n:=TargetList.Row;
   f_planetariuminfo.Ra.Text  := '';
   f_planetariuminfo.De.Text  := '';
   f_planetariuminfo.PA.Text  := '';
@@ -3820,7 +3813,6 @@ begin
 end;
 
 procedure Tf_EditTargets.btnStarAutoexposureClick(Sender: TObject);
-var i,n: integer;
 begin
   if SelectedObjectMagnitude<>NullCoord then
     f_autoexposurestep.Magnitude.Value:=SelectedObjectMagnitude;

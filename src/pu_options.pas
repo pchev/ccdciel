@@ -27,7 +27,7 @@ interface
 
 uses u_utils, u_global, UScaleDPI, u_hints, u_translation, u_speech, u_ccdconfig,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, LCLType, math,
-  StdCtrls, ExtCtrls, ComCtrls, Grids, EditBtn, CheckLst, Buttons, Spin, SpinEx, enhedits, Types;
+  StdCtrls, ExtCtrls, ComCtrls, Grids, EditBtn, CheckLst, Buttons, SpinEx, enhedits, Types;
 
 type
 

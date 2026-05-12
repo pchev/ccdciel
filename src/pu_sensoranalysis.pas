@@ -713,7 +713,6 @@ label
 var
   i: integer;
   image3: Timafloat;
-  mean  : double;
   valuesSD0, valuesSD, valuesM,valuesRTN,valuesRTNrms: array of double;
 begin
   the_median := 0;
@@ -764,7 +763,7 @@ end;
 
 procedure trendline(xylist: xy_list; len{length xy_list}: integer;  out slope, intercept: double); //find linear trendline Y = magnitude_slope*X + intercept
 var                                                                                                //idea from https://stackoverflow.com/questions/43224/how-do-i-calculate-a-trendline-for-a-graph
-  sumX, sumX2, sumY, sumXY, median, mad: double;
+  sumX, sumX2, sumY, sumXY: double;
   Count, i: integer;
 begin
   Count := 0;
@@ -814,7 +813,7 @@ end;
 procedure Tf_sensoranalysis.StepButton1Click(Sender: TObject);
 var
   saturationlevel, correction, stepexposure, themedian,
-  oldthemedian, median_dark_adu, sigma_light_adu, exposure_lin, sd_RTN_dark_adu2, sd_dark_adu2, median_dark_adu2, dark_current_adu, dark_current_es,
+  oldthemedian, median_dark_adu, exposure_lin, sd_RTN_dark_adu2, sd_dark_adu2, median_dark_adu2, dark_current_adu, dark_current_es,
   total_noise, total_noise_e, readnoise2_e, dark_current2_e, dark_current2_es,  readnoise_RTN2_e, total_noise_RTN_e, dark_current_RTN2_es,RTN_perc,RTN_rms : double;
   i, gainstep, nr :  integer;
   message:  string;

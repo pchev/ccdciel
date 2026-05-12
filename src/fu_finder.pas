@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI, u_global, u_utils, Graphics, Dialogs, u_translation, u_hints, cu_camera, indiapi,
+uses  UScaleDPI, u_global, u_utils, Graphics, Dialogs, u_translation, cu_camera, indiapi,
       fu_visu, cu_astrometry, pu_findercalibration, math,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls, SpinEx, Buttons, Menus;
 

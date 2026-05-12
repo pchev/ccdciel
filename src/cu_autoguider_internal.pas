@@ -2688,7 +2688,7 @@ end;
 
 function T_autoguider_internal.SelectSpectroTarget:boolean;
 var n,bin,gain,offset: integer;
-    exp,xt,yt,dist,pa: double;
+    exp,xt,yt,dist: double;
     xg,yg,xo,yo: double;
     c: TcdcWCScoord;
     fi:TFits;

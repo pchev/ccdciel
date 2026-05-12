@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses
-  Math, Types, StdCtrls, Buttons,
+  Math, Types, Buttons,
   Forms, Graphics, Controls, ComCtrls, Grids, LCLType;
 
 procedure SetScale(cnv: TCanvas);

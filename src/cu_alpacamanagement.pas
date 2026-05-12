@@ -34,7 +34,7 @@ interface
 
 uses
  {$IFDEF WINDOWS}
- Variants, comobj, ActiveX,
+ Variants, comobj, ActiveX, synaip,
  {$ENDIF}
  {$ifdef AppSkychart}
  u_constant, u_util,
@@ -42,7 +42,7 @@ uses
  {$ifdef AppCcdciel}
  u_global, u_utils,
  {$endif}
-  cu_ascomrest,  synaip,
+  cu_ascomrest,
   httpsend, synautil, fpjson, jsonparser, blcksock, synsock,
   process, Forms, Dialogs, Classes, SysUtils;
 
@@ -151,7 +151,7 @@ var
   processok,newformat: boolean;
   buf: string;
   jl,ja,jf: TJSONData;
-  j,n,l: integer;
+  j,n: integer;
   {$ENDIF}
   {$IFDEF WINDOWS}
   ip,mask: string;

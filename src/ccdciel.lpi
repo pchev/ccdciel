@@ -371,7 +371,7 @@
         <PackageName Value="LCL"/>
       </Item12>
     </RequiredPackages>
-    <Units Count="133">
+    <Units Count="134">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -1067,6 +1067,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit132>
+      <Unit133>
+        <Filename Value="cu_tiff.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit133>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

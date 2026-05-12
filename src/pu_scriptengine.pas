@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp, fu_devicesconnection, pu_pause,
+uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp, fu_devicesconnection,
   fu_capture, fu_preview, fu_mount, cu_wheel, cu_mount, cu_camera, cu_focuser, cu_autoguider, cu_astrometry,
   cu_dome, cu_rotator, cu_safety, cu_weather,
   fu_cover, cu_cover, fu_internalguider, fu_finder, cu_switch, fu_starprofile,
@@ -338,7 +338,7 @@ end;
 
 function Tf_scriptengine.RunScriptAsync(sname,path,args: string; notify:boolean=True):integer;
 var fn: string;
-    i,n: integer;
+    n: integer;
     ok: boolean;
 begin
  try
@@ -365,8 +365,7 @@ end;
 
 function Tf_scriptengine.RunScript(sname,path,args: string; notify:boolean=True):boolean;
 var fn: string;
-    i,n: integer;
-    ok: boolean;
+    n: integer;
 begin
  try
   LockSwitch;
@@ -770,7 +769,7 @@ begin
 end;
 
 function Tf_scriptengine.cmd_AutoguiderSetSettleTolerance(spx,smint,smaxt:string):string;
-var x,px: double;
+var px: double;
     n,mint,maxt: integer;
 begin
   try
@@ -2032,7 +2031,6 @@ end;
 
 function Tf_scriptengine.cmd_Internalguider_SetSpectroTargetRaDec(ra,de:string):string;
 var gRa,gDec: double;
-    n: integer;
 begin
 result:=msgFailed;
 try
@@ -2083,7 +2081,6 @@ end;
 
 function Tf_scriptengine.cmd_Internalguider_SetSpectroGuidestarRaDec(ra,de:string):string;
 var gRa,gDec: double;
-    n: integer;
 begin
 result:=msgFailed;
 try

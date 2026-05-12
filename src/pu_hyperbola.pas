@@ -67,7 +67,7 @@ end;
 function mean_error_hyperbola(var data: array of TDouble2 {pos, hfd};data_length:integer; perfectfocusposition,a,b : double): double;{calculates total averaged error between measured V-curve and hyperbola}
 var
   i : integer;
-  hfd_simulation, total_error,error : double;
+  hfd_simulation, total_error : double;
 begin
   total_error:=0;
   for i:=0 to data_length-1 do

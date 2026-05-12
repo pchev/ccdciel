@@ -450,7 +450,7 @@ begin
 end;
 
 procedure Tf_script.LoadScriptList;
-var i,k: integer;
+var i: integer;
     fs : TSearchRec;
     s: TStringlist;
     scr: string;
@@ -459,14 +459,9 @@ begin
   ComboBoxScript.Clear;
   i:=FindFirstUTF8(slash(ConfigDir)+'*.script',0,fs);
   while i=0 do begin
-    {$if defined(CPUARM) or defined(CPUAARCH64)}
-    if f_scriptengine.ScriptType(slash(ConfigDir)+fs.name)<>stPascal then
-    {$endif}
-      begin
-        scr:=ExtractFileNameOnly(fs.Name);
-        if s.IndexOf(scr)<0 then
-          s.Add(scr);
-      end;
+    scr:=ExtractFileNameOnly(fs.Name);
+    if s.IndexOf(scr)<0 then
+      s.Add(scr);
     i:=FindNextUTF8(fs);
   end;
   FindCloseUTF8(fs);

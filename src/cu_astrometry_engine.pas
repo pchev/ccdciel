@@ -488,8 +488,7 @@ var n: LongInt;
     logok: boolean;
     cbuf: array[0..READ_BYTES] of char;
     ft,fl: TextFile;
-    fn,imgdir,txt: string;
-    i,nside,available: integer;
+    i,available: integer;
     endtime: double;
     mem,mwcs: TMemoryStream;
 begin

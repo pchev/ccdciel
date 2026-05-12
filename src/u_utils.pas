@@ -2433,7 +2433,7 @@ end;
 
 procedure InitCoord(jdnow: double=0);
 var dy,dm,dd: word;
-    se,ce,sra,sde: double;
+    se,ce: double;
 begin
   if jdnow=0 then begin
     DecodeDate(now,dy,dm,dd);
@@ -3879,7 +3879,7 @@ begin
 end;
 
 function NumericStr(txt:string):string;
-var i,n: integer;
+var i: integer;
     c: char;
 begin
   // keep only numeric character, keep space between number
@@ -3897,7 +3897,7 @@ end;
 
 procedure Str2RaDec(txt: string; out ra,de: double);
 var buf,buf1,buf2: string;
-    i,p,s: integer;
+    i,s: integer;
     lst: TStringList;
 begin
 //  Format example:

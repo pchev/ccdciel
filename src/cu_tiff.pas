@@ -191,7 +191,7 @@ var
   OffsetStrip: LongInt;
   OffsetDir: LongInt;
   thefile: tfilestream;
-  i, j, k, m, width2, height2: integer;
+  i, k, m, width2, height2: integer;
   dum: double;
   memstream: TMemoryStream; {For compression}
   compstream: TCompressionStream; {For compression}
@@ -462,9 +462,8 @@ var
   OffsetDir: LongInt;
   OffsetBitsPerSample: LongInt;
   thefile: tfilestream;
-  i, j, k, m, width2, height2: integer;
+  i, k, m, width2, height2: integer;
   dum: double;
-  dummy: word;
   memstream: TMemoryStream;
   compstream: TCompressionStream;
   tiffbuffer: array of byte;
@@ -621,8 +620,6 @@ var
   thefile: tfilestream;
   i, j, k, m, width2, height2: integer;
 
-  buf32: single;
-  buffer: array[0..3] of byte absolute buf32;
   memstream: TMemoryStream;
   compstream: TCompressionStream;
 begin
@@ -755,7 +752,7 @@ var
   header          : array[0..7] of byte;
   ifd_offset      : LongInt;
   num_entries     : Word;
-  i, j, k, m     : integer;
+  i, j, k         : integer;
   entry           : TDirEntry;
   width, height   : LongInt;
   compression     : word;
@@ -778,12 +775,10 @@ var
   desc_len        : integer;
   desc_offset     : LongInt;
   predictor       : Word;
-  stride          : integer;
-  curr16, prev16, sum16: integer;
   lzwOut          : PByte;
   lzwLen          : PtrInt;
   lzwPos          : PtrInt;
-  pixel_value, scalefactor: single;
+  scalefactor     : single;
   big_endian      : boolean;   { TRUE when file uses MM / big-endian byte order }
 
   { ── byte-swap helpers ─────────────────────────────────────────────────── }
@@ -815,15 +810,13 @@ var
   procedure ApplyPredictor;
   var
     p16     : PWord;
-    s, jj, b: Integer;
+    jj, b: Integer;
     rowBytes: Integer;
-    numComps: Integer;
     temp    : array of Byte;
     srcPtr  : PByte;
   begin
     if (predictor <> 2) and (predictor <> 3) then Exit;
     rowBytes := row_size;
-    numComps := samplesperpixel;
 
     if predictor = 2 then
     begin

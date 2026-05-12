@@ -661,7 +661,7 @@ var propname: string;
     TxtProp: ITextVectorProperty;
     Txt: IText;
     buf: string;
-    i,fmin,fmax: integer;
+    i: integer;
 begin
   propname:=indiProp.getName;
   proptype:=indiProp.getType;

@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses
-  Classes, SysUtils, math;
+  Classes, SysUtils;
 
 type
   image_array = array of array of array of single;

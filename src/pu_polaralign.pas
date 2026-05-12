@@ -549,7 +549,6 @@ end;
 
 procedure Tf_polaralign.move_to_start_position;
 var cra,cde  : double;
-    eqn      : string;
 begin
   {$ifdef test_polaralignment}
   exit;

@@ -1241,7 +1241,9 @@ begin
 end;
 
 function T_ascommount.GetTrackRate: TTrackRate;
+{$ifdef mswindows}
 var i: integer;
+{$endif}
 begin
   result:=trSidereal;
   {$ifdef mswindows}
@@ -1255,7 +1257,9 @@ begin
 end;
 
 procedure T_ascommount.SetTrackRate(value: TTrackRate);
+{$ifdef mswindows}
 var i: integer;
+{$endif}
 begin
   {$ifdef mswindows}
     try

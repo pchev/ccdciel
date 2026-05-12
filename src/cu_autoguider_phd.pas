@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_autoguider, cu_tcpclient, u_global, u_utils, blcksock, synsock, fpjson, jsonparser, u_translation,
+uses cu_autoguider, cu_tcpclient, u_global, u_utils, blcksock, synsock, fpjson, jsonparser,
   Forms, Classes, SysUtils;
 
 type
@@ -238,7 +238,7 @@ procedure T_autoguider_phd.ProcessEventAsync(Data: PtrInt);
 var eventname,rpcid,rpcresult,rpcerror,err: string;
     attrib,value:Tstringlist;
     p,q,r,i,s,k:integer;
-    radiff, decdiff, buf:string;
+    radiff, decdiff:string;
 begin
 try
 attrib:=Tstringlist.Create;
