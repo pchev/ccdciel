@@ -281,8 +281,8 @@ try
     if FFirstExp then begin    // first exposure
       FFirstExp:=false;
       s:=20;
-      rx:=img_Width-6*s;
-      ry:=img_Height-6*s;
+      rx:=Fcamera.Fits.HeaderInfo.naxis1-6*s;
+      ry:=Fcamera.Fits.HeaderInfo.naxis2-6*s;
       repeat
         // search stars
         Fcamera.Fits.GetStarList(rx,ry,s,maxint,FSNR);
