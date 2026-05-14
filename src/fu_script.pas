@@ -37,7 +37,7 @@ type
     BtnRun: TButton;
     BtnEdit: TButton;
     BtnNew: TButton;
-    BtnStop: TButton;
+    BtnScriptList: TButton;
     BtnCopy: TButton;
     ButtonParam: TButton;
     ComboBoxScript: TComboBox;
@@ -53,7 +53,7 @@ type
     procedure BtnCopyClick(Sender: TObject);
     procedure BtnScriptClick(Sender: TObject);
     procedure BtnRunClick(Sender: TObject);
-    procedure BtnStopClick(Sender: TObject);
+    procedure BtnScriptListClick(Sender: TObject);
     procedure ButtonParamClick(Sender: TObject);
     procedure ComboBoxScriptChange(Sender: TObject);
     procedure ComboBoxScriptKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -141,7 +141,7 @@ begin
   BtnRun.Caption:=rsRun;
   BtnEdit.Caption:=rsEdit;
   BtnNew.Caption:=rsNew;
-  BtnStop.Caption:=rsStop;
+  BtnScriptList.Caption:=rsScriptList;
   BtnCopy.Caption:=rsCopy;
   ButtonParam.Hint:=rsScriptArgume;
   ScriptParam.Hint:=rsScriptArgume;
@@ -319,12 +319,9 @@ begin
   else msg(rsPleaseSelect);
 end;
 
-procedure Tf_script.BtnStopClick(Sender: TObject);
+procedure Tf_script.BtnScriptListClick(Sender: TObject);
 begin
-  if f_scriptengine.ScriptRunning then begin
-    f_scriptengine.StopScript;
-  end
-  else msg(rsNoScriptAreR);
+  f_scriptengine.Show;
 end;
 
 procedure Tf_script.ButtonParamClick(Sender: TObject);

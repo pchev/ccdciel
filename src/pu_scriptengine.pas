@@ -29,12 +29,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp, fu_devicesconnection,
+uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp, fu_devicesconnection, UScaleDPI,
   fu_capture, fu_preview, fu_mount, cu_wheel, cu_mount, cu_camera, cu_focuser, cu_autoguider, cu_astrometry,
   cu_dome, cu_rotator, cu_safety, cu_weather,
   fu_cover, cu_cover, fu_internalguider, fu_finder, cu_switch, fu_starprofile,
   Classes, SysUtils, FileUtil, LazFileUtils, Forms, process,
-  u_translation, Controls, Graphics, Dialogs, ExtCtrls;
+  u_translation, Controls, Graphics, Dialogs, ExtCtrls, CheckLst, Grids, StdCtrls;
 
 const
   MaxPythonScr=10;
@@ -56,7 +56,6 @@ type
     pynum: integer;
     pycmd, pyscript, pypath, args: string;
     debug, notify: boolean;
-    host,port: string;
     output: TStringList;
     rc: integer;
     FRunning: boolean;
@@ -67,11 +66,19 @@ type
   { Tf_scriptengine }
 
   Tf_scriptengine = class(TForm)
+    btnStop: TButton;
+    Panel1: TPanel;
     ShutdownTimer: TTimer;
     DelayedAsyncTimer: TTimer;
+    ScriptGrid: TStringGrid;
+    ListScriptTimer: TTimer;
+    procedure btnStopClick(Sender: TObject);
     procedure DelayedAsyncTimerTimer(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure ListScriptTimerTimer(Sender: TObject);
     procedure ShutdownTimerTimer(Sender: TObject);
   private
     { private declarations }
@@ -119,6 +126,7 @@ type
     FAsyncMethod: TDataEvent;
     FAsyncData: PtrInt;
     radec: Tradec;
+    procedure ListRunning;
     procedure msg(str:string);
     procedure LockSwitch;
     procedure UnLockSwitch;
@@ -127,6 +135,7 @@ type
     PythonScr: array[1..MaxPythonScr] of TPythonThread;
     PythonResult: array[1..MaxPythonScr] of integer;
     PythonOutput: array[1..MaxPythonScr] of TStringList;
+    procedure SetLang;
     function cmd_DevicesConnection(onoff:string; dev:string=''):string;
     function cmd_MountPark(onoff:string):string;
     function cmd_MountTrack:string;
@@ -247,11 +256,10 @@ type
     function cmd_scriptstop(num: string): string;
     function  RunScriptAsync(sname,path,args: string; notify:boolean=True):integer;
     function  RunScript(sname,path,args: string; notify:boolean=True):boolean;
-    function ScriptRunning: boolean;
     function RunPythonAsync(pycmd, pyscript, pypath, args: string; notify: boolean; out num:integer; debug:boolean=false): boolean;
     function RunPython(pycmd, pyscript, pypath, args: string; notify: boolean; out num:integer; debug:boolean=false): boolean;
     procedure StopPython(n: integer = -1);
-    function PythonRunning(n: integer = -1): boolean;
+    function ScriptRunning(n: integer = -1): boolean;
     procedure ShowPythonOutput(num:integer; output: TStringList; exitcode: integer; notify:boolean);
     procedure StopScript;
     property AstrometryGotoRunning: boolean read FAstrometryGotoRunning;
@@ -315,6 +323,14 @@ begin
   radec:=Tradec.Create;
   FAstrometryGotoRunning:=false;
   FAstrometryGotoResult:=false;
+  ScaleDPI(Self);
+  SetLang;
+end;
+
+procedure Tf_scriptengine.SetLang;
+begin
+  Caption:=rsRunningScrip;
+  btnStop.Caption:=rsStopSelected;
 end;
 
 procedure Tf_scriptengine.DelayedAsyncTimerTimer(Sender: TObject);
@@ -323,11 +339,38 @@ begin
   Application.QueueAsyncCall(FAsyncMethod,FAsyncData);
 end;
 
+procedure Tf_scriptengine.btnStopClick(Sender: TObject);
+var i : integer;
+begin
+  i:=StrToIntDef(ScriptGrid.Cells[0,ScriptGrid.Selection.Top],-1);
+  if i>0 then begin
+    StopPython(i);
+  end;
+
+end;
+
+procedure Tf_scriptengine.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  ListScriptTimer.Enabled:=false;
+  CloseAction:=caHide;
+end;
+
 procedure Tf_scriptengine.FormDestroy(Sender: TObject);
 var i: integer;
 begin
   for i:=1 to MaxPythonScr do PythonOutput[i].Free;
   radec.Free;
+end;
+
+procedure Tf_scriptengine.FormShow(Sender: TObject);
+begin
+  ListRunning;
+  ListScriptTimer.Enabled:=True;
+end;
+
+procedure Tf_scriptengine.ListScriptTimerTimer(Sender: TObject);
+begin
+  ListRunning;
 end;
 
 
@@ -384,14 +427,25 @@ begin
  end;
 end;
 
-function Tf_scriptengine.ScriptRunning: boolean;
+procedure Tf_scriptengine.ListRunning;
+var i,n: integer;
 begin
- result:= PythonRunning;
+  ScriptGrid.Clean;
+  ScriptGrid.Cells[0,0]:='n';
+  ScriptGrid.Cells[1,0]:=rsScript;
+  n:=0;
+  for i:=1 to MaxPythonScr do begin
+    if ScriptRunning(i) then begin
+      inc(n);
+      ScriptGrid.Cells[0,n]:=IntToStr(i);
+      ScriptGrid.Cells[1,n]:=PythonScr[i].pyscript;
+    end;
+  end;
 end;
 
 Procedure Tf_scriptengine.StopScript;
 begin
-  if PythonRunning then begin
+  if ScriptRunning then begin
      msg(rsScriptTermin);
      ScriptCancel:=true;
      StopPython;
@@ -2225,7 +2279,7 @@ try
   val(num,i,n);
   if n<>0 then exit;
   if (i<=0) or (i>MaxPythonScr) then exit;
-  result:=PythonRunning(i);
+  result:=ScriptRunning(i);
 except
   result:=false;
 end;
@@ -2281,7 +2335,7 @@ result:=false;
 try
   n:=-1;
   for i:=1 to MaxPythonScr do begin
-    if PythonScr[i]=nil then begin
+    if not ScriptRunning(i) then begin
       n:=i;
       break;
     end;
@@ -2305,7 +2359,7 @@ try
   if notify and assigned(FonScriptExecute) then FonScriptExecute(self);
   repeat
     wait(1);
-  until not PythonRunning(n);
+  until not ScriptRunning(n);
   result:=(PythonResult[n]=0);
   FreeAndNil(PythonScr[n]);
 except
@@ -2320,7 +2374,7 @@ result:=false;
 try
   n:=-1;
   for i:=1 to MaxPythonScr do begin
-    if not PythonRunning(i) then begin
+    if not ScriptRunning(i) then begin
       n:=i;
       break;
     end;
@@ -2349,7 +2403,7 @@ except
 end;
 end;
 
-function Tf_scriptengine.PythonRunning(n: integer = -1): boolean;
+function Tf_scriptengine.ScriptRunning(n: integer = -1): boolean;
 var i:integer;
 begin
 try
@@ -2370,11 +2424,11 @@ procedure Tf_scriptengine.StopPython(n: integer = -1);
 var i: integer;
 begin
   if (n>0) and (n<=MaxPythonScr) then begin
-    if PythonRunning(n) then PythonScr[n].PyProcess.Terminate(1)
+    if ScriptRunning(n) then PythonScr[n].PyProcess.Terminate(1)
   end
   else begin
     for i:=1 to MaxPythonScr do
-      if PythonRunning(i) then PythonScr[i].PyProcess.Terminate(1);
+      if ScriptRunning(i) then PythonScr[i].PyProcess.Terminate(1);
   end;
 end;
 
@@ -2495,13 +2549,13 @@ try
     M.SetSize(BytesRead);
     output.LoadFromStream(M);
   end;
+  FRunning:=false;
   if Assigned(FOnShowOutput) then Synchronize(@ShowOutput);
   FreeAndNil(PyProcess);
   M.Free;
   param.Free;
   scparam.Free;
   output.Free;
-  FRunning:=false;
 except
   on E: Exception do begin
     rc:=-1;

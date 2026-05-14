@@ -1,21 +1,72 @@
 object f_scriptengine: Tf_scriptengine
   Left = 0
-  Height = 314
+  Height = 320
   Top = 0
   Width = 404
+  BorderStyle = bsDialog
   Caption = 'f_scriptengine'
+  ClientHeight = 320
+  ClientWidth = 404
+  OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnShow = FormShow
+  object ScriptGrid: TStringGrid
+    Left = 0
+    Height = 285
+    Top = 0
+    Width = 404
+    Align = alClient
+    AutoFillColumns = True
+    ColCount = 2
+    DefaultColWidth = 40
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowSelect, goSmoothScroll]
+    RowCount = 11
+    TabOrder = 0
+    ColWidths = (
+      40
+      364
+    )
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 35
+    Top = 285
+    Width = 404
+    Align = alBottom
+    ClientHeight = 35
+    ClientWidth = 404
+    TabOrder = 1
+    object btnStop: TButton
+      AnchorSideLeft.Control = Panel1
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = Panel1
+      AnchorSideTop.Side = asrCenter
+      Left = 149
+      Height = 25
+      Top = 5
+      Width = 107
+      Caption = 'Stop script'
+      OnClick = btnStopClick
+      TabOrder = 0
+    end
+  end
   object ShutdownTimer: TTimer
     Enabled = False
     OnTimer = ShutdownTimerTimer
-    Left = 96
-    Top = 41
+    Left = 152
+    Top = 48
   end
   object DelayedAsyncTimer: TTimer
     Enabled = False
     OnTimer = DelayedAsyncTimerTimer
-    Left = 240
-    Top = 41
+    Left = 280
+    Top = 40
+  end
+  object ListScriptTimer: TTimer
+    Enabled = False
+    OnTimer = ListScriptTimerTimer
+    Left = 150
+    Top = 122
   end
 end

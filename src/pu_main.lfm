@@ -1361,9 +1361,9 @@ object f_main: Tf_main
           Caption = 'Run'
           OnClick = MenuScriptRunClick
         end
-        object MenuScriptStop: TMenuItem
-          Caption = 'Stop'
-          OnClick = MenuScriptStopClick
+        object MenuScriptList: TMenuItem
+          Caption = 'List'
+          OnClick = MenuScriptListClick
         end
         object MenuScriptEdit: TMenuItem
           Caption = 'Edit'

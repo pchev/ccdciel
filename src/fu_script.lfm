@@ -119,13 +119,13 @@ object f_script: Tf_script
         ParentFont = False
         TabOrder = 0
       end
-      object BtnStop: TButton
+      object BtnScriptList: TButton
         Left = 82
         Height = 25
         Top = 0
-        Width = 70
+        Width = 90
         Caption = 'Stop'
-        OnClick = BtnStopClick
+        OnClick = BtnScriptListClick
         ParentFont = False
         TabOrder = 1
       end

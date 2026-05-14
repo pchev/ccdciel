@@ -1542,6 +1542,9 @@ resourcestring
   rsReverseDirec = 'Reverse direction';
   rsMinimumHFDFo = 'Minimum HFD found';
   rsFocuserCalib2 = 'Focuser calibration using the %s';
+  rsScriptList = 'Script list';
+  rsRunningScrip = 'Running script';
+  rsStopSelected = 'Stop selected';
 
 implementation
 

@@ -316,7 +316,7 @@ type
     MenuAutoguiderCalibrate: TMenuItem;
     MenuAutoguiderGuide: TMenuItem;
     MenuAutoguiderDither: TMenuItem;
-    MenuScriptStop: TMenuItem;
+    MenuScriptList: TMenuItem;
     MenuScriptEdit: TMenuItem;
     MenuScriptNew: TMenuItem;
     MenuScriptRun: TMenuItem;
@@ -569,7 +569,7 @@ type
     procedure MenuScriptEditClick(Sender: TObject);
     procedure MenuScriptNewClick(Sender: TObject);
     procedure MenuScriptRunClick(Sender: TObject);
-    procedure MenuScriptStopClick(Sender: TObject);
+    procedure MenuScriptListClick(Sender: TObject);
     procedure MenuSequenceEditClick(Sender: TObject);
     procedure MenuSequenceLoadClick(Sender: TObject);
     procedure MenuSequenceNewClick(Sender: TObject);
@@ -2623,7 +2623,7 @@ begin
    MenuPlanetariumConnect.Caption := rsConnect;
    MenuScript.Caption := rsScript;
    MenuScriptRun.Caption := rsRun;
-   MenuScriptStop.Caption := rsStop;
+   MenuScriptList.Caption := rsScriptList;
    MenuScriptEdit.Caption := rsEdit;
    MenuScriptNew.Caption := rsNew;
    MenuHistogram.Caption := rsVisualisatio;
@@ -3529,7 +3529,8 @@ end;
 
 procedure Tf_main.ScriptAfterExecute(Sender: TObject);
 begin
-  f_script.led.Brush.Color:=clGray;
+  if not f_scriptengine.ScriptRunning then
+     f_script.led.Brush.Color:=clGray;
 end;
 
 Procedure Tf_main.StartSequence(SeqName: string);
@@ -15176,9 +15177,9 @@ begin
   f_script.BtnRun.Click;
 end;
 
-procedure Tf_main.MenuScriptStopClick(Sender: TObject);
+procedure Tf_main.MenuScriptListClick(Sender: TObject);
 begin
-  f_script.BtnStop.Click;
+  f_script.BtnScriptList.Click;
 end;
 
 procedure Tf_main.MenuSequenceEditClick(Sender: TObject);
