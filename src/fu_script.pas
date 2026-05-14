@@ -415,7 +415,7 @@ begin
       s.Add('# Python program for CCDciel');
       s.Add('# see: https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference');
       s.Add('');
-      s.Add('from ccdciel import ccdciel');
+      s.Add('from ccdciel import ccdcielex');
       s.Add('');
     end;
     f_scripteditor.ScriptName:=txt;
