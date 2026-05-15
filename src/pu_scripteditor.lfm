@@ -559,7 +559,6 @@ object f_scripteditor: Tf_scripteditor
     MouseLinkColor.Foreground = clBlue
     LineHighlightColor.Background = clNone
     LineHighlightColor.Foreground = clNone
-    OnSpecialLineColors = SynEdit1SpecialLineColors
     OnStatusChange = SynEdit1StatusChange
     inline SynLeftGutterPartList1: TSynGutterPartList
       object SynGutterMarks1: TSynGutterMarks

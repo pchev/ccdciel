@@ -83,13 +83,10 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure SynEdit1SpecialLineColors(Sender: TObject; Line: integer;
-      var Special: boolean; var FG, BG: TColor);
     procedure SynEdit1StatusChange(Sender: TObject; Changes: TSynStatusChanges);
   private
     { private declarations }
-    FDebugResume: Boolean;
-    FActiveLine: integer;
+    FActiveScript: integer;
     FScriptName: string;
     procedure SetScriptName(value:string);
   public
@@ -115,18 +112,18 @@ begin
   else
     SynEdit1.Font.Style:=[];
   ScaleDPI(Self);
-  FDebugResume:=false;
   SetLang;
+  FActiveScript:=-1;
 end;
 
 procedure Tf_scripteditor.FormShow(Sender: TObject);
 begin
-FActiveLine := 0;
 DebugMemo.Clear;
 SynEdit1.Modified:=False;
 ToolButton4.Visible:=true;
 ToolButton4.Hint:='Debug';
 SynEdit1.Highlighter:=SynPythonSyn1;
+FActiveScript:=-1;
 end;
 
 procedure Tf_scripteditor.SetLang;
@@ -170,20 +167,26 @@ begin
 end;
 
 procedure Tf_scripteditor.ButtonRunClick(Sender: TObject);
-var i,n: integer;
+var i: integer;
     fn,args:string;
 begin
-  n:=1;
+try
   fn:=slash(ConfigDir)+'tmpscript';
   SynEdit1.Lines.SaveToFile(fn);
   args:=trim(params.Text);
   DebugMemo.Clear;
   DebugMemo.Lines.Add('running...');
   Application.ProcessMessages;
-  f_scriptengine.RunPython(PythonCmd, fn, slash(ScriptsDir),args,true,n);
-  for i:=0 to f_scriptengine.PythonOutput[n].Count-1 do
-     DebugMemo.Lines.Add(f_scriptengine.PythonOutput[n][i]);
-  DebugMemo.Lines.Add('Exit code: '+inttostr(f_scriptengine.PythonResult[n]));
+  f_scriptengine.RunPythonAsync(PythonCmd, fn, slash(ScriptsDir),args,true,FActiveScript);
+  repeat
+    wait(1);
+  until not f_scriptengine.ScriptRunning(FActiveScript);
+  for i:=0 to f_scriptengine.PythonOutput[FActiveScript].Count-1 do
+     DebugMemo.Lines.Add(f_scriptengine.PythonOutput[FActiveScript][i]);
+  DebugMemo.Lines.Add('Exit code: '+inttostr(f_scriptengine.PythonResult[FActiveScript]));
+finally
+  FActiveScript:=-1;
+end;
 end;
 
 procedure Tf_scripteditor.ButtonStepIntoClick(Sender: TObject);
@@ -196,7 +199,10 @@ begin
   DebugMemo.Clear;
   DebugMemo.Lines.Add('debugging...');
   Application.ProcessMessages;
-  f_scriptengine.RunPython(PythonCmd, fn, slash(ScriptsDir),args,true,n,true);
+  f_scriptengine.RunPythonAsync(PythonCmd, fn, slash(ScriptsDir),args,true,n,true);
+  repeat
+    wait(1);
+  until not f_scriptengine.ScriptRunning(n);
   DebugMemo.Lines.Add('Exit code: '+inttostr(f_scriptengine.PythonResult[n]));
 end;
 
@@ -228,7 +234,8 @@ end;
 
 procedure Tf_scripteditor.ButtonStopClick(Sender: TObject);
 begin
-  f_scriptengine.StopPython;
+  if FActiveScript>0 then
+    f_scriptengine.StopPython(FActiveScript);
 end;
 
 procedure Tf_scripteditor.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -236,17 +243,6 @@ begin
 if SynEdit1.Modified and (ModalResult<>mrOK) then begin
    CanClose:=(MessageDlg('Abandon your changes?', mtConfirmation, mbYesNo, 0)=mrYes);
 end;
-end;
-
-procedure Tf_scripteditor.SynEdit1SpecialLineColors(Sender: TObject;
-  Line: integer; var Special: boolean; var FG, BG: TColor);
-begin
-  if Line = FActiveLine then
-  begin
-    Special := True;
-    BG := clYellow;
-    FG := clWindowText;
-  end else Special := False;
 end;
 
 procedure Tf_scripteditor.SynEdit1StatusChange(Sender: TObject;
