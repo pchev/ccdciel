@@ -1514,6 +1514,8 @@ begin
   EmailCondition.Items[3]:=rsAutofocusErr2;
   EmailCondition.Items[4]:=rsMeridianFlip8;
   EmailCondition.Items[5]:=rsTargetInitia2;
+  EmailCondition.Items[6]:=rsCaptureNorma;
+  EmailCondition.Items[7]:=rsCaptureAbnor;
   CheckGroupVoice.Items[0]:=rsInteractionD;
   CheckGroupVoice.Items[1]:=rsSequenceStep;
   CheckGroupVoice.Items[2]:=rsErrorMessage;

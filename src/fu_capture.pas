@@ -434,13 +434,30 @@ begin
 end;
 
 procedure Tf_capture.Stop;
+var r:string;
 begin
   Frunning:=false;
-  if (FstartedBy=CAPTURE)and(led.Brush.Color<>clGray)and(cbTerminationScript.Checked)and(cbScript.text>'')and(FileExists(slash(ConfigDir)+cbScript.text+'.script'))and assigned(FRunScript) then begin
-    if ExpectedStop then
-      FRunScript(cbScript.text,ConfigDir,'2 '+ScriptParams)
-    else
-      FRunScript(cbScript.text,ConfigDir,'3 '+ScriptParams);
+  if (FstartedBy=CAPTURE)and(led.Brush.Color<>clGray) then begin
+    if ExpectedStop then  begin
+      if EmailEndCapture then begin
+        r:=email(Format(rsCaptureSFini, ['']),Format(rsCaptureSFini, [FName.Text]));
+        if r='' then r:=rsEmailSentSuc;
+        if Assigned(FonMsg) then FonMsg(r,9);
+      end;
+      if (cbTerminationScript.Checked)and(cbScript.text>'')and(FileExists(slash(ConfigDir)+cbScript.text+'.script'))and assigned(FRunScript) then begin
+        FRunScript(cbScript.text,ConfigDir,'2 '+ScriptParams)
+      end;
+    end
+    else begin
+       if EmailAbortCapture then begin
+         r:=email(rsCaptureStopp2,rsCaptureStopp2 +' '+FName.Text);
+         if r='' then r:=rsEmailSentSuc;
+         if Assigned(FonMsg) then FonMsg(r,9);
+       end;
+       if (cbTerminationScript.Checked)and(cbScript.text>'')and(FileExists(slash(ConfigDir)+cbScript.text+'.script'))and assigned(FRunScript) then begin
+         FRunScript(cbScript.text,ConfigDir,'3 '+ScriptParams);
+       end;
+    end;
   end;
   cbOverwrite.Checked:=false;
   EarlyNextExposure:=false;

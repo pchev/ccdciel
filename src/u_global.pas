@@ -589,7 +589,7 @@ var
   PolarAlignmentOverlayOffsetX,PolarAlignmentOverlayOffsetY: double;
   MailTo,MailFrom,SMTPHost,SMTPPort,SMTPUser,SMTPPasswd : String;
   SMTPSSLTLS: boolean;
-  EmailEndSequence,EmailAbortSequence,EmailAutoguider,EmailAufofocus,EmailMeridianFlip,EmailTargetInitialisation: boolean;
+  EmailEndSequence,EmailAbortSequence,EmailAutoguider,EmailAufofocus,EmailMeridianFlip,EmailTargetInitialisation,EmailEndCapture,EmailAbortCapture: boolean;
   ManualFilterNames: TStringList;
   VoiceDialog,VoiceSequence,VoiceError,VoiceEmail: boolean;
   DisplayCapture,LowQualityDisplay: boolean;

@@ -5537,6 +5537,8 @@ begin
   EmailAufofocus:=config.GetValue('/Mail/Aufofocus',false);
   EmailMeridianFlip:=config.GetValue('/Mail/MeridianFlip',false);
   EmailTargetInitialisation:=config.GetValue('/Mail/TargetInitialisation',false);
+  EmailEndCapture:=config.GetValue('/Mail/EndCapture',false);
+  EmailAbortCapture:=config.GetValue('/Mail/AbortCapture',false);
   VoiceDialog:=config.GetValue('/Voice/Dialog',false);
   VoiceSequence:=config.GetValue('/Voice/Sequence',false);
   VoiceError:=config.GetValue('/Voice/Error',false);
@@ -10062,6 +10064,8 @@ begin
    f_option.EmailCondition.Checked[3]:=config.GetValue('/Mail/Aufofocus',false);
    f_option.EmailCondition.Checked[4]:=config.GetValue('/Mail/MeridianFlip',false);
    f_option.EmailCondition.Checked[5]:=config.GetValue('/Mail/TargetInitialisation',false);
+   f_option.EmailCondition.Checked[6]:=config.GetValue('/Mail/EndCapture',false);
+   f_option.EmailCondition.Checked[7]:=config.GetValue('/Mail/AbortCapture',false);
    f_option.CheckGroupVoice.Checked[0]:=config.GetValue('/Voice/Dialog',false);
    f_option.CheckGroupVoice.Checked[1]:=config.GetValue('/Voice/Sequence',false);
    f_option.CheckGroupVoice.Checked[2]:=config.GetValue('/Voice/Error',false);
@@ -10498,6 +10502,8 @@ begin
      config.SetValue('/Mail/Aufofocus',f_option.EmailCondition.Checked[3]);
      config.SetValue('/Mail/MeridianFlip',f_option.EmailCondition.Checked[4]);
      config.SetValue('/Mail/TargetInitialisation',f_option.EmailCondition.Checked[5]);
+     config.SetValue('/Mail/EndCapture',f_option.EmailCondition.Checked[6]);
+     config.SetValue('/Mail/AbortCapture',f_option.EmailCondition.Checked[7]);
      config.SetValue('/Voice/Dialog',f_option.CheckGroupVoice.Checked[0]);
      config.SetValue('/Voice/Sequence',f_option.CheckGroupVoice.Checked[1]);
      config.SetValue('/Voice/Error',f_option.CheckGroupVoice.Checked[2]);

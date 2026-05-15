@@ -5509,8 +5509,8 @@ object f_option: Tf_option
               Width = 555
               Align = alClient
               Caption = 'PHD2'
-              ClientHeight = 76
-              ClientWidth = 551
+              ClientHeight = 94
+              ClientWidth = 543
               ParentFont = False
               TabOrder = 0
               object Label16: TLabel
@@ -8158,12 +8158,14 @@ object f_option: Tf_option
                   'Autofocus error'
                   'Meridian flip error'
                   'Target initialisation'
+                  'Capture normal end'
+                  'Capture abnormal end'
                 )
                 ItemHeight = 26
                 ParentFont = False
                 TabOrder = 0
                 Data = {
-                  06000000000000000000
+                  080000000000000000000000
                 }
               end
               object Panel6: TPanel

@@ -1545,6 +1545,8 @@ resourcestring
   rsScriptList = 'Script list';
   rsRunningScrip = 'Running script';
   rsStopSelected = 'Stop selected';
+  rsCaptureNorma = 'Capture normal end';
+  rsCaptureAbnor = 'Capture abnormal end';
 
 implementation
 
