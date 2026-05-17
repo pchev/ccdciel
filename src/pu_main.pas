@@ -2623,7 +2623,7 @@ begin
    MenuPlanetariumConnect.Caption := rsConnect;
    MenuScript.Caption := rsScript;
    MenuScriptRun.Caption := rsRun;
-   MenuScriptList.Caption := rsScriptList;
+   MenuScriptList.Caption := rsRunning;
    MenuScriptEdit.Caption := rsEdit;
    MenuScriptNew.Caption := rsNew;
    MenuHistogram.Caption := rsVisualisatio;

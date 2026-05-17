@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-12 16:00+0000\n"
+"POT-Creation-Date: 2026-05-17 13:30+0000\n"
 "PO-Revision-Date: 2026-05-08 05:36+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-05-12 16:04+0000\n"
-"X-Generator: Launchpad (build 91d5f4cbcbec62cc98ca9991c8ad99af4e21f85a)\n"
+"X-Launchpad-Export-Date: 2026-05-17 13:40+0000\n"
+"X-Generator: Launchpad (build 21e17fefcf122f18da93c143f29f40ba940e464c)\n"
 "Language: cs\n"
 
 #: u_translation.rs2d
@@ -775,6 +775,10 @@ msgstr "Sledovat poledník po dobu"
 msgid "Capture"
 msgstr "Snímání"
 
+#: u_translation.rscaptureabnor
+msgid "Capture abnormal end"
+msgstr ""
+
 #: u_translation.rscapturealrea
 msgid "Capture already running! please stop it first if you want to start a new sequence."
 msgstr "Snímání již běží! Pokud chcete spustit novou sekvenci, nejprve ji zastavte."
@@ -782,6 +786,10 @@ msgstr "Snímání již běží! Pokud chcete spustit novou sekvenci, nejprve ji
 #: u_translation.rscapturefolde
 msgid "Capture folder"
 msgstr "Složka pro snímání"
+
+#: u_translation.rscapturenorma
+msgid "Capture normal end"
+msgstr ""
 
 #: u_translation.rscapturesfini
 #, object-pascal-format
@@ -2937,6 +2945,10 @@ msgstr "Režim:"
 msgid "Modify"
 msgstr "Upravit"
 
+#: u_translation.rsmonochromebi
+msgid "Monochrome 2x2 binning for color camera"
+msgstr ""
+
 #: u_translation.rsmoonavoidanc
 msgid "Moon avoidance"
 msgstr "Vyhýbání se Měsíci"
@@ -4200,6 +4212,15 @@ msgstr "Automatické zaostření při změně teploty o více než %s"
 msgid "Run auto-focus if change is more than % HFD"
 msgstr "Spustit auto-ostření, pokud je změna větší než % HFD"
 
+#: u_translation.rsrunning
+msgctxt "u_translation.rsrunning"
+msgid "Running"
+msgstr ""
+
+#: u_translation.rsrunningscrip
+msgid "Running script"
+msgstr ""
+
 #: u_translation.rsrunscript
 msgid "Run script"
 msgstr "Spustit script"
@@ -4903,6 +4924,10 @@ msgstr "Spektrální profil"
 msgid "Spectroscopy"
 msgstr "Spektroskopie"
 
+#: u_translation.rsspectroscopy2
+msgid "Spectroscopy options"
+msgstr ""
+
 #: u_translation.rsspectroslitr
 msgid "Spectroscope ROI"
 msgstr "Spektroskop ROI"
@@ -5181,6 +5206,10 @@ msgstr "Zastavit cyklus náhledu"
 #: u_translation.rsstoprecord
 msgid "Stop record"
 msgstr "Zastavit záznam"
+
+#: u_translation.rsstopselected
+msgid "Stop selected"
+msgstr ""
 
 #: u_translation.rsstoptelescop
 msgid "Stop telescope motion."

@@ -5901,3 +5901,31 @@ msgstr ""
 msgid "Focuser calibration using the %s"
 msgstr ""
 
+#: u_translation:rsrunning
+msgid "Running"
+msgstr ""
+
+#: u_translation:rsrunningscrip
+msgid "Running script"
+msgstr ""
+
+#: u_translation:rsstopselected
+msgid "Stop selected"
+msgstr ""
+
+#: u_translation:rscapturenorma
+msgid "Capture normal end"
+msgstr ""
+
+#: u_translation:rscaptureabnor
+msgid "Capture abnormal end"
+msgstr ""
+
+#: u_translation:rsmonochromebi
+msgid "Monochrome 2x2 binning for color camera"
+msgstr ""
+
+#: u_translation:rsspectroscopy2
+msgid "Spectroscopy options"
+msgstr ""
+

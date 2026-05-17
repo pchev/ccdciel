@@ -141,7 +141,7 @@ begin
   BtnRun.Caption:=rsRun;
   BtnEdit.Caption:=rsEdit;
   BtnNew.Caption:=rsNew;
-  BtnScriptList.Caption:=rsScriptList;
+  BtnScriptList.Caption:=rsRunning;
   BtnCopy.Caption:=rsCopy;
   ButtonParam.Hint:=rsScriptArgume;
   ScriptParam.Hint:=rsScriptArgume;
