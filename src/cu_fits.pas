@@ -243,6 +243,7 @@ type
      procedure LoadFlat(fn: string);
      procedure MedianFilter(size,centralweight: integer);
      procedure ghost_blackout(threshold,dx,dy,diameter,binref: integer);
+     procedure SoftBinning;
      function dateobs: double;
      property IntfImg: TLazIntfImage read FIntfImg;
      Property HeaderInfo : TFitsInfo read FFitsInfo;
@@ -2761,6 +2762,86 @@ begin
   FNoiseProcess:=true;
   FStreamValid:=false;
   FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Noise removed by median filtering','');
+end;
+
+procedure TFits.SoftBinning;
+var i,i1,i2,j,j1,j2,m,m0,n,n0,bx,by: integer;
+    dmin,dmax,x,sc,px,py : double;
+    ni,sum,sum2 : extended;
+    source: Timafloat;
+begin
+  source:=CopyImage(Fimage);
+  m0:=FFitsInfo.naxis1;
+  n0:=FFitsInfo.naxis2;
+  m:=FFitsInfo.naxis1 div 2;
+  n:=FFitsInfo.naxis2 div 2;
+  bx:=FFitsInfo.BinX*2;
+  by:=FFitsInfo.BinY*2;
+  px:=FFitsInfo.pixsz1*2;
+  py:=FFitsInfo.pixsz2*2;
+  sc:=FFitsInfo.scale*2;
+  SetLength(Fimage,1,n,m);
+  FillByte(FHistogram,sizeof(THistogram),0);
+  dmin:=1.0E100;
+  dmax:=-1.0E100;
+  sum:=0; sum2:=0; ni:=0;
+  for i:=0 to n-1 do begin
+    i1:=2*i;
+    i2:=min(i1+1,n0-1);
+    for j:=0 to m-1 do begin
+      j1:=2*j;
+      j2:=min(j1+1,m0-1);
+      x:=source[0,i1,j1]+source[0,i1,j2]+source[0,i2,j1]+source[0,i2,j2];
+      x:=min(round(x),maxword);
+      Fimage[0,i,j]:=x;
+      inc(FHistogram[round(x)]);
+      dmin:=min(x,dmin);
+      dmax:=max(x,dmax);
+      sum:=sum+x;
+      sum2:=sum2+x*x;
+      ni:=ni+1;
+    end;
+  end;
+  Fmean:=sum/ni;
+  Fsigma:=sqrt( (sum2/ni)-(Fmean*Fmean) );
+  if dmin>=dmax then begin
+     if dmin=0 then
+       dmax:=dmin+1  // black if all 0
+     else
+       dmin:=dmax-1; // white if all same value
+  end;
+  FimageMin:=0;
+  FimageMax:=maxword;
+  FimageC:=1;
+  FStreamValid:=false;
+  FHeader.Replace('NAXIS1',m);
+  FHeader.Replace('NAXIS2',n);
+  FHeader.Replace('NAXIS2',n);
+  if FHeader.Valueof('CRPIX1',i) then  FHeader.Replace('CRPIX1',i div 2);
+  if FHeader.Valueof('CRPIX2',i) then  FHeader.Replace('CRPIX2',i div 2);
+  if FHeader.Valueof('CDELT1',x) then  FHeader.Replace('CDELT1',x*2);
+  if FHeader.Valueof('CDELT2',x) then  FHeader.Replace('CDELT2',x*2);
+  FHeader.Replace('XPIXSZ',px);
+  FHeader.Replace('YPIXSZ',py);
+  FHeader.Replace('PIXSIZE1',px);
+  FHeader.Replace('PIXSIZE2',py);
+  FHeader.Replace('XBINNING',bx);
+  FHeader.Replace('YBINNING',by);
+  FHeader.Replace('SCALE',sc);
+  FHeader.Replace('DATAMAX',dmax);
+  FHeader.Replace('DATAMIN',dmin);
+  FHeader.Delete('BAYERPAT');
+  FHeader.Delete('XBAYROFF');
+  FHeader.Delete('YBAYROFF');
+  FHeader.Delete('MULT_R');
+  FHeader.Delete('MULT_G');
+  FHeader.Delete('MULT_B');
+  FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Soft binning 2x2','');
+  Fwidth:=m;
+  Fheight:=n;
+  GetFitsInfo;
+  FFitsInfo.dmin:=dmin;
+  FFitsInfo.dmax:=dmax;
 end;
 
 procedure TFits.LoadDark(fn: string);

@@ -5140,6 +5140,8 @@ begin
        FocuserTemperatureChange(focuser.Temperature);
     end;
   end;
+  if camera<>nil then
+    camera.SoftBinning:=config.GetValue('/Sensor/SoftBinning',false);
   TemperatureSlope:=config.GetValue('/Cooler/TemperatureSlope',0);
   ReadoutModeCapture:=config.GetValue('/Readout/Capture',0);
   ReadoutModePreview:=config.GetValue('/Readout/Preview',0);
@@ -7918,6 +7920,7 @@ begin
                      wait(1);
                      WheelStatus(Sender);
                    end;
+                   camera.SoftBinning:=config.GetValue('/Sensor/SoftBinning',false);
                    ReadoutList.Assign(camera.ReadOutList);
                    f_option.ReadOutCapture.Items.Assign(ReadoutList);
                    f_option.ReadOutPreview.Items.Assign(ReadoutList);
@@ -9801,6 +9804,7 @@ begin
      f_option.RoiList.ItemIndex:=0;
      f_option.RoiListChange(nil);
    end;
+   f_option.cbSoftBinning.Checked:=config.GetValue('/Sensor/SoftBinning',false);
    f_option.MaxAdu.Value:=config.GetValue('/Sensor/MaxADU',MAXWORD);
    f_option.MaxAduFromCamera.Checked:=config.GetValue('/Sensor/MaxADUFromCamera',true);
    f_option.NotDisplayCapture.Checked:=not config.GetValue('/Visu/DisplayCapture',DisplayCapture);
@@ -10289,6 +10293,7 @@ begin
        end;
      end;
      f_option.ClearRoi;
+     config.SetValue('/Sensor/SoftBinning',f_option.cbSoftBinning.Checked);
      config.SetValue('/Sensor/MaxADUFromCamera',f_option.MaxAduFromCamera.Checked);
      config.SetValue('/Sensor/MaxADU',f_option.MaxAdu.Value);
      config.SetValue('/Sensor/ExpEarlyStart',f_option.ExpEarlyStart.Checked);

@@ -1547,6 +1547,8 @@ resourcestring
   rsStopSelected = 'Stop selected';
   rsCaptureNorma = 'Capture normal end';
   rsCaptureAbnor = 'Capture abnormal end';
+  rsMonochromeBi = 'Monochrome 2x2 binning for color camera';
+  rsSpectroscopy2 = 'Spectroscopy options';
 
 implementation
 

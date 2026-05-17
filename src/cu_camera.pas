@@ -201,6 +201,7 @@ T_camera = class(TComponent)
     FonEndControlExposure: TNotifyEvent;
     FRunScript: TRunScript;
     FSolve: TSolve;
+    FSoftBinning: boolean;
     procedure RampTimerTimer(Sender: TObject);
     procedure EndExposure(Sender: TObject);
     function Solve(f:TFits; out ra,de,pa,scale: double): boolean;
@@ -379,6 +380,7 @@ T_camera = class(TComponent)
     property onEndControlExposure: TNotifyEvent read FonEndControlExposure write FonEndControlExposure;
     property onRunScript: TRunScript read FRunScript write FRunScript;
     property onSolve: TSolve read FSolve write FSolve;
+    property SoftBinning: boolean read FSoftBinning write FSoftBinning;
 end;
 
 
@@ -457,6 +459,7 @@ begin
   FTargetRA:=NullCoord;
   FTargetDE:=NullCoord;
   FCoordinateOrigin:='Telescope pointing';
+  FSoftBinning:=false;
 end;
 
 destructor  T_camera.Destroy;
@@ -744,6 +747,11 @@ else begin  // normal capture
   {$ifdef timing_stdout}writeln(FormatDateTime('yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz',Now)+' write header time = '+FormatFloat('0.000',86400*(now-tt)));{$endif}
   end;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'process new image');{$endif}
+  if FSoftBinning then begin
+    FFits.LoadStream;
+    FFits.SoftBinning;
+    FFits.UpdateStream;
+  end;
   if Assigned(FonNewImage) then FonNewImage(self);
 end;
 end;

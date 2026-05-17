@@ -42,6 +42,7 @@ type
     cbHighlightColor: TComboBox;
     cbWeatherScript: TComboBox;
     cbAstrometryNewImage: TCheckBox;
+    cbSoftBinning: TCheckBox;
     CheckRecenterTarget: TCheckBox;
     CrosshairsR1: TEdit;
     CrosshairsR2: TEdit;
@@ -51,6 +52,7 @@ type
     FocaleLength: TFloatSpinEditEx;
     GroupBox23: TGroupBox;
     GroupBox37: TGroupBox;
+    GroupBox9: TGroupBox;
     Label132: TLabel;
     Label166: TLabel;
     Label167: TLabel;
@@ -1159,6 +1161,8 @@ begin
   StackDebayer.Caption:=rsDebayer;
   StackOperation.Items[0]:=rsAddImages;
   StackOperation.Items[1]:=rsMeanOfImages;
+  GroupBox9.Caption:=rsSpectroscopy2;
+  cbSoftBinning.Caption:=rsMonochromeBi;
   GroupBox19.Caption := rsClippingIndi;
   Label37.Caption := rsShadowADU;
   Label100.Caption := rsHighlightADU;
