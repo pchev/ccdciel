@@ -2847,7 +2847,7 @@ begin
   FStreamValid:=false;
   FHeader.Replace('NAXIS1',m);
   FHeader.Replace('NAXIS2',n);
-  FHeader.Replace('NAXIS2',n);
+  FHeader.Replace('NAXIS3',1);
   if FHeader.Valueof('CRPIX1',i) then  FHeader.Replace('CRPIX1',i div 2);
   if FHeader.Valueof('CRPIX2',i) then  FHeader.Replace('CRPIX2',i div 2);
   if FHeader.Valueof('CDELT1',x) then  FHeader.Replace('CDELT1',x*2);
@@ -2868,6 +2868,7 @@ begin
   FHeader.Delete('MULT_G');
   FHeader.Delete('MULT_B');
   FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Soft binning 2x2','');
+  Fpreview_axis:=1;
   Fwidth:=m;
   Fheight:=n;
   GetFitsInfo;

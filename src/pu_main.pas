@@ -5055,7 +5055,7 @@ begin
   ObsLongitude:=config.GetValue('/Info/ObservatoryLongitude',0.0);
   ObsElevation:=config.GetValue('/Info/ObservatoryElevation',0.0);
   InitObservatory;
-  BayerColor:=config.GetValue('/Color/Bayer',false);
+  BayerColor:=config.GetValue('/Color/Bayer',false) and (not config.GetValue('/Sensor/SoftBinning',false));
   oldbayer:=DefaultBayerMode;
   oldRed:=RedBalance;
   oldGreen:=GreenBalance;
