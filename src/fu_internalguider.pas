@@ -68,6 +68,7 @@ type
     cbRotator: TCheckBox;
     cbParallactic: TCheckBox;
     cbGhost: TCheckBox;
+    cbSoftbinning: TCheckBox;
     CheckBoxBacklash: TCheckBox;
     CheckBoxTrackSolar1: TCheckBox;
     cbSlitList: TComboBox;
@@ -228,7 +229,7 @@ type
     Label4: TLabel;
     ra_gain1: TSpinEditEx;
     scale1: TUpDown;
-    Binning: TSpinEditEx;
+    spBinning: TSpinEditEx;
     Gain: TSpinEditEx;
     Offset: TSpinEditEx;
     edslitWinMin: TSpinEditEx;
@@ -268,7 +269,7 @@ type
     TabSheetAdvanced: TTabSheet;
     TabSheetGuider: TTabSheet;
     Title: TLabel;
-    procedure BinningChange(Sender: TObject);
+    procedure spBinningChange(Sender: TObject);
     procedure btnAddSlitOffsetClick(Sender: TObject);
     procedure btnDelSlitOffsetClick(Sender: TObject);
     procedure btnSetMultiStarOffsetClick(Sender: TObject);
@@ -289,6 +290,7 @@ type
     procedure cbSpectroChange(Sender: TObject);
     procedure cbEnlargeImageChange(Sender: TObject);
     procedure cbParallacticChange(Sender: TObject);
+    procedure cbSoftbinningChange(Sender: TObject);
     procedure CheckBoxBacklashChange(Sender: TObject);
     procedure CheckBoxTrackSolar1Change(Sender: TObject);
     procedure ClearMsgTimerTimer(Sender: TObject);
@@ -461,6 +463,12 @@ type
     Procedure Redraw(Sender: TObject);
     Procedure ZoomImage(Sender: TObject);
     function GetDelay: integer;
+    procedure SetCameraBinning(value:integer);
+    function GetCameraBinning:integer;
+    procedure SetSoftBinning(value:boolean);
+    function GetSoftBinning:boolean;
+    procedure SetTotBinning(value:integer);
+    function GetTotBinning:integer;
 
   public
     { public declarations }
@@ -565,6 +573,9 @@ type
     property onSetSpectro: TNotifyEvent read FonSetSpectro write FonSetSpectro;
     property Delay: integer read GetDelay;
     property GhostBinning: integer read FGhostBinning write FGhostBinning;
+    property CameraBinning: integer read GetCameraBinning write SetCameraBinning;
+    property SoftBinning: boolean read GetSoftBinning write SetSoftBinning;
+    property TotBinning: integer read GetTotBinning write SetTotBinning;
 
   end;
 
@@ -824,7 +835,7 @@ end;
 
 function Tf_internalguider.GetpulsegainEASTsetting:double;
 begin
-  result:=strtofloat(pulsegainEAST1.text)*StrToIntDef(CalBinning.Text,1)/Binning.Value;
+  result:=strtofloat(pulsegainEAST1.text)*StrToIntDef(CalBinning.Text,1)/GetTotBinning;
 end;
 
 procedure Tf_internalguider.SetpulsegainEastsetting(value:double);
@@ -834,7 +845,7 @@ end;
 
 function Tf_internalguider.GetpulsegainWestsetting:double;
 begin
-  result:=strtofloat(pulsegainWest1.text)*StrToIntDef(CalBinning.Text,1)/Binning.Value;
+  result:=strtofloat(pulsegainWest1.text)*StrToIntDef(CalBinning.Text,1)/GetTotBinning;
 end;
 
 procedure Tf_internalguider.SetpulsegainWestsetting(value:double);
@@ -844,7 +855,7 @@ end;
 
 function Tf_internalguider.GetpulsegainNorthsetting:double;
 begin
-  result:=strtofloat(pulsegainNorth1.text)*StrToIntDef(CalBinning.Text,1)/Binning.Value;
+  result:=strtofloat(pulsegainNorth1.text)*StrToIntDef(CalBinning.Text,1)/GetTotBinning;
 end;
 
 procedure Tf_internalguider.SetpulsegainNorthsetting(value:double);
@@ -854,7 +865,7 @@ end;
 
 function Tf_internalguider.GetpulsegainSouthsetting:double;
 begin
-  result:=strtofloat(pulsegainSouth1.text)*StrToIntDef(CalBinning.Text,1)/Binning.Value;
+  result:=strtofloat(pulsegainSouth1.text)*StrToIntDef(CalBinning.Text,1)/GetTotBinning;
 end;
 
 procedure Tf_internalguider.SetpulsegainSouthsetting(value:double);
@@ -874,7 +885,7 @@ end;
 
 function Tf_internalguider.GetPixelSize:double;
 begin
-  result:=strtofloat(pixelsize1.text)*Binning.Value/StrToIntDef(CalBinning.Text,1);
+  result:=strtofloat(pixelsize1.text)*GetTotBinning/StrToIntDef(CalBinning.Text,1);
 end;
 
 procedure Tf_internalguider.SetPulseDirectionNorth_1(value:string);
@@ -1091,12 +1102,12 @@ end;
 procedure Tf_internalguider.cbGhostChange(Sender: TObject);
 begin
   PanelGhost2.Visible:=cbGhost.Checked;
-  FGhostBinning:=Binning.Value;
+  FGhostBinning:=GetTotBinning;
 end;
 
 procedure Tf_internalguider.GhostPosChange(Sender: TObject);
 begin
-  FGhostBinning:=Binning.Value;
+  FGhostBinning:=GetTotBinning;
 end;
 
 procedure Tf_internalguider.ChangeSpectro;
@@ -1347,14 +1358,14 @@ begin
   PanelGuideSpeed.Enabled:=ForceGuideSpeed.Checked;
 end;
 
-procedure Tf_internalguider.BinningChange(Sender: TObject);
+procedure Tf_internalguider.spBinningChange(Sender: TObject);
 var b1,b2: integer;
 begin
   if (not TabChange) and SpectroFunctions then begin
     try
     BinningChanging:=true;
     b1:=BinningRef;
-    b2:=binning.value;
+    b2:=GetTotBinning;
     edRefX.Value:=edRefX.Value*b1/b2;
     edRefY.Value:=edRefY.Value*b1/b2;
     BinningRef:=b2;
@@ -1365,9 +1376,16 @@ begin
   ShowMinMove;
 end;
 
+procedure Tf_internalguider.cbSoftbinningChange(Sender: TObject);
+begin
+  Fcamera.SoftBinning:=cbSoftbinning.Checked;
+  spBinningChange(Sender);
+end;
+
 procedure Tf_internalguider.edRefChange(Sender: TObject);
 begin
-  BinningRef:=Binning.Value;
+  BinningRef:=GetTotBinning;
+  if cbSoftbinning.Checked then BinningRef:=2*BinningRef;
   if not BinningChanging then ForceRedraw(Sender);
 end;
 
@@ -2050,7 +2068,8 @@ try
     if (not InternalguiderRunning) then begin
       sgain:=gain.Value;
       soffset:=Offset.Value;
-      bin:=Binning.Value;
+      bin:=GetCameraBinning;
+      Fcamera.SoftBinning:=GetSoftBinning;
       if SpectroFunctions then begin
         FCamera.GuideLockX:=LockX;
         FCamera.GuideLockY:=LockY;
@@ -2258,6 +2277,41 @@ function Tf_internalguider.GetDelay: integer;
 begin
   result:=ExpDelay.Value;
 end;
+
+procedure Tf_internalguider.SetCameraBinning(value:integer);
+begin
+  spBinning.Value:=value;
+end;
+
+function Tf_internalguider.GetCameraBinning:integer;
+begin
+  result:=spBinning.Value;
+end;
+
+procedure Tf_internalguider.SetSoftBinning(value:boolean);
+begin
+  cbSoftbinning.Checked:=value;
+end;
+
+function Tf_internalguider.GetSoftBinning:boolean;
+begin
+  result:=cbSoftbinning.Checked;
+end;
+
+procedure Tf_internalguider.SetTotBinning(value:integer);
+var i:integer;
+begin
+  i:=value;
+  if GetSoftBinning then i:=max(1,i div 2);
+  SetCameraBinning(i);
+end;
+
+function Tf_internalguider.GetTotBinning:integer;
+begin
+  result:=GetCameraBinning;
+  if GetSoftBinning then result:=2*result;
+end;
+
 
 end.
 

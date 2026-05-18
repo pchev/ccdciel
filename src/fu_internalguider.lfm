@@ -341,7 +341,7 @@ object f_internalguider: Tf_internalguider
             Height = 22
             Hint = 'The trend and XY scales will be in arc seconds'
             Top = 170
-            Width = 30
+            Width = 34
             Caption = '"'
             ParentFont = False
             TabOrder = 6
@@ -368,7 +368,7 @@ object f_internalguider: Tf_internalguider
             Left = 128
             Height = 22
             Top = 448
-            Width = 150
+            Width = 154
             Caption = 'Enlarge guide image'
             OnChange = cbEnlargeImageChange
             TabOrder = 7
@@ -434,7 +434,7 @@ object f_internalguider: Tf_internalguider
               Left = 110
               Height = 22
               Top = 9
-              Width = 92
+              Width = 96
               Caption = 'Noise filter'
               TabOrder = 1
             end
@@ -443,7 +443,7 @@ object f_internalguider: Tf_internalguider
               AnchorSideLeft.Side = asrBottom
               AnchorSideTop.Control = cbFilterNoise
               AnchorSideTop.Side = asrCenter
-              Left = 210
+              Left = 214
               Height = 32
               Top = 4
               Width = 50
@@ -477,7 +477,7 @@ object f_internalguider: Tf_internalguider
               Left = 12
               Height = 22
               Top = 1
-              Width = 236
+              Width = 240
               BorderSpacing.Left = 11
               Caption = 'Remove star reflection on glass slit'
               OnChange = cbGhostChange
@@ -619,12 +619,12 @@ object f_internalguider: Tf_internalguider
           end
           object Panel7: TPanel
             Left = 0
-            Height = 66
+            Height = 90
             Top = 154
             Width = 340
             Align = alTop
             BevelOuter = bvNone
-            ClientHeight = 66
+            ClientHeight = 90
             ClientWidth = 340
             ParentBackground = False
             TabOrder = 1
@@ -652,23 +652,23 @@ object f_internalguider: Tf_internalguider
               Value = 1
             end
             object Label14: TLabel
-              AnchorSideTop.Control = Binning
+              AnchorSideTop.Control = spBinning
               AnchorSideTop.Side = asrCenter
               Left = 16
               Height = 18
-              Top = 40
+              Top = 39
               Width = 48
               Caption = 'Binning'
               ParentColor = False
             end
-            object Binning: TSpinEditEx
+            object spBinning: TSpinEditEx
               Left = 104
               Height = 32
-              Top = 33
+              Top = 32
               Width = 111
               MaxLength = 0
               TabOrder = 1
-              OnChange = BinningChange
+              OnChange = spBinningChange
               MaxValue = 8
               MinValue = 1
               NullValue = 0
@@ -711,11 +711,23 @@ object f_internalguider: Tf_internalguider
               Caption = 'sec'
               ParentColor = False
             end
+            object cbSoftbinning: TCheckBox
+              AnchorSideLeft.Control = Label14
+              AnchorSideTop.Control = spBinning
+              AnchorSideTop.Side = asrBottom
+              Left = 16
+              Height = 22
+              Top = 64
+              Width = 290
+              Caption = 'Monochrome 2x2 binning for color camera'
+              OnChange = cbSoftbinningChange
+              TabOrder = 3
+            end
           end
           object PanelGain: TPanel
             Left = 0
             Height = 34
-            Top = 220
+            Top = 244
             Width = 340
             Align = alTop
             BevelOuter = bvNone
@@ -747,7 +759,7 @@ object f_internalguider: Tf_internalguider
           object PanelOffset: TPanel
             Left = 0
             Height = 34
-            Top = 254
+            Top = 278
             Width = 340
             Align = alTop
             BevelOuter = bvNone
@@ -779,7 +791,7 @@ object f_internalguider: Tf_internalguider
           object PanelTemperature: TPanel
             Left = 0
             Height = 60
-            Top = 288
+            Top = 312
             Width = 340
             Align = alTop
             BevelOuter = bvNone
@@ -837,7 +849,7 @@ object f_internalguider: Tf_internalguider
               Left = 160
               Height = 22
               Top = 36
-              Width = 65
+              Width = 69
               BorderSpacing.Top = 4
               Caption = 'Cooler'
               OnClick = CoolerClick
@@ -846,12 +858,12 @@ object f_internalguider: Tf_internalguider
           end
           object Panel8: TPanel
             Left = 0
-            Height = 577
-            Top = 348
+            Height = 553
+            Top = 372
             Width = 340
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 577
+            ClientHeight = 553
             ClientWidth = 340
             TabOrder = 5
             object PanelVisu: TPanel
@@ -1054,7 +1066,7 @@ object f_internalguider: Tf_internalguider
               Height = 22
               Hint = 'If checked then the telescope will follow the moving solar object.'
               Top = 200
-              Width = 207
+              Width = 211
               Caption = 'Activate solar object tracking. '
               OnChange = CheckBoxTrackSolar1Change
               TabOrder = 5
@@ -1090,7 +1102,7 @@ object f_internalguider: Tf_internalguider
               Left = 8
               Height = 22
               Top = 304
-              Width = 195
+              Width = 199
               Caption = 'Use backlash compensation'
               OnChange = CheckBoxBacklashChange
               TabOrder = 8
@@ -1122,7 +1134,7 @@ object f_internalguider: Tf_internalguider
               Height = 22
               Hint = 'For testing. This will disable guiding but still show the trend.'
               Top = 368
-              Width = 187
+              Width = 191
               Caption = 'Disable guiding temporary'
               OnChange = disable_guiding1Change
               ParentFont = False
@@ -1169,7 +1181,7 @@ object f_internalguider: Tf_internalguider
               Height = 22
               Hint = 'Use alternative method for measuring pixel scale in arc seconds during calibration. '
               Top = 132
-              Width = 281
+              Width = 285
               Caption = 'Measure pixel scale ["/px] by stop tracking'
               ParentFont = False
               TabOrder = 0
@@ -1201,7 +1213,7 @@ object f_internalguider: Tf_internalguider
               Left = 8
               Height = 22
               Top = 60
-              Width = 192
+              Width = 196
               Caption = 'Set guide speed [x sidereal]'
               OnChange = ForceGuideSpeedChange
               TabOrder = 2
@@ -1263,7 +1275,7 @@ object f_internalguider: Tf_internalguider
               Left = 8
               Height = 22
               Top = 4
-              Width = 196
+              Width = 200
               Caption = 'Use rotator angle correction'
               OnChange = cbRotatorChange
               TabOrder = 4
@@ -1292,7 +1304,7 @@ object f_internalguider: Tf_internalguider
             Left = 9
             Height = 22
             Top = 4
-            Width = 217
+            Width = 221
             Caption = 'Activate spectroscopy functions'
             OnChange = cbSpectroChange
             TabOrder = 0
@@ -1581,7 +1593,7 @@ object f_internalguider: Tf_internalguider
                   Height = 22
                   Hint = 'Beware this may result in the selection of a wrong star if the mount is not ideal'
                   Top = 64
-                  Width = 175
+                  Width = 179
                   Caption = ' Fast centering to the slit'
                   ParentBidiMode = False
                   TabOrder = 2
@@ -1838,7 +1850,7 @@ object f_internalguider: Tf_internalguider
                 Left = 10
                 Height = 22
                 Top = 66
-                Width = 207
+                Width = 211
                 Caption = 'Rotate to the parallactic angle'
                 Enabled = False
                 OnChange = cbParallacticChange
@@ -1870,7 +1882,7 @@ object f_internalguider: Tf_internalguider
                   Left = 118
                   Height = 22
                   Top = 2
-                  Width = 70
+                  Width = 74
                   BorderSpacing.Left = 8
                   Caption = 'Vertical'
                   Checked = True
@@ -1881,10 +1893,10 @@ object f_internalguider: Tf_internalguider
                   AnchorSideLeft.Control = SlitVertical
                   AnchorSideLeft.Side = asrBottom
                   AnchorSideTop.Control = SlitVertical
-                  Left = 196
+                  Left = 200
                   Height = 22
                   Top = 2
-                  Width = 88
+                  Width = 92
                   BorderSpacing.Left = 8
                   Caption = 'Horizontal'
                   TabOrder = 0
@@ -1907,7 +1919,7 @@ object f_internalguider: Tf_internalguider
               Left = 0
               Height = 22
               Top = 0
-              Width = 169
+              Width = 173
               Caption = 'Draw slit area on image'
               OnChange = cbDrawSlitChange
               TabOrder = 0

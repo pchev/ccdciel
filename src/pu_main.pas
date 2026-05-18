@@ -4346,6 +4346,8 @@ begin
   f_finder.Cooler.Visible:=f_finder.Temperature.Visible;
   if f_finder.Cooler.Visible and config.GetValue('/Cooler/CameraAutoCool',false) then FinderCameraSetCooler(nil);
   f_finder.Binning.Value:=config.GetValue('/PrecSlew/Binning',1);
+  astrometry.FinderSoftBinning:=config.GetValue('/Finder/SoftBinning',1);
+  f_finder.cbSoftBinning.Checked:=(astrometry.FinderSoftBinning=2);
   if (astrometry.FinderOffsetX=0)and(astrometry.FinderOffsetY=0) then begin
     // set default position in the middle of the image
     findercamera.GetFrameRange(rx,ry,rw,rh);
@@ -5313,7 +5315,8 @@ begin
   f_internalguider.trend_scale:=config.GetValue('/InternalGuider/Scale',5);
   f_internalguider.Exposure.Value:=config.GetValue('/InternalGuider/Camera/Exposure',2.0);
   f_internalguider.ExpDelay.Value:=config.GetValue('/InternalGuider/Camera/ExpDelay',0);
-  f_internalguider.Binning.Value:=config.GetValue('/InternalGuider/Camera/Binning',1);
+  f_internalguider.CameraBinning:=config.GetValue('/InternalGuider/Camera/Binning',1);
+  f_internalguider.SoftBinning:=config.GetValue('/InternalGuider/Camera/SoftBinning',false);
   f_internalguider.Gain.Value:=config.GetValue('/InternalGuider/Camera/Gain',0);
   f_internalguider.Offset.Value:=config.GetValue('/InternalGuider/Camera/Offset',0);
   f_internalguider.Temperature.Value:=config.GetValue('/InternalGuider/Camera/Temperature',0);
@@ -5384,6 +5387,8 @@ begin
   astrometry.FinderOffsetX:=config.GetValue('/Finder/OffsetX',0.0);
   astrometry.FinderOffsetY:=config.GetValue('/Finder/OffsetY',0.0);
   astrometry.FinderBinning:=config.GetValue('/Finder/Binning',1);
+  astrometry.FinderSoftBinning:=config.GetValue('/Finder/SoftBinning',1);
+  f_finder.cbSoftBinning.Checked:=(astrometry.FinderSoftBinning=2);
   f_finder.Binning.Value:=config.GetValue('/PrecSlew/Binning',1);
   f_finder.ShowCalibration;
   f_finder.PreviewExp.Value:=config.GetValue('/PrecSlew/Exposure',10.0);
@@ -6006,7 +6011,8 @@ begin
   config.SetValue('/InternalGuider/DecBacklash',f_internalguider.DecBacklash);
   config.SetValue('/InternalGuider/Camera/Exposure',f_internalguider.Exposure.Value);
   config.SetValue('/InternalGuider/Camera/ExpDelay',f_internalguider.ExpDelay.Value);
-  config.SetValue('/InternalGuider/Camera/Binning',f_internalguider.Binning.Value);
+  config.SetValue('/InternalGuider/Camera/Binning',f_internalguider.CameraBinning);
+  config.SetValue('/InternalGuider/Camera/SoftBinning',f_internalguider.SoftBinning);
   config.SetValue('/InternalGuider/Camera/Gain',f_internalguider.Gain.Value);
   config.SetValue('/InternalGuider/Camera/Offset',f_internalguider.Offset.Value);
   config.SetValue('/InternalGuider/Camera/Temperature',f_internalguider.Temperature.Value);
@@ -13674,7 +13680,8 @@ begin
     f_focusercalibration.camera:=guidecamera;
     f_focusercalibration.Label4.Caption:=Format(rsFocuserCalib2,[rsGuideCamera]);
     f_focusercalibration.spExp.Value:=f_internalguider.Exposure.Value;
-    f_focusercalibration.spBin.Value:=f_internalguider.Binning.Value;
+    f_focusercalibration.spBin.Value:=f_internalguider.CameraBinning;
+    guidecamera.SoftBinning:=f_internalguider.SoftBinning;
     if guidecamera.hasGain then begin
       f_focusercalibration.PanelGain.Visible:=true;
       f_focusercalibration.spGain.Value:=f_internalguider.Gain.Value;
@@ -14548,7 +14555,8 @@ begin
   f_internalguider.Gain.Value:=AutofocusGain;
   f_internalguider.Offset.Value:=AutofocusOffset;
   guidecamera.Fits.DarkOn:=true;
-  if not guidecamera.ControlExposure(f_internalguider.Exposure.Value,f_internalguider.Binning.Value,f_internalguider.Binning.Value,LIGHT,ReadoutModeCapture,f_internalguider.Gain.Value,f_internalguider.Offset.Value) then begin
+  guidecamera.SoftBinning:=f_internalguider.SoftBinning;
+  if not guidecamera.ControlExposure(f_internalguider.Exposure.Value,f_internalguider.CameraBinning,f_internalguider.CameraBinning,LIGHT,ReadoutModeCapture,f_internalguider.Gain.Value,f_internalguider.Offset.Value) then begin
     NewMessage(rsExposureFail,1);
     f_starprofile.ChkAutofocusDown(false);
     exit;
@@ -18067,9 +18075,10 @@ begin
    guidefits.SetBPM(bpm,0,0,0,0);
    guidefits.DarkOn:=false;
    f_dark.camera:=guidecamera;
+   f_dark.camera.SoftBinning:=f_internalguider.SoftBinning;
    f_dark.Gain:=f_internalguider.Gain.Value;
    f_dark.Offset:=f_internalguider.Offset.Value;
-   f_dark.Binning:=f_internalguider.Binning.Value;
+   f_dark.Binning:=f_internalguider.CameraBinning;
    f_dark.filename:=ConfigGuiderDarkFile;
    FormPos(f_dark,mouse.CursorPos.X,mouse.CursorPos.Y);
    f_dark.ShowModal;
@@ -19054,7 +19063,7 @@ const
           ok:=false;
           case ncam of
              0: ok:=camera.ControlExposure(f_preview.Exposure,f_preview.Bin,f_preview.Bin,LIGHT,ReadoutModeAstrometry,f_preview.Gain,f_preview.Offset) ;
-             1: ok:=guidecamera.ControlExposure(f_internalguider.Exposure.Value,f_internalguider.Binning.Value,f_internalguider.Binning.Value,LIGHT,ReadoutModeCapture,f_internalguider.Gain.Value,f_internalguider.Offset.Value) ;
+             1: ok:=guidecamera.ControlExposure(f_internalguider.Exposure.Value,f_internalguider.CameraBinning,f_internalguider.CameraBinning,LIGHT,ReadoutModeCapture,f_internalguider.Gain.Value,f_internalguider.Offset.Value) ;
              2: ok:=findercamera.ControlExposure(config.GetValue('/PrecSlew/Exposure',10.0),config.GetValue('/PrecSlew/Binning',1),config.GetValue('/PrecSlew/Binning',1),LIGHT,ReadoutModeCapture,config.GetValue('/PrecSlew/Gain',NullInt),config.GetValue('/PrecSlew/Offset',NullInt)) ;
           end;
           if ok then

@@ -751,7 +751,7 @@ begin
       mean_hfd:=mean_hfd/star_counter;
       CurrentHFD:=mean_hfd;
 
-      if ((frame_size<(ysize-1)) and (frame_size<(xsize-1)) and (not (SameGuiderFinder or finternalguider.SpectroFunctions or InternalguiderCalibrating or InternalguiderCalibratingBacklash))) then //filter out stars available in the frame
+      if ((frame_size<(ysize-1)) and (frame_size<(xsize-1)) and (not (SameGuiderFinder or finternalguider.SpectroFunctions or finternalguider.SoftBinning or InternalguiderCalibrating or InternalguiderCalibratingBacklash))) then //filter out stars available in the frame
       begin
         starx:=round(xy_array[maxSNRstar].x1); // brightest star position
         stary:=round(xy_array[maxSNRstar].y1);
@@ -1007,7 +1007,8 @@ begin
   InternalguiderRunning:=true;
   Finternalguider.ForceMultiStar:=false;
   Finternalguider.Info:='';
-  Finternalguider.Binning.enabled:=false;
+  Finternalguider.spBinning.enabled:=false;
+  Finternalguider.cbSoftbinning.enabled:=false;
   Finternalguider.ButtonLoop.enabled:=false;
   Finternalguider.ButtonCalibrate.enabled:=false;
   Finternalguider.ButtonDark.enabled:=false;
@@ -1023,7 +1024,8 @@ begin
   FCamera.StackAllow8bit:=false;
   FCamera.SaveFrames:=false;
   FCamera.AlignFrames:=false;
-  Binning:=Finternalguider.Binning.Value;
+  FCamera.SoftBinning:=Finternalguider.SoftBinning;
+  Binning:=Finternalguider.CameraBinning;
   if not (SameGuiderFinder or finternalguider.SpectroFunctions) then Fcamera.ResetFrame;
   FRecoveringCameraCount:=0;
   NextExposureStartTime:=0;
@@ -1229,7 +1231,7 @@ begin
 
   InternalguiderInitialize:=true; //initialize;
 
-  Binning:=Finternalguider.Binning.Value;
+  Binning:=Finternalguider.CameraBinning;
   frame_size:=Finternalguider.FrameSize div Binning;
   if frame_size=999999 then
     frametxt:='Full'
@@ -1261,7 +1263,7 @@ begin
     txt:=txt+'both axes';
   txt:=txt+', Dither scale = '+formatfloat(f3,DitherPixel);
   WriteLog(txt);
-  WriteLog('Pixel scale = '+FormatFloat(f2,Finternalguider.pixel_size)+' arc-sec/px, Binning = '+IntToStr(Finternalguider.Binning.Value));
+  WriteLog('Pixel scale = '+FormatFloat(f2,Finternalguider.pixel_size)+' arc-sec/px, Binning = '+IntToStr(Finternalguider.TotBinning));
   WriteLog('Frame size = '+frametxt);
   WriteLog('Camera = '+camera.DeviceName);
   WriteLog('Exposure = '+FormatFloat(f0,finternalguider.Exposure.value*1000)+' ms');
@@ -1903,7 +1905,8 @@ begin
   InternalguiderCalibrating:=false;
   InternalguiderCalibratingBacklash:=false;
   InternalguiderCalibratingMeridianFlip:=false;
-  Finternalguider.Binning.enabled:=true;
+  Finternalguider.spBinning.enabled:=true;
+  Finternalguider.cbSoftbinning.enabled:=true;
   Finternalguider.ButtonLoop.enabled:=true;
   Finternalguider.ButtonCalibrate.enabled:=true;
   Finternalguider.ButtonGuide.enabled:=true;
@@ -2354,7 +2357,7 @@ begin
           Finternalguider.CalRotatorAngle.Text:=FormatFloat(f1,rotator.Angle)
         else
           Finternalguider.CalRotatorAngle.Text:='';
-        Finternalguider.CalBinning.Text:=IntToStr(Finternalguider.Binning.Value);
+        Finternalguider.CalBinning.Text:=IntToStr(Finternalguider.TotBinning);
         Finternalguider.CalRAspeed.Text:=FormatFloat(f1,Finternalguider.GuideSpeedRA.Value);
         Finternalguider.CalDECspeed.Text:=FormatFloat(f1,Finternalguider.GuideSpeedDEC.Value);
         Finternalguider.CalIssue.Text:=msgC;
@@ -2772,9 +2775,10 @@ try
      // so the target is moved to the slit when the guiding is started
     result:=false;
     exp:=finternalguider.SpectroAstrometryExposure;
-    bin:=finternalguider.Binning.Value;
+    bin:=finternalguider.CameraBinning;
     gain:=finternalguider.Gain.Value;
     offset:=finternalguider.Offset.Value;
+    FCamera.SoftBinning:=finternalguider.SoftBinning;
     FCamera.ObjectName:=rsGuide;
     FCamera.GuidePixelScale:=finternalguider.pixel_size;
     FCamera.GuideLockX:=Finternalguider.LockX;

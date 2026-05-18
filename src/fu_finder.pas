@@ -44,6 +44,7 @@ type
     cbFilterNoise: TCheckBox;
     cbFilterstrength: TComboBox;
     cbSaveImages: TCheckBox;
+    cbSoftBinning: TCheckBox;
     Cooler: TCheckBox;
     Gain: TSpinEditEx;
     Label14: TLabel;
@@ -84,6 +85,7 @@ type
     procedure ButtonDarkMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ButtonMousePositionClick(Sender: TObject);
     procedure ButtonSetTempClick(Sender: TObject);
+    procedure cbSoftBinningChange(Sender: TObject);
     procedure ClearMsgTimerTimer(Sender: TObject);
     procedure CoolerClick(Sender: TObject);
     procedure GainChange(Sender: TObject);
@@ -227,6 +229,8 @@ begin
   FinderCapturingDark:=false;
   FinderCancelPreviewLoop:=false;
   BtnPreviewLoop.Caption:=rsStopPreviewL;
+  Binning.Enabled:=false;
+  cbSoftBinning.Enabled:=false;
   msg(rsStartPreview,0);
   FCamera.Fits.SetBPM(bpm,0,0,0,0);
   FCamera.Fits.DarkOn:=true;
@@ -246,6 +250,8 @@ begin
   FinderPreviewLoop:=false;
   if abort then FCamera.AbortExposure;
   BtnPreviewLoop.Caption:=rsStartPreview;
+  Binning.Enabled:=true;
+  cbSoftBinning.Enabled:=true;
   if abort then msg(rsStopPreviewL,3);
   ClearMsgTimer.Enabled:=true;
   if Assigned(FonStop) then FonStop(self);
@@ -265,6 +271,7 @@ begin
    LoopOffset:=config.GetValue('/PrecSlew/Offset',NullInt);
    LoopBin:=config.GetValue('/PrecSlew/Binning',1);
    if (LoopBin<>FCamera.BinX)or(LoopBin<>FCamera.BinY) then FCamera.SetBinning(LoopBin,LoopBin);
+   FCamera.SoftBinning:=cbSoftBinning.Checked;
    if FCamera.hasGain then begin
      if FCamera.Gain<>LoopGain then begin
        FCamera.Gain:=LoopGain;
@@ -436,11 +443,19 @@ begin
 end;
 
 procedure Tf_finder.BinningChange(Sender: TObject);
-var oldbin: integer;
+var oldbin,newbin: integer;
     scaling: double;
 begin
-  oldbin:=FAstrometry.FinderBinning;
-  scaling:=oldbin/Binning.Value;
+  oldbin:=FAstrometry.FinderBinning*FAstrometry.FinderSoftBinning;
+  newbin:=Binning.Value;
+  if cbSoftBinning.Checked then begin
+     newbin:=newbin*2;
+     FAstrometry.FinderSoftBinning:=2;
+  end
+  else begin
+     FAstrometry.FinderSoftBinning:=1;
+  end;
+  scaling:=oldbin/newbin;
   FAstrometry.FinderOffsetX:=FAstrometry.FinderOffsetX*scaling;
   FAstrometry.FinderOffsetY:=FAstrometry.FinderOffsetY*scaling;
   FAstrometry.FinderBinning:=Binning.Value;
@@ -448,12 +463,18 @@ begin
   config.SetValue('/Finder/OffsetY',astrometry.FinderOffsetY);
   config.SetValue('/Finder/Binning',astrometry.FinderBinning);
   config.SetValue('/PrecSlew/Binning',Binning.Value);
+  config.SetValue('/Finder/SoftBinning',FAstrometry.FinderSoftBinning);
   ShowCalibration;
   if FinderPreviewLoop then begin
     StopLoop;
     wait(1);
     StartLoop;
   end;
+end;
+
+procedure Tf_finder.cbSoftBinningChange(Sender: TObject);
+begin
+  BinningChange(Sender);
 end;
 
 procedure Tf_finder.Button1Click(Sender: TObject);

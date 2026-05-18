@@ -2867,6 +2867,8 @@ begin
   FHeader.Replace('XBINNING',bx);
   FHeader.Replace('YBINNING',by);
   FHeader.Replace('SCALE',sc);
+  FHeader.Replace('SECPIX1',sc);
+  FHeader.Replace('SECPIX2',sc);
   FHeader.Replace('DATAMAX',dmax);
   FHeader.Replace('DATAMIN',dmin);
   FHeader.Delete('BAYERPAT');

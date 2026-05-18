@@ -152,7 +152,7 @@ object f_finder: Tf_finder
         Left = 8
         Height = 22
         Top = 70
-        Width = 100
+        Width = 104
         Caption = 'Save images'
         TabOrder = 2
       end
@@ -179,7 +179,7 @@ object f_finder: Tf_finder
         Left = 112
         Height = 22
         Top = 113
-        Width = 92
+        Width = 96
         Caption = 'Noise filter'
         TabOrder = 4
       end
@@ -188,7 +188,7 @@ object f_finder: Tf_finder
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = cbFilterNoise
         AnchorSideTop.Side = asrCenter
-        Left = 212
+        Left = 216
         Height = 32
         Top = 108
         Width = 50
@@ -210,7 +210,7 @@ object f_finder: Tf_finder
     object PanelTemperature: TPanel
       Left = 0
       Height = 60
-      Top = 410
+      Top = 434
       Width = 280
       Align = alTop
       BevelOuter = bvNone
@@ -268,7 +268,7 @@ object f_finder: Tf_finder
         Left = 152
         Height = 22
         Top = 36
-        Width = 65
+        Width = 69
         BorderSpacing.Top = 4
         Caption = 'Cooler'
         OnClick = CoolerClick
@@ -278,7 +278,7 @@ object f_finder: Tf_finder
     object PanelGain: TPanel
       Left = 0
       Height = 34
-      Top = 342
+      Top = 366
       Width = 280
       Align = alTop
       BevelOuter = bvNone
@@ -311,7 +311,7 @@ object f_finder: Tf_finder
     object PanelOffset: TPanel
       Left = 0
       Height = 34
-      Top = 376
+      Top = 400
       Width = 280
       Align = alTop
       BevelOuter = bvNone
@@ -343,12 +343,12 @@ object f_finder: Tf_finder
     end
     object PanelBinning: TPanel
       Left = 0
-      Height = 34
+      Height = 58
       Top = 308
       Width = 280
       Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 34
+      ClientHeight = 58
       ClientWidth = 280
       TabOrder = 5
       object Label14: TLabel
@@ -362,7 +362,7 @@ object f_finder: Tf_finder
         ParentColor = False
       end
       object Binning: TSpinEditEx
-        Left = 110
+        Left = 111
         Height = 32
         Top = 2
         Width = 110
@@ -374,15 +374,27 @@ object f_finder: Tf_finder
         NullValue = 0
         Value = 1
       end
+      object cbSoftBinning: TCheckBox
+        AnchorSideLeft.Control = Label14
+        AnchorSideTop.Control = Binning
+        AnchorSideTop.Side = asrBottom
+        Left = 16
+        Height = 22
+        Top = 34
+        Width = 290
+        Caption = 'Monochrome 2x2 binning for color camera'
+        OnChange = cbSoftBinningChange
+        TabOrder = 1
+      end
     end
     object Panel4: TPanel
       Left = 0
-      Height = 280
-      Top = 470
+      Height = 256
+      Top = 494
       Width = 280
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 280
+      ClientHeight = 256
       ClientWidth = 280
       TabOrder = 6
       object PanelVisu: TPanel
