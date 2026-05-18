@@ -2768,6 +2768,7 @@ procedure TFits.SoftBinning;
 var i,i1,i2,j,j1,j2,m,m0,n,n0,bx,by,offsety: integer;
     dmin,dmax,x,sc,px,py : double;
     ni,sum,sum2 : extended;
+    pat: string;
     t: TBayerMode;
     source: Timafloat;
 begin
@@ -2794,6 +2795,13 @@ begin
        bayerGB: t:=bayerRG;
      end;
     end;
+  end;
+  case t of
+    bayerGR: pat:='GRBG';
+    bayerRG: pat:='RGGB';
+    bayerBG: pat:='BGGR';
+    bayerGB: pat:='GBRG';
+    else pat:='None';
   end;
   source:=CopyImage(Fimage);
   m0:=FFitsInfo.naxis1;
@@ -2867,7 +2875,7 @@ begin
   FHeader.Delete('MULT_R');
   FHeader.Delete('MULT_G');
   FHeader.Delete('MULT_B');
-  FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Soft binning 2x2','');
+  FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Soft binning 2x2, bayer pattern: '+pat,'');
   Fpreview_axis:=1;
   Fwidth:=m;
   Fheight:=n;
