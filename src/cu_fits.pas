@@ -187,7 +187,7 @@ type
     procedure ApplyDark;
     procedure ApplyFlat;
     procedure SetGamma(value: double);
-    function GetBayerMode: TBayerMode;
+    function GetBayerMode(default:TBayerMode): TBayerMode;
     procedure GetBayerBgColor(t:TBayerMode; rmult,gmult,bmult:double; out r,g,b: single);
     procedure SetMaxADU(value: double);
     procedure SetCurrentExtend(value: integer);
@@ -2405,7 +2405,7 @@ Fwidth :=FFitsInfo.naxis1;
 // do not scale 8 or 16 bit images
 FimageScaled:=(FFitsInfo.bscale<>1)or((FFitsInfo.bitpix<>16)and(FFitsInfo.bitpix<>8));
 // debayer supported for this image
-FimageDebayer:=BayerColor and (n_plane=1) and (not FDisableBayer) and (GetBayerMode<>bayerUnsupported) and (not FimageScaled);
+FimageDebayer:=BayerColor and (n_plane=1) and (not FDisableBayer) and (GetBayerMode(DefaultBayerMode)<>bayerUnsupported) and (not FimageScaled);
 // fill raw image only if debayer or scaled
 FUseRawImage:=FimageScaled or FimageDebayer;
 if FUseRawImage then
@@ -2624,7 +2624,7 @@ var i,j: integer;
     rbg,gbg,bbg,bgm: single;
     t: TBayerMode;
 begin
-  t:=GetBayerMode;
+  t:=GetBayerMode(DefaultBayerMode);
   rmult:=0; gmult:=0; bmult:=0; rbg:=0; gbg:=0; bbg:=0;
   fpreview_axis:=3;
   if (BalanceFromCamera)and(FFitsInfo.rmult>0)and(FFitsInfo.gmult>0)and(FFitsInfo.bmult>0) then begin
@@ -2765,11 +2765,36 @@ begin
 end;
 
 procedure TFits.SoftBinning;
-var i,i1,i2,j,j1,j2,m,m0,n,n0,bx,by: integer;
+var i,i1,i2,j,j1,j2,m,m0,n,n0,bx,by,offsety: integer;
     dmin,dmax,x,sc,px,py : double;
     ni,sum,sum2 : extended;
+    t: TBayerMode;
     source: Timafloat;
 begin
+  if FFitsInfo.bayerpattern='' then
+    t:=bayerUnsupported
+  else
+    t:=GetBayerMode(bayerCamera);
+  if t<>bayerUnsupported then begin
+    if ((FFitsInfo.bayeroffsetx mod 2) = 1) and (not odd(Fwidth)) then begin
+     case t of
+       bayerGR: t:=bayerRG;
+       bayerRG: t:=bayerGR;
+       bayerBG: t:=bayerGB;
+       bayerGB: t:=bayerBG;
+     end;
+    end;
+    offsety:=FFitsInfo.bayeroffsety;
+    if FFitsInfo.roworder<>bottomup then offsety:=(offsety+1) mod 2;
+    if ((offsety mod 2) = 1) and (not odd(Fheight)) then begin
+     case t of
+       bayerGR: t:=bayerBG;
+       bayerRG: t:=bayerGB;
+       bayerBG: t:=bayerGR;
+       bayerGB: t:=bayerRG;
+     end;
+    end;
+  end;
   source:=CopyImage(Fimage);
   m0:=FFitsInfo.naxis1;
   n0:=FFitsInfo.naxis2;
@@ -2791,7 +2816,13 @@ begin
     for j:=0 to m-1 do begin
       j1:=2*j;
       j2:=min(j1+1,m0-1);
-      x:=source[0,i1,j1]+source[0,i1,j2]+source[0,i2,j1]+source[0,i2,j2];
+      case t of
+        bayerGR: x:=(source[0,i1,j1]+source[0,i2,j2])/2 + source[0,i1,j2] + source[0,i2,j1];
+        bayerRG: x:=source[0,i1,j1] + (source[0,i1,j2]+source[0,i2,j1])/2 + source[0,i2,j2];
+        bayerBG: x:=source[0,i1,j1] + (source[0,i1,j2]+source[0,i2,j1])/2 + source[0,i2,j2];
+        bayerGB: x:=(source[0,i1,j1]+source[0,i2,j2])/2 + source[0,i1,j2] + source[0,i2,j1];
+        else x:=source[0,i1,j1]+source[0,i1,j2]+source[0,i2,j1]+source[0,i2,j2];
+      end;
       x:=min(round(x),maxword);
       Fimage[0,i,j]:=x;
       inc(FHistogram[round(x)]);
@@ -3031,10 +3062,10 @@ begin
   FMaxADU:=value;
 end;
 
-function TFits.GetBayerMode: TBayerMode;
+function TFits.GetBayerMode(default:TBayerMode): TBayerMode;
 var buf: string;
 begin
-  if DefaultBayerMode=bayerCamera then begin
+  if default=bayerCamera then begin
     buf:=copy(HeaderInfo.bayerpattern,1,2);
     // use value from header
     if buf='GR' then result:=bayerGR
@@ -3049,7 +3080,7 @@ begin
   end
   else begin
     // use default configured value
-    result:=DefaultBayerMode;
+    result:=default;
   end;
 end;
 
