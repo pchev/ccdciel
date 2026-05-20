@@ -6981,6 +6981,13 @@ case guidecamera.Status of
                       GuideCameraTemperatureChange(t);
                       cool:=guidecamera.Cooler;
                       guideCameraCoolerChange(cool);
+                      if guidecamera.hasCfaInfo then begin
+                        f_internalguider.cbSoftBinning.Visible:=true;
+                      end
+                      else begin
+                        f_internalguider.cbSoftBinning.Checked:=false;
+                        f_internalguider.cbSoftBinning.Visible:=false;
+                      end;
                       SetGuiderCameraFrame;
                    end;
 end;
@@ -7074,6 +7081,13 @@ case findercamera.Status of
                       cool:=findercamera.Cooler;
                       FinderCameraCoolerChange(cool);
                       SetFinderCameraFrame;
+                      if findercamera.hasCfaInfo then begin
+                        f_finder.cbSoftBinning.Visible:=true;
+                      end
+                      else begin
+                        f_finder.cbSoftBinning.Checked:=false;
+                        f_finder.cbSoftBinning.Visible:=false;
+                      end;
                    end;
 end;
 CheckConnectionStatus;
