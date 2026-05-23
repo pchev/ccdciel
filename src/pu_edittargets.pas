@@ -1855,8 +1855,8 @@ begin
   end;
   t.FlatBinX:=1;
   t.FlatBinY:=1;
-  t.FlatGain:=Gain;
-  t.FlatOffset:=Offset;
+  t.FlatGain:=DefaultGain;
+  t.FlatOffset:=DefaultOffset;
   t.FlatFstop:='';
   t.FlatCount:=15;
   TargetList.Cells[colseq,i]:=IntToStr(i);
@@ -2417,7 +2417,7 @@ begin
     if j<0 then
       j:=FlatBinning.Items.Add(buf);
     FlatBinning.ItemIndex:=j;
-    if hasGainISO then
+    if FISObox.Visible then
       FISObox.ItemIndex:=t.FlatGain
     else
       FGainEdit.Value:=t.FlatGain;
@@ -2613,10 +2613,10 @@ begin
       t.FlatBinX:=1;
       t.FlatBinY:=1;
     end;
-    if hasGainISO then begin
+    if FISObox.Visible then begin
        t.FlatGain:=FISObox.ItemIndex;
     end
-    else if hasGain then begin
+    else if FGainEdit.Visible then begin
        t.FlatGain:=FGainEdit.Value;
     end;
     t.FlatOffset:=FOffsetEdit.Value;
@@ -3286,10 +3286,10 @@ begin
   end;
   str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Gain','');
   gainmsg:=(str='');
-  p.gain:=StrToIntDef(str,Gain);
+  p.gain:=StrToIntDef(str,DefaultGain);
   str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Offset','');
   gainmsg:=gainmsg or (str='');
-  p.offset:=StrToIntDef(str,Offset);
+  p.offset:=StrToIntDef(str,DefaultOffset);
   str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Filter','');
   if i<SaveFilterNum then originalFilter[i]:=str;
   j:=StepList.Columns[pcolfilter-1].PickList.IndexOf(str);
@@ -3476,7 +3476,7 @@ begin
     StepList.Cells[pcolrefexp,n]:=p.refexposure;
     StepList.Cells[pcolstack,n]:=inttostr(p.stackcount);
     StepList.Cells[pcolbin,n]:=p.binning_str;
-    if hasGainISO then begin
+    if FISObox.Visible then begin
       if (p.gain<StepList.Columns[pcolgain-1].PickList.Count) then
         StepList.Cells[pcolgain,n]:=StepList.Columns[pcolgain-1].PickList[p.gain]
       else
@@ -3588,16 +3588,16 @@ begin
       StepsModified:=StepsModified or (p.biny<>1);
       p.biny:=1;
     end;
-    if hasGainISO then begin
+    if FISObox.Visible then begin
       str:=StepList.Cells[pcolgain,n];
       j:=StepList.Columns[pcolgain-1].PickList.IndexOf(str);
       StepsModified:=StepsModified or (p.gain<>j);
       if j>=0 then p.gain:=j;
     end
-    else if hasGain then begin
+    else if FGainEdit.Visible then begin
       j:=StrToIntDef(StepList.Cells[pcolgain,n],p.gain);
-      if j>GainMax then begin j:=GainMax; StepList.Cells[pcolgain,n]:=inttostr(j); end;
-      if j<GainMin then begin j:=GainMin; StepList.Cells[pcolgain,n]:=inttostr(j); end;
+      if j>FGainEdit.MaxValue then begin j:=FGainEdit.MaxValue; StepList.Cells[pcolgain,n]:=inttostr(j); end;
+      if j<FGainEdit.MinValue then begin j:=FGainEdit.MinValue; StepList.Cells[pcolgain,n]:=inttostr(j); end;
       StepsModified:=StepsModified or (p.gain<>j);
       p.gain:=j;
     end;
@@ -3766,7 +3766,7 @@ begin
   else if (aCol=pcolafstart) then
      Editor:=StepList.EditorByStyle(cbsCheckboxColumn) // autofocus at start selection
   else if (aCol=pcolgain) then begin
-    if hasGainISO then
+    if FISObox.Visible then
       Editor:=StepList.EditorByStyle(cbsPickList) // ISO list
     else
       Editor:=StepList.EditorByStyle(cbsAuto)     // Gain
@@ -3799,8 +3799,8 @@ begin
   end;
   p.steptype:=0;
   p.description:=txt;
-  p.gain:=Gain;
-  p.offset:=Offset;
+  p.gain:=DefaultGain;
+  p.offset:=DefaultOffset;
   StepList.RowCount:=StepList.RowCount+1;
   i:=StepList.RowCount-1;
   StepList.Cells[pcolseq,i]:=IntToStr(i);

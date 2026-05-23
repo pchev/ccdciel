@@ -933,9 +933,9 @@ begin
               s.biny:=1;
             end;
             str:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Gain','');
-            s.gain:=StrToIntDef(str,Gain);
+            s.gain:=StrToIntDef(str,DefaultGain);
             str:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Offset','');
-            s.offset:=StrToIntDef(str,Offset);
+            s.offset:=StrToIntDef(str,DefaultOffset);
             s.fstop:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Fstop','');
             str:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Filter','');
             FOriginalFilter[i]:=str;
@@ -1167,9 +1167,9 @@ begin
          s.biny:=1;
        end;
        str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Gain','');
-       s.gain:=StrToIntDef(str,Gain);
+       s.gain:=StrToIntDef(str,DefaultGain);
        str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Offset','');
-       s.offset:=StrToIntDef(str,Offset);
+       s.offset:=StrToIntDef(str,DefaultOffset);
        str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Filter','');
        if i<SaveFilterNum then FOriginalFilter[i]:=str;
        j:=FFilterList.IndexOf(str);
@@ -3650,8 +3650,8 @@ begin
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Autofocus',false)<>p.Steps[i-1].autofocus then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusCount',10)<>p.Steps[i-1].autofocuscount then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Binning','1x1')<>IntToStr(p.Steps[i-1].binx)+'x'+IntToStr(p.Steps[i-1].biny) then exit;
-     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Gain',Gain)<>p.Steps[i-1].gain then exit;
-     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Offset',Offset)<>p.Steps[i-1].offset then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Gain',DefaultGain)<>p.Steps[i-1].gain then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Offset',DefaultOffset)<>p.Steps[i-1].offset then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/FrameType','Light')<>p.Steps[i-1].frtype_str then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Fstop','')<>p.Steps[i-1].fstop then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Description','')<>p.Steps[i-1].description then exit;

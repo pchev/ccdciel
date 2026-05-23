@@ -561,10 +561,7 @@ var
   FileSequenceWidth: integer;
   LastCaptureFile: string;
   UseRotator: boolean;
-  hasGain, hasGainISO, hasOffset: boolean;
-  ISOList: TStringList;
-  Gain,GainMin,GainMax: integer;
-  Offset,OffsetMin,OffsetMax: integer;
+  DefaultGain,DefaultOffset: integer;
   SubDirName: array[0..SubDirCount-1] of string;
   FilenameName: array[0..FileNameCount-1] of string;
   CurrentSeqName, CurrentTargetName, CurrentTargetInfo, CurrentStepName,CurrentSequenceDirectory: string;
@@ -790,8 +787,8 @@ var buf: string;
 begin
   // if any of this change we consider it another step
   buf:=trim(description)+frtype_str+exposure_str+binning_str+filter_str;
-  if hasGain or hasGainISO then buf:=buf+gain_str;
-  if hasOffset then buf:=buf+offset_str;
+  buf:=buf+gain_str;
+  buf:=buf+offset_str;
   result:=Hash(buf);
 end;
 

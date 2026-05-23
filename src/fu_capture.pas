@@ -369,7 +369,7 @@ end;
 
 function Tf_capture.GetGain:integer;
 begin
-  if hasGainISO then
+  if ISObox.Visible then
     result:=ISObox.ItemIndex
   else
     result:=GainEdit.Value;
@@ -377,7 +377,7 @@ end;
 
 procedure Tf_capture.SetGain(value:integer);
 begin
-  if hasGainISO then begin
+  if ISObox.Visible then begin
     if (value>=0)and(value<ISObox.Items.Count) then
       ISObox.ItemIndex:=value
   end

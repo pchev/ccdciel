@@ -153,7 +153,7 @@ type
     procedure TabSheet4Show(Sender: TObject);
   private
     FFits: TFits;
-    w, h, bit_depth, nrgainsteps: integer;
+    w, h, bit_depth, nrgainsteps, gain: integer;
     biaslevel, flux_adu, sd_dark_adu, sd_RTN_dark_adu, exposure, sat_level_adu, exposure_min: double;
     stoploop: boolean;
     bayerpatt: integer;
@@ -290,6 +290,7 @@ end;
 procedure Tf_sensoranalysis.FormCreate(Sender: TObject);
 begin
   ScaleDPI(Self);
+  gain:=DefaultGain;
   Chart1LineSeries1.SeriesColor:=colorBlue;
   Chart1LineSeries1.LinePen.Color:=colorBlue;
   Chart2LineSeries1.SeriesColor:=colorBlue;
