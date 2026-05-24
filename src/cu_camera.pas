@@ -780,7 +780,7 @@ var origin,observer,telname,instrum,objname,siso,CType,roworder,buf: string;
     hSkyTemperature,hStarFWHM,hTemperature,hWindDirection,hWindGust,hWindSpeed: double;
     hbzero,hbscale,hdmin,hdmax,hra,hdec,hexp,hpix1,hpix2,hairmass,focusertemp: double;
     haz,hal,pa,dt,jdt: double;
-    gamma,voffset,coffset,OffsetX,OffsetY: integer;
+    vgamma,vbright,coffset,OffsetX,OffsetY: integer;
     Frx,Fry,Frwidth,Frheight: integer;
     hasfocusertemp,hasfocuserpos: boolean;
     i,j,k,n: integer;
@@ -931,11 +931,11 @@ begin
    Frwidth:=0;
   end;
   try
-   gamma:=GetVideoGamma;
-   voffset:=GetVideoBrightness;
+   vgamma:=GetVideoGamma;
+   vbright:=GetVideoBrightness;
   except
-   gamma:=NullInt;
-   voffset:=NullInt;
+   vgamma:=NullInt;
+   vbright:=NullInt;
   end;
   try
    cgain:=NullInt;
@@ -949,10 +949,10 @@ begin
    siso:='';
   end;
   try
-   coffset:=voffset;
+   coffset:=NullInt;
    if FhasOffset then coffset:=GetOffset;
   except
-   cgain:=voffset;
+   coffset:=NullInt;
   end;
   hasfocuserpos:=false;
   try
@@ -1086,9 +1086,10 @@ begin
     if FStackAlign and (not FStackRotation) then f.Header.Insert(i,'STACKALN',FormatFloat(f0,FStackAlignX)+'/'+FormatFloat(f0,hnaxis2-FStackAlignY),'Alignment star x/y position');
   end;
   if cgain<>NullInt then f.Header.Insert(i,'GAIN',cgain,'Camera gain setting in manufacturer units');
-  if siso<>'' then f.Header.Insert(i,'GAIN',siso,'Camera ISO');
-  if gamma<>NullInt then f.Header.Insert(i,'GAMMA',gamma,'Video gamma');
   if coffset<>NullInt then f.Header.Insert(i,'OFFSET',coffset,'Camera offset setting in manufacturer units');
+  if siso<>'' then f.Header.Insert(i,'ISOSPEED',siso,'Camera ISO');
+  if vgamma<>NullInt then f.Header.Insert(i,'GAMMA',vgamma,'Video gamma');
+  if vbright<>NullInt then f.Header.Insert(i,'BRIGHTNS',vbright,'Video brightness');
   if fstop>0 then f.Header.Insert(i,'F_STOP',fstop ,'Camera F-stop');
   if hpix1>0 then f.Header.Insert(i,'XPIXSZ',hpix1 ,'[um] Pixel Size X, binned');
   if hpix2>0 then f.Header.Insert(i,'YPIXSZ',hpix2 ,'[um] Pixel Size Y, binned');
