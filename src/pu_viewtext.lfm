@@ -8,6 +8,7 @@ object f_viewtext: Tf_viewtext
   ClientWidth = 677
   OnClose = FormClose
   OnCreate = FormCreate
+  OnShow = FormShow
   object Memo1: TMemo
     Left = 0
     Height = 420
@@ -34,7 +35,7 @@ object f_viewtext: Tf_viewtext
     ClientWidth = 677
     ParentFont = False
     TabOrder = 1
-    object Button1: TButton
+    object btnClose: TButton
       Left = 593
       Height = 25
       Top = 4
@@ -42,14 +43,14 @@ object f_viewtext: Tf_viewtext
       Anchors = [akTop, akRight]
       Cancel = True
       Caption = 'Close'
-      OnClick = Button1Click
+      OnClick = btnCloseClick
       ParentFont = False
       TabOrder = 0
     end
     object ActionButton: TSpeedButton
-      AnchorSideTop.Control = Button1
-      AnchorSideRight.Control = Button1
-      AnchorSideBottom.Control = Button1
+      AnchorSideTop.Control = btnClose
+      AnchorSideRight.Control = btnClose
+      AnchorSideBottom.Control = btnClose
       AnchorSideBottom.Side = asrBottom
       Left = 500
       Height = 25
@@ -65,6 +66,43 @@ object f_viewtext: Tf_viewtext
       Spacing = 0
       Transparent = False
       Visible = False
+    end
+    object PanelSearch: TPanel
+      Left = 1
+      Height = 33
+      Top = 1
+      Width = 335
+      Align = alLeft
+      BevelOuter = bvNone
+      ClientHeight = 33
+      ClientWidth = 335
+      TabOrder = 1
+      object edSearch: TEdit
+        AnchorSideLeft.Control = PanelSearch
+        AnchorSideTop.Control = PanelSearch
+        AnchorSideTop.Side = asrCenter
+        Left = 8
+        Height = 32
+        Top = 0
+        Width = 215
+        BorderSpacing.Left = 8
+        OnKeyDown = edSearchKeyDown
+        TabOrder = 0
+      end
+      object btnSearch: TButton
+        AnchorSideLeft.Control = edSearch
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = PanelSearch
+        AnchorSideTop.Side = asrCenter
+        Left = 230
+        Height = 25
+        Top = 4
+        Width = 91
+        BorderSpacing.Left = 7
+        Caption = 'Search'
+        OnClick = btnSearchClick
+        TabOrder = 1
+      end
     end
   end
 end
