@@ -4332,16 +4332,20 @@ begin
   FinderCameraConnectTimer.Enabled:=false;
   findercamera.CheckGain;
   f_finder.PanelGain.Visible:=findercamera.hasGain;
-  if findercamera.hasGain and (f_finder.Gain.Value=0) then f_finder.Gain.Value:=findercamera.Gain;
-  f_finder.Gain.MinValue:=findercamera.GainMin;
-  f_finder.Gain.MaxValue:=findercamera.GainMax;
-  f_finder.Gain.Value:=config.GetValue('/PrecSlew/Gain',NullInt);
+  if f_finder.PanelGain.Visible then begin
+    f_finder.Gain.MinValue:=findercamera.GainMin;
+    f_finder.Gain.MaxValue:=findercamera.GainMax;
+    f_finder.Gain.Value:=config.GetValue('/PrecSlew/Gain',0);
+    if (f_finder.Gain.Value=0) then f_finder.Gain.Value:=findercamera.Gain;
+  end;
   findercamera.CheckOffset;
   f_finder.PanelOffset.Visible:=findercamera.hasOffset;
-  if findercamera.hasOffset and (f_finder.Offset.Value=0) then f_finder.Offset.Value:=findercamera.Offset;
-  f_finder.Offset.MinValue:=findercamera.OffsetMin;
-  f_finder.Offset.MaxValue:=findercamera.OffsetMax;
-  f_finder.Offset.Value:=config.GetValue('/PrecSlew/Offset',NullInt);
+  if  f_finder.PanelOffset.Visible then begin
+    f_finder.Offset.MinValue:=findercamera.OffsetMin;
+    f_finder.Offset.MaxValue:=findercamera.OffsetMax;
+    f_finder.Offset.Value:=config.GetValue('/PrecSlew/Offset',0);
+    if (f_finder.Offset.Value=0) then f_finder.Offset.Value:=findercamera.Offset;
+  end;
   f_finder.PanelTemperature.Visible:=findercamera.Temperature<>NullCoord;
   f_finder.Temperature.Visible:=(not SameGuiderFinder) and findercamera.CanSetTemperature;
   f_finder.ButtonSetTemp.Visible:=f_finder.Temperature.Visible;
@@ -5241,8 +5245,8 @@ begin
   AutofocusTolerance:=config.GetValue('/StarAnalysis/AutofocusTolerance',99.0);
   AutofocusMinSNR:=config.GetValue('/StarAnalysis/AutofocusMinSNR',3.0);
   AutoFocusDefocus:=config.GetValue('/StarAnalysis/AutoFocusDefocus',0);
-  AutofocusGain:=config.GetValue('/StarAnalysis/AutofocusGain',f_preview.Gain);
-  AutofocusOffset:=config.GetValue('/StarAnalysis/AutofocusOffset',f_preview.Offset);
+  AutofocusGain:=config.GetValue('/StarAnalysis/AutofocusGain',DefaultGain);
+  AutofocusOffset:=config.GetValue('/StarAnalysis/AutofocusOffset',DefaultOffset);
   AutofocusFilter:=config.GetValue('/StarAnalysis/AutofocusFilter',0);
   MagnitudeCalibration:=config.GetValue('/StarAnalysis/MagnitudeCalibration',MagnitudeCalibration);
 
@@ -5394,8 +5398,8 @@ begin
   f_finder.Binning.Value:=config.GetValue('/PrecSlew/Binning',1);
   f_finder.ShowCalibration;
   f_finder.PreviewExp.Value:=config.GetValue('/PrecSlew/Exposure',10.0);
-  f_finder.Gain.Value:=config.GetValue('/PrecSlew/Gain',NullInt);
-  f_finder.Offset.Value:=config.GetValue('/PrecSlew/Offset',NullInt);
+  f_finder.Gain.Value:=config.GetValue('/PrecSlew/Gain',0);
+  f_finder.Offset.Value:=config.GetValue('/PrecSlew/Offset',0);
   x:=config.GetValue('/Finder/Visu/Gamma',0.5);
   if x>1 then x:=0.5;
   f_finder.visu.Gamma.Value:=x;
@@ -9893,8 +9897,8 @@ begin
    if f_option.SlewISObox.Visible then
      f_option.SlewISObox.ItemIndex:=config.GetValue('/PrecSlew/Gain',f_preview.ISObox.ItemIndex)
    else
-     f_option.SlewGainEdit.Value:=config.GetValue('/PrecSlew/Gain',f_preview.GainEdit.Value);
-   f_option.SlewOffsetEdit.Value:=config.GetValue('/PrecSlew/Offset',f_preview.OffsetEdit.Value);
+     f_option.SlewGainEdit.Value:=config.GetValue('/PrecSlew/Gain',DefaultGain);
+   f_option.SlewOffsetEdit.Value:=config.GetValue('/PrecSlew/Offset',DefaultOffset);
    f_option.SlewBin.Value:=config.GetValue('/PrecSlew/Binning',1);
    if (camera.Status=devConnected)and(camera.BinXrange<>NullRange) then
        f_option.SlewBin.MaxValue:=round(camera.BinXrange.max)
