@@ -187,6 +187,8 @@ type
     function cmd_Preview_Loop:string;
     function cmd_Preview_WaitLoop:string;
     function cmd_Preview_Stop:string;
+    function cmd_Camera_SetGain(g:string):string;
+    function cmd_Camera_SetOffset(o:string):string;
     function cmd_Capture_SetExposure(exp:string):string;
     function cmd_Capture_SetBinning(bin:string):string;
     function cmd_Capture_SetObjectName(obj:string):string;
@@ -1301,6 +1303,34 @@ Preview.Stop;
 if Assigned(Preview.onAbortExposure) then
   Preview.onAbortExposure(Self);
 wait(1);
+result:=msgOK;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Camera_SetGain(g:string):string;
+var i,n: integer;
+begin
+try
+result:=msgFailed;
+val(g,i,n);
+if n<>0 then exit;
+DefaultGain:=i;
+result:=msgOK;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Camera_SetOffset(o:string):string;
+var i,n: integer;
+begin
+try
+result:=msgFailed;
+val(o,i,n);
+if n<>0 then exit;
+DefaultOffset:=i;
 result:=msgOK;
 except
   result:=msgFailed;

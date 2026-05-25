@@ -17065,6 +17065,8 @@ try
   else if method='PREVIEW_GETBINNING' then result:=result+'"result": "'+f_Preview.Binning.Text+'"'
   else if method='PREVIEW_RUNNING' then result:=result+'"result": '+BoolToStr(f_Preview.Running,tr,fa)
   else if method='PREVIEW_LOOP_RUNNING' then result:=result+'"result": '+BoolToStr(f_Preview.Loop,tr,fa)
+  else if method='CAMERA_GETGAIN' then result:=result+'"result": '+IntToStr(DefaultGain)
+  else if method='CAMERA_GETOFFSET' then result:=result+'"result": '+IntToStr(DefaultOffset)
   else if method='CAPTURE_GETEXPOSURE' then result:=result+'"result": '+f_capture.ExpTime.Text
   else if method='CAPTURE_GETBINNING' then result:=result+'"result": "'+f_capture.Binning.Text+'"'
   else if method='CAPTURE_GETOBJECTNAME' then result:=result+'"result": "'+f_capture.Fname.Text+'"'
@@ -17321,6 +17323,19 @@ try
     CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_Preview_SetBinning(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+
+  else if method='CAMERA_SETGAIN' then begin
+    CheckParamCount(1);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Camera_SetGain(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='CAMERA_SETOFFSET' then begin
+    CheckParamCount(1);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Camera_SetOffset(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='CAPTURE_SETEXPOSURE' then begin
