@@ -502,7 +502,7 @@ var
   GuiderAutofocus: boolean;
   FocuserDelay,AutofocusBinning,AutofocusPeriod: integer;
   AutofocusExposure,AutofocusExposureFact:double;
-  AutofocusGain, AutofocusOffset,AutofocusFilter: integer;
+  AutofocusFilter: integer;
   AutofocusMoveDir,AFmedianfilter: boolean;
   Previewmedianstrength: integer;
   AutofocusDynamicMovement,AutofocusDynamicNumPoint,AutoFocusDefocus: integer;

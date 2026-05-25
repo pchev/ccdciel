@@ -5251,8 +5251,6 @@ begin
   AutofocusTolerance:=config.GetValue('/StarAnalysis/AutofocusTolerance',99.0);
   AutofocusMinSNR:=config.GetValue('/StarAnalysis/AutofocusMinSNR',3.0);
   AutoFocusDefocus:=config.GetValue('/StarAnalysis/AutoFocusDefocus',0);
-  AutofocusGain:=config.GetValue('/StarAnalysis/AutofocusGain',DefaultGain);
-  AutofocusOffset:=config.GetValue('/StarAnalysis/AutofocusOffset',DefaultOffset);
   AutofocusFilter:=config.GetValue('/StarAnalysis/AutofocusFilter',0);
   MagnitudeCalibration:=config.GetValue('/StarAnalysis/MagnitudeCalibration',MagnitudeCalibration);
 
@@ -14171,7 +14169,7 @@ begin
   end;
   fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
   fits.DarkOn:=true;
-  if not camera.ControlExposure(AutofocusExposure*AutofocusExposureFact,AutofocusBinning,AutofocusBinning,LIGHT,ReadoutModeFocus,AutofocusGain,AutofocusOffset) then begin
+  if not camera.ControlExposure(AutofocusExposure*AutofocusExposureFact,AutofocusBinning,AutofocusBinning,LIGHT,ReadoutModeFocus,DefaultGain,DefaultOffset) then begin
     NewMessage(rsExposureFail,1);
     f_starprofile.ChkAutofocusDown(false);
     exit;
@@ -14427,8 +14425,6 @@ begin
     InternalguiderStop(nil);
   end;
   f_internalguider.Exposure.Value:=AutofocusExposure;
-  f_internalguider.Gain.Value:=AutofocusGain;
-  f_internalguider.Offset.Value:=AutofocusOffset;
   guidecamera.Fits.DarkOn:=true;
   guidecamera.SoftBinning:=f_internalguider.SoftBinning;
   if not guidecamera.ControlExposure(f_internalguider.Exposure.Value,f_internalguider.CameraBinning,f_internalguider.CameraBinning,LIGHT,ReadoutModeCapture,f_internalguider.Gain.Value,f_internalguider.Offset.Value) then begin
