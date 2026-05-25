@@ -32,7 +32,7 @@ uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_scripteditor, u_anno
 
 const
   colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colmagn=6; colstart=7; colend=8; colrepeat=9;
-  pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolrefexp=4; pcolstack=5; pcolbin=6; pcolfilter=7; pcolcount=8; pcolafstart=9; pcolafevery=10; pcoldither=11; pcolgain=12; pcoloffset=13; pcolfstop=14;
+  pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolrefexp=4; pcolstack=5; pcolbin=6; pcolfilter=7; pcolcount=8; pcolafstart=9; pcolafevery=10; pcoldither=11; pcolfstop=12;
   titleadd=0; titledel=1;
   pageobject=0; pagescript=1; pageflat=2; pagenone=3; pageswitch=4;
   cbNone=0; cbStopTracking=1; cbWarm=2; cbParkScope=3; cbParkDome=4; cbScript=5; cbUnattended=6;
@@ -635,8 +635,6 @@ begin
   StepList.Columns.Items[pcolafstart-1].Title.Caption := Format(rsAutofocusBef,[crlf]);
   StepList.Columns.Items[pcolafevery-1].Title.Caption := Format(rsAutofocusEve,[crlf]);
   StepList.Columns.Items[pcoldither-1].Title.Caption := Format(rsDitherEvery2,[crlf]);
-  StepList.Columns.Items[pcolgain-1].Title.Caption := rsGain;
-  StepList.Columns.Items[pcoloffset-1].Title.Caption := rsOffset2;
   StepList.Columns.Items[pcolfstop-1].Title.Caption := rsFStop;
   if StepList.Columns[pcolfilter-1].PickList.Count>0 then StepList.Columns[pcolfilter-1].PickList[0]:=Filter0;
   Label1.Caption := rsTemplate;
@@ -3284,12 +3282,6 @@ begin
     p.binx:=1;
     p.biny:=1;
   end;
-  str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Gain','');
-  gainmsg:=(str='');
-  p.gain:=StrToIntDef(str,DefaultGain);
-  str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Offset','');
-  gainmsg:=gainmsg or (str='');
-  p.offset:=StrToIntDef(str,DefaultOffset);
   str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Filter','');
   if i<SaveFilterNum then originalFilter[i]:=str;
   j:=StepList.Columns[pcolfilter-1].PickList.IndexOf(str);
@@ -3311,8 +3303,6 @@ begin
   p.switchnickname:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/SwitchNickname','');
   p.switchname:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/SwitchName','');
   p.switchvalue:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/SwitchValue','');
-  if gainmsg and StepList.Columns[pcolgain-1].Visible then
-     LabelMsg.Caption:=rsPleaseBeCare;
   // obsolete option
   if trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',1)) > 1 then
      msg:=msg+crlf+p.description+' warning! the Repeat option at the step level as been removed. Please use the Repeat option at the target level instead.';
@@ -3476,15 +3466,6 @@ begin
     StepList.Cells[pcolrefexp,n]:=p.refexposure;
     StepList.Cells[pcolstack,n]:=inttostr(p.stackcount);
     StepList.Cells[pcolbin,n]:=p.binning_str;
-    if FISObox.Visible then begin
-      if (p.gain<StepList.Columns[pcolgain-1].PickList.Count) then
-        StepList.Cells[pcolgain,n]:=StepList.Columns[pcolgain-1].PickList[p.gain]
-      else
-        LabelMsg.Caption:='Gain setting not compatible!';
-    end
-    else
-      StepList.Cells[pcolgain,n]:=IntToStr(p.gain);
-    StepList.Cells[pcoloffset,n]:=IntToStr(p.offset);
     StepList.Cells[pcolfstop,n]:=p.fstop;
     if p.filter<StepList.Columns[pcolfilter-1].PickList.count then
       StepList.Cells[pcolfilter,n]:=StepList.Columns[pcolfilter-1].PickList[p.filter]
@@ -3512,8 +3493,6 @@ begin
     StepList.Cells[pcolafstart,n]:='';
     StepList.Cells[pcolafevery,n]:='';
     StepList.Cells[pcoldither,n]:='';
-    StepList.Cells[pcolgain,n]:='';
-    StepList.Cells[pcoloffset,n]:='';
     StepList.Cells[pcolfstop,n]:='';
     SetScriptList1(n,p.scriptpath,p.scriptname,p.scriptargs);
   end
@@ -3528,8 +3507,6 @@ begin
     StepList.Cells[pcolafstart,n]:='';
     StepList.Cells[pcolafevery,n]:='';
     StepList.Cells[pcoldither,n]:='';
-    StepList.Cells[pcolgain,n]:='';
-    StepList.Cells[pcoloffset,n]:='';
     StepList.Cells[pcolfstop,n]:='';
     SetSwitch1(n,p.switchnickname,p.switchname,p.switchvalue);
   end;
@@ -3588,22 +3565,6 @@ begin
       StepsModified:=StepsModified or (p.biny<>1);
       p.biny:=1;
     end;
-    if FISObox.Visible then begin
-      str:=StepList.Cells[pcolgain,n];
-      j:=StepList.Columns[pcolgain-1].PickList.IndexOf(str);
-      StepsModified:=StepsModified or (p.gain<>j);
-      if j>=0 then p.gain:=j;
-    end
-    else if FGainEdit.Visible then begin
-      j:=StrToIntDef(StepList.Cells[pcolgain,n],p.gain);
-      if j>FGainEdit.MaxValue then begin j:=FGainEdit.MaxValue; StepList.Cells[pcolgain,n]:=inttostr(j); end;
-      if j<FGainEdit.MinValue then begin j:=FGainEdit.MinValue; StepList.Cells[pcolgain,n]:=inttostr(j); end;
-      StepsModified:=StepsModified or (p.gain<>j);
-      p.gain:=j;
-    end;
-    j:=StrToIntDef(StepList.Cells[pcoloffset,n],p.offset);
-    StepsModified:=StepsModified or (p.offset<>j);
-    p.offset:=j;
     str:=StepList.Cells[pcolfstop,n];
     StepsModified:=StepsModified or (p.fstop<>str);
     p.fstop:=str;
@@ -3745,8 +3706,6 @@ begin
     pcolafstart : HintText:=rsAutofocusAtT;
     pcolafevery : HintText:=rsRedoAutofocu;
     pcoldither  : HintText:=rsDitherAfterT;
-    pcolgain    : HintText:=rsCameraGain;
-    pcoloffset  : HintText:=rsCameraOffset;
     pcolfstop   : HintText:=rsFStop;
     else HintText:='';
   end;
@@ -3765,12 +3724,6 @@ begin
      Editor:=StepList.EditorByStyle(cbsPickList) // filter selection
   else if (aCol=pcolafstart) then
      Editor:=StepList.EditorByStyle(cbsCheckboxColumn) // autofocus at start selection
-  else if (aCol=pcolgain) then begin
-    if FISObox.Visible then
-      Editor:=StepList.EditorByStyle(cbsPickList) // ISO list
-    else
-      Editor:=StepList.EditorByStyle(cbsAuto)     // Gain
-  end
   else if (aCol=pcolfstop) then
      Editor:=StepList.EditorByStyle(cbsPickList) // f-stop
   else
@@ -3799,8 +3752,6 @@ begin
   end;
   p.steptype:=0;
   p.description:=txt;
-  p.gain:=DefaultGain;
-  p.offset:=DefaultOffset;
   StepList.RowCount:=StepList.RowCount+1;
   i:=StepList.RowCount-1;
   StepList.Cells[pcolseq,i]:=IntToStr(i);
@@ -3967,8 +3918,6 @@ try
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/RefExposure',p.refexposure);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/StackCount',p.stackcount);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Binning',IntToStr(p.binx)+'x'+IntToStr(p.biny));
-    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Gain',p.gain);
-    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Offset',p.offset);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Fstop',p.fstop);
     if StepList.Columns[pcolfilter-1].PickList.Count>0 then begin // do not erase the filters if the filter wheel is not connected
       k:=p.filter;

@@ -40,19 +40,12 @@ type
     StackPreview: TCheckBox;
     PreprocessPreview: TCheckBox;
     Fnumber: TComboBox;
-    ISObox: TComboBox;
     Label3: TLabel;
     LabelAstrometry: TLabel;
-    LabelOffset: TLabel;
-    LabelGain: TLabel;
     Panel6: TPanel;
     Panel5: TPanel;
     Panel7: TPanel;
-    PanelOffset: TPanel;
     PanelFnumber: TPanel;
-    PanelGain: TPanel;
-    GainEdit: TSpinEditEx;
-    OffsetEdit: TSpinEditEx;
     ExpTime: TComboBox;
     Binning: TComboBox;
     Label1: TLabel;
@@ -81,10 +74,6 @@ type
     procedure SetExposure(value:double);
     function GetBinning: integer;
     procedure SetBinning(value:integer);
-    function GetGain:integer;
-    procedure SetGain(value:integer);
-    function GetOffset:integer;
-    procedure SetOffset(value:integer);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -96,8 +85,6 @@ type
     property Camera: T_camera read Fcamera write Fcamera;
     property Loop: boolean read FLoop write FLoop;
     property Exposure: double read GetExposure write SetExposure;
-    property Gain: integer read GetGain write SetGain;
-    property Offset: integer read GetOffset write SetOffset;
     property Bin: integer read GetBinning write SetBinning;
     property onResetStack: TNotifyEvent read FonResetStack write FonResetStack;
     property onStartExposure: TNotifyEvent read FonStartExposure write FonStartExposure;
@@ -140,7 +127,6 @@ procedure Tf_preview.SetLang;
 begin
   Title.Caption:=rsPreview;
   Label1.Caption:=rsExposure;
-  LabelGain.Caption:=rsGain;
   Label2.Caption:=rsBinning;
   Label3.Caption:=rsFStop;
   BtnPreview.Caption:=rsPreview;
@@ -150,8 +136,6 @@ begin
   PreprocessPreview.Caption:=rsPreprocessin;
   BtnLoop.Caption:=rsLoop;
   ExpTime.Hint:=rsExposureTime;
-  ISObox.Hint:=rsCameraISO;
-  GainEdit.Hint:=rsCameraGain;
   Binning.Hint:=rsCameraBinnin;
   BtnPreview.Hint:=rsStartOnePrev;
   BtnLoop.Hint:=rsLoopPreviewE;
@@ -273,35 +257,6 @@ begin
   buf:=IntToStr(value)+'x'+IntToStr(value);
   i:=Binning.Items.IndexOf(buf);
   if i>=0 then Binning.ItemIndex:=i;
-end;
-
-function Tf_preview.GetGain:integer;
-begin
-  if ISObox.Visible then
-    result:=ISObox.ItemIndex
-  else
-    result:=GainEdit.Value;
-end;
-
-procedure Tf_preview.SetGain(value:integer);
-begin
-  if ISObox.Visible then begin
-    if (value>=0)and(value<ISObox.Items.Count) then
-      ISObox.ItemIndex:=value
-  end
-  else begin
-    GainEdit.Value:=value;
-  end;
-end;
-
-function Tf_preview.GetOffset:integer;
-begin
-  result:=OffsetEdit.Value;
-end;
-
-procedure Tf_preview.SetOffset(value:integer);
-begin
-  OffsetEdit.Value:=value;
 end;
 
 end.

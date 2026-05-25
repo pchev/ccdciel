@@ -301,7 +301,6 @@ resourcestring
   rsRunScript = 'Run script';
   rsCopy = 'Copy';
   rsPleaseSelect = 'Please select a script!';
-  rsNoScriptAreR = 'No script are running.';
   rsDoYouWantToD = 'Do you want to delete file %s ?';
   rsCopyTo = 'Copy to ';
   rsScriptAlread = 'Script %s already exist. Do you want to replace this file?';
@@ -1109,7 +1108,6 @@ resourcestring
   rsBeSureTheCom = 'Be sure the computer use the local timezone and the observatory location is configured in the program preferences.';
   rsBeCarefulOft = 'Be careful of the longitude East/West setting.';
   rsOffset2 = 'Offset';
-  rsPleaseBeCare = 'Please be careful to review and set the value for the Gain and Offset';
   rsSaveAndApply = 'Save and apply to targets';
   rsCopyASequenc = 'Copy a sequence';
   rsDeleteASeque = 'Delete a sequence';

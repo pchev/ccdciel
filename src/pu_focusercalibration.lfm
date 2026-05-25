@@ -1,10 +1,10 @@
 object f_focusercalibration: Tf_focusercalibration
   Left = 0
-  Height = 498
+  Height = 456
   Top = 0
   Width = 597
   Caption = 'Focuser calibration'
-  ClientHeight = 498
+  ClientHeight = 456
   ClientWidth = 597
   FormStyle = fsStayOnTop
   OnClose = FormClose
@@ -13,7 +13,7 @@ object f_focusercalibration: Tf_focusercalibration
   OnShow = FormShow
   object Notebook1: TNotebook
     Left = 0
-    Height = 464
+    Height = 422
     Top = 0
     Width = 597
     PageIndex = 0
@@ -163,93 +163,6 @@ object f_focusercalibration: Tf_focusercalibration
           Value = 1
         end
       end
-      object PanelGain: TPanel
-        AnchorSideLeft.Control = PanelExp
-        AnchorSideTop.Control = PanelExp
-        AnchorSideTop.Side = asrBottom
-        Left = 0
-        Height = 34
-        Top = 412
-        Width = 384
-        BorderSpacing.Top = 8
-        BevelOuter = bvNone
-        ClientHeight = 34
-        ClientWidth = 384
-        ParentFont = False
-        TabOrder = 3
-        Visible = False
-        object ISObox: TComboBox
-          Left = 100
-          Height = 32
-          Top = 0
-          Width = 91
-          ItemHeight = 18
-          ParentFont = False
-          Style = csDropDownList
-          TabOrder = 0
-          Visible = False
-        end
-        object LabelGain: TLabel
-          AnchorSideTop.Control = spGain
-          AnchorSideTop.Side = asrCenter
-          Left = 6
-          Height = 18
-          Top = 7
-          Width = 29
-          Caption = 'Gain'
-          ParentColor = False
-          ParentFont = False
-        end
-        object spGain: TSpinEditEx
-          Left = 100
-          Height = 32
-          Top = 0
-          Width = 90
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 1
-          MaxValue = 32767
-          MinValue = -32768
-          NullValue = 0
-          Value = 0
-        end
-        object PanelOffset: TPanel
-          AnchorSideLeft.Control = spGain
-          AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = PanelGain
-          Left = 201
-          Height = 32
-          Top = 0
-          Width = 184
-          BorderSpacing.Left = 11
-          BevelOuter = bvNone
-          ClientHeight = 32
-          ClientWidth = 184
-          TabOrder = 2
-          object LabelOffset: TLabel
-            AnchorSideTop.Control = spOffset
-            AnchorSideTop.Side = asrCenter
-            Left = 0
-            Height = 18
-            Top = 7
-            Width = 38
-            Caption = 'Offset'
-            ParentColor = False
-          end
-          object spOffset: TSpinEditEx
-            Left = 96
-            Height = 32
-            Top = 0
-            Width = 90
-            MaxLength = 0
-            TabOrder = 0
-            MaxValue = 32767
-            MinValue = -32768
-            NullValue = 0
-            Value = 0
-          end
-        end
-      end
       object spStartStep: TSpinEdit
         AnchorSideTop.Control = PanelExp
         AnchorSideTop.Side = asrCenter
@@ -259,7 +172,7 @@ object f_focusercalibration: Tf_focusercalibration
         Width = 82
         MaxValue = 1000
         MinValue = 1
-        TabOrder = 4
+        TabOrder = 3
         Value = 10
       end
       object Label3: TLabel
@@ -319,7 +232,7 @@ object f_focusercalibration: Tf_focusercalibration
   object Panel1: TPanel
     Left = 0
     Height = 34
-    Top = 464
+    Top = 422
     Width = 597
     Align = alBottom
     ClientHeight = 34
@@ -357,7 +270,6 @@ object f_focusercalibration: Tf_focusercalibration
     end
     object btnStart: TButton
       AnchorSideLeft.Control = spStartStep
-      AnchorSideTop.Control = PanelGain
       AnchorSideTop.Side = asrCenter
       Left = 400
       Height = 25

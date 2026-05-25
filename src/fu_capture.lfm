@@ -78,7 +78,7 @@ object f_capture: Tf_capture
     object PanelStack: TPanel
       Left = 1
       Height = 29
-      Top = 272
+      Top = 200
       Width = 297
       Align = alTop
       BorderSpacing.Top = 4
@@ -86,7 +86,7 @@ object f_capture: Tf_capture
       ClientHeight = 29
       ClientWidth = 297
       ParentFont = False
-      TabOrder = 10
+      TabOrder = 9
       object Label7: TLabel
         AnchorSideTop.Control = StackNum
         AnchorSideTop.Side = asrCenter
@@ -115,92 +115,10 @@ object f_capture: Tf_capture
         Value = 1
       end
     end
-    object PanelGain: TPanel
-      Left = 1
-      Height = 68
-      Top = 38
-      Width = 297
-      Align = alTop
-      BorderSpacing.Top = 4
-      BevelOuter = bvNone
-      ClientHeight = 68
-      ClientWidth = 297
-      ParentFont = False
-      TabOrder = 8
-      object ISObox: TComboBox
-        Left = 88
-        Height = 28
-        Top = 1
-        Width = 91
-        Constraints.MaxHeight = 28
-        ItemHeight = 18
-        ParentFont = False
-        Style = csDropDownList
-        TabOrder = 0
-        Visible = False
-      end
-      object LabelGain: TLabel
-        AnchorSideTop.Control = GainEdit
-        AnchorSideTop.Side = asrCenter
-        Left = 4
-        Height = 18
-        Top = 9
-        Width = 29
-        Caption = 'Gain'
-        ParentColor = False
-        ParentFont = False
-      end
-      object GainEdit: TSpinEditEx
-        Left = 89
-        Height = 28
-        Top = 4
-        Width = 101
-        Constraints.MaxHeight = 28
-        MaxLength = 0
-        ParentFont = False
-        TabOrder = 1
-        MaxValue = 32767
-        MinValue = -32768
-        NullValue = 0
-        Value = 0
-      end
-      object PanelOffset: TPanel
-        Left = 0
-        Height = 36
-        Top = 32
-        Width = 191
-        BevelOuter = bvNone
-        ClientHeight = 36
-        ClientWidth = 191
-        TabOrder = 2
-        object LabelOffset: TLabel
-          AnchorSideTop.Control = OffsetEdit
-          AnchorSideTop.Side = asrCenter
-          Left = 4
-          Height = 18
-          Top = 11
-          Width = 38
-          Caption = 'Offset'
-          ParentColor = False
-        end
-        object OffsetEdit: TSpinEditEx
-          Left = 89
-          Height = 32
-          Top = 4
-          Width = 101
-          MaxLength = 0
-          TabOrder = 0
-          MaxValue = 32767
-          MinValue = -32768
-          NullValue = 0
-          Value = 0
-        end
-      end
-    end
     object Panel3: TPanel
       Left = 1
       Height = 29
-      Top = 110
+      Top = 38
       Width = 297
       Align = alTop
       BorderSpacing.Top = 4
@@ -241,7 +159,7 @@ object f_capture: Tf_capture
     object PanelFnumber: TPanel
       Left = 1
       Height = 28
-      Top = 240
+      Top = 168
       Width = 297
       Align = alTop
       BorderSpacing.Top = 4
@@ -249,7 +167,7 @@ object f_capture: Tf_capture
       ClientHeight = 28
       ClientWidth = 297
       ParentFont = False
-      TabOrder = 9
+      TabOrder = 8
       Visible = False
       object Label6: TLabel
         AnchorSideTop.Control = Fnumber
@@ -277,7 +195,7 @@ object f_capture: Tf_capture
     object Panel4: TPanel
       Left = 1
       Height = 28
-      Top = 143
+      Top = 71
       Width = 297
       Align = alTop
       BorderSpacing.Top = 4
@@ -310,7 +228,7 @@ object f_capture: Tf_capture
     object Panel5: TPanel
       Left = 1
       Height = 28
-      Top = 175
+      Top = 103
       Width = 297
       Align = alTop
       BorderSpacing.Top = 4
@@ -358,7 +276,7 @@ object f_capture: Tf_capture
     object Panel6: TPanel
       Left = 1
       Height = 29
-      Top = 207
+      Top = 135
       Width = 297
       Align = alTop
       BorderSpacing.Top = 4
@@ -402,7 +320,7 @@ object f_capture: Tf_capture
     object Panel7: TPanel
       Left = 1
       Height = 28
-      Top = 305
+      Top = 233
       Width = 297
       Align = alTop
       BorderSpacing.Top = 4
@@ -441,7 +359,7 @@ object f_capture: Tf_capture
     object Panel8: TPanel
       Left = 1
       Height = 88
-      Top = 337
+      Top = 265
       Width = 297
       Align = alTop
       BorderSpacing.Top = 4
@@ -499,7 +417,7 @@ object f_capture: Tf_capture
     object Panel9: TPanel
       Left = 1
       Height = 30
-      Top = 557
+      Top = 485
       Width = 297
       Align = alTop
       BorderSpacing.Top = 4
@@ -549,14 +467,14 @@ object f_capture: Tf_capture
     object PanelScript: TPanel
       Left = 1
       Height = 128
-      Top = 425
+      Top = 353
       Width = 297
       Align = alTop
       AutoSize = True
       BevelOuter = bvNone
       ClientHeight = 128
       ClientWidth = 297
-      TabOrder = 11
+      TabOrder = 10
       object PanelScriptname: TPanel
         Left = 0
         Height = 29

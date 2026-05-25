@@ -57,7 +57,6 @@ type
     Panel14: TPanel;
     StackNum: TSpinEditEx;
     Fnumber: TComboBox;
-    ISObox: TComboBox;
     cbFrameType: TComboBox;
     ExpTime: TComboBox;
     Label1: TLabel;
@@ -67,14 +66,10 @@ type
     Label5: TLabel;
     Label6: TLabel;
     Label7: TLabel;
-    LabelGain: TLabel;
-    LabelOffset: TLabel;
     led: TShape;
-    OffsetEdit: TSpinEditEx;
     Panel1: TPanel;
     PanelStack: TPanel;
     PanelFnumber: TPanel;
-    PanelGain: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
     Panel4: TPanel;
@@ -84,8 +79,6 @@ type
     Panel8: TPanel;
     Panel9: TPanel;
     Fname: TEdit;
-    GainEdit: TSpinEditEx;
-    PanelOffset: TPanel;
     SeqNum: TSpinEditEx;
     DitherCount: TSpinEditEx;
     FocusCount: TSpinEditEx;
@@ -120,10 +113,6 @@ type
     FonResetHFM: TNotifyEvent;
     FRunScript: TRunScript;
     procedure SetExposureTime(val: double);
-    function GetGain:integer;
-    procedure SetGain(value:integer);
-    function GetOffset:integer;
-    procedure SetOffset(value:integer);
     function GetFrameType:integer;
     procedure SetFrameType(value:integer);
     function GetFrameTypeText:string;
@@ -148,8 +137,6 @@ type
     property StackCount: Integer read FStackCount write FStackCount;
     property ExposureTime: double read FExposureTime write SetExposureTime;
     property CameraExposureRemain: double read FCameraExposureRemain write FCameraExposureRemain;
-    property Gain: integer read GetGain write SetGain;
-    property Offset: integer read GetOffset write SetOffset;
     property FrameType: integer read GetFrameType write SetFrameType;
     property FrameTypeText: string read GetFrameTypeText;
     property DitherNum: Integer read FDitherNum write FDitherNum;
@@ -212,8 +199,6 @@ begin
   Title.Caption:=rsCapture;
   Label1.Caption:=rsExposure;
   Label7.Caption:=rsStackingCoun;
-  LabelGain.Caption:=rsGain;
-  LabelOffset.Caption:=rsOffset2;
   Label2.Caption:=rsBinning;
   Label6.Caption:=rsFStop;
   Label3.Caption:=rsObject;
@@ -232,8 +217,6 @@ begin
   BtnStart.Caption:=rsStart;
   ExpTime.Hint:=rsExposureTime;
   Binning.Hint:=rsCameraBinnin;
-  ISObox.Hint:=rsCameraISO;
-  GainEdit.Hint:=rsCameraGain;
   Fname.Hint:=rsTheObjectNam;
   SeqNum.Hint:=rsTheNumberOfI;
   cbFrameType.Hint:=rsTheTypeOfFra;
@@ -365,35 +348,6 @@ procedure Tf_capture.SetExposureTime(val: double);
 begin
   FExposureTime:=val;
   ExpTime.Text:=FormatFloat(f9v,val);
-end;
-
-function Tf_capture.GetGain:integer;
-begin
-  if ISObox.Visible then
-    result:=ISObox.ItemIndex
-  else
-    result:=GainEdit.Value;
-end;
-
-procedure Tf_capture.SetGain(value:integer);
-begin
-  if ISObox.Visible then begin
-    if (value>=0)and(value<ISObox.Items.Count) then
-      ISObox.ItemIndex:=value
-  end
-  else begin
-    GainEdit.Value:=value;
-  end;
-end;
-
-function Tf_capture.GetOffset:integer;
-begin
-  result:=OffsetEdit.Value;
-end;
-
-procedure Tf_capture.SetOffset(value:integer);
-begin
-  OffsetEdit.Value:=value;
 end;
 
 function Tf_capture.GetOverwrite:boolean;

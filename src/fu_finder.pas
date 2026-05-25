@@ -267,8 +267,8 @@ Procedure Tf_finder.StartExposureAsync(Data: PtrInt);
 begin
  if (FCamera.Status=devConnected) then begin
    LoopExp:=max(FCamera.ExposureRange.min,PreviewExp.Value);
-   LoopGain:=config.GetValue('/PrecSlew/Gain',NullInt);
-   LoopOffset:=config.GetValue('/PrecSlew/Offset',NullInt);
+   LoopGain:=config.GetValue('/Finder/Gain',NullInt);
+   LoopOffset:=config.GetValue('/Finder/Offset',NullInt);
    LoopBin:=config.GetValue('/PrecSlew/Binning',1);
    if (LoopBin<>FCamera.BinX)or(LoopBin<>FCamera.BinY) then FCamera.SetBinning(LoopBin,LoopBin);
    FCamera.SoftBinning:=cbSoftBinning.Checked;
@@ -327,8 +327,8 @@ if (FCamera.Status=devConnected) then begin
       exit;
     end;
     exp:=max(FCamera.ExposureRange.min,PreviewExp.Value);
-    sgain:=config.GetValue('/PrecSlew/Gain',NullInt);
-    soffset:=config.GetValue('/PrecSlew/Offset',NullInt);
+    sgain:=config.GetValue('/Finder/Gain',NullInt);
+    soffset:=config.GetValue('/Finder/Offset',NullInt);
     bin:=config.GetValue('/PrecSlew/Binning',1);
     msg(format(rsExposureS,[FormatFloat(f3,exp)])+blank+rsSeconds,3);
     if not Fcamera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeAstrometry,sgain,soffset) then begin
@@ -378,7 +378,7 @@ end;
 
 procedure Tf_finder.GainChange(Sender: TObject);
 begin
-  config.SetValue('/PrecSlew/Gain',Gain.Value);
+  config.SetValue('/Finder/Gain',Gain.Value);
 end;
 
 procedure Tf_finder.MenuItemCaptureDarkClick(Sender: TObject);
@@ -403,7 +403,7 @@ end;
 
 procedure Tf_finder.OffsetChange(Sender: TObject);
 begin
-  config.SetValue('/PrecSlew/Offset',Offset.Value);
+  config.SetValue('/Finder/Offset',Offset.Value);
 end;
 
 Procedure Tf_finder.Redraw(Sender: TObject);
@@ -493,8 +493,8 @@ try
       StopLoop;
       wait(1);
     end;
-    sgain:=config.GetValue('/PrecSlew/Gain',NullInt);
-    soffset:=config.GetValue('/PrecSlew/Offset',NullInt);
+    sgain:=config.GetValue('/Finder/Gain',NullInt);
+    soffset:=config.GetValue('/Finder/Offset',NullInt);
     bin:=config.GetValue('/PrecSlew/Binning',1);
     msg(format(rsExposureS,[FormatFloat(f3,exp)])+blank+rsSeconds,3);
     FCamera.Fits.DarkOn:=true;

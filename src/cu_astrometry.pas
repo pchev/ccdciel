@@ -93,7 +93,7 @@ TAstrometry = class(TComponent)
     procedure SyncCurrentImage(wait: boolean);
     procedure StackSolve(f: TFits; out ra,de,pa,scale: double; out ok:boolean);
     procedure SlewScreenXY(x,y: integer);
-    function PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew,sgain,soffset: integer; brightstaroffset: boolean; broffset: double; out err: double):boolean;
+    function PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew: integer; brightstaroffset: boolean; broffset: double; out err: double):boolean;
     function PrecisionSlew(ra,de:double; out err: double; magn:double=-9999):boolean;
     function AutofocusPrecisionSlew(ra,de:double; out err: double):boolean;
     procedure MarkPlanetarium(ra,de: double);
@@ -761,7 +761,6 @@ var fn: string;
     i: TcdcWCSinfo;
     c: TcdcWCScoord;
     err,prec,exp:double;
-    sgain,soffset: integer;
     fi,cormethod,bin,maxretry: integer;
 begin
 TimerAstrometrySlewScreenXY.Enabled:=false;
@@ -787,11 +786,9 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
        cormethod:=config.GetValue('/PrecSlew/Method',1);
        maxretry:=config.GetValue('/PrecSlew/Retry',3);
        exp:=config.GetValue('/PrecSlew/Exposure',10.0);
-       sgain:=config.GetValue('/PrecSlew/Gain',NullInt);
-       soffset:=config.GetValue('/PrecSlew/Offset',NullInt);
        bin:=config.GetValue('/PrecSlew/Binning',1);
        fi:=config.GetValue('/PrecSlew/Filter',0);
-       PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,sgain,soffset,false,0,err);
+       PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,false,0,err);
      end;
    end;
 end;
@@ -800,7 +797,7 @@ finally
 end;
 end;
 
-function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew,sgain,soffset: integer; brightstaroffset: boolean; broffset: double; out err: double): boolean;
+function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew: integer; brightstaroffset: boolean; broffset: double; out err: double): boolean;
 var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde,pa,ara,ade,fov: double;
     originalra, originaldec: double;
     fn:string;
@@ -878,7 +875,7 @@ begin
       if CancelAutofocus or CancelGoto then exit;
       if FFinderCamera=nil then begin
         // Use main camera
-        if not Fcamera.ControlExposure(exp,binx,biny,LIGHT,ReadoutModeAstrometry,sgain,soffset) then begin
+        if not Fcamera.ControlExposure(exp,binx,biny,LIGHT,ReadoutModeAstrometry,DefaultGain,DefaultOffset) then begin
           msg(rsExposureFail,0);
           exit;
         end;
@@ -896,7 +893,7 @@ begin
               // the FOV is small and can be problematic (bright star or cluster, no star)
               // we retry with an offset equal to the FOV width
               msg(rsRetryWithAnO, 3);
-              result:=PrecisionSlew(ra,de,prec,exp,filter,binx,biny,method,maxslew,sgain,soffset,true,fov/60,err);
+              result:=PrecisionSlew(ra,de,prec,exp,filter,binx,biny,method,maxslew,true,fov/60,err);
               exit;
            end
            else begin
@@ -917,7 +914,7 @@ begin
       else begin
         // Use finder camera
         FFinderFits.DarkOn:=true;
-        if not FFinderCamera.ControlExposure(exp,binx,biny,LIGHT,ReadoutModeAstrometry,sgain,soffset) then begin
+        if not FFinderCamera.ControlExposure(exp,binx,biny,LIGHT,ReadoutModeAstrometry,FFinderCamera.Gain,FFinderCamera.Offset) then begin
           msg(rsExposureFail,0);
           exit;
         end;
@@ -1024,9 +1021,9 @@ begin
     WaitSlewDelay(delay);
     // short exposure to show the new position with the bright star
     if FFinderCamera<>nil then
-      FFinderCamera.ControlExposure(min(1,exp),binx,biny,LIGHT,ReadoutModeAstrometry,sgain,soffset)
+      FFinderCamera.ControlExposure(min(1,exp),binx,biny,LIGHT,ReadoutModeAstrometry,FFinderCamera.Gain,FFinderCamera.Offset)
     else
-      Fcamera.ControlExposure(min(1,exp),binx,biny,LIGHT,ReadoutModeAstrometry,sgain,soffset)
+      Fcamera.ControlExposure(min(1,exp),binx,biny,LIGHT,ReadoutModeAstrometry,DefaultGain,DefaultOffset)
   end;
 
   finally
@@ -1043,38 +1040,32 @@ end;
 function TAstrometry.PrecisionSlew(ra,de:double; out err: double; magn:double=-9999):boolean;
 var prec,exp,brmagn,broffset:double;
     fi,cormethod,bin,maxretry: integer;
-    sgain,soffset: integer;
     br: boolean;
 begin
   prec:=config.GetValue('/PrecSlew/Precision',SlewPrecision)/60;
   cormethod:=config.GetValue('/PrecSlew/Method',1);
   maxretry:=config.GetValue('/PrecSlew/Retry',3);
   exp:=config.GetValue('/PrecSlew/Exposure',10.0);
-  sgain:=config.GetValue('/PrecSlew/Gain',NullInt);
-  soffset:=config.GetValue('/PrecSlew/Offset',NullInt);
   bin:=config.GetValue('/PrecSlew/Binning',1);
   fi:=config.GetValue('/PrecSlew/Filter',0);
   br:=SlewingAvoidBrightStar;
   broffset:=SlewingBrightStarOffset;
   brmagn:=SlewingBrightStarMagn;
   br:=br and (magn<>NullCoord) and (magn<=brmagn);
-  result:=PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,sgain,soffset,br,broffset,err);
+  result:=PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,br,broffset,err);
 end;
 
 function TAstrometry.AutofocusPrecisionSlew(ra,de:double; out err: double):boolean;
 var prec,exp:double;
     fi,cormethod,bin,maxretry: integer;
-    sgain,soffset: integer;
 begin
   prec:=config.GetValue('/StarAnalysis/AutofocusPrecisionSlew',2.0)/60;
   cormethod:=config.GetValue('/PrecSlew/Method',1);
   maxretry:=config.GetValue('/PrecSlew/Retry',3);
   exp:=config.GetValue('/PrecSlew/Exposure',10.0);
-  sgain:=config.GetValue('/PrecSlew/Gain',NullInt);
-  soffset:=config.GetValue('/PrecSlew/Offset',NullInt);
   bin:=config.GetValue('/PrecSlew/Binning',1);
   fi:=config.GetValue('/PrecSlew/Filter',0);
-  result:=PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,sgain,soffset,false,0,err);
+  result:=PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,false,0,err);
 end;
 
 procedure TAstrometry.MarkPlanetarium(ra,de: double);

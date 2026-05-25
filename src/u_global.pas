@@ -125,8 +125,6 @@ type
               autofocuscount: integer;
               filter: integer;
               binx,biny: integer;
-              gain: integer;
-              offset: integer;
               frtype: integer;
               fstop: string;
               refexposure: string;
@@ -151,8 +149,6 @@ type
               function description_str: string;
               function dithercount_str: string;
               function autofocuscount_str: string;
-              function gain_str: string;
-              function offset_str: string;
               function id: LongWord;
               function totaltime(skipdone:boolean): double;
             end;
@@ -242,7 +238,7 @@ type
   {$i revision.inc}
 
 const
-  ccdcielver = '0.9.95';
+  ccdcielver = '0.9.96';
   ccdciel_version='Version beta '+ccdcielver;
   TargetFileVersion = 5;
   Maxclient = 100;
@@ -673,8 +669,6 @@ begin
   autofocus:=false;
   autofocuscount:=10;
   fstop:='';
-  gain:=1;
-  offset:=0;
   description:='Step1';
   scriptname:='';
   scriptpath:='';
@@ -694,8 +688,6 @@ begin
   filter:=Source.filter;
   binx:=Source.binx;
   biny:=Source.biny;
-  gain:=Source.gain;
-  offset:=Source.offset;
   frtype:=Source.frtype;
   dither:=Source.dither;
   dithercount:=Source.dithercount;
@@ -772,23 +764,11 @@ begin
   Result:=description;
 end;
 
-function TStep.gain_str: string;
-begin
-  Result:=IntToStr(gain);
-end;
-
-function TStep.offset_str: string;
-begin
-  Result:=IntToStr(offset);
-end;
-
 function TStep.id: LongWord;
 var buf: string;
 begin
   // if any of this change we consider it another step
   buf:=trim(description)+frtype_str+exposure_str+binning_str+filter_str;
-  buf:=buf+gain_str;
-  buf:=buf+offset_str;
   result:=Hash(buf);
 end;
 

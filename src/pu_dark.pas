@@ -61,7 +61,7 @@ type
     Frunning: boolean;
     nloop,curloop,nstack,curstack: integer;
     maxexp,curexp,sq2: double;
-    FGain,FOffset,FBin: integer;
+    FBin,FGain,FOffset: integer;
     curft: TFrameType;
     fstack: TFits;
     fdark: TMemoryStream;
@@ -89,8 +89,6 @@ procedure Tf_dark.FormCreate(Sender: TObject);
 begin
   Frunning:=false;
   sq2:=sqrt(2);
-  FGain:=0;
-  FOffset:=0;
   SetLang;
 end;
 

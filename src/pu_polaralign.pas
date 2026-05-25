@@ -424,8 +424,14 @@ fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
 fits.DarkOn:=true;
 exp:=config.GetValue('/PrecSlew/Exposure',10.0);
 bin:=config.GetValue('/PrecSlew/Binning',1);
-pgain:=config.GetValue('/PrecSlew/Gain',NullInt);
-poffset:=config.GetValue('/PrecSlew/Offset',NullInt);
+if camera.FinderCamera then begin
+  pgain:=config.GetValue('/Finder/Gain',NullInt);
+  poffset:=config.GetValue('/Finder/Offset',NullInt);
+end
+else begin
+  pgain:=DefaultGain;
+  poffset:=DefaultOffset;
+end;
 filter:=config.GetValue('/PrecSlew/Filter',0);
 if (filter>0)and(Assigned(Fwheel)) then begin
   Fwheel.Filter:=filter;
@@ -807,8 +813,6 @@ begin
     FVisu.BtnZoomAdjust.Click;
     preview.Exposure:=config.GetValue('/PrecSlew/Exposure',1.0);
     preview.Bin:=config.GetValue('/PrecSlew/Binning',1);
-    preview.Gain:=config.GetValue('/PrecSlew/Gain',NullInt);
-    preview.Offset:=config.GetValue('/PrecSlew/Offset',NullInt);
     if not preview.Loop then preview.BtnLoopClick(nil);
   end;
   FInProgress:=false;

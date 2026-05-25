@@ -92,8 +92,8 @@ begin
   screen.Cursor:=crHourGlass;
   exp:=Fpreview.Exposure;
   bin:=Fpreview.Bin;
-  gain:=Fpreview.Gain;
-  offset:=Fpreview.Offset;
+  gain:=DefaultGain;
+  offset:=DefaultOffset;
   FAstrometry.Camera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeAstrometry,gain,offset);
   screen.Cursor:=crHourGlass;
   FAstrometry.SolveCurrentImage(true);

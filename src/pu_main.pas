@@ -711,7 +711,7 @@ type
     AccelList: array[0..MaxMenulevel] of string;
     SaveAutofocusBinning: string;
     SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH,SaveAutofocusBX,SaveAutofocusBY: integer;
-    SaveAutofocusGain, SaveAutofocusOffset, SaveAutofocusPreviewGain, SaveAutofocusPreviewOffset,SaveAutofocusFilter: integer;
+    SaveAutofocusFilter: integer;
     SaveAutofocusExposure,SaveGuiderAutofocusExposure: double;
     SaveGuiderAutofocusGain, SaveGuiderAutofocusOffset: integer;
     ScrBmp,ScrGuideBmp,ScrFinderBmp: TBGRABitmap;
@@ -3826,6 +3826,10 @@ try
     end;
     if msg<>'' then MessageDlg(caption,msg,mtWarning,[mbOK],0);
   end;
+  if oldver<'0.9.96' then begin
+     msg:='Please review the gain/offset settings,'+crlf+'now in Preferences/Camera';
+     MessageDlg(caption,msg,mtWarning,[mbOK],0);
+  end;
   if config.Modified then begin
      config.SetValue('/Configuration/Version',ccdcielver);
      SaveConfig;
@@ -4335,7 +4339,7 @@ begin
   if f_finder.PanelGain.Visible then begin
     f_finder.Gain.MinValue:=findercamera.GainMin;
     f_finder.Gain.MaxValue:=findercamera.GainMax;
-    f_finder.Gain.Value:=config.GetValue('/PrecSlew/Gain',0);
+    f_finder.Gain.Value:=config.GetValue('/Finder/Gain',0);
     if (f_finder.Gain.Value=0) then f_finder.Gain.Value:=findercamera.Gain;
   end;
   findercamera.CheckOffset;
@@ -4343,7 +4347,7 @@ begin
   if  f_finder.PanelOffset.Visible then begin
     f_finder.Offset.MinValue:=findercamera.OffsetMin;
     f_finder.Offset.MaxValue:=findercamera.OffsetMax;
-    f_finder.Offset.Value:=config.GetValue('/PrecSlew/Offset',0);
+    f_finder.Offset.Value:=config.GetValue('/Finder/Offset',0);
     if (f_finder.Offset.Value=0) then f_finder.Offset.Value:=findercamera.Offset;
   end;
   f_finder.PanelTemperature.Visible:=findercamera.Temperature<>NullCoord;
@@ -4515,7 +4519,7 @@ if f_pause.Wait then begin
   fits.DarkOn:=false;
   fits.DisableBayer:=true;
   try
-  if camera.ControlExposure(f_preview.Exposure,bin,bin,DARK,ReadoutModeCapture,f_preview.Gain,f_preview.Offset) then begin
+  if camera.ControlExposure(f_preview.Exposure,bin,bin,DARK,ReadoutModeCapture,DefaultGain,DefaultOffset) then begin
     CreateBPM(fits);
   end
   else
@@ -4639,9 +4643,9 @@ begin
   fits.SetBPM(bpm,0,0,0,0);
   fits.DarkOn:=false;
   f_dark.camera:=camera;
-  f_dark.Gain:=f_preview.Gain;
-  f_dark.Offset:=f_preview.Offset;
   f_dark.Binning:=f_preview.Bin;
+  f_dark.Gain:=DefaultGain;
+  f_dark.Offset:=DefaultOffset;
   f_dark.filename:=ConfigDarkFile;
   FormPos(f_dark,mouse.CursorPos.X,mouse.CursorPos.Y);
   f_dark.ShowModal;
@@ -4721,7 +4725,7 @@ begin
      fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
      fits.DarkOn:=true;
      fits.FlatOn:=false;
-     if camera.ControlExposure(f_preview.Exposure,bin,bin,FLAT,ReadoutModeCapture,f_preview.Gain,f_preview.Offset) then begin
+     if camera.ControlExposure(f_preview.Exposure,bin,bin,FLAT,ReadoutModeCapture,DefaultGain,DefaultOffset) then begin
        fits.SaveToFile(ConfigFlatFile);
        fits.LoadFlat(ConfigFlatFile);
      end
@@ -5097,6 +5101,8 @@ begin
   f_frame.PanelRoi.Visible:=(n>0);
   LastROIname:=config.GetValue('/Sensor/ROI/ROIname','');
   MaxADU:=config.GetValue('/Sensor/MaxADU',MAXWORD);
+  defaultGain:=config.GetValue('/Gain/Gain',NullInt);
+  defaultOffset:=config.GetValue('/Offset/Offset',NullInt);
   DisplayCapture:=config.GetValue('/Visu/DisplayCapture',DisplayCapture);
   ok:=f_visu.PanelNoDisplay.Visible<>(not DisplayCapture);
   f_visu.PanelNoDisplay.Visible:=not DisplayCapture;
@@ -5398,8 +5404,10 @@ begin
   f_finder.Binning.Value:=config.GetValue('/PrecSlew/Binning',1);
   f_finder.ShowCalibration;
   f_finder.PreviewExp.Value:=config.GetValue('/PrecSlew/Exposure',10.0);
-  f_finder.Gain.Value:=config.GetValue('/PrecSlew/Gain',0);
-  f_finder.Offset.Value:=config.GetValue('/PrecSlew/Offset',0);
+  if findercamera.Status=devDisconnected then begin
+    f_finder.Gain.Value:=config.GetValue('/Finder/Gain',0);
+    f_finder.Offset.Value:=config.GetValue('/Finder/Offset',0);
+  end;
   x:=config.GetValue('/Finder/Visu/Gamma',0.5);
   if x>1 then x:=0.5;
   f_finder.visu.Gamma.Value:=x;
@@ -5605,9 +5613,6 @@ begin
     f_option.ReadOutPreview.Items.Assign(ReadoutList);
     f_option.ReadOutFocus.Items.Assign(ReadoutList);
     f_option.ReadOutAstrometry.Items.Assign(ReadoutList);
-
-    defaultGain:=config.GetValue('/Gain/Gain',100);
-    defaultOffset:=config.GetValue('/Offset/Offset',10);
   end;
   if (planetarium.PlanetariumType<>TPlanetariumType(config.GetValue('/Planetarium/Software',ord(plaNONE)))) and (not planetarium.Connected) then begin
      try
@@ -5691,12 +5696,6 @@ begin
         MenuTabVideo.Visible:=false;
       end;
     end;
-  end;
-  if (camera.Status=devDisconnected) then begin
-    f_preview.Gain:=config.GetValue('/Preview/Gain',0);
-    f_capture.Gain:=config.GetValue('/Capture/Gain',0);
-    f_preview.Offset:=config.GetValue('/Preview/Offset',0);
-    f_capture.Offset:=config.GetValue('/Capture/Offset',0);
   end;
   SetGuiderCamera;
   SetFinderCamera;
@@ -5874,23 +5873,11 @@ begin
    config.SetValue('/Temperature/Setpoint',f_ccdtemp.Setpoint.Value);
    config.SetValue('/Preview/Exposure',f_preview.ExpTime.Text);
    config.SetValue('/Preview/Binning',f_preview.Binning.Text);
-   if f_preview.ISObox.Visible then
-     config.SetValue('/Preview/Gain',f_preview.ISObox.Text)
-   else
-     config.SetValue('/Preview/Gain',f_preview.GainEdit.Value);
    config.SetValue('/Capture/Exposure',f_capture.ExpTime.Text);
    config.SetValue('/Capture/StackNum',f_capture.StackNum.Value);
    config.SetValue('/Capture/Binning',f_capture.Binning.Text);
    config.SetValue('/Capture/FileName',f_capture.Fname.Text);
    config.SetValue('/Capture/Count',f_capture.SeqNum.Value);
-   if f_capture.ISObox.Visible then
-     config.SetValue('/Capture/Gain',f_capture.ISObox.Text)
-   else
-     config.SetValue('/Capture/Gain',f_capture.GainEdit.Value);
-   if camera.hasOffset then begin
-     config.SetValue('/Preview/Offset',f_preview.OffsetEdit.Value);
-     config.SetValue('/Capture/Offset',f_capture.OffsetEdit.Value);
-   end;
 
    config.SetValue('/CCDframe/FrameX',FrameX);
    config.SetValue('/CCDframe/FrameY',FrameY);
@@ -6765,127 +6752,33 @@ end;
 procedure Tf_main.ShowGain;
 begin
  camera.CheckGain;
- DefaultGain:=camera.Gain;
+ if DefaultGain=NullInt then DefaultGain:=camera.Gain;
  camera.CheckOffset;
- DefaultOffset:=camera.Offset;
+ if DefaultOffset=NullInt then DefaultOffset:=camera.Offset;
  SetGainList;
 end;
 
 procedure Tf_main.SetGainList;
-var gainprev,gaincapt,offsetprev,offsetcapt:string;
-    i,posprev,poscapt,poffprev,poffcapt:integer;
 begin
  if debug_msg then NewMessage('Camera gain:'+BoolToStr(camera.hasGain,rsTrue,rsFalse)+' iso:'+BoolToStr(camera.hasGainISO,rsTrue,rsFalse));
- gainprev:=config.GetValue('/Preview/Gain','');
- gaincapt:=config.GetValue('/Capture/Gain','');
- offsetprev:=config.GetValue('/Preview/Offset','');
- offsetcapt:=config.GetValue('/Capture/Offset','');
- if (gainprev='0') and (gaincapt='0') then begin
-   // previous version with no gain settings, reset to camera default
-   gainprev:='';
-   gaincapt:='';
-   offsetprev:='';
-   offsetcapt:='';
- end;
- posprev:=DefaultGain;
- poscapt:=DefaultGain;
- poffprev:=DefaultOffset;
- poffcapt:=DefaultOffset;
- f_capture.PanelGain.Visible:=(camera.hasGain or camera.hasGainISO);
- f_capture.PanelOffset.Visible:=f_capture.PanelGain.Visible and camera.hasOffset;
- f_preview.PanelGain.Visible:=f_capture.PanelGain.Visible;
- f_preview.PanelOffset.Visible:=f_capture.PanelOffset.Visible;
- f_EditTargets.PanelGain.Visible:=f_capture.PanelGain.Visible;
- f_EditTargets.StepList.Columns[pcolgain-1].Visible:=f_capture.PanelGain.Visible;
- f_EditTargets.StepList.Columns[pcoloffset-1].Visible:=f_capture.PanelOffset.Visible;
- f_option.AutofocusPanelGain.Visible:=f_capture.PanelGain.Visible;
- f_option.AutofocusPanelOffset.Visible:=f_capture.PanelOffset.Visible;
- f_option.SlewPanelGain.Visible:=f_capture.PanelGain.Visible;
- f_option.SlewPanelOffset.Visible:=f_capture.PanelOffset.Visible;
+ f_option.PanelGain.Visible:=(camera.hasGain or camera.hasGainISO);
+ f_option.PanelOffset.Visible:=f_option.PanelGain.Visible and camera.hasOffset;
  if camera.hasGainISO then begin
-   f_capture.ISObox.Visible:=true;
-   f_capture.GainEdit.Visible:=false;
-   f_capture.ISObox.Items.Assign(camera.ISOList);
-   f_preview.ISObox.Visible:=true;
-   f_preview.GainEdit.Visible:=false;
-   f_preview.ISObox.Items.Assign(camera.ISOList);
-   f_EditTargets.FISObox.Items.Assign(camera.ISOList);
-   f_EditTargets.FISObox.Visible:=true;
-   f_EditTargets.FGainEdit.Visible:=false;
-   f_EditTargets.StepList.Columns[pcolgain-1].PickList.Assign(camera.ISOList);
-   f_option.AutofocusISObox.Visible:=true;
-   f_option.AutofocusGainEdit.Visible:=false;
-   f_option.AutofocusISObox.Items.Assign(camera.ISOList);
-   f_option.SlewISObox.Visible:=true;
-   f_option.SlewGainEdit.Visible:=false;
-   f_option.SlewISObox.Items.Assign(camera.ISOList);
-   for i:=0 to camera.ISOList.Count-1 do begin;
-      if camera.ISOList[i]=gainprev then posprev:=i;
-      if camera.ISOList[i]=gaincapt then poscapt:=i;
-   end;
-   f_capture.ISObox.ItemIndex:=poscapt;
-   f_preview.ISObox.ItemIndex:=posprev;
-   f_EditTargets.FISObox.ItemIndex:=poscapt;
-   f_option.AutofocusISObox.ItemIndex:=posprev;
-   f_option.SlewISObox.ItemIndex:=posprev;
+   f_option.ISObox.Visible:=true;
+   f_option.GainEdit.Visible:=false;
+   f_option.ISObox.Items.Assign(camera.ISOList);
  end;
  if camera.hasGain and (not camera.hasGainISO) then begin
-   f_capture.ISObox.Visible:=false;
-   f_capture.GainEdit.Visible:=true;
-   f_capture.GainEdit.MinValue:=camera.GainMin;
-   f_capture.GainEdit.MaxValue:=camera.GainMax;
-   f_capture.GainEdit.Hint:=IntToStr(camera.GainMin)+ellipsis+IntToStr(camera.GainMax);
-   f_preview.ISObox.Visible:=false;
-   f_preview.GainEdit.Visible:=true;
-   f_preview.GainEdit.MinValue:=camera.GainMin;
-   f_preview.GainEdit.MaxValue:=camera.GainMax;
-   f_preview.GainEdit.Hint:=IntToStr(camera.GainMin)+ellipsis+IntToStr(camera.GainMax);
-   f_EditTargets.FISObox.Visible:=false;
-   f_EditTargets.FGainEdit.Visible:=true;
-   f_EditTargets.FGainEdit.MinValue:=camera.GainMin;
-   f_EditTargets.FGainEdit.MaxValue:=camera.GainMax;
-   f_EditTargets.FGainEdit.Hint:=IntToStr(camera.GainMin)+ellipsis+IntToStr(camera.GainMax);
-   f_option.AutofocusISObox.Visible:=false;
-   f_option.AutofocusGainEdit.Visible:=true;
-   f_option.AutofocusGainEdit.MinValue:=camera.GainMin;
-   f_option.AutofocusGainEdit.MaxValue:=camera.GainMax;
-   f_option.AutofocusGainEdit.Hint:=IntToStr(camera.GainMin)+ellipsis+IntToStr(camera.GainMax);
-   f_option.SlewISObox.Visible:=false;
-   f_option.SlewGainEdit.Visible:=true;
-   f_option.SlewGainEdit.MinValue:=camera.GainMin;
-   f_option.SlewGainEdit.MaxValue:=camera.GainMax;
-   f_option.SlewGainEdit.Hint:=IntToStr(camera.GainMin)+ellipsis+IntToStr(camera.GainMax);
-   posprev:=StrToIntDef(gainprev,DefaultGain);
-   poscapt:=StrToIntDef(gaincapt,DefaultGain);
-   f_capture.GainEdit.Value:=poscapt;
-   f_preview.GainEdit.Value:=posprev;
-   f_EditTargets.FGainEdit.Value:=poscapt;
-   f_option.AutofocusGainEdit.Value:=posprev;
-   f_option.SlewGainEdit.Value:=posprev;
+   f_option.ISObox.Visible:=false;
+   f_option.GainEdit.Visible:=true;
+   f_option.GainEdit.MinValue:=camera.GainMin;
+   f_option.GainEdit.MaxValue:=camera.GainMax;
+   f_option.GainEdit.Hint:=IntToStr(camera.GainMin)+ellipsis+IntToStr(camera.GainMax);
  end;
  if camera.hasOffset then begin
-   f_preview.OffsetEdit.MinValue:=camera.OffsetMin;
-   f_preview.OffsetEdit.MaxValue:=camera.OffsetMax;
-   f_preview.OffsetEdit.Hint:=IntToStr(camera.OffsetMin)+ellipsis+IntToStr(camera.OffsetMax);
-   f_capture.OffsetEdit.MinValue:=camera.OffsetMin;
-   f_capture.OffsetEdit.MaxValue:=camera.OffsetMax;
-   f_capture.OffsetEdit.Hint:=IntToStr(camera.OffsetMin)+ellipsis+IntToStr(camera.OffsetMax);
-   f_EditTargets.FOffsetEdit.MinValue:=camera.OffsetMin;
-   f_EditTargets.FOffsetEdit.MaxValue:=camera.OffsetMax;
-   f_EditTargets.FOffsetEdit.Hint:=IntToStr(camera.OffsetMin)+ellipsis+IntToStr(camera.OffsetMax);
-   f_option.AutofocusOffsetEdit.MinValue:=camera.OffsetMin;
-   f_option.AutofocusOffsetEdit.MaxValue:=camera.OffsetMax;
-   f_option.AutofocusOffsetEdit.Hint:=IntToStr(camera.OffsetMin)+ellipsis+IntToStr(camera.OffsetMax);
-   f_option.SlewOffsetEdit.MinValue:=camera.OffsetMin;
-   f_option.SlewOffsetEdit.MaxValue:=camera.OffsetMax;
-   f_option.SlewOffsetEdit.Hint:=IntToStr(camera.OffsetMin)+ellipsis+IntToStr(camera.OffsetMax);
-   poffprev:=StrToIntDef(offsetprev,DefaultOffset);
-   poffcapt:=StrToIntDef(offsetcapt,DefaultOffset);
-   f_preview.OffsetEdit.Value:=poffprev;
-   f_capture.OffsetEdit.Value:=poffcapt;
-   f_EditTargets.FOffsetEdit.Value:=poffcapt;
-   f_option.AutofocusOffsetEdit.Value:=poffprev;
-   f_option.SlewOffsetEdit.Value:=poffprev;
+   f_option.OffsetEdit.MinValue:=camera.OffsetMin;
+   f_option.OffsetEdit.MaxValue:=camera.OffsetMax;
+   f_option.OffsetEdit.Hint:=IntToStr(camera.OffsetMin)+ellipsis+IntToStr(camera.OffsetMax);
  end;
 end;
 
@@ -9762,11 +9655,6 @@ begin
      f_option.GuiderAutofocus.checked:=false;
    end;
    f_option.AutofocusExp:=config.GetValue('/StarAnalysis/AutofocusExposure',AutofocusExposure);
-   if f_option.AutofocusISObox.Visible then
-     f_option.AutofocusISObox.ItemIndex:=config.GetValue('/StarAnalysis/AutofocusGain',AutofocusGain)
-   else
-     f_option.AutofocusGainEdit.Value:=config.GetValue('/StarAnalysis/AutofocusGain',AutofocusGain);
-   f_option.AutofocusOffsetEdit.Value:=config.GetValue('/StarAnalysis/AutofocusOffset',AutofocusOffset);
    f_option.AutofocusBinning.Value:=config.GetValue('/StarAnalysis/AutofocusBinning',AutofocusBinning);
 
    f_option.cbAutofocusFilter.Items.Assign(FilterList);
@@ -9832,6 +9720,17 @@ begin
    f_option.cbSoftBinning.Checked:=config.GetValue('/Sensor/SoftBinning',false);
    f_option.MaxAdu.Value:=config.GetValue('/Sensor/MaxADU',MAXWORD);
    f_option.MaxAduFromCamera.Checked:=config.GetValue('/Sensor/MaxADUFromCamera',true);
+   f_option.PanelGain.Visible:=((camera.Status=devDisconnected) or camera.hasGain or camera.hasGainISO);
+   f_option.PanelOffset.Visible:=(camera.Status=devDisconnected) or (f_option.PanelGain.Visible and camera.hasOffset);
+   i:=config.GetValue('/Gain/Gain',DefaultGain);
+   if i=NullInt then i:=DefaultGain;
+   if f_option.ISObox.Visible then
+     f_option.ISObox.ItemIndex:=i
+   else
+     f_option.GainEdit.Value:=i;
+   i:=config.GetValue('/Offset/Offset',DefaultOffset);
+   if i=NullInt then i:=DefaultOffset;
+   f_option.OffsetEdit.Value:=i;
    f_option.NotDisplayCapture.Checked:=not config.GetValue('/Visu/DisplayCapture',DisplayCapture);
    f_option.LowQualityDisplay.Checked:=config.GetValue('/Visu/LowQualityDisplay',LowQualityDisplay);
    f_option.ExpEarlyStart.Checked:=config.GetValue('/Sensor/ExpEarlyStart',ConfigExpEarlyStart);
@@ -9900,11 +9799,6 @@ begin
    f_option.PanelFinder.Visible:=f_option.AstrometryCamera.ItemIndex=1;
    if f_option.FocaleFromDriver.Checked then
       OptionGetFocaleLength(f_option);
-   if f_option.SlewISObox.Visible then
-     f_option.SlewISObox.ItemIndex:=config.GetValue('/PrecSlew/Gain',f_preview.ISObox.ItemIndex)
-   else
-     f_option.SlewGainEdit.Value:=config.GetValue('/PrecSlew/Gain',DefaultGain);
-   f_option.SlewOffsetEdit.Value:=config.GetValue('/PrecSlew/Offset',DefaultOffset);
    f_option.SlewBin.Value:=config.GetValue('/PrecSlew/Binning',1);
    if (camera.Status=devConnected)and(camera.BinXrange<>NullRange) then
        f_option.SlewBin.MaxValue:=round(camera.BinXrange.max)
@@ -10173,11 +10067,6 @@ begin
      else
        config.SetValue('/StarAnalysis/GuiderAutofocus',false);
      config.SetValue('/StarAnalysis/AutofocusExposure',f_option.AutofocusExp);
-     if f_option.AutofocusISObox.Visible then
-       config.SetValue('/StarAnalysis/AutofocusGain',f_option.AutofocusISObox.ItemIndex)
-     else
-       config.SetValue('/StarAnalysis/AutofocusGain',f_option.AutofocusGainEdit.Value);
-     config.SetValue('/StarAnalysis/AutofocusOffset',f_option.AutofocusOffsetEdit.Value);
      config.SetValue('/StarAnalysis/AutofocusBinning',f_option.AutofocusBinning.Value);
 
      config.SetValue('/StarAnalysis/AutofocusFilter',f_option.cbAutofocusFilter.ItemIndex);
@@ -10322,6 +10211,11 @@ begin
      config.SetValue('/Sensor/MaxADUFromCamera',f_option.MaxAduFromCamera.Checked);
      config.SetValue('/Sensor/MaxADU',f_option.MaxAdu.Value);
      config.SetValue('/Sensor/ExpEarlyStart',f_option.ExpEarlyStart.Checked);
+     if f_option.ISObox.Visible then
+       config.SetValue('/Gain/Gain',f_option.ISObox.ItemIndex)
+     else
+       config.SetValue('/Gain/Gain',f_option.GainEdit.Value);
+     config.SetValue('/Offset/Offset',f_option.OffsetEdit.Value);
      config.SetValue('/Visu/DisplayCapture',not f_option.NotDisplayCapture.Checked);
      config.SetValue('/Visu/LowQualityDisplay',f_option.LowQualityDisplay.Checked);
      config.SetValue('/Files/MeasureNewImage',f_option.MeasureNewImage.Checked);
@@ -10362,11 +10256,6 @@ begin
      config.SetValue('/PrecSlew/BrightStarOffset',(i=1) and f_option.cbBrightStarOffset.Checked);
      config.SetValue('/PrecSlew/BrightStarMagnitude',f_option.BrightStarMagn.Value);
      config.SetValue('/PrecSlew/BrightStarOffsetValue',f_option.BrightStarOffset.Value);
-     if f_option.SlewISObox.Visible then
-       config.SetValue('/PrecSlew/Gain',f_option.SlewISObox.ItemIndex)
-     else
-       config.SetValue('/PrecSlew/Gain',f_option.SlewGainEdit.Value);
-     config.SetValue('/PrecSlew/Offset',f_option.SlewOffsetEdit.Value);
      config.SetValue('/PrecSlew/Binning',f_option.SlewBin.Value);
      config.SetValue('/PrecSlew/Delay',f_option.SlewDelay.Value);
      config.SetValue('/PrecSlew/Filter',f_option.SlewFilter.ItemIndex);
@@ -11025,11 +10914,11 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
       else NewMessage(rsInvalid+blank+rsFStop+blank+f_preview.Fnumber.Text, 0);
     end;
   end;
-  if camera.Gain<>f_preview.Gain then begin
-    camera.Gain:=f_preview.Gain;
+  if camera.Gain<>DefaultGain then begin
+    camera.Gain:=DefaultGain;
   end;
   if camera.hasOffset then begin
-     if camera.Offset<>f_preview.Offset then camera.Offset:=f_preview.Offset;
+     if camera.Offset<>DefaultOffset then camera.Offset:=DefaultOffset;
   end;
   if camera.FrameType<>LIGHT then camera.FrameType:=LIGHT;
   camera.ObjectName:=rsPreview;
@@ -11727,11 +11616,11 @@ if (camera.Status=devConnected)and(not autofocusing) then begin
     end;
   end;
   // check and set gain
-  if camera.Gain<>f_capture.Gain then begin
-    camera.Gain:=f_capture.Gain;
+  if camera.Gain<>DefaultGain then begin
+    camera.Gain:=DefaultGain;
   end;
   if camera.hasOffset then begin
-     if camera.Offset<>f_capture.Offset then camera.Offset:=f_capture.Offset;
+     if camera.Offset<>DefaultOffset then camera.Offset:=DefaultOffset;
   end;
   // check and set frame
   if camera.FrameType<>ftype then camera.FrameType:=ftype;
@@ -13701,38 +13590,16 @@ begin
     f_focusercalibration.spExp.Value:=f_internalguider.Exposure.Value;
     f_focusercalibration.spBin.Value:=f_internalguider.CameraBinning;
     guidecamera.SoftBinning:=f_internalguider.SoftBinning;
-    if guidecamera.hasGain then begin
-      f_focusercalibration.PanelGain.Visible:=true;
-      f_focusercalibration.spGain.Value:=f_internalguider.Gain.Value;
-      if guidecamera.hasOffset then begin
-        f_focusercalibration.PanelOffset.Visible:=true;
-        f_focusercalibration.spOffset.Value:=f_internalguider.Offset.Value;
-      end
-      else begin
-        f_focusercalibration.PanelOffset.Visible:=false;
-      end;
-    end
-    else
-      f_focusercalibration.PanelGain.Visible:=false;
+    f_focusercalibration.Gain:=f_internalguider.Gain.Value;
+    f_focusercalibration.Offset:=f_internalguider.Offset.Value;
   end
   else begin
     f_focusercalibration.camera:=camera;
     f_focusercalibration.Label4.Caption:=Format(rsFocuserCalib2,[rsMainCamera]);
     f_focusercalibration.spExp.Value:=f_preview.Exposure;
     f_focusercalibration.spBin.Value:=f_preview.Bin;
-    if camera.hasGain then begin
-      f_focusercalibration.PanelGain.Visible:=true;
-      f_focusercalibration.spGain.Value:=f_preview.Gain;
-      if camera.hasOffset then begin
-        f_focusercalibration.PanelOffset.Visible:=true;
-        f_focusercalibration.spOffset.Value:=f_preview.Offset;
-      end
-      else begin
-        f_focusercalibration.PanelOffset.Visible:=false;
-      end;
-    end
-    else
-      f_focusercalibration.PanelGain.Visible:=false;
+    f_focusercalibration.Gain:=DefaultGain;
+    f_focusercalibration.Offset:=DefaultOffset;
   end;
   SelectTab(TBFocus);
   formpos(f_focusercalibration,mouse.CursorPos.x,mouse.CursorPos.y);
@@ -14252,11 +14119,6 @@ begin
   SaveAutofocusBinning:=f_preview.Binning.Text;
   SaveAutofocusBX:=camera.BinX;
   SaveAutofocusBY:=camera.BinY;
-  SaveAutofocusPreviewGain:=f_preview.Gain;
-  SaveAutofocusPreviewOffset:=f_preview.Offset;
-  SaveAutofocusGain:=camera.Gain;
-  SaveAutofocusOffset:=camera.Offset;
-  SaveAutofocusFilter:=wheel.Filter;
   camera.GetFrame(SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH);
   if (camera.Status<>devConnected)or(focuser.Status<>devConnected) then begin
    NewMessage(rsCameraOrFocu,1);
@@ -14292,8 +14154,6 @@ begin
   // start a new exposure as the current frame is probably not a preview
   f_preview.CheckBoxAstrometry.Checked:=false;
   f_preview.Exposure:=AutofocusExposure*AutofocusExposureFact;
-  f_preview.Gain:=AutofocusGain;
-  f_preview.Offset:=AutofocusOffset;
   f_preview.Binning.Text:=inttostr(AutofocusBinning)+'x'+inttostr(AutofocusBinning);
   SetBinning(AutofocusBinning,AutofocusBinning);
   if AutofocusMultiStarCenter then begin  // reduce search area to image center
@@ -14454,10 +14314,6 @@ begin
    camera.SetFrame(SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH);
    f_visu.Zoom:=SaveFocusZoom;
    f_preview.Exposure:=SaveAutofocusExposure;
-   f_preview.Gain:=SaveAutofocusPreviewGain;
-   f_preview.Offset:=SaveAutofocusPreviewOffset;
-   camera.Gain:=SaveAutofocusGain;
-   camera.Offset:=SaveAutofocusOffset;
    if (AutofocusFilter>0)and(wheel.Status=devConnected) then begin
      wheel.Filter:=SaveAutofocusFilter;
    end;
@@ -19081,9 +18937,9 @@ const
           result:=false;
           ok:=false;
           case ncam of
-             0: ok:=camera.ControlExposure(f_preview.Exposure,f_preview.Bin,f_preview.Bin,LIGHT,ReadoutModeAstrometry,f_preview.Gain,f_preview.Offset) ;
+             0: ok:=camera.ControlExposure(f_preview.Exposure,f_preview.Bin,f_preview.Bin,LIGHT,ReadoutModeAstrometry,DefaultGain,DefaultOffset) ;
              1: ok:=guidecamera.ControlExposure(f_internalguider.Exposure.Value,f_internalguider.CameraBinning,f_internalguider.CameraBinning,LIGHT,ReadoutModeCapture,f_internalguider.Gain.Value,f_internalguider.Offset.Value) ;
-             2: ok:=findercamera.ControlExposure(config.GetValue('/PrecSlew/Exposure',10.0),config.GetValue('/PrecSlew/Binning',1),config.GetValue('/PrecSlew/Binning',1),LIGHT,ReadoutModeCapture,config.GetValue('/PrecSlew/Gain',NullInt),config.GetValue('/PrecSlew/Offset',NullInt)) ;
+             2: ok:=findercamera.ControlExposure(f_finder.PreviewExp.Value,f_finder.Binning.Value,f_finder.Binning.Value,LIGHT,ReadoutModeCapture,f_finder.Gain.Value,f_finder.Offset.Value) ;
           end;
           if ok then
           begin

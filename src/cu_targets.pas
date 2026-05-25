@@ -681,8 +681,6 @@ begin
           if p.exposure>=0 then Fcapture.ExposureTime:=p.exposure;
           Fcapture.StackNum.Value:=p.stackcount;
           Fcapture.Binning.Text:=p.binning_str;
-          Fcapture.Gain:=p.gain;
-          Fcapture.Offset:=p.offset;
           if p.fstop<>'' then Fcapture.Fnumber.Text:=p.fstop;
           Fcapture.SeqNum.Value:=p.count;
           Fcapture.SeqCount:=CurrentDoneCount+1;
@@ -932,10 +930,6 @@ begin
               s.binx:=1;
               s.biny:=1;
             end;
-            str:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Gain','');
-            s.gain:=StrToIntDef(str,DefaultGain);
-            str:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Offset','');
-            s.offset:=StrToIntDef(str,DefaultOffset);
             s.fstop:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Fstop','');
             str:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Filter','');
             FOriginalFilter[i]:=str;
@@ -1094,8 +1088,6 @@ try
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/RefExposure',p.Steps[j-1].refexposure);
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/StackCount',p.Steps[j-1].stackcount);
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Binning',IntToStr(p.Steps[j-1].binx)+'x'+IntToStr(p.Steps[j-1].biny));
-          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Gain',p.Steps[j-1].gain);
-          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Offset',p.Steps[j-1].offset);
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Fstop',p.Steps[j-1].fstop);
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Filter',p.Steps[j-1].filter_str);
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Count',p.Steps[j-1].count);
@@ -1138,15 +1130,6 @@ begin
      n:=pfile.GetValue('/StepNum',0);
      msgstr:='';
      for i:=1 to n do begin
-        buf1:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Gain','');
-        buf2:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Offset','');
-        if (buf1='')or(buf2='') then
-          msgstr:=rsPlan+blank+plan+': '+rsPleaseBeCare;
-     end;
-     if msgstr<>'' then
-        msg(msgstr,1);
-     msgstr:='';
-     for i:=1 to n do begin
        s:=TStep.Create;
        str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Description','');
        s.description:=str;
@@ -1166,10 +1149,6 @@ begin
          s.binx:=1;
          s.biny:=1;
        end;
-       str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Gain','');
-       s.gain:=StrToIntDef(str,DefaultGain);
-       str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Offset','');
-       s.offset:=StrToIntDef(str,DefaultOffset);
        str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Filter','');
        if i<SaveFilterNum then FOriginalFilter[i]:=str;
        j:=FFilterList.IndexOf(str);
@@ -2860,8 +2839,6 @@ begin
       fls.filter:=FilterList.IndexOf(flfilter[i]);
       fls.binx:=flt.FlatBinX;
       fls.biny:=flt.FlatBinY;
-      fls.gain:=flt.FlatGain;
-      fls.offset:=flt.FlatOffset;
       fls.fstop:=flt.FlatFstop;
       fls.count:=flt.FlatCount;
       fls.exposure:=FlatMinExp;
@@ -3121,7 +3098,6 @@ function T_Targets.Slew(ra,de,magn: double; precision,planprecision: boolean):bo
 var err: double;
     errtxt: string;
     prec,exp,brmagn,broffset:double;
-    sgain,soffset: integer;
     fi,cormethod,bin,maxretry,delay: integer;
     br: boolean;
 begin
@@ -3145,15 +3121,13 @@ begin
     cormethod:=config.GetValue('/PrecSlew/Method',1);
     maxretry:=config.GetValue('/PrecSlew/Retry',3);
     exp:=config.GetValue('/PrecSlew/Exposure',10.0);
-    sgain:=config.GetValue('/PrecSlew/Gain',NullInt);
-    soffset:=config.GetValue('/PrecSlew/Offset',NullInt);
     bin:=config.GetValue('/PrecSlew/Binning',1);
     fi:=config.GetValue('/PrecSlew/Filter',0);
     br:=SlewingAvoidBrightStar;
     broffset:=SlewingBrightStarOffset;
     brmagn:=SlewingBrightStarMagn;
     br:=br and (magn<>NullCoord) and (magn<=brmagn);
-    result:=astrometry.PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,sgain,soffset,br,broffset,err);
+    result:=astrometry.PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,br,broffset,err);
     if result then begin
       FTargetCoord:=true;
       FTargetRA:=ra;
@@ -3650,8 +3624,6 @@ begin
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Autofocus',false)<>p.Steps[i-1].autofocus then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusCount',10)<>p.Steps[i-1].autofocuscount then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Binning','1x1')<>IntToStr(p.Steps[i-1].binx)+'x'+IntToStr(p.Steps[i-1].biny) then exit;
-     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Gain',DefaultGain)<>p.Steps[i-1].gain then exit;
-     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Offset',DefaultOffset)<>p.Steps[i-1].offset then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/FrameType','Light')<>p.Steps[i-1].frtype_str then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Fstop','')<>p.Steps[i-1].fstop then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Description','')<>p.Steps[i-1].description then exit;

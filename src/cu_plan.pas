@@ -284,8 +284,6 @@ begin
         else
           Fcapture.StackNum.Value:=1;
         Fcapture.Binning.Text:=p.binning_str;
-        Fcapture.Gain:=p.gain;
-        Fcapture.Offset:=p.offset;
         if p.fstop<>'' then Fcapture.Fnumber.Text:=p.fstop;
         Fcapture.SeqNum.Value:=p.count;
         Fcapture.SeqCount:=CurrentDoneCount+1;

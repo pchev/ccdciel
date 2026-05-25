@@ -113,7 +113,7 @@ object f_dark: Tf_dark
     Left = 8
     Height = 22
     Top = 4
-    Width = 251
+    Width = 255
     Caption = 'Multiple dark with different exposure'
     Checked = True
     OnChange = cbMultiExpChange

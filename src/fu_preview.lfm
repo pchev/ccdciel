@@ -74,91 +74,10 @@ object f_preview: Tf_preview
         ParentFont = False
       end
     end
-    object PanelGain: TPanel
-      Left = 0
-      Height = 64
-      Top = 28
-      Width = 191
-      BevelOuter = bvNone
-      ClientHeight = 64
-      ClientWidth = 191
-      ParentFont = False
-      TabOrder = 4
-      object ISObox: TComboBox
-        Left = 100
-        Height = 32
-        Hint = 'Exposure time in seconds'
-        Top = 0
-        Width = 91
-        ItemHeight = 18
-        ParentFont = False
-        Style = csDropDownList
-        TabOrder = 0
-        Visible = False
-      end
-      object LabelGain: TLabel
-        AnchorSideTop.Control = GainEdit
-        AnchorSideTop.Side = asrCenter
-        Left = 6
-        Height = 18
-        Top = 7
-        Width = 29
-        Caption = 'Gain'
-        ParentColor = False
-        ParentFont = False
-      end
-      object GainEdit: TSpinEditEx
-        Left = 100
-        Height = 32
-        Top = 0
-        Width = 90
-        MaxLength = 0
-        ParentFont = False
-        TabOrder = 1
-        MaxValue = 32767
-        MinValue = -32768
-        NullValue = 0
-        Value = 0
-      end
-      object PanelOffset: TPanel
-        AnchorSideTop.Control = GainEdit
-        AnchorSideTop.Side = asrBottom
-        Left = 0
-        Height = 32
-        Top = 32
-        Width = 190
-        BevelOuter = bvNone
-        ClientHeight = 32
-        ClientWidth = 190
-        TabOrder = 2
-        object LabelOffset: TLabel
-          AnchorSideTop.Control = OffsetEdit
-          AnchorSideTop.Side = asrCenter
-          Left = 6
-          Height = 18
-          Top = 7
-          Width = 38
-          Caption = 'Offset'
-          ParentColor = False
-        end
-        object OffsetEdit: TSpinEditEx
-          Left = 100
-          Height = 32
-          Top = 0
-          Width = 90
-          MaxLength = 0
-          TabOrder = 0
-          MaxValue = 32767
-          MinValue = -32768
-          NullValue = 0
-          Value = 0
-        end
-      end
-    end
     object Panel3: TPanel
       Left = 0
       Height = 28
-      Top = 92
+      Top = 28
       Width = 191
       BevelOuter = bvNone
       ClientHeight = 28
@@ -195,13 +114,13 @@ object f_preview: Tf_preview
     object PanelFnumber: TPanel
       Left = 0
       Height = 30
-      Top = 120
+      Top = 56
       Width = 191
       BevelOuter = bvNone
       ClientHeight = 30
       ClientWidth = 191
       ParentFont = False
-      TabOrder = 5
+      TabOrder = 4
       Visible = False
       object Label3: TLabel
         AnchorSideTop.Control = Fnumber
@@ -228,7 +147,7 @@ object f_preview: Tf_preview
     object Panel5: TPanel
       Left = 0
       Height = 26
-      Top = 150
+      Top = 86
       Width = 191
       BevelOuter = bvNone
       ClientHeight = 26
@@ -262,7 +181,7 @@ object f_preview: Tf_preview
     object Panel4: TPanel
       Left = 0
       Height = 28
-      Top = 176
+      Top = 112
       Width = 191
       BevelOuter = bvNone
       ClientHeight = 28
@@ -285,13 +204,13 @@ object f_preview: Tf_preview
     object Panel7: TPanel
       Left = 0
       Height = 13
-      Top = 204
+      Top = 140
       Width = 191
       AutoSize = True
       BevelOuter = bvNone
       ClientHeight = 13
       ClientWidth = 191
-      TabOrder = 6
+      TabOrder = 5
       object LabelAstrometry: TLabel
         Left = 0
         Height = 1

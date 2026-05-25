@@ -207,10 +207,12 @@ object f_polaralign: Tf_polaralign
               Top = 8
               Width = 89
               Constraints.MaxHeight = 28
-              MaxValue = 45
-              MinValue = 5
+              MaxLength = 0
               ParentFont = False
               TabOrder = 0
+              MaxValue = 45
+              MinValue = 5
+              NullValue = 0
               Value = 20
             end
             object Label2: TLabel

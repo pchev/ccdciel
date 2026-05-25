@@ -34,6 +34,11 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    GainEdit: TSpinEditEx;
+    ISObox: TComboBox;
+    OffsetEdit: TSpinEditEx;
+    PanelGain: TPanel;
+    PanelOffset: TPanel;
     BrightStarOffset: TSpinEditEx;
     BtnClearCrosshairs: TButton;
     cbBrightStarOffset: TCheckBox;
@@ -62,6 +67,8 @@ type
     Label195: TLabel;
     Label196: TLabel;
     Label4: TLabel;
+    LabelGain: TLabel;
+    LabelOffset: TLabel;
     Panel41: TPanel;
     PanelSlewBrightStar: TPanel;
     PanelAutofocusFilter: TPanel;
@@ -255,9 +262,6 @@ type
     StartHNSKY: TCheckBox;
     StartSAMP: TCheckBox;
     TCPIPportDefault: TButton;
-    SlewGainEdit: TSpinEditEx;
-    SlewISObox: TComboBox;
-    SlewOffsetEdit: TSpinEditEx;
     AutofocusPlanetMovement: TSpinEditEx;
     AutofocusPlanetNumPoint: TSpinEditEx;
     AutofocusPauseGuider: TCheckBox;
@@ -269,12 +273,6 @@ type
     BtnMaxDriftDisable: TButton;
     BtnDisableStarLost: TButton;
     ASTAPadvanced: TButton;
-    AutofocusGainEdit: TSpinEditEx;
-    AutofocusISObox: TComboBox;
-    LabelGain: TLabel;
-    LabelGain1: TLabel;
-    LabelOffset: TLabel;
-    LabelOffset1: TLabel;
     ObservatoryDBDelete: TButton;
     ButtonVoiceTest: TButton;
     ButtonVoiceAll: TButton;
@@ -283,14 +281,9 @@ type
     Label14: TLabel;
     ObservatoryDB: TComboBox;
     LongitudeError: TLabel;
-    AutofocusOffsetEdit: TSpinEditEx;
     PagePlaNone: TPage;
     Panel21: TPanel;
-    AutofocusPanelGain: TPanel;
-    SlewPanelGain: TPanel;
     PanelLeft: TPanel;
-    AutofocusPanelOffset: TPanel;
-    SlewPanelOffset: TPanel;
     SlewPrec: TFloatSpinEditEx;
     SlewRetry: TSpinEditEx;
     PythonDefault: TButton;
@@ -1336,8 +1329,6 @@ begin
   Label28.Caption := rsTargetPrecis;
   Label29.Caption := rsMaximumNumbe;
   Label30.Caption := rsExposureTime3;
-  LabelGain1.Caption:=rsGain;
-  LabelOffset1.Caption:=rsOffset2;
   Label31.Caption := rsBinning;
   Label32.Caption := rsControlExpos;
   Label165.Caption:=rsCamera;
