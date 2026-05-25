@@ -84,7 +84,6 @@ object f_preview: Tf_preview
       ClientWidth = 191
       ParentFont = False
       TabOrder = 4
-      Visible = False
       object ISObox: TComboBox
         Left = 100
         Height = 32
@@ -113,10 +112,13 @@ object f_preview: Tf_preview
         Height = 32
         Top = 0
         Width = 90
-        MaxValue = 32767
-        MinValue = -32768
+        MaxLength = 0
         ParentFont = False
         TabOrder = 1
+        MaxValue = 32767
+        MinValue = -32768
+        NullValue = 0
+        Value = 0
       end
       object PanelOffset: TPanel
         AnchorSideTop.Control = GainEdit
@@ -144,9 +146,12 @@ object f_preview: Tf_preview
           Height = 32
           Top = 0
           Width = 90
+          MaxLength = 0
+          TabOrder = 0
           MaxValue = 32767
           MinValue = -32768
-          TabOrder = 0
+          NullValue = 0
+          Value = 0
         end
       end
     end

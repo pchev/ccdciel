@@ -5692,6 +5692,12 @@ begin
       end;
     end;
   end;
+  if (camera.Status=devDisconnected) then begin
+    f_preview.Gain:=config.GetValue('/Preview/Gain',0);
+    f_capture.Gain:=config.GetValue('/Capture/Gain',0);
+    f_preview.Offset:=config.GetValue('/Preview/Offset',0);
+    f_capture.Offset:=config.GetValue('/Capture/Offset',0);
+  end;
   SetGuiderCamera;
   SetFinderCamera;
 

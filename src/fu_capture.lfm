@@ -127,7 +127,6 @@ object f_capture: Tf_capture
       ClientWidth = 297
       ParentFont = False
       TabOrder = 8
-      Visible = False
       object ISObox: TComboBox
         Left = 88
         Height = 28
@@ -351,7 +350,7 @@ object f_capture: Tf_capture
         Left = 203
         Height = 22
         Top = 1
-        Width = 85
+        Width = 89
         Caption = 'Overwrite'
         TabOrder = 1
       end
@@ -418,7 +417,7 @@ object f_capture: Tf_capture
         Left = 4
         Height = 22
         Top = 3
-        Width = 99
+        Width = 103
         Caption = 'Dither every'
         OnClick = CheckLight
         ParentFont = False
@@ -458,7 +457,7 @@ object f_capture: Tf_capture
         Left = 4
         Height = 22
         Top = 3
-        Width = 96
+        Width = 100
         Caption = 'Focus every'
         OnClick = CheckLight
         ParentFont = False
@@ -482,7 +481,7 @@ object f_capture: Tf_capture
         Left = 4
         Height = 22
         Top = 32
-        Width = 247
+        Width = 251
         Caption = 'Autofocus after temperature change'
         OnClick = CheckLight
         TabOrder = 2
@@ -491,7 +490,7 @@ object f_capture: Tf_capture
         Left = 4
         Height = 22
         Top = 62
-        Width = 225
+        Width = 229
         Caption = 'Autofocus after % change in HFD'
         OnClick = CheckLight
         TabOrder = 3
@@ -669,7 +668,7 @@ object f_capture: Tf_capture
           Left = 1
           Height = 22
           Top = 23
-          Width = 196
+          Width = 200
           Caption = 'Run script after every image'
           TabOrder = 0
         end
@@ -678,7 +677,7 @@ object f_capture: Tf_capture
           Left = 1
           Height = 22
           Top = 1
-          Width = 207
+          Width = 211
           Caption = 'Run script before every image'
           TabOrder = 1
         end
@@ -687,7 +686,7 @@ object f_capture: Tf_capture
           Left = 1
           Height = 22
           Top = 47
-          Width = 230
+          Width = 234
           Caption = 'Run script at the end of the series'
           TabOrder = 2
         end
