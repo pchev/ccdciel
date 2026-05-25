@@ -6785,12 +6785,13 @@ end;
 
 procedure Tf_main.ShowGainInfo;
 var txt: string;
+    x:double;
 begin
    txt:='';
-   if camera.hasGain then begin
-     txt:=txt+rsGain+': '+inttostr(DefaultGain)+', ';
-   end;
+   if camera.hasGain then txt:=txt+rsGain+': '+inttostr(DefaultGain)+', ';
    if camera.hasOffset then txt:=txt+rsOffset2+': '+inttostr(DefaultOffset)+', ';
+   x:=camera.ElectronsPerADU;
+   if x>0 then txt:=txt+'eGain'+': '+FormatFloat(f3,x)+', ';
    txt:=copy(txt,1,length(txt)-2);
    f_capture.LabelExpInfo.Caption:=txt;
 end;

@@ -117,6 +117,7 @@ T_ascomcamera = class(T_camera)
    procedure SetVideoPreviewLimit(value:integer); override;
    procedure SetGain(value: integer); override;
    function GetGain: integer; override;
+   function GetElectronsPerADU: double; override;
    procedure SetOffset(value: integer); override;
    function GetOffset: integer; override;
    procedure SetReadOutMode(value: integer); override;
@@ -555,7 +556,7 @@ type Timgdata = array of longint;
 var ok: boolean;
     i,j,c,xs,ys,tmp: integer;
     nax1,nax2,state,bitpx: integer;
-    pix,piy,expt,ElectronsPerADU,rexp: double;
+    pix,piy,expt,rexp, egain: double;
     dateobs,frname:string;
     {$ifdef DirectArray}
       img: array of array of LongInt;     // 2D dynamic array for the image data
@@ -745,11 +746,7 @@ begin
        FhasLastExposureDuration:=false;
      end;
    end;
-   try
-     ElectronsPerADU:=V.ElectronsPerADU;
-   except
-     ElectronsPerADU:=-1;
-   end;
+   egain:=ElectronsPerADU;
    bitpx:=round(GetBitperPixel);
 
    {$ifndef DirectArray}
@@ -796,7 +793,7 @@ begin
    hdr.Add('YBINNING',BinY ,'Binning factor in height');
    hdr.Add('FRAME',frname,'Frame Type');
    hdr.Add('INSTRUME',ccdname,'CCD Name');
-   if ElectronsPerADU>0 then hdr.Add('EGAIN',ElectronsPerADU,' Electronic gain in e-/ADU');
+   if egain>0 then hdr.Add('EGAIN',egain,' Electronic gain in e-/ADU');
    hdr.Add('DATE-OBS',dateobs,'UTC start date of observation');
    hdr.Add('END','','');
    hdrmem:=hdr.GetStream;
@@ -1497,6 +1494,18 @@ begin
    end;
  end;
  {$endif}
+end;
+
+function T_ascomcamera.GetElectronsPerADU: double;
+begin
+  result:=-1;
+  {$ifdef mswindows}
+  try
+    result:=V.ElectronsPerADU;
+  except
+     result:=-1;
+  end;
+  {$endif}
 end;
 
 procedure  T_ascomcamera.SetOffset(value: integer);

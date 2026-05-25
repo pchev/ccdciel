@@ -247,6 +247,7 @@ private
    procedure SetVideoPreviewLimit(value:integer); override;
    procedure SetGain(value: integer); override;
    function GetGain: integer; override;
+   function GetElectronsPerADU: double; override;
    procedure SetOffset(value: integer); override;
    function GetOffset: integer; override;
    procedure SetReadOutMode(value: integer); override;
@@ -2095,6 +2096,12 @@ begin
   else if (IGain<>nil) and FhasGain then begin
       result:=round(IGain.value);
   end;
+end;
+
+function T_indicamera.GetElectronsPerADU: double;
+begin
+  // not implemented by INDI
+  result:=-1;
 end;
 
 procedure T_indicamera.SetOffset(value: integer);

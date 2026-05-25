@@ -177,6 +177,7 @@ T_camera = class(TComponent)
     procedure SetVideoPreviewLimit(value:integer); virtual; abstract;
     procedure SetGain(value: integer); virtual; abstract;
     function GetGain: integer; virtual; abstract;
+    function GetElectronsPerADU: double;  virtual; abstract;
     procedure SetOffset(value: integer); virtual; abstract;
     function GetOffset: integer; virtual; abstract;
     procedure SetReadOutMode(value: integer); virtual; abstract;
@@ -318,6 +319,7 @@ T_camera = class(TComponent)
     property hasGain: boolean read FhasGain;
     property GainMin: integer read FGainMin;
     property GainMax: integer read FGainMax;
+    property ElectronsPerADU: double read GetElectronsPerADU;
     property hasGainISO: boolean read FhasGainISO;
     property ISOList: TStringList read FISOList;
     property Offset: integer read GetOffset write SetOffset;

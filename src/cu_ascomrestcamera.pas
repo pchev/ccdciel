@@ -118,6 +118,7 @@ T_ascomrestcamera = class(T_camera)
    procedure SetGain(value: integer); override;
    function GetGain: integer; override;
    function GetGainReal: integer;
+   function GetElectronsPerADU: double; override;
    procedure SetOffset(value: integer); override;
    function GetOffset: integer; override;
    function GetOffsetReal: integer;
@@ -535,7 +536,7 @@ var ok: boolean;
     imgarray:TImageArray;
     i,j,k,c,xs,ys: integer;
     nax1,nax2,state: integer;
-    pix,piy,expt,rexp: double;
+    pix,piy,expt,rexp,egain: double;
     dateobs,frname:string;
     Dims,x,y: Integer;
     lii: integer;
@@ -648,6 +649,7 @@ begin
        FhasLastExposureDuration:=false;
      end;
    end;
+   egain:=ElectronsPerADU;
    if debug_msg then msg('set fits header');
    hdr:=TFitsHeader.Create;
    hdr.ClearHeader;
@@ -677,6 +679,7 @@ begin
    hdr.Add('YBINNING',BinY ,'Binning factor in height');
    hdr.Add('FRAME',frname,'Frame Type');
    hdr.Add('INSTRUME',ccdname,'CCD Name');
+   if egain>0 then hdr.Add('EGAIN',egain,' Electronic gain in e-/ADU');
    hdr.Add('DATE-OBS',dateobs,'UTC start date of observation');
    hdr.Add('END','','');
    hdrmem:=hdr.GetStream;
@@ -1286,6 +1289,17 @@ begin
    except
       result:=NullInt;
    end;
+ end;
+end;
+
+function T_ascomrestcamera.GetElectronsPerADU: double;
+begin
+  result:=-1;
+ if FStatus<>devConnected then exit;
+ try
+   result:=V.Get('electronsperadu').AsFloat;
+ except
+   result:=-1;
  end;
 end;
 
