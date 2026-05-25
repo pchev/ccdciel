@@ -119,7 +119,6 @@ type
     TermOpt: TCheckListBox;
     FFstopbox: TComboBox;
     FlatFilterList: TCheckGroup;
-    FOffsetEdit: TSpinEditEx;
     Label4: TLabel;
     MenuApplyTemplate: TMenuItem;
     MenuSaveTemplate: TMenuItem;
@@ -149,8 +148,6 @@ type
     Label3: TLabel;
     Label6: TLabel;
     Label7: TLabel;
-    LabelOffset: TLabel;
-    PanelOffset: TPanel;
     PopupInsert: TPopupMenu;
     PopupSaveTemplate: TPopupMenu;
     PopupOptions: TPopupMenu;
@@ -195,15 +192,11 @@ type
     PlanNone: TTabSheet;
     TDelay: TSpinEditEx;
     TargetName: TLabel;
-    FISObox: TComboBox;
     Label16: TLabel;
     Label18: TLabel;
-    LabelGain: TLabel;
     FlatTime: TRadioGroup;
-    PanelGain: TPanel;
     RepeatCountList: TSpinEditEx;
     FlatCount: TSpinEditEx;
-    FGainEdit: TSpinEditEx;
     StepList: TStringGrid;
     SeqStart: TCheckBox;
     SeqStopAt: TMaskEdit;
@@ -612,7 +605,6 @@ begin
   GroupBox6.Caption := rsFilters;
   GroupBox7.Caption := rsExposure;
   Label18.Caption := rsCount;
-  LabelGain.Caption := rsGain;
   FlatTime.Items[0]:=rsAtDusk;
   FlatTime.Items[1]:=rsAtDawn;
   label2.Caption:=rsSequence;
@@ -655,8 +647,6 @@ begin
   TermOpt.Items[cbUnattended]:=rsUnattendedEr;
   // hint
   Preview.Hint:=rsStartAPrevie;
-  FISObox.Hint:=rsCameraISO;
-  FGainEdit.Hint:=rsCameraGain;
   CheckBoxRepeatList.Hint:=rsRepeatTheWho2;
   BtnRepeatInf.Hint:=rsInfiniteNumb;
   SeqStart.Hint:=rsActivateTheS;
@@ -1853,8 +1843,6 @@ begin
   end;
   t.FlatBinX:=1;
   t.FlatBinY:=1;
-  t.FlatGain:=DefaultGain;
-  t.FlatOffset:=DefaultOffset;
   t.FlatFstop:='';
   t.FlatCount:=15;
   TargetList.Cells[colseq,i]:=IntToStr(i);
@@ -2415,11 +2403,6 @@ begin
     if j<0 then
       j:=FlatBinning.Items.Add(buf);
     FlatBinning.ItemIndex:=j;
-    if FISObox.Visible then
-      FISObox.ItemIndex:=t.FlatGain
-    else
-      FGainEdit.Value:=t.FlatGain;
-    FOffsetEdit.Value:=t.FlatOffset;
     FFstopbox.Text:=t.FlatFstop;
     filterlst:=TStringList.Create();
     SplitRec(t.FlatFilters,';',filterlst);
@@ -2611,13 +2594,6 @@ begin
       t.FlatBinX:=1;
       t.FlatBinY:=1;
     end;
-    if FISObox.Visible then begin
-       t.FlatGain:=FISObox.ItemIndex;
-    end
-    else if FGainEdit.Visible then begin
-       t.FlatGain:=FGainEdit.Value;
-    end;
-    t.FlatOffset:=FOffsetEdit.Value;
     t.FlatFilters:='';
     for j:=0 to FlatFilterList.Items.Count-1 do begin
       if FlatFilterList.Checked[j] then

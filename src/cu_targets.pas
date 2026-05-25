@@ -39,7 +39,6 @@ type
               startrise,endset,darknight,skip,fullonly,moonavoidance,mandatorystarttime,initscript: boolean;
               repeatcount,repeatdone: integer;
               FlatBinX,FlatBinY,FlatCount: integer;
-              FlatGain,FlatOffset: integer;
               FlatFilters: shortstring;
               FlatFstop: shortstring;
               preview,astrometrypointing,updatecoord,inplaceautofocus,autofocustemp,
@@ -898,8 +897,6 @@ begin
        t.FlatCount:=trunc(FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/FlatCount',1));
        t.FlatBinX:=trunc(FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/FlatBinX',1));
        t.FlatBinY:=trunc(FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/FlatBinY',1));
-       t.FlatGain:=trunc(FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/FlatGain',0));
-       t.FlatOffset:=trunc(FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/FlatOffset',0));
        t.FlatFstop:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/FlatFstop','');
        t.FlatFilters:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/FlatFilters','');
        if FileVersion>=5 then begin
@@ -1071,8 +1068,6 @@ try
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FlatCount',t.FlatCount);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FlatBinX',t.FlatBinX);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FlatBinY',t.FlatBinY);
-      FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FlatGain',t.FlatGain);
-      FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FlatOffset',t.FlatOffset);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FlatFstop',t.FlatFstop);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FlatFilters',t.FlatFilters);
       if (t.objectname<>ScriptTxt) then begin
@@ -3519,8 +3514,6 @@ begin
   FlatCount:=Source.FlatCount;
   FlatBinX:=Source.FlatBinX;
   FlatBinY:=Source.FlatBinY;
-  FlatGain:=Source.FlatGain;
-  FlatOffset:=Source.FlatOffset;
   FlatFilters:=Source.FlatFilters;
   FlatFstop:=Source.FlatFstop;
   darknight:=Source.darknight;

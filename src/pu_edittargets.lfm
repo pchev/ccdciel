@@ -730,7 +730,7 @@ object f_EditTargets: Tf_EditTargets
           Height = 194
           Top = 26
           Width = 390
-          HorzScrollBar.Page = 359
+          HorzScrollBar.Page = 338
           VertScrollBar.Page = 190
           Align = alClient
           ClientHeight = 190
@@ -1584,95 +1584,6 @@ object f_EditTargets: Tf_EditTargets
             ClientWidth = 190
             ParentFont = False
             TabOrder = 0
-            object PanelGain: TPanel
-              Left = 0
-              Height = 68
-              Top = 64
-              Width = 186
-              BevelOuter = bvNone
-              Caption = ' '
-              ClientHeight = 68
-              ClientWidth = 186
-              ParentFont = False
-              TabOrder = 1
-              Visible = False
-              object FISObox: TComboBox
-                Left = 91
-                Height = 26
-                Top = 0
-                Width = 93
-                Constraints.MaxHeight = 26
-                ItemHeight = 18
-                OnChange = TargetChange
-                ParentFont = False
-                Style = csDropDownList
-                TabOrder = 0
-                Visible = False
-              end
-              object LabelGain: TLabel
-                AnchorSideTop.Control = FGainEdit
-                AnchorSideTop.Side = asrCenter
-                Left = 8
-                Height = 18
-                Top = 4
-                Width = 29
-                Caption = 'Gain'
-                ParentColor = False
-                ParentFont = False
-              end
-              object FGainEdit: TSpinEditEx
-                Left = 91
-                Height = 26
-                Top = 0
-                Width = 65
-                Constraints.MaxHeight = 26
-                MaxLength = 0
-                ParentFont = False
-                TabOrder = 1
-                OnChange = TargetChange
-                MaxValue = 32767
-                MinValue = -32768
-                NullValue = 0
-                Value = 0
-              end
-              object PanelOffset: TPanel
-                Left = 0
-                Height = 36
-                Top = 24
-                Width = 191
-                BevelOuter = bvNone
-                ClientHeight = 36
-                ClientWidth = 191
-                ParentFont = False
-                TabOrder = 2
-                object LabelOffset: TLabel
-                  AnchorSideTop.Control = FOffsetEdit
-                  AnchorSideTop.Side = asrCenter
-                  Left = 8
-                  Height = 18
-                  Top = 8
-                  Width = 38
-                  Caption = 'Offset'
-                  ParentColor = False
-                  ParentFont = False
-                end
-                object FOffsetEdit: TSpinEditEx
-                  Left = 91
-                  Height = 26
-                  Top = 4
-                  Width = 65
-                  Constraints.MaxHeight = 26
-                  MaxLength = 0
-                  ParentFont = False
-                  TabOrder = 0
-                  OnChange = TargetChange
-                  MaxValue = 32767
-                  MinValue = -32768
-                  NullValue = 0
-                  Value = 0
-                end
-              end
-            end
             object Label16: TLabel
               AnchorSideTop.Control = FlatBinning
               AnchorSideTop.Side = asrCenter
@@ -1720,7 +1631,7 @@ object f_EditTargets: Tf_EditTargets
               Constraints.MaxHeight = 28
               MaxLength = 0
               ParentFont = False
-              TabOrder = 2
+              TabOrder = 1
               OnChange = TargetChange
               MaxValue = 10000
               MinValue = 1
@@ -1728,15 +1639,15 @@ object f_EditTargets: Tf_EditTargets
               Value = 1
             end
             object PanelFstop: TPanel
-              Left = -1
+              Left = 0
               Height = 28
-              Top = 120
+              Top = 72
               Width = 186
               BevelOuter = bvNone
               ClientHeight = 28
               ClientWidth = 186
               ParentFont = False
-              TabOrder = 3
+              TabOrder = 2
               Visible = False
               object Label6: TLabel
                 AnchorSideTop.Control = FFstopbox
