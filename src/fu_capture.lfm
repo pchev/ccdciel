@@ -24,14 +24,13 @@ object f_capture: Tf_capture
     OnResize = Panel1Resize
     object Panel2: TPanel
       Left = 1
-      Height = 29
+      Height = 59
       Top = 5
       Width = 297
       Align = alTop
       BorderSpacing.Top = 4
       BevelOuter = bvNone
-      Caption = ' '
-      ClientHeight = 29
+      ClientHeight = 59
       ClientWidth = 297
       ParentFont = False
       TabOrder = 0
@@ -74,11 +73,19 @@ object f_capture: Tf_capture
         ParentColor = False
         ParentFont = False
       end
+      object LabelExpInfo: TLabel
+        Left = 4
+        Height = 18
+        Top = 40
+        Width = 80
+        Caption = 'LabelExpInfo'
+        ParentColor = False
+      end
     end
     object PanelStack: TPanel
       Left = 1
       Height = 29
-      Top = 200
+      Top = 230
       Width = 297
       Align = alTop
       BorderSpacing.Top = 4
@@ -118,7 +125,7 @@ object f_capture: Tf_capture
     object Panel3: TPanel
       Left = 1
       Height = 29
-      Top = 38
+      Top = 68
       Width = 297
       Align = alTop
       BorderSpacing.Top = 4
@@ -159,7 +166,7 @@ object f_capture: Tf_capture
     object PanelFnumber: TPanel
       Left = 1
       Height = 28
-      Top = 168
+      Top = 198
       Width = 297
       Align = alTop
       BorderSpacing.Top = 4
@@ -195,7 +202,7 @@ object f_capture: Tf_capture
     object Panel4: TPanel
       Left = 1
       Height = 28
-      Top = 71
+      Top = 101
       Width = 297
       Align = alTop
       BorderSpacing.Top = 4
@@ -228,7 +235,7 @@ object f_capture: Tf_capture
     object Panel5: TPanel
       Left = 1
       Height = 28
-      Top = 103
+      Top = 133
       Width = 297
       Align = alTop
       BorderSpacing.Top = 4
@@ -276,7 +283,7 @@ object f_capture: Tf_capture
     object Panel6: TPanel
       Left = 1
       Height = 29
-      Top = 135
+      Top = 165
       Width = 297
       Align = alTop
       BorderSpacing.Top = 4
@@ -320,7 +327,7 @@ object f_capture: Tf_capture
     object Panel7: TPanel
       Left = 1
       Height = 28
-      Top = 233
+      Top = 263
       Width = 297
       Align = alTop
       BorderSpacing.Top = 4
@@ -359,7 +366,7 @@ object f_capture: Tf_capture
     object Panel8: TPanel
       Left = 1
       Height = 88
-      Top = 265
+      Top = 295
       Width = 297
       Align = alTop
       BorderSpacing.Top = 4
@@ -417,7 +424,7 @@ object f_capture: Tf_capture
     object Panel9: TPanel
       Left = 1
       Height = 30
-      Top = 485
+      Top = 515
       Width = 297
       Align = alTop
       BorderSpacing.Top = 4
@@ -467,7 +474,7 @@ object f_capture: Tf_capture
     object PanelScript: TPanel
       Left = 1
       Height = 128
-      Top = 353
+      Top = 383
       Width = 297
       Align = alTop
       AutoSize = True

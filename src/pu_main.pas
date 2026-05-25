@@ -800,6 +800,7 @@ type
     procedure ShowBinningRange;
     procedure SetGainList;
     procedure ShowGain;
+    procedure ShowGainInfo;
     procedure GainStatus(Sender: TObject);
     procedure CameraSequenceInfo(Sender: TObject);
     procedure ShowFnumber;
@@ -5103,6 +5104,7 @@ begin
   MaxADU:=config.GetValue('/Sensor/MaxADU',MAXWORD);
   defaultGain:=config.GetValue('/Gain/Gain',NullInt);
   defaultOffset:=config.GetValue('/Offset/Offset',NullInt);
+  ShowGainInfo;
   DisplayCapture:=config.GetValue('/Visu/DisplayCapture',DisplayCapture);
   ok:=f_visu.PanelNoDisplay.Visible<>(not DisplayCapture);
   f_visu.PanelNoDisplay.Visible:=not DisplayCapture;
@@ -6754,6 +6756,7 @@ begin
  camera.CheckOffset;
  if DefaultOffset=NullInt then DefaultOffset:=camera.Offset;
  SetGainList;
+ ShowGainInfo;
 end;
 
 procedure Tf_main.SetGainList;
@@ -6778,6 +6781,18 @@ begin
    f_option.OffsetEdit.MaxValue:=camera.OffsetMax;
    f_option.OffsetEdit.Hint:=IntToStr(camera.OffsetMin)+ellipsis+IntToStr(camera.OffsetMax);
  end;
+end;
+
+procedure Tf_main.ShowGainInfo;
+var txt: string;
+begin
+   txt:='';
+   if camera.hasGain then begin
+     txt:=txt+rsGain+': '+inttostr(DefaultGain)+', ';
+   end;
+   if camera.hasOffset then txt:=txt+rsOffset2+': '+inttostr(DefaultOffset)+', ';
+   txt:=copy(txt,1,length(txt)-2);
+   f_capture.LabelExpInfo.Caption:=txt;
 end;
 
 procedure Tf_main.ShowFnumber;
@@ -17327,12 +17342,14 @@ try
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_Camera_SetGain(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
+    ShowGainInfo;
   end
   else if method='CAMERA_SETOFFSET' then begin
     CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_Camera_SetOffset(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
+    ShowGainInfo;
   end
   else if method='CAPTURE_SETEXPOSURE' then begin
     CheckParamCount(1);

@@ -46,6 +46,7 @@ type
     CheckBoxFocus: TCheckBox;
     cbScript: TComboBox;
     edParams: TEdit;
+    LabelExpInfo: TLabel;
     Label8: TLabel;
     Label9: TLabel;
     LabelTime: TLabel;
@@ -180,6 +181,7 @@ begin
  SetLang;
  led.Canvas.AntialiasingMode:=amOn;
  LabelTime.Caption:='';
+ LabelExpInfo.Caption:='';
 end;
 
 destructor  Tf_capture.Destroy;
