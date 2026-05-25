@@ -914,7 +914,7 @@ begin
       else begin
         // Use finder camera
         FFinderFits.DarkOn:=true;
-        if not FFinderCamera.ControlExposure(exp,binx,biny,LIGHT,ReadoutModeAstrometry,FFinderCamera.Gain,FFinderCamera.Offset) then begin
+        if not FFinderCamera.ControlExposure(exp,binx,biny,LIGHT,ReadoutModeAstrometry,config.GetValue('/Finder/Gain',FFinderCamera.Gain),config.GetValue('/Finder/Gain',FFinderCamera.Offset)) then begin
           msg(rsExposureFail,0);
           exit;
         end;
@@ -1021,7 +1021,7 @@ begin
     WaitSlewDelay(delay);
     // short exposure to show the new position with the bright star
     if FFinderCamera<>nil then
-      FFinderCamera.ControlExposure(min(1,exp),binx,biny,LIGHT,ReadoutModeAstrometry,FFinderCamera.Gain,FFinderCamera.Offset)
+      FFinderCamera.ControlExposure(min(1,exp),binx,biny,LIGHT,ReadoutModeAstrometry,config.GetValue('/Finder/Gain',FFinderCamera.Gain),config.GetValue('/Finder/Gain',FFinderCamera.Offset))
     else
       Fcamera.ControlExposure(min(1,exp),binx,biny,LIGHT,ReadoutModeAstrometry,DefaultGain,DefaultOffset)
   end;
