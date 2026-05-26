@@ -1269,6 +1269,7 @@ begin
    try
       V.Put('Gain',value);
       stGain:=value;
+      if Assigned(FonEGainChange) then FonEGainChange(self);
    except
    end;
  end;
@@ -1317,6 +1318,7 @@ begin
    try
       V.Put('Offset',value);
       stOffset:=value;
+      if Assigned(FonEGainChange) then FonEGainChange(self);
    except
    end;
  end;

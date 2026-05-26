@@ -1482,6 +1482,7 @@ begin
  if (FhasGainISO or FhasGain) then begin
    try
       V.Gain:=value;
+      if Assigned(FonEGainChange) then FonEGainChange(self);
    except
    end;
  end;
@@ -1520,6 +1521,7 @@ begin
  if FhasOffset then begin
    try
       V.Offset:=value;
+      if Assigned(FonEGainChange) then FonEGainChange(self);
    except
    end;
  end;

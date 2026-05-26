@@ -17350,12 +17350,14 @@ try
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_Camera_SetGain(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
+    ShowGainInfo(camera);
   end
   else if method='CAMERA_SETOFFSET' then begin
     CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_Camera_SetOffset(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
+    ShowGainInfo(camera);
   end
   else if method='CAPTURE_SETEXPOSURE' then begin
     CheckParamCount(1);
