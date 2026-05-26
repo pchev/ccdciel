@@ -47,7 +47,7 @@ T_ascomcamera = class(T_camera)
    FCType: string;
    FMaxBinX,FMaxBinY,FBinX,FBinY:integer;
    FHasTemperature: boolean;
-   stCCDtemp,stCoolerPower : double;
+   stCCDtemp,stCoolerPower,stEGain : double;
    stCooler : boolean;
    FFrametype:TFrameType;
    ExposureTimer: TTimer;
@@ -171,6 +171,7 @@ begin
  stCooler:=false;
  stCCDtemp:=NullCoord;
  stCoolerPower:=NullCoord;
+ stEGain:=NullCoord;
  FInterfaceVersion:=1;
  FCameraXSize:=-1;
  FCameraYSize:=-1;
@@ -458,7 +459,7 @@ end;
 
 procedure T_ascomcamera.StatusTimerTimer(sender: TObject);
 {$ifdef mswindows}
-var t: double;
+var t,e: double;
     c: boolean;
 {$endif}
 begin
@@ -476,6 +477,11 @@ begin
     try
      FBinY:=V.BinY;
     except
+    end;
+    e:=GetElectronsPerADU;
+    if abs(e-stEGain)>1E-5 then begin
+      stEGain:=e;
+      if Assigned(FonEGainChange) then FonEGainChange(self);
     end;
     c:=GetCooler;
     if c<>stCooler then begin
@@ -1581,7 +1587,7 @@ begin
   try
     result := V.FullWellCapacity;
   except
-    on E: Exception do msg('Get FullWellCapacity: '+E.Message,0);
+    result:=0;
   end;
   {$endif}
 end;

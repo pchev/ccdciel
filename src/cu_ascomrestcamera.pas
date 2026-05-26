@@ -41,7 +41,7 @@ T_ascomrestcamera = class(T_camera)
    FPixelSizeX,FPixelSizeY: double;
    FMaxBinX,FMaxBinY,FBinX,FBinY:integer;
    FHasTemperature: boolean;
-   stCCDtemp,stCoolerPower : double;
+   stCCDtemp,stCoolerPower,stEGain : double;
    stCooler : boolean;
    stX,stY,stWidth,stHeight: integer;
    stGain,stOffset: integer;
@@ -170,6 +170,8 @@ begin
  V.ClientId:=3200;
  stCooler:=false;
  stCCDtemp:=NullCoord;
+ stCoolerPower:=NullCoord;
+ stEGain:=NullCoord;
  FInterfaceVersion:=1;
  FCameraXSize:=-1;
  FCameraYSize:=-1;
@@ -448,7 +450,7 @@ begin
 end;
 
 procedure T_ascomrestcamera.StatusTimerTimer(sender: TObject);
-var t: double;
+var t,e: double;
     c: boolean;
 begin
  StatusTimer.Enabled:=false;
@@ -463,6 +465,11 @@ begin
     try
      FBinY:=V.Get('biny').AsInt;
     except
+    end;
+    e:=GetElectronsPerADU;
+    if abs(e-stEGain)>1E-5 then begin
+      stEGain:=e;
+      if Assigned(FonEGainChange) then FonEGainChange(self);
     end;
     c:=GetCooler;
     if c<>stCooler then begin
@@ -1391,7 +1398,7 @@ begin
   try
     result := V.Get('fullwellcapacity').AsFloat;
   except
-    on E: Exception do msg('Get FullWellCapacity: '+E.Message,0);
+    result:=0;
   end;
 end;
 

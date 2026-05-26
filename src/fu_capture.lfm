@@ -38,7 +38,7 @@ object f_capture: Tf_capture
         Left = 89
         Height = 28
         Hint = 'Exposure time in seconds'
-        Top = 1
+        Top = 26
         Width = 101
         Constraints.MaxHeight = 28
         ItemHeight = 24
@@ -67,7 +67,7 @@ object f_capture: Tf_capture
         AnchorSideTop.Side = asrCenter
         Left = 4
         Height = 18
-        Top = 6
+        Top = 31
         Width = 23
         Caption = 'Exp'
         ParentColor = False
@@ -76,7 +76,7 @@ object f_capture: Tf_capture
       object LabelExpInfo: TLabel
         Left = 4
         Height = 18
-        Top = 40
+        Top = 4
         Width = 80
         Caption = 'LabelExpInfo'
         ParentColor = False

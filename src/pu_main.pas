@@ -800,7 +800,7 @@ type
     procedure ShowBinningRange;
     procedure SetGainList;
     procedure ShowGain;
-    procedure ShowGainInfo;
+    procedure ShowGainInfo(Sender: TObject);
     procedure GainStatus(Sender: TObject);
     procedure CameraSequenceInfo(Sender: TObject);
     procedure ShowFnumber;
@@ -2333,6 +2333,7 @@ begin
    camera.onCameraDisconnected:=@CameraDisconnected;
    camera.onAbortExposure:=@CameraExposureAborted;
    camera.onGainStatus:=@GainStatus;
+   camera.onEGainChange:=@ShowGainInfo;
    camera.onSequenceInfo:=@CameraSequenceInfo;
    camera.onEndControlExposure:=@EndControlExposure;
    camera.onRunScript:=@RunScript;
@@ -5104,7 +5105,7 @@ begin
   MaxADU:=config.GetValue('/Sensor/MaxADU',MAXWORD);
   defaultGain:=config.GetValue('/Gain/Gain',NullInt);
   defaultOffset:=config.GetValue('/Offset/Offset',NullInt);
-  ShowGainInfo;
+  ShowGainInfo(camera);
   DisplayCapture:=config.GetValue('/Visu/DisplayCapture',DisplayCapture);
   ok:=f_visu.PanelNoDisplay.Visible<>(not DisplayCapture);
   f_visu.PanelNoDisplay.Visible:=not DisplayCapture;
@@ -6756,7 +6757,7 @@ begin
  camera.CheckOffset;
  if DefaultOffset=NullInt then DefaultOffset:=camera.Offset;
  SetGainList;
- ShowGainInfo;
+ ShowGainInfo(camera);
 end;
 
 procedure Tf_main.SetGainList;
@@ -6783,17 +6784,23 @@ begin
  end;
 end;
 
-procedure Tf_main.ShowGainInfo;
+procedure Tf_main.ShowGainInfo(Sender: TObject);
 var txt: string;
     x:double;
 begin
-   txt:='';
-   if camera.hasGain then txt:=txt+rsGain+': '+inttostr(DefaultGain)+', ';
-   if camera.hasOffset then txt:=txt+rsOffset2+': '+inttostr(DefaultOffset)+', ';
-   x:=camera.ElectronsPerADU;
-   if x>0 then txt:=txt+'eGain'+': '+FormatFloat(f3,x)+', ';
-   txt:=copy(txt,1,length(txt)-2);
-   f_capture.LabelExpInfo.Caption:=txt;
+  if sender is T_camera then
+    with sender as T_camera do begin
+       txt:='';
+       if hasGain then txt:=txt+rsGain+': '+inttostr(DefaultGain)+', ';
+       if hasOffset then txt:=txt+rsOffset2+': '+inttostr(DefaultOffset)+', ';
+       x:=ElectronsPerADU;
+       if x>0 then txt:=txt+'eGain'+': '+FormatFloat(f3,x)+', ';
+       x:=FullWellCapacity;
+       if x>0 then txt:=txt+'FWe-'+': '+FormatFloat(f0,x)+', ';
+       txt:=copy(txt,1,length(txt)-2);
+       f_capture.LabelExpInfo.Caption:=txt;
+       f_preview.LabelExpInfo.Caption:=txt;
+    end;
 end;
 
 procedure Tf_main.ShowFnumber;
@@ -17343,14 +17350,12 @@ try
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_Camera_SetGain(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
-    ShowGainInfo;
   end
   else if method='CAMERA_SETOFFSET' then begin
     CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_Camera_SetOffset(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
-    ShowGainInfo;
   end
   else if method='CAPTURE_SETEXPOSURE' then begin
     CheckParamCount(1);

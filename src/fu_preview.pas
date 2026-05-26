@@ -37,6 +37,7 @@ type
     BtnLoop: TButton;
     CheckBoxAstrometry: TCheckBox;
     image_inspection1: TCheckBox;
+    LabelExpInfo: TLabel;
     StackPreview: TCheckBox;
     PreprocessPreview: TCheckBox;
     Fnumber: TComboBox;
@@ -109,6 +110,7 @@ begin
  Frunning:=false;
  SetLang;
  led.Canvas.AntialiasingMode:=amOn;
+ LabelExpInfo.Caption:='';
 end;
 
 destructor  Tf_preview.Destroy;
