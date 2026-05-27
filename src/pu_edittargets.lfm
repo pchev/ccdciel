@@ -593,20 +593,20 @@ object f_EditTargets: Tf_EditTargets
             Width = 80
           end        
           item
-            MinSize = 86
-            MaxSize = 86
+            MinSize = 108
+            MaxSize = 108
             SizePriority = 0
             Title.MultiLine = True
             Title.Caption = 'RA'
-            Width = 86
+            Width = 108
           end        
           item
-            MinSize = 96
-            MaxSize = 96
+            MinSize = 108
+            MaxSize = 108
             SizePriority = 0
             Title.MultiLine = True
             Title.Caption = 'Dec'
-            Width = 86
+            Width = 108
           end        
           item
             MinSize = 4
@@ -664,7 +664,7 @@ object f_EditTargets: Tf_EditTargets
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Repeat'
-            Width = 14
+            Width = 2
           end>
         DefaultColWidth = 30
         HeaderHotZones = [gzFixedCols, gzFixedCells]
@@ -688,13 +688,13 @@ object f_EditTargets: Tf_EditTargets
           30
           120
           80
-          86
-          86
+          108
+          108
           40
           50
           60
           60
-          14
+          2
         )
       end
       object PanelTargetDetail: TPanel
@@ -730,7 +730,7 @@ object f_EditTargets: Tf_EditTargets
           Height = 194
           Top = 26
           Width = 390
-          HorzScrollBar.Page = 338
+          HorzScrollBar.Page = 359
           VertScrollBar.Page = 190
           Align = alClient
           ClientHeight = 190
@@ -1055,26 +1055,26 @@ object f_EditTargets: Tf_EditTargets
                 )
                 Title.MultiLine = True
                 Title.Caption = 'Type'
-                Width = 79
+                Width = 88
               end            
               item
                 MaxSize = 202
                 Title.MultiLine = True
                 Title.Caption = 'Exposure'
-                Width = 79
+                Width = 88
               end            
               item
                 ButtonStyle = cbsPickList
                 Title.MultiLine = True
                 Title.Caption = 'Ref. exposure'
-                Width = 79
+                Width = 88
               end            
               item
                 MinSize = 71
                 MaxSize = 71
                 Title.MultiLine = True
                 Title.Caption = 'Stack'
-                Width = 79
+                Width = 88
               end            
               item
                 ButtonStyle = cbsPickList
@@ -1085,7 +1085,7 @@ object f_EditTargets: Tf_EditTargets
                 )
                 Title.MultiLine = True
                 Title.Caption = 'Binning'
-                Width = 79
+                Width = 88
               end            
               item
                 ButtonStyle = cbsPickList
@@ -1103,32 +1103,33 @@ object f_EditTargets: Tf_EditTargets
                 MaxSize = 71
                 Title.MultiLine = True
                 Title.Caption = 'Count'
-                Width = 79
+                Width = 88
               end            
               item
                 ButtonStyle = cbsCheckboxColumn
                 MaxSize = 202
                 Title.MultiLine = True
                 Title.Caption = 'Autofocus before to start'
-                Width = 79
+                Width = 88
               end            
               item
                 MaxSize = 202
                 Title.MultiLine = True
                 Title.Caption = 'Autofocus every'
-                Width = 79
+                Width = 88
               end            
               item
                 MaxSize = 202
                 Title.MultiLine = True
                 Title.Caption = 'Dither every'
-                Width = 79
+                Width = 88
               end            
               item
                 ButtonStyle = cbsPickList
                 Title.MultiLine = True
                 Title.Caption = 'F-stop'
-                Width = 86
+                Width = 0
+                Visible = False
               end>
             DefaultColWidth = 30
             MouseWheelOption = mwGrid
@@ -1147,17 +1148,17 @@ object f_EditTargets: Tf_EditTargets
             ColWidths = (
               30
               120
-              79
-              79
-              79
-              79
-              79
+              88
+              88
+              88
+              88
+              88
               69
-              79
-              79
-              79
-              79
-              86
+              88
+              88
+              88
+              88
+              0
             )
           end
           object Panel17: TPanel
