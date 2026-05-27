@@ -1547,6 +1547,7 @@ resourcestring
   rsCaptureAbnor = 'Capture abnormal end';
   rsMonochromeBi = 'Monochrome 2x2 binning for color camera';
   rsSpectroscopy2 = 'Spectroscopy options';
+  rsTheCameraDri = 'The camera driver do not allow to modify the gain';
 
 implementation
 

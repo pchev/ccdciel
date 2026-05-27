@@ -6764,6 +6764,7 @@ procedure Tf_main.SetGainList;
 begin
  if debug_msg then NewMessage('Camera gain:'+BoolToStr(camera.hasGain,rsTrue,rsFalse)+' iso:'+BoolToStr(camera.hasGainISO,rsTrue,rsFalse));
  f_option.PanelGain.Visible:=(camera.hasGain or camera.hasGainISO);
+ f_option.LabelNoGain.Visible:=not f_option.PanelGain.Visible;
  f_option.PanelOffset.Visible:=f_option.PanelGain.Visible and camera.hasOffset;
  if camera.hasGainISO then begin
    f_option.ISObox.Visible:=true;
@@ -6793,10 +6794,12 @@ begin
        txt:='';
        if hasGain then txt:=txt+rsGain+': '+inttostr(DefaultGain)+', ';
        if hasOffset then txt:=txt+rsOffset2+': '+inttostr(DefaultOffset)+', ';
-       x:=ElectronsPerADU;
-       if x>0 then txt:=txt+'eGain'+': '+FormatFloat(f3,x)+', ';
-       x:=FullWellCapacity;
-       if x>0 then txt:=txt+'FWe-'+': '+FormatFloat(f0,x)+', ';
+       if txt<>'' then begin
+         x:=ElectronsPerADU;
+         if x>0 then txt:=txt+'eGain'+': '+FormatFloat(f3,x)+', ';
+         x:=FullWellCapacity;
+         if x>0 then txt:=txt+'FWe-'+': '+FormatFloat(f0,x)+', ';
+       end;
        txt:=copy(txt,1,length(txt)-2);
        f_capture.LabelExpInfo.Caption:=txt;
        f_preview.LabelExpInfo.Caption:=txt;
@@ -9742,6 +9745,7 @@ begin
    f_option.MaxAdu.Value:=config.GetValue('/Sensor/MaxADU',MAXWORD);
    f_option.MaxAduFromCamera.Checked:=config.GetValue('/Sensor/MaxADUFromCamera',true);
    f_option.PanelGain.Visible:=((camera.Status=devDisconnected) or camera.hasGain or camera.hasGainISO);
+   f_option.LabelNoGain.Visible:=not f_option.PanelGain.Visible;
    f_option.PanelOffset.Visible:=(camera.Status=devDisconnected) or (f_option.PanelGain.Visible and camera.hasOffset);
    i:=config.GetValue('/Gain/Gain',DefaultGain);
    if i=NullInt then i:=DefaultGain;

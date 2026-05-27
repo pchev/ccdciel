@@ -36,6 +36,7 @@ type
   Tf_option = class(TForm)
     GainEdit: TSpinEditEx;
     ISObox: TComboBox;
+    LabelNoGain: TLabel;
     OffsetEdit: TSpinEditEx;
     PanelGain: TPanel;
     PanelOffset: TPanel;
@@ -1265,6 +1266,7 @@ begin
   Autofocusmode.Caption := rsAutofocusMet;
   Label49.Caption := rsExposureTime2;
   Label51.Caption := rsSeconds;
+  LabelNoGain.Caption:=rsTheCameraDri;
   LabelGain.Caption:=rsGain;
   LabelOffset.Caption:=rsOffset2;
   Label58.Caption := rsMoveDirectio;

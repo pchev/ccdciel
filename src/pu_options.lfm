@@ -1708,6 +1708,14 @@ object f_option: Tf_option
           ClientWidth = 551
           ParentFont = False
           TabOrder = 1
+          object LabelNoGain: TLabel
+            Left = 16
+            Height = 18
+            Top = 70
+            Width = 272
+            Caption = 'The Gain cannot be modified for this camera'
+            ParentColor = False
+          end
           object Label19: TLabel
             AnchorSideTop.Control = MaxAdu
             AnchorSideTop.Side = asrCenter
@@ -3586,7 +3594,7 @@ object f_option: Tf_option
             Height = 91
             Top = 155
             Width = 555
-            PageIndex = 1
+            PageIndex = 0
             Align = alBottom
             TabOrder = 2
             TabStop = True
