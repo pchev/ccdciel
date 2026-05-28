@@ -6792,7 +6792,15 @@ begin
   if sender is T_camera then
     with sender as T_camera do begin
        txt:='';
-       if hasGain then txt:=txt+rsGain+': '+inttostr(DefaultGain)+', ';
+       if hasGainISO then begin
+         try
+         txt:=txt+rsGain+': '+ISOList[DefaultGain]+', ';
+         except
+           txt:='';
+         end;
+       end
+       else if hasGain then
+         txt:=txt+rsGain+': '+inttostr(DefaultGain)+', ';
        if hasOffset then txt:=txt+rsOffset2+': '+inttostr(DefaultOffset)+', ';
        if txt<>'' then begin
          x:=ElectronsPerADU;
