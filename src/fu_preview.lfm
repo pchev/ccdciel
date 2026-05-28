@@ -74,12 +74,14 @@ object f_preview: Tf_preview
         ParentFont = False
       end
       object LabelExpInfo: TLabel
+        Cursor = crHandPoint
         Left = 6
         Height = 18
         Top = 4
         Width = 80
         Caption = 'LabelExpInfo'
         ParentColor = False
+        OnClick = LabelExpInfoClick
       end
     end
     object Panel3: TPanel

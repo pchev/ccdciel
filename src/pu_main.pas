@@ -1929,6 +1929,7 @@ begin
   f_preview.onStartExposure:=@StartPreviewExposure;
   f_preview.onAbortExposure:=@StopExposure;
   f_preview.onMsg:=@NewMessage;
+  f_preview.onOptions:=@MenuOptionsClick;
   astrometry.preview:=f_preview;
   astrometry.visu:=f_visu;
 
@@ -1939,6 +1940,7 @@ begin
   f_capture.onAbortExposure:=@StopExposure;
   f_capture.onStopPreview:=@StopPreviewEvent;
   f_capture.onMsg:=@NewMessage;
+  f_capture.onOptions:=@MenuOptionsClick;
   f_capture.onResetHFM:=@HFM_ResetMeasurements;
   f_capture.onRunScript:=@RunScript;
 
@@ -10032,6 +10034,8 @@ begin
    pt.y:=PanelCenter.top;
    pt:=ClientToScreen(pt);
    FormPos(f_option,pt.X,pt.Y);
+   if sender=f_preview then
+     f_option.PageControl1.ActivePage:=f_option.PageCamera;
    f_option.ShowModal;
 
    if f_option.ModalResult=mrOK then begin

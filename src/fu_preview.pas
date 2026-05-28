@@ -61,6 +61,7 @@ type
     procedure BtnPreviewClick(Sender: TObject);
     procedure CheckBoxAstrometryClick(Sender: TObject);
     procedure ExpTimeKeyPress(Sender: TObject; var Key: char);
+    procedure LabelExpInfoClick(Sender: TObject);
     procedure StackPreviewClick(Sender: TObject);
   private
     { private declarations }
@@ -70,6 +71,7 @@ type
     FonResetStack: TNotifyEvent;
     FonStartExposure: TNotifyEvent;
     FonAbortExposure: TNotifyEvent;
+    FonOptions: TNotifyEvent;
     procedure msg(txt:string; level:integer);
     function GetExposure:double;
     procedure SetExposure(value:double);
@@ -91,6 +93,7 @@ type
     property onStartExposure: TNotifyEvent read FonStartExposure write FonStartExposure;
     property onAbortExposure: TNotifyEvent read FonAbortExposure write FonAbortExposure;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
+    property onOptions: TNotifyEvent read FonOptions write FonOptions;
   end;
 
 implementation
@@ -185,6 +188,11 @@ begin
   inherited KeyPress(Key);
   if (Key in ['.',',']) then Key := DefaultFormatSettings.Decimalseparator;
   if not (Key in ['0'..'9', DefaultFormatSettings.DecimalSeparator,'+',#8,#9,^C,^X,^V,^Z]) then Key := #0;
+end;
+
+procedure Tf_preview.LabelExpInfoClick(Sender: TObject);
+begin
+  if Assigned(FonOptions) then FonOptions(self);
 end;
 
 procedure Tf_preview.StackPreviewClick(Sender: TObject);

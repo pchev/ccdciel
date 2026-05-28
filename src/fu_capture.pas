@@ -90,6 +90,7 @@ type
     procedure ExpTimeChange(Sender: TObject);
     procedure ExpTimeKeyPress(Sender: TObject; var Key: char);
     procedure CheckLight(Sender: TObject);
+    procedure LabelExpInfoClick(Sender: TObject);
     procedure Panel1Resize(Sender: TObject);
     procedure SeqNumChange(Sender: TObject);
     procedure StackNumChange(Sender: TObject);
@@ -106,6 +107,7 @@ type
     Frunning: boolean;
     FResetHFM: boolean;
     FonMsg: TNotifyMsg;
+    FonOptions:  TNotifyEvent;
     FonStartExposure: TNotifyEvent;
     FonAbortExposure: TNotifyEvent;
     FonStopPreview: TNotifyEvent;
@@ -148,6 +150,7 @@ type
     property onAbortExposure: TNotifyEvent read FonAbortExposure write FonAbortExposure;
     property onResetStack: TNotifyEvent read FonResetStack write FonResetStack;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
+    property onOptions: TNotifyEvent read FonOptions write FonOptions;
     property onFrameTypeChange: TNotifyEvent read FonFrameTypeChange write FonFrameTypeChange;
     property onResetHFM: TNotifyEvent read FonResetHFM write FonResetHFM;
     property ResetHFM: boolean read FResetHFM write FResetHFM;
@@ -371,6 +374,11 @@ begin
     // run custom frame type script immediately when changed interactively
     if assigned(FonFrameTypeChange) then FonFrameTypeChange(self);
   end;
+end;
+
+procedure Tf_capture.LabelExpInfoClick(Sender: TObject);
+begin
+  if Assigned(FonOptions) then FonOptions(self);
 end;
 
 procedure Tf_capture.Panel1Resize(Sender: TObject);

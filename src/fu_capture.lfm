@@ -74,12 +74,14 @@ object f_capture: Tf_capture
         ParentFont = False
       end
       object LabelExpInfo: TLabel
+        Cursor = crHandPoint
         Left = 4
         Height = 18
         Top = 4
         Width = 80
         Caption = 'LabelExpInfo'
         ParentColor = False
+        OnClick = LabelExpInfoClick
       end
     end
     object PanelStack: TPanel
