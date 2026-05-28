@@ -1404,26 +1404,28 @@ var i,n: integer;
 {$endif}
 begin
   result:=false;
+  FhasGain:=false;
+  FhasGainISO:=false;
   {$ifdef mswindows}
-    if FStatus<>devConnected then exit;
-    try
+  if FStatus<>devConnected then exit;
     if debug_msg then msg('Check camera gain');
     // check Gain property
+    try
        i:=V.Gain;
        if debug_msg then msg('Gain='+inttostr(i));
-       try
        // check Gain range
-          FGainMin:=V.GainMin;
-          FGainMax:=V.GainMax;
-          FhasGain:=true;
-          if debug_msg then msg('GainMin='+IntToStr(FGainMin)+' GainMax='+inttostr(FGainMax));
-       except
+       FGainMin:=V.GainMin;
+       FGainMax:=V.GainMax;
+       FhasGain:=true;
+       if debug_msg then msg('GainMin='+IntToStr(FGainMin)+' GainMax='+inttostr(FGainMax));
+    except
        // No Gain range
           on E: Exception do begin
               FhasGain:=false;
-              if debug_msg then msg('Camera GainMin or GainMax exception: '+E.Message);
+              if debug_msg then msg('Camera Gain, GainMin or GainMax exception: '+E.Message);
           end;
-       end;
+    end;
+    if not hasGain then begin
        try
        // Check ISO list
           if debug_msg then msg('Check camera gains list');
@@ -1443,13 +1445,6 @@ begin
              if debug_msg then msg('Camera Gains list exception: '+E.Message);
           end;
        end;
-    except
-    // No Gain property at all
-       on E: Exception do begin
-          FhasGain:=false;
-          FhasGainISO:=false;
-          if debug_msg then msg('Camera Gain exception: '+E.Message);
-       end;
     end;
     result:=(FhasGainISO or FhasGain);
   {$endif}
@@ -1463,13 +1458,17 @@ begin
   FhasOffset:=false;
   {$ifdef mswindows}
   if FInterfaceVersion>=3 then begin
+    if debug_msg then msg('Check camera offset');
     try
       i:=V.Offset;
       FOffsetMin:=V.OffsetMin;
       FOffsetMax:=V.OffsetMax;
       FhasOffset:=true;
     except
-      FhasOffset:=false;
+      on E: Exception do begin
+          FhasOffset:=false;
+          if debug_msg then msg('Camera Offset, OffsetMin or OffsetMax exception: '+E.Message);
+      end;
     end;
   end;
   {$endif}

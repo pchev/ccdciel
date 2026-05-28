@@ -1206,21 +1206,30 @@ var i,n: integer;
     gainlist: array of string;
 begin
   result:=false;
+  FhasGain:=false;
+  FhasGainISO:=false;
   if FStatus<>devConnected then exit;
-    try
+    if debug_msg then msg('Check camera gain');
     // check Gain property
-       i:=V.Get('gain').AsInt;
-       try
-       // check Gain range
-          FGainMin:=V.Get('gainmin').AsInt;
-          FGainMax:=V.Get('gainmax').AsInt;
-          FhasGain:=true;
-       except
-       // No Gain range
-          FhasGain:=false;
-       end;
+    try
+     i:=V.Get('gain').AsInt;
+     if debug_msg then msg('Gain='+inttostr(i));
+     // check Gain range
+        FGainMin:=V.Get('gainmin').AsInt;
+        FGainMax:=V.Get('gainmax').AsInt;
+        FhasGain:=true;
+        if debug_msg then msg('GainMin='+IntToStr(FGainMin)+' GainMax='+inttostr(FGainMax));
+     except
+        // No Gain range
+         on E: Exception do begin
+             FhasGain:=false;
+             if debug_msg then msg('Camera Gain, GainMin or GainMax exception: '+E.Message);
+         end;
+     end;
+     if not hasGain then begin
        try
        // Check ISO list
+          if debug_msg then msg('Check camera gains list');
           gainlist:=V.Get('gains').AsStringArray;
           n:=Length(gainlist);
           FISOList.Clear;
@@ -1230,17 +1239,17 @@ begin
           end;
           SetLength(gainlist,0);
           FhasGainISO:=FISOList.Count>0;
+          if debug_msg then msg('Found '+IntToStr(FISOList.Count)+' gains');
        except
        // No ISO list
-          FhasGainISO:=false;
-          FISOList.Clear;
+         on E: Exception do begin
+            FhasGainISO:=false;
+            FISOList.Clear;
+            if debug_msg then msg('Camera Gains list exception: '+E.Message);
+         end;
        end;
-    except
-    // No Gain property at all
-       FhasGain:=false;
-       FhasGainISO:=false;
-    end;
-    result:=(FhasGainISO or FhasGain);
+     end;
+     result:=(FhasGainISO or FhasGain);
 end;
 
 function  T_ascomrestcamera.CheckOffset:boolean;
@@ -1250,13 +1259,18 @@ begin
   result:=false;
   if FStatus<>devConnected then exit;
   if FInterfaceVersion>=3 then begin
+    if debug_msg then msg('Check camera offset');
     try
       i:=V.Get('offset').AsInt;
       FOffsetMin:=V.Get('offsetmin').AsInt;
       FOffsetMax:=V.Get('offsetmax').AsInt;
       FhasOffset:=true;
+      if debug_msg then msg('OffsetMin='+IntToStr(FOffsetMin)+' OffsetMax='+inttostr(FOffsetMax));
     except
-      FhasOffset:=false;
+      on E: Exception do begin
+          FhasOffset:=false;
+          if debug_msg then msg('Camera Offset, OffsetMin or OffsetMax exception: '+E.Message);
+      end;
     end;
   end;
   result:=FhasOffset;

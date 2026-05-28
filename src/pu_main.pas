@@ -6808,7 +6808,7 @@ begin
          x:=ElectronsPerADU;
          if x>0 then txt:=txt+'eGain'+': '+FormatFloat(f3,x)+', ';
          x:=FullWellCapacity;
-         if x>0 then txt:=txt+'FWe-'+': '+FormatFloat(f0,x)+', ';
+         if x>0 then txt:=txt+'FWC'+': '+FormatFloat(f0,x)+', ';
        end;
        txt:=copy(txt,1,length(txt)-2);
        f_capture.LabelExpInfo.Caption:=txt;
