@@ -87,6 +87,7 @@ T_indimount = class(T_mount)
    Guide_W:  INumber;
    Guide_E:  INumber;
    Guide_Rate: INumberVectorProperty;
+   Guide_Rate_Rate:  INumber;
    Guide_Rate_NS:  INumber;
    Guide_Rate_WE:  INumber;
    SlewRate_prop: ISwitchVectorProperty;
@@ -516,7 +517,15 @@ begin
       Guide_Rate:=indiProp.getNumber;
       Guide_Rate_NS:=IUFindNumber(Guide_Rate,'GUIDE_RATE_NS');
       Guide_Rate_WE:=IUFindNumber(Guide_Rate,'GUIDE_RATE_WE');
-      if (Guide_Rate_NS=nil)or(Guide_Rate_WE=nil) then Guide_Rate:=nil;
+      if ((Guide_Rate_NS=nil)or(Guide_Rate_WE=nil)) then begin
+         Guide_Rate_Rate:=IUFindNumber(Guide_Rate,'RATE');
+         if Guide_Rate_Rate=nil then Guide_Rate:=nil;
+      end;
+   end
+   else if (proptype=INDI_NUMBER)and(Guide_Rate=nil)and(propname='TELESCOPE_GUIDE_RATE') then begin
+       Guide_Rate:=indiProp.getNumber;
+       Guide_Rate_Rate:=IUFindNumber(Guide_Rate,'Guide Rate');
+       if Guide_Rate_Rate=nil then Guide_Rate:=nil;
    end
    else if (proptype=INDI_SWITCH)and(moveNS_prop=nil)and(propname='TELESCOPE_MOTION_NS') then begin
      moveNS_prop := indiProp.getSwitch;
@@ -1011,7 +1020,10 @@ end;
 function T_indimount.GetGuideRateRa: double;
 begin
   if Guide_Rate<>nil then begin
-    result:=Guide_Rate_WE.value;
+    if Guide_Rate_WE<>nil then
+      result:=Guide_Rate_WE.value
+    else if Guide_Rate_Rate<>nil then
+      result:=Guide_Rate_Rate.value;
     result:=result*siderealrate/3600; // deg/sec, ascom compatibility
   end
   else result:=0;
@@ -1020,7 +1032,10 @@ end;
 function T_indimount.GetGuideRateDe: double;
 begin
   if Guide_Rate<>nil then begin
-    result:=Guide_Rate_NS.value;
+    if Guide_Rate_NS<>nil then
+      result:=Guide_Rate_NS.value
+    else if Guide_Rate_Rate<>nil then
+      result:=Guide_Rate_Rate.value;
     result:=result*siderealrate/3600; // deg/sec, ascom compatibility
   end
   else result:=0;
@@ -1029,7 +1044,10 @@ end;
 procedure T_indimount.SetGuideRateRa(value:double);
 begin
   if Guide_Rate<>nil then begin
-    Guide_Rate_WE.value:=value*3600/siderealrate;
+    if Guide_Rate_WE<>nil then
+      Guide_Rate_WE.value:=value*3600/siderealrate
+    else if Guide_Rate_Rate<>nil then
+      Guide_Rate_Rate.value:=value*3600/siderealrate;
     indiclient.sendNewNumber(Guide_Rate);
   end;
 end;
@@ -1037,7 +1055,10 @@ end;
 procedure T_indimount.SetGuideRateDe(value:double);
 begin
   if Guide_Rate<>nil then begin
-    Guide_Rate_NS.value:=value*3600/siderealrate;
+    if Guide_Rate_NS<>nil then
+      Guide_Rate_NS.value:=value*3600/siderealrate
+    else if Guide_Rate_Rate<>nil then
+      Guide_Rate_Rate.value:=value*3600/siderealrate;
     indiclient.sendNewNumber(Guide_Rate);
   end;
 end;
