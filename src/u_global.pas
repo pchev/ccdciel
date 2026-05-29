@@ -128,7 +128,10 @@ type
               frtype: integer;
               fstop: string;
               refexposure: string;
-              // script options
+              // capture script
+              capturescript,capturescriptparam: string;
+              capturescriptrun: integer;
+              // script step options
               scriptname: string;
               scriptpath: string;
               scriptargs: string;
@@ -676,6 +679,9 @@ begin
   switchnickname:='';
   switchname:='';
   switchvalue:='';
+  capturescript:='';
+  capturescriptparam:='';
+  capturescriptrun:=0;
 end;
 
 procedure TStep.Assign(Source: Tstep);
@@ -703,6 +709,9 @@ begin
   switchnickname:=Source.switchnickname;
   switchname:=Source.switchname;
   switchvalue:=Source.switchvalue;
+  capturescript:=Source.capturescript;
+  capturescriptparam:=Source.capturescriptparam;
+  capturescriptrun:=Source.capturescriptrun;
 end;
 
 function TStep.exposure_str: string;

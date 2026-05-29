@@ -946,6 +946,9 @@ begin
             s.switchnickname:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/SwitchNickname','');
             s.switchname:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/SwitchName','');
             s.switchvalue:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/SwitchValue','');
+            s.capturescript:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/CaptureScript','');
+            s.capturescriptparam:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/CaptureScriptParam','');
+            s.capturescriptrun:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/CaptureScriptRun',0);
             p.Add(s);
           end;
           if TemplateModified(p) then begin
@@ -1098,6 +1101,9 @@ try
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/SwitchNickname',p.Steps[j-1].switchnickname);
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/SwitchName',p.Steps[j-1].switchname);
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/SwitchValue',p.Steps[j-1].switchvalue);
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/CaptureScript',p.Steps[j-1].capturescript);
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/CaptureScriptParam',p.Steps[j-1].capturescriptparam);
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/CaptureScriptRun',p.Steps[j-1].capturescriptrun);
         end;
       end;
     end;
@@ -1158,6 +1164,9 @@ begin
        s.autofocusstart:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusStart',false);
        s.autofocus:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Autofocus',false);
        s.autofocuscount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusCount',10));
+       s.capturescript:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/CaptureScript','');
+       s.capturescriptparam:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/CaptureScriptParam','');
+       s.capturescriptrun:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/CaptureScriptRun',0);
        s.donecount:=0;
        p.Add(s);
      end;
@@ -2843,6 +2852,9 @@ begin
       fls.autofocusstart:=false;
       fls.autofocus:=false;
       fls.autofocuscount:=10;
+      fls.capturescript:='';
+      fls.capturescriptparam:='';
+      fls.capturescriptrun:=0;
       if flfilter[i]=Filter0 then
          fls.description:=flt.planname+' flat '
       else
@@ -3626,6 +3638,9 @@ begin
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/SwitchNickname','')<>p.Steps[i-1].switchnickname then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/SwitchName','')<>p.Steps[i-1].switchname then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/SwitchValue','')<>p.Steps[i-1].switchvalue then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/CaptureScript','')<>p.Steps[i-1].capturescript then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/CaptureScriptParam','')<>p.Steps[i-1].capturescriptparam then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/CaptureScirptRun',0)<>p.Steps[i-1].capturescriptrun then exit;
      n:=p.Steps[i-1].filter;
      if FilterList.Count>=n then begin
        if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Filter','')<>FilterList[n] then exit;

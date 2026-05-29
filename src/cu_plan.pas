@@ -292,7 +292,14 @@ begin
         Fcapture.DitherCount.Value:=p.dithercount;
         Fcapture.CheckBoxFocus.Checked:=p.autofocus;
         Fcapture.FocusCount.Value:=p.autofocuscount;
+        Fcapture.cbScript.Text:=p.capturescript;
+        Fcapture.edParams.Text:=p.capturescriptparam;
+        Fcapture.cbStartupScript.Checked:=p.capturescriptrun=1;
+        Fcapture.cbStartScriptImage.Checked:=p.capturescriptrun=2;
+        Fcapture.cbEndScriptImage.Checked:=p.capturescriptrun=3;
+        Fcapture.cbTerminationScript.Checked:=p.capturescriptrun=4;
         Fcapture.CheckLight(self); // be sure to apply the change now
+        Fcapture.cbScriptChange(self);
         if p.autofocusstart then Fcapture.FocusNow:=true;
         Ffilter.Filters.ItemIndex:=p.filter;
         Ffilter.FiltersChange(self);

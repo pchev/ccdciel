@@ -13,6 +13,7 @@ object f_EditTargets: Tf_EditTargets
   OnDestroy = FormDestroy
   OnResize = FormResize
   OnShow = FormShow
+  LCLVersion = '2.2.6.0'
   object PanelTarget: TPanel
     AnchorSideBottom.Control = Splitter1
     Left = 0
@@ -1034,7 +1035,7 @@ object f_EditTargets: Tf_EditTargets
             Width = 1020
             Align = alClient
             AutoFillColumns = True
-            ColCount = 13
+            ColCount = 16
             Columns = <            
               item
                 MinSize = 120
@@ -1055,26 +1056,26 @@ object f_EditTargets: Tf_EditTargets
                 )
                 Title.MultiLine = True
                 Title.Caption = 'Type'
-                Width = 88
+                Width = 66
               end            
               item
                 MaxSize = 202
                 Title.MultiLine = True
                 Title.Caption = 'Exposure'
-                Width = 88
+                Width = 66
               end            
               item
                 ButtonStyle = cbsPickList
                 Title.MultiLine = True
                 Title.Caption = 'Ref. exposure'
-                Width = 88
+                Width = 66
               end            
               item
                 MinSize = 71
                 MaxSize = 71
                 Title.MultiLine = True
                 Title.Caption = 'Stack'
-                Width = 88
+                Width = 66
               end            
               item
                 ButtonStyle = cbsPickList
@@ -1085,7 +1086,7 @@ object f_EditTargets: Tf_EditTargets
                 )
                 Title.MultiLine = True
                 Title.Caption = 'Binning'
-                Width = 88
+                Width = 66
               end            
               item
                 ButtonStyle = cbsPickList
@@ -1103,26 +1104,26 @@ object f_EditTargets: Tf_EditTargets
                 MaxSize = 71
                 Title.MultiLine = True
                 Title.Caption = 'Count'
-                Width = 88
+                Width = 66
               end            
               item
                 ButtonStyle = cbsCheckboxColumn
                 MaxSize = 202
                 Title.MultiLine = True
                 Title.Caption = 'Autofocus before to start'
-                Width = 88
+                Width = 66
               end            
               item
                 MaxSize = 202
                 Title.MultiLine = True
                 Title.Caption = 'Autofocus every'
-                Width = 88
+                Width = 66
               end            
               item
                 MaxSize = 202
                 Title.MultiLine = True
                 Title.Caption = 'Dither every'
-                Width = 88
+                Width = 66
               end            
               item
                 ButtonStyle = cbsPickList
@@ -1130,6 +1131,20 @@ object f_EditTargets: Tf_EditTargets
                 Title.Caption = 'F-stop'
                 Width = 0
                 Visible = False
+              end            
+              item
+                ButtonStyle = cbsPickList
+                Title.Caption = 'Script'
+                Width = 66
+              end            
+              item
+                Title.Caption = 'Param'
+                Width = 66
+              end            
+              item
+                ButtonStyle = cbsPickList
+                Title.Caption = 'Run'
+                Width = 75
               end>
             DefaultColWidth = 30
             MouseWheelOption = mwGrid
@@ -1148,17 +1163,20 @@ object f_EditTargets: Tf_EditTargets
             ColWidths = (
               30
               120
-              88
-              88
-              88
-              88
-              88
+              66
+              66
+              66
+              66
+              66
               69
-              88
-              88
-              88
-              88
+              66
+              66
+              66
+              66
               0
+              66
+              66
+              75
             )
           end
           object Panel17: TPanel
@@ -1581,8 +1599,8 @@ object f_EditTargets: Tf_EditTargets
             Width = 194
             Align = alLeft
             Caption = 'Exposure'
-            ClientHeight = 140
-            ClientWidth = 190
+            ClientHeight = 158
+            ClientWidth = 182
             ParentFont = False
             TabOrder = 0
             object Label16: TLabel
@@ -1681,8 +1699,8 @@ object f_EditTargets: Tf_EditTargets
             Width = 331
             Align = alLeft
             Caption = 'Filters'
-            ClientHeight = 140
-            ClientWidth = 327
+            ClientHeight = 158
+            ClientWidth = 319
             ParentFont = False
             TabOrder = 1
             object ScrollBox1: TScrollBox
@@ -1746,8 +1764,8 @@ object f_EditTargets: Tf_EditTargets
               ChildSizing.ShrinkVertical = crsScaleChilds
               ChildSizing.Layout = cclLeftToRightThenTopToBottom
               ChildSizing.ControlsPerLine = 1
-              ClientHeight = 61
-              ClientWidth = 198
+              ClientHeight = 79
+              ClientWidth = 190
               Items.Strings = (
                 'at dusk'
                 'at dawn'

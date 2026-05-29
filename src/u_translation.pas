@@ -1532,6 +1532,7 @@ resourcestring
   rsRunScriptBef = 'Run script before each exposure';
   rsRunScriptAft = 'Run script after an image is saved';
   rsRunScriptAtT = 'Run script at the end of the series';
+  rsRunScriptAtT2 = 'Run script at the start of the series';
   rsClickSaveToS = 'Click Save to set this values to the configuration for this profile.';
   rsStepSize = 'Step size';
   rsHFDFluctuati = 'HFD fluctuation measurement in progress';
@@ -1548,6 +1549,11 @@ resourcestring
   rsMonochromeBi = 'Monochrome 2x2 binning for color camera';
   rsSpectroscopy2 = 'Spectroscopy options';
   rsTheCameraDri = 'The camera driver do not allow to modify the gain';
+  rsNever = 'Never';
+  rsStartOfSerie = 'Start of series';
+  rsBeforeImage = 'Before image';
+  rsAfterImage = 'After image';
+  rsEndOfSeries = 'End of series';
 
 implementation
 

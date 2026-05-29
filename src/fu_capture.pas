@@ -40,6 +40,7 @@ type
     cbOverwrite: TCheckBox;
     cbStartScriptImage: TCheckBox;
     cbTerminationScript: TCheckBox;
+    cbStartupScript: TCheckBox;
     CheckBoxFocusHFD: TCheckBox;
     CheckBoxFocusTemp: TCheckBox;
     CheckBoxDither: TCheckBox;
@@ -216,6 +217,7 @@ begin
   CheckBoxFocusHFD.Caption:=rsAutofocusHFD2;
   Label8.Caption:=rsScript;
   Label9.Caption:=rsParameter;
+  cbStartupScript.Caption:=rsRunScriptAtT2;
   cbStartScriptImage.Caption:=rsRunScriptBef;
   cbEndScriptImage.Caption:=rsRunScriptAft;
   cbTerminationScript.Caption:=rsRunScriptAtT;
@@ -301,6 +303,9 @@ begin
         if ExposureTime>FlatMaxExp then ExposureTime:=FlatMaxExp;
       end;
       if Assigned(FonMsg) then FonMsg(rsStartCapture,2);
+      if (cbStartupScript.Checked)and(cbScript.text>'')and(FileExists(slash(ConfigDir)+cbScript.text+'.script'))and assigned(FRunScript) then begin
+        FRunScript(cbScript.text,ConfigDir,'-1 '+ScriptParams)
+      end;
       EarlyNextExposure:= ConfigExpEarlyStart and (ExposureTime>=1) and (not Overwrite)
           and (not cbStartScriptImage.Checked) and (not cbEndScriptImage.Checked)
           and ((TFrameType(cbFrameType.ItemIndex)=LIGHT)or(TFrameType(cbFrameType.ItemIndex)=DARK)or(cbFrameType.ItemIndex>ord(high(TFrameType))));
@@ -401,9 +406,9 @@ procedure Tf_capture.Stop;
 var r:string;
 begin
   Frunning:=false;
-  if (FstartedBy=CAPTURE)and(led.Brush.Color<>clGray) then begin
+  if (led.Brush.Color<>clGray) then begin
     if ExpectedStop then  begin
-      if EmailEndCapture then begin
+      if (FstartedBy=CAPTURE) and EmailEndCapture then begin
         r:=email(Format(rsCaptureSFini, ['']),Format(rsCaptureSFini, [FName.Text]));
         if r='' then r:=rsEmailSentSuc;
         if Assigned(FonMsg) then FonMsg(r,9);
@@ -413,7 +418,7 @@ begin
       end;
     end
     else begin
-       if EmailAbortCapture then begin
+       if (FstartedBy=CAPTURE) and EmailAbortCapture then begin
          r:=email(rsCaptureStopp2,rsCaptureStopp2 +' '+FName.Text);
          if r='' then r:=rsEmailSentSuc;
          if Assigned(FonMsg) then FonMsg(r,9);

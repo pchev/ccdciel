@@ -426,7 +426,7 @@ object f_capture: Tf_capture
     object Panel9: TPanel
       Left = 1
       Height = 30
-      Top = 515
+      Top = 537
       Width = 297
       Align = alTop
       BorderSpacing.Top = 4
@@ -475,13 +475,13 @@ object f_capture: Tf_capture
     end
     object PanelScript: TPanel
       Left = 1
-      Height = 128
+      Height = 150
       Top = 383
       Width = 297
       Align = alTop
       AutoSize = True
       BevelOuter = bvNone
-      ClientHeight = 128
+      ClientHeight = 150
       ClientWidth = 297
       TabOrder = 10
       object PanelScriptname: TPanel
@@ -580,42 +580,50 @@ object f_capture: Tf_capture
       end
       object PanelRunScript: TPanel
         Left = 0
-        Height = 70
+        Height = 92
         Top = 58
         Width = 297
         Align = alTop
         BevelOuter = bvNone
-        ClientHeight = 70
+        ClientHeight = 92
         ClientWidth = 297
         TabOrder = 2
         Visible = False
         object cbEndScriptImage: TCheckBox
           AnchorSideTop.Control = cbStartScriptImage
           AnchorSideTop.Side = asrBottom
-          Left = 1
+          Left = 0
           Height = 22
-          Top = 23
+          Top = 45
           Width = 200
           Caption = 'Run script after every image'
           TabOrder = 0
         end
         object cbStartScriptImage: TCheckBox
           AnchorSideTop.Side = asrBottom
-          Left = 1
+          Left = 0
           Height = 22
-          Top = 1
+          Top = 23
           Width = 211
           Caption = 'Run script before every image'
           TabOrder = 1
         end
         object cbTerminationScript: TCheckBox
           AnchorSideTop.Side = asrBottom
-          Left = 1
+          Left = 0
           Height = 22
-          Top = 47
+          Top = 67
           Width = 234
           Caption = 'Run script at the end of the series'
           TabOrder = 2
+        end
+        object cbStartupScript: TCheckBox
+          Left = 0
+          Height = 22
+          Top = 2
+          Width = 239
+          Caption = 'Run script at the start of the series'
+          TabOrder = 3
         end
       end
     end

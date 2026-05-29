@@ -32,7 +32,7 @@ uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_scripteditor, u_anno
 
 const
   colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colmagn=6; colstart=7; colend=8; colrepeat=9;
-  pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolrefexp=4; pcolstack=5; pcolbin=6; pcolfilter=7; pcolcount=8; pcolafstart=9; pcolafevery=10; pcoldither=11; pcolfstop=12;
+  pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolrefexp=4; pcolstack=5; pcolbin=6; pcolfilter=7; pcolcount=8; pcolafstart=9; pcolafevery=10; pcoldither=11; pcolfstop=12; pcolcscript=13; pcolcscriptp=14; pcolcscriptr=15;
   titleadd=0; titledel=1;
   pageobject=0; pagescript=1; pageflat=2; pagenone=3; pageswitch=4;
   cbNone=0; cbStopTracking=1; cbWarm=2; cbParkScope=3; cbParkDome=4; cbScript=5; cbUnattended=6;
@@ -628,6 +628,15 @@ begin
   StepList.Columns.Items[pcolafevery-1].Title.Caption := Format(rsAutofocusEve,[crlf]);
   StepList.Columns.Items[pcoldither-1].Title.Caption := Format(rsDitherEvery2,[crlf]);
   StepList.Columns.Items[pcolfstop-1].Title.Caption := rsFStop;
+  StepList.Columns.Items[pcolcscript-1].Title.Caption := rsScript;
+  StepList.Columns.Items[pcolcscriptp-1].Title.Caption := rsParameter;
+  StepList.Columns.Items[pcolcscriptr-1].Title.Caption := rsRun;
+  StepList.Columns[pcolcscriptr-1].PickList.Clear;
+  StepList.Columns[pcolcscriptr-1].PickList.Add(rsNever);
+  StepList.Columns[pcolcscriptr-1].PickList.Add(rsStartOfSerie);
+  StepList.Columns[pcolcscriptr-1].PickList.Add(rsBeforeImage);
+  StepList.Columns[pcolcscriptr-1].PickList.Add(rsAfterImage);
+  StepList.Columns[pcolcscriptr-1].PickList.Add(rsEndOfSeries);
   if StepList.Columns[pcolfilter-1].PickList.Count>0 then StepList.Columns[pcolfilter-1].PickList[0]:=Filter0;
   Label1.Caption := rsTemplate;
   // start options
@@ -730,6 +739,7 @@ begin
   ScriptList.Clear;
   ScriptList1.Clear;
   ScriptList2.Clear;
+  StepList.Columns[pcolcscript-1].PickList.Clear;
   i:=FindFirstUTF8(slash(ConfigDir)+'*.script',0,fs);
   while i=0 do begin
     scr:=ExtractFileNameOnly(fs.Name);
@@ -747,6 +757,8 @@ begin
   ScriptList2.Items.Assign(s);
   ScriptList2.ItemIndex:=0;
   f_selectscript.ComboBoxScript.Items.Assign(s);
+  StepList.Columns[pcolcscript-1].PickList.Assign(s);
+  StepList.Columns[pcolcscript-1].PickList.Insert(0,'');
   s.Free;
 end;
 
@@ -3279,6 +3291,9 @@ begin
   p.switchnickname:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/SwitchNickname','');
   p.switchname:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/SwitchName','');
   p.switchvalue:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/SwitchValue','');
+  p.capturescript:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/CaptureScript','');
+  p.capturescriptparam:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/CaptureScriptParam','');
+  p.capturescriptrun:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/CaptureScriptRun',0);
   // obsolete option
   if trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',1)) > 1 then
      msg:=msg+crlf+p.description+' warning! the Repeat option at the step level as been removed. Please use the Repeat option at the target level instead.';
@@ -3457,6 +3472,9 @@ begin
       StepList.Cells[pcolafevery,n]:=IntToStr(p.autofocuscount)
     else
       StepList.Cells[pcolafevery,n]:='';
+    StepList.Cells[pcolcscript,n]:=p.capturescript;
+    StepList.Cells[pcolcscriptp,n]:=p.capturescriptparam;
+    StepList.Cells[pcolcscriptr,n]:=StepList.Columns[pcolcscriptr-1].PickList[p.capturescriptrun];
   end
   else if p.steptype=1 then begin
     StepList.Cells[pcoltype,n]:=rsScript;
@@ -3470,6 +3488,9 @@ begin
     StepList.Cells[pcolafevery,n]:='';
     StepList.Cells[pcoldither,n]:='';
     StepList.Cells[pcolfstop,n]:='';
+    StepList.Cells[pcolcscript,n]:='';
+    StepList.Cells[pcolcscriptp,n]:='';
+    StepList.Cells[pcolcscriptr,n]:='';
     SetScriptList1(n,p.scriptpath,p.scriptname,p.scriptargs);
   end
   else if p.steptype=2 then begin
@@ -3484,6 +3505,9 @@ begin
     StepList.Cells[pcolafevery,n]:='';
     StepList.Cells[pcoldither,n]:='';
     StepList.Cells[pcolfstop,n]:='';
+    StepList.Cells[pcolcscript,n]:='';
+    StepList.Cells[pcolcscriptp,n]:='';
+    StepList.Cells[pcolcscriptr,n]:='';
     SetSwitch1(n,p.switchnickname,p.switchname,p.switchvalue);
   end;
   LockStep:=false;
@@ -3573,6 +3597,17 @@ begin
        p.autofocuscount:=j
     else
        p.autofocuscount:=0;
+    str:=StepList.Cells[pcolcscript,n];
+    StepsModified:=StepsModified or (p.capturescript<>str);
+    p.capturescript:=str;
+    str:=StepList.Cells[pcolcscriptp,n];
+    StepsModified:=StepsModified or (p.capturescriptparam<>str);
+    p.capturescriptparam:=str;
+    str:=StepList.Cells[pcolcscriptr,n];
+    j:=StepList.Columns[pcolcscriptr-1].PickList.IndexOf(str);
+    if j<0 then j:=0;
+    StepsModified:=StepsModified or (p.capturescriptrun<>j);
+    p.capturescriptrun:=j;
     // reset donecount if the id change
     if p.id<>oldid then
       p.donecount:=0;
@@ -3683,6 +3718,9 @@ begin
     pcolafevery : HintText:=rsRedoAutofocu;
     pcoldither  : HintText:=rsDitherAfterT;
     pcolfstop   : HintText:=rsFStop;
+    pcolcscript : HintText:='';
+    pcolcscriptp: HintText:='';
+    pcolcscriptr: HintText:='';
     else HintText:='';
   end;
 end;
@@ -3702,6 +3740,10 @@ begin
      Editor:=StepList.EditorByStyle(cbsCheckboxColumn) // autofocus at start selection
   else if (aCol=pcolfstop) then
      Editor:=StepList.EditorByStyle(cbsPickList) // f-stop
+  else if (aCol=pcolcscript) then
+     Editor:=StepList.EditorByStyle(cbsPickList) // script list
+  else if (aCol=pcolcscriptr) then
+     Editor:=StepList.EditorByStyle(cbsPickList) // script run
   else
      Editor:=StepList.EditorByStyle(cbsAuto);
 end;
@@ -3916,6 +3958,9 @@ try
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/SwitchNickname',p.switchnickname);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/SwitchName',p.switchname);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/SwitchValue',p.switchvalue);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/CaptureScript',p.capturescript);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/CaptureScriptParam',p.capturescriptparam);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/CaptureScriptRun',p.capturescriptrun);
   end;
   pfile.Flush;
   pfile.Free;
