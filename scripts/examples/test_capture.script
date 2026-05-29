@@ -16,6 +16,14 @@ if len(sys.argv) >= 2 :
      stackcount = int(captureparam[2])
   else:
      stackcount = 1
+  if len(captureparam)>=4:
+     currentframe = int(captureparam[3])
+  else:
+     currentframe = 0
+  if len(captureparam)>=5:
+     totalframe = int(captureparam[4])
+  else:
+     totalframe = 0
 else:
   sys.exit(1)
 
@@ -25,11 +33,16 @@ if len(sys.argv) >= 3 :
   print('param1='+p1)
 
 match action:
+   case -1:
+      print('start of the series')
+
    case 0:
       if stackcount==1:
          print(f"we start an exposure of {exptime} seconds")
       else:
          print(f"we start a stack of {stackcount} exposure of {exptime} seconds")
+      if (currentframe > 0) and (totalframe > 0):
+         print(f"this is exposure number {currentframe} on a total of {totalframe}")
 
    case 1:
       lastfile=ccdciel('Capture_getLastfilename')['result']
@@ -43,5 +56,4 @@ match action:
 
    case _:
       print('something else ??')
-
 
