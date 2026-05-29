@@ -654,7 +654,7 @@ type
     astrometry:TAstrometry;
     WantCamera,WantGuideCamera,WantFinderCamera,WantWheel,WantFocuser,WantRotator, WantMount, WantDome, WantWeather, WantSafety, WantSwitch, WantCover, WantWatchdog: boolean;
     CameraInitialized: boolean;
-    FOpenSetup, FConnecting: boolean;
+    FOpenSetup, FConnectingCamera,FConnectingGuider,FConnectingFinder: boolean;
     f_devicesconnection: Tf_devicesconnection;
     f_filterwheel: Tf_filterwheel;
     f_ccdtemp: Tf_ccdtemp;
@@ -1587,7 +1587,9 @@ begin
   ScaleMainForm;
   NeedRestart:=false;
   AllDevicesConnected:=false;
-  FConnecting:=false;
+  FConnectingCamera:=false;
+  FConnectingGuider:=false;
+  FConnectingFinder:=false;
   GUIready:=false;
   filteroffset_initialized:=false;
   MsgHandle:=handle;
@@ -4300,6 +4302,7 @@ end;
 procedure Tf_main.CameraConnectTimerTimer(Sender: TObject);
 begin
   CameraConnectTimer.Enabled:=false;
+  FConnectingCamera:=false;
   if not CameraInitialized then begin
     //Thing to do after camera is connected
     CameraInitialized:=true;
@@ -4316,6 +4319,7 @@ end;
 procedure Tf_main.GuideCameraConnectTimerTimer(Sender: TObject);
 begin
   GuideCameraConnectTimer.Enabled:=false;
+  FConnectingGuider:=false;
   guidecamera.CheckGain;
   f_internalguider.PanelGain.Visible:=guidecamera.hasGain;
   if guidecamera.hasGain and (f_internalguider.Gain.Value=0) then f_internalguider.Gain.Value:=guidecamera.Gain;
@@ -4338,6 +4342,7 @@ var rx,ry,rw,rh:TNumRange;
     bin:integer;
 begin
   FinderCameraConnectTimer.Enabled:=false;
+  FConnectingFinder:=false;
   findercamera.CheckGain;
   f_finder.PanelGain.Visible:=findercamera.hasGain;
   if f_finder.PanelGain.Visible then begin
@@ -6115,7 +6120,6 @@ try
       wait(10);
     end;
   end;
-  FConnecting:=true;
   f_script.RunBeforeConnectScript;
   if WantCamera and (CameraName='') then begin
     f_devicesconnection.BtnConnect.Caption:=rsConnect;
@@ -6246,7 +6250,9 @@ Procedure Tf_main.Disconnect(Sender: TObject);
 begin
    if (sender=nil) or (MessageDlg(rsAreYouSureYo, mtConfirmation, mbYesNo, 0)=mrYes) then begin
      NewMessage(rsDisconnectin,9);
-     FConnecting:=false;
+     FConnectingCamera:=false;
+     FConnectingGuider:=false;
+     FConnectingFinder:=false;
      if camera.Status=devConnected then camera.AbortExposure;
      if guidecamera.Status=devConnected then guidecamera.AbortExposure;
      if findercamera.Status=devConnected then findercamera.AbortExposure;
@@ -6325,7 +6331,6 @@ end;
 procedure SetConnected;
 begin
  AllDevicesConnected:=true;
- FConnecting:=false;
  f_devicesconnection.led.Brush.Color:=clLime;
  f_devicesconnection.BtnProfile.Enabled:=False;
  f_devicesconnection.BtnConnect.Caption:=rsDisconnect;
@@ -6347,7 +6352,7 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
   case camera.Status of
     devConnected: begin
                   inc(upcount);
-                  if FConnecting then begin
+                  if FConnectingCamera then begin
                     CameraConnectTimer.Enabled:=false;
                     CameraConnectTimer.Enabled:=true;
                   end;
@@ -6434,7 +6439,7 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
    case guidecamera.Status of
      devConnected: begin
                    inc(upcount);
-                   if FConnecting then begin
+                   if FConnectingGuider then begin
                      GuideCameraConnectTimer.Enabled:=false;
                      GuideCameraConnectTimer.Enabled:=true;
                    end;
@@ -6448,7 +6453,7 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
    case findercamera.Status of
      devConnected: begin
                    inc(upcount);
-                   if FConnecting then begin
+                   if FConnectingFinder then begin
                      FinderCameraConnectTimer.Enabled:=false;
                      FinderCameraConnectTimer.Enabled:=true;
                    end;
@@ -6475,6 +6480,7 @@ var inditransfer: TIndiTransfert;
 begin
    if camera.Status<>devDisconnected then exit;
    CameraInitialized:=false;
+   FConnectingCamera:=true;
    case camera.CameraInterface of
     INDI : begin
            inditransfer:=TIndiTransfert(config.GetValue('/INDIcamera/IndiTransfert',ord(itNetwork)));
@@ -6844,6 +6850,7 @@ var inditransfer: TIndiTransfert;
     ok: boolean;
 begin
    if guidecamera.Status<>devDisconnected then exit;
+   FConnectingGuider:=true;
    case guidecamera.CameraInterface of
     INDI : begin
            if SameGuiderFinder then begin
@@ -6952,6 +6959,7 @@ end;
 procedure Tf_main.ConnectFinderCamera(Sender: TObject);
 begin
   if findercamera.Status<>devDisconnected then exit;
+  FConnectingFinder:=true;
   case findercamera.CameraInterface of
    INDI : begin
           findercamera.IndiTransfert:=itNetwork;
