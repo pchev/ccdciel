@@ -11722,7 +11722,11 @@ if (camera.Status=devConnected)and(not autofocusing) then begin
   // start exposure script
   if f_capture.StartScriptImage and (f_capture.Script<>'')and(FileExists(slash(ConfigDir)+f_capture.Script+'.script'))and((not camera.AddFrames)or(camera.StackStarted=1)) then begin
      buf:='0'+','+FormatFloat(f3,e);
-     if camera.AddFrames then buf:=buf+','+f_capture.StackNum.Text;
+     if camera.AddFrames then
+        buf:=buf+','+f_capture.StackNum.Text
+     else
+       buf:=buf+',1';
+     buf:=buf+','+inttostr(cc)+','+f_capture.SeqNum.Text;
      RunScript(f_capture.Script,ConfigDir,buf+' '+f_capture.ScriptParams);
   end;
   // start exposure for time e
