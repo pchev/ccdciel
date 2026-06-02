@@ -35,9 +35,9 @@ type
   Tf_preview = class(TFrame)
     BtnPreview: TButton;
     BtnLoop: TButton;
+    cbGainOffset: TCheckBox;
     CheckBoxAstrometry: TCheckBox;
     image_inspection1: TCheckBox;
-    LabelExpInfo: TLabel;
     StackPreview: TCheckBox;
     PreprocessPreview: TCheckBox;
     Fnumber: TComboBox;
@@ -57,8 +57,15 @@ type
     Panel3: TPanel;
     Panel4: TPanel;
     Title: TLabel;
+    ISObox: TComboBox;
+    LabelOffset: TLabel;
+    PanelOffset: TPanel;
+    PanelGain: TPanel;
+    GainEdit: TSpinEditEx;
+    OffsetEdit: TSpinEditEx;
     procedure BtnLoopClick(Sender: TObject);
     procedure BtnPreviewClick(Sender: TObject);
+    procedure cbGainOffsetClick(Sender: TObject);
     procedure CheckBoxAstrometryClick(Sender: TObject);
     procedure ExpTimeKeyPress(Sender: TObject; var Key: char);
     procedure LabelExpInfoClick(Sender: TObject);
@@ -77,6 +84,10 @@ type
     procedure SetExposure(value:double);
     function GetBinning: integer;
     procedure SetBinning(value:integer);
+    function GetGain:integer;
+    procedure SetGain(value:integer);
+    function GetOffset:integer;
+    procedure SetOffset(value:integer);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -88,6 +99,8 @@ type
     property Camera: T_camera read Fcamera write Fcamera;
     property Loop: boolean read FLoop write FLoop;
     property Exposure: double read GetExposure write SetExposure;
+    property Gain: integer read GetGain write SetGain;
+    property Offset: integer read GetOffset write SetOffset;
     property Bin: integer read GetBinning write SetBinning;
     property onResetStack: TNotifyEvent read FonResetStack write FonResetStack;
     property onStartExposure: TNotifyEvent read FonStartExposure write FonStartExposure;
@@ -113,7 +126,6 @@ begin
  Frunning:=false;
  SetLang;
  led.Canvas.AntialiasingMode:=amOn;
- LabelExpInfo.Caption:='';
 end;
 
 destructor  Tf_preview.Destroy;
@@ -140,6 +152,7 @@ begin
   StackPreview.Caption:=rsStack;
   PreprocessPreview.Caption:=rsPreprocessin;
   BtnLoop.Caption:=rsLoop;
+  cbGainOffset.Caption:=rsGain;
   ExpTime.Hint:=rsExposureTime;
   Binning.Hint:=rsCameraBinnin;
   BtnPreview.Hint:=rsStartOnePrev;
@@ -170,6 +183,22 @@ begin
      msg(rsStopPreview,2);
      ExpectedStop:=true;
      if Assigned(FonAbortExposure) then FonAbortExposure(self);
+  end;
+end;
+
+procedure Tf_preview.cbGainOffsetClick(Sender: TObject);
+begin
+  if cbGainOffset.Checked then begin
+    ISObox.Enabled:=true;
+    GainEdit.Enabled:=true;
+    PanelOffset.Enabled:=true;
+  end
+  else begin
+    Gain:=DefaultGain;
+    Offset:=DefaultOffset;
+    ISObox.Enabled:=false;
+    GainEdit.Enabled:=false;
+    PanelOffset.Enabled:=false;
   end;
 end;
 
@@ -267,6 +296,32 @@ begin
   buf:=IntToStr(value)+'x'+IntToStr(value);
   i:=Binning.Items.IndexOf(buf);
   if i>=0 then Binning.ItemIndex:=i;
+end;
+
+function Tf_preview.GetGain:integer;
+begin
+  if ISObox.Visible then
+    result:=ISObox.ItemIndex
+  else
+    result:=GainEdit.Value;
+end;
+procedure Tf_preview.SetGain(value:integer);
+begin
+  if ISObox.Visible then begin
+    if (value>=0)and(value<ISObox.Items.Count) then
+      ISObox.ItemIndex:=value
+  end
+  else begin
+    GainEdit.Value:=value;
+  end;
+end;
+function Tf_preview.GetOffset:integer;
+begin
+  result:=OffsetEdit.Value;
+end;
+procedure Tf_preview.SetOffset(value:integer);
+begin
+  OffsetEdit.Value:=value;
 end;
 
 end.

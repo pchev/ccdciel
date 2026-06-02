@@ -2,10 +2,10 @@ object f_preview: Tf_preview
   Left = 0
   Height = 324
   Top = 0
-  Width = 194
+  Width = 279
   AutoSize = True
   ClientHeight = 324
-  ClientWidth = 194
+  ClientWidth = 279
   ParentFont = False
   TabOrder = 0
   DesignLeft = -2
@@ -14,30 +14,116 @@ object f_preview: Tf_preview
     Left = 0
     Height = 260
     Top = 64
-    Width = 194
+    Width = 279
     Align = alClient
     AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
     ClientHeight = 260
-    ClientWidth = 194
+    ClientWidth = 279
     ParentFont = False
     TabOrder = 0
+    object PanelGain: TPanel
+      Left = 0
+      Height = 32
+      Top = 0
+      Width = 272
+      BevelOuter = bvNone
+      ClientHeight = 32
+      ClientWidth = 272
+      ParentFont = False
+      TabOrder = 6
+      object ISObox: TComboBox
+        Left = 72
+        Height = 32
+        Hint = 'Exposure time in seconds'
+        Top = 0
+        Width = 70
+        Enabled = False
+        ItemHeight = 18
+        ParentFont = False
+        Style = csDropDownList
+        TabOrder = 0
+        Visible = False
+      end
+      object GainEdit: TSpinEditEx
+        Left = 72
+        Height = 32
+        Top = 0
+        Width = 70
+        Enabled = False
+        MaxLength = 0
+        ParentFont = False
+        TabOrder = 1
+        MaxValue = 32767
+        MinValue = -32768
+        NullValue = 0
+        Value = 0
+      end
+      object PanelOffset: TPanel
+        AnchorSideLeft.Control = GainEdit
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = GainEdit
+        Left = 145
+        Height = 32
+        Top = 0
+        Width = 127
+        BorderSpacing.Left = 3
+        BevelOuter = bvNone
+        ClientHeight = 32
+        ClientWidth = 127
+        Enabled = False
+        TabOrder = 2
+        object LabelOffset: TLabel
+          AnchorSideTop.Control = OffsetEdit
+          AnchorSideTop.Side = asrCenter
+          Left = 6
+          Height = 18
+          Top = 7
+          Width = 38
+          Caption = 'Offset'
+          ParentColor = False
+        end
+        object OffsetEdit: TSpinEditEx
+          Left = 56
+          Height = 32
+          Top = 0
+          Width = 70
+          MaxLength = 0
+          TabOrder = 0
+          MaxValue = 32767
+          MinValue = -32768
+          NullValue = 0
+          Value = 0
+        end
+      end
+      object cbGainOffset: TCheckBox
+        AnchorSideTop.Control = GainEdit
+        AnchorSideTop.Side = asrCenter
+        Left = 0
+        Height = 22
+        Top = 5
+        Width = 53
+        Caption = 'Gain'
+        OnClick = cbGainOffsetClick
+        TabOrder = 3
+      end
+    end
     object Panel2: TPanel
       Left = 0
-      Height = 57
-      Top = 0
-      Width = 191
+      Height = 30
+      Top = 32
+      Width = 272
       BevelOuter = bvNone
-      ClientHeight = 57
-      ClientWidth = 191
+      ClientHeight = 30
+      ClientWidth = 272
       ParentFont = False
       TabOrder = 0
       object ExpTime: TComboBox
         Left = 101
         Height = 28
         Hint = 'Exposure time in seconds'
-        Top = 29
+        Top = 2
         Width = 90
         Constraints.MaxHeight = 28
         ItemHeight = 24
@@ -67,31 +153,21 @@ object f_preview: Tf_preview
         AnchorSideTop.Side = asrCenter
         Left = 6
         Height = 18
-        Top = 34
+        Top = 7
         Width = 57
         Caption = 'Exposure'
         ParentColor = False
         ParentFont = False
       end
-      object LabelExpInfo: TLabel
-        Cursor = crHandPoint
-        Left = 6
-        Height = 18
-        Top = 4
-        Width = 80
-        Caption = 'LabelExpInfo'
-        ParentColor = False
-        OnClick = LabelExpInfoClick
-      end
     end
     object Panel3: TPanel
       Left = 0
       Height = 28
-      Top = 57
-      Width = 191
+      Top = 62
+      Width = 272
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 191
+      ClientWidth = 272
       ParentFont = False
       TabOrder = 1
       object Binning: TComboBox
@@ -124,11 +200,11 @@ object f_preview: Tf_preview
     object PanelFnumber: TPanel
       Left = 0
       Height = 30
-      Top = 85
-      Width = 191
+      Top = 90
+      Width = 272
       BevelOuter = bvNone
       ClientHeight = 30
-      ClientWidth = 191
+      ClientWidth = 272
       ParentFont = False
       TabOrder = 4
       Visible = False
@@ -157,11 +233,11 @@ object f_preview: Tf_preview
     object Panel5: TPanel
       Left = 0
       Height = 26
-      Top = 115
-      Width = 191
+      Top = 120
+      Width = 272
       BevelOuter = bvNone
       ClientHeight = 26
-      ClientWidth = 191
+      ClientWidth = 272
       ParentFont = False
       TabOrder = 3
       object BtnPreview: TButton
@@ -191,11 +267,11 @@ object f_preview: Tf_preview
     object Panel4: TPanel
       Left = 0
       Height = 28
-      Top = 141
-      Width = 191
+      Top = 146
+      Width = 272
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 191
+      ClientWidth = 272
       ParentFont = False
       TabOrder = 2
       object led: TShape
@@ -214,12 +290,12 @@ object f_preview: Tf_preview
     object Panel7: TPanel
       Left = 0
       Height = 13
-      Top = 169
-      Width = 191
+      Top = 174
+      Width = 272
       AutoSize = True
       BevelOuter = bvNone
       ClientHeight = 13
-      ClientWidth = 191
+      ClientWidth = 272
       TabOrder = 5
       object LabelAstrometry: TLabel
         Left = 0
@@ -238,7 +314,7 @@ object f_preview: Tf_preview
     Left = 0
     Height = 20
     Top = 0
-    Width = 194
+    Width = 279
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -255,28 +331,28 @@ object f_preview: Tf_preview
     Left = 0
     Height = 44
     Top = 20
-    Width = 194
+    Width = 279
     Align = alTop
     BevelOuter = bvNone
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 2
     ClientHeight = 44
-    ClientWidth = 194
+    ClientWidth = 279
     TabOrder = 1
     object CheckBoxAstrometry: TCheckBox
       Left = 0
       Height = 22
       Top = 0
-      Width = 97
+      Width = 93
       Caption = 'Astrometry'
       OnClick = CheckBoxAstrometryClick
       TabOrder = 0
     end
     object image_inspection1: TCheckBox
-      Left = 97
+      Left = 93
       Height = 22
       Top = 0
-      Width = 96
+      Width = 92
       Caption = 'Inspection'
       TabOrder = 1
     end
@@ -284,16 +360,16 @@ object f_preview: Tf_preview
       Left = 0
       Height = 22
       Top = 22
-      Width = 97
+      Width = 93
       Caption = 'Stack'
       OnClick = StackPreviewClick
       TabOrder = 2
     end
     object PreprocessPreview: TCheckBox
-      Left = 97
+      Left = 93
       Height = 22
       Top = 22
-      Width = 96
+      Width = 92
       Caption = 'Preprocess'
       TabOrder = 3
     end
