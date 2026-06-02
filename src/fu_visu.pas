@@ -108,7 +108,7 @@ type
     { private declarations }
     Fhist:Thistogram;
     Fmaxh, Fmaxp, Fsum: integer;
-    FimageC, FimageMin, FimageMax, FdataMin, FdataMax, Fmean, Fsd : double;
+    FimageC, FimageMin, FimageMax, FdataMin, FdataMax, Fmedian, Fbell_min,Fbell_max : double;
     FisFloatingPoint, FisFlipped, Finitialized: boolean;
     FimgMin, FimgMax: double;
     FHistStart,FHistStop,FZoomStart,FZoomStop, FHistStep, MaxHistSize : integer;
@@ -201,12 +201,13 @@ procedure Tf_visu.SetLang;
 begin
   Title.Caption:=rsVisualisatio;
   cbHistRange.Items[0]:=rsDataRange;
-  cbHistRange.Items[1]:=rsLow;
-  cbHistRange.Items[2]:=rsMedium;
-  cbHistRange.Items[3]:=rsHigh;
-  cbHistRange.Items[4]:=rsVeryHigh;
-  cbHistRange.Items[5]:=rsExtreme;
-  cbHistRange.Items[6]:=rsManual;
+  cbHistRange.Items[1]:=rsVeryLow;
+  cbHistRange.Items[2]:=rsLow;
+  cbHistRange.Items[3]:=rsMedium;
+  cbHistRange.Items[4]:=rsHigh;
+  cbHistRange.Items[5]:=rsVeryHigh;
+  cbHistRange.Items[6]:=rsExtreme;
+  cbHistRange.Items[7]:=rsManual;
   HistGraph.Hint:=rsHistogramOfT;
   BtnZoomAdjust.Hint:=rsZoomToAdjust;
   HistBar.Hint:=rsClickAndMove;
@@ -228,39 +229,47 @@ begin
   SpinEditMax.Hint:=rsTheUpperLimi;
 end;
 
-procedure Tf_visu.SetLimit(SetLevel:boolean);
-var x: array[0..3] of double;
+procedure Tf_visu.SetLimit(SetLevel:boolean); //v2026
+var i,n: integer;
 begin
   if SetLevel and (Fmaxh>0) then begin
-    x[3]:=min(FdataMax,Fmean + 0.2*(FdataMax-Fmean));               // medium
-    x[2]:=min(FdataMax,Fmean + 0.1*(FdataMax-Fmean));               // high
-    x[1]:=min(FdataMax,Fmean + max(10*Fsd,0.02*(FdataMax-Fmean))) ; // very high
-    x[0]:=min(FdataMax,Fmean + 3*Fsd);                              // extreme
-    quicksort(x,0,3);  // sort to respect range order with noisy camera
     case cbHistRange.ItemIndex of
       0 : begin  // data range
             FimgMin:=FdataMin;
             FimgMax:=FdataMax;
           end;
-      1 : begin  // low
+      1 : begin  // very low , cut only 0.01% for hot pixels
             FimgMin:=FdataMin;
-            FimgMax:=min(FdataMax,FdataMin + 0.5*(FdataMax-FdataMin));
+            n:=0;
+            for i:=0 to high(word) do begin
+              n:=n+Fhist[i];
+              if n>=(0.9999*Fsum) then begin
+                FimgMax:=i;
+                break;
+              end;
+            end;
           end;
-      2 : begin  // medium
-            FimgMin:=FdataMin;
-            FimgMax:=x[3];
+      2 : begin  // low
+            FimgMin:=Fmedian;
+            FimgMax:=min(FdataMax,Fmedian + 40*(Fbell_max-Fmedian)) ;
           end;
-      3 : begin  // high
-            FimgMin:=Fmean;
-            FimgMax:=x[2];
+      3 : begin  // medium
+            FimgMin:=Fmedian;
+            FimgMax:=min(FdataMax,Fmedian + 20*(Fbell_max-Fmedian)) ;
+
           end;
-      4 : begin  // very high
-            FimgMin:=Fmean;
-            FimgMax:=x[1];
+      4 : begin  // high
+            FimgMin:=Fmedian;
+            FimgMax:=min(FdataMax,Fmedian + 10*(Fbell_max-Fmedian)) ;
+
           end;
-      5 : begin  // extreme
-            FimgMin:=Fmean;
-            FimgMax:=x[0];
+      5 : begin  // very high
+             FimgMin:=Fmedian;
+             FimgMax:=min(FdataMax,Fmedian +5*(Fbell_max-Fmedian)) ;
+          end;
+      6 : begin  // extreme
+             FimgMin:=Fmedian;
+             FimgMax:=min(FdataMax,Fmedian +1*(Fbell_max-Fmedian)) ;
           end;
       else begin  // manual
             // do not change previous setting
@@ -333,9 +342,10 @@ FimageMax:=f.imageMax;
 FdataMin:=f.HeaderInfo.dmin;
 FdataMax:=f.HeaderInfo.dmax;
 i:=max(4,min(f.HeaderInfo.naxis1,f.HeaderInfo.naxis2) div 100);
-f.stdev2(i,Fmean,Fsd,iterations);
-Fmean:=FimageMin+Fmean/FimageC;
-Fsd:=FimageMin+Fsd/FimageC;
+f.bell_median_and_begin_and_end(Fmedian,Fbell_min,Fbell_max);//Find in the histogram the bell shape median and begin and end position (one sigma from median)
+Fmedian:=FimageMin+Fmedian/FimageC;
+Fbell_min:=Fbell_min/FimageC;
+Fbell_max:=Fbell_max/FimageC;
 for i:=0 to high(word) do Fhist[i]:=f.Histogram[i];
 HistStats(Fhist,Fmaxh,Fmaxp,Fsum,FHistStart,FHistStop);
 FZoomStart:=FHistStart;

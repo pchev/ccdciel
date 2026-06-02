@@ -208,6 +208,7 @@ type
      procedure ClearFitsInfo;
      procedure GetFitsInfo;
      procedure stdev2(samplestep: integer; out mean,sd : double; out iterations :integer; x1:integer=0; y1:integer=0; x2:integer=0; y2:integer=0);{calculate mean and standard deviation using sigma clip to exclude outliers}
+     procedure bell_median_and_begin_and_end(out median,bell_min,bell_max: double);
      procedure CreateImage(info: TFitsInfo; hdr:TFitsHeader);
      procedure BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; rbg,gbg,bbg:single; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:single; row,col:integer; out pixr,pixg,pixb:single); inline;
      Procedure Debayer;
@@ -2004,6 +2005,87 @@ begin
 
     inc(iterations);
   until (((sd_old-sd)<0.03*sd) or (iterations>=7));{repeat until sd is stable or 7 iterations}
+end;
+
+
+procedure TFits.bell_median_and_begin_and_end(out median,bell_min,bell_max: double);//Find in the histogram the bell shape median and begin and end position (one sigma from median)
+var
+  i, val, sum,q_low,q_high,background,upperlimit: integer;
+  currentCount, targetCount  : double;
+begin
+  background := 0;
+
+  { --- Step 1: full sum (skip the few zero-value outlier pixels) --- }
+  sum := 0;
+  for i := 1 to high(Fhistogram) do          // start at 1 to ignore the stray zeros
+    sum := sum + Fhistogram[i];
+
+  if sum = 0 then Exit;
+
+  { --- Step 2: find Q_low ≈ μ − 1σ  (16th percentile) --- }
+  Q_low      := 0;
+  currentCount := 0;
+  targetCount  := sum * 0.16;
+  for i := 1 to high(Fhistogram) do
+  begin
+    val := histogram[i];
+    if val > 0 then
+    begin
+      currentCount := currentCount + val;
+      if currentCount >= targetCount then
+      begin
+        Q_low := i;
+        break;
+      end;
+    end;
+  end;
+
+  { --- Step 3: trim at 2 * Q_low and recount --- }
+  upperlimit := Q_low * 2;  // symmetry assumption: peak ≈ Q_low + σ
+  sum := 0;
+  for i := 1 to upperlimit do
+    sum := sum + Fhistogram[i];
+
+  if sum = 0 then Exit;
+
+  { --- Step 4: find background (50th percentile) ≈ μ inside trimmed range --- }
+  currentCount := 0;
+  targetCount  := sum * 0.50;
+  for i := 1 to upperlimit do
+  begin
+    val := Fhistogram[i];
+    if val > 0 then
+    begin
+      currentCount := currentCount + val;
+      if currentCount >= targetCount then
+      begin
+        background := i;
+        break;
+      end;
+    end;
+  end;
+
+  { --- Step 5: find Q_high ≈ μ + 1σ  (84th percentile inside trimmed range) --- }
+  { Optional but gives a cross-check / more robust sigma }
+  currentCount := 0;
+  targetCount  := sum * 0.84;
+  for i := 1 to upperlimit do
+  begin
+    val := Fhistogram[i];
+    if val > 0 then
+    begin
+      currentCount := currentCount + val;
+      if currentCount >= targetCount then
+      begin
+        Q_high := i;
+        break;
+      end;
+    end;
+  end;
+
+  median:=background; //integer to double
+  bell_min:=q_low;  //position one sigma below median
+  bell_max:=q_high; //position one sigma above median
 end;
 
 

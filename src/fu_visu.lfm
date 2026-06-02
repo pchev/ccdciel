@@ -455,6 +455,7 @@ object f_visu: Tf_visu
             ItemIndex = 0
             Items.Strings = (
               'Data range'
+              'Very Low'
               'Low '
               'Medium'
               'High'
