@@ -6830,6 +6830,8 @@ begin
        end;
        txt:=copy(txt,1,length(txt)-2);
        f_capture.LabelExpInfo.Caption:=txt;
+       if (not f_preview.GainEdit.Enabled) and (not f_preview.ISObox.Enabled) then f_preview.Gain:=DefaultGain;
+       if not f_preview.OffsetEdit.Enabled then f_preview.Offset:=DefaultOffset;
     end;
 end;
 
