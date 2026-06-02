@@ -3288,10 +3288,6 @@ begin
   f_visu.BtnClipRange.Glyph.Assign(btn);
   f_internalguider.visu.BtnClipRange.Glyph.Assign(btn);
   f_finder.visu.BtnClipRange.Glyph.Assign(btn);
-  TBTabs.Images.GetBitmap(16, btn);
-  f_visu.BtnZoomHist.Glyph.Assign(btn);
-  f_internalguider.visu.BtnZoomHist.Glyph.Assign(btn);
-  f_finder.visu.BtnZoomHist.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(8, btn);
   f_visu.BtnClipping.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(11, btn);

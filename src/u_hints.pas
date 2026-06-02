@@ -162,7 +162,6 @@ resourcestring
   rsTheObjectMag = 'The object magnitude';
   rsSkipThisTarg = 'Skip this target if there is not enough time to do all the steps before the end time';
   rsDetachTheGra = 'Detach the graph';
-  rsZoomTheHisto = 'Zoom the histogram to the current selection';
   rsPredefinedHi = 'Predefined histogram truncation';
   rsTheLowerLimi = 'The lower limit of histogram truncation';
   rsTheUpperLimi = 'The upper limit of histogram truncation';

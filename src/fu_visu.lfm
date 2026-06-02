@@ -236,7 +236,7 @@ object f_visu: Tf_visu
           object BtnInvert: TSpeedButton
             AnchorSideLeft.Side = asrBottom
             AnchorSideTop.Control = BtnClipRange
-            Left = 58
+            Left = 29
             Height = 22
             Hint = 'Invert image display'
             Top = 0
@@ -250,7 +250,7 @@ object f_visu: Tf_visu
           end
           object BtnBullsEye: TSpeedButton
             AnchorSideLeft.Side = asrBottom
-            Left = 87
+            Left = 58
             Height = 22
             Hint = 'Show bulls eye'
             Top = 0
@@ -264,7 +264,7 @@ object f_visu: Tf_visu
           end
           object BtnClipping: TSpeedButton
             AnchorSideLeft.Side = asrBottom
-            Left = 116
+            Left = 88
             Height = 22
             Hint = 'Show highlight and shadow clipping'
             Top = 0
@@ -274,17 +274,6 @@ object f_visu: Tf_visu
             Color = clDefault
             GroupIndex = 104
             OnClick = BtnClippingClick
-            ParentFont = False
-          end
-          object BtnZoomHist: TSpeedButton
-            Left = 29
-            Height = 22
-            Top = 0
-            Width = 28
-            AllowAllUp = True
-            Color = clDefault
-            GroupIndex = 111
-            OnClick = BtnZoomHistClick
             ParentFont = False
           end
           object PanelNoDisplay: TPanel

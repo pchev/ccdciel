@@ -67,7 +67,6 @@ type
     Panel8: TPanel;
     Panel9: TPanel;
     PanelNoDisplay: TPanel;
-    BtnZoomHist: TSpeedButton;
     SpinEditMin: TFloatSpinEditEx;
     SpinEditMax: TFloatSpinEditEx;
     SplitterMin: TSplitter;
@@ -108,11 +107,12 @@ type
     { private declarations }
     Fhist:Thistogram;
     Fmaxh, Fmaxp, Fsum: integer;
-    FimageC, FimageMin, FimageMax, FdataMin, FdataMax, Fmedian, Fbell_min,Fbell_max : double;
+    FimageC, FimageMin, FimageMax, FdataMin, FdataMax, F_background : double;
     FisFloatingPoint, FisFlipped, Finitialized: boolean;
     FimgMin, FimgMax: double;
     FHistStart,FHistStop,FZoomStart,FZoomStop, FHistStep, MaxHistSize : integer;
     FBullsEye, LockSpinEdit, LockSpinInit, LockHistbar, FClipping, FInvert: Boolean;
+    F_low,F_medium,F_high,F_veryhigh, F_extreme: integer;
     FZoom: double;
     LockRedraw: boolean;
     FRedraw: TNotifyEvent;
@@ -125,6 +125,7 @@ type
     procedure SetLimit(SetLevel:boolean);
     procedure PlotHistogram;
     procedure PanelVisuClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure Analyse_histogram;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -223,7 +224,6 @@ begin
   BtnShowImage.Hint:=rsShowLastCapt;
   BtnClipRange.Hint:=rsHistogramFul;
   BtnPinVisu.Hint:=rsDetachTheGra;
-  BtnZoomHist.Hint:=rsZoomTheHisto;
   cbHistRange.Hint:=rsPredefinedHi;
   SpinEditMin.Hint:=rsTheLowerLimi;
   SpinEditMax.Hint:=rsTheUpperLimi;
@@ -244,41 +244,49 @@ begin
             for i:=0 to high(word) do begin
               n:=n+Fhist[i];
               if n>=(0.9999*Fsum) then begin
-                FimgMax:=i;
+                FimgMax:=i/FimageC;
                 break;
               end;
             end;
           end;
       2 : begin  // low
-            FimgMin:=Fmedian;
-            FimgMax:=min(FdataMax,Fmedian + 40*(Fbell_max-Fmedian)) ;
+            FimgMin:=F_background/FimageC;
+            FimgMax:=F_low/FimageC;
           end;
       3 : begin  // medium
-            FimgMin:=Fmedian;
-            FimgMax:=min(FdataMax,Fmedian + 20*(Fbell_max-Fmedian)) ;
+            FimgMin:=F_background/FimageC;
+            FimgMax:=F_medium/FimageC;
 
           end;
       4 : begin  // high
-            FimgMin:=Fmedian;
-            FimgMax:=min(FdataMax,Fmedian + 10*(Fbell_max-Fmedian)) ;
+            FimgMin:=F_background/FimageC;
+            FimgMax:=F_high/FimageC;
 
           end;
       5 : begin  // very high
-             FimgMin:=Fmedian;
-             FimgMax:=min(FdataMax,Fmedian +5*(Fbell_max-Fmedian)) ;
+             FimgMin:=F_background/FimageC;
+             FimgMax:=F_veryhigh/FimageC;
           end;
       6 : begin  // extreme
-             FimgMin:=Fmedian;
-             FimgMax:=min(FdataMax,Fmedian +1*(Fbell_max-Fmedian)) ;
+             FimgMin:=F_background/FimageC;
+             FimgMax:=F_extreme/FimageC;
           end;
       else begin  // manual
             // do not change previous setting
           end;
     end;
-    if FimgMax<=FimgMin then
-      FimgMax:=FimgMin+1;
+
     FImgMin:=(FImgMin-FimageMin)*FimageC;
     FImgMax:=(FImgMax-FimageMin)*FimageC;
+
+    if FimgMax<=FimgMin then
+      FimgMax:=FimgMin+1;
+
+    FHistStop:=min(high(word),round(2*FimgMax));//set histogram range twice Fimgmax
+    FZoomStart:=FHistStart;
+    FZoomStop:=FHistStop;
+    if FZoomStop<=FZoomStart then FZoomStop:=FZoomStart+1;
+
   end;
   // adjust spinedit for data range
   LockSpinInit:=true;  // setting decimalplaces trigger onchange
@@ -325,8 +333,61 @@ begin
   SpinEditMax.Value:=FimageMin+FimgMax/FimageC;
 end;
 
+
+procedure Tf_visu.analyse_histogram;
+var
+  i, above : integer;
+begin
+
+  Fsum := 0;
+  Fmaxh:=0;
+  Fmaxp:=0;
+  FhistStart:=0;
+  FhistStop:=0;
+
+  for i := 1 to high(fhist) do          // start at 1 to ignore the stray zeros
+  begin
+    if fhist[i]>Fmaxh then begin Fmaxh:=fhist[i]; Fmaxp:=i; end;
+    Fsum := Fsum + Fhist[i];
+
+    if (FhistStart=0)and(fhist[i]>0) then FhistStart:=i;
+    if (Fhist[i]>0) then FhistStop:=i;
+    if Fhist[i]>Fmaxh then begin
+        Fmaxh:=Fhist[i];
+        Fmaxp:=i;
+    end;
+
+
+  end;
+
+  F_background:=0;
+  i:=Fmaxp;{typical background position in histogram};
+  while ((F_background=0) and (i>0)) do
+  begin
+    dec(i);
+    if fhist[i]<0.9*Fmaxh then F_background:=i; {find position just before the peak}
+  end;
+
+
+  F_low:=fhist[i];
+  F_extreme:=F_low;
+  F_veryhigh:=F_low;
+  F_high:=F_low;
+  F_medium:=F_low;
+
+  above:=0;
+  i:=high(fhist);
+  while i>F_background+1 do begin dec(i); above:=above+fhist[i]; if above>0.001*Fsum then begin F_low:=i;break; end; end;
+  while i>F_background+1 do begin dec(i); above:=above+fhist[i]; if above>0.003*Fsum then begin F_medium:=i;break; end; end;
+  while i>F_background+1 do begin dec(i); above:=above+fhist[i]; if above>0.010*Fsum then begin F_high:=i;break; end; end;
+  while i>F_background+1 do begin dec(i); above:=above+fhist[i]; if above>0.030*Fsum then begin F_veryhigh:=i;break; end; end;
+  while i>F_background+1 do begin dec(i); above:=above+fhist[i]; if above>0.100*Fsum then begin F_extreme:=i;break; end; end;
+end;
+
+
+
 procedure Tf_visu.DrawHistogram(f: TFits; SetLevel,ResetCursor: boolean);
-var i,iterations: integer;
+var i: integer;
 begin
 try
 panel9.Enabled:=true;
@@ -342,18 +403,16 @@ FimageMax:=f.imageMax;
 FdataMin:=f.HeaderInfo.dmin;
 FdataMax:=f.HeaderInfo.dmax;
 i:=max(4,min(f.HeaderInfo.naxis1,f.HeaderInfo.naxis2) div 100);
-f.bell_median_and_begin_and_end(Fmedian,Fbell_min,Fbell_max);//Find in the histogram the bell shape median and begin and end position (one sigma from median)
-Fmedian:=FimageMin+Fmedian/FimageC;
-Fbell_min:=Fbell_min/FimageC;
-Fbell_max:=Fbell_max/FimageC;
+
 for i:=0 to high(word) do Fhist[i]:=f.Histogram[i];
-HistStats(Fhist,Fmaxh,Fmaxp,Fsum,FHistStart,FHistStop);
-FZoomStart:=FHistStart;
-FZoomStop:=FHistStop;
-if FZoomStop<=FZoomStart then FZoomStop:=FZoomStart+1;
+
+Analyse_histogram;
 if Fmaxh=0 then exit;
 SetLimit(SetLevel);
+
 PlotHistogram;
+
+
 finally
   LockSpinEdit:=false;
 end;
@@ -361,22 +420,13 @@ end;
 
 procedure Tf_visu.PlotHistogram;
 var i,j,r: integer;
-    x,t: double;
+    x: double;
 begin
 HistGraphAreaSeries1.Clear;
 if Fmaxh=0 then exit;
 if BtnClipRange.Down then begin
-  if BtnZoomHist.Down then begin
-    t:=abs(SpinEditMax.Value-SpinEditMin.Value)/3;
-    x:=max(FimageMin,SpinEditMin.Value-t);
-    FZoomStart:=round(FimageC*(x-FimageMin));
-    x:=min(FimageMax,SpinEditMax.Value+t);
-    FZoomStop:=round(FimageC*(x-FimageMin));
-  end
-  else begin
-    FZoomStart:=FHistStart;
-    FZoomStop:=FHistStop;
-  end;
+  FZoomStart:=FHistStart;
+  FZoomStop:=FHistStop;
   if FZoomStop<=FZoomStart then FZoomStop:=FZoomStart+1;
   r:=FZoomStop-FZoomStart;
   if r>MaxHistSize then
@@ -502,6 +552,7 @@ end;
 procedure Tf_visu.cbHistRangeCloseUp(Sender: TObject);
 begin
   SetLimit(true);
+  plothistogram;
 end;
 
 procedure Tf_visu.GammaChange(Sender: TObject);
@@ -556,7 +607,6 @@ procedure Tf_visu.BtnClipRangeClick(Sender: TObject);
 begin
   if FisFloatingPoint then
     BtnClipRange.Down:=true; // floating point histogram is always clipped to data range
-  BtnZoomHist.Down:=false;
   PlotHistogram;
 end;
 
