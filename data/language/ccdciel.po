@@ -1038,10 +1038,6 @@ msgstr ""
 msgid "Please select a script!"
 msgstr ""
 
-#: u_translation:rsnoscriptarer
-msgid "No script are running."
-msgstr ""
-
 #: u_translation:rsdoyouwanttod
 msgid "Do you want to delete file %s ?"
 msgstr ""
@@ -4174,10 +4170,6 @@ msgstr ""
 msgid "Offset"
 msgstr ""
 
-#: u_translation:rspleasebecare
-msgid "Please be careful to review and set the value for the Gain and Offset"
-msgstr ""
-
 #: u_translation:rssaveandapply
 msgid "Save and apply to targets"
 msgstr ""
@@ -5869,6 +5861,10 @@ msgstr ""
 msgid "Run script at the end of the series"
 msgstr ""
 
+#: u_translation:rsrunscriptatt2
+msgid "Run script at the start of the series"
+msgstr ""
+
 #: u_translation:rsclicksavetos
 msgid "Click Save to set this values to the configuration for this profile."
 msgstr ""
@@ -5927,5 +5923,41 @@ msgstr ""
 
 #: u_translation:rsspectroscopy2
 msgid "Spectroscopy options"
+msgstr ""
+
+#: u_translation:rsthecameradri
+msgid "The camera driver do not allow to modify the gain"
+msgstr ""
+
+#: u_translation:rsstartofserie
+msgid "Start of series"
+msgstr ""
+
+#: u_translation:rsbeforeimage
+msgid "Before image"
+msgstr ""
+
+#: u_translation:rsafterimage
+msgid "After image"
+msgstr ""
+
+#: u_translation:rsendofseries
+msgid "End of series"
+msgstr ""
+
+#: u_translation:rsverylow
+msgid "Very Low"
+msgstr ""
+
+#: u_translation:rsstartandendo
+msgid "Start and end of series"
+msgstr ""
+
+#: u_translation:rsbeforeandaft
+msgid "Before and after image"
+msgstr ""
+
+#: u_translation:rsalways
+msgid "Always"
 msgstr ""
 

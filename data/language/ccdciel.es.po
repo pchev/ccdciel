@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-05-17 13:30+0000\n"
+"POT-Creation-Date: 2026-06-03 15:42+0000\n"
 "PO-Revision-Date: 2023-02-08 02:21+0000\n"
 "Last-Translator: Víctor R. Ruiz <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-05-17 13:40+0000\n"
-"X-Generator: Launchpad (build 21e17fefcf122f18da93c143f29f40ba940e464c)\n"
+"X-Launchpad-Export-Date: 2026-06-03 16:12+0000\n"
+"X-Generator: Launchpad (build e655887187b0b1e1a70625cd2d210bb3cf47cd14)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -136,6 +136,10 @@ msgstr "Avanzado"
 msgid "Advanced settings"
 msgstr "Ajustes avanzados"
 
+#: u_translation.rsafterimage
+msgid "After image"
+msgstr ""
+
 #: u_translation.rsaftertelesco
 #, object-pascal-format
 msgid "After telescope pointing to target the offset relative to requested position is %s arcminutes.%sDo you want to retry the slew?"
@@ -168,6 +172,10 @@ msgstr "Permitir seleccionar una estrella brillante para el factor de exposició
 #: u_translation.rsalt
 msgid "Alt"
 msgstr "Alt"
+
+#: u_translation.rsalways
+msgid "Always"
+msgstr ""
 
 #: u_translation.rsanytime
 msgid "Any time"
@@ -537,6 +545,14 @@ msgstr "Matriz de Bayer"
 #: u_translation.rsbecarefuloft
 msgid "Be careful of the longitude East/West setting."
 msgstr "Tenga cuidado con el ajuste de la longitud Este/Oeste."
+
+#: u_translation.rsbeforeandaft
+msgid "Before and after image"
+msgstr ""
+
+#: u_translation.rsbeforeimage
+msgid "Before image"
+msgstr ""
 
 #: u_translation.rsbegin
 msgid "Begin"
@@ -1631,6 +1647,10 @@ msgstr "'Encoder'"
 #: u_translation.rsend
 msgid "End"
 msgstr "Fin"
+
+#: u_translation.rsendofseries
+msgid "End of series"
+msgstr ""
 
 #: u_translation.rsendpreview
 msgid "End preview"
@@ -3227,10 +3247,6 @@ msgstr "¡La cámara no responde!"
 msgid "North"
 msgstr "Norte"
 
-#: u_translation.rsnoscriptarer
-msgid "No script are running."
-msgstr "No hay guión en ejecución."
-
 #: u_translation.rsnostardetect
 msgid "No star detected. Is the image focused and sufficiently exposed?"
 msgstr "No se detectó ninguna estrella. ¿Está la imagen enfocada y expuesta lo suficiente?"
@@ -3638,10 +3654,6 @@ msgstr ""
 #: u_translation.rspleaseactiva
 msgid "Please activate the log file in the preference."
 msgstr "Por favor, active el fichero de registros en las preferencias."
-
-#: u_translation.rspleasebecare
-msgid "Please be careful to review and set the value for the Gain and Offset"
-msgstr ""
 
 #: u_translation.rspleaseconfig
 msgid "Please configure your"
@@ -4213,7 +4225,6 @@ msgid "Run auto-focus if change is more than % HFD"
 msgstr ""
 
 #: u_translation.rsrunning
-msgctxt "u_translation.rsrunning"
 msgid "Running"
 msgstr ""
 
@@ -4236,6 +4247,10 @@ msgstr ""
 
 #: u_translation.rsrunscriptatt
 msgid "Run script at the end of the series"
+msgstr ""
+
+#: u_translation.rsrunscriptatt2
+msgid "Run script at the start of the series"
 msgstr ""
 
 #: u_translation.rsrunscriptbef
@@ -5012,6 +5027,10 @@ msgstr ""
 msgid "Start"
 msgstr "Iniciar"
 
+#: u_translation.rsstartandendo
+msgid "Start and end of series"
+msgstr ""
+
 #: u_translation.rsstartat
 msgid "Start at "
 msgstr "Comenzar en "
@@ -5051,6 +5070,10 @@ msgstr "Comenzar nueva exposición tan pronto como sea posible"
 #: u_translation.rsstartnewlog
 msgid "Start new log"
 msgstr "Comenzar nuevo registro"
+
+#: u_translation.rsstartofserie
+msgid "Start of series"
+msgstr ""
 
 #: u_translation.rsstartoptions
 msgid "Start options"
@@ -5480,6 +5503,10 @@ msgstr "Prueba"
 #: u_translation.rstestemailfro
 msgid "Test email from CCDciel"
 msgstr "Correo de prueba de CCDciel"
+
+#: u_translation.rsthecameradri
+msgid "The camera driver do not allow to modify the gain"
+msgstr ""
 
 #: u_translation.rsthecameraisc
 msgid "The camera is connected. Do you want to exit the program now?"
@@ -5948,6 +5975,10 @@ msgstr "Corrección vertical:"
 
 #: u_translation.rsveryhigh
 msgid "Very High"
+msgstr ""
+
+#: u_translation.rsverylow
+msgid "Very Low"
 msgstr ""
 
 #: u_translation.rsvideo

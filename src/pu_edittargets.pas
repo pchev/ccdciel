@@ -630,9 +630,9 @@ begin
   StepList.Columns.Items[pcolfstop-1].Title.Caption := rsFStop;
   StepList.Columns.Items[pcolcscript-1].Title.Caption := rsScript;
   StepList.Columns.Items[pcolcscriptp-1].Title.Caption := rsParameter;
-  StepList.Columns.Items[pcolcscriptr-1].Title.Caption := rsRun;
+  StepList.Columns.Items[pcolcscriptr-1].Title.Caption := rsRunScript;
   StepList.Columns[pcolcscriptr-1].PickList.Clear;
-  StepList.Columns[pcolcscriptr-1].PickList.Add(rsNever);
+  StepList.Columns[pcolcscriptr-1].PickList.Add('');
   StepList.Columns[pcolcscriptr-1].PickList.Add(rsStartOfSerie);
   StepList.Columns[pcolcscriptr-1].PickList.Add(rsBeforeImage);
   StepList.Columns[pcolcscriptr-1].PickList.Add(rsAfterImage);

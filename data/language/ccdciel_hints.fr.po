@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-05-17 13:31+0000\n"
+"POT-Creation-Date: 2026-06-03 15:46+0000\n"
 "PO-Revision-Date: 2026-04-16 11:06+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-05-17 13:40+0000\n"
-"X-Generator: Launchpad (build 21e17fefcf122f18da93c143f29f40ba940e464c)\n"
+"X-Launchpad-Export-Date: 2026-06-03 16:12+0000\n"
+"X-Generator: Launchpad (build e655887187b0b1e1a70625cd2d210bb3cf47cd14)\n"
 
 #: u_hints.rsactivateback
 #, object-pascal-format
@@ -558,10 +558,6 @@ msgstr "Attendre la nuit sans lune"
 #: u_hints.rswaittothisti
 msgid "Wait to this time before to start to process the list."
 msgstr "Attendre cette heure avant de commencer à traiter la liste"
-
-#: u_hints.rszoomthehisto
-msgid "Zoom the histogram to the current selection"
-msgstr "Zoomer l'histogramme sur la sélection actuelle"
 
 #: u_hints.rszoomtoadjust
 msgid "Zoom to adjust in window"

@@ -1549,7 +1549,6 @@ resourcestring
   rsMonochromeBi = 'Monochrome 2x2 binning for color camera';
   rsSpectroscopy2 = 'Spectroscopy options';
   rsTheCameraDri = 'The camera driver do not allow to modify the gain';
-  rsNever = 'Never';
   rsStartOfSerie = 'Start of series';
   rsBeforeImage = 'Before image';
   rsAfterImage = 'After image';

@@ -518,10 +518,6 @@ msgstr ""
 msgid "Detach the graph"
 msgstr ""
 
-#: u_hints:rszoomthehisto
-msgid "Zoom the histogram to the current selection"
-msgstr ""
-
 #: u_hints:rspredefinedhi
 msgid "Predefined histogram truncation"
 msgstr ""

@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-17 13:30+0000\n"
-"PO-Revision-Date: 2026-05-08 05:36+0000\n"
+"POT-Creation-Date: 2026-06-03 15:42+0000\n"
+"PO-Revision-Date: 2026-05-25 17:26+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-05-17 13:40+0000\n"
-"X-Generator: Launchpad (build 21e17fefcf122f18da93c143f29f40ba940e464c)\n"
+"X-Launchpad-Export-Date: 2026-06-03 16:12+0000\n"
+"X-Generator: Launchpad (build e655887187b0b1e1a70625cd2d210bb3cf47cd14)\n"
 "Language: cs\n"
 
 #: u_translation.rs2d
@@ -133,6 +133,10 @@ msgstr "Pokročilé"
 msgid "Advanced settings"
 msgstr "Pokročilá nastavení"
 
+#: u_translation.rsafterimage
+msgid "After image"
+msgstr ""
+
 #: u_translation.rsaftertelesco
 #, object-pascal-format
 msgid "After telescope pointing to target the offset relative to requested position is %s arcminutes.%sDo you want to retry the slew?"
@@ -165,6 +169,10 @@ msgstr "Vyberte jasnější hvězdu pro vysoký expoziční faktor filtru"
 #: u_translation.rsalt
 msgid "Alt"
 msgstr "Výš"
+
+#: u_translation.rsalways
+msgid "Always"
+msgstr ""
 
 #: u_translation.rsanytime
 msgid "Any time"
@@ -535,6 +543,14 @@ msgstr "Maticový vzorec Bayer"
 msgid "Be careful of the longitude East/West setting."
 msgstr "Dávejte pozor na nastavení Východní a Západní zeměpisné délky."
 
+#: u_translation.rsbeforeandaft
+msgid "Before and after image"
+msgstr ""
+
+#: u_translation.rsbeforeimage
+msgid "Before image"
+msgstr ""
+
 #: u_translation.rsbegin
 msgid "Begin"
 msgstr "Začít"
@@ -777,7 +793,7 @@ msgstr "Snímání"
 
 #: u_translation.rscaptureabnor
 msgid "Capture abnormal end"
-msgstr ""
+msgstr "Zachytit abnormální konec"
 
 #: u_translation.rscapturealrea
 msgid "Capture already running! please stop it first if you want to start a new sequence."
@@ -789,7 +805,7 @@ msgstr "Složka pro snímání"
 
 #: u_translation.rscapturenorma
 msgid "Capture normal end"
-msgstr ""
+msgstr "Zachytit normální konec"
 
 #: u_translation.rscapturesfini
 #, object-pascal-format
@@ -913,7 +929,7 @@ msgstr "Kliknutím na snímek nastavíte offset a navádění"
 
 #: u_translation.rsclicksavetos
 msgid "Click Save to set this values to the configuration for this profile."
-msgstr ""
+msgstr "Kliknutím na tlačítko Uložit tyto hodnoty uložíte do nastavení tohoto profilu."
 
 #: u_translation.rsclicktheobje
 msgid "Click the object in planetarium"
@@ -1632,6 +1648,10 @@ msgstr "Enkodér"
 msgid "End"
 msgstr "Konec"
 
+#: u_translation.rsendofseries
+msgid "End of series"
+msgstr ""
+
 #: u_translation.rsendpreview
 msgid "End preview"
 msgstr "Konec náhledu"
@@ -1954,7 +1974,7 @@ msgstr "Kalibrace ostření"
 #: u_translation.rsfocusercalib2
 #, object-pascal-format
 msgid "Focuser calibration using the %s"
-msgstr ""
+msgstr "Kalibrace zaostřovače pomocí %s"
 
 #: u_translation.rsfocusercalib3
 msgid "Focuser calibration started, please wait..."
@@ -2246,12 +2266,12 @@ msgstr "HFD Monitor Ostření: Aktivní. Práh: %s%%, Referenční HFD: %s"
 
 #: u_translation.rshfdfluctuati
 msgid "HFD fluctuation measurement in progress"
-msgstr ""
+msgstr "Probíhá měření kolísání HFD"
 
 #: u_translation.rshfdfluctuati2
 #, object-pascal-format
 msgid "HFD fluctuation px=%s"
-msgstr ""
+msgstr "Kolísání HFD px=%s"
 
 #: u_translation.rshfdmeasuring
 #, object-pascal-format
@@ -2413,7 +2433,7 @@ msgstr "Poč. krok."
 
 #: u_translation.rsincreasestep
 msgid "Increase step:"
-msgstr ""
+msgstr "Velikost kroku:"
 
 #: u_translation.rsindisettings
 msgid "INDI settings"
@@ -2903,7 +2923,7 @@ msgstr "Minimální vzdálenost od Měsíce"
 
 #: u_translation.rsminimumhfdfo
 msgid "Minimum HFD found"
-msgstr ""
+msgstr "Zjištěna minimální hodnota HFD"
 
 #: u_translation.rsminimummove
 msgid "Minimum move"
@@ -2947,7 +2967,7 @@ msgstr "Upravit"
 
 #: u_translation.rsmonochromebi
 msgid "Monochrome 2x2 binning for color camera"
-msgstr ""
+msgstr "Černobílý binning 2x2 pro barevnou kameru"
 
 #: u_translation.rsmoonavoidanc
 msgid "Moon avoidance"
@@ -3226,10 +3246,6 @@ msgstr "Žádná odpověď z kamery!"
 #: u_translation.rsnorth
 msgid "North"
 msgstr "Sever"
-
-#: u_translation.rsnoscriptarer
-msgid "No script are running."
-msgstr "Nejsou spuštěny žádné skripty."
 
 #: u_translation.rsnostardetect
 msgid "No star detected. Is the image focused and sufficiently exposed?"
@@ -3638,10 +3654,6 @@ msgstr "Astrometrie pro aktualizaci opravy"
 #: u_translation.rspleaseactiva
 msgid "Please activate the log file in the preference."
 msgstr "Aktivujte protokol v předvolbách."
-
-#: u_translation.rspleasebecare
-msgid "Please be careful to review and set the value for the Gain and Offset"
-msgstr "Pečlivě zkontrolujte a nastavte hodnotu pro Zesílení a Offset"
 
 #: u_translation.rspleaseconfig
 msgid "Please configure your"
@@ -4123,7 +4135,7 @@ msgstr "Otočit"
 
 #: u_translation.rsreversedirec
 msgid "Reverse direction"
-msgstr ""
+msgstr "Změnit směr"
 
 #: u_translation.rsrise
 msgid "rise"
@@ -4213,13 +4225,12 @@ msgid "Run auto-focus if change is more than % HFD"
 msgstr "Spustit auto-ostření, pokud je změna větší než % HFD"
 
 #: u_translation.rsrunning
-msgctxt "u_translation.rsrunning"
 msgid "Running"
-msgstr ""
+msgstr "Běží"
 
 #: u_translation.rsrunningscrip
 msgid "Running script"
-msgstr ""
+msgstr "Spuštění skriptu"
 
 #: u_translation.rsrunscript
 msgid "Run script"
@@ -4232,15 +4243,19 @@ msgstr "Spuštění skriptu %s"
 
 #: u_translation.rsrunscriptaft
 msgid "Run script after an image is saved"
-msgstr ""
+msgstr "Spustit skript po uložení snímku"
 
 #: u_translation.rsrunscriptatt
 msgid "Run script at the end of the series"
+msgstr "Spustit skript na konci série"
+
+#: u_translation.rsrunscriptatt2
+msgid "Run script at the start of the series"
 msgstr ""
 
 #: u_translation.rsrunscriptbef
 msgid "Run script before each exposure"
-msgstr ""
+msgstr "Spustit skript před každou expozicí"
 
 #: u_translation.rsrunscriptwhe
 msgid "Run script when the weather change"
@@ -4926,7 +4941,7 @@ msgstr "Spektroskopie"
 
 #: u_translation.rsspectroscopy2
 msgid "Spectroscopy options"
-msgstr ""
+msgstr "Spectroscopy options"
 
 #: u_translation.rsspectroslitr
 msgid "Spectroscope ROI"
@@ -5012,6 +5027,10 @@ msgstr "Oblast vyhledávání hvězd"
 msgid "Start"
 msgstr "Spustit"
 
+#: u_translation.rsstartandendo
+msgid "Start and end of series"
+msgstr ""
+
 #: u_translation.rsstartat
 msgid "Start at "
 msgstr "Spustit v "
@@ -5051,6 +5070,10 @@ msgstr "Zahájit novou expozici co nejdříve"
 #: u_translation.rsstartnewlog
 msgid "Start new log"
 msgstr "Spustit nový protokol"
+
+#: u_translation.rsstartofserie
+msgid "Start of series"
+msgstr ""
 
 #: u_translation.rsstartoptions
 msgid "Start options"
@@ -5148,7 +5171,7 @@ msgstr "Krok Do"
 
 #: u_translation.rsstepsize
 msgid "Step size"
-msgstr ""
+msgstr "Step size"
 
 #: u_translation.rsstop
 msgid "Stop"
@@ -5209,7 +5232,7 @@ msgstr "Zastavit záznam"
 
 #: u_translation.rsstopselected
 msgid "Stop selected"
-msgstr ""
+msgstr "Zastávka vybrána"
 
 #: u_translation.rsstoptelescop
 msgid "Stop telescope motion."
@@ -5480,6 +5503,10 @@ msgstr "Test"
 #: u_translation.rstestemailfro
 msgid "Test email from CCDciel"
 msgstr "Testovací e-mail od CCDciel"
+
+#: u_translation.rsthecameradri
+msgid "The camera driver do not allow to modify the gain"
+msgstr ""
 
 #: u_translation.rsthecameraisc
 msgid "The camera is connected. Do you want to exit the program now?"
@@ -5949,6 +5976,10 @@ msgstr "Vertikální oprava:"
 #: u_translation.rsveryhigh
 msgid "Very High"
 msgstr "Velmi vysoká"
+
+#: u_translation.rsverylow
+msgid "Very Low"
+msgstr ""
 
 #: u_translation.rsvideo
 msgid "Video"

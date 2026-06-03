@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-05-17 13:30+0000\n"
+"POT-Creation-Date: 2026-06-03 15:42+0000\n"
 "PO-Revision-Date: 2026-02-05 04:11+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-05-17 13:40+0000\n"
-"X-Generator: Launchpad (build 21e17fefcf122f18da93c143f29f40ba940e464c)\n"
+"X-Launchpad-Export-Date: 2026-06-03 16:12+0000\n"
+"X-Generator: Launchpad (build e655887187b0b1e1a70625cd2d210bb3cf47cd14)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -136,6 +136,10 @@ msgstr "高级设置"
 msgid "Advanced settings"
 msgstr "高级设置"
 
+#: u_translation.rsafterimage
+msgid "After image"
+msgstr ""
+
 #: u_translation.rsaftertelesco
 #, object-pascal-format
 msgid "After telescope pointing to target the offset relative to requested position is %s arcminutes.%sDo you want to retry the slew?"
@@ -168,6 +172,10 @@ msgstr "允许为高滤镜曝光系数选择更亮的星"
 #: u_translation.rsalt
 msgid "Alt"
 msgstr "Alt"
+
+#: u_translation.rsalways
+msgid "Always"
+msgstr ""
 
 #: u_translation.rsanytime
 msgid "Any time"
@@ -537,6 +545,14 @@ msgstr "拜尔阵列模式"
 #: u_translation.rsbecarefuloft
 msgid "Be careful of the longitude East/West setting."
 msgstr "注意东/西经度设置。"
+
+#: u_translation.rsbeforeandaft
+msgid "Before and after image"
+msgstr ""
+
+#: u_translation.rsbeforeimage
+msgid "Before image"
+msgstr ""
 
 #: u_translation.rsbegin
 msgid "Begin"
@@ -1634,6 +1650,10 @@ msgstr "编码器"
 #: u_translation.rsend
 msgid "End"
 msgstr "结尾"
+
+#: u_translation.rsendofseries
+msgid "End of series"
+msgstr ""
 
 #: u_translation.rsendpreview
 msgid "End preview"
@@ -3230,10 +3250,6 @@ msgstr "相机没有响应！"
 msgid "North"
 msgstr "北"
 
-#: u_translation.rsnoscriptarer
-msgid "No script are running."
-msgstr "没有脚本在运行。"
-
 #: u_translation.rsnostardetect
 msgid "No star detected. Is the image focused and sufficiently exposed?"
 msgstr "未找到星点。图像是否合焦并充分曝光？"
@@ -3641,10 +3657,6 @@ msgstr "以解析更新修正"
 #: u_translation.rspleaseactiva
 msgid "Please activate the log file in the preference."
 msgstr "请在首选项中激活日志文件。"
-
-#: u_translation.rspleasebecare
-msgid "Please be careful to review and set the value for the Gain and Offset"
-msgstr "请仔细预览并设定相机的增益和偏置"
 
 #: u_translation.rspleaseconfig
 msgid "Please configure your"
@@ -4216,7 +4228,6 @@ msgid "Run auto-focus if change is more than % HFD"
 msgstr "如果变化超过 % HFD，则运行自动对焦"
 
 #: u_translation.rsrunning
-msgctxt "u_translation.rsrunning"
 msgid "Running"
 msgstr ""
 
@@ -4239,6 +4250,10 @@ msgstr ""
 
 #: u_translation.rsrunscriptatt
 msgid "Run script at the end of the series"
+msgstr ""
+
+#: u_translation.rsrunscriptatt2
+msgid "Run script at the start of the series"
 msgstr ""
 
 #: u_translation.rsrunscriptbef
@@ -5015,6 +5030,10 @@ msgstr "星点搜索范围"
 msgid "Start"
 msgstr "启动"
 
+#: u_translation.rsstartandendo
+msgid "Start and end of series"
+msgstr ""
+
 #: u_translation.rsstartat
 msgid "Start at "
 msgstr "起始于 "
@@ -5054,6 +5073,10 @@ msgstr "尽早启动新曝光"
 #: u_translation.rsstartnewlog
 msgid "Start new log"
 msgstr "开始新的日志"
+
+#: u_translation.rsstartofserie
+msgid "Start of series"
+msgstr ""
 
 #: u_translation.rsstartoptions
 msgid "Start options"
@@ -5483,6 +5506,10 @@ msgstr "测试"
 #: u_translation.rstestemailfro
 msgid "Test email from CCDciel"
 msgstr "来自 CCDciel 的测试电子邮件"
+
+#: u_translation.rsthecameradri
+msgid "The camera driver do not allow to modify the gain"
+msgstr ""
 
 #: u_translation.rsthecameraisc
 msgid "The camera is connected. Do you want to exit the program now?"
@@ -5952,6 +5979,10 @@ msgstr "垂直修正："
 #: u_translation.rsveryhigh
 msgid "Very High"
 msgstr "很高"
+
+#: u_translation.rsverylow
+msgid "Very Low"
+msgstr ""
 
 #: u_translation.rsvideo
 msgid "Video"
