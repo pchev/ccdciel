@@ -13,7 +13,6 @@ object f_EditTargets: Tf_EditTargets
   OnDestroy = FormDestroy
   OnResize = FormResize
   OnShow = FormShow
-  LCLVersion = '2.2.6.0'
   object PanelTarget: TPanel
     AnchorSideBottom.Control = Splitter1
     Left = 0
@@ -177,7 +176,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 8
             Height = 22
             Top = 70
-            Width = 242
+            Width = 238
             Caption = 'Clear restart information on repeat'
             ParentFont = False
             TabOrder = 0
@@ -186,7 +185,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 8
             Height = 22
             Top = 22
-            Width = 191
+            Width = 187
             Caption = 'Record restart information'
             OnChange = CheckRestartStatus
             ParentFont = False
@@ -207,7 +206,7 @@ object f_EditTargets: Tf_EditTargets
             Height = 22
             Hint = 'Repeat the whole list a number of time.'
             Top = 46
-            Width = 159
+            Width = 155
             Caption = 'Repeat the whole list '
             OnChange = CheckBoxRepeatListChange
             ParentFont = False
@@ -254,7 +253,7 @@ object f_EditTargets: Tf_EditTargets
             Height = 22
             Hint = 'Activate the start time'
             Top = 29
-            Width = 76
+            Width = 72
             Caption = 'Start at '
             OnChange = SeqStartChange
             ParentFont = False
@@ -283,7 +282,7 @@ object f_EditTargets: Tf_EditTargets
             Height = 22
             Hint = 'Set the start time at astronomical dusk, recomputed for the date you run the sequence.'
             Top = 29
-            Width = 58
+            Width = 54
             Caption = 'dusk'
             Enabled = False
             OnChange = SeqStartTwilightChange
@@ -295,7 +294,7 @@ object f_EditTargets: Tf_EditTargets
             Height = 22
             Hint = 'Activate the stop time'
             Top = 61
-            Width = 75
+            Width = 71
             Caption = 'Stop at '
             OnChange = SeqStopChange
             ParentFont = False
@@ -324,7 +323,7 @@ object f_EditTargets: Tf_EditTargets
             Height = 22
             Hint = 'Set the stop time at astronomical dawn, recomputed for the date you run the sequence.'
             Top = 61
-            Width = 62
+            Width = 58
             Caption = 'dawn'
             Enabled = False
             OnChange = SeqStopTwilightChange
@@ -473,7 +472,7 @@ object f_EditTargets: Tf_EditTargets
                 Height = 22
                 Hint = 'Start a preview loop when waiting for the delay to expire.'
                 Top = 2
-                Width = 77
+                Width = 73
                 Caption = 'Preview'
                 OnChange = TargetChange
                 ParentFont = False
@@ -732,10 +731,10 @@ object f_EditTargets: Tf_EditTargets
           Top = 26
           Width = 390
           HorzScrollBar.Page = 359
-          VertScrollBar.Page = 190
+          VertScrollBar.Page = 194
           Align = alClient
-          ClientHeight = 190
-          ClientWidth = 365
+          ClientHeight = 194
+          ClientWidth = 369
           Color = clDefault
           ParentColor = False
           TabOrder = 1
@@ -743,7 +742,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Top = 4
-            Width = 93
+            Width = 89
             Caption = 'Dark night'
             OnChange = cbChange
             TabOrder = 0
@@ -754,7 +753,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Top = 28
-            Width = 158
+            Width = 154
             BorderSpacing.Top = 2
             Caption = 'Mandatory start time'
             OnChange = cbChange
@@ -766,7 +765,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Top = 52
-            Width = 90
+            Width = 86
             BorderSpacing.Top = 2
             Caption = 'Don''t wait'
             OnChange = cbChange
@@ -778,7 +777,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Top = 76
-            Width = 293
+            Width = 289
             BorderSpacing.Top = 2
             Caption = 'Do not start if it cannot be done completely'
             OnChange = cbChange
@@ -790,7 +789,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Top = 124
-            Width = 253
+            Width = 249
             BorderSpacing.Top = 2
             Caption = 'Use astrometry to refine the position'
             OnChange = cbChange
@@ -802,7 +801,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Top = 148
-            Width = 190
+            Width = 186
             BorderSpacing.Top = 2
             Caption = 'Stay in place for autofocus'
             OnChange = cbChange
@@ -814,7 +813,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Top = 172
-            Width = 251
+            Width = 247
             BorderSpacing.Top = 2
             Caption = 'Autofocus after temperature change'
             OnChange = cbChange
@@ -826,7 +825,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Top = 196
-            Width = 214
+            Width = 210
             BorderSpacing.Top = 2
             Caption = 'Autofocus after % change HFD'
             OnChange = cbChange
@@ -838,7 +837,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Top = 220
-            Width = 234
+            Width = 230
             BorderSpacing.Top = 2
             Caption = 'Update RA+Dec from Planetarium'
             OnChange = cbChange
@@ -860,7 +859,7 @@ object f_EditTargets: Tf_EditTargets
               Left = 16
               Height = 22
               Top = 0
-              Width = 204
+              Width = 200
               Caption = 'Activate solar object tracking'
               OnChange = cbChange
               TabOrder = 0
@@ -873,7 +872,7 @@ object f_EditTargets: Tf_EditTargets
             Height = 22
             Hint = 'This option is normally unchecked, use it only if you manage the pointing and autoguiding by script.'
             Top = 270
-            Width = 179
+            Width = 175
             Caption = 'Do not start autoguiding'
             OnChange = cbChange
             TabOrder = 7
@@ -884,7 +883,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Top = 294
-            Width = 186
+            Width = 182
             BorderSpacing.Top = 2
             Caption = 'Run an initialization script'
             OnChange = cbChange
@@ -967,7 +966,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Top = 100
-            Width = 129
+            Width = 125
             BorderSpacing.Top = 2
             Caption = 'Moon avoidance'
             OnChange = cbChange
@@ -1038,92 +1037,109 @@ object f_EditTargets: Tf_EditTargets
             ColCount = 16
             Columns = <            
               item
-                MinSize = 120
+                MinSize = 80
                 MaxSize = 202
                 SizePriority = 0
                 Title.MultiLine = True
                 Title.Caption = 'Description'
-                Width = 120
+                Width = 80
               end            
               item
                 ButtonStyle = cbsPickList
-                MaxSize = 202
+                MinSize = 66
+                MaxSize = 100
                 PickList.Strings = (
                   'Light'
                   'Bias'
                   'Dark'
                   'Flat'
                 )
+                SizePriority = 0
                 Title.MultiLine = True
                 Title.Caption = 'Type'
                 Width = 66
               end            
               item
-                MaxSize = 202
+                MinSize = 66
+                MaxSize = 100
+                SizePriority = 0
                 Title.MultiLine = True
                 Title.Caption = 'Exposure'
                 Width = 66
               end            
               item
                 ButtonStyle = cbsPickList
+                MinSize = 80
+                MaxSize = 120
+                SizePriority = 0
                 Title.MultiLine = True
                 Title.Caption = 'Ref. exposure'
-                Width = 66
+                Width = 80
               end            
               item
-                MinSize = 71
+                MinSize = 65
                 MaxSize = 71
+                SizePriority = 0
                 Title.MultiLine = True
                 Title.Caption = 'Stack'
-                Width = 66
+                Width = 65
               end            
               item
                 ButtonStyle = cbsPickList
-                MinSize = 81
+                MinSize = 65
                 MaxSize = 81
                 PickList.Strings = (
                   '1x1'
                 )
+                SizePriority = 0
                 Title.MultiLine = True
                 Title.Caption = 'Binning'
-                Width = 66
+                Width = 65
               end            
               item
                 ButtonStyle = cbsPickList
-                MaxSize = 202
+                MinSize = 70
+                MaxSize = 120
                 PickList.Strings = (
                   'No change'
                 )
                 SizePriority = 0
                 Title.MultiLine = True
                 Title.Caption = 'Filter'
-                Width = 69
+                Width = 70
               end            
               item
-                MinSize = 71
+                MinSize = 65
                 MaxSize = 71
+                SizePriority = 0
                 Title.MultiLine = True
                 Title.Caption = 'Count'
-                Width = 66
+                Width = 65
               end            
               item
                 ButtonStyle = cbsCheckboxColumn
+                MinSize = 80
                 MaxSize = 202
+                SizePriority = 0
                 Title.MultiLine = True
                 Title.Caption = 'Autofocus before to start'
-                Width = 66
+                Width = 80
               end            
               item
-                MaxSize = 202
+                MinSize = 80
+                MaxSize = 120
+                SizePriority = 0
                 Title.MultiLine = True
                 Title.Caption = 'Autofocus every'
-                Width = 66
+                Width = 80
               end            
               item
-                MaxSize = 202
+                MinSize = 65
+                MaxSize = 100
+                SizePriority = 0
                 Title.MultiLine = True
                 Title.Caption = 'Dither every'
-                Width = 66
+                Width = 65
               end            
               item
                 ButtonStyle = cbsPickList
@@ -1134,17 +1150,24 @@ object f_EditTargets: Tf_EditTargets
               end            
               item
                 ButtonStyle = cbsPickList
+                MinSize = 100
+                SizePriority = 0
                 Title.Caption = 'Script'
-                Width = 66
+                Width = 100
               end            
               item
+                MinSize = 65
+                SizePriority = 0
                 Title.Caption = 'Param'
-                Width = 66
+                Width = 70
               end            
               item
                 ButtonStyle = cbsPickList
+                DropDownRows = 8
+                MinSize = 80
+                SizePriority = 0
                 Title.Caption = 'Run'
-                Width = 75
+                Width = 38
               end>
             DefaultColWidth = 30
             MouseWheelOption = mwGrid
@@ -1162,21 +1185,21 @@ object f_EditTargets: Tf_EditTargets
             OnValidateEntry = StepListValidateEntry
             ColWidths = (
               30
-              120
+              80
               66
               66
-              66
-              66
-              66
-              69
-              66
-              66
-              66
-              66
+              80
+              65
+              65
+              70
+              65
+              80
+              80
+              65
               0
-              66
-              66
-              75
+              100
+              70
+              38
             )
           end
           object Panel17: TPanel
@@ -1599,8 +1622,8 @@ object f_EditTargets: Tf_EditTargets
             Width = 194
             Align = alLeft
             Caption = 'Exposure'
-            ClientHeight = 158
-            ClientWidth = 182
+            ClientHeight = 140
+            ClientWidth = 190
             ParentFont = False
             TabOrder = 0
             object Label16: TLabel
@@ -1699,8 +1722,8 @@ object f_EditTargets: Tf_EditTargets
             Width = 331
             Align = alLeft
             Caption = 'Filters'
-            ClientHeight = 158
-            ClientWidth = 319
+            ClientHeight = 140
+            ClientWidth = 327
             ParentFont = False
             TabOrder = 1
             object ScrollBox1: TScrollBox
@@ -1764,8 +1787,8 @@ object f_EditTargets: Tf_EditTargets
               ChildSizing.ShrinkVertical = crsScaleChilds
               ChildSizing.Layout = cclLeftToRightThenTopToBottom
               ChildSizing.ControlsPerLine = 1
-              ClientHeight = 79
-              ClientWidth = 190
+              ClientHeight = 61
+              ClientWidth = 198
               Items.Strings = (
                 'at dusk'
                 'at dawn'

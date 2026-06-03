@@ -294,10 +294,62 @@ begin
         Fcapture.FocusCount.Value:=p.autofocuscount;
         Fcapture.cbScript.Text:=p.capturescript;
         Fcapture.edParams.Text:=p.capturescriptparam;
-        Fcapture.cbStartupScript.Checked:=p.capturescriptrun=1;
-        Fcapture.cbStartScriptImage.Checked:=p.capturescriptrun=2;
-        Fcapture.cbEndScriptImage.Checked:=p.capturescriptrun=3;
-        Fcapture.cbTerminationScript.Checked:=p.capturescriptrun=4;
+        case p.capturescriptrun of
+          0: begin // Never
+              Fcapture.cbStartupScript.Checked:=false;
+              Fcapture.cbStartScriptImage.Checked:=false;
+              Fcapture.cbEndScriptImage.Checked:=false;
+              Fcapture.cbTerminationScript.Checked:=false;
+             end;
+          1: begin // Start of series
+              Fcapture.cbStartupScript.Checked:=true;
+              Fcapture.cbStartScriptImage.Checked:=false;
+              Fcapture.cbEndScriptImage.Checked:=false;
+              Fcapture.cbTerminationScript.Checked:=false;
+             end;
+          2: begin // Before image
+              Fcapture.cbStartupScript.Checked:=false;
+              Fcapture.cbStartScriptImage.Checked:=true;
+              Fcapture.cbEndScriptImage.Checked:=false;
+              Fcapture.cbTerminationScript.Checked:=false;
+             end;
+          3: begin // After image
+              Fcapture.cbStartupScript.Checked:=false;
+              Fcapture.cbStartScriptImage.Checked:=false;
+              Fcapture.cbEndScriptImage.Checked:=true;
+              Fcapture.cbTerminationScript.Checked:=false;
+             end;
+          4: begin // End of series
+              Fcapture.cbStartupScript.Checked:=false;
+              Fcapture.cbStartScriptImage.Checked:=false;
+              Fcapture.cbEndScriptImage.Checked:=false;
+              Fcapture.cbTerminationScript.Checked:=true;
+             end;
+          5: begin // Start and end of series
+              Fcapture.cbStartupScript.Checked:=true;
+              Fcapture.cbStartScriptImage.Checked:=false;
+              Fcapture.cbEndScriptImage.Checked:=false;
+              Fcapture.cbTerminationScript.Checked:=true;
+             end;
+          6: begin // Before and after image
+              Fcapture.cbStartupScript.Checked:=false;
+              Fcapture.cbStartScriptImage.Checked:=true;
+              Fcapture.cbEndScriptImage.Checked:=true;
+              Fcapture.cbTerminationScript.Checked:=false;
+             end;
+          7: begin // Always
+              Fcapture.cbStartupScript.Checked:=true;
+              Fcapture.cbStartScriptImage.Checked:=true;
+              Fcapture.cbEndScriptImage.Checked:=true;
+              Fcapture.cbTerminationScript.Checked:=true;
+             end;
+          else begin
+              Fcapture.cbStartupScript.Checked:=false;
+              Fcapture.cbStartScriptImage.Checked:=false;
+              Fcapture.cbEndScriptImage.Checked:=false;
+              Fcapture.cbTerminationScript.Checked:=false;
+             end;
+        end;
         Fcapture.CheckLight(self); // be sure to apply the change now
         Fcapture.cbScriptChange(self);
         if p.autofocusstart then Fcapture.FocusNow:=true;

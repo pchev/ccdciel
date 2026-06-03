@@ -1555,6 +1555,9 @@ resourcestring
   rsAfterImage = 'After image';
   rsEndOfSeries = 'End of series';
   rsVeryLow = 'Very Low';
+  rsStartAndEndO = 'Start and end of series';
+  rsBeforeAndAft = 'Before and after image';
+  rsAlways = 'Always';
 
 implementation
 

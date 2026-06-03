@@ -637,6 +637,9 @@ begin
   StepList.Columns[pcolcscriptr-1].PickList.Add(rsBeforeImage);
   StepList.Columns[pcolcscriptr-1].PickList.Add(rsAfterImage);
   StepList.Columns[pcolcscriptr-1].PickList.Add(rsEndOfSeries);
+  StepList.Columns[pcolcscriptr-1].PickList.Add(rsStartAndEndO);
+  StepList.Columns[pcolcscriptr-1].PickList.Add(rsBeforeAndAft);
+  StepList.Columns[pcolcscriptr-1].PickList.Add(rsAlways);
   if StepList.Columns[pcolfilter-1].PickList.Count>0 then StepList.Columns[pcolfilter-1].PickList[0]:=Filter0;
   Label1.Caption := rsTemplate;
   // start options
