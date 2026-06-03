@@ -1932,7 +1932,6 @@ begin
   f_preview.onStartExposure:=@StartPreviewExposure;
   f_preview.onAbortExposure:=@StopExposure;
   f_preview.onMsg:=@NewMessage;
-  f_preview.onOptions:=@MenuOptionsClick;
   astrometry.preview:=f_preview;
   astrometry.visu:=f_visu;
 
@@ -10055,8 +10054,10 @@ begin
    pt.y:=PanelCenter.top;
    pt:=ClientToScreen(pt);
    FormPos(f_option,pt.X,pt.Y);
-   if sender=f_preview then
-     f_option.PageControl1.ActivePage:=f_option.PageCamera;
+   if sender=f_capture then begin
+     f_option.ShowPage(f_option.PageCamera);
+     f_option.ActiveControl:=f_option.GainEdit;
+   end;
    f_option.ShowModal;
 
    if f_option.ModalResult=mrOK then begin

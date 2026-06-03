@@ -899,6 +899,7 @@ type
     procedure SaveObservatoryDB;
     procedure ClearRoi;
     procedure SetScriptList(sl: TStrings);
+    procedure ShowPage(p: TTabSheet);
     property AutofocusExp: double read FAutofocusExposure write SetAutofocusExpTime;
     property Resolver: integer read GetResolver write SetResolver;
     property Latitude: double read Flatitude write SetLatitude;
@@ -968,6 +969,20 @@ begin
   b.OnClick:=@IncPage;
   b.Parent:=PanelLeft;
   SetupHFMOption;
+end;
+
+procedure Tf_option.ShowPage(p: TTabSheet);
+var i,n: integer;
+begin
+  n:=p.TabIndex;
+  for i:=0 to PanelLeft.ControlCount-1 do begin
+    if PanelLeft.Controls[i] is TSpeedButton then begin
+      if TSpeedButton(PanelLeft.Controls[i]).Tag=n then begin
+        TSpeedButton(PanelLeft.Controls[i]).Down:=true;
+        PageControl1.ActivePageIndex:=n;
+      end;
+    end;
+  end;
 end;
 
 procedure Tf_option.SelectPage(Sender: TObject);
