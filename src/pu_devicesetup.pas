@@ -2827,8 +2827,10 @@ begin
        if CoverIndiDevice.Items[i]=coversavedev then CoverIndiDevice.ItemIndex:=i;
   end;
   if (GetDeviceType=12) then begin
-    if GuideCameraIndiDevice.Items.Count>0 then
-       GuideCameraIndiDevice.ItemIndex:=0
+    if GuideCameraIndiDevice.Items.Count>0 then begin
+       GuideCameraIndiDevice.ItemIndex:=0;
+       DeviceGuideCamera.Checked:=true;
+    end
     else begin
        GuideCameraIndiDevice.Items.Add(guidecamsavedev); ;
        GuideCameraMsg.Caption:=rsNoDevice;
@@ -2837,8 +2839,10 @@ begin
        if GuideCameraIndiDevice.Items[i]=guidecamsavedev then GuideCameraIndiDevice.ItemIndex:=i;
   end;
   if (GetDeviceType=13) then begin
-    if FinderCameraIndiDevice.Items.Count>0 then
-       FinderCameraIndiDevice.ItemIndex:=0
+    if FinderCameraIndiDevice.Items.Count>0 then begin
+       FinderCameraIndiDevice.ItemIndex:=0;
+       DeviceFinderCamera.Checked:=true;
+    end
     else begin
        FinderCameraIndiDevice.Items.Add(findercamsavedev); ;
        FinderCameraMsg.Caption:=rsNoDevice;
@@ -3419,6 +3423,7 @@ begin
     GuideCameraARestPort.Text:=lst[2];
     GuideCameraARestDevice.Value:=StrToInt(lst[4]);
     GuideCameraARestProtocol.ItemIndex:=0;
+    DeviceGuideCamera.Checked:=true;
     lst.Free;
   end;
 end;
@@ -3435,6 +3440,7 @@ begin
     FinderCameraARestPort.Text:=lst[2];
     FinderCameraARestDevice.Value:=StrToInt(lst[4]);
     FinderCameraARestProtocol.ItemIndex:=0;
+    DeviceFinderCamera.Checked:=true;
     lst.Free;
   end;
 end;
