@@ -5162,6 +5162,10 @@ msgstr ""
 msgid "Object sets at %s. In %s hour(s)"
 msgstr ""
 
+#: u_translation:rsobservatione
+msgid "Observation end time at %s. In %s hour(s)"
+msgstr ""
+
 #: u_translation:rstimingestima
 msgid "Timing estimate"
 msgstr ""
