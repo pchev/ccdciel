@@ -1357,6 +1357,7 @@ resourcestring
   rsTargetPositi2 = 'Target position in finder image';
   rsSavePreviewI = 'Save preview images';
   rsObjectSetsAt = 'Object sets at %s. In %s hour(s)';
+  rsObservationE = 'Observation end time at %s. In %s hour(s)';
   rsTimingEstima = 'Timing estimate';
   rsAdjustTheCha = 'Adjust the chart for the image or frame';
   rsUseBacklashC = 'Use backlash compensation';
