@@ -1041,7 +1041,8 @@ begin
     end;
   end
   else begin
-    f.Header.Insert(i,'INSTRUME',instrum,'Instrument used for acquisition');
+    j:=f.Header.Insert(i,'INSTRUME',instrum,'Instrument used for acquisition');
+    if hinstr<>instrum then f.Header.Insert(j+1,'CAMERA',hinstr,'Camera used for acquisition');
   end;
   if hfilter<>'' then f.Header.Insert(i,'FILTER',hfilter,'Filter');
   f.Header.Insert(i,'SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr+blank+compile_system,'');
