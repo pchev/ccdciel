@@ -504,6 +504,8 @@ if not indiclient.Connected then begin
   Findidevice:=cp3;
   Fdevice:=cp3;
   Findisensor:=cp4;
+  Fccdname:=Fdevice;
+  if (Findisensor<>'') and (Findisensor<>'CCD1') then Fccdname:=Fccdname+'-'+Findisensor;
   FStatus := devDisconnected;
   FWheelStatus:=devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
