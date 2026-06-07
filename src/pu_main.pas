@@ -3659,13 +3659,6 @@ var ok,b1,b2,b3:boolean;
     i,j: integer;
     f: double;
     msg,buf: string;
-procedure movetoolconfig(tool:string; defaultParent: TPanel);
-begin
-  screenconfig.SetValue('/Tools/'+tool+'/Parent',config.GetValue('/Tools/'+tool+'/Parent',defaultParent.name));
-  screenconfig.SetValue('/Tools/'+widestring(tool)+'/Top',config.GetValue('/Tools/'+widestring(tool)+'/Top',0));
-  screenconfig.SetValue('/Tools/'+widestring(tool)+'/Left',config.GetValue('/Tools/'+widestring(tool)+'/Left',0));
-  screenconfig.SetValue('/Tools/'+widestring(tool)+'/Visible',config.GetValue('/Tools/'+widestring(tool)+'/Visible',true));
-end;
 begin
 try
   if trim(oldver)='' then
@@ -5838,12 +5831,12 @@ begin
  screenconfig.SetValue('/Tools/Switch/Left',f_switch.Left);
 
  screenconfig.SetValue('/Tools/InternalGuider/Parent',f_internalguider.Parent.Name);
- screenconfig.SetValue('/Tools/InternalGuider/Visible',f_internalguider.Visible or (not WantGuideCamera));
+ screenconfig.SetValue('/Tools/InternalGuider/Visible',True);
  screenconfig.SetValue('/Tools/InternalGuider/Top',f_internalguider.Top);
  screenconfig.SetValue('/Tools/InternalGuider/Left',f_internalguider.Left);
 
  screenconfig.SetValue('/Tools/Finder/Parent',f_finder.Parent.Name);
- screenconfig.SetValue('/Tools/Finder/Visible',f_finder.Visible or (not WantFinderCamera));
+ screenconfig.SetValue('/Tools/Finder/Visible',True);
  screenconfig.SetValue('/Tools/Finder/Top',f_finder.Top);
  screenconfig.SetValue('/Tools/Finder/Left',f_finder.Left);
 
@@ -19347,7 +19340,6 @@ begin
       0: astrometry.FinderCamera:=nil;
       1: astrometry.FinderCamera:=findercamera;
     end;
-    screenconfig.SetValue('/Tools/Finder/Visible',true);
     TBFinder.Visible:=true;
     SetTool(f_finder,'Finder',PanelRight7,0,MenuViewFinder,MenuFinder,true,true);
     MenuTabFinder.Visible:=true;
@@ -19357,7 +19349,6 @@ begin
   else begin
     UseFinder:=false;
     astrometry.FinderCamera:=nil;
-    screenconfig.SetValue('/Tools/Finder/Visible',false);
     TBFinder.Visible:=false;
     SetTool(f_finder,'Finder',PanelRight7,0,MenuViewFinder,MenuFinder,false,true);
     MenuTabFinder.Visible:=false;
