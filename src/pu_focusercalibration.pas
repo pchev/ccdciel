@@ -389,7 +389,7 @@ try
          end
          else begin
            // increase the step if the change is too small
-           if (not StepFound)and(abs(curhfd-lasthfd)<(3*seeing)) then begin
+           if (not StepFound)and(abs(curhfd-lasthfd)<(min(2,2*seeing))) then begin
              step:=round(1.5*step);
              if step>spStartStep.Value then
                 msg(rsIncreaseStep+' '+inttostr(step));
@@ -400,6 +400,7 @@ try
              // reverse direction when we are moving out of focus
              Direction:=not Direction;
              Reverse:=true;
+             StepFound:=true;
              msg(rsReverseDirec);
            end
            else if (not MinHfdFound)and(Reverse)and((curhfd-lasthfd)>(2*seeing)) then begin
@@ -439,6 +440,8 @@ try
 except
   on e: Exception do begin
     CalibrationCancel(e.Message);
+    if FAbsolute then
+      Ffocuser.Position:=startpos;
    end;
 end;
 end;
