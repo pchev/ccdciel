@@ -6,12 +6,14 @@ object f_main: Tf_main
   ActiveControl = PageControlRight
   AllowDropFiles = True
   Caption = 'CCD Ciel'
-  ClientHeight = 420
-  ClientWidth = 800
+  ClientHeight = 915
+  ClientWidth = 1245
   Constraints.MinHeight = 450
   Constraints.MinWidth = 800
   KeyPreview = True
   Menu = MainMenu1
+  ShowHint = True
+  LCLVersion = '4.6.0.0'
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -20,8 +22,6 @@ object f_main: Tf_main
   OnKeyDown = FormKeyDown
   OnResize = FormResize
   OnShow = FormShow
-  ShowHint = True
-  LCLVersion = '2.2.6.0'
   object Panel1: TPanel
     Left = 0
     Height = 892
@@ -172,12 +172,12 @@ object f_main: Tf_main
         Width = 1009
         Align = alTop
         DoubleBuffered = False
-        OnMoved = Splitter2Moved
         ParentColor = False
         ParentDoubleBuffered = False
         ParentShowHint = False
         ResizeAnchor = akTop
         ShowHint = True
+        OnMoved = Splitter2Moved
       end
       object PanelImage1: TPanel
         Left = 0
@@ -215,11 +215,11 @@ object f_main: Tf_main
             BorderSpacing.Left = 4
             BorderSpacing.Bottom = 4
             Min = 0
-            OnClick = updExtendClick
             Orientation = udHorizontal
             Position = 0
             TabOrder = 0
             Visible = False
+            OnClick = updExtendClick
           end
         end
       end
@@ -251,8 +251,8 @@ object f_main: Tf_main
     Top = 0
     Width = 5
     Align = alRight
-    OnMoved = Splitter1Moved
     ResizeAnchor = akRight
+    OnMoved = Splitter1Moved
   end
   object PanelRight: TPanel
     Left = 1023
@@ -285,10 +285,10 @@ object f_main: Tf_main
         Down = True
         Grouped = True
         ImageIndex = 15
+        Style = tbsCheck
         OnClick = SelectTab
         OnDragDrop = ButtonDragDrop
         OnDragOver = ButtonDragOver
-        Style = tbsCheck
       end
       object TBFocus: TToolButton
         Tag = 1
@@ -297,10 +297,10 @@ object f_main: Tf_main
         Top = 2
         Grouped = True
         ImageIndex = 1
+        Style = tbsCheck
         OnClick = SelectTab
         OnDragDrop = ButtonDragDrop
         OnDragOver = ButtonDragOver
-        Style = tbsCheck
       end
       object TBCapture: TToolButton
         Tag = 2
@@ -309,10 +309,10 @@ object f_main: Tf_main
         Top = 2
         Grouped = True
         ImageIndex = 2
+        Style = tbsCheck
         OnClick = SelectTab
         OnDragDrop = ButtonDragDrop
         OnDragOver = ButtonDragOver
-        Style = tbsCheck
       end
       object TBSequence: TToolButton
         Tag = 3
@@ -321,10 +321,10 @@ object f_main: Tf_main
         Top = 2
         Grouped = True
         ImageIndex = 3
+        Style = tbsCheck
         OnClick = SelectTab
         OnDragDrop = ButtonDragDrop
         OnDragOver = ButtonDragOver
-        Style = tbsCheck
       end
       object TBInternalGuider: TToolButton
         Tag = 5
@@ -333,10 +333,10 @@ object f_main: Tf_main
         Top = 2
         Grouped = True
         ImageIndex = 0
+        Style = tbsCheck
         OnClick = SelectTab
         OnDragDrop = ButtonDragDrop
         OnDragOver = ButtonDragOver
-        Style = tbsCheck
       end
       object TBFinder: TToolButton
         Tag = 6
@@ -345,8 +345,8 @@ object f_main: Tf_main
         Top = 2
         Grouped = True
         ImageIndex = 6
-        OnClick = SelectTab
         Style = tbsCheck
+        OnClick = SelectTab
       end
       object TBVideo: TToolButton
         Tag = 4
@@ -355,11 +355,11 @@ object f_main: Tf_main
         Top = 2
         Grouped = True
         ImageIndex = 4
+        Style = tbsCheck
+        Visible = False
         OnClick = SelectTab
         OnDragDrop = ButtonDragDrop
         OnDragOver = ButtonDragOver
-        Style = tbsCheck
-        Visible = False
       end
     end
     object PageControlRight: TPageControl
@@ -371,32 +371,32 @@ object f_main: Tf_main
       Align = alClient
       Images = ImageListDay
       MultiLine = True
+      Options = [nboMultiLine]
       ParentFont = False
       ShowTabs = False
       TabIndex = 0
       TabOrder = 1
-      Options = [nboMultiLine]
       object PageConnect: TTabSheet
-        ClientHeight = 847
-        ClientWidth = 218
+        ClientHeight = 851
+        ClientWidth = 222
         ImageIndex = 0
         ParentFont = False
         object ScrollBox3: TScrollBox
           Left = 0
-          Height = 847
+          Height = 851
           Top = 0
-          Width = 218
+          Width = 222
           HorzScrollBar.Page = 1
           VertScrollBar.Page = 1
           Align = alClient
-          ClientHeight = 847
-          ClientWidth = 218
+          ClientHeight = 851
+          ClientWidth = 222
           TabOrder = 0
           object PanelRight1: TPanel
             Left = 0
-            Height = 847
+            Height = 851
             Top = 0
-            Width = 218
+            Width = 222
             Align = alClient
             AutoSize = True
             BevelOuter = bvNone
@@ -413,26 +413,26 @@ object f_main: Tf_main
         end
       end
       object PageFocus: TTabSheet
-        ClientHeight = 847
-        ClientWidth = 218
+        ClientHeight = 851
+        ClientWidth = 222
         ImageIndex = 1
         ParentFont = False
         object ScrollBox4: TScrollBox
           Left = 0
-          Height = 847
+          Height = 851
           Top = 0
-          Width = 218
+          Width = 222
           HorzScrollBar.Page = 1
           VertScrollBar.Page = 1
           Align = alClient
-          ClientHeight = 847
-          ClientWidth = 218
+          ClientHeight = 851
+          ClientWidth = 222
           TabOrder = 0
           object PanelRight2: TPanel
             Left = 0
-            Height = 847
+            Height = 851
             Top = 0
-            Width = 218
+            Width = 222
             Align = alClient
             AutoSize = True
             BevelOuter = bvNone
@@ -449,26 +449,26 @@ object f_main: Tf_main
         end
       end
       object PageCapture: TTabSheet
-        ClientHeight = 847
-        ClientWidth = 218
+        ClientHeight = 851
+        ClientWidth = 222
         ImageIndex = 2
         ParentFont = False
         object ScrollBox5: TScrollBox
           Left = 0
-          Height = 847
+          Height = 851
           Top = 0
-          Width = 218
+          Width = 222
           HorzScrollBar.Page = 1
           VertScrollBar.Page = 1
           Align = alClient
-          ClientHeight = 847
-          ClientWidth = 218
+          ClientHeight = 851
+          ClientWidth = 222
           TabOrder = 0
           object PanelRight3: TPanel
             Left = 0
-            Height = 847
+            Height = 851
             Top = 0
-            Width = 218
+            Width = 222
             Align = alClient
             AutoSize = True
             BevelOuter = bvNone
@@ -485,26 +485,26 @@ object f_main: Tf_main
         end
       end
       object PageSequence: TTabSheet
-        ClientHeight = 847
-        ClientWidth = 218
+        ClientHeight = 851
+        ClientWidth = 222
         ImageIndex = 3
         ParentFont = False
         object ScrollBox2: TScrollBox
           Left = 0
-          Height = 847
+          Height = 851
           Top = 0
-          Width = 218
+          Width = 222
           HorzScrollBar.Page = 1
           VertScrollBar.Page = 1
           Align = alClient
-          ClientHeight = 847
-          ClientWidth = 218
+          ClientHeight = 851
+          ClientWidth = 222
           TabOrder = 0
           object PanelRight4: TPanel
             Left = 0
-            Height = 847
+            Height = 851
             Top = 0
-            Width = 218
+            Width = 222
             Align = alClient
             AutoSize = True
             BevelOuter = bvNone
@@ -521,26 +521,26 @@ object f_main: Tf_main
         end
       end
       object PageVideo: TTabSheet
-        ClientHeight = 847
-        ClientWidth = 218
+        ClientHeight = 851
+        ClientWidth = 222
         ImageIndex = 4
         ParentFont = False
         object ScrollBox6: TScrollBox
           Left = 0
-          Height = 847
+          Height = 851
           Top = 0
-          Width = 218
+          Width = 222
           HorzScrollBar.Page = 1
           VertScrollBar.Page = 1
           Align = alClient
-          ClientHeight = 847
-          ClientWidth = 218
+          ClientHeight = 851
+          ClientWidth = 222
           TabOrder = 0
           object PanelRight5: TPanel
             Left = 0
-            Height = 847
+            Height = 851
             Top = 0
-            Width = 218
+            Width = 222
             Align = alClient
             AutoSize = True
             BevelOuter = bvNone
@@ -553,27 +553,27 @@ object f_main: Tf_main
         end
       end
       object PageInternalGuider: TTabSheet
-        ClientHeight = 847
-        ClientWidth = 218
+        ClientHeight = 851
+        ClientWidth = 222
         ImageIndex = 4
-        OnShow = PageInternalGuiderShow
         ParentFont = False
+        OnShow = PageInternalGuiderShow
         object ScrollBox7: TScrollBox
           Left = 0
-          Height = 847
+          Height = 851
           Top = 0
-          Width = 218
+          Width = 222
           HorzScrollBar.Page = 1
           VertScrollBar.Page = 1
           Align = alClient
-          ClientHeight = 847
-          ClientWidth = 218
+          ClientHeight = 851
+          ClientWidth = 222
           TabOrder = 0
           object PanelRight6: TPanel
             Left = 0
-            Height = 847
+            Height = 851
             Top = 0
-            Width = 218
+            Width = 222
             Align = alClient
             BevelOuter = bvNone
             ParentColor = False
@@ -585,25 +585,25 @@ object f_main: Tf_main
         end
       end
       object PageFinder: TTabSheet
-        ClientHeight = 847
-        ClientWidth = 218
+        ClientHeight = 851
+        ClientWidth = 222
         ParentFont = False
         object ScrollBox8: TScrollBox
           Left = 0
-          Height = 847
+          Height = 851
           Top = 0
-          Width = 218
+          Width = 222
           HorzScrollBar.Page = 1
           VertScrollBar.Page = 1
           Align = alClient
-          ClientHeight = 847
-          ClientWidth = 218
+          ClientHeight = 851
+          ClientWidth = 222
           TabOrder = 0
           object PanelRight7: TPanel
             Left = 0
-            Height = 847
+            Height = 851
             Top = 0
-            Width = 218
+            Width = 222
             Align = alClient
             BevelOuter = bvNone
             TabOrder = 0

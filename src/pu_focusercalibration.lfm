@@ -1,19 +1,20 @@
 object f_focusercalibration: Tf_focusercalibration
   Left = 0
-  Height = 456
+  Height = 490
   Top = 0
   Width = 597
   Caption = 'Focuser calibration'
-  ClientHeight = 456
+  ClientHeight = 490
   ClientWidth = 597
   FormStyle = fsStayOnTop
+  LCLVersion = '4.6.0.0'
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnShow = FormShow
   object Notebook1: TNotebook
     Left = 0
-    Height = 422
+    Height = 456
     Top = 0
     Width = 597
     PageIndex = 0
@@ -121,6 +122,7 @@ object f_focusercalibration: Tf_focusercalibration
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
+          SpinButtonWidth = 17
           TabOrder = 0
           MaxValue = 8
           MinValue = 1
@@ -139,7 +141,6 @@ object f_focusercalibration: Tf_focusercalibration
         ParentFont = False
         TabOrder = 2
         object Label1: TLabel
-          AnchorSideTop.Side = asrCenter
           Left = 6
           Height = 18
           Top = 5
@@ -157,6 +158,7 @@ object f_focusercalibration: Tf_focusercalibration
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
+          SpinButtonWidth = 17
           TabOrder = 0
           MaxValue = 60
           MinValue = 0.1
@@ -185,6 +187,59 @@ object f_focusercalibration: Tf_focusercalibration
         Caption = 'Step size'
         ParentColor = False
       end
+      object Label5: TLabel
+        AnchorSideLeft.Control = cbDirection
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = Label6
+        Left = 221
+        Height = 18
+        Top = 423
+        Width = 145
+        BorderSpacing.Left = 12
+        Caption = 'Backlash compensation'
+      end
+      object spBacklash: TSpinEditEx
+        AnchorSideLeft.Control = Label5
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = Label5
+        AnchorSideTop.Side = asrCenter
+        Left = 374
+        Height = 28
+        Top = 418
+        Width = 80
+        BorderSpacing.Left = 8
+        Constraints.MaxHeight = 28
+        MaxLength = 0
+        SpinButtonWidth = 17
+        TabOrder = 4
+        NullValue = 0
+        Value = 0
+      end
+      object cbDirection: TComboBox
+        AnchorSideLeft.Control = Label6
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = Label6
+        AnchorSideTop.Side = asrCenter
+        Left = 105
+        Height = 28
+        Top = 418
+        Width = 104
+        BorderSpacing.Left = 8
+        Constraints.MaxHeight = 28
+        ItemHeight = 24
+        Items.Strings = (
+          'In'
+          'Out'
+        )
+        TabOrder = 5
+      end
+      object Label6: TLabel
+        Left = 6
+        Height = 18
+        Top = 423
+        Width = 91
+        Caption = 'Move direction'
+      end
     end
     object PageResult: TPage
       object ValueListEditor1: TValueListEditor
@@ -193,7 +248,6 @@ object f_focusercalibration: Tf_focusercalibration
         Top = 8
         Width = 584
         DefaultColWidth = 250
-        FixedCols = 0
         ParentFont = False
         RowCount = 10
         TabOrder = 0
@@ -232,7 +286,7 @@ object f_focusercalibration: Tf_focusercalibration
   object Panel1: TPanel
     Left = 0
     Height = 34
-    Top = 422
+    Top = 456
     Width = 597
     Align = alBottom
     ClientHeight = 34
@@ -246,9 +300,9 @@ object f_focusercalibration: Tf_focusercalibration
       Width = 75
       Cancel = True
       Caption = 'Cancel'
-      OnClick = btnCancelClick
       ParentFont = False
       TabOrder = 0
+      OnClick = btnCancelClick
     end
     object btnNext: TButton
       Left = 400
@@ -256,8 +310,8 @@ object f_focusercalibration: Tf_focusercalibration
       Top = 4
       Width = 75
       Caption = 'Next'
-      OnClick = btnNextClick
       TabOrder = 1
+      OnClick = btnNextClick
     end
     object btnSave: TButton
       Left = 400
@@ -265,8 +319,8 @@ object f_focusercalibration: Tf_focusercalibration
       Top = 4
       Width = 75
       Caption = 'Save'
-      OnClick = btnSaveClick
       TabOrder = 2
+      OnClick = btnSaveClick
     end
     object btnStart: TButton
       AnchorSideLeft.Control = spStartStep
@@ -276,8 +330,8 @@ object f_focusercalibration: Tf_focusercalibration
       Top = 4
       Width = 75
       Caption = 'Start'
-      OnClick = btnStartClick
       TabOrder = 3
+      OnClick = btnStartClick
     end
   end
   object FitSource: TListChartSource

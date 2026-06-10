@@ -48,6 +48,9 @@ type
   Tf_focusercalibration = class(TForm)
     btnNext: TButton;
     btnSave: TButton;
+    cbDirection: TComboBox;
+    Label5: TLabel;
+    Label6: TLabel;
     spBin: TSpinEditEx;
     spExp: TFloatSpinEditEx;
     btnCancel: TButton;
@@ -64,6 +67,7 @@ type
     PanelExp: TPanel;
     PanelBinning: TPanel;
     PtSource: TListChartSource;
+    spBacklash: TSpinEditEx;
     spStartStep: TSpinEdit;
     btnStart: TButton;
     ValueListEditor1: TValueListEditor;
@@ -131,7 +135,11 @@ begin
   label1.Caption:=rsExposure;
   label2.Caption:=rsBinning;
   label3.Caption:=rsStepSize;
-   ValueListEditor1.TitleCaptions[0] := rsParameter;
+  label5.Caption:=rsBacklashComp;
+  Label6.Caption := rsMoveDirectio;
+  cbDirection.Items[0]:=rsIn;
+  cbDirection.Items[1]:=rsOut;
+  ValueListEditor1.TitleCaptions[0] := rsParameter;
   ValueListEditor1.TitleCaptions[1] := rsValue;
   label8.Caption:=rsClickSaveToS;
   btnStart.Caption := rsStart;
@@ -215,7 +223,6 @@ begin
   SeeingFound:=false;
   MinHfdFound:=false;
   Reverse:=false;
-  Direction:=FocusDirOut;
   StepFound:=false;
   FSNR:=30;
   hfddiff:=2;
@@ -223,6 +230,11 @@ begin
   maxmeasurement:=50;
   curmeasurement:=0;
   SetLength(measurement,maxmeasurement);
+  // backlash
+  Direction:=(cbDirection.ItemIndex=0);
+  Ffocuser.Backlash:=spBacklash.Value;
+  Ffocuser.BacklashDirection:=(cbDirection.ItemIndex=0);
+  Ffocuser.BacklashActive:=(Ffocuser.Backlash<>0);
   // get focuser state
   FAbsolute:=focuser.hasAbsolutePosition;
   if FAbsolute then begin
@@ -499,7 +511,8 @@ begin
   ValueListEditor1.InsertRow(rsGain, inttostr(FGain), true);
   ValueListEditor1.InsertRow(rsOffset2, inttostr(FOffset), true);
   ValueListEditor1.InsertRow(rsBinning, inttostr(FBin), true);
-  ValueListEditor1.InsertRow(rsMoveDirectio,rsOut,true);
+  ValueListEditor1.InsertRow(rsBacklashComp, inttostr(Ffocuser.Backlash), true);
+  ValueListEditor1.InsertRow(rsMoveDirectio,BoolToStr(Ffocuser.BacklashDirection,rsIn,rsOut),true);
   ValueListEditor1.InsertRow(rsAutofocusTol,FormatFloat(f1,2*minhfd),true);
   ValueListEditor1.InsertRow(rsMinSNR,FormatFloat(f1,FSNR),true);
   ValueListEditor1.InsertRow(rsNumberOfDyna,'7',true);
@@ -522,6 +535,10 @@ begin
   config.SetValue('/StarAnalysis/AutofocusInPlace',True);
   config.SetValue('/StarAnalysis/AutofocusPlanetNumPoint',7);
   config.SetValue('/StarAnalysis/AutofocusPlanetMovement',Fdynstep);
+  config.SetValue('/StarAnalysis/FocuserBacklash',Ffocuser.Backlash);
+  config.SetValue('/StarAnalysis/FocuserBacklashActive',Ffocuser.BacklashActive);
+  config.SetValue('/StarAnalysis/FocuserBacklashDirection',Ffocuser.BacklashDirection);
+  config.SetValue('/StarAnalysis/AutofocusMoveDir',Ffocuser.BacklashDirection);
   config.Flush;
   except
     on E: Exception do ShowMessage('Error saving focuser calibration: '+ E.Message);

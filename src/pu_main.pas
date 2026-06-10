@@ -13644,6 +13644,11 @@ begin
   end;
   f_focusercalibration.onMsg:=@NewMessage;
   f_focusercalibration.focuser:=focuser;
+  f_focusercalibration.spBacklash.Value:=focuser.Backlash;
+  if focuser.BacklashDirection then
+    f_focusercalibration.cbDirection.ItemIndex:=0
+  else
+    f_focusercalibration.cbDirection.ItemIndex:=1;
   if GuiderAutofocus then begin
     f_focusercalibration.camera:=guidecamera;
     f_focusercalibration.Label4.Caption:=Format(rsFocuserCalib2,[rsGuideCamera]);
