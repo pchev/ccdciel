@@ -220,7 +220,7 @@ begin
   FSNR:=30;
   hfddiff:=2;
   FFirstExp:=true;
-  maxmeasurement:=100;
+  maxmeasurement:=50;
   curmeasurement:=0;
   SetLength(measurement,maxmeasurement);
   // get focuser state
@@ -328,6 +328,7 @@ try
          for i:=0 to ns-1 do
              hfdlist[i]:=Fcamera.Fits.StarList[i].hfd;
          meanhfd:=SMedian(hfdlist,ns);
+         starthfd:=min(starthfd,meanhfd);
          seeinglist[numseeing-1]:=meanhfd;
          if numseeing=5 then begin
            minseeing:=999;
@@ -358,6 +359,10 @@ try
              hfdlist[i]:=Fcamera.Fits.StarList[i].hfd;
          meanhfd:=SMedian(hfdlist,ns);
          curhfd:=meanhfd;
+         if meanhfd<starthfd then begin
+           starthfd:=meanhfd;
+           startpos:=curpos;
+         end;
          // store measurement
          inc(curmeasurement);
          if curmeasurement>=maxmeasurement then raise exception.Create('Too many measurement without convergence');
