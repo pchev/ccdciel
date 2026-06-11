@@ -453,7 +453,7 @@ begin
     FFullDitherRa:=+dra;
     FFullDitherDec:=+ddec; //the dither pulse will be executed in InternalAutoguiding;
 
-    if mount.isGem and ((mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0)) then // Did a meridian flip occur since calibration.
+    if mount.isGem and (not UseRotator) and ((mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0)) then // Did a meridian flip occur since calibration.
       mflipcorr:=180 // A meridian flip occurred
     else
       mflipcorr:=0;
@@ -1666,7 +1666,7 @@ begin
   end;
 
   // Apply camera orientation and meridian flip if required
-  if meridianflip then // Did a meridian flip occur since calibration.
+  if meridianflip and (not UseRotator) then // Did a meridian flip occur since calibration.
     mflipcorr:=180 // A meridian flip occurred
   else
     mflipcorr:=0;
