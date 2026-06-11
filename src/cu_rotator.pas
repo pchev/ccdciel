@@ -185,7 +185,12 @@ else
 end;
 
 procedure T_rotator.SetMountPierSide(value: TPierSide);
+var x: double;
 begin
+  if (not FSoftSync)and(FMountPierSide<pierUnknown)and(value<pierUnknown)and(FMountPierSide<>value) then begin
+    x:=rmod(GetAngle+180+360,360);
+    Sync(x);
+  end;
   FMountPierSide:=value;
   if Assigned(FonAngleChange) then FonAngleChange(self);
 end;
