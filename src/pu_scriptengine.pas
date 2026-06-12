@@ -440,7 +440,10 @@ begin
     if ScriptRunning(i) then begin
       inc(n);
       ScriptGrid.Cells[0,n]:=IntToStr(i);
+      try
       ScriptGrid.Cells[1,n]:=PythonScr[i].pyscript;
+      except
+      end;
     end;
   end;
 end;
