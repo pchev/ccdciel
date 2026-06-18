@@ -2530,7 +2530,7 @@ begin
                end
                else begin
                  // start South backlash measurement
-                 CalibrationDuration:=round(3*1000/finternalguider.pulsegainNorth); //duration for 3 pixel move
+                 CalibrationDuration:=round(3*1000/abs(finternalguider.pulsegainNorth)); //duration for 3 pixel move
                  InternalguiderCalibrationDirection:=2;
                  InternalguiderCalibrationStep:=0;
                  BacklashCalibration;  // iterate without new image
