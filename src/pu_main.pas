@@ -12928,7 +12928,7 @@ end;
 procedure  Tf_main.StarSelection(Sender: TObject);
 begin
   // redraw star box
-  if f_visu.BullsEye then begin
+  if f_visu.BullsEye and f_starprofile.FindStar then begin
      // crosshair follow the selected star
      BullsEyeX:=round(f_starprofile.StarX);
      BullsEyeY:=round(f_starprofile.StarY);
