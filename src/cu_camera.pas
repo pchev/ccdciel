@@ -540,7 +540,8 @@ begin
   coolp:=GetCoolerPower;
   finished:=(Nstep<=0)or((TempRamp>0)and((coolp<>NullCoord)and(coolp<1)));
   if finished then begin
-    if (TempFinal=20)and(TempRamp>0)and((coolp<>NullCoord)and(coolp<5)) then begin // want to stop cooling by setting the temperature to 20C
+    if (TempFinal=20)and(TempRamp>0) then begin // want to stop cooling by setting the temperature to 20C
+      SetTemperature(TempFinal);
       msg('Stop camera cooling');
       SetCooler(false);
     end
