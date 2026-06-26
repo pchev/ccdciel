@@ -1132,6 +1132,10 @@ begin
               DynAbsStartPos:=FPreFocusPos;  //return -1 for relative focuser
               k:=AutofocusDynamicNumPoint div 2;
               if FPreFocusPos=-1 then begin
+                VcChart.Extent.XMin:=1;
+                VcChart.Extent.XMax:=AutofocusDynamicNumPoint;
+                VcChart.Extent.UseXMin:=true;
+                VcChart.Extent.UseXMax:=true;
                 focuser.FocusSpeed:=AutofocusDynamicMovement*k;
                 if AutofocusMoveDir=FocusDirIn then begin
                   onFocusOUT(self);
@@ -1144,6 +1148,10 @@ begin
                 focuser.FocusSpeed:=AutofocusDynamicMovement;
               end
               else begin
+                VcChart.Extent.XMin:=FPreFocusPos-AutofocusDynamicMovement*k;
+                VcChart.Extent.XMax:=FPreFocusPos+AutofocusDynamicMovement*k;
+                VcChart.Extent.UseXMin:=true;
+                VcChart.Extent.UseXMax:=true;
                 if AutofocusMoveDir=FocusDirIn then begin
                   DynAbsStartPos:=DynAbsStartPos+AutofocusDynamicMovement*k;
                   DynAbsStep:=-AutofocusDynamicMovement;
