@@ -534,11 +534,19 @@ end;
 
 procedure T_camera.RampTimerTimer(Sender: TObject);
 var finished: boolean;
+    coolp: double;
 begin
   RampTimer.Enabled:=false;
-  finished:=(Nstep<=0)or((TempRamp>0)and(GetCoolerPower<1));
+  coolp:=GetCoolerPower;
+  finished:=(Nstep<=0)or((TempRamp>0)and((coolp<>NullCoord)and(coolp<1)));
   if finished then begin
-    SetTemperature(TempFinal);
+    if (TempFinal=20)and(TempRamp>0)and((coolp<>NullCoord)and(coolp<5)) then begin // want to stop cooling by setting the temperature to 20C
+      msg('Stop camera cooling');
+      SetCooler(false);
+    end
+    else begin
+      SetTemperature(TempFinal);
+    end;
     msg(rsSetTemperatu3);
     FTemperatureRampActive:=false;
     if Assigned(FonTemperatureChange) then FonTemperatureChange(GetTemperature);
