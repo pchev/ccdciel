@@ -13,7 +13,7 @@ object f_main: Tf_main
   KeyPreview = True
   Menu = MainMenu1
   ShowHint = True
-  LCLVersion = '4.6.0.0'
+  LCLVersion = '4.8.0.0'
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -1027,6 +1027,10 @@ object f_main: Tf_main
       object MenuItem22: TMenuItem
         Caption = '-'
       end
+      object MenuItemAstap2: TMenuItem
+        Caption = 'Open in Astap'
+        OnClick = MenuItemAstapClick
+      end
       object MenuViewAstrometryLog2: TMenuItem
         Caption = 'View last resolver log'
         OnClick = MenuViewAstrometryLogClick
@@ -1679,6 +1683,10 @@ object f_main: Tf_main
     end
     object MenuItem8: TMenuItem
       Caption = '-'
+    end
+    object MenuItemAstap: TMenuItem
+      Caption = 'Open in ASTAP'
+      OnClick = MenuItemAstapClick
     end
     object MenuViewAstrometryLog: TMenuItem
       Caption = 'View last resolver log'

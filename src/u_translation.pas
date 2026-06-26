@@ -1558,6 +1558,7 @@ resourcestring
   rsStartAndEndO = 'Start and end of series';
   rsBeforeAndAft = 'Before and after image';
   rsAlways = 'Always';
+  rsOpenWithS = 'Open with %s';
 
 implementation
 

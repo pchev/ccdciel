@@ -152,6 +152,8 @@ type
     MenuFlatHeader: TMenuItem;
     MeasureConeError1: TMenuItem;
     MenuInstallScript: TMenuItem;
+    MenuItemAstap2: TMenuItem;
+    MenuItemAstap: TMenuItem;
     MenuItemGuiderSolveSyncRotator: TMenuItem;
     MenuItemFinderSolvePlanetarium: TMenuItem;
     MenuItemFinderShowCCDFrame: TMenuItem;
@@ -465,6 +467,7 @@ type
     procedure MenuInstallScriptClick(Sender: TObject);
     procedure MenuInternalguiderStartClick(Sender: TObject);
     procedure MenuInternalGuiderStopClick(Sender: TObject);
+    procedure MenuItemAstapClick(Sender: TObject);
     procedure MenuItemFinderSaveImageClick(Sender: TObject);
     procedure MenuItemFinderShowCCDFrameClick(Sender: TObject);
     procedure MenuItemFinderSolveClick(Sender: TObject);
@@ -2711,6 +2714,8 @@ begin
    MenuShowCCDFrame2.Caption := rsResolveAndSh2;
    MenuItemGuiderShowCCDFrame.Caption := rsResolveAndSh2;
    MenuItemFinderShowCCDFrame.Caption := rsResolveAndSh2;
+   MenuItemAstap.Caption:=Format(rsOpenWithS, ['ASTAP']);
+   MenuItemAstap2.Caption:=Format(rsOpenWithS, ['ASTAP']);
    MenuViewAstrometryLog.Caption := rsViewLastReso;
    MenuViewAstrometryLog2.Caption := rsViewLastReso;
    MenuStopAstrometry.Caption := rsStopAstromet;
@@ -5417,6 +5422,7 @@ begin
   f_finder.FilterStrength:=config.GetValue('/Finder/FilterStrength',3);
 
   astrometryResolver:=config.GetValue('/Astrometry/Resolver',ResolverAstap);
+  MenuItemAstap.Visible:=(astrometryResolver=ResolverAstap);
   AstrometryTimeout:=config.GetValue('/Astrometry/Timeout',30.0);
   buf:=config.GetValue('/Astrometry/OtherOptions','');
   if (astrometryResolver=ResolverAstrometryNet)and(pos('--no-fits2fits',buf)>0)and(not config.GetValue('/Astrometry/AstUseOnline',false)) then begin
@@ -14851,6 +14857,24 @@ begin
     f.Show;
   end;
 end;
+
+procedure Tf_main.MenuItemAstapClick(Sender: TObject);
+var fn,dir,cmd: string;
+begin
+  if (not astrometry.Busy) and (Fits.HeaderInfo.naxis>0) and Fits.ImageValid then begin
+     fn:=slash(TmpDir)+'ccdcieltmp.fits';
+     Fits.SaveToFile(fn);
+     dir:=config.GetValue('/Astrometry/ASTAPFolder','');
+     {$ifdef mswindows}
+       cmd:=slash(dir)+'astap.exe';
+     {$else}
+       cmd:=slash(dir)+'astap';
+     {$endif}
+     cmd:=cmd+' "'+fn+'"';
+     ExecNoWait(cmd,'',false);
+  end;
+end;
+
 
 procedure Tf_main.MenuResolveClick(Sender: TObject);
 begin
