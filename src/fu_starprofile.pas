@@ -895,8 +895,8 @@ end;
 
 procedure Tf_starprofile.Autofocus(f: TFits; x,y,s: integer);
 var bg,bgdev,star_fwhm: double;
-  xg,yg,flux,med: double;
-  xm,ym,ri,ns,i,nhfd : integer;
+  xg,yg,flux,med,meanhfd: double;
+  xm,ym,ri,ns,i,nhfd,rx,ry,n : integer;
   hfdlist: array of double;
   txt:string;
 begin
@@ -919,6 +919,48 @@ begin
    else begin                             // measure multiple stars
     f.MeasureStarList(s,AutofocusStarList);
     ns:=Length(f.StarList);
+    if ns=0 then begin
+      // retry star detection with a big window to find median star diameter
+      // same as initial measurement in Tf_main.AutoFocusStart
+      msg('retry star detection',3);
+      s:=starwindow;
+      rx:=img_Width-6*s; {search area}
+      ry:=img_Height-6*s;
+      f.GetStarList(rx,ry,s,maxint{accept saturation},AutofocusMinSNR); {search stars in fits image}
+      ns:=Length(f.StarList);
+      if ns>0 then begin
+        SetLength(hfdlist,ns);
+        for i:=0 to ns-1 do
+          hfdlist[i]:=f.StarList[i].hfd;
+        med:=SMedian(hfdlist,ns);            {median of starshfd}
+        s:=min(max(14,round(3.0*med)),s); {reasonable window to measure this star}
+      end
+      else
+        s:=20; {no star found, try with small default window}
+      rx:=img_Width-6*s; {search area}
+      ry:=img_Height-6*s;
+      f.GetStarList(rx,ry,s,maxint{accept saturation},AutofocusMinSNR); {search stars in fits image}
+      ns:=Length(f.StarList);
+      // store star list
+      if ns>0 then begin
+         // compute median HFD
+         SetLength(hfdlist,ns);
+         for i:=0 to ns-1 do
+             hfdlist[i]:=f.StarList[i].hfd;
+         meanhfd:=SMedian(hfdlist,ns);
+         n:=0;
+         SetLength(AutofocusStarList,ns);
+         for i:=0 to ns-1 do begin
+           // filter by hfd to remove galaxies and others outliers
+           if abs(f.StarList[i].hfd-meanhfd)<(0.5*meanhfd) then begin
+             inc(n);
+             AutofocusStarList[n-1,1]:=f.StarList[i].x;
+             AutofocusStarList[n-1,2]:=f.StarList[i].y;
+           end;
+         end;
+         SetLength(AutofocusStarList,n);
+      end;
+    end;
     if ns>0 then begin
       SetLength(hfdlist,ns);
       for i:=0 to ns-1 do
