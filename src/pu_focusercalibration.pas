@@ -333,6 +333,28 @@ try
       s:=20;
       Fcamera.Fits.MeasureStarList(s,AutofocusStarList);
       ns:=Length(Fcamera.Fits.StarList);
+      if ns=0 then begin
+        // star loss, retry initial search
+        msg('retry star detection');
+        s:=20;
+        rx:=Fcamera.Fits.HeaderInfo.naxis1-6*s;
+        ry:=Fcamera.Fits.HeaderInfo.naxis2-6*s;
+        repeat
+          // search stars
+          Fcamera.Fits.GetStarList(rx,ry,s,maxint,FSNR);
+          ns:=Length(Fcamera.Fits.StarList);
+          // if not found retry with a smaller snr
+          if (ns=0)and(FSNR>=6) then FSNR:=FSNR-3;
+        until (ns>0)or(FSNR<=3);
+        if ns>0 then begin
+          // store star list for next exposures
+          SetLength(AutofocusStarList,ns);
+          for i:=0 to ns-1 do begin
+              AutofocusStarList[i,1]:=Fcamera.Fits.StarList[i].x;
+              AutofocusStarList[i,2]:=Fcamera.Fits.StarList[i].y;
+          end;
+        end;
+      end;
       if ns>0 then begin
          // compute median HFD
          inc(numseeing);
@@ -364,6 +386,28 @@ try
       s:=20;
       Fcamera.Fits.MeasureStarList(s,AutofocusStarList);
       ns:=Length(Fcamera.Fits.StarList);
+      if ns=0 then begin
+        // star loss, retry initial search
+        msg('retry star detection');
+        s:=20;
+        rx:=Fcamera.Fits.HeaderInfo.naxis1-6*s;
+        ry:=Fcamera.Fits.HeaderInfo.naxis2-6*s;
+        repeat
+          // search stars
+          Fcamera.Fits.GetStarList(rx,ry,s,maxint,FSNR);
+          ns:=Length(Fcamera.Fits.StarList);
+          // if not found retry with a smaller snr
+          if (ns=0)and(FSNR>=6) then FSNR:=FSNR-3;
+        until (ns>0)or(FSNR<=3);
+        if ns>0 then begin
+          // store star list for next exposures
+          SetLength(AutofocusStarList,ns);
+          for i:=0 to ns-1 do begin
+              AutofocusStarList[i,1]:=Fcamera.Fits.StarList[i].x;
+              AutofocusStarList[i,2]:=Fcamera.Fits.StarList[i].y;
+          end;
+        end;
+      end;
       if ns>0 then begin
          // compute median HFD
          SetLength(hfdlist,ns);
@@ -380,6 +424,7 @@ try
          if curmeasurement>=maxmeasurement then raise exception.Create('Too many measurement without convergence');
          measurement[curmeasurement-1,1]:=curpos;
          measurement[curmeasurement-1,2]:=curhfd;
+         msg(Format('Measurement: focuser=%s hfd=%s', [inttostr(curpos), FormatFloat(f1, curhfd)]));
          // store maximum
          if MinHfdFound and (curhfd>maxhfd) then begin
            maxhfd:=curhfd;

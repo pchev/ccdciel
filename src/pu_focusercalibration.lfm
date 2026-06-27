@@ -7,7 +7,7 @@ object f_focusercalibration: Tf_focusercalibration
   ClientHeight = 490
   ClientWidth = 597
   FormStyle = fsStayOnTop
-  LCLVersion = '4.6.0.0'
+  LCLVersion = '4.8.0.0'
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
