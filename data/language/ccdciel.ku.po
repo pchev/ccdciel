@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-06-05 14:20+0000\n"
+"POT-Creation-Date: 2026-06-28 07:48+0000\n"
 "PO-Revision-Date: 2021-08-31 20:35+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Kurdish <ku@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-06-05 14:44+0000\n"
-"X-Generator: Launchpad (build f85a4e13f5f1af0eb2d5aadecdf089bdd7783432)\n"
+"X-Launchpad-Export-Date: 2026-06-28 08:04+0000\n"
+"X-Generator: Launchpad (build c38ea58da9d7185c4996adfc854ab433551cdcdd)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -892,10 +892,6 @@ msgstr ""
 
 #: u_translation.rsclearflatfra
 msgid "Clear Flat frame"
-msgstr ""
-
-#: u_translation.rsclearrestart
-msgid "Clear restart information on repeat"
 msgstr ""
 
 #: u_translation.rsclearthecomp
@@ -3446,6 +3442,11 @@ msgstr ""
 msgid "Open the Dome shutter"
 msgstr ""
 
+#: u_translation.rsopenwiths
+#, object-pascal-format
+msgid "Open with %s"
+msgstr ""
+
 #: u_translation.rsoptions
 #, object-pascal-format
 msgid "Options :%s"
@@ -3922,6 +3923,10 @@ msgstr ""
 
 #: u_translation.rsred
 msgid "red"
+msgstr ""
+
+#: u_translation.rsredoalltheob
+msgid "Redo every object with each repetition"
 msgstr ""
 
 #: u_translation.rsreferenceexp

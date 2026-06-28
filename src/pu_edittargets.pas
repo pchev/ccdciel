@@ -558,7 +558,7 @@ begin
   cbUpdCoord.Hint:=Format(rsPriorToSlewi, [crlf, crlf]);
   CheckBoxRepeatList.Caption := rsRepeatTheWho;
   CheckBoxRestartStatus.Caption:=rsRecordRestar;
-  CheckBoxResetRepeat.Caption:=rsClearRestart;
+  CheckBoxResetRepeat.Caption:=rsRedoAllTheOb;
   Label24.Caption:=rsNextSequence;
   Label5.Caption:=rsSequenceStar2;
   SeqStart.Caption := rsStartAt;
@@ -661,6 +661,7 @@ begin
   Preview.Hint:=rsStartAPrevie;
   CheckBoxRepeatList.Hint:=rsRepeatTheWho2;
   BtnRepeatInf.Hint:=rsInfiniteNumb;
+  cbNextSequence.Hint:=rsContinueWit2;
   SeqStart.Hint:=rsActivateTheS;
   SeqStartAt.Hint:=rsWaitToThisTi;
   SeqStartTwilight.Hint:=rsSetTheStartT;

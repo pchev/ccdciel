@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-06-05 14:15+0000\n"
+"POT-Creation-Date: 2026-06-28 07:48+0000\n"
 "PO-Revision-Date: 2025-10-30 04:32+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-06-05 14:44+0000\n"
-"X-Generator: Launchpad (build f85a4e13f5f1af0eb2d5aadecdf089bdd7783432)\n"
+"X-Launchpad-Export-Date: 2026-06-28 08:04+0000\n"
+"X-Generator: Launchpad (build c38ea58da9d7185c4996adfc854ab433551cdcdd)\n"
 
 #: u_hints.rsactivateback
 #, object-pascal-format
@@ -106,6 +106,10 @@ msgstr "点击以按%s排序"
 #: u_hints.rsconnectallde
 msgid "Connect all devices"
 msgstr "连接所有设备"
+
+#: u_hints.rscontinuewit2
+msgid "Continue with another sequence when this one is finished"
+msgstr ""
 
 #: u_hints.rscontrolhowco
 msgid "Control how complete target are managed when the whole list is repeated"

@@ -542,3 +542,7 @@ msgstr ""
 msgid "Specific astrometry of the guider field, redo it for any change in the image scale or rotation"
 msgstr ""
 
+#: u_hints:rscontinuewit2
+msgid "Continue with another sequence when this one is finished"
+msgstr ""
+

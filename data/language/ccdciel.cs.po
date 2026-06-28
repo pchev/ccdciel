@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-05 14:20+0000\n"
+"POT-Creation-Date: 2026-06-28 07:48+0000\n"
 "PO-Revision-Date: 2026-05-25 17:26+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-06-05 14:44+0000\n"
-"X-Generator: Launchpad (build f85a4e13f5f1af0eb2d5aadecdf089bdd7783432)\n"
+"X-Launchpad-Export-Date: 2026-06-28 08:04+0000\n"
+"X-Generator: Launchpad (build c38ea58da9d7185c4996adfc854ab433551cdcdd)\n"
 "Language: cs\n"
 
 #: u_translation.rs2d
@@ -890,10 +890,6 @@ msgstr "Clear Dark frame"
 #: u_translation.rsclearflatfra
 msgid "Clear Flat frame"
 msgstr "Clear Flat frame"
-
-#: u_translation.rsclearrestart
-msgid "Clear restart information on repeat"
-msgstr "Vymazat informace při resetu o opakování"
 
 #: u_translation.rsclearthecomp
 msgid "Clear the completion status?"
@@ -3446,6 +3442,11 @@ msgstr "Otevřít soubor FITS nebo soubor snímku%s"
 msgid "Open the Dome shutter"
 msgstr "Otevřít štěrbinu Kopule"
 
+#: u_translation.rsopenwiths
+#, object-pascal-format
+msgid "Open with %s"
+msgstr ""
+
 #: u_translation.rsoptions
 #, object-pascal-format
 msgid "Options :%s"
@@ -3923,6 +3924,10 @@ msgstr "Zaznamenat informace o restartování"
 #: u_translation.rsred
 msgid "red"
 msgstr "červená"
+
+#: u_translation.rsredoalltheob
+msgid "Redo every object with each repetition"
+msgstr ""
 
 #: u_translation.rsreferenceexp
 msgid "Reference exposure"

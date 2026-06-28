@@ -1148,7 +1148,6 @@ resourcestring
   rsRecording = 'Recording';
   rsFromPlanetar = 'From planetarium';
   rsRemoveRow = 'Remove row';
-  rsClearRestart = 'Clear restart information on repeat';
   rsRecordRestar = 'Record restart information';
   rsInsertBlankR = 'Insert blank row';
   rsSequenceStar2 = 'Sequence start / stop time';
@@ -1559,6 +1558,7 @@ resourcestring
   rsBeforeAndAft = 'Before and after image';
   rsAlways = 'Always';
   rsOpenWithS = 'Open with %s';
+  rsRedoAllTheOb = 'Redo every object with each repetition';
 
 implementation
 
