@@ -843,6 +843,7 @@ begin
    h:=config.GetValue('/Visu/PosH',-1);
    f:=TForm.Create(self);
    f.FormStyle:=fsStayOnTop;
+   f.BorderStyle:=bsSizeToolWin;
    f.OnClose:=@PanelVisuClose;
    f.ShowHint:=ShowHint;
    if w>0 then

@@ -193,6 +193,7 @@ begin
    h:=config.GetValue('/SpectraProfile/ProfileH',-1);
    f:=TForm.Create(self);
    f.FormStyle:=fsStayOnTop;
+   f.BorderStyle:=bsSizeToolWin;
    f.OnClose:=@PanelProfileClose;
    if w>0 then
      f.Width:=w

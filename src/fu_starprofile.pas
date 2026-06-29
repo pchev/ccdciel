@@ -418,6 +418,7 @@ begin
    h:=config.GetValue('/StarAnalysis/Profile2DH',-1);
    f:=TForm.Create(self);
    f.FormStyle:=fsStayOnTop;
+   f.BorderStyle:=bsSizeToolWin;
    f.OnClose:=@Panel2DClose;
     if w>0 then
       f.Width:=w
@@ -466,6 +467,7 @@ begin
    h:=config.GetValue('/StarAnalysis/ProfileH',-1);
    f:=TForm.Create(self);
    f.FormStyle:=fsStayOnTop;
+   f.BorderStyle:=bsSizeToolWin;
    f.OnClose:=@PanelProfileClose;
    if w>0 then
      f.Width:=w
@@ -523,6 +525,7 @@ begin
    h:=config.GetValue('/StarAnalysis/TrendH',-1);
    f:=TForm.Create(self);
    f.FormStyle:=fsStayOnTop;
+   f.BorderStyle:=bsSizeToolWin;
    f.OnClose:=@PanelTrendClose;
    if w>0 then
      f.Width:=w
@@ -580,6 +583,7 @@ begin
  if PanelGraph.Parent=Panel6 then begin
   f:=TForm.Create(self);
   f.FormStyle:=fsStayOnTop;
+  f.BorderStyle:=bsSizeToolWin;
   f.OnClose:=@PanelGraphClose;
   f.Width:=DoScaleX(400);
   f.Height:=DoScaleY(300);

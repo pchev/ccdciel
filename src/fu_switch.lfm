@@ -6,6 +6,7 @@ object f_switch: Tf_switch
   ClientHeight = 103
   ClientWidth = 194
   Constraints.MaxHeight = 250
+  LCLVersion = '4.8.0.0'
   ParentFont = False
   TabOrder = 0
   DesignLeft = -1

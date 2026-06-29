@@ -177,6 +177,7 @@ begin
    h:=config.GetValue('/Switch/PosH',-1);
    f:=TForm.Create(self);
    f.FormStyle:=fsStayOnTop;
+   f.BorderStyle:=bsSizeToolWin;
    f.OnClose:=@DetachFormClose;
    if w>0 then
      f.Width:=w

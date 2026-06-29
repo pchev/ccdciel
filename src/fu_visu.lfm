@@ -5,10 +5,11 @@ object f_visu: Tf_visu
   Width = 440
   ClientHeight = 127
   ClientWidth = 440
-  OnEndDrag = FrameEndDrag
-  OnResize = FrameResize
+  LCLVersion = '4.8.0.0'
   ParentFont = False
   TabOrder = 0
+  OnEndDrag = FrameEndDrag
+  OnResize = FrameResize
   DesignLeft = -3
   DesignTop = 20
   object Panel1: TPanel
@@ -45,6 +46,7 @@ object f_visu: Tf_visu
         ClientWidth = 262
         Color = clBlack
         Font.Color = clSilver
+        ParentBackground = False
         ParentColor = False
         ParentFont = False
         TabOrder = 0
@@ -126,6 +128,7 @@ object f_visu: Tf_visu
           Align = alLeft
           BevelOuter = bvNone
           Color = clBlack
+          ParentBackground = False
           ParentColor = False
           TabOrder = 0
           OnClick = HistBarLeftClick
@@ -139,6 +142,7 @@ object f_visu: Tf_visu
           Align = alClient
           BevelOuter = bvNone
           Color = clSilver
+          ParentBackground = False
           ParentColor = False
           TabOrder = 1
           OnClick = HistBarCenterClick
@@ -152,6 +156,7 @@ object f_visu: Tf_visu
           Align = alRight
           BevelOuter = bvNone
           Color = clWhite
+          ParentBackground = False
           ParentColor = False
           TabOrder = 4
           OnClick = HistBarRightClick
@@ -165,9 +170,9 @@ object f_visu: Tf_visu
           AutoSnap = False
           Color = clRed
           MinSize = 1
+          ParentColor = False
           OnChangeBounds = SplitterChangeBounds
           OnMoved = SplitterMinMoved
-          ParentColor = False
         end
         object SplitterMax: TSplitter
           AnchorSideLeft.Side = asrBottom
@@ -179,10 +184,10 @@ object f_visu: Tf_visu
           AutoSnap = False
           Color = clGreen
           MinSize = 1
-          OnChangeBounds = SplitterChangeBounds
-          OnMoved = SplitterMaxMoved
           ParentColor = False
           ResizeAnchor = akRight
+          OnChangeBounds = SplitterChangeBounds
+          OnMoved = SplitterMaxMoved
         end
       end
     end
@@ -230,8 +235,8 @@ object f_visu: Tf_visu
             BorderSpacing.Left = 1
             Color = clDefault
             GroupIndex = 110
-            OnClick = BtnClipRangeClick
             ParentFont = False
+            OnClick = BtnClipRangeClick
           end
           object BtnInvert: TSpeedButton
             AnchorSideLeft.Side = asrBottom
@@ -245,8 +250,8 @@ object f_visu: Tf_visu
             BorderSpacing.Left = 1
             Color = clDefault
             GroupIndex = 105
-            OnClick = BtnInvertClick
             ParentFont = False
+            OnClick = BtnInvertClick
           end
           object BtnBullsEye: TSpeedButton
             AnchorSideLeft.Side = asrBottom
@@ -259,8 +264,8 @@ object f_visu: Tf_visu
             BorderSpacing.Left = 1
             Color = clDefault
             GroupIndex = 103
-            OnClick = BtnBullsEyeClick
             ParentFont = False
+            OnClick = BtnBullsEyeClick
           end
           object BtnClipping: TSpeedButton
             AnchorSideLeft.Side = asrBottom
@@ -273,8 +278,8 @@ object f_visu: Tf_visu
             BorderSpacing.Left = 1
             Color = clDefault
             GroupIndex = 104
-            OnClick = BtnClippingClick
             ParentFont = False
+            OnClick = BtnClippingClick
           end
           object PanelNoDisplay: TPanel
             Left = 145
@@ -327,8 +332,8 @@ object f_visu: Tf_visu
             Color = clDefault
             GroupIndex = 102
             Layout = blGlyphBottom
-            OnClick = BtnZoomClick
             ParentFont = False
+            OnClick = BtnZoomClick
           end
           object BtnZoomAdjust: TSpeedButton
             AnchorSideLeft.Control = Panel7
@@ -340,8 +345,8 @@ object f_visu: Tf_visu
             AllowAllUp = True
             Color = clDefault
             GroupIndex = 102
-            OnClick = BtnZoomClick
             ParentFont = False
+            OnClick = BtnZoomClick
           end
           object BtnZoom2: TSpeedButton
             Tag = 3
@@ -359,8 +364,8 @@ object f_visu: Tf_visu
             Color = clDefault
             GroupIndex = 102
             Layout = blGlyphBottom
-            OnClick = BtnZoomClick
             ParentFont = False
+            OnClick = BtnZoomClick
           end
           object BtnZoom1: TSpeedButton
             Tag = 2
@@ -378,8 +383,8 @@ object f_visu: Tf_visu
             Color = clDefault
             GroupIndex = 102
             Layout = blGlyphBottom
-            OnClick = BtnZoomClick
             ParentFont = False
+            OnClick = BtnZoomClick
           end
           object BtnFlipHorz: TSpeedButton
             Left = 116
@@ -390,8 +395,8 @@ object f_visu: Tf_visu
             AllowAllUp = True
             Color = clDefault
             GroupIndex = 106
-            OnClick = BtnFlipHorzClick
             ParentFont = False
+            OnClick = BtnFlipHorzClick
           end
           object BtnFlipVert: TSpeedButton
             AnchorSideLeft.Side = asrBottom
@@ -404,8 +409,8 @@ object f_visu: Tf_visu
             BorderSpacing.Left = 1
             Color = clDefault
             GroupIndex = 107
-            OnClick = BtnFlipVertClick
             ParentFont = False
+            OnClick = BtnFlipVertClick
           end
         end
         object Panel8: TPanel
@@ -452,10 +457,10 @@ object f_visu: Tf_visu
               'Background'
               'Manual'
             )
-            OnCloseUp = cbHistRangeCloseUp
             Style = csDropDownList
             TabOrder = 1
             Text = 'Data range'
+            OnCloseUp = cbHistRangeCloseUp
           end
         end
         object Panel5: TPanel
@@ -512,8 +517,8 @@ object f_visu: Tf_visu
             Width = 19
             BorderSpacing.Left = 2
             Flat = True
-            OnClick = BtnPinVisuClick
             ParentFont = False
+            OnClick = BtnPinVisuClick
           end
         end
         object LabelPos: TLabel
