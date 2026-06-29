@@ -1411,7 +1411,7 @@ end;
 
 constructor TGetBgraThread.Create(CreateSuspended: boolean);
 begin
-  FreeOnTerminate := True;
+  FreeOnTerminate := False;
   inherited Create(CreateSuspended);
   working := True;
 end;
@@ -1478,7 +1478,7 @@ end;
 
 constructor TGetExpThread.Create(CreateSuspended: boolean);
 begin
-  FreeOnTerminate := True;
+  FreeOnTerminate := False;
   inherited Create(CreateSuspended);
   working := True;
   minv:=0;
@@ -3317,6 +3317,9 @@ repeat
     working := working or thread[i].working;
   timingout := (now > timelimit);
 until (not working) or timingout;
+for i := 0 to tc - 1 do begin
+  thread[i].Free;
+end;
 // refresh image
 bgra.InvalidateBitmap;
 end;
@@ -3377,6 +3380,9 @@ begin
       working := working or thread[i].working;
     timingout := (now > timelimit);
   until (not working) or timingout;
+  for i := 0 to tc - 1 do begin
+    thread[i].Free;
+  end;
   // refresh image
   bgra.InvalidateBitmap;
 end;
