@@ -4086,7 +4086,7 @@ for i:=0 to Length(list)-1 do
    hfd1:=-1;
    star_fwhm:=-1;
 
-   GetHFD(fitsX,fitsY,s,maxint {allow saturation},false,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux);
+   GetHFD(fitsX,fitsY,s,maxint {allow saturation},true{correct drift},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux);
 
    {check valid hfd, snr}
    if ((hfd1>0)and (Undersampled or (hfd1>0.7)))
