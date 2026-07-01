@@ -102,7 +102,6 @@ type
     procedure HistoryChartDblClick(Sender: TObject);
     procedure HistoryChartMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure PageControlProfileChange(Sender: TObject);
-    procedure PanelGraphDblClick(Sender: TObject);
     procedure Star2DResize(Sender: TObject);
     procedure TimerHideGraphTimer(Sender: TObject);
     procedure VcChartMouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -259,7 +258,6 @@ begin
   LabelImax.Hint:=rsTheMaximumIn;
   LabelSNR.Hint:=rsTheSignalNoi;
   LabelFWHM.Hint:=rsTheFullWidth;
-  BtnPinGraph.Hint:=rsKeepTheGraph;
   ChkFocus.Hint:=rsStartImageLo;
   ChkAutofocus.Hint:=rsStartTheAuto;
 end;
@@ -566,9 +564,9 @@ begin
   PanelBtnTrend.BringToFront;
 end;
 
-procedure Tf_starprofile.BtnPinGraphClick(Sender: TObject);
+procedure Tf_starprofile.Star2DResize(Sender: TObject);
 begin
-  if BtnPinGraph.Down then PanelGraphDblClick(Sender);
+  PlotStar2D;
 end;
 
 procedure Tf_starprofile.BtnViewAutofocusClick(Sender: TObject);
@@ -577,34 +575,50 @@ begin
  PanelFWHM.Visible:=not PanelGraph.Visible;
 end;
 
-procedure Tf_starprofile.PanelGraphDblClick(Sender: TObject);
+procedure Tf_starprofile.BtnPinGraphClick(Sender: TObject);
 var f: TForm;
+    x,y,w,h: integer;
 begin
  if PanelGraph.Parent=Panel6 then begin
+  x:=config.GetValue('/StarAnalysis/AfGraphX',-1);
+  y:=config.GetValue('/StarAnalysis/AfGraphY',-1);
+  w:=config.GetValue('/StarAnalysis/AfGraphW',-1);
+  h:=config.GetValue('/StarAnalysis/AfGraph',-1);
   f:=TForm.Create(self);
   f.FormStyle:=fsStayOnTop;
   f.BorderStyle:=bsSizeToolWin;
   f.OnClose:=@PanelGraphClose;
-  f.Width:=DoScaleX(400);
-  f.Height:=DoScaleY(300);
+  if w>0 then
+    f.Width:=w
+  else
+    f.Width:=DoScaleX(400);
+  if h>0 then
+    f.Height:=h
+  else
+    f.Height:=DoScaleY(300);
   f.Caption:=rsAutofocusGra;
   PanelGraph.Parent:=f;
   PanelGraph.Align:=alClient;
-  BtnPinGraph.Down:=true;
   VcChart.AxisList.Axes[0].Marks.LabelFont.Height:=0;
   VcChart.AxisList.Axes[1].Marks.LabelFont.Height:=0;
-  FormPos(f,mouse.CursorPos.x,mouse.CursorPos.y);
+  if (x>0)and(y>0) then begin
+    f.Left:=x;
+    f.Top:=y;
+  end
+  else
+    FormPos(f,mouse.CursorPos.x,mouse.CursorPos.y);
   f.Show;
- end;
-end;
-
-procedure Tf_starprofile.Star2DResize(Sender: TObject);
-begin
-  PlotStar2D;
+ end
+ else if PanelGraph.Parent is TForm then
+  TForm(PanelGraph.Parent).Close;
 end;
 
 procedure Tf_starprofile.PanelGraphClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  config.SetValue('/StarAnalysis/AfGraphX',TForm(Sender).Left);
+  config.SetValue('/StarAnalysis/AfGraphY',TForm(Sender).Top);
+  config.SetValue('/StarAnalysis/AfGraphW',TForm(Sender).Width);
+  config.SetValue('/StarAnalysis/AfGraphH',TForm(Sender).Height);
   CloseAction:=caFree;
   PanelGraph.Parent:=Panel6;
   PanelGraph.Align:=alClient;
@@ -614,19 +628,15 @@ end;
 
 procedure Tf_starprofile.TimerHideGraphTimer(Sender: TObject);
 begin
- if BtnPinGraph.Down then begin
+ if PanelGraph.Parent<>Panel6 then begin
    TimerHideGraph.Interval:=1000;
  end
  else begin
    TimerHideGraph.Enabled:=false;
-   if (PanelGraph.Parent<>Panel6)and(PanelGraph.Parent is TForm) then begin
-     TForm(PanelGraph.Parent).close;
-   end;
    PanelFWHM.Visible:=true;
    PanelGraph.Visible:=false;
  end;
 end;
-
 
 procedure Tf_starprofile.VcChartMouseMove(Sender: TObject; Shift: TShiftState;
   X, Y: Integer);

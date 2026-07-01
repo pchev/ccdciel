@@ -44,7 +44,6 @@ resourcestring
   rsTheSignalNoi = 'The Signal/Noise ratio';
   rsTheFullWidth = 'The Full Width at Half Maximum value in pixels / arc '
     +'seconds';
-  rsKeepTheGraph = 'Keep the graph visible after autofocus is completed';
   rsStartImageLo = 'Start image loop centered on selected star';
   rsStartTheAuto = 'Start the auto-focus procedure';
   rsHistogramOfT = 'Histogram of the current image';

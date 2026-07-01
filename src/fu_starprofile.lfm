@@ -199,7 +199,6 @@ object f_starprofile: Tf_starprofile
         ParentFont = False
         TabOrder = 1
         Visible = False
-        OnDblClick = PanelGraphDblClick
         object VcChart: TChart
           Left = 0
           Height = 102
@@ -231,7 +230,6 @@ object f_starprofile: Tf_starprofile
             'TAChart'
           )
           Align = alClient
-          OnDblClick = PanelGraphDblClick
           OnMouseMove = VcChartMouseMove
           object VcChartPtMeasure: TLineSeries
             LinePen.Color = clNone
@@ -277,20 +275,20 @@ object f_starprofile: Tf_starprofile
             Left = 0
             Height = 19
             Top = 0
-            Width = 173
+            Width = 163
             Align = alClient
             AutoSize = False
             ParentColor = False
             ParentFont = False
           end
           object BtnPinGraph: TSpeedButton
-            Left = 173
+            Left = 163
             Height = 19
-            Hint = 'Keep graph visible after autofocus is completed'
             Top = 0
             Width = 19
             Align = alRight
             AllowAllUp = True
+            BorderSpacing.Right = 10
             Flat = True
             GroupIndex = 1
             ParentFont = False
