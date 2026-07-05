@@ -779,7 +779,7 @@ end;
 
 function T_ascommount.getCanSetGuideRates:Boolean;
 begin
- result:=true;
+ result:=false;
  {$ifdef mswindows}
  if not VarIsEmpty(V) then begin
    try
