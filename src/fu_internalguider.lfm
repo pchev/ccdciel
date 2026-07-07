@@ -189,7 +189,6 @@ object f_internalguider: Tf_internalguider
             Width = 56
             MaxLength = 0
             ParentFont = False
-            SpinButtonWidth = 17
             TabOrder = 3
             OnChange = dec_gain1Change
             Increment = 5
@@ -208,7 +207,6 @@ object f_internalguider: Tf_internalguider
             BorderSpacing.Top = 2
             MaxLength = 0
             ParentFont = False
-            SpinButtonWidth = 17
             TabOrder = 2
             OnChange = ra_hysteresis1Change
             Increment = 5
@@ -268,7 +266,6 @@ object f_internalguider: Tf_internalguider
             Width = 56
             MaxLength = 0
             ParentFont = False
-            SpinButtonWidth = 17
             TabOrder = 1
             OnChange = ra_gain1Change
             Increment = 5
@@ -305,7 +302,6 @@ object f_internalguider: Tf_internalguider
             BorderSpacing.Top = 2
             MaxLength = 0
             ParentFont = False
-            SpinButtonWidth = 17
             TabOrder = 4
             OnChange = dec_hysteresis1Change
             Increment = 5
@@ -651,7 +647,6 @@ object f_internalguider: Tf_internalguider
               Top = 0
               Width = 111
               MaxLength = 0
-              SpinButtonWidth = 17
               TabOrder = 0
               OnChange = ExposureChange
               DecimalPlaces = 3
@@ -675,7 +670,6 @@ object f_internalguider: Tf_internalguider
               Top = 32
               Width = 111
               MaxLength = 0
-              SpinButtonWidth = 17
               TabOrder = 1
               OnChange = spBinningChange
               MaxValue = 8
@@ -694,7 +688,6 @@ object f_internalguider: Tf_internalguider
               Width = 58
               BorderSpacing.Left = 4
               MaxLength = 0
-              SpinButtonWidth = 17
               TabOrder = 2
               MaxValue = 60
               NullValue = 0
@@ -761,7 +754,6 @@ object f_internalguider: Tf_internalguider
               Top = 0
               Width = 111
               MaxLength = 0
-              SpinButtonWidth = 17
               TabOrder = 0
               NullValue = 0
               Value = 0
@@ -794,7 +786,6 @@ object f_internalguider: Tf_internalguider
               Top = 0
               Width = 111
               MaxLength = 0
-              SpinButtonWidth = 17
               TabOrder = 0
               NullValue = 0
               Value = 0
@@ -837,7 +828,6 @@ object f_internalguider: Tf_internalguider
               Top = 0
               Width = 54
               MaxLength = 0
-              SpinButtonWidth = 17
               TabOrder = 0
               MaxValue = 99
               MinValue = -99
@@ -928,7 +918,6 @@ object f_internalguider: Tf_internalguider
               Top = 4
               Width = 72
               MaxLength = 0
-              SpinButtonWidth = 17
               TabOrder = 0
               OnChange = ShortestPulse1Change
               Increment = 5
@@ -964,7 +953,6 @@ object f_internalguider: Tf_internalguider
               Top = 128
               Width = 72
               MaxLength = 0
-              SpinButtonWidth = 17
               TabOrder = 3
               OnChange = minSNR1Change
               Increment = 3
@@ -990,7 +978,6 @@ object f_internalguider: Tf_internalguider
               Top = 94
               Width = 72
               MaxLength = 0
-              SpinButtonWidth = 17
               TabOrder = 2
               OnChange = minHFD1Change
               Increment = 0.3
@@ -1047,7 +1034,6 @@ object f_internalguider: Tf_internalguider
               Top = 60
               Width = 72
               MaxLength = 0
-              SpinButtonWidth = 17
               TabOrder = 1
               OnChange = LongestPulse1Change
               Increment = 100
@@ -1099,7 +1085,6 @@ object f_internalguider: Tf_internalguider
               Enabled = False
               MaxLength = 0
               ParentFont = False
-              SpinButtonWidth = 17
               TabOrder = 6
               OnChange = v_solar1Change
               MaxValue = 1000
@@ -1113,7 +1098,6 @@ object f_internalguider: Tf_internalguider
               Enabled = False
               MaxLength = 0
               ParentFont = False
-              SpinButtonWidth = 17
               TabOrder = 7
               OnChange = vpa_solar1Change
               MaxValue = 360
@@ -1135,7 +1119,6 @@ object f_internalguider: Tf_internalguider
               Width = 72
               Enabled = False
               MaxLength = 0
-              SpinButtonWidth = 17
               TabOrder = 9
               MaxValue = 10000
               NullValue = 0
@@ -1225,7 +1208,6 @@ object f_internalguider: Tf_internalguider
               Top = 28
               Width = 72
               MaxLength = 0
-              SpinButtonWidth = 17
               TabOrder = 1
               Increment = 100
               MaxValue = 1000
@@ -1274,7 +1256,6 @@ object f_internalguider: Tf_internalguider
                 Top = 0
                 Width = 72
                 MaxLength = 0
-                SpinButtonWidth = 17
                 TabOrder = 0
                 DecimalPlaces = 1
                 Increment = 0.1
@@ -1288,7 +1269,6 @@ object f_internalguider: Tf_internalguider
                 Top = 0
                 Width = 72
                 MaxLength = 0
-                SpinButtonWidth = 17
                 TabOrder = 1
                 DecimalPlaces = 1
                 Increment = 0.1
@@ -1417,7 +1397,6 @@ object f_internalguider: Tf_internalguider
                 Width = 69
                 BorderSpacing.Left = 8
                 MaxLength = 0
-                SpinButtonWidth = 17
                 TabOrder = 0
                 DecimalPlaces = 0
                 MaxValue = 120
@@ -1464,7 +1443,6 @@ object f_internalguider: Tf_internalguider
                 Width = 66
                 BorderSpacing.Left = 8
                 MaxLength = 0
-                SpinButtonWidth = 17
                 TabOrder = 0
                 OnChange = ForceRedraw
                 DecimalPlaces = 1
@@ -1492,7 +1470,6 @@ object f_internalguider: Tf_internalguider
                 Width = 66
                 BorderSpacing.Left = 8
                 MaxLength = 0
-                SpinButtonWidth = 17
                 TabOrder = 1
                 OnChange = ForceRedraw
                 DecimalPlaces = 1
@@ -1590,7 +1567,6 @@ object f_internalguider: Tf_internalguider
                   Top = 2
                   Width = 65
                   MaxLength = 0
-                  SpinButtonWidth = 17
                   TabOrder = 0
                   MaxValue = 200
                   MinValue = 15
@@ -1606,7 +1582,6 @@ object f_internalguider: Tf_internalguider
                   Width = 65
                   BorderSpacing.Top = 2
                   MaxLength = 0
-                  SpinButtonWidth = 17
                   TabOrder = 1
                   MaxValue = 800
                   MinValue = 100
@@ -1656,7 +1631,6 @@ object f_internalguider: Tf_internalguider
                   Top = 3
                   Width = 105
                   MaxLength = 0
-                  SpinButtonWidth = 17
                   TabOrder = 0
                 end
                 object Label37: TLabel
@@ -1685,7 +1659,6 @@ object f_internalguider: Tf_internalguider
                   Top = 35
                   Width = 105
                   MaxLength = 0
-                  SpinButtonWidth = 17
                   TabOrder = 1
                 end
                 object btnSetMultiStarOffset: TButton
@@ -1781,7 +1754,6 @@ object f_internalguider: Tf_internalguider
                 Width = 66
                 BorderSpacing.Left = 8
                 MaxLength = 0
-                SpinButtonWidth = 17
                 TabOrder = 1
                 OnChange = SlitOffsetChange
                 DecimalPlaces = 1
@@ -1797,7 +1769,6 @@ object f_internalguider: Tf_internalguider
                 Width = 66
                 BorderSpacing.Left = 8
                 MaxLength = 0
-                SpinButtonWidth = 17
                 TabOrder = 2
                 OnChange = SlitOffsetChange
                 DecimalPlaces = 1
@@ -1842,7 +1813,6 @@ object f_internalguider: Tf_internalguider
                 Top = 1
                 Width = 84
                 MaxLength = 0
-                SpinButtonWidth = 17
                 TabOrder = 0
                 OnChange = edRefChange
                 DecimalPlaces = 1
@@ -1873,7 +1843,6 @@ object f_internalguider: Tf_internalguider
                 Top = 1
                 Width = 84
                 MaxLength = 0
-                SpinButtonWidth = 17
                 TabOrder = 1
                 OnChange = edRefChange
                 DecimalPlaces = 1
@@ -2035,7 +2004,6 @@ object f_internalguider: Tf_internalguider
                 Top = 0
                 Width = 80
                 MaxLength = 0
-                SpinButtonWidth = 17
                 TabOrder = 0
                 OnChange = ForceRedraw
                 MaxValue = 99999
@@ -2048,7 +2016,6 @@ object f_internalguider: Tf_internalguider
                 Top = 0
                 Width = 80
                 MaxLength = 0
-                SpinButtonWidth = 17
                 TabOrder = 1
                 OnChange = ForceRedraw
                 MaxValue = 99999
@@ -2061,7 +2028,6 @@ object f_internalguider: Tf_internalguider
                 Top = 40
                 Width = 80
                 MaxLength = 0
-                SpinButtonWidth = 17
                 TabOrder = 2
                 OnChange = ForceRedraw
                 MaxValue = 99999
@@ -2074,7 +2040,6 @@ object f_internalguider: Tf_internalguider
                 Top = 40
                 Width = 80
                 MaxLength = 0
-                SpinButtonWidth = 17
                 TabOrder = 3
                 OnChange = ForceRedraw
                 MaxValue = 99999
@@ -2087,7 +2052,6 @@ object f_internalguider: Tf_internalguider
                 Top = 80
                 Width = 80
                 MaxLength = 0
-                SpinButtonWidth = 17
                 TabOrder = 4
                 OnChange = ForceRedraw
                 MaxValue = 90

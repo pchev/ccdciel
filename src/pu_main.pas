@@ -3799,6 +3799,7 @@ try
         else j:=ResolverNone;
       end;
       config.SetValue('/Astrometry/Resolver',j);
+      config.SetValue('/Astrometry/UseFinderSolver',false);
     end;
     // remove VCurve and Iterative focus
     i:=config.GetValue('/StarAnalysis/AutoFocusMode',-1);

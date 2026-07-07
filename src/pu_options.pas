@@ -939,6 +939,9 @@ begin
   SafetyActions.RowCount:=SafetyActionNum+1;
   PageControl1.ActivePageIndex:=0;
   CustomHeader.RowCount:=MaxCustomHeaders+1;
+  FinderSolver.Clear;
+  for i:=0 to 4 do
+    FinderSolver.Items.Add(ResolverName[i]);
   b:=TSpeedButton.Create(self);
   b.GroupIndex:=99876;
   b.AllowAllUp:=true;
