@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-28 07:48+0000\n"
-"PO-Revision-Date: 2026-05-25 17:26+0000\n"
+"POT-Creation-Date: 2026-07-07 08:57+0000\n"
+"PO-Revision-Date: 2026-06-28 12:54+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-06-28 08:04+0000\n"
-"X-Generator: Launchpad (build c38ea58da9d7185c4996adfc854ab433551cdcdd)\n"
+"X-Launchpad-Export-Date: 2026-07-07 09:08+0000\n"
+"X-Generator: Launchpad (build 9266e25987148283c3b4dddb06517b57ecf29d92)\n"
 "Language: cs\n"
 
 #: u_translation.rs2d
@@ -135,7 +135,7 @@ msgstr "Pokročilá nastavení"
 
 #: u_translation.rsafterimage
 msgid "After image"
-msgstr ""
+msgstr "Snímek po"
 
 #: u_translation.rsaftertelesco
 #, object-pascal-format
@@ -172,7 +172,7 @@ msgstr "Výš"
 
 #: u_translation.rsalways
 msgid "Always"
-msgstr ""
+msgstr "Vždy"
 
 #: u_translation.rsanytime
 msgid "Any time"
@@ -545,11 +545,11 @@ msgstr "Dávejte pozor na nastavení Východní a Západní zeměpisné délky."
 
 #: u_translation.rsbeforeandaft
 msgid "Before and after image"
-msgstr ""
+msgstr "Snímek před a po"
 
 #: u_translation.rsbeforeimage
 msgid "Before image"
-msgstr ""
+msgstr "Snímek před"
 
 #: u_translation.rsbegin
 msgid "Begin"
@@ -1646,7 +1646,7 @@ msgstr "Konec"
 
 #: u_translation.rsendofseries
 msgid "End of series"
-msgstr ""
+msgstr "End of series"
 
 #: u_translation.rsendpreview
 msgid "End preview"
@@ -3348,7 +3348,7 @@ msgstr "Objekt %s, plán spuštěn %s"
 #: u_translation.rsobservatione
 #, object-pascal-format
 msgid "Observation end time at %s. In %s hour(s)"
-msgstr ""
+msgstr "Čas ukončení pozorování v %s. Za %s hodinu(y)"
 
 #: u_translation.rsobservatory
 msgid "Observatory"
@@ -3445,7 +3445,7 @@ msgstr "Otevřít štěrbinu Kopule"
 #: u_translation.rsopenwiths
 #, object-pascal-format
 msgid "Open with %s"
-msgstr ""
+msgstr "Otevřít pomocí %s"
 
 #: u_translation.rsoptions
 #, object-pascal-format
@@ -3835,6 +3835,10 @@ msgstr "Doba trvání impulzu"
 msgid "pulse gain"
 msgstr "pulzní zesílení"
 
+#: u_translation.rspulsenorthdi
+msgid "Pulse North direction [cal/flipped]"
+msgstr ""
+
 #: u_translation.rspythoncomman
 msgid "Python command"
 msgstr "Příkaz Pythonu"
@@ -3927,7 +3931,7 @@ msgstr "červená"
 
 #: u_translation.rsredoalltheob
 msgid "Redo every object with each repetition"
-msgstr ""
+msgstr "Při každém opakování znovu zpracovat každý objekt"
 
 #: u_translation.rsreferenceexp
 msgid "Reference exposure"
@@ -4261,7 +4265,7 @@ msgstr "Spustit skript na konci série"
 
 #: u_translation.rsrunscriptatt2
 msgid "Run script at the start of the series"
-msgstr ""
+msgstr "Spustit skript na začátku série"
 
 #: u_translation.rsrunscriptbef
 msgid "Run script before each exposure"
@@ -5039,7 +5043,7 @@ msgstr "Spustit"
 
 #: u_translation.rsstartandendo
 msgid "Start and end of series"
-msgstr ""
+msgstr "Start and end of series"
 
 #: u_translation.rsstartat
 msgid "Start at "
@@ -5083,7 +5087,7 @@ msgstr "Spustit nový protokol"
 
 #: u_translation.rsstartofserie
 msgid "Start of series"
-msgstr ""
+msgstr "Začátek série"
 
 #: u_translation.rsstartoptions
 msgid "Start options"
@@ -5516,7 +5520,7 @@ msgstr "Testovací e-mail od CCDciel"
 
 #: u_translation.rsthecameradri
 msgid "The camera driver do not allow to modify the gain"
-msgstr ""
+msgstr "Ovladač kamery neumožňuje změnit gain"
 
 #: u_translation.rsthecameraisc
 msgid "The camera is connected. Do you want to exit the program now?"
@@ -5989,7 +5993,7 @@ msgstr "Velmi vysoká"
 
 #: u_translation.rsverylow
 msgid "Very Low"
-msgstr ""
+msgstr "Velmi nízká"
 
 #: u_translation.rsvideo
 msgid "Video"

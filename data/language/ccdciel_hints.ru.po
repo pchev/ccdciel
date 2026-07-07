@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-06-28 07:48+0000\n"
+"POT-Creation-Date: 2026-07-07 08:58+0000\n"
 "PO-Revision-Date: 2024-12-21 17:04+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-06-28 08:04+0000\n"
-"X-Generator: Launchpad (build c38ea58da9d7185c4996adfc854ab433551cdcdd)\n"
+"X-Launchpad-Export-Date: 2026-07-07 09:08+0000\n"
+"X-Generator: Launchpad (build 9266e25987148283c3b4dddb06517b57ecf29d92)\n"
 
 #: u_hints.rsactivateback
 #, object-pascal-format
@@ -221,10 +221,6 @@ msgstr "Бесконечное число повторов"
 #: u_hints.rsinvertimaged
 msgid "Invert image display"
 msgstr "Инвертировать цвета"
-
-#: u_hints.rskeepthegraph
-msgid "Keep the graph visible after autofocus is completed"
-msgstr "Оставить график видимым после завершения автофокусировки"
 
 #: u_hints.rsletblankford
 msgid "Let blank for default system search path"

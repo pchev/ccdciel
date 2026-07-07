@@ -5969,3 +5969,7 @@ msgstr ""
 msgid "Redo every object with each repetition"
 msgstr ""
 
+#: u_translation:rspulsenorthdi
+msgid "Pulse North direction [cal/flipped]"
+msgstr ""
+

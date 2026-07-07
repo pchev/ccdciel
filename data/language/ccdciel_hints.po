@@ -126,10 +126,6 @@ msgstr ""
 msgid "The Full Width at Half Maximum value in pixels / arc seconds"
 msgstr ""
 
-#: u_hints:rskeepthegraph
-msgid "Keep the graph visible after autofocus is completed"
-msgstr ""
-
 #: u_hints:rsstartimagelo
 msgid "Start image loop centered on selected star"
 msgstr ""

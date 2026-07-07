@@ -6,6 +6,7 @@ object f_internalguider: Tf_internalguider
   AutoSize = True
   ClientHeight = 857
   ClientWidth = 346
+  LCLVersion = '4.8.0.0'
   ParentFont = False
   TabOrder = 0
   DesignLeft = 1140
@@ -29,12 +30,12 @@ object f_internalguider: Tf_internalguider
   end
   object Panel1: TPanel
     Left = 0
-    Height = 1037
+    Height = 1031
     Top = 20
     Width = 346
     Align = alTop
     AutoSize = True
-    ClientHeight = 1037
+    ClientHeight = 1031
     ClientWidth = 346
     ParentFont = False
     TabOrder = 0
@@ -82,8 +83,8 @@ object f_internalguider: Tf_internalguider
         Top = 0
         Width = 75
         Caption = 'Loop'
-        OnClick = ButtonLoopClick
         TabOrder = 0
+        OnClick = ButtonLoopClick
       end
       object ButtonGuide: TButton
         Left = 104
@@ -92,9 +93,9 @@ object f_internalguider: Tf_internalguider
         Top = 0
         Width = 75
         Caption = 'Guide'
-        OnClick = ButtonGuideClick
         ParentFont = False
         TabOrder = 1
+        OnClick = ButtonGuideClick
       end
       object led: TShape
         AnchorSideLeft.Side = asrBottom
@@ -116,9 +117,9 @@ object f_internalguider: Tf_internalguider
         Top = 0
         Width = 75
         Caption = 'Stop'
-        OnClick = ButtonStopClick
         ParentFont = False
         TabOrder = 2
+        OnClick = ButtonStopClick
       end
       object LabelInfo: TLabel
         Left = 0
@@ -139,7 +140,7 @@ object f_internalguider: Tf_internalguider
     end
     object pcInternalguider: TPageControl
       Left = 1
-      Height = 929
+      Height = 923
       Top = 107
       Width = 344
       ActivePage = TabSheetGuider
@@ -152,18 +153,18 @@ object f_internalguider: Tf_internalguider
       OnChange = pcInternalguiderChange
       object TabSheetGuider: TTabSheet
         Caption = 'Guider'
-        ClientHeight = 925
-        ClientWidth = 340
+        ClientHeight = 923
+        ClientWidth = 344
         ParentFont = False
         object Panel3: TPanel
           Left = 0
-          Height = 925
+          Height = 923
           Top = 0
-          Width = 340
+          Width = 344
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 925
-          ClientWidth = 340
+          ClientHeight = 923
+          ClientWidth = 344
           Color = clMenu
           ParentBackground = False
           ParentColor = False
@@ -176,9 +177,9 @@ object f_internalguider: Tf_internalguider
             Top = 447
             Width = 75
             Caption = 'Calibrate'
-            OnClick = ButtonCalibrateClick
             ParentFont = False
             TabOrder = 0
+            OnClick = ButtonCalibrateClick
           end
           object dec_gain1: TSpinEditEx
             Left = 80
@@ -188,6 +189,7 @@ object f_internalguider: Tf_internalguider
             Width = 56
             MaxLength = 0
             ParentFont = False
+            SpinButtonWidth = 17
             TabOrder = 3
             OnChange = dec_gain1Change
             Increment = 5
@@ -206,6 +208,7 @@ object f_internalguider: Tf_internalguider
             BorderSpacing.Top = 2
             MaxLength = 0
             ParentFont = False
+            SpinButtonWidth = 17
             TabOrder = 2
             OnChange = ra_hysteresis1Change
             Increment = 5
@@ -265,6 +268,7 @@ object f_internalguider: Tf_internalguider
             Width = 56
             MaxLength = 0
             ParentFont = False
+            SpinButtonWidth = 17
             TabOrder = 1
             OnChange = ra_gain1Change
             Increment = 5
@@ -301,6 +305,7 @@ object f_internalguider: Tf_internalguider
             BorderSpacing.Top = 2
             MaxLength = 0
             ParentFont = False
+            SpinButtonWidth = 17
             TabOrder = 4
             OnChange = dec_hysteresis1Change
             Increment = 5
@@ -332,16 +337,16 @@ object f_internalguider: Tf_internalguider
             Width = 17
             Max = 6
             Min = 0
-            OnClick = scale1Click
             Position = 2
             TabOrder = 5
+            OnClick = scale1Click
           end
           object unitarcseconds1: TCheckBox
             Left = 144
             Height = 22
             Hint = 'The trend and XY scales will be in arc seconds'
             Top = 170
-            Width = 34
+            Width = 30
             Caption = '"'
             ParentFont = False
             TabOrder = 6
@@ -368,16 +373,16 @@ object f_internalguider: Tf_internalguider
             Left = 128
             Height = 22
             Top = 448
-            Width = 154
+            Width = 150
             Caption = 'Enlarge guide image'
-            OnChange = cbEnlargeImageChange
             TabOrder = 7
+            OnChange = cbEnlargeImageChange
           end
           object PanelImage: TPanel
             Left = -3
             Height = 1
             Top = 479
-            Width = 310
+            Width = 314
             Anchors = [akTop, akLeft, akRight]
             ParentBackground = False
             TabOrder = 8
@@ -386,17 +391,17 @@ object f_internalguider: Tf_internalguider
       end
       object TabSheetCamera: TTabSheet
         Caption = 'Camera'
-        ClientHeight = 925
-        ClientWidth = 340
+        ClientHeight = 923
+        ClientWidth = 344
         object Panel4: TPanel
           Left = 0
-          Height = 925
+          Height = 923
           Top = 0
-          Width = 340
+          Width = 344
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 925
-          ClientWidth = 340
+          ClientHeight = 923
+          ClientWidth = 344
           Color = clMenu
           ParentBackground = False
           ParentColor = False
@@ -405,10 +410,10 @@ object f_internalguider: Tf_internalguider
             Left = 0
             Height = 60
             Top = 0
-            Width = 340
+            Width = 344
             Align = alTop
             ClientHeight = 60
-            ClientWidth = 340
+            ClientWidth = 344
             ParentBackground = False
             TabOrder = 0
             object ButtonDark: TButton
@@ -417,8 +422,8 @@ object f_internalguider: Tf_internalguider
               Top = 8
               Width = 75
               Caption = 'Dark'
-              OnMouseDown = ButtonDarkMouseDown
               TabOrder = 0
+              OnMouseDown = ButtonDarkMouseDown
             end
             object LabelDark: TLabel
               Left = 11
@@ -434,7 +439,7 @@ object f_internalguider: Tf_internalguider
               Left = 110
               Height = 22
               Top = 9
-              Width = 96
+              Width = 92
               Caption = 'Noise filter'
               TabOrder = 1
             end
@@ -443,7 +448,7 @@ object f_internalguider: Tf_internalguider
               AnchorSideLeft.Side = asrBottom
               AnchorSideTop.Control = cbFilterNoise
               AnchorSideTop.Side = asrCenter
-              Left = 214
+              Left = 210
               Height = 32
               Top = 4
               Width = 50
@@ -466,22 +471,23 @@ object f_internalguider: Tf_internalguider
             Left = 0
             Height = 94
             Top = 60
-            Width = 340
+            Width = 344
             Align = alTop
             AutoSize = True
             ClientHeight = 94
-            ClientWidth = 340
+            ClientWidth = 344
+            ParentBackground = False
             TabOrder = 6
             Visible = False
             object cbGhost: TCheckBox
               Left = 12
               Height = 22
               Top = 1
-              Width = 240
+              Width = 236
               BorderSpacing.Left = 11
               Caption = 'Remove star reflection on glass slit'
-              OnChange = cbGhostChange
               TabOrder = 0
+              OnChange = cbGhostChange
             end
             object PanelGhost2: TPanel
               AnchorSideLeft.Control = cbGhost
@@ -496,6 +502,7 @@ object f_internalguider: Tf_internalguider
               BevelOuter = bvNone
               ClientHeight = 68
               ClientWidth = 327
+              ParentBackground = False
               TabOrder = 1
               Visible = False
               object spGhostD: TSpinEdit
@@ -509,9 +516,9 @@ object f_internalguider: Tf_internalguider
                 BorderSpacing.Left = 4
                 MaxValue = 999
                 MinValue = 1
-                OnChange = GhostPosChange
                 TabOrder = 0
                 Value = 30
+                OnChange = GhostPosChange
               end
               object Label64: TLabel
                 AnchorSideLeft.Control = spGhostY
@@ -537,9 +544,9 @@ object f_internalguider: Tf_internalguider
                 BorderSpacing.Left = 4
                 MaxValue = 999
                 MinValue = -999
-                OnChange = GhostPosChange
                 TabOrder = 1
                 Value = 80
+                OnChange = GhostPosChange
               end
               object Label62: TLabel
                 AnchorSideLeft.Control = spGhostX
@@ -564,8 +571,8 @@ object f_internalguider: Tf_internalguider
                 BorderSpacing.Left = 3
                 MaxValue = 999
                 MinValue = -999
-                OnChange = GhostPosChange
                 TabOrder = 2
+                OnChange = GhostPosChange
               end
               object Label61: TLabel
                 AnchorSideLeft.Control = Label60
@@ -621,11 +628,11 @@ object f_internalguider: Tf_internalguider
             Left = 0
             Height = 90
             Top = 154
-            Width = 340
+            Width = 344
             Align = alTop
             BevelOuter = bvNone
             ClientHeight = 90
-            ClientWidth = 340
+            ClientWidth = 344
             ParentBackground = False
             TabOrder = 1
             object Label10: TLabel
@@ -644,6 +651,7 @@ object f_internalguider: Tf_internalguider
               Top = 0
               Width = 111
               MaxLength = 0
+              SpinButtonWidth = 17
               TabOrder = 0
               OnChange = ExposureChange
               DecimalPlaces = 3
@@ -667,6 +675,7 @@ object f_internalguider: Tf_internalguider
               Top = 32
               Width = 111
               MaxLength = 0
+              SpinButtonWidth = 17
               TabOrder = 1
               OnChange = spBinningChange
               MaxValue = 8
@@ -685,6 +694,7 @@ object f_internalguider: Tf_internalguider
               Width = 58
               BorderSpacing.Left = 4
               MaxLength = 0
+              SpinButtonWidth = 17
               TabOrder = 2
               MaxValue = 60
               NullValue = 0
@@ -718,21 +728,21 @@ object f_internalguider: Tf_internalguider
               Left = 16
               Height = 22
               Top = 64
-              Width = 290
+              Width = 286
               Caption = 'Monochrome 2x2 binning for color camera'
-              OnChange = cbSoftbinningChange
               TabOrder = 3
+              OnChange = cbSoftbinningChange
             end
           end
           object PanelGain: TPanel
             Left = 0
             Height = 34
             Top = 244
-            Width = 340
+            Width = 344
             Align = alTop
             BevelOuter = bvNone
             ClientHeight = 34
-            ClientWidth = 340
+            ClientWidth = 344
             ParentBackground = False
             TabOrder = 2
             object Label15: TLabel
@@ -751,6 +761,7 @@ object f_internalguider: Tf_internalguider
               Top = 0
               Width = 111
               MaxLength = 0
+              SpinButtonWidth = 17
               TabOrder = 0
               NullValue = 0
               Value = 0
@@ -760,11 +771,11 @@ object f_internalguider: Tf_internalguider
             Left = 0
             Height = 34
             Top = 278
-            Width = 340
+            Width = 344
             Align = alTop
             BevelOuter = bvNone
             ClientHeight = 34
-            ClientWidth = 340
+            ClientWidth = 344
             ParentBackground = False
             TabOrder = 3
             object Label16: TLabel
@@ -783,6 +794,7 @@ object f_internalguider: Tf_internalguider
               Top = 0
               Width = 111
               MaxLength = 0
+              SpinButtonWidth = 17
               TabOrder = 0
               NullValue = 0
               Value = 0
@@ -792,11 +804,11 @@ object f_internalguider: Tf_internalguider
             Left = 0
             Height = 60
             Top = 312
-            Width = 340
+            Width = 344
             Align = alTop
             BevelOuter = bvNone
             ClientHeight = 60
-            ClientWidth = 340
+            ClientWidth = 344
             ParentBackground = False
             TabOrder = 4
             object Label21: TLabel
@@ -825,6 +837,7 @@ object f_internalguider: Tf_internalguider
               Top = 0
               Width = 54
               MaxLength = 0
+              SpinButtonWidth = 17
               TabOrder = 0
               MaxValue = 99
               MinValue = -99
@@ -839,8 +852,8 @@ object f_internalguider: Tf_internalguider
               Top = 4
               Width = 52
               Caption = 'Set'
-              OnClick = ButtonSetTempClick
               TabOrder = 1
+              OnClick = ButtonSetTempClick
             end
             object Cooler: TCheckBox
               AnchorSideLeft.Control = Temperature
@@ -849,22 +862,23 @@ object f_internalguider: Tf_internalguider
               Left = 160
               Height = 22
               Top = 36
-              Width = 69
+              Width = 65
               BorderSpacing.Top = 4
               Caption = 'Cooler'
-              OnClick = CoolerClick
               TabOrder = 2
+              OnClick = CoolerClick
             end
           end
           object Panel8: TPanel
             Left = 0
-            Height = 553
+            Height = 551
             Top = 372
-            Width = 340
+            Width = 344
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 553
-            ClientWidth = 340
+            ClientHeight = 551
+            ClientWidth = 344
+            ParentBackground = False
             TabOrder = 5
             object PanelVisu: TPanel
               AnchorSideTop.Side = asrBottom
@@ -873,6 +887,7 @@ object f_internalguider: Tf_internalguider
               Top = 0
               Width = 262
               BevelOuter = bvNone
+              ParentBackground = False
               TabOrder = 0
             end
           end
@@ -880,17 +895,17 @@ object f_internalguider: Tf_internalguider
       end
       object TabSheetOptions: TTabSheet
         Caption = 'Options'
-        ClientHeight = 925
-        ClientWidth = 340
+        ClientHeight = 923
+        ClientWidth = 344
         object Panel5: TPanel
           Left = 0
-          Height = 925
+          Height = 923
           Top = 0
-          Width = 340
+          Width = 344
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 925
-          ClientWidth = 340
+          ClientHeight = 923
+          ClientWidth = 344
           Color = clMenu
           ParentBackground = False
           ParentColor = False
@@ -899,11 +914,11 @@ object f_internalguider: Tf_internalguider
             Left = 0
             Height = 400
             Top = 0
-            Width = 340
+            Width = 344
             Align = alTop
             BevelOuter = bvNone
             ClientHeight = 400
-            ClientWidth = 340
+            ClientWidth = 344
             ParentBackground = False
             TabOrder = 1
             object ShortestPulse1: TSpinEditEx
@@ -913,6 +928,7 @@ object f_internalguider: Tf_internalguider
               Top = 4
               Width = 72
               MaxLength = 0
+              SpinButtonWidth = 17
               TabOrder = 0
               OnChange = ShortestPulse1Change
               Increment = 5
@@ -948,6 +964,7 @@ object f_internalguider: Tf_internalguider
               Top = 128
               Width = 72
               MaxLength = 0
+              SpinButtonWidth = 17
               TabOrder = 3
               OnChange = minSNR1Change
               Increment = 3
@@ -973,6 +990,7 @@ object f_internalguider: Tf_internalguider
               Top = 94
               Width = 72
               MaxLength = 0
+              SpinButtonWidth = 17
               TabOrder = 2
               OnChange = minHFD1Change
               Increment = 0.3
@@ -1029,6 +1047,7 @@ object f_internalguider: Tf_internalguider
               Top = 60
               Width = 72
               MaxLength = 0
+              SpinButtonWidth = 17
               TabOrder = 1
               OnChange = LongestPulse1Change
               Increment = 100
@@ -1066,10 +1085,10 @@ object f_internalguider: Tf_internalguider
               Height = 22
               Hint = 'If checked then the telescope will follow the moving solar object.'
               Top = 200
-              Width = 211
+              Width = 207
               Caption = 'Activate solar object tracking. '
-              OnChange = CheckBoxTrackSolar1Change
               TabOrder = 5
+              OnChange = CheckBoxTrackSolar1Change
             end
             object v_solar1: TFloatSpinEditEx
               Left = 200
@@ -1080,6 +1099,7 @@ object f_internalguider: Tf_internalguider
               Enabled = False
               MaxLength = 0
               ParentFont = False
+              SpinButtonWidth = 17
               TabOrder = 6
               OnChange = v_solar1Change
               MaxValue = 1000
@@ -1093,6 +1113,7 @@ object f_internalguider: Tf_internalguider
               Enabled = False
               MaxLength = 0
               ParentFont = False
+              SpinButtonWidth = 17
               TabOrder = 7
               OnChange = vpa_solar1Change
               MaxValue = 360
@@ -1102,10 +1123,10 @@ object f_internalguider: Tf_internalguider
               Left = 8
               Height = 22
               Top = 304
-              Width = 199
+              Width = 195
               Caption = 'Use backlash compensation'
-              OnChange = CheckBoxBacklashChange
               TabOrder = 8
+              OnChange = CheckBoxBacklashChange
             end
             object Backlash: TSpinEditEx
               Left = 200
@@ -1114,6 +1135,7 @@ object f_internalguider: Tf_internalguider
               Width = 72
               Enabled = False
               MaxLength = 0
+              SpinButtonWidth = 17
               TabOrder = 9
               MaxValue = 10000
               NullValue = 0
@@ -1134,18 +1156,18 @@ object f_internalguider: Tf_internalguider
               Height = 22
               Hint = 'For testing. This will disable guiding but still show the trend.'
               Top = 368
-              Width = 191
+              Width = 187
               Caption = 'Disable guiding temporary'
-              OnChange = disable_guiding1Change
               ParentFont = False
               TabOrder = 10
+              OnChange = disable_guiding1Change
             end
           end
           object rgDitherMode: TRadioGroup
             Left = 0
             Height = 57
             Top = 400
-            Width = 340
+            Width = 344
             Align = alTop
             AutoFill = True
             Caption = 'Dither mode'
@@ -1156,24 +1178,25 @@ object f_internalguider: Tf_internalguider
             ChildSizing.ShrinkVertical = crsScaleChilds
             ChildSizing.Layout = cclLeftToRightThenTopToBottom
             ChildSizing.ControlsPerLine = 2
-            ClientHeight = 27
-            ClientWidth = 336
+            ClientHeight = 28
+            ClientWidth = 340
             Columns = 2
             Items.Strings = (
               'Spiral'
               'Random'
             )
+            ParentBackground = False
             TabOrder = 2
           end
           object GroupBox3: TGroupBox
             Left = 0
-            Height = 468
+            Height = 466
             Top = 457
-            Width = 340
+            Width = 344
             Align = alClient
             Caption = 'Calibration options'
-            ClientHeight = 438
-            ClientWidth = 336
+            ClientHeight = 437
+            ClientWidth = 340
             ParentBackground = False
             TabOrder = 0
             object measure_method2: TCheckBox
@@ -1181,7 +1204,7 @@ object f_internalguider: Tf_internalguider
               Height = 22
               Hint = 'Use alternative method for measuring pixel scale in arc seconds during calibration. '
               Top = 132
-              Width = 285
+              Width = 281
               Caption = 'Measure pixel scale ["/px] by stop tracking'
               ParentFont = False
               TabOrder = 0
@@ -1202,6 +1225,7 @@ object f_internalguider: Tf_internalguider
               Top = 28
               Width = 72
               MaxLength = 0
+              SpinButtonWidth = 17
               TabOrder = 1
               Increment = 100
               MaxValue = 1000
@@ -1213,10 +1237,10 @@ object f_internalguider: Tf_internalguider
               Left = 8
               Height = 22
               Top = 60
-              Width = 196
+              Width = 192
               Caption = 'Set guide speed [x sidereal]'
-              OnChange = ForceGuideSpeedChange
               TabOrder = 2
+              OnChange = ForceGuideSpeedChange
             end
             object PanelGuideSpeed: TPanel
               Left = 0
@@ -1250,6 +1274,7 @@ object f_internalguider: Tf_internalguider
                 Top = 0
                 Width = 72
                 MaxLength = 0
+                SpinButtonWidth = 17
                 TabOrder = 0
                 DecimalPlaces = 1
                 Increment = 0.1
@@ -1263,6 +1288,7 @@ object f_internalguider: Tf_internalguider
                 Top = 0
                 Width = 72
                 MaxLength = 0
+                SpinButtonWidth = 17
                 TabOrder = 1
                 DecimalPlaces = 1
                 Increment = 0.1
@@ -1275,27 +1301,27 @@ object f_internalguider: Tf_internalguider
               Left = 8
               Height = 22
               Top = 4
-              Width = 200
+              Width = 196
               Caption = 'Use rotator angle correction'
-              OnChange = cbRotatorChange
               TabOrder = 4
+              OnChange = cbRotatorChange
             end
           end
         end
       end
       object TabSheetSpectro: TTabSheet
         Caption = 'Spectro'
-        ClientHeight = 925
-        ClientWidth = 340
+        ClientHeight = 923
+        ClientWidth = 344
         object Panel9: TPanel
           Left = 0
           Height = 30
           Top = 0
-          Width = 340
+          Width = 344
           Align = alTop
           BevelOuter = bvNone
           ClientHeight = 30
-          ClientWidth = 340
+          ClientWidth = 344
           Color = clMenu
           ParentBackground = False
           ParentColor = False
@@ -1304,40 +1330,41 @@ object f_internalguider: Tf_internalguider
             Left = 9
             Height = 22
             Top = 4
-            Width = 221
+            Width = 217
             Caption = 'Activate spectroscopy functions'
-            OnChange = cbSpectroChange
             TabOrder = 0
+            OnChange = cbSpectroChange
           end
         end
         object PanelSpectro: TPanel
           Left = 0
-          Height = 895
+          Height = 893
           Top = 30
-          Width = 340
+          Width = 344
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 895
-          ClientWidth = 340
+          ClientHeight = 893
+          ClientWidth = 344
           Color = clMenu
           ParentBackground = False
           ParentColor = False
           TabOrder = 0
           object Panel14: TPanel
             Left = 0
-            Height = 313
+            Height = 312
             Top = 0
-            Width = 340
+            Width = 344
             Align = alTop
             AutoSize = True
-            ClientHeight = 313
-            ClientWidth = 340
+            ClientHeight = 312
+            ClientWidth = 344
+            ParentBackground = False
             TabOrder = 3
             object rgSpectroStrategy: TRadioGroup
               Left = 1
-              Height = 140
+              Height = 139
               Top = 1
-              Width = 338
+              Width = 342
               Align = alTop
               AutoFill = False
               AutoSize = True
@@ -1348,7 +1375,7 @@ object f_internalguider: Tf_internalguider
               ChildSizing.Layout = cclLeftToRightThenTopToBottom
               ChildSizing.ControlsPerLine = 1
               ClientHeight = 110
-              ClientWidth = 334
+              ClientWidth = 338
               ItemIndex = 0
               Items.Strings = (
                 'Single star, use the brightest star'
@@ -1357,18 +1384,20 @@ object f_internalguider: Tf_internalguider
                 'Single star with astrometry, then multistar'
                 'Multistar with guider astrometry'
               )
-              OnSelectionChanged = rgSpectroStrategySelectionChanged
+              ParentBackground = False
               TabOrder = 0
+              OnSelectionChanged = rgSpectroStrategySelectionChanged
             end
             object PanelAstrometryExposure: TPanel
               AnchorSideTop.Side = asrBottom
               Left = 1
               Height = 34
-              Top = 141
-              Width = 338
+              Top = 140
+              Width = 342
               Align = alTop
               ClientHeight = 34
-              ClientWidth = 338
+              ClientWidth = 342
+              ParentBackground = False
               TabOrder = 1
               object Label39: TLabel
                 AnchorSideTop.Control = AstrometryExp
@@ -1388,6 +1417,7 @@ object f_internalguider: Tf_internalguider
                 Width = 69
                 BorderSpacing.Left = 8
                 MaxLength = 0
+                SpinButtonWidth = 17
                 TabOrder = 0
                 DecimalPlaces = 0
                 MaxValue = 120
@@ -1399,11 +1429,12 @@ object f_internalguider: Tf_internalguider
               AnchorSideTop.Side = asrBottom
               Left = 1
               Height = 137
-              Top = 175
-              Width = 338
+              Top = 174
+              Width = 342
               Align = alTop
               ClientHeight = 137
-              ClientWidth = 338
+              ClientWidth = 342
+              ParentBackground = False
               TabOrder = 2
               object Label55: TLabel
                 AnchorSideTop.Side = asrCenter
@@ -1433,6 +1464,7 @@ object f_internalguider: Tf_internalguider
                 Width = 66
                 BorderSpacing.Left = 8
                 MaxLength = 0
+                SpinButtonWidth = 17
                 TabOrder = 0
                 OnChange = ForceRedraw
                 DecimalPlaces = 1
@@ -1460,6 +1492,7 @@ object f_internalguider: Tf_internalguider
                 Width = 66
                 BorderSpacing.Left = 8
                 MaxLength = 0
+                SpinButtonWidth = 17
                 TabOrder = 1
                 OnChange = ForceRedraw
                 DecimalPlaces = 1
@@ -1475,8 +1508,8 @@ object f_internalguider: Tf_internalguider
                 Width = 88
                 BorderSpacing.Left = 8
                 Caption = 'Solve'
-                OnClick = btnRefImageClick
                 TabOrder = 2
+                OnClick = btnRefImageClick
               end
               object Label58: TLabel
                 Left = 8
@@ -1503,8 +1536,8 @@ object f_internalguider: Tf_internalguider
                 Top = 88
                 Width = 319
                 Caption = 'Click on the image to set the offset and guide'
-                OnClick = btnSetStarOffsetClick
                 TabOrder = 3
+                OnClick = btnSetStarOffsetClick
               end
               object LabelSetOffset: TLabel
                 Left = 12
@@ -1519,8 +1552,8 @@ object f_internalguider: Tf_internalguider
           object PageControl2: TPageControl
             Left = 0
             Height = 148
-            Top = 313
-            Width = 340
+            Top = 312
+            Width = 344
             ActivePage = TabSheet2
             Align = alTop
             ShowTabs = False
@@ -1528,17 +1561,17 @@ object f_internalguider: Tf_internalguider
             TabOrder = 2
             object TabSheet1: TTabSheet
               Caption = 'TabSheet1'
-              ClientHeight = 144
-              ClientWidth = 336
+              ClientHeight = 148
+              ClientWidth = 344
               object GroupBoxSearchArea: TGroupBox
                 Left = 0
-                Height = 144
+                Height = 148
                 Top = 0
-                Width = 336
+                Width = 344
                 Align = alClient
                 Caption = 'Star search area'
-                ClientHeight = 114
-                ClientWidth = 332
+                ClientHeight = 119
+                ClientWidth = 340
                 ParentBackground = False
                 TabOrder = 0
                 object Label30: TLabel
@@ -1557,6 +1590,7 @@ object f_internalguider: Tf_internalguider
                   Top = 2
                   Width = 65
                   MaxLength = 0
+                  SpinButtonWidth = 17
                   TabOrder = 0
                   MaxValue = 200
                   MinValue = 15
@@ -1572,6 +1606,7 @@ object f_internalguider: Tf_internalguider
                   Width = 65
                   BorderSpacing.Top = 2
                   MaxLength = 0
+                  SpinButtonWidth = 17
                   TabOrder = 1
                   MaxValue = 800
                   MinValue = 100
@@ -1593,7 +1628,7 @@ object f_internalguider: Tf_internalguider
                   Height = 22
                   Hint = 'Beware this may result in the selection of a wrong star if the mount is not ideal'
                   Top = 64
-                  Width = 179
+                  Width = 175
                   Caption = ' Fast centering to the slit'
                   ParentBidiMode = False
                   TabOrder = 2
@@ -1602,17 +1637,17 @@ object f_internalguider: Tf_internalguider
             end
             object TabSheet2: TTabSheet
               Caption = 'TabSheet2'
-              ClientHeight = 144
-              ClientWidth = 336
+              ClientHeight = 148
+              ClientWidth = 344
               object GroupBoxOffset: TGroupBox
                 Left = 0
-                Height = 144
+                Height = 148
                 Top = 0
-                Width = 336
+                Width = 344
                 Align = alClient
                 Caption = 'Multi-star guide offset'
-                ClientHeight = 114
-                ClientWidth = 332
+                ClientHeight = 119
+                ClientWidth = 340
                 ParentBackground = False
                 TabOrder = 0
                 object edOffsetX: TFloatSpinEditEx
@@ -1621,6 +1656,7 @@ object f_internalguider: Tf_internalguider
                   Top = 3
                   Width = 105
                   MaxLength = 0
+                  SpinButtonWidth = 17
                   TabOrder = 0
                 end
                 object Label37: TLabel
@@ -1649,6 +1685,7 @@ object f_internalguider: Tf_internalguider
                   Top = 35
                   Width = 105
                   MaxLength = 0
+                  SpinButtonWidth = 17
                   TabOrder = 1
                 end
                 object btnSetMultiStarOffset: TButton
@@ -1657,8 +1694,8 @@ object f_internalguider: Tf_internalguider
                   Top = 68
                   Width = 319
                   Caption = 'Click on the image to set the offset and guide'
-                  OnClick = btnSetMultiStarOffsetClick
                   TabOrder = 2
+                  OnClick = btnSetMultiStarOffsetClick
                 end
                 object LabelSetMultiOffset: TLabel
                   Left = 15
@@ -1673,24 +1710,25 @@ object f_internalguider: Tf_internalguider
           end
           object GroupBoxLock: TGroupBox
             Left = 0
-            Height = 252
-            Top = 461
-            Width = 340
+            Height = 251
+            Top = 460
+            Width = 344
             Align = alTop
             AutoSize = True
             Caption = 'Guide position on the slit'
             ClientHeight = 222
-            ClientWidth = 336
+            ClientWidth = 340
             ParentBackground = False
             TabOrder = 0
             object Panel12: TPanel
               Left = 0
               Height = 104
               Top = 118
-              Width = 336
+              Width = 340
               Align = alTop
               ClientHeight = 104
-              ClientWidth = 336
+              ClientWidth = 340
+              ParentBackground = False
               TabOrder = 0
               object cbSlitList: TComboBox
                 AnchorSideTop.Control = Label53
@@ -1700,9 +1738,9 @@ object f_internalguider: Tf_internalguider
                 Top = 25
                 Width = 136
                 AutoSize = False
-                ItemHeight = 24
-                OnChange = cbSlitListChange
+                ItemHeight = 30
                 TabOrder = 0
+                OnChange = cbSlitListChange
               end
               object Label51: TLabel
                 Left = 8
@@ -1743,6 +1781,7 @@ object f_internalguider: Tf_internalguider
                 Width = 66
                 BorderSpacing.Left = 8
                 MaxLength = 0
+                SpinButtonWidth = 17
                 TabOrder = 1
                 OnChange = SlitOffsetChange
                 DecimalPlaces = 1
@@ -1758,6 +1797,7 @@ object f_internalguider: Tf_internalguider
                 Width = 66
                 BorderSpacing.Left = 8
                 MaxLength = 0
+                SpinButtonWidth = 17
                 TabOrder = 2
                 OnChange = SlitOffsetChange
                 DecimalPlaces = 1
@@ -1781,19 +1821,20 @@ object f_internalguider: Tf_internalguider
                 BorderSpacing.Left = 8
                 Caption = 'Manage'
                 Color = clMenu
-                OnMouseDown = MenuSlitOffsetMouseDown
                 TabOrder = 3
+                OnMouseDown = MenuSlitOffsetMouseDown
               end
             end
             object Panel13: TPanel
               Left = 0
               Height = 118
               Top = 0
-              Width = 336
+              Width = 340
               Align = alTop
               AutoSize = True
               ClientHeight = 118
-              ClientWidth = 336
+              ClientWidth = 340
+              ParentBackground = False
               TabOrder = 1
               object edRefX: TFloatSpinEditEx
                 Left = 65
@@ -1801,6 +1842,7 @@ object f_internalguider: Tf_internalguider
                 Top = 1
                 Width = 84
                 MaxLength = 0
+                SpinButtonWidth = 17
                 TabOrder = 0
                 OnChange = edRefChange
                 DecimalPlaces = 1
@@ -1831,6 +1873,7 @@ object f_internalguider: Tf_internalguider
                 Top = 1
                 Width = 84
                 MaxLength = 0
+                SpinButtonWidth = 17
                 TabOrder = 1
                 OnChange = edRefChange
                 DecimalPlaces = 1
@@ -1850,11 +1893,11 @@ object f_internalguider: Tf_internalguider
                 Left = 10
                 Height = 22
                 Top = 66
-                Width = 211
+                Width = 207
                 Caption = 'Rotate to the parallactic angle'
                 Enabled = False
-                OnChange = cbParallacticChange
                 TabOrder = 2
+                OnChange = cbParallacticChange
               end
               object PanelParallactic: TPanel
                 Left = 1
@@ -1865,6 +1908,7 @@ object f_internalguider: Tf_internalguider
                 ClientHeight = 28
                 ClientWidth = 360
                 Enabled = False
+                ParentBackground = False
                 TabOrder = 3
                 object Label18: TLabel
                   Left = 10
@@ -1882,7 +1926,7 @@ object f_internalguider: Tf_internalguider
                   Left = 118
                   Height = 22
                   Top = 2
-                  Width = 74
+                  Width = 70
                   BorderSpacing.Left = 8
                   Caption = 'Vertical'
                   Checked = True
@@ -1893,10 +1937,10 @@ object f_internalguider: Tf_internalguider
                   AnchorSideLeft.Control = SlitVertical
                   AnchorSideLeft.Side = asrBottom
                   AnchorSideTop.Control = SlitVertical
-                  Left = 200
+                  Left = 196
                   Height = 22
                   Top = 2
-                  Width = 92
+                  Width = 88
                   BorderSpacing.Left = 8
                   Caption = 'Horizontal'
                   TabOrder = 0
@@ -1907,22 +1951,22 @@ object f_internalguider: Tf_internalguider
           object GroupBoxSlit: TGroupBox
             Left = 0
             Height = 182
-            Top = 713
-            Width = 340
+            Top = 711
+            Width = 344
             Align = alTop
             Caption = 'Slit drawing'
-            ClientHeight = 152
-            ClientWidth = 336
+            ClientHeight = 153
+            ClientWidth = 340
             ParentBackground = False
             TabOrder = 1
             object cbDrawSlit: TCheckBox
               Left = 0
               Height = 22
               Top = 0
-              Width = 173
+              Width = 169
               Caption = 'Draw slit area on image'
-              OnChange = cbDrawSlitChange
               TabOrder = 0
+              OnChange = cbDrawSlitChange
             end
             object PanelSlitDrawing: TPanel
               Left = 0
@@ -1932,6 +1976,7 @@ object f_internalguider: Tf_internalguider
               BevelOuter = bvNone
               ClientHeight = 125
               ClientWidth = 331
+              ParentBackground = False
               TabOrder = 1
               Visible = False
               object Label32: TLabel
@@ -1990,6 +2035,7 @@ object f_internalguider: Tf_internalguider
                 Top = 0
                 Width = 80
                 MaxLength = 0
+                SpinButtonWidth = 17
                 TabOrder = 0
                 OnChange = ForceRedraw
                 MaxValue = 99999
@@ -2002,6 +2048,7 @@ object f_internalguider: Tf_internalguider
                 Top = 0
                 Width = 80
                 MaxLength = 0
+                SpinButtonWidth = 17
                 TabOrder = 1
                 OnChange = ForceRedraw
                 MaxValue = 99999
@@ -2014,6 +2061,7 @@ object f_internalguider: Tf_internalguider
                 Top = 40
                 Width = 80
                 MaxLength = 0
+                SpinButtonWidth = 17
                 TabOrder = 2
                 OnChange = ForceRedraw
                 MaxValue = 99999
@@ -2026,6 +2074,7 @@ object f_internalguider: Tf_internalguider
                 Top = 40
                 Width = 80
                 MaxLength = 0
+                SpinButtonWidth = 17
                 TabOrder = 3
                 OnChange = ForceRedraw
                 MaxValue = 99999
@@ -2038,6 +2087,7 @@ object f_internalguider: Tf_internalguider
                 Top = 80
                 Width = 80
                 MaxLength = 0
+                SpinButtonWidth = 17
                 TabOrder = 4
                 OnChange = ForceRedraw
                 MaxValue = 90
@@ -2051,18 +2101,18 @@ object f_internalguider: Tf_internalguider
       end
       object TabSheetAdvanced: TTabSheet
         Caption = 'Advanced'
-        ClientHeight = 925
-        ClientWidth = 340
+        ClientHeight = 923
+        ClientWidth = 344
         ParentFont = False
         object Panel2: TPanel
           Left = 0
-          Height = 925
+          Height = 923
           Top = 0
-          Width = 340
+          Width = 344
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 925
-          ClientWidth = 340
+          ClientHeight = 923
+          ClientWidth = 344
           Color = clMenu
           ParentBackground = False
           ParentColor = False
@@ -2070,13 +2120,13 @@ object f_internalguider: Tf_internalguider
           TabOrder = 0
           object GroupBox2: TGroupBox
             Left = 0
-            Height = 925
+            Height = 923
             Top = 0
-            Width = 340
+            Width = 344
             Align = alClient
             Caption = 'Calibration results:'
-            ClientHeight = 895
-            ClientWidth = 336
+            ClientHeight = 894
+            ClientWidth = 340
             ParentBackground = False
             TabOrder = 0
             object Label5: TLabel
@@ -2096,10 +2146,10 @@ object f_internalguider: Tf_internalguider
               Hint = 'The relative angle between the mount and the image. An image with north up and east left has an angle of zero.'
               Top = 8
               Width = 60
-              OnChange = pa1Change
               ParentFont = False
               TabOrder = 0
               Text = '0'
+              OnChange = pa1Change
             end
             object Label6: TLabel
               AnchorSideTop.Control = pulsegainEast1
@@ -2118,10 +2168,10 @@ object f_internalguider: Tf_internalguider
               Hint = 'Pulse gain in pixels at the celestial equator. Measured at 0.5x guide rate.'
               Top = 40
               Width = 60
-              OnChange = pulsegainEast1Change
               ParentFont = False
               TabOrder = 1
               Text = '3'
+              OnChange = pulsegainEast1Change
             end
             object Label7: TLabel
               AnchorSideTop.Control = pulsegainWest1
@@ -2140,10 +2190,10 @@ object f_internalguider: Tf_internalguider
               Hint = 'Pulse gain in pixels at the celestial equator. Measured at 1.5x guide rate.'
               Top = 72
               Width = 60
-              OnChange = pulsegainWest1Change
               ParentFont = False
               TabOrder = 2
               Text = '3'
+              OnChange = pulsegainWest1Change
             end
             object Label8: TLabel
               AnchorSideTop.Control = pulsegainNorth1
@@ -2162,10 +2212,10 @@ object f_internalguider: Tf_internalguider
               Hint = 'A negative value indicates a flipped image. Measured at 7.5"/px rate.'
               Top = 104
               Width = 60
-              OnChange = pulsegainNorth1Change
               ParentFont = False
               TabOrder = 3
               Text = '3'
+              OnChange = pulsegainNorth1Change
             end
             object pulsegainSouth1: TEdit
               Left = 230
@@ -2173,10 +2223,10 @@ object f_internalguider: Tf_internalguider
               Hint = 'A negative value indicates a flipped image. Measured at 7.5"/px rate.'
               Top = 136
               Width = 60
-              OnChange = pulsegainSouth1Change
               ParentFont = False
               TabOrder = 4
               Text = '3'
+              OnChange = pulsegainSouth1Change
             end
             object Label13: TLabel
               AnchorSideTop.Control = pulsegainSouth1
@@ -2206,10 +2256,10 @@ object f_internalguider: Tf_internalguider
               Hint = 'Mount side where the calibation was done. This specifies the side where telescope is pointing at.'
               Top = 168
               Width = 60
-              OnChange = pier_side1Change
               ParentFont = False
               TabOrder = 5
               Text = 'W'
+              OnChange = pier_side1Change
             end
             object label_estimate1: TLabel
               AnchorSideTop.Control = pixelsize1
@@ -2231,10 +2281,10 @@ object f_internalguider: Tf_internalguider
               Hint = 'Based on measured pulse gain in px/sec and assuming 0.5x and 1.5x guide rates. This value is not essential for guiding except for Solar object tracking.'
               Top = 200
               Width = 60
-              OnChange = pixelsize1Change
               ParentFont = False
               TabOrder = 6
               Text = '2.5'
+              OnChange = pixelsize1Change
             end
             object Label43: TLabel
               AnchorSideTop.Control = CalDate
@@ -2354,8 +2404,8 @@ object f_internalguider: Tf_internalguider
               Left = 8
               Height = 18
               Top = 236
-              Width = 206
-              Caption = 'Pulse North direction[cal/flipped]:'
+              Width = 202
+              Caption = 'Pulse North direction[cal/flipped]'
               ParentColor = False
             end
             object PulseNorthDirection1: TEdit
@@ -2363,17 +2413,17 @@ object f_internalguider: Tf_internalguider
               Height = 32
               Hint = 'Pulse North direction at calibration side.'
               Top = 232
-              Width = 32
+              Width = 26
               ParentFont = False
               TabOrder = 13
               Text = '?'
             end
             object PulseNotthDirection2: TEdit
-              Left = 270
+              Left = 264
               Height = 32
               Hint = 'Pulse North direction at the other side after a merdian flip.'
               Top = 232
-              Width = 32
+              Width = 26
               ParentFont = False
               TabOrder = 14
               Text = '?'
@@ -2418,8 +2468,8 @@ object f_internalguider: Tf_internalguider
       Top = 1
       Width = 190
       Caption = 'Please configure the guider'
-      OnClick = Button1Click
       TabOrder = 0
+      OnClick = Button1Click
     end
   end
   object PopupMenuDark: TPopupMenu

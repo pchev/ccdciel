@@ -717,6 +717,7 @@ begin
   Label13.Caption:=rsPulseGain+blank+rsSouth+' [px/sec]';
   Label12.Caption:=rsMeasuredAtEW;
   label_estimate1.Caption:=rsPixelScale+' ["/px]';
+  label48.Caption:=rsPulseNorthDi;
   Label22.Caption:=rsShortestGuid+' [ms]';
   label11.Caption:=rsLongestGuide+' [ms]';
   Label20.Caption:=rsMinimumMove;

@@ -1559,6 +1559,7 @@ resourcestring
   rsAlways = 'Always';
   rsOpenWithS = 'Open with %s';
   rsRedoAllTheOb = 'Redo every object with each repetition';
+  rsPulseNorthDi = 'Pulse North direction [cal/flipped]';
 
 implementation
 
