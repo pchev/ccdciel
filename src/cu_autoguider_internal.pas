@@ -2043,11 +2043,11 @@ begin
                CalEastRa1:=mount.ra;//mount right ascension at start of east calibration
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure reference star positions
                if finternalguider.SpectroFunctions then begin
-                 MinimumDrift:=max(5,min(25,3*CurrentHFD));
+                 MinimumDrift:=max(5,min(25,2*CurrentHFD));
                  Finternalguider.SearchWinMin:=round(3*MinimumDrift);  // set a reasonable search box based on HFD
                end
                else
-                 MinimumDrift:=5;
+                 MinimumDrift:=max(5,min(25,2*CurrentHFD));
                mount.PulseGuide(2,CalibrationDuration {duration msec} );  // 0=north, 1=south, 2 East, 3 West
 
                WaitPulseGuiding(CalibrationDuration);
