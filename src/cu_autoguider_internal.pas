@@ -1657,6 +1657,8 @@ begin
        FDithering:=false;
        SetStatus('Guiding',GUIDER_GUIDING);
        WriteLog('INFO: SETTLING STATE CHANGE, Settling failed');
+       if finternalguider.GuideLock and finternalguider.ForceGuideMultistar then
+         msg('Settling fail, changing to multi-stars abandoned.',1);
      end;
   end //settling
   else begin
