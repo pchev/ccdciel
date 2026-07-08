@@ -59,6 +59,7 @@ type
     pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos,Orthogonality,Caltheangle,CaldriftOld, ditherX,ditherY,
     GuideStartTime,LogSNR,LogFlux,mean_hfd,CalNorthDec1,CalNorthDec2,CalEastRa1,CalEastRa2,CurrentHFD,MinimumDrift,
     LastDecSign,FFullDitherRa,FFullDitherDec,PulseGuidingStartTime,RAposition,DECposition : double;
+    CalPixSize1,CalPixSize2: double;
     RAduration, DECduration,BacklashDuration : longint;
     RADirection,DECDirection: string;
     SameDecSignCount,LastBacklashDuration,Dnorth, Dsouth, CalibrationPhase2,watchdog,FLongestPulse : integer;
@@ -1996,6 +1997,8 @@ begin
 
   Calthecos:=cos(mount.Dec*pi/180); if Calthecos=0 then Calthecos:=0.00000001; //prevent dividing by zero
 
+  CalPixSize1:=0;
+  CalPixSize2:=0;
   InternalguiderCalibrationDirection:=1;
   InternalguiderCalibrationStep:=0;
 
@@ -2003,7 +2006,7 @@ begin
 end;
 
 procedure T_autoguider_internal.InternalCalibration;
-var drift,unequal                            : double;
+var drift,unequal,cspeed                     : double;
     saveInternalguiderCalibratingMeridianFlip: boolean;
     msgA, msgB,msgC,pattern                  : string;
             procedure StopError;
@@ -2285,8 +2288,8 @@ begin
         end;
         msg(pattern,3);
 
-
-        finternalguider.pixel_size:=Finternalguider.GuideSpeedRA.Value*15*2/(pulsegainEast+pulsegainWest);//Use the set pulse speed
+        CalPixSize1:=Finternalguider.GuideSpeedRA.Value*15*2/(pulsegainEast+pulsegainWest);//Use the set pulse speed
+        finternalguider.pixel_size:=CalPixSize1;
 
         if finternalguider.measure_method2.checked then begin  //Alternative method. Measure pixel size in arc seconds by stopping tracking
           InternalguiderCalibrationDirection:=6;
@@ -2332,7 +2335,8 @@ begin
              end;
           2: begin
                drift:=sqrt(sqr(driftX)+sqr(driftY));
-               finternalguider.pixel_size:=Calnrtest*0.5*15/drift;
+               CalPixSize2:=Calthecos*Calnrtest*0.5*15/drift;
+               finternalguider.pixel_size:=CalPixSize2;
                msg('Total drift: '+ FormatFloat(f2v,drift)+ ' pixels after '+inttostr(Calnrtest)+ ' tracking stops of 0.5 seconds. Estimated pixel size '+FormatFloat(f2v,finternalguider.pixel_size)+' "/px' ,3);
                InternalguiderCalibrationDirection:=7;
                InternalguiderCalibrationStep:=0;
@@ -2351,6 +2355,15 @@ begin
         if abs(Orthogonality)>15 then begin  // 15° tolerance on measured orthogonality
            msg('Warning Orthogonality error = '+FormatFloat(f1,abs(Orthogonality))+' degrees',1);
            msgC:=trim(msgC+' '+'Ortho');
+        end;
+
+        if (CalPixSize1<>0)and(CalPixSize2<>0) then begin
+          if abs((CalPixSize1-CalPixSize2)/CalPixSize1)>0.5 then begin // 50% tolerance for guide speed error
+            cspeed:=CalPixSize2*(pulsegainEast+pulsegainWest)/15/2;
+            msg('Warning Guide Speed inconsistancy, it look to be '+FormatFloat(f2,abs(cspeed))+' x sidereal, instead of '+FormatFloat(f2,Finternalguider.GuideSpeedRA.Value),1);
+            msg('Pixel scale from guiding = '+FormatFloat(f2,CalPixSize1)+', from drift = '+FormatFloat(f2,CalPixSize2),1);
+            msgC:=msgC+' '+'Speed';
+          end;
         end;
 
         if msgC='' then msgC:='None';
