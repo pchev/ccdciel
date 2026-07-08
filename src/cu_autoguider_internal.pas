@@ -2132,6 +2132,7 @@ begin
                    StopError;
                  end
                  else begin
+                   if BacklashStep>=3 then CalDecBacklash:=round(min(Finternalguider.LongestPulse,1.5*CalDecBacklash)); // try larger correction
                    mount.PulseGuide(0,CalDecBacklash); // 0=north, 1=south, 2 East, 3 West
                    WaitPulseGuiding(CalDecBacklash);
                  end;
@@ -2208,6 +2209,7 @@ begin
                    StopError;
                  end
                  else begin
+                   if BacklashStep>=3 then CalDecBacklash:=round(min(Finternalguider.LongestPulse,1.5*CalDecBacklash)); // try larger correction
                    mount.PulseGuide(1,CalDecBacklash); // 0=north, 1=south, 2 East, 3 West
                    WaitPulseGuiding(CalDecBacklash);
                  end;
