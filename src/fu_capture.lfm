@@ -117,7 +117,6 @@ object f_capture: Tf_capture
         Constraints.MaxHeight = 28
         MaxLength = 0
         ParentFont = False
-        SpinButtonWidth = 17
         TabOrder = 0
         OnChange = StackNumChange
         MaxValue = 1000
@@ -268,7 +267,6 @@ object f_capture: Tf_capture
         Constraints.MaxHeight = 28
         MaxLength = 0
         ParentFont = False
-        SpinButtonWidth = 17
         TabOrder = 0
         OnChange = SeqNumChange
         MaxValue = 10000
@@ -361,7 +359,6 @@ object f_capture: Tf_capture
         Constraints.MaxHeight = 28
         MaxLength = 0
         ParentFont = False
-        SpinButtonWidth = 17
         TabOrder = 1
         MaxValue = 10000
         MinValue = 1
@@ -402,7 +399,6 @@ object f_capture: Tf_capture
         Constraints.MaxHeight = 28
         MaxLength = 0
         ParentFont = False
-        SpinButtonWidth = 17
         TabOrder = 1
         MaxValue = 10000
         MinValue = 1
