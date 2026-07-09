@@ -6,6 +6,7 @@ object f_dark: Tf_dark
   Caption = 'f_dark'
   ClientHeight = 278
   ClientWidth = 301
+  LCLVersion = '4.8.0.0'
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -16,9 +17,9 @@ object f_dark: Tf_dark
     Top = 32
     Width = 84
     MaxValue = 60
-    OnChange = TotalChange
     TabOrder = 0
     Value = 5
+    OnChange = TotalChange
   end
   object Label1: TLabel
     AnchorSideTop.Control = MaxExposure
@@ -47,9 +48,9 @@ object f_dark: Tf_dark
     Width = 84
     MaxValue = 15
     MinValue = 1
-    OnChange = TotalChange
     TabOrder = 1
     Value = 5
+    OnChange = TotalChange
   end
   object btnStart: TButton
     Left = 200
@@ -57,8 +58,8 @@ object f_dark: Tf_dark
     Top = 132
     Width = 84
     Caption = 'Start'
-    OnClick = btnStartClick
     TabOrder = 2
+    OnClick = btnStartClick
   end
   object ProgressBarStack: TProgressBar
     Left = 8
@@ -80,8 +81,8 @@ object f_dark: Tf_dark
     Top = 240
     Width = 84
     Caption = 'Cancel'
-    OnClick = btnCancelClick
     TabOrder = 5
+    OnClick = btnCancelClick
   end
   object Status: TLabel
     Left = 8
@@ -113,11 +114,11 @@ object f_dark: Tf_dark
     Left = 8
     Height = 22
     Top = 4
-    Width = 255
+    Width = 251
     Caption = 'Multiple dark with different exposure'
     Checked = True
-    OnChange = cbMultiExpChange
     State = cbChecked
     TabOrder = 6
+    OnChange = cbMultiExpChange
   end
 end

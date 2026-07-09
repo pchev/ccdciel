@@ -145,7 +145,7 @@ begin
   if cbMultiExp.Checked then begin
     nloop:=trunc(LogN(sq2,maxexp))+1;
     curloop:=-1;
-    curexp:=0;
+    curexp:=Fcamera.ExposureRange.min;
     curft:=BIAS;
   end
   else begin
