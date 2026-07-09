@@ -153,6 +153,7 @@ public
    function  CheckOffset:boolean; override;
    Procedure AbortExposure; override;
    procedure AbortExposureButNotSequence; override;
+   procedure StopExposure; override;
    Procedure SetActiveDevices(afocuser,afilters,atelescope: string); override;
    procedure StartVideoPreview; override;
    procedure StopVideoPreview; override;
@@ -305,6 +306,11 @@ begin
       buf:=V.SensorName;
       if buf<>'' then Fccdname:=Fccdname+'-'+buf;
     except
+    end;
+    try
+      FcanStopExposure:=V.CanStopExposure
+    except
+      FcanStopExposure:=false;
     end;
     try
       FhasCoolerPower:=V.CanGetCoolerPower;
@@ -1105,13 +1111,27 @@ begin
     WaitExposure:=false;
     if V.CanAbortExposure then
       V.AbortExposure
-    else if V.CanStopExposure then
+    else if FcanStopExposure then
       V.StopExposure;
     if assigned(FonAbortExposure) then FonAbortExposure(self);
    except
     on E: Exception do msg('Abort exposure error: ' + E.Message,0);
    end;
  {$endif}
+end;
+
+procedure T_ascomcamera.StopExposure;
+begin
+{$ifdef mswindows}
+  try
+    if FcanStopExposure then begin
+      V.StopExposure;
+      Fexptime:=round((NowUTC-newtimestart)*secperday);
+    end;
+   except
+   on E: Exception do msg('Stop exposure error: ' + E.Message,0);
+  end;
+{$endif}
 end;
 
 Procedure T_ascomcamera.SetActiveDevices(afocuser,afilters,atelescope: string);

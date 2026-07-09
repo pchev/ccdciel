@@ -281,6 +281,7 @@ private
    function  CheckOffset:boolean; override;
    Procedure AbortExposure; override;
    procedure AbortExposureButNotSequence; override;
+   procedure StopExposure; override;
    Procedure SetActiveDevices(afocuser,afilters,atelescope: string); override;
    procedure StartVideoPreview; override;
    procedure StopVideoPreview; override;
@@ -508,6 +509,7 @@ if not indiclient.Connected then begin
   if (Findisensor<>'') and (Findisensor<>'CCD1') then Fccdname:=Fccdname+'-'+Findisensor;
   FStatus := devDisconnected;
   FWheelStatus:=devDisconnected;
+  FcanStopExposure:=false;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
   msg('Connecting to INDI server "'+Findiserver+':'+Findiserverport+'" for device "'+Findidevice+'"',9);
@@ -1561,6 +1563,11 @@ end else begin
 end;
 if FFinderCamera or FGuideCamera then
   indiblob.setBLOBMode(B_NEVER,Findidevice,Findisensor);
+end;
+
+procedure T_indicamera.StopExposure;
+begin
+  // not implemented by INDI
 end;
 
 function T_indicamera.GetBinX:integer;

@@ -108,7 +108,7 @@ T_camera = class(TComponent)
     FTargetRA,FTargetDE: Double;
     FCoordinateOrigin: string;
     FCameraTimeout: integer;
-    WaitExposure, FControlExposureOK: boolean;
+    WaitExposure, FControlExposureOK,FcanStopExposure: boolean;
     procedure msg(txt: string; level:integer=3);
     procedure NewImage;
     procedure TryNextExposure(Data: PtrInt);
@@ -217,6 +217,7 @@ T_camera = class(TComponent)
     Procedure SetBinning(binX,binY: integer); virtual; abstract;
     Procedure StartExposure(exptime: double); virtual; abstract;
     procedure RestartExposure; virtual; abstract;
+    Procedure StopExposure; virtual; abstract;
     Procedure AbortExposure; virtual; abstract;
     procedure AbortExposureButNotSequence; virtual; abstract;
     procedure SetFrame(x,y,width,height: integer); virtual; abstract;
@@ -347,6 +348,7 @@ T_camera = class(TComponent)
     property Aperture: double read GetAperture;
     property FocaleLength: double read GetFocaleLength;
     property ControlExposureOK: boolean read FControlExposureOK;
+    property canStopExposure: boolean read FcanStopExposure;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onExposureProgress: TNotifyNum read FonExposureProgress write FonExposureProgress;
@@ -416,6 +418,7 @@ begin
   FStackAllow8bit:=false;
   FSaveFrames:=false;
   FStackSaveDir:='';
+  FcanStopExposure:=false;
   FhasVideo:=false;
   FVideoStream:=TMemoryStream.Create;;
   lockvideoframe:=false;

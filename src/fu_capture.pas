@@ -111,6 +111,7 @@ type
     FonOptions:  TNotifyEvent;
     FonStartExposure: TNotifyEvent;
     FonAbortExposure: TNotifyEvent;
+    FonStopExposure: TNotifyEvent;
     FonStopPreview: TNotifyEvent;
     FonResetStack: TNotifyEvent;
     FonFrameTypeChange: TNotifyEvent;
@@ -149,6 +150,7 @@ type
     property onStopPreview: TNotifyEvent read FonStopPreview write FonStopPreview;
     property onStartExposure: TNotifyEvent read FonStartExposure write FonStartExposure;
     property onAbortExposure: TNotifyEvent read FonAbortExposure write FonAbortExposure;
+    property onStopExposure: TNotifyEvent read FonStopExposure write FonStopExposure;
     property onResetStack: TNotifyEvent read FonResetStack write FonResetStack;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onOptions: TNotifyEvent read FonOptions write FonOptions;
@@ -314,9 +316,14 @@ begin
       if (not Frunning) and Assigned(FonMsg) then FonMsg(rsCannotStartC,0);
     end;
   end else begin
-    CancelAutofocus:=true;
-    EarlyNextExposure:=false;
-    if Assigned(FonAbortExposure) then FonAbortExposure(self);
+    if GetKeyShiftState=[ssShift] then begin
+      if Assigned(FonStopExposure) then FonStopExposure(self);
+    end
+    else begin
+      CancelAutofocus:=true;
+      EarlyNextExposure:=false;
+      if Assigned(FonAbortExposure) then FonAbortExposure(self);
+    end;
   end;
   if Frunning then begin
     led.Brush.Color:=clLime;

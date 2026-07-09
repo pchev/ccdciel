@@ -963,6 +963,7 @@ type
     procedure ResetPreviewStack(Sender: TObject);
     procedure CaptureFrameTypeChange(Sender: TObject);
     Procedure StopExposure(Sender: TObject);
+    Procedure AbortExposure(Sender: TObject);
     procedure StopPreview;
     Procedure StartPreviewExposure(Sender: TObject);
     Procedure StartPreviewExposureAsync(Data: PtrInt);
@@ -1933,7 +1934,7 @@ begin
   f_preview:=Tf_preview.Create(self);
   f_preview.onResetStack:=@ResetPreviewStack;
   f_preview.onStartExposure:=@StartPreviewExposure;
-  f_preview.onAbortExposure:=@StopExposure;
+  f_preview.onAbortExposure:=@AbortExposure;
   f_preview.onMsg:=@NewMessage;
   astrometry.preview:=f_preview;
   astrometry.visu:=f_visu;
@@ -1942,7 +1943,8 @@ begin
   f_capture.onResetStack:=@ResetPreviewStack;
   f_capture.onFrameTypeChange:=@CaptureFrameTypeChange;
   f_capture.onStartExposure:=@StartCaptureExposure;
-  f_capture.onAbortExposure:=@StopExposure;
+  f_capture.onStopExposure:=@StopExposure;
+  f_capture.onAbortExposure:=@AbortExposure;
   f_capture.onStopPreview:=@StopPreviewEvent;
   f_capture.onMsg:=@NewMessage;
   f_capture.onOptions:=@MenuOptionsClick;
@@ -2920,6 +2922,7 @@ begin
   FinderImgCy:=0;
   RunningCapture:=false;
   RunningPreview:=false;
+  SaveStopCapture:=false;
   MenuIndiSettings.Enabled:=true;
   MenuShowINDIlog.Visible:=true;
   ObsTimeZone:=-GetLocalTimeOffset/60;
@@ -4396,7 +4399,7 @@ end;
 if CanClose then begin
  StopInternalguider:=true;
  if f_capture.Running or f_preview.Running then begin
-   StopExposure(nil);
+   AbortExposure(nil);
  end;
  if f_video.Running then begin
   Camera.StopVideoPreview;
@@ -6259,6 +6262,7 @@ begin
      f_video.stop;
      f_internalguider.ButtonStopClick(nil);
      RunningCapture:=false;
+     SaveStopCapture:=false;
      StatusBar1.Panels[panelstatus].Text:='';
      DisconnectCamera(Sender); // disconnect camera first
      DisconnectWheel(Sender);
@@ -10898,7 +10902,7 @@ begin
  else Accept:=false;
 end;
 
-Procedure Tf_main.StopExposure(Sender: TObject);
+Procedure Tf_main.AbortExposure(Sender: TObject);
 begin
   camera.AbortExposure;
   fits.SetBPM(bpm,0,0,0,0);
@@ -10906,6 +10910,15 @@ begin
   fits.FlatOn:=false;
   RunningPreview:=false;
   RunningCapture:=false;
+  StatusBar1.Panels[panelstatus].Text:=rsStop;
+end;
+
+Procedure Tf_main.StopExposure(Sender: TObject);
+begin
+  camera.StopExposure;
+  RunningPreview:=false;
+  RunningCapture:=false;
+  SaveStopCapture:=true;
   StatusBar1.Panels[panelstatus].Text:=rsStop;
 end;
 
@@ -11629,6 +11642,7 @@ if (camera.Status=devConnected)and(not autofocusing) then begin
   MenuCaptureStart.Caption:=rsStop;
   RunningPreview:=false;
   RunningCapture:=true;
+  SaveStopCapture:=false;
   ExpectedStop:=false;
   autoguider.ResetDriftRestartCount;
   // check exposure time
@@ -11979,6 +11993,11 @@ begin
          f_capture.FocusNum:=f_capture.FocusNum-1;
        end;
      end;
+  end
+  // save stopped capture with incomplete exposure
+  else if SaveStopCapture then begin
+     CameraSaveNewImage;
+     SaveStopCapture:=false;
   end
   // process preview
   else if RunningPreview then begin
@@ -13177,7 +13196,7 @@ begin
  else if f_preview.Running then begin
    f_preview.Running:=false;
    f_preview.Loop:=false;
-   StopExposure(Sender);
+   AbortExposure(Sender);
  end;
 end;
 
@@ -13208,7 +13227,7 @@ begin
   if f_preview.Running then begin
     f_preview.Running:=false;
     f_preview.Loop:=false;
-    StopExposure(Sender);
+    AbortExposure(Sender);
   end;
 end;
 
@@ -13247,7 +13266,7 @@ begin
   if f_preview.Running then begin
     f_preview.Running:=false;
     f_preview.Loop:=false;
-    StopExposure(Sender);
+    AbortExposure(Sender);
   end;
 end;
 

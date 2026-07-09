@@ -600,7 +600,7 @@ var
   MountTrackingAlertTime: double;
   SaveStack, StackAlign, StackRotation, StackUseDark, StackUseFlat, StackDebayer: boolean;
   StackOperation: integer;
-  RunningCapture,RunningPreview: boolean;
+  RunningCapture,RunningPreview,SaveStopCapture: boolean;
   ImageInspection, TriangleInspection: boolean;
   TriangleInspectionAngle: double;
   LastHfd,LastDrift: double;

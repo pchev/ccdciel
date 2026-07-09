@@ -5211,6 +5211,8 @@ begin
      blankrep:='-'
   else if FilenameSep='-' then
      blankrep:='_';
+  if SaveStopCapture then
+    fn:='interrupted'+FilenameSep;  // mark incomplete exposure
   UseFileSequenceNumber:=false;
   for i:=0 to FileNameCount-1 do begin
     case FileNameOpt[i] of
