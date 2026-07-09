@@ -1157,7 +1157,9 @@ begin
         FGuideStarOffset:=false;
         StarOffsetX.Value:=0;
         StarOffsetY.Value:=0;
-        PageControl2.ActivePageIndex:=0;
+        PageControl2.ActivePageIndex:=1;
+        btnSetMultiStarOffset.Visible:=false;
+        LabelSetMultiOffset.Caption:='';
         PanelAstrometryExposure.Visible:=true;
         PanelGuideStarOffset.Visible:=false;
        end;
@@ -1169,6 +1171,7 @@ begin
         StarOffsetX.Value:=0;
         StarOffsetY.Value:=0;
         PageControl2.ActivePageIndex:=1;
+        btnSetMultiStarOffset.Visible:=true;
         PanelAstrometryExposure.Visible:=true;
         PanelGuideStarOffset.Visible:=false;
        end;
