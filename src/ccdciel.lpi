@@ -418,7 +418,7 @@
         <PackageName Value="LCL"/>
       </Item12>
     </RequiredPackages>
-    <Units Count="134">
+    <Units Count="135">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -1118,6 +1118,13 @@
         <Filename Value="cu_tiff.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit133>
+      <Unit134>
+        <Filename Value="pu_csvoption.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="f_csvoption"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit134>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

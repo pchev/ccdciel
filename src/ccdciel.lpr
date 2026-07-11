@@ -57,7 +57,7 @@ uses
   fu_switchpage, pu_newscript, pu_polaralign2, fu_internalguider,
   cu_autoguider_internal, pu_handpad, fu_finder, pu_findercalibration,
   fu_switch, pu_sensoranalysis, cu_onlinesearch, pu_onlineinfo,
-  pu_downloadscript, u_refraction, cu_waitthread, pu_autoexposurestep, u_ephem, fu_profile, pu_dark, cu_tiff;
+  pu_downloadscript, u_refraction, cu_waitthread, pu_autoexposurestep, u_ephem, fu_profile, pu_dark, cu_tiff, pu_csvoption;
 
 {$R *.res}
 
@@ -120,6 +120,7 @@ begin
   Application.CreateForm(Tf_autoexposurestep, f_autoexposurestep);
   Application.CreateForm(Tf_downloadscript, f_downloadscript);
   Application.CreateForm(Tf_dark, f_dark);
+  Application.CreateForm(Tf_csvoption, f_csvoption);
   Application.Run;
   {$ifdef LCLGTK2}
   try

@@ -1,0 +1,69 @@
+object f_csvoption: Tf_csvoption
+  Left = 369
+  Height = 167
+  Top = 30
+  Width = 284
+  Caption = 'Load CSV file'
+  ClientHeight = 167
+  ClientWidth = 284
+  LCLVersion = '4.8.0.0'
+  object Label1: TLabel
+    AnchorSideTop.Control = cbSep
+    AnchorSideTop.Side = asrCenter
+    Left = 8
+    Height = 18
+    Top = 23
+    Width = 61
+    Caption = 'Separator'
+  end
+  object cbSep: TComboBox
+    Left = 208
+    Height = 32
+    Top = 16
+    Width = 60
+    ItemHeight = 24
+    ItemIndex = 0
+    Items.Strings = (
+      ';'
+      ','
+      '|'
+      'tab'
+    )
+    Style = csDropDownList
+    TabOrder = 0
+    Text = ';'
+  end
+  object Label2: TLabel
+    AnchorSideTop.Control = cbQuote
+    AnchorSideTop.Side = asrCenter
+    Left = 8
+    Height = 18
+    Top = 85
+    Width = 96
+    Caption = 'String delimiter'
+  end
+  object cbQuote: TComboBox
+    Left = 208
+    Height = 32
+    Top = 78
+    Width = 60
+    ItemHeight = 24
+    ItemIndex = 0
+    Items.Strings = (
+      ''
+      '"'
+      ''''
+    )
+    Style = csDropDownList
+    TabOrder = 1
+  end
+  object Button1: TButton
+    Left = 193
+    Height = 25
+    Top = 128
+    Width = 75
+    Caption = 'Continue'
+    ModalResult = 1
+    TabOrder = 2
+  end
+end

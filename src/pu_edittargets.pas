@@ -27,7 +27,7 @@ interface
 
 uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_scripteditor, u_annotation, pu_keyboard, pu_newscript, pu_onlineinfo,
   pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math, cu_targets, pu_viewtext, cu_switch, pu_autoexposurestep,
-  SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI, cu_plan, LCLType,
+  SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI, cu_plan, LCLType, csvdocument, pu_csvoption,
   LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, SpinEx, Buttons, Menus, CheckLst, Types;
 
 const
@@ -1605,11 +1605,11 @@ begin
 end;
 
 procedure Tf_EditTargets.MenuImportCSVClick(Sender: TObject);
-var fn,buf: string;
-    f: textfile;
-    rec: Tstringlist;
-    i:integer;
+var fn: string;
+    sep,quote: char;
+    i,j,colcount:integer;
     t:TTarget;
+    CSVDoc:TCSVDocument;
 begin
   if OpenDialog1.InitialDir='' then OpenDialog1.InitialDir:=HomeDir;
   OpenDialog1.Filter:='CSV file |*.csv';
@@ -1618,56 +1618,68 @@ begin
     fn:=OpenDialog1.FileName
   else
     exit;
-  rec:=Tstringlist.Create;
-  AssignFile(f,fn);
-  Reset(f);
-  readln(f,buf);
-  if copy(buf,1,11)<>'Target name' then
-    Reset(f);
-  repeat
-    readln(f,buf);
-    SplitRec(buf,';',rec);
-    if rec.Count=0 then continue;
+  formpos(f_csvoption ,mouse.CursorPos.X,mouse.CursorPos.Y);
+  f_csvoption.ShowModal;
+  if f_csvoption.ModalResult=mrOK then begin
+    sep:=f_csvoption.separator;
+    quote:=f_csvoption.quote;
+  end
+  else
+    exit;
+
+  CSVDoc := TCSVDocument.Create;
+  try
+  CSVDoc.Delimiter := sep;
+  CSVDoc.QuoteChar := quote;
+  CSVDoc.LoadFromFile(fn);
+  for j:=0 to CSVDoc.RowCount-1 do begin
+    colcount:=CSVDoc.ColCount[j];
+    if colcount=0 then continue;
+    if CSVDoc.Cells[0,j]='Target name' then continue;  // ignore header from exportcsv
+    if CSVDoc.Cells[0,j]=SkyFlatTxt then continue;     // ignore flat from exportcsv
+    if CSVDoc.Cells[0,j]=ScriptTxt then continue;      // ignore script from exportcsv
+    if CSVDoc.Cells[0,j]=SwitchTxt then continue;      // ignore switch from exportcsv
     TargetList.RowCount:=TargetList.RowCount+1;
     i:=TargetList.RowCount-1;
     TargetList.Row:=i;
     t:=TTarget.Create;
-    t.objectname:=rec[0];
+    t.objectname:=CSVDoc.Cells[0,j];
     TargetList.Objects[colseq,i]:=t;
     TargetList.Cells[colseq,i]:=IntToStr(i);
-    TargetList.Cells[colname,i]:=rec[0];
-    if rec.count>1 then TargetList.Cells[colplan,i]:=rec[1];
-    if rec.count>2 then TargetList.Cells[colra,i]:=rec[2];
-    if rec.count>3 then TargetList.Cells[coldec,i]:=rec[3];
-    if rec.count>4 then TargetList.Cells[colpa,i]:=rec[4];
-    if rec.count>5 then TargetList.Cells[colmagn,i]:=rec[5];
-    if rec.count>6 then TargetList.Cells[colstart,i]:=rec[6];
-    if rec.count>7 then TargetList.Cells[colend,i]:=rec[7];
-    if rec.count>8 then TargetList.Cells[colrepeat,i]:=rec[8];
-    if rec.count>9 then TDelay.Value:=StrToIntDef(rec[9],1);
-    if rec.count>10 then Preview.Checked:=rec[10]='1';
-    if rec.count>11 then PreviewExposure.Value:=StrToFloatDef(rec[11],1.0);
-    if rec.count>12 then cbDarkNight.Checked:=rec[12]='1';
-    if rec.count>13 then cbMandatoryStartTime.Checked:=rec[13]='1';
-    if rec.count>14 then cbSkip.Checked:=rec[14]='1';
-    if rec.count>15 then cbFullOnly.Checked:=rec[15]='1';
-    if rec.count>16 then cbMoonAvoidance.Checked:=rec[16]='1';
-    if rec.count>17 then cbAstrometry.Checked:=rec[17]='1';
-    if rec.count>18 then cbInplace.Checked:=rec[18]='1';
-    if rec.count>19 then cbAutofocusTemp.Checked:=rec[19]='1';
-    if rec.count>20 then cbAutofocusHFD.Checked:=rec[20]='1';
-    if rec.count>21 then cbUpdCoord.Checked:=rec[21]='1';
-    if rec.count>22 then cbSolarTracking.Checked:=rec[22]='1';
-    if rec.count>23 then cbNoAutoguidingChange.Checked:=rec[23]='1';
-    if rec.count>24 then cbInitScript.Checked:=rec[24]='1';
-    if rec.count>25 then ScriptList2.Text:=rec[25];
-    if rec.count>26 then ScriptParam2.Text:=rec[26];
+    TargetList.Cells[colname,i]:=CSVDoc.Cells[0,j];
+    if colcount>1 then TargetList.Cells[colplan,i]:=CSVDoc.Cells[1,j];
+    if colcount>2 then TargetList.Cells[colra,i]:=CSVDoc.Cells[2,j];
+    if colcount>3 then TargetList.Cells[coldec,i]:=CSVDoc.Cells[3,j];
+    if colcount>4 then TargetList.Cells[colpa,i]:=CSVDoc.Cells[4,j];
+    if colcount>5 then TargetList.Cells[colmagn,i]:=CSVDoc.Cells[5,j];
+    if colcount>6 then TargetList.Cells[colstart,i]:=CSVDoc.Cells[6,j];
+    if colcount>7 then TargetList.Cells[colend,i]:=CSVDoc.Cells[7,j];
+    if colcount>8 then TargetList.Cells[colrepeat,i]:=CSVDoc.Cells[8,j];
+    if colcount>9 then TDelay.Value:=StrToIntDef(CSVDoc.Cells[9,j],1);
+    if colcount>10 then Preview.Checked:=CSVDoc.Cells[10,j]='1';
+    if colcount>11 then PreviewExposure.Value:=StrToFloatDef(CSVDoc.Cells[11,j],1.0);
+    if colcount>12 then cbDarkNight.Checked:=CSVDoc.Cells[12,j]='1';
+    if colcount>13 then cbMandatoryStartTime.Checked:=CSVDoc.Cells[13,j]='1';
+    if colcount>14 then cbSkip.Checked:=CSVDoc.Cells[14,j]='1';
+    if colcount>15 then cbFullOnly.Checked:=CSVDoc.Cells[15,j]='1';
+    if colcount>16 then cbMoonAvoidance.Checked:=CSVDoc.Cells[16,j]='1';
+    if colcount>17 then cbAstrometry.Checked:=CSVDoc.Cells[17,j]='1';
+    if colcount>18 then cbInplace.Checked:=CSVDoc.Cells[18,j]='1';
+    if colcount>19 then cbAutofocusTemp.Checked:=CSVDoc.Cells[19,j]='1';
+    if colcount>20 then cbAutofocusHFD.Checked:=CSVDoc.Cells[20,j]='1';
+    if colcount>21 then cbUpdCoord.Checked:=CSVDoc.Cells[21,j]='1';
+    if colcount>22 then cbSolarTracking.Checked:=CSVDoc.Cells[22,j]='1';
+    if colcount>23 then cbNoAutoguidingChange.Checked:=CSVDoc.Cells[23,j]='1';
+    if colcount>24 then cbInitScript.Checked:=CSVDoc.Cells[24,j]='1';
+    if colcount>25 then ScriptList2.Text:=CSVDoc.Cells[25,j];
+    if colcount>26 then ScriptParam2.Text:=CSVDoc.Cells[26,j];
     TargetChange(nil);
     ShowPlan;
     Application.ProcessMessages;
-  until eof(f);
-  CloseFile(f);
-  rec.Free;
+  end;
+  finally
+    CSVDoc.Free;
+  end;
 end;
 
 procedure Tf_EditTargets.BtnSaveTemplatePopup(Sender: TObject);
