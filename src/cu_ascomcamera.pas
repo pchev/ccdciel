@@ -1191,17 +1191,16 @@ begin
     try
     result.max:=V.ExposureMax;
     except
-     result:=NullRange;
+     result:=result.max:=3600;
     end;
     try
     result.min:=V.ExposureMin;
     except
-     result:=NullRange;
+     result.min:=0.001;
     end;
     try
     result.step:=V.ExposureResolution;
     except
-     result:=NullRange;
     end;
   {$endif}
 end;

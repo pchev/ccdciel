@@ -11647,7 +11647,7 @@ if (camera.Status=devConnected)and(not autofocusing) then begin
   autoguider.ResetDriftRestartCount;
   // check exposure time
   if ftype=BIAS then
-    e:=0
+    e:=camera.ExposureRange.min
   else
     e:=StrToFloatDef(f_capture.ExpTime.Text,-1);
   if e<0 then begin
