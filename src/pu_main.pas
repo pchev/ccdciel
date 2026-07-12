@@ -4983,10 +4983,10 @@ mount.AutoLoadConfig:=config.GetValue('/INDImount/AutoLoadConfig',false);
 dome.AutoLoadConfig:=config.GetValue('/INDIdome/AutoLoadConfig',false);
 camera.AutoLoadConfig:=config.GetValue('/INDIcamera/AutoLoadConfig',false);
 if camera.CameraInterface=ASCOM then begin
-   camera.ASCOMFlipImage:=config.GetValue('/ASCOMcamera/FlipImage',true);
+   camera.ASCOMFlipImage:=config.GetValue('/ASCOMcamera/FlipImage',false);
 end;
 if camera.CameraInterface=ASCOMREST then begin
-   camera.ASCOMFlipImage:=config.GetValue('/ASCOMRestcamera/FlipImage',true);
+   camera.ASCOMFlipImage:=config.GetValue('/ASCOMRestcamera/FlipImage',false);
 end;
 guidecamera.ASCOMFlipImage:=false;
 findercamera.ASCOMFlipImage:=false;
