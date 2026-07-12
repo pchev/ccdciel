@@ -1191,7 +1191,7 @@ begin
     try
     result.max:=V.ExposureMax;
     except
-     result:=result.max:=3600;
+     result.max:=3600;
     end;
     try
     result.min:=V.ExposureMin;
