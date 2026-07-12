@@ -1934,6 +1934,7 @@ begin
   f_preview:=Tf_preview.Create(self);
   f_preview.onResetStack:=@ResetPreviewStack;
   f_preview.onStartExposure:=@StartPreviewExposure;
+  f_preview.onStopExposure:=@StopExposure;
   f_preview.onAbortExposure:=@AbortExposure;
   f_preview.onMsg:=@NewMessage;
   astrometry.preview:=f_preview;
@@ -2426,6 +2427,7 @@ begin
    f_preview.Camera:=camera;
  end;
  if f_capture<>nil then begin
+   f_capture.Camera:=camera;
    f_capture.Mount:=mount;
  end;
  if f_video<>nil then begin
@@ -10916,9 +10918,10 @@ end;
 Procedure Tf_main.StopExposure(Sender: TObject);
 begin
   camera.StopExposure;
+  if RunningCapture then
+    SaveStopCapture:=true;
   RunningPreview:=false;
   RunningCapture:=false;
-  SaveStopCapture:=true;
   StatusBar1.Panels[panelstatus].Text:=rsStop;
 end;
 

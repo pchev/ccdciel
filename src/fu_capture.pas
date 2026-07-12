@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, Graphics, UScaleDPI, u_hints, u_translation, cu_mount, u_utils, math, Dialogs,
+uses u_global, Graphics, UScaleDPI, u_hints, u_translation, cu_mount,cu_camera, u_utils, math, Dialogs,
   Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, SpinEx;
 
 type
@@ -98,6 +98,7 @@ type
     procedure TimerExpTimer(Sender: TObject);
   private
     { private declarations }
+    Fcamera: T_camera;
     FMount: T_mount;
     FstartedBy: TCaptureRunType;
     FExposureTime,FCameraExposureRemain: double;
@@ -135,6 +136,7 @@ type
     procedure SetTitleColor;
     procedure Stop;
     procedure setCustomFrameType;
+    property Camera: T_camera read Fcamera write Fcamera;
     property Mount: T_mount read FMount write FMount;
     property Running: boolean read Frunning write Frunning;
     property Overwrite: boolean read GetOverwrite;
@@ -316,7 +318,8 @@ begin
       if (not Frunning) and Assigned(FonMsg) then FonMsg(rsCannotStartC,0);
     end;
   end else begin
-    if GetKeyShiftState=[ssShift] then begin
+    if (Fcamera.canStopExposure) and (GetKeyShiftState=[ssShift]) then begin
+      globalmsg(rsInterrupt+' '+rsCapture);
       if Assigned(FonStopExposure) then FonStopExposure(self);
     end
     else begin

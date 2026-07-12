@@ -6,6 +6,7 @@ object f_preview: Tf_preview
   AutoSize = True
   ClientHeight = 324
   ClientWidth = 279
+  LCLVersion = '4.8.0.0'
   ParentFont = False
   TabOrder = 0
   DesignLeft = -2
@@ -24,9 +25,9 @@ object f_preview: Tf_preview
     ParentFont = False
     TabOrder = 0
     object PanelGain: TPanel
-      Left = 0
+      Left = 1
       Height = 32
-      Top = 0
+      Top = 1
       Width = 272
       BevelOuter = bvNone
       ClientHeight = 32
@@ -40,7 +41,7 @@ object f_preview: Tf_preview
         Top = 0
         Width = 70
         Enabled = False
-        ItemHeight = 18
+        ItemHeight = 24
         ParentFont = False
         Style = csDropDownList
         TabOrder = 0
@@ -105,14 +106,14 @@ object f_preview: Tf_preview
         Top = 5
         Width = 53
         Caption = 'Gain'
-        OnClick = cbGainOffsetClick
         TabOrder = 3
+        OnClick = cbGainOffsetClick
       end
     end
     object Panel2: TPanel
-      Left = 0
+      Left = 1
       Height = 30
-      Top = 32
+      Top = 33
       Width = 272
       BevelOuter = bvNone
       ClientHeight = 30
@@ -143,10 +144,10 @@ object f_preview: Tf_preview
           '20'
           '60'
         )
-        OnKeyPress = ExpTimeKeyPress
         ParentFont = False
         TabOrder = 0
         Text = '1'
+        OnKeyPress = ExpTimeKeyPress
       end
       object Label1: TLabel
         AnchorSideTop.Control = ExpTime
@@ -161,9 +162,9 @@ object f_preview: Tf_preview
       end
     end
     object Panel3: TPanel
-      Left = 0
+      Left = 1
       Height = 28
-      Top = 62
+      Top = 63
       Width = 272
       BevelOuter = bvNone
       ClientHeight = 28
@@ -198,9 +199,9 @@ object f_preview: Tf_preview
       end
     end
     object PanelFnumber: TPanel
-      Left = 0
+      Left = 1
       Height = 30
-      Top = 90
+      Top = 91
       Width = 272
       BevelOuter = bvNone
       ClientHeight = 30
@@ -225,15 +226,15 @@ object f_preview: Tf_preview
         Top = 2
         Width = 90
         Constraints.MaxHeight = 28
-        ItemHeight = 24
+        ItemHeight = 30
         ParentFont = False
         TabOrder = 0
       end
     end
     object Panel5: TPanel
-      Left = 0
+      Left = 1
       Height = 26
-      Top = 120
+      Top = 121
       Width = 272
       BevelOuter = bvNone
       ClientHeight = 26
@@ -247,9 +248,9 @@ object f_preview: Tf_preview
         Top = 0
         Width = 96
         Caption = 'Preview'
-        OnClick = BtnPreviewClick
         ParentFont = False
         TabOrder = 0
+        OnClick = BtnPreviewClick
       end
       object BtnLoop: TButton
         Tag = 1
@@ -259,15 +260,15 @@ object f_preview: Tf_preview
         Top = 0
         Width = 90
         Caption = 'Loop'
-        OnClick = BtnLoopClick
         ParentFont = False
         TabOrder = 1
+        OnClick = BtnLoopClick
       end
     end
     object Panel4: TPanel
-      Left = 0
+      Left = 1
       Height = 28
-      Top = 146
+      Top = 147
       Width = 272
       BevelOuter = bvNone
       ClientHeight = 28
@@ -288,9 +289,9 @@ object f_preview: Tf_preview
       end
     end
     object Panel7: TPanel
-      Left = 0
+      Left = 1
       Height = 13
-      Top = 174
+      Top = 175
       Width = 272
       AutoSize = True
       BevelOuter = bvNone
@@ -345,8 +346,8 @@ object f_preview: Tf_preview
       Top = 0
       Width = 93
       Caption = 'Astrometry'
-      OnClick = CheckBoxAstrometryClick
       TabOrder = 0
+      OnClick = CheckBoxAstrometryClick
     end
     object image_inspection1: TCheckBox
       Left = 93
@@ -362,8 +363,8 @@ object f_preview: Tf_preview
       Top = 22
       Width = 93
       Caption = 'Stack'
-      OnClick = StackPreviewClick
       TabOrder = 2
+      OnClick = StackPreviewClick
     end
     object PreprocessPreview: TCheckBox
       Left = 93

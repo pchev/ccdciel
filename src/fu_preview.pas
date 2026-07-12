@@ -76,6 +76,7 @@ type
     FonMsg: TNotifyMsg;
     FonResetStack: TNotifyEvent;
     FonStartExposure: TNotifyEvent;
+    FonStopExposure: TNotifyEvent;
     FonAbortExposure: TNotifyEvent;
     procedure msg(txt:string; level:integer);
     function GetExposure:double;
@@ -102,6 +103,7 @@ type
     property Bin: integer read GetBinning write SetBinning;
     property onResetStack: TNotifyEvent read FonResetStack write FonResetStack;
     property onStartExposure: TNotifyEvent read FonStartExposure write FonStartExposure;
+    property onStopExposure: TNotifyEvent read FonStopExposure write FonStopExposure;
     property onAbortExposure: TNotifyEvent read FonAbortExposure write FonAbortExposure;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
   end;
@@ -177,9 +179,15 @@ begin
         Msg(rsCannotStartP,0);
      end;
   end else begin
-     msg(rsStopPreview,2);
-     ExpectedStop:=true;
-     if Assigned(FonAbortExposure) then FonAbortExposure(self);
+     if (Fcamera.canStopExposure) and (GetKeyShiftState=[ssShift]) then begin
+       msg(rsInterrupt+' '+rsPreview, 1);
+       if Assigned(FonStopExposure) then FonStopExposure(self);
+     end
+     else begin
+       msg(rsStopPreview,2);
+       ExpectedStop:=true;
+       if Assigned(FonAbortExposure) then FonAbortExposure(self);
+     end;
   end;
 end;
 
@@ -241,8 +249,15 @@ begin
      end;
   end else begin
      EarlyNextExposure:=false;
-     ExpectedStop:=true;
-     if Assigned(FonAbortExposure) then FonAbortExposure(self);
+     if (Fcamera.canStopExposure) and (GetKeyShiftState=[ssShift]) then begin
+       msg(rsInterrupt+' '+rsPreview, 1);
+       if Assigned(FonStopExposure) then FonStopExposure(self);
+     end
+     else begin
+       msg(rsStopPreview,2);
+       ExpectedStop:=true;
+       if Assigned(FonAbortExposure) then FonAbortExposure(self);
+     end;
      led.Brush.Color:=clGray;
      BtnLoop.Caption:=rsLoop;
      FLoop:=False;
