@@ -3666,9 +3666,9 @@ end;
 
 procedure Tf_main.UpdConfig(oldver:string);
 var ok,b1,b2,b3:boolean;
-    i,j: integer;
+    i,j,n: integer;
     f: double;
-    msg,buf: string;
+    msg,buf,val: string;
 begin
 try
   if trim(oldver)='' then
@@ -3837,6 +3837,32 @@ try
   if oldver<'0.9.96' then begin
      msg:='Please review the gain/offset settings,'+crlf+'now in Preferences/Camera';
      MessageDlg(caption,msg,mtWarning,[mbOK],0);
+  end;
+  if oldver<'0.9.97' then begin
+     msg:='';
+     n:=config.GetValue('/Files/CustomHeader/Num',0);
+     if n>0 then begin
+       CustomHeaderNum:=0;
+       for i:=1 to n do begin
+         buf:=config.GetValue('/Files/CustomHeader/Key'+inttostr(i),'');
+         val:=config.GetValue('/Files/CustomHeader/Value'+inttostr(i),'');
+         if (buf>'')and(ValidateCustomHeader(buf)) then begin
+           inc(CustomHeaderNum);
+           CustomHeaders[CustomHeaderNum].key:=buf;
+           CustomHeaders[CustomHeaderNum].value:=val;
+         end
+         else begin
+           msg:=msg+buf+' = '+val+crlf;
+         end;
+       end;
+       config.DeletePath('/Files/CustomHeader/');
+       config.SetValue('/Files/CustomHeader/Num',CustomHeaderNum);
+       for i:=1 to CustomHeaderNum do begin
+         config.SetValue('/Files/CustomHeader/Key'+inttostr(i),CustomHeaders[i].key);
+         config.SetValue('/Files/CustomHeader/Value'+inttostr(i),CustomHeaders[i].value);
+       end;
+       if msg<>'' then MessageDlg(caption,'Delete reserved custom header '+crlf+msg,mtWarning,[mbOK],0);
+     end;
   end;
   if config.Modified then begin
      config.SetValue('/Configuration/Version',ccdcielver);

@@ -3350,8 +3350,8 @@ object f_option: Tf_option
             TabOrder = 0
             ColWidths = (
               123
-              206
-              205
+              216
+              216
             )
           end
         end

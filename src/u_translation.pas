@@ -1561,6 +1561,7 @@ resourcestring
   rsRedoAllTheOb = 'Redo every object with each repetition';
   rsPulseNorthDi = 'Pulse North direction [cal/flipped]';
   rsInterrupt = 'Interrupt';
+  rsReservedKeyw = 'Reserved keyword';
 
 implementation
 

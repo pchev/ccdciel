@@ -2454,7 +2454,12 @@ end;
 procedure Tf_option.CustomHeaderValidateEntry(Sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
 begin
   if  aCol=0 then begin
-    if (NewValue>'')and(not ValidateCustomHeader(NewValue)) then NewValue:=OldValue;
+    if (NewValue>'')and(not ValidateCustomHeader(NewValue)) then begin
+       Labelmsg.Caption:=rsReservedKeyw+': '+NewValue;
+       NewValue:=OldValue;
+    end
+    else
+       Labelmsg.Caption:='';
   end;
 end;
 
