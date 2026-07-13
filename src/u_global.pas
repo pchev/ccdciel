@@ -306,8 +306,8 @@ const
   azNorth=0;
   azSouth=1;
   b80 ='                                                                                ';
-  NRestrictKey=50;
-  RestrictKey: array[1..NRestrictKey] of string = ('SIMPLE','BITPIX','NAXIS','NAXIS1','NAXIS2','NAXIS3','XTENSION','END','BZERO','BSCALE','ROWORDER','DATAMIN','DATAMAX','DATE','DATE-OBS','SWCREATE','IMAGETYP','DATE-OBS','MJD-OBS','EXPTIME','STACKCNT','STACKEXP','STACKOP','STACKALN','GAIN','OFFSET','ISOSPEED','GAMMA','BRIGHTNS','F_STOP','XPIXSZ','YPIXSZ','PIXSIZE1','PIXSIZE2','XBINNING','YBINNING','XBAYROFF','YBAYROFF','BAYERPAT','MULT_R','MULT_G','MULT_B','FRAMEX','FRAMEY','FRAMEHGT','FRAMEWDH','XORGSUBF','YORGSUBF','GUIDEX','GUIDEY');
+  NRestrictKey=49;
+  RestrictKey: array[1..NRestrictKey] of string = ('SIMPLE','BITPIX','NAXIS','NAXIS1','NAXIS2','NAXIS3','XTENSION','END','BZERO','BSCALE','ROWORDER','DATAMIN','DATAMAX','DATE','DATE-OBS','SWCREATE','IMAGETYP','MJD-OBS','EXPTIME','STACKCNT','STACKEXP','STACKOP','STACKALN','GAIN','OFFSET','ISOSPEED','GAMMA','BRIGHTNS','F_STOP','XPIXSZ','YPIXSZ','PIXSIZE1','PIXSIZE2','XBINNING','YBINNING','XBAYROFF','YBAYROFF','BAYERPAT','MULT_R','MULT_G','MULT_B','FRAMEX','FRAMEY','FRAMEHGT','FRAMEWDH','XORGSUBF','YORGSUBF','GUIDEX','GUIDEY');
   FocusDirIn=true;
   FocusDirOut=false;
   FrameName: array[0..ord(high(TFrameType))] of string =('Light   ','Bias    ','Dark    ','Flat    '); // add space to header as INDI do

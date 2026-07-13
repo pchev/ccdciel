@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2026-07-07 08:58+0000\n"
+"POT-Creation-Date: 2026-07-13 07:33+0000\n"
 "PO-Revision-Date: 2025-10-21 04:59+0000\n"
 "Last-Translator: boneni <Unknown>\n"
 "Language-Team: Lao <lo@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2026-07-07 09:08+0000\n"
-"X-Generator: Launchpad (build 9266e25987148283c3b4dddb06517b57ecf29d92)\n"
+"X-Launchpad-Export-Date: 2026-07-13 07:48+0000\n"
+"X-Generator: Launchpad (build 4cb86061fad3822d81e8d53a5db6f9011a76c47d)\n"
 
 #: u_hints.rsactivateback
 #, object-pascal-format

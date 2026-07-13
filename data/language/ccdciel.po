@@ -5973,3 +5973,11 @@ msgstr ""
 msgid "Pulse North direction [cal/flipped]"
 msgstr ""
 
+#: u_translation:rsinterrupt
+msgid "Interrupt"
+msgstr ""
+
+#: u_translation:rsreservedkeyw
+msgid "Reserved keyword"
+msgstr ""
+
