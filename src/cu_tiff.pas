@@ -43,19 +43,13 @@ implementation
 uses
   SysUtils, Classes, dialogs, math,
   zstream, //for ZIP compression/decompression
-  {$ifndef mswindows}
-  unit_mtpcpu, //GetSystemThreadCount
-  {$endif}
+  u_global,
   FPReadTiff;//for LZW decompression
 
 
 function get_thread_count: integer; //nr of logical cores
 begin
-  {$ifdef mswindows}
-  result := System.CPUCount;//works in Windows and Linux virtual machine but not in native Linux or Darwin
-  {$else} {unix}
-  result := GetSystemThreadCount;
-  {$endif}
+  result := MaxThreadCount;
   if result < 1 then result := 1;
 end;
 
