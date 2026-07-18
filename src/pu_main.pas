@@ -3879,7 +3879,8 @@ begin
   AppClose:=true;
 
   SaveSettings;
-  SaveInternalGuiderSettings;
+  if Autoguider.AutoguiderType=agINTERNAL then
+    SaveInternalGuiderSettings;
   SaveConfig;
 
   try
@@ -9112,7 +9113,8 @@ end;
 procedure Tf_main.MenuSaveConfigClick(Sender: TObject);
 begin
  SaveSettings;
- SaveInternalGuiderSettings;
+ if Autoguider.AutoguiderType=agINTERNAL then
+   SaveInternalGuiderSettings;
  SaveConfig;
 end;
 
