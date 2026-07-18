@@ -10523,7 +10523,9 @@ begin
 
      SetSequenceDir(f_option.SeqDir.Text);
 
-     SaveInternalGuiderSettings;
+     if TAutoguiderType(f_option.AutoguiderType)=agINTERNAL then
+       SaveInternalGuiderSettings;
+
      SaveConfig;
 
      SetOptions;
