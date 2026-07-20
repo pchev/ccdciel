@@ -1327,12 +1327,11 @@ begin
      FImageFormat:='.fits';
      if assigned(FonExposureProgress) then FonExposureProgress(-10);
      if debug_msg then msg('this is a packed fits file');
-     if debug_msg then msg('run funpack');
      tmpf:=slash(TmpDir)+'tmppack.fits.fz';
      data.SaveToFile(tmpf);
      i:=UnpackFits(tmpf,FImgStream,rmsg);
      if i<>0 then begin
-        msg('funpack error '+inttostr(i)+': '+rmsg,0);
+        msg('unpack error '+inttostr(i)+': '+rmsg,0);
         if assigned(FonAbortExposure) then FonAbortExposure(self);
         exit;
      end;

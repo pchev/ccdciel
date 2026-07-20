@@ -29,7 +29,8 @@ interface
 
 uses SysUtils, Classes, LazFileUtils, u_utils, u_global, BGRABitmap, BGRABitmapTypes, ExpandedBitmap,
   GraphType,  FPReadJPEG, LazSysUtils, u_libraw, dateutils, FPReadTiff, cu_tiff,
-  LCLIntf, LazUTF8, Graphics,Math, FPImage, Controls, LCLType, Dialogs, u_translation, IntfGraphics;
+  LCLIntf, LazUTF8, Graphics,Math, FPImage, Controls, LCLType, Dialogs, u_translation, IntfGraphics,
+  unit_ricecomp_fits;
 
 type
 
@@ -1839,7 +1840,7 @@ begin
       mem.SaveToFile(tmpf);
       i:=PackFits(tmpf,fn+'.fz',rmsg);
       if i<>0 then begin
-        buf:='fpack error '+inttostr(i)+': '+rmsg;
+        buf:='FITS compression error '+inttostr(i)+': '+rmsg;
         buf:=buf+', Saving file without compression';
         msg(buf,1);
         mem.SaveToFile(fn);
@@ -1868,7 +1869,7 @@ try
     mem.SaveToFile(tmpf);
     i:=PackFits(tmpf,filename+'.fz',rmsg);
     if i<>0 then begin
-      buf:='fpack error '+inttostr(i)+': '+rmsg;
+      buf:='FITS compression error '+inttostr(i)+': '+rmsg;
       buf:=buf+', Saving file without compression';
       PostMessage(MsgHandle, LM_CCDCIEL, M_Message, PtrInt(strnew(PChar(buf))));
       mem.SaveToFile(filename);
@@ -1900,7 +1901,7 @@ if FileExistsUTF8(fn) then begin
      i:=UnpackFits(fn,mem,rmsg);
      if i<>0 then begin
        ClearImage;
-       msg('funpack error '+inttostr(i)+': '+rmsg,1);
+       msg('FITS decompression error '+inttostr(i)+': '+rmsg,1);
        exit;
      end;
    end
@@ -1920,6 +1921,7 @@ end;
 
 procedure TFits.LoadHeaderFromFile(fn:string);
 var mem: TMemoryStream;
+    ins: TFileStream;
     pack: boolean;
     rmsg: string;
     i: integer;
@@ -1928,13 +1930,24 @@ if FileExistsUTF8(fn) then begin
    mem:=TMemoryStream.Create;
    try
    pack:=uppercase(ExtractFileExt(fn))='.FZ';
+
    if pack then begin
-     i:=UnpackFits(fn,mem,rmsg);
+     // Tile-compressed file: the keywords are ASCII cards in the BINTABLE
+     // header of the second HDU. Read that header only, no pixel
+     // decompression, and translate the Z* geometry back to BITPIX/NAXISn.
+     ins:=nil;
+     try
+       ins:=TFileStream.Create(fn, fmOpenRead or fmShareDenyWrite);
+       i:=NativeReadFzHeader(ins, mem, rmsg);//in unit_ricecomp_fits.
+     finally
+       if ins<>nil then ins.Free;
+     end;
      if i<>0 then begin
        ClearImage;
-       msg('funpack error '+inttostr(i)+': '+rmsg,1);
+       msg('FITS header read error '+inttostr(i)+': '+rmsg,1);
        exit;
      end;
+     mem.Position:=0;
    end
    else
      mem.LoadFromFile(fn);
@@ -5063,17 +5076,22 @@ end;
 
 function PackFits(unpackedfilename,packedfilename: string; out rmsg:string):integer;
 var
-  j: integer;
-  outstr:Tstringlist;
+  ins,outs: TFileStream;
 begin
+ // Native Rice (fpack-format) compression, no external utility required.
+ // Supports 16-bit integer mono images (Rice is lossless only for integers).
+ ins:=nil; outs:=nil;
+ rmsg:='';
  try
-   outstr:=TStringList.Create;
-   rmsg:='';
-   result:=ExecProcess(fpackcmd+' -O "'+packedfilename+'" -D -Y "'+unpackedfilename+'"',outstr);
-   if result<>0 then begin
-     for j:=0 to outstr.Count-1 do rmsg:=rmsg+crlf+outstr[j];
+   try
+     if FileExists(packedfilename) then DeleteFile(packedfilename);
+     ins:=TFileStream.Create(unpackedfilename, fmOpenRead or fmShareDenyWrite);
+     outs:=TFileStream.Create(packedfilename, fmCreate);
+     result:=NativePackFits(ins, outs, rmsg);
+   finally
+     if ins<>nil then ins.Free;
+     if outs<>nil then outs.Free;
    end;
-   outstr.Free;
  except
    on E: Exception do begin
      result:=-1;
@@ -5083,32 +5101,23 @@ begin
 end;
 
 function UnpackFits(packedfilename: string; var ImgStream:TMemoryStream; out rmsg:string):integer;
-{$ifdef mswindows}
 var
-  j: integer;
-  tmpfo: string;
-  outstr:Tstringlist;
-{$endif}
+  ins: TFileStream;
 begin
+ // Native Rice (fpack-format) decompression, no external utility required.
+ // Supports RICE_1 with original ZBITPIX = 16 (integer) and -32 (float,
+ // including SUBTRACTIVE_DITHER_1 / DITHER_2).
+ ins:=nil;
+ rmsg:='';
  try
-   ImgStream.Clear;
-   {$ifdef mswindows}
-   // funpack -S do not work correctly on Windows
-   tmpfo:=slash(TmpDir)+'tmpunpack.fits';
-   outstr:=TStringList.Create;
-   rmsg:='';
-   result:=ExecProcess(funpackcmd+' -O "'+tmpfo+'" -D "'+packedfilename+'"',outstr);
-   if result=0 then begin
-     ImgStream.LoadFromFile(tmpfo);
-     DeleteFile(tmpfo);
-   end
-   else begin
-     for j:=0 to outstr.Count-1 do rmsg:=rmsg+crlf+outstr[j];
+   try
+     ImgStream.Clear;
+     ins:=TFileStream.Create(packedfilename, fmOpenRead or fmShareDenyWrite);
+     result:=NativeUnpackFits(ins, ImgStream, rmsg);
+     if result=0 then ImgStream.Position:=0;
+   finally
+     if ins<>nil then ins.Free;
    end;
-   outstr.Free;
-   {$else}
-   result:=ExecProcessMem(funpackcmd+' -S "'+packedfilename+'"',ImgStream,rmsg);
-   {$endif}
  except
    on E: Exception do begin
      result:=-1;

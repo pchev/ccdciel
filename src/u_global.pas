@@ -381,8 +381,6 @@ const
     defTransfertPath='/mnt/ramdisk';
     libwcs = 'libpaswcs.so.1';
     libz = 'libz.so.1';
-    fpackcmd = 'fpack';
-    funpackcmd = 'funpack';
     defCdCpath = 'skychart';
     defHNSKYpath = 'hnsky';
     defSAMPpath = 'aladin';
@@ -396,8 +394,6 @@ const
     defTransfertPath='/Volumes/ramdisk';
     libwcs = 'libccdcielwcs.dylib';
     libz = 'libz.dylib';
-    fpackcmd = 'fpack';
-    funpackcmd = 'funpack';
     defCdCpath = '/Applications/Cartes du Ciel/skychart.app/Contents/MacOS/skychart';
     defHNSKYpath = 'hnsky';
     defSAMPpath = '/Applications/Aladin.app/Contents/MacOS/Aladin';
@@ -411,8 +407,6 @@ const
     defTransfertPath='Z:\';
     libwcs = 'libccdcielwcs.dll';
     libz = 'zlib1.dll';
-    fpackcmd = 'fpack.exe';
-    funpackcmd = 'funpack.exe';
     defCdCpath = 'C:\Program Files\Ciel\skychart.exe';
     defHNSKYpath = 'C:\Program Files\hnsky\hnsky.exe';
     defSAMPpath = 'C:\Program Files\Aladin\Aladin.exe';

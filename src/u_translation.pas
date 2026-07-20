@@ -1030,7 +1030,7 @@ resourcestring
   rsEmailSentSuc = 'Email sent successfully, please check your inbox';
   rsUseDSLRColor = 'Use DSLR color balance';
   rsColorBalance = 'Color balance';
-  rsCompressTheF = 'Compress the FITS files with fpack';
+  rsCompressTheF = 'Compress the FITS files';
   rsStartNewExpo = 'Start new exposure as early as possible';
   rsNotification = 'Notifications';
   rsEmailConfigu = 'Email configuration';
