@@ -31,9 +31,6 @@ Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:Ad
 [Files]
 Source: Data\ccdciel.exe; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace; AfterInstall: UpdateFirewallRules
 Source: Data\exiv2.exe; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
-Source: Data\FPack.exe; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
-Source: Data\Funpack.exe; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
-Source: Data\cfitsio.dll; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
 Source: Data\libccdcielwcs.dll; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
 Source: Data\libssl-3-x64.dll; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
 Source: Data\libcrypto-3-x64.dll; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;

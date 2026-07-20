@@ -8,7 +8,7 @@ Installed-Size: %size%
 Provides: ccdciel
 Conflicts: ccdciel
 Replaces: ccdciel
-Depends: libc6, libqt6pas6, libglib2.0-0, libpasastro, libcfitsio-bin
+Depends: libc6, libqt6pas6, libglib2.0-0, libpasastro
 Recommends: libpasraw, espeak, exiv2
 Description: A CCD capture software intended for the amateur astronomer.
  It include all the features required to perform digital imaging CCD observation of celestial objects.

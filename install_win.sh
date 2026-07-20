@@ -31,7 +31,6 @@ if [ $OS_TARGET = win32 ]; then
   strip -v -o $destdir/libpasraw.dll library/raw/libpasraw.dll
   unzip -d $destdir system_integration/Windows/data/openssl-win32.zip
   unzip -d $destdir system_integration/Windows/data/zlib-win32.zip
-  unzip -d $destdir system_integration/Windows/data/cfitsio-win32.zip
   unzip -d $destdir system_integration/Windows/data/exiv2-win32.zip
   unzip -d $destdir/scripts/python system_integration/Windows/data/python-3.14.2-embed-win32.zip
 fi
@@ -41,7 +40,6 @@ if [ $OS_TARGET = win64 ]; then
   strip -v -o $destdir/libpasraw.dll library/raw/libpasraw.dll
   unzip -d $destdir system_integration/Windows/data/openssl-win64.zip
   unzip -d $destdir system_integration/Windows/data/zlib-win64.zip
-  unzip -d $destdir system_integration/Windows/data/cfitsio-win64.zip
   unzip -d $destdir system_integration/Windows/data/exiv2-win64.zip
   unzip -d $destdir/scripts/python system_integration/Windows/data/python-3.14.2-embed-amd64.zip
 fi
