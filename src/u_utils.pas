@@ -195,8 +195,8 @@ const
   GregorianStart=15821015;
   GregorianStartJD=2299161;
 
-var
-  dummy_ext : extended;
+// 2024 (report item 15a): dummy_ext removed - it was a shared scratch variable
+// used only by IsNumber, which now uses a local.
 
 {$IFDEF Linux}
 const _SC_NPROCESSORS_CONF = 83;
@@ -205,28 +205,43 @@ function sysconf(i: cint): clong; cdecl; external name 'sysconf';
 {$ENDIF}
 
 
+// 2024 rewrite (report items 3 and 3b).
+//
+// Both functions convert a big-endian IEEE-754 value read from a FITS file into
+// the host representation. They used to do the byte shuffle by hand:
+//
+//   temp:=4294967296 * ((P[0] shl 24) or ... ) + ((P[4] shl 24) or ... );
+//
+// P[] is a PByteArray, so each element is a Byte, and in FPC "Byte shl 24" is
+// promoted to a SIGNED 32-bit LongInt. Whenever P[4] >= $80 the low group came
+// out negative, so instead of OR-ing the low 32 bits into place the expression
+// SUBTRACTED 2^32 - decrementing the high word of the double by one. That flips
+// mantissa bit 32 of 52, a relative error of about 1e-6, on roughly half of all
+// pixels of every BITPIX=-64 image. (The high group survived by accident:
+// a negative value there wraps back to the right bits modulo 2^64.)
+//
+// The NaN guard was wrong too. P[0] is the most significant big-endian byte, so
+// "P[0]=$7F" matches every single from about 1.7e38 upward and every double from
+// about 9e307 upward - overwhelmingly ordinary finite numbers, which were
+// silently replaced by zero. Only $7F80_0000 and above is actually Inf/NaN.
+//
+// BEtoN is the RTL primitive for this and compiles to a single BSWAP. The same
+// file already uses it for the integer paths (cu_fits.pas lines 1257, 1287,
+// 2379), so this only makes the float paths consistent with them.
+// NaN and Inf are left alone here; cu_fits applies the BLANK test to the decoded
+// value, which is where an out-of-range pixel belongs.
 function InvertF32(X : LongWord) : Single;
-var  P : PbyteArray;
-     temp : LongWord;
+var  temp : LongWord;
 begin
-    P:=@X;
-    if (P[0]=$7F)or(P[0]=$FF) then result:=0   // IEEE-754 NaN
-    else begin
-    temp:=(P[0] shl 24) or (P[1] shl 16) or (P[2] shl 8) or (P[3]);
+    temp:=BEtoN(X);
     move(temp,result,4);
-    end;
 end;
 
 function InvertF64(X : Int64) : Double;
-var  P : PbyteArray;
-     temp : Int64;
+var  temp : Int64;
 begin
-    P:=@X;
-    if (P[0]=$7F)or(P[0]=$FF) then result:=0   // IEEE-754 NaN
-    else begin
-    temp:=4294967296 * ((P[0] shl 24) or (P[1] shl 16) or (P[2] shl 8) or (P[3])) + ((P[4] shl 24) or (P[5] shl 16) or (P[6] shl 8) or (P[7]));
+    temp:=BEtoN(X);
     move(temp,result,8);
-    end;
 end;
 
 Procedure FormPos(form : Tform; x,y : integer);
@@ -1374,14 +1389,30 @@ BEGIN
     Rmod := x - Int(x/y) * y ;
 END  ;
 
+// 2024 rewrite (report item 12).
+//
+// These used to normalise by adding 3,600,000,000 first:
+//     result:=rmod(x+3600000000,360);
+// The offset was there only because Rmod truncates toward zero and so returns a
+// negative result for negative x. The cost was that Rmod then had to cancel two
+// numbers of magnitude 3.6e9 to produce a result below 360, throwing away about
+// ten significant digits. On x86_64 Windows FPC maps Extended to Double, which
+// left an absolute error near 8e-7 degrees (~3 milliarcseconds) - small, but
+// avoidable, and it matters for polar alignment and plate-solve residuals.
+// The magic constant also silently failed for |x| > 3.6e9.
+//
+// Rmod itself is unchanged: other callers rely on its truncated-modulo
+// behaviour, so only the two normalisation helpers are corrected here.
 function to360(x:Extended):Extended;
 begin
- result:=rmod(x+3600000000,360);
+ result:=rmod(x,360);
+ if result<0 then result:=result+360;
 end;
 
 function to180(x:Extended):Extended;
 begin
- result:=rmod(x+3600000000,360);
+ result:=rmod(x,360);
+ if result<0 then result:=result+360;
  if result>180 then result:=result-360;
 end;
 
@@ -1391,8 +1422,12 @@ begin
 end;
 
 function IsNumber(n : string) : boolean;
+// 2024 fix (report item 15a): this used to write into the unit-level global
+// dummy_ext, so two threads calling IsNumber at the same time clobbered each
+// other's scratch value. There was never a reason for it to be shared.
+var v : extended;
 begin
-result:=TextToFloat(PChar(n),Dummy_ext);
+result:=TextToFloat(PChar(n),v);
 end;
 
 Function PadZeros(x : string ; l :integer) : string;
@@ -1762,12 +1797,12 @@ end;
 function AirMass(h: double): double;
 begin
 if h>0 then begin
-  try
   // Pickering, 2002
+  // 2024 (report item 15h): the try/except around this expression was dead
+  // code. h>0 is guaranteed by the test above, so (165 + 47*h**1.1) cannot be
+  // zero and the expression cannot raise. Removing it makes the remaining
+  // guard - h<=0, i.e. below the horizon - the only real case.
   result := 1 / sin(deg2rad * (h + (244 / (165 + 47 * h ** 1.1))));
-  except
-   result:=-1;
-  end;
 end
 else
   result:=-1;
@@ -3108,6 +3143,18 @@ begin
   Result := Chr(SI);
 end;
 
+// 2024 note (report item 9c): despite the name, this is OBFUSCATION, not
+// encryption. The key handed in by every caller is the compile-time constant
+// u_global.encryptpwd, so it is identical in every copy of the program and is
+// recoverable from the binary. It protects stored ASCOM/Alpaca credentials
+// against someone glancing at the configuration file, and against nothing else.
+// The names were left unchanged to avoid touching the dozens of call sites in
+// pu_devicesetup, but treat the stored credentials as plaintext when deciding
+// file permissions. Proper storage would be DPAPI on Windows, libsecret on
+// Linux or Keychain on macOS.
+//
+// The 15-space pad added below is what DecryptStr has to trim off again; see
+// the note there about passwords with trailing spaces.
 function EncryptStr(Str, Pwd: string; Encode: boolean = True): string;
 var
   a, PwdChk, Direction, ShiftVal, PasswordDigit: integer;
@@ -3152,7 +3199,19 @@ end;
 
 function DecryptStr(Str, Pwd: string): string;
 begin
-  Result := trim(EncryptStr(Str, Pwd, False));
+  // 2024 fix (report item 9b): this used to be trim(), which stripped BOTH
+  // ends. EncryptStr pads the plaintext with 15 trailing spaces before
+  // encoding, so only the right-hand side needs trimming; the blanket trim also
+  // ate any leading space the user had deliberately put in their password.
+  // TrimRight keeps leading spaces and stays compatible with values already
+  // stored by earlier versions.
+  //
+  // NOTE: a password ending in a space is still not round-trippable, because
+  // the padding is indistinguishable from real trailing spaces. Fixing that
+  // properly needs a length prefix or an explicit terminator in the stored
+  // format, which would break existing configuration files - see
+  // EncryptStr below.
+  Result := TrimRight(EncryptStr(Str, Pwd, False));
 end;
 
 function strtohex(str: string): string;
@@ -3180,12 +3239,18 @@ begin
   if str = '' then
     exit;
 
+  // 2024 fix (report item 9a): the test used to be "if k > 0", which treated a
+  // perfectly legitimate $00 byte as a decoding failure and returned the raw hex
+  // STRING as though it were the decoded value. RotateBits does produce zero
+  // bytes, so a stored credential could silently come back as hex text and the
+  // user would get an unexplained authentication failure. Only a genuinely
+  // non-hex pair (strtointdef returns -1) is an error.
   for i := 0 to (length(str) - 1) div 2 do
   begin
 
     k := strtointdef('$' + str[2 * i + 1] + str[2 * i + 2], -1);
 
-    if k > 0 then
+    if k >= 0 then
       Result := Result + char(k)
     else
     begin
@@ -3197,8 +3262,10 @@ begin
 
 end;
 
-procedure quicksort(var list: array of double; lo,hi: integer); inline;{ Fast quick sort. Sorts elements in the array list with indices between lo and hi}
-  procedure sort ( left, right : integer); inline; {processing takes place in the sort procedure which executes itself recursively.}
+// 2024 (report item 15b): the "inline" directives were removed. FPC cannot
+// inline a recursive routine, so they were ignored and merely misleading.
+procedure quicksort(var list: array of double; lo,hi: integer);{ Fast quick sort. Sorts elements in the array list with indices between lo and hi}
+  procedure sort ( left, right : integer); {processing takes place in the sort procedure which executes itself recursively.}
   var
     i, j       : integer;
     tmp, pivot : double;    { tmp & pivot are the same type as the elements of array }
@@ -3250,9 +3317,15 @@ begin
 end;
 
 procedure SortFilterListInc(var list: TStringList);
+// 2024 (report item 15c): TStringList.Move relocates the string AND its
+// associated object together, so the three statements that used to follow the
+// Move were writing back exactly the values already in place:
+//     list[j] := tmpname;                              // no-op
+//     TFilterExp(list.Objects[j]).ExpFact := tmpexp;   // no-op
+// They were harmless, but they show the author expected Move to shift only the
+// string - a misunderstanding that a later edit could easily turn into a real
+// bug. Removed, along with the temporaries they needed.
 var sorted: boolean;
-    tmpexp: double;
-    tmpname:string;
     j,n: integer;
 begin
 repeat
@@ -3262,11 +3335,7 @@ repeat
   begin
     if TFilterExp(list.Objects[j - 1]).ExpFact > TFilterExp(list.Objects[j]).ExpFact then
     begin
-      tmpname := list[j - 1];
-      tmpexp := TFilterExp(list.Objects[j - 1]).ExpFact;
       list.Move(j,j - 1);
-      list[j] := tmpname;
-      TFilterExp(list.Objects[j]).ExpFact:=tmpexp;
       sorted := False;
     end;
   end;
@@ -3274,9 +3343,8 @@ until sorted;
 end;
 
 procedure SortFilterListDec(var list: TStringList);
+// 2024 (report item 15c): same dead-code removal as SortFilterListInc above.
 var sorted: boolean;
-    tmpexp: double;
-    tmpname:string;
     j,n: integer;
 begin
 repeat
@@ -3286,11 +3354,7 @@ repeat
   begin
     if TFilterExp(list.Objects[j - 1]).ExpFact < TFilterExp(list.Objects[j]).ExpFact then
     begin
-      tmpname := list[j - 1];
-      tmpexp := TFilterExp(list.Objects[j - 1]).ExpFact;
       list.Move(j,j - 1);
-      list[j] := tmpname;
-      TFilterExp(list.Objects[j]).ExpFact:=tmpexp;
       sorted := False;
     end;
   end;
@@ -3636,14 +3700,22 @@ function GetThreadCount: integer;
   var
     i: Integer;
     ProcessAffinityMask, SystemAffinityMask: DWORD_PTR;
-    Mask: DWORD;
+    Mask: DWORD_PTR;   // 2024 (item 15g): was DWORD, too narrow on Win64
     SystemInfo: SYSTEM_INFO;
   begin
     if GetProcessAffinityMask(GetCurrentProcess, ProcessAffinityMask, SystemAffinityMask)
     then begin
+      // 2024 fix (report item 15g): the loop used to stop at bit 31 and used a
+      // 32-bit DWord mask, so on a 64-bit build it ignored half of
+      // ProcessAffinityMask (a DWORD_PTR) and undercounted on machines with
+      // more than 32 logical processors.
+      // Note this still reports only the CURRENT processor group; a machine
+      // with more than 64 logical processors needs GetActiveProcessorCount
+      // (ALL_PROCESSOR_GROUPS). Not an issue in practice here, because the
+      // callers clamp the result to 16.
       Result := 0;
-      for i := 0 to 31 do begin
-        Mask := DWord(1) shl i;
+      for i := 0 to (SizeOf(ProcessAffinityMask)*8) - 1 do begin
+        Mask := DWORD_PTR(1) shl i;
         if (ProcessAffinityMask and Mask)<>0 then
           inc(Result);
       end;
@@ -3814,11 +3886,48 @@ begin
 end;
 
 function SafeFileName(fn:string): string;
+// 2024 rewrite (report item 14). The old version stripped only * / \ and :
+// which does block path traversal, but left ? " < > | and control characters in
+// place - all of them illegal in a Windows filename, so creating the file
+// simply failed. Trailing dots and spaces and the reserved DOS device names
+// were not handled either, and a name consisting entirely of stripped
+// characters came back empty. Object names reach this function from user input
+// and from planetarium / SIMBAD lookups, so odd characters are routine.
+const
+  // reserved device names on Windows; also refused when they carry an extension
+  ReservedNames : array[0..21] of string = (
+    'CON','PRN','AUX','NUL',
+    'COM1','COM2','COM3','COM4','COM5','COM6','COM7','COM8','COM9',
+    'LPT1','LPT2','LPT3','LPT4','LPT5','LPT6','LPT7','LPT8','LPT9');
+var i: integer;
+    c: char;
+    base: string;
 begin
-result:=StringReplace(fn,'*','',[rfReplaceAll]);
-result:=StringReplace(result,'/','',[rfReplaceAll]);
-result:=StringReplace(result,'\','',[rfReplaceAll]);
-result:=StringReplace(result,':','',[rfReplaceAll]);
+result:='';
+for i:=1 to length(fn) do begin
+  c:=fn[i];
+  // control characters, and every character illegal in a Windows filename
+  if (c<#32) or (c=#127) or
+     (c='*') or (c='/') or (c='\') or (c=':') or
+     (c='?') or (c='"') or (c='<') or (c='>') or (c='|') then
+    continue;
+  result:=result+c;
+end;
+// Windows refuses names ending in a dot or a space
+while (result<>'') and ((result[length(result)]='.') or (result[length(result)]=' ')) do
+  delete(result,length(result),1);
+result:=TrimLeft(result);
+// a reserved device name is refused with or without an extension
+base:=uppercase(result);
+i:=pos('.',base);
+if i>0 then base:=copy(base,1,i-1);
+for i:=0 to high(ReservedNames) do
+  if base=ReservedNames[i] then begin
+    result:='_'+result;
+    break;
+  end;
+// never hand back an empty name
+if result='' then result:='unnamed';
 end;
 
 function ValidateCustomHeader(key:string): boolean;

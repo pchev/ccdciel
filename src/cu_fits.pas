@@ -391,6 +391,25 @@ type
 
 implementation
 
+// 2024 addition (report item 8).
+// Both TFits.SaveToFile and TSaveFits.Execute used to compress through the same
+// hard-coded scratch file, slash(TmpDir)+'tmppack.fits'. Since SaveToFile takes
+// an Async flag, two saves can legitimately be in flight at once - a background
+// save of the previous exposure overlapping the next one - and they then wrote
+// to the same path and compressed whichever version won the race, so the
+// resulting .fz could hold another exposure's pixels. The counter is bumped
+// atomically so the name is unique even between two threads asking in the same
+// millisecond.
+var
+  TempFitsCounter: integer = 0;
+
+function UniqueTempFits: string;
+begin
+  result := slash(TmpDir) + 'tmppack_' +
+            FormatDateTime('yyyymmdd"T"hhnnsszzz', Now) + '_' +
+            IntToStr(InterLockedIncrement(TempFitsCounter)) + '.fits';
+end;
+
 //////////////////// TFitsHeader /////////////////////////
 
 constructor TFitsHeader.Create;
@@ -1078,8 +1097,16 @@ begin
 end;
 
 procedure TReadFits.Execute;
-var i,ii,j,npix,k,km,kk,streaminc : integer;
-    streamstart,startline, endline, xs,ys: integer;
+// 2024 fix (report item 5b): streamstart was an Integer, and the byte offsets
+// below were built with Integer*Integer arithmetic, so every position overflowed
+// past 2^31. The maxl=20000 size guard explicitly permits a 20000x20000 float64
+// image, which is 3.2 GB - larger than this code could address - and the result
+// was a silently truncated offset and garbage pixels rather than an error.
+// streamstart and the increments are Int64 now.
+var i,ii,j,npix,k,km,kk : integer;
+    streaminc : Int64;
+    streamstart : Int64;
+    startline, endline, xs,ys: integer;
     x16,b16:smallint;
     x8,b8:byte;
     x : double;
@@ -1100,7 +1127,8 @@ if id = (num - 1) then
 else
   endline := (id + 1) * i - 1;
 // start position of this range
-streamstart:=fits.fhdr_end+round(xs*startline*abs(fits.FFitsInfo.bitpix/8));
+// Int64 throughout: Int64(xs)*startline can exceed 2^31 on large mosaics
+streamstart:=fits.fhdr_end+round(Int64(xs)*Int64(startline)*abs(fits.FFitsInfo.bitpix/8));
 dmin:=1.0E100;
 dmax:=-1.0E100;
 sum:=0; sum2:=0; ni:=0;
@@ -1118,7 +1146,7 @@ case fits.FFitsInfo.bitpix of
            if (npix mod 360 = 0) then begin
              EnterCriticalSection(fits.ReadFitsCS);
              try
-             fits.FStream.Position:=streamstart+streaminc*sizeof(d64);
+             fits.FStream.Position:=streamstart+streaminc*Int64(sizeof(d64));
              fits.FStream.Read(d64,sizeof(d64));
              finally
                LeaveCriticalSection(fits.ReadFitsCS);
@@ -1146,7 +1174,7 @@ case fits.FFitsInfo.bitpix of
            if (npix mod 720 = 0) then begin
              EnterCriticalSection(fits.ReadFitsCS);
              try
-             fits.FStream.Position:=streamstart+streaminc*sizeof(d32);
+             fits.FStream.Position:=streamstart+streaminc*Int64(sizeof(d32));
              fits.FStream.Read(d32,sizeof(d32));
              finally
                LeaveCriticalSection(fits.ReadFitsCS);
@@ -1175,7 +1203,7 @@ case fits.FFitsInfo.bitpix of
            if (npix mod 2880 = 0) then begin
              EnterCriticalSection(fits.ReadFitsCS);
              try
-             fits.FStream.Position:=streamstart+streaminc*sizeof(d8);
+             fits.FStream.Position:=streamstart+streaminc*Int64(sizeof(d8));
              fits.FStream.Read(d8,sizeof(d8));
              finally
                LeaveCriticalSection(fits.ReadFitsCS);
@@ -1210,7 +1238,7 @@ case fits.FFitsInfo.bitpix of
              if (npix mod 2880 = 0) then begin
                EnterCriticalSection(fits.ReadFitsCS);
                try
-               fits.FStream.Position:=streamstart+streaminc*sizeof(d8);
+               fits.FStream.Position:=streamstart+streaminc*Int64(sizeof(d8));
                fits.FStream.Read(d8,sizeof(d8));
                finally
                  LeaveCriticalSection(fits.ReadFitsCS);
@@ -1245,7 +1273,7 @@ case fits.FFitsInfo.bitpix of
            if (npix mod 1440 = 0) then begin
              EnterCriticalSection(fits.ReadFitsCS);
              try
-             fits.FStream.Position:=streamstart+streaminc*sizeof(d16);
+             fits.FStream.Position:=streamstart+streaminc*Int64(sizeof(d16));
              fits.FStream.Read(d16,sizeof(d16));
              finally
                LeaveCriticalSection(fits.ReadFitsCS);
@@ -1275,7 +1303,7 @@ case fits.FFitsInfo.bitpix of
            if (npix mod 720 = 0) then begin
              EnterCriticalSection(fits.ReadFitsCS);
              try
-             fits.FStream.Position:=streamstart+streaminc*sizeof(d32);
+             fits.FStream.Position:=streamstart+streaminc*Int64(sizeof(d32));
              fits.FStream.Read(d32,sizeof(d32));
              finally
                LeaveCriticalSection(fits.ReadFitsCS);
@@ -1814,14 +1842,21 @@ begin
     FFitsInfo.bitpix:=-32;
     FFitsInfo.bscale:=1;
     FFitsInfo.bzero:=0;
+    // 2024 fix (report item 15e): the Delete-then-Insert idiom below relied on
+    // TFitsHeader.Insert's "negative index means append at the end" branch
+    // whenever the keyword was absent - which would have written the card AFTER
+    // the END record, producing a non-conforming header. Elsewhere this unit
+    // correctly inserts before END. The Delete was redundant too: Insert already
+    // replaces an existing key in place. Each update is now a single Insert at a
+    // position that is always valid.
     i:=FHeader.Indexof('BITPIX');
-    if i>=0 then FHeader.Delete(i);
+    if i<0 then i:=FHeader.Indexof('END');
     FHeader.Insert(i,'BITPIX',FFitsInfo.bitpix,'');
     i:=FHeader.Indexof('BSCALE');
-    if i>=0 then FHeader.Delete(i);
+    if i<0 then i:=FHeader.Indexof('END');
     FHeader.Insert(i,'BSCALE',FFitsInfo.bscale,'');
     i:=FHeader.Indexof('BZERO');
-    if i>=0 then FHeader.Delete(i);
+    if i<0 then i:=FHeader.Indexof('END');
     FHeader.Insert(i,'BZERO',FFitsInfo.bzero,'');
     // force reloading
     FStreamValid:=false;
@@ -1831,25 +1866,42 @@ begin
     SaveFits:=TSaveFits.Create(true);
     SaveFits.filename:=fn;
     SaveFits.pack:=pack;
-    SaveFits.mem:=mem;
+    SaveFits.mem:=mem;   // the thread takes ownership of mem from here on
     SaveFits.Start;
   end
   else begin
-    if pack then begin
-      tmpf:=slash(TmpDir)+'tmppack.fits';
-      mem.SaveToFile(tmpf);
-      i:=PackFits(tmpf,fn+'.fz',rmsg);
-      if i<>0 then begin
-        buf:='FITS compression error '+inttostr(i)+': '+rmsg;
-        buf:=buf+', Saving file without compression';
-        msg(buf,1);
+    // 2024 fix (report item 7c): mem.SaveToFile can raise - disk full,
+    // read-only directory, network share gone - and mem.Free used to sit after
+    // it with no finally, leaking a full image buffer on every failed save.
+    try
+      if pack then begin
+        // 2024 fix (report item 8): the temp file used to be the fixed name
+        // slash(TmpDir)+'tmppack.fits', shared with TSaveFits.Execute running
+        // in the background. Two saves in flight at once - which the Async
+        // parameter exists to allow - wrote to the same file and then
+        // compressed whichever one won the race, so the .fz could contain
+        // another exposure's data. UniqueTempFits gives each save its own name.
+        tmpf:=UniqueTempFits;
+        try
+          mem.SaveToFile(tmpf);
+          i:=PackFits(tmpf,fn+'.fz',rmsg);
+          if i<>0 then begin
+            buf:='FITS compression error '+inttostr(i)+': '+rmsg;
+            buf:=buf+', Saving file without compression';
+            msg(buf,1);
+            mem.SaveToFile(fn);
+          end;
+        finally
+          // the old code never removed the temp file either
+          if FileExistsUTF8(tmpf) then DeleteFileUTF8(tmpf);
+        end;
+      end
+      else begin
         mem.SaveToFile(fn);
       end;
-    end
-    else begin
-      mem.SaveToFile(fn);
+    finally
+      mem.Free;
     end;
-    mem.Free;
   end;
 end;
 
@@ -1863,9 +1915,13 @@ procedure TSaveFits.Execute;
 var rmsg,tmpf,buf: string;
     i: integer;
 begin
+tmpf:='';
 try
+ try
   if pack then begin
-    tmpf:=slash(TmpDir)+'tmppack.fits';
+    // 2024 fix (report item 8): was the fixed shared name
+    // slash(TmpDir)+'tmppack.fits' - see the note in TFits.SaveToFile.
+    tmpf:=UniqueTempFits;
     mem.SaveToFile(tmpf);
     i:=PackFits(tmpf,filename+'.fz',rmsg);
     if i<>0 then begin
@@ -1878,13 +1934,23 @@ try
   else begin
     mem.SaveToFile(filename);
   end;
-  mem.Free;
-except
- on e:Exception do begin
-    buf:='Save FITS: '+e.Message;
-    PostMessage(MsgHandle, LM_CCDCIEL, M_Message, PtrInt(strnew(PChar(buf))));
-    PostMessage(MsgHandle, LM_CCDCIEL, M_AbortSequence, 0);
+ except
+  on e:Exception do begin
+     buf:='Save FITS: '+e.Message;
+     PostMessage(MsgHandle, LM_CCDCIEL, M_Message, PtrInt(strnew(PChar(buf))));
+     PostMessage(MsgHandle, LM_CCDCIEL, M_AbortSequence, 0);
+  end;
  end;
+finally
+  // 2024 fix (report item 7b): mem.Free used to be the last statement of the
+  // TRY block, so any failure inside SaveToFile skipped it. This thread is
+  // FreeOnTerminate, so the orphaned stream - a full image buffer, often tens
+  // or hundreds of megabytes - became unreachable. On an unattended sequence
+  // writing to a failing disk that grew without bound. The finally makes the
+  // release unconditional, and the temp file is now cleaned up too.
+  FreeAndNil(mem);
+  if (tmpf<>'') and FileExistsUTF8(tmpf) then
+    DeleteFileUTF8(tmpf);
 end;
 end;
 
@@ -1896,22 +1962,33 @@ var mem: TMemoryStream;
 begin
 if FileExistsUTF8(fn) then begin
    mem:=TMemoryStream.Create;
-   pack:=uppercase(ExtractFileExt(fn))='.FZ';
-   if pack then begin
-     i:=UnpackFits(fn,mem,rmsg);
-     if i<>0 then begin
-       ClearImage;
-       msg('FITS decompression error '+inttostr(i)+': '+rmsg,1);
-       exit;
-     end;
-   end
-   else
-     mem.LoadFromFile(fn);
-   SetBPM(bpm,0,0,0,0);
-   FDarkOn:=false;
-   FFlatOn:=false;
-   SetStream(mem);
-   LoadStream;
+   // 2024 fix (report item 7a): mem leaked on two paths here. The decompression
+   // failure below used to "exit" without freeing it, and mem.LoadFromFile can
+   // raise (unreadable file, disk error) with nothing to catch it. On the
+   // success path ownership passes to SetStream, which is why the release was
+   // easy to overlook - so mem is nil'd at that moment and the finally can free
+   // it unconditionally.
+   try
+     pack:=uppercase(ExtractFileExt(fn))='.FZ';
+     if pack then begin
+       i:=UnpackFits(fn,mem,rmsg);
+       if i<>0 then begin
+         ClearImage;
+         msg('FITS decompression error '+inttostr(i)+': '+rmsg,1);
+         exit;
+       end;
+     end
+     else
+       mem.LoadFromFile(fn);
+     SetBPM(bpm,0,0,0,0);
+     FDarkOn:=false;
+     FFlatOn:=false;
+     SetStream(mem);
+     mem:=nil;      // ownership has passed to FStream
+     LoadStream;
+   finally
+     mem.Free;      // nil after a successful hand-over; frees only on failure
+   end;
 end
 else begin
  ClearImage;
@@ -2184,39 +2261,61 @@ begin
        then begin valid:=false;Break;end
        else begin valid:=true;end;
     if (keyword='XTENSION') and (trim(buf)='IMAGE') then valid:=true;
-    if (keyword='BITPIX') then bitpix:=strtoint(buf);
-    if (keyword='NAXIS')  then naxis:=strtoint(buf);
-    if (keyword='NAXIS1') then naxis1:=strtoint(buf);
-    if (keyword='NAXIS2') then naxis2:=strtoint(buf);
-    if (keyword='NAXIS3') then naxis3:=strtoint(buf);
-    if (keyword='BZERO') then bzero:=strtofloat(buf);
-    if (keyword='BSCALE') then bscale:=strtofloat(buf);
-    if (keyword='DATAMAX') then dmax:=strtofloat(buf);
-    if (keyword='DATAMIN') then dmin:=strtofloat(buf);
-    if (keyword='THRESH') then dmax:=strtofloat(buf);
-    if (keyword='THRESL') then dmin:=strtofloat(buf);
-    if (keyword='BLANK') then blank:=strtofloat(buf);
-    if (keyword='FOCALLEN') then focallen:=strtofloat(buf);
-    if (keyword='EXPTIME') then exptime:=strtofloat(buf);
-    if (keyword='EXPOSURE') then exptime:=strtofloat(buf);
-    if (keyword='STACKEXP') then stackexp:=strtofloat(buf);
-    if (keyword='STACKCNT') then stackcount:=StrToInt(buf);
-    if (keyword='XPIXSZ') then pixsz1:=strtofloat(buf);
-    if (keyword='YPIXSZ') then pixsz2:=strtofloat(buf);
-    if (keyword='XBINNING') then BinX:=round(StrToFloat(buf));
-    if (keyword='YBINNING') then BinY:=round(StrToFloat(buf));
-    if (keyword='FRAMEX') then Frx:=round(StrToFloat(buf));
-    if (keyword='FRAMEY') then Fry:=round(StrToFloat(buf));
-    if (keyword='FRAMEHGT') then Frheight:=round(StrToFloat(buf));
-    if (keyword='FRAMEWDH') then Frwidth:=round(StrToFloat(buf));
+    // 2024 (report item 13): a malformed value used to raise
+    // EConvertError out of GetFitsInfo, which nothing on the
+    // LoadFromFile -> LoadStream -> GetFitsInfo path catches, so a
+    // truncated or hand-edited header surfaced as a raw error dialog
+    // in the middle of an unattended sequence. These five keywords are
+    // structural, so an unparseable value marks the file invalid;
+    // everything below simply keeps its ClearFitsInfo default.
+    if (keyword='BITPIX') then begin
+      bitpix:=StrToIntDef(buf,Low(Integer));
+      if bitpix=Low(Integer) then begin valid:=false; Break; end;
+    end;
+    if (keyword='NAXIS')  then begin
+      naxis:=StrToIntDef(buf,Low(Integer));
+      if naxis=Low(Integer) then begin valid:=false; Break; end;
+    end;
+    if (keyword='NAXIS1') then begin
+      naxis1:=StrToIntDef(buf,Low(Integer));
+      if naxis1=Low(Integer) then begin valid:=false; Break; end;
+    end;
+    if (keyword='NAXIS2') then begin
+      naxis2:=StrToIntDef(buf,Low(Integer));
+      if naxis2=Low(Integer) then begin valid:=false; Break; end;
+    end;
+    if (keyword='NAXIS3') then begin
+      naxis3:=StrToIntDef(buf,Low(Integer));
+      if naxis3=Low(Integer) then begin valid:=false; Break; end;
+    end;
+    if (keyword='BZERO') then bzero:=StrToFloatDef(buf,bzero);
+    if (keyword='BSCALE') then bscale:=StrToFloatDef(buf,bscale);
+    if (keyword='DATAMAX') then dmax:=StrToFloatDef(buf,dmax);
+    if (keyword='DATAMIN') then dmin:=StrToFloatDef(buf,dmin);
+    if (keyword='THRESH') then dmax:=StrToFloatDef(buf,dmax);
+    if (keyword='THRESL') then dmin:=StrToFloatDef(buf,dmin);
+    if (keyword='BLANK') then blank:=StrToFloatDef(buf,blank);
+    if (keyword='FOCALLEN') then focallen:=StrToFloatDef(buf,focallen);
+    if (keyword='EXPTIME') then exptime:=StrToFloatDef(buf,exptime);
+    if (keyword='EXPOSURE') then exptime:=StrToFloatDef(buf,exptime);
+    if (keyword='STACKEXP') then stackexp:=StrToFloatDef(buf,stackexp);
+    if (keyword='STACKCNT') then stackcount:=StrToIntDef(buf,stackcount);
+    if (keyword='XPIXSZ') then pixsz1:=StrToFloatDef(buf,pixsz1);
+    if (keyword='YPIXSZ') then pixsz2:=StrToFloatDef(buf,pixsz2);
+    if (keyword='XBINNING') then BinX:=round(StrToFloatDef(buf,BinX));
+    if (keyword='YBINNING') then BinY:=round(StrToFloatDef(buf,BinY));
+    if (keyword='FRAMEX') then Frx:=round(StrToFloatDef(buf,Frx));
+    if (keyword='FRAMEY') then Fry:=round(StrToFloatDef(buf,Fry));
+    if (keyword='FRAMEHGT') then Frheight:=round(StrToFloatDef(buf,Frheight));
+    if (keyword='FRAMEWDH') then Frwidth:=round(StrToFloatDef(buf,Frwidth));
     if (keyword='BAYERPAT') then bayerpattern:=trim(buf);
     if (keyword='ROWORDER') then roworder:=trim(buf);
-    if (keyword='XBAYROFF') then bayeroffsetx:=round(StrToFloat(buf));
-    if (keyword='YBAYROFF') then bayeroffsety:=round(StrToFloat(buf));
-    if (keyword='MULT_R') then rmult:=strtofloat(buf);
-    if (keyword='MULT_G') then gmult:=strtofloat(buf);
-    if (keyword='MULT_B') then bmult:=strtofloat(buf);
-    if (keyword='AIRMASS') then airmass:=strtofloat(buf);
+    if (keyword='XBAYROFF') then bayeroffsetx:=round(StrToFloatDef(buf,bayeroffsetx));
+    if (keyword='YBAYROFF') then bayeroffsety:=round(StrToFloatDef(buf,bayeroffsety));
+    if (keyword='MULT_R') then rmult:=StrToFloatDef(buf,rmult);
+    if (keyword='MULT_G') then gmult:=StrToFloatDef(buf,gmult);
+    if (keyword='MULT_B') then bmult:=StrToFloatDef(buf,bmult);
+    if (keyword='AIRMASS') then airmass:=StrToFloatDef(buf,airmass);
     if (keyword='OBJECT') then objects:=trim(buf);
     if (keyword='EXTNAME') then extname:=trim(buf);
     if (keyword='RA') then begin
@@ -2237,16 +2336,16 @@ begin
     if (dec=NullCoord)and(keyword='OBJCTDEC') then begin
        dec:=StrToDE(buf);
     end;
-    if (keyword='WAVEMIN') then wavemin:=strtofloat(buf);
-    if (keyword='WAVEMAX') then wavemax:=strtofloat(buf);
+    if (keyword='WAVEMIN') then wavemin:=StrToFloatDef(buf,wavemin);
+    if (keyword='WAVEMAX') then wavemax:=StrToFloatDef(buf,wavemax);
     if (keyword='EQUINOX') then equinox:=StrToFloatDef(buf,2000);
     if (keyword='CTYPE1') then ctype1:=buf;
     if (keyword='CTYPE2') then ctype2:=buf;
-    if (keyword='CRVAL1') then crval1:=strtofloat(buf);
-    if (keyword='CRVAL2') then crval2:=strtofloat(buf);
-    if (keyword='CDELT1') then cdelt1:=strtofloat(buf);
-    if (keyword='SCALE')  then scale:=strtofloat(buf);
-    if (scale=0) and (keyword='SECPIX1')then scale:=strtofloat(buf);
+    if (keyword='CRVAL1') then crval1:=StrToFloatDef(buf,crval1);
+    if (keyword='CRVAL2') then crval2:=StrToFloatDef(buf,crval2);
+    if (keyword='CDELT1') then cdelt1:=StrToFloatDef(buf,cdelt1);
+    if (keyword='SCALE')  then scale:=StrToFloatDef(buf,scale);
+    if (scale=0) and (keyword='SECPIX1')then scale:=StrToFloatDef(buf,scale);
     if (keyword='FRAME')or(keyword='IMAGETYP') then frametype:=UpperCase(trim(buf));
     if ((keyword='PLTSOLVD')and(copy(buf,1,1)='T')) or
        (keyword='CRPIX1')
@@ -2398,19 +2497,24 @@ Procedure TFits.ReadFitsImage;
 var i,j,k : integer;
     dmin,dmax : double;
     ni,sum,sum2 : extended;
-    working, timingout: boolean;
-    timelimit: TDateTime;
     thread: array[0..15] of TReadFits;
-    tc,timeout: integer;
+    tc: integer;   // 2024 (item 6): timeout removed, the join is now a WaitFor
 begin
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'ReadFitsImage');{$endif}
 FImageValid:=false;
-if FFitsInfo.naxis1=0 then exit;
+// 2024 fix (report item 6): naxis2 was never checked. With NAXIS2=0 the worker
+// loops below never execute, ni stays 0, and Fmean:=sum/ni divides by zero.
+if (FFitsInfo.naxis1<=0) or (FFitsInfo.naxis2<=0) then exit;
 FDarkProcess:=false;
 FFlatProcess:=false;
 FBPMProcess:=false;
 FNoiseProcess:=false;
-if (FFitsInfo.naxis1*FFitsInfo.naxis2)>(maxl*maxl) then
+// 2024 fix (report item 5): naxis1 and naxis2 are 32-bit Integers, so this
+// multiplication used to be done in 32 bits. A header claiming e.g.
+// NAXIS1=NAXIS2=100000 gives 1e10, which wraps past 2^31 to a small value, sails
+// through the guard, and reaches SetLength with the unvalidated dimensions.
+// Header values come from an untrusted file, so the arithmetic must be widened.
+if (Int64(FFitsInfo.naxis1)*Int64(FFitsInfo.naxis2))>(Int64(maxl)*Int64(maxl)) then
   raise exception.Create(Format('Image too big! limit is currently %dx%d %sPlease open an issue to request an extension.',[maxl,maxl,crlf]));
 Fheight:=FFitsInfo.naxis2;
 Fwidth :=FFitsInfo.naxis1;
@@ -2439,45 +2543,78 @@ else begin
   tc := max(1,min(tc,Fheight div 100)); // do not split the image too much
 end;
 InitCriticalSection(ReadFitsCS);
-// start thread
-for i := 0 to tc - 1 do
-begin
-  thread[i] := TReadFits.Create(True);
-  thread[i].fits := self;
-  thread[i].num := tc;
-  thread[i].id := i;
-  thread[i].Start;
-end;
-// wait complete
-timeout:=60;
-timelimit := now + timeout / secperday;
-repeat
-  sleep(100);
-  working := False;
+// 2024 (report item 6): a local array is NOT zero-initialised in Pascal, and
+// the finally block below iterates over it. Clear it first so a failure part
+// way through the Create loop cannot make the cleanup read stale stack values.
+for i := 0 to high(thread) do thread[i] := nil;
+try
+  // start thread
   for i := 0 to tc - 1 do
-    working := working or thread[i].working;
-  timingout := (now > timelimit);
-until (not working) or timingout;
-// total statistics and histogram
-for i:=0 to tc - 1 do begin
-  dmin:=min(thread[i].dmin,dmin);
-  dmax:=max(thread[i].dmax,dmax);
-  sum:=sum+thread[i].sum;
-  sum2:=sum2+thread[i].sum2;
-  ni:=ni+thread[i].ni;
-  for j:=0 to high(word) do begin
-     FHistogram[j]:=FHistogram[j]+thread[i].hist[j];
+  begin
+    thread[i] := TReadFits.Create(True);
+    thread[i].fits := self;
+    thread[i].num := tc;
+    thread[i].id := i;
+    thread[i].Start;
   end;
-end;
-// cleanup
-DoneCriticalSection(ReadFitsCS);
-for i := 0 to tc - 1 do begin
-  thread[i].Free;
+  // 2024 fix (report item 6): wait complete.
+  //
+  // This used to be a poll on thread[i].working with a 60 second cut-off:
+  //
+  //   repeat sleep(100); ... until (not working) or timingout;
+  //
+  // If the cut-off fired while the workers were still running, execution fell
+  // straight through into code that assumes they have stopped - reading their
+  // dmin/dmax/sum/sum2/ni/hist fields while they were still being written,
+  // calling DoneCriticalSection on a lock a worker could still be inside
+  // (TReadFits.Execute enters it every 360/720/2880 pixels, which is undefined
+  // behaviour), and then freeing running threads. 60 seconds is not generous
+  // either: a multi-gigabyte float image on a slow or network disk reaches it
+  // routinely, so the corruption path was reachable in normal use.
+  //
+  // TReadFits has FreeOnTerminate=False, so WaitFor is the correct join and
+  // there is no need for a timeout at all - the workers cannot block on the
+  // main thread (they use no Synchronize), so this cannot deadlock.
+  for i := 0 to tc - 1 do
+    thread[i].WaitFor;
+  // total statistics and histogram
+  for i:=0 to tc - 1 do begin
+    dmin:=min(thread[i].dmin,dmin);
+    dmax:=max(thread[i].dmax,dmax);
+    sum:=sum+thread[i].sum;
+    sum2:=sum2+thread[i].sum2;
+    ni:=ni+thread[i].ni;
+    for j:=0 to high(word) do begin
+       FHistogram[j]:=FHistogram[j]+thread[i].hist[j];
+    end;
+  end;
+finally
+  // 2024 fix (report item 6): the cleanup is now exception-safe. Previously any
+  // raise between InitCriticalSection and DoneCriticalSection leaked the lock.
+  for i := 0 to tc - 1 do begin
+    if thread[i]<>nil then begin
+      thread[i].WaitFor;   // never free a thread that is still running
+      FreeAndNil(thread[i]);
+    end;
+  end;
+  DoneCriticalSection(ReadFitsCS);
 end;
 
 FStreamValid:=true;
-Fmean:=sum/ni;
-Fsigma:=sqrt( (sum2/ni)-(Fmean*Fmean) );
+// 2024 fix (report item 6): guard the statistics.
+// ni can still be zero for a valid-looking but empty image, and the
+// sum-of-squares form of the variance suffers catastrophic cancellation: on a
+// near-uniform frame (bias, flat, saturated) sum2/ni and Fmean*Fmean are nearly
+// equal and rounding can push the difference slightly negative, so sqrt() then
+// raised EInvalidOp or produced NaN.
+if ni>0 then begin
+  Fmean:=sum/ni;
+  Fsigma:=sqrt( max(0, (sum2/ni)-(Fmean*Fmean)) );
+end
+else begin
+  Fmean:=0;
+  Fsigma:=0;
+end;
 if dmin>=dmax then begin
    if dmin=0 then
      dmax:=dmin+1  // black if all 0
@@ -2534,6 +2671,7 @@ var hdrmem: TMemoryStream;
     i,j,k,ii,npix: integer;
     x:double;
     xs:single;
+    xw:longword;   // 2024 (item 2): raw bits of xs, for the big-endian swap
     first:boolean;
 begin
   hdrmem:=FHeader.GetStream;
@@ -2558,7 +2696,14 @@ begin
                first:=false;
              end;
              inc(npix);
-             x:=max(min(round(((Fimage[k,ii,j]/255)-FFitsInfo.bzero)/FFitsInfo.bscale),MAXBYTE),0);
+             // 2024 fix (report item 15f): the divisor used to be 255. Fimage
+             // is scaled 0..65535, and 65535/255 = 257, so everything above
+             // 65025 clipped to 255 and the top of the range was flattened.
+             // 65535/257 = 255 exactly, which is the correct 16 -> 8 bit
+             // reduction. NOTE this changes the pixel values written to 8-bit
+             // FITS files; revert the constant to 255 if bit-identical output
+             // with earlier versions matters more than correct scaling.
+             x:=max(min(round(((Fimage[k,ii,j]/257)-FFitsInfo.bzero)/FFitsInfo.bscale),MAXBYTE),0);
              d8[npix]:=byte(round(x));
            end;
            end;
@@ -2616,21 +2761,38 @@ begin
              end;
              inc(npix);
              xs:=(Fimage[k,ii,j]-FFitsInfo.bzero)/FFitsInfo.bscale;
-             dm32[npix]:=single(NtoBE(longword(xs)));
+             // 2024 fix (report item 2): this used to be
+             //     dm32[npix]:=single(NtoBE(longword(xs)));
+             // which relies on FPC treating longword(<single expression>) and
+             // single(<longword expression>) as bit reinterpretation rather
+             // than value conversion. That holds for same-size variable casts
+             // but is not guaranteed for an expression, and a change of
+             // compiler mode would turn the pixel data into rounded integers
+             // without any warning. Move() makes the reinterpretation explicit.
+             Move(xs,xw,4);          // take the IEEE-754 bits of the float
+             xw:=NtoBE(xw);          // FITS stores them big-endian
+             Move(xw,dm32[npix],4);  // and put them back as raw bytes
            end;
            end;
            end;
-           if npix>0 then  FStream.Write(d32,sizeof(d32));
+           // 2024 fix (report item 2): this line used to read
+           //     if npix>0 then FStream.Write(d32,sizeof(d32));
+           // flushing the INTEGER buffer instead of the float one. The three
+           // integer branches above all correctly flush their own buffer
+           // (d8, d16, d32). Because d32 and dm32 are both 2880 bytes there was
+           // no range error and no crash - just silent corruption: npix is
+           // always in 1..720 here, so the last 2880-byte data record of EVERY
+           // 32-bit float FITS file written by CCDciel contained stale
+           // big-endian integer data (or zeros) instead of up to 720 pixels.
+           if npix>0 then  FStream.Write(dm32,sizeof(dm32));
            end;
   end;
 end;
 
 procedure TFits.Debayer;
 var i,j: integer;
-    working, timingout: boolean;
-    timelimit: TDateTime;
     thread: array[0..15] of TDebayerImage;
-    tc,timeout: integer;
+    tc: integer;   // 2024 (item 6): timeout removed, the join is now a WaitFor
     rmult,gmult,bmult,mx: double;
     offsety: integer;
     rbg,gbg,bbg,bgm: single;
@@ -2698,16 +2860,13 @@ begin
     thread[i].t := t;
     thread[i].Start;
   end;
-  // wait complete
-  timeout:=60;
-  timelimit := now + timeout / secperday;
-  repeat
-    sleep(100);
-    working := False;
-    for i := 0 to tc - 1 do
-      working := working or thread[i].working;
-    timingout := (now > timelimit);
-  until (not working) or timingout;
+  // 2024 fix (report item 6): replaced the 60 second polling wait
+  //     repeat sleep(100); ... until (not working) or timingout;
+  // which fell through and freed/read the workers even when they were still
+  // running. These worker classes have FreeOnTerminate=False and use no
+  // Synchronize, so WaitFor is both the correct join and deadlock-free.
+  for i := 0 to tc - 1 do
+    thread[i].WaitFor;
   // total histogram
   for i:=0 to tc - 1 do begin
     for j:=0 to high(word) do begin
@@ -2735,10 +2894,8 @@ end;
 
 procedure TFits.MedianFilter(size,centralweight: integer);
 var i: integer;
-    working, timingout: boolean;
-    timelimit: TDateTime;
     thread: array[0..15] of TMedianFilter;
-    tc,timeout: integer;
+    tc: integer;   // 2024 (item 6): timeout removed, the join is now a WaitFor
     source: Timafloat;
 begin
   source:=CopyImage(Fimage);
@@ -2758,16 +2915,13 @@ begin
     thread[i].id := i;
     thread[i].Start;
   end;
-  // wait complete
-  timeout:=60;
-  timelimit := now + timeout / secperday;
-  repeat
-    sleep(100);
-    working := False;
-    for i := 0 to tc - 1 do
-      working := working or thread[i].working;
-    timingout := (now > timelimit);
-  until (not working) or timingout;
+  // 2024 fix (report item 6): replaced the 60 second polling wait
+  //     repeat sleep(100); ... until (not working) or timingout;
+  // which fell through and freed/read the workers even when they were still
+  // running. These worker classes have FreeOnTerminate=False and use no
+  // Synchronize, so WaitFor is both the correct join and deadlock-free.
+  for i := 0 to tc - 1 do
+    thread[i].WaitFor;
   // cleanup
   for i := 0 to tc - 1 do thread[i].Free;
   setlength(source,0,0,0);
@@ -3295,10 +3449,8 @@ end;
 procedure TFits.GetExpBitmap(var bgra: TExpandedBitmap);
 // get linear 16bit bitmap
 var i: integer;
-    working, timingout: boolean;
-    timelimit: TDateTime;
     thread: array[0..15] of TGetExpThread;
-    tc,timeout: integer;
+    tc: integer;   // 2024 (item 6): timeout removed, the join is now a WaitFor
 begin
 bgra.SetSize(Fwidth,Fheight);
 bgra.LoadFromBitmapIfNeeded;
@@ -3320,16 +3472,13 @@ begin
   end;
   thread[i].Start;
 end;
-// wait complete
-timeout:=60;
-timelimit := now + timeout / secperday;
-repeat
-  sleep(100);
-  working := False;
-  for i := 0 to tc - 1 do
-    working := working or thread[i].working;
-  timingout := (now > timelimit);
-until (not working) or timingout;
+// 2024 fix (report item 6): replaced the 60 second polling wait
+//     repeat sleep(100); ... until (not working) or timingout;
+// which fell through and freed/read the workers even when they were still
+// running. These worker classes have FreeOnTerminate=False and use no
+// Synchronize, so WaitFor is both the correct join and deadlock-free.
+for i := 0 to tc - 1 do
+  thread[i].WaitFor;
 for i := 0 to tc - 1 do begin
   thread[i].Free;
 end;
@@ -3342,10 +3491,8 @@ procedure TFits.GetBGRABitmap(var bgra: TBGRABitmap; maxthread:integer=-1);
 var i : integer;
     HighOverflow,LowOverflow: TBGRAPixel;
     c,overflow,underflow: double;
-    working, timingout: boolean;
-    timelimit: TDateTime;
     thread: array[0..15] of TGetBgraThread;
-    tc,timeout: integer;
+    tc: integer;   // 2024 (item 6): timeout removed, the join is now a WaitFor
 begin
   HighOverflow:=ColorToBGRA(clFuchsia);
   LowOverflow:=ColorToBGRA(clYellow);
@@ -3383,16 +3530,13 @@ begin
     thread[i].c := c;
     thread[i].Start;
   end;
-  // wait complete
-  timeout:=60;
-  timelimit := now + timeout / secperday;
-  repeat
-    sleep(100);
-    working := False;
-    for i := 0 to tc - 1 do
-      working := working or thread[i].working;
-    timingout := (now > timelimit);
-  until (not working) or timingout;
+  // 2024 fix (report item 6): replaced the 60 second polling wait
+  //     repeat sleep(100); ... until (not working) or timingout;
+  // which fell through and freed/read the workers even when they were still
+  // running. These worker classes have FreeOnTerminate=False and use no
+  // Synchronize, so WaitFor is both the correct join and deadlock-free.
+  for i := 0 to tc - 1 do
+    thread[i].WaitFor;
   for i := 0 to tc - 1 do begin
     thread[i].Free;
   end;
@@ -4020,10 +4164,8 @@ var
  i,j,n,nhfd: integer;
  overlap: integer;
  img_temp: Timabyte;
- working, timingout: boolean;
- timelimit: TDateTime;
  thread: array[0..15] of TGetStarList;
- tc,timeout: integer;
+ tc: integer;   // 2024 (item 6): timeout removed, the join is now a WaitFor
 begin
   overlap:=max(8,round(s/3)); // large overlap to have more chance to measure a big dot as a single piece
   s:=max(4,s-overlap);        // keep original window size after adding overlap
@@ -4052,16 +4194,13 @@ begin
     thread[i].img_temp := img_temp;
     thread[i].Start;
   end;
-  // wait complete
-  timeout:=60;
-  timelimit := now + timeout / secperday;
-  repeat
-    wait(0.1);
-    working := False;
-    for i := 0 to tc - 1 do
-      working := working or thread[i].working;
-    timingout := (now > timelimit);
-  until (not working) or timingout;
+  // 2024 fix (report item 6): replaced the 60 second polling wait
+  //     repeat sleep(100); ... until (not working) or timingout;
+  // which fell through and freed/read the workers even when they were still
+  // running. These worker classes have FreeOnTerminate=False and use no
+  // Synchronize, so WaitFor is both the correct join and deadlock-free.
+  for i := 0 to tc - 1 do
+    thread[i].WaitFor;
   SetLength(img_temp,0,0,0);
   // copy result
   nhfd:=0;
@@ -4173,14 +4312,16 @@ begin
  FFitsInfo.bitpix:=16;
  FFitsInfo.bscale:=1;
  FFitsInfo.bzero:=32768;
+ // 2024 fix (report item 15e): see the note in TFits.SaveToFile - an absent
+ // keyword used to be appended after the END record.
  i:=FHeader.Indexof('BITPIX');
- if i>=0 then FHeader.Delete(i);
+ if i<0 then i:=FHeader.Indexof('END');
  FHeader.Insert(i,'BITPIX',16,'');
  i:=FHeader.Indexof('BSCALE');
- if i>=0 then FHeader.Delete(i);
+ if i<0 then i:=FHeader.Indexof('END');
  FHeader.Insert(i,'BSCALE',1,'');
  i:=FHeader.Indexof('BZERO');
- if i>=0 then FHeader.Delete(i);
+ if i<0 then i:=FHeader.Indexof('END');
  FHeader.Insert(i,'BZERO',32768,'');
  WriteFitsImage;
 end;

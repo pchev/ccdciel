@@ -149,8 +149,14 @@ end;
 procedure Tf_polaralign2.FormDestroy(Sender: TObject);
 var i: integer;
 begin
-  for i:=0 to GotoPosition.items.Count-1 do
+  // 2024 (report item 1): nil each slot as it is released. If the same
+  // TAltAzPosition pointer ever ends up in the list twice again - see the bug
+  // fixed in FormShow - this turns a double free into a harmless Free(nil)
+  // instead of heap corruption.
+  for i:=0 to GotoPosition.items.Count-1 do begin
      GotoPosition.items.Objects[i].free;
+     GotoPosition.items.Objects[i]:=nil;
+  end;
 end;
 
 procedure Tf_polaralign2.FormShow(Sender: TObject);
@@ -175,8 +181,14 @@ var altaz: TAltAzPosition;
 begin
   InitAlignment;
   // Refresh the combobox every time if the observatory latitude change
-  for i:=0 to GotoPosition.items.Count-1 do
+  // 2024 (report item 1): nil each slot as it is released. If the same
+  // TAltAzPosition pointer ever ends up in the list twice again - see the bug
+  // fixed in FormShow - this turns a double free into a harmless Free(nil)
+  // instead of heap corruption.
+  for i:=0 to GotoPosition.items.Count-1 do begin
      GotoPosition.items.Objects[i].free;
+     GotoPosition.items.Objects[i]:=nil;
+  end;
   GotoPosition.clear;
   altaz:=TAltAzPosition.Create;
   altaz.az1:=-1; altaz.alt1:=-1;
@@ -214,6 +226,20 @@ begin
     {Near equator}
     if ObsLatitude>0 then begin
       {North, preference for south horizon}
+      // 2024 fix (report item 1): the Create below was MISSING here. Without
+      // it, altaz still referenced the object made at the top of this routine
+      // and already added to the list as the "custom position" entry. The two
+      // GetAE calls then overwrote that entry's -1 sentinels with real alt/az
+      // values, and the AddObject below stored the SAME pointer a second time.
+      // The cleanup loop at the top of FormShow
+      //     for i:=0 to GotoPosition.items.Count-1 do
+      //        GotoPosition.items.Objects[i].free;
+      // therefore called Free twice on one object the next time the dialog was
+      // opened - heap corruption or an access violation. It hit every observer
+      // between 0 and 30 degrees north.
+      // The matching southern branch below had the Create twice in a row, which
+      // is where this one ended up.
+      altaz:=TAltAzPosition.Create;
       GetAE(-4,0,1,altaz);
       GetAE(-0.5,-40,2,altaz);{avoid zenith for azimuth adjustment}
       GotoPosition.items.AddObject(rsMeasureES, altaz);
@@ -232,7 +258,10 @@ begin
     end
     else begin
       {South, preference for north horizon}
-      altaz:=TAltAzPosition.Create;
+      // 2024 fix (report item 1): this Create used to appear twice in a row,
+      // so the first object was orphaned immediately - a leak on every FormShow
+      // in the southern hemisphere. The duplicate belonged in the northern
+      // branch above, where it was missing.
       altaz:=TAltAzPosition.Create;
       GetAE(-4,0,1,altaz);
       GetAE(-0.5,70,2,altaz);
