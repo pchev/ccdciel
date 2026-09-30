@@ -1562,6 +1562,7 @@ resourcestring
   rsPulseNorthDi = 'Pulse North direction [cal/flipped]';
   rsInterrupt = 'Interrupt';
   rsReservedKeyw = 'Reserved keyword';
+  rsSyncOffsetTo = 'Sync offset too big: %s° , ignored.';
 
 implementation
 

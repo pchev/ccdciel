@@ -132,6 +132,8 @@ end;
 
 implementation
 
+const MaxSync=15.0;
+
 constructor TAstrometry.Create(AOwner: TComponent);
 begin
   Inherited create(AOwner);
@@ -584,7 +586,7 @@ end;
 
 procedure TAstrometry.AstrometrySyncFinderonTimer(Sender: TObject);
 var fn: string;
-    ra,de,eq,pa: double;
+    ra,de,eq,pa,dpos: double;
     n:integer;
 begin
 TimerAstrometrySyncFinder.Enabled:=false;
@@ -593,7 +595,11 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
    n:=cdcwcs_initfitsfile(pchar(fn),wcsfind);
    if FinderCurrentCoord(ra,de,eq,pa) then begin
        J2000ToMount(mount.EquinoxJD,ra,de);
-       mount.Sync(ra,de);
+       dpos:=rad2deg*(rmod(AngularDistance(mount.RA*15*deg2rad,mount.Dec*deg2rad,ra*15*deg2rad,de*deg2rad)+pi2,pi2));
+       if dpos<=MaxSync then
+          mount.Sync(ra,de)
+       else
+          msg(Format(rsSyncOffsetTo, [FormatFloat(f1, dpos)]), 1);
    end;
    PostMessage(MsgHandle, LM_CCDCIEL, M_RedrawFinderImage, 0);
 end;
@@ -679,7 +685,7 @@ end;
 
 procedure TAstrometry.AstrometrySyncGuideronTimer(Sender: TObject);
 var fn: string;
-    ra,de,eq,pa: double;
+    ra,de,eq,pa,dpos: double;
     n:integer;
 begin
 TimerAstrometrySyncGuider.Enabled:=false;
@@ -688,7 +694,11 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
    n:=cdcwcs_initfitsfile(pchar(fn),wcsguide);
    if GuideCurrentCoord(ra,de,eq,pa) then begin
        J2000ToMount(mount.EquinoxJD,ra,de);
-       mount.Sync(ra,de);
+       dpos:=rad2deg*(rmod(AngularDistance(mount.RA*15*deg2rad,mount.Dec*deg2rad,ra*15*deg2rad,de*deg2rad)+pi2,pi2));
+       if dpos<=MaxSync then
+          mount.Sync(ra,de)
+       else
+          msg(Format(rsSyncOffsetTo, [FormatFloat(f1, dpos)]), 1);
    end;
    PostMessage(MsgHandle, LM_CCDCIEL, M_RedrawGuideImage, 0);
 end;
@@ -715,7 +725,7 @@ end;
 
 procedure TAstrometry.AstrometrySynconTimer(Sender: TObject);
 var fn: string;
-    ra,de,eq,pa: double;
+    ra,de,eq,pa,dpos: double;
     n:integer;
 begin
 TimerAstrometrySync.Enabled:=false;
@@ -728,7 +738,11 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
    end;
    if (n=0) and CurrentCoord(ra,de,eq,pa) then begin
        J2000ToMount(mount.EquinoxJD,ra,de);
-       mount.Sync(ra,de);
+       dpos:=rad2deg*(rmod(AngularDistance(mount.RA*15*deg2rad,mount.Dec*deg2rad,ra*15*deg2rad,de*deg2rad)+pi2,pi2));
+       if dpos<=MaxSync then
+          mount.Sync(ra,de)
+       else
+          msg(Format(rsSyncOffsetTo, [FormatFloat(f1, dpos)]), 1);
    end;
 end;
 end;
@@ -950,6 +964,7 @@ begin
       msg(Format(rsDistanceToTa, [FormatFloat(f5, 60*dist)]),3);
       if CancelAutofocus or CancelGoto then exit;
       if dist>prec then begin
+       if dist<=MaxSync then begin
         case method of
          0: begin
                SyncOK:=mount.Sync(cra,cde);
@@ -996,6 +1011,11 @@ begin
                if CancelAutofocus or CancelGoto then exit;
             end;
          end;
+       end
+       else begin
+         msg(Format(rsSyncOffsetTo, [FormatFloat(f1, dist)]), 1);
+         break;
+       end;
       end;
       if CancelAutofocus or CancelGoto then exit;
       inc(i);
