@@ -361,7 +361,11 @@ end;
 procedure T_autoguider_internal.Guide(onoff:boolean; recalibrate:boolean=false);
 begin
   if onoff then begin
-    if recalibrate then InternalguiderCalibrate;
+    if recalibrate then begin
+      InternalguiderCalibrate;
+      SetStatus('Start Calibration',GUIDER_BUSY);
+      WaitBusy(CalibrationDelay+SettleMaxTime);
+    end;
     InternalguiderStart;
   end
   else begin

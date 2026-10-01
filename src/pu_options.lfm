@@ -4141,8 +4141,8 @@ object f_option: Tf_option
               Width = 559
               Align = alClient
               Caption = 'ASTAP'
-              ClientHeight = 527
-              ClientWidth = 555
+              ClientHeight = 544
+              ClientWidth = 547
               ParentFont = False
               TabOrder = 0
               object Label105: TLabel
@@ -4238,8 +4238,8 @@ object f_option: Tf_option
               Width = 559
               Align = alClient
               Caption = 'Astrometry.Net'
-              ClientHeight = 527
-              ClientWidth = 555
+              ClientHeight = 544
+              ClientWidth = 547
               ParentFont = False
               TabOrder = 0
               object Panel30: TPanel
@@ -5986,100 +5986,90 @@ object f_option: Tf_option
               NullValue = 0
               Value = 0
             end
-            object Panel29: TPanel
-              Left = 0
-              Height = 122
-              Top = 96
-              Width = 248
-              BevelOuter = bvNone
-              ClientHeight = 122
-              ClientWidth = 248
+            object Label26: TLabel
+              AnchorSideTop.Control = CalibrationDelay
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 18
+              Top = 104
+              Width = 103
+              Caption = 'Calibration delay'
+              ParentColor = False
+              ParentFont = False
+            end
+            object CalibrationDelay: TSpinEditEx
+              Left = 160
+              Height = 28
+              Top = 99
+              Width = 74
+              Constraints.MaxHeight = 28
+              MaxLength = 0
+              ParentFont = False
               TabOrder = 3
-              object Label26: TLabel
-                AnchorSideTop.Control = CalibrationDelay
+              MaxValue = 600
+              NullValue = 0
+              Value = 0
+            end
+            object GroupBox34: TGroupBox
+              Left = 0
+              Height = 89
+              Top = 132
+              Width = 248
+              Caption = 'Spectroscopy'
+              ClientHeight = 60
+              ClientWidth = 244
+              TabOrder = 4
+              object GuideLockX: TFloatSpinEditEx
+                AnchorSideTop.Control = GuideLockY
                 AnchorSideTop.Side = asrCenter
-                Left = 8
-                Height = 18
-                Top = 8
-                Width = 103
-                Caption = 'Calibration delay'
-                ParentColor = False
-                ParentFont = False
-              end
-              object CalibrationDelay: TSpinEditEx
-                Left = 160
+                Left = 32
                 Height = 28
-                Top = 3
-                Width = 74
+                Hint = 'X'
+                Top = 28
+                Width = 90
                 Constraints.MaxHeight = 28
                 MaxLength = 0
-                ParentFont = False
                 TabOrder = 0
-                MaxValue = 600
-                NullValue = 0
-                Value = 0
               end
-              object GroupBox34: TGroupBox
-                Left = 0
-                Height = 89
-                Top = 32
-                Width = 248
-                Caption = 'Spectroscopy'
-                ClientHeight = 60
-                ClientWidth = 244
+              object GuideLockY: TFloatSpinEditEx
+                Left = 152
+                Height = 28
+                Hint = 'Y'
+                Top = 28
+                Width = 90
+                Constraints.MaxHeight = 28
+                MaxLength = 0
                 TabOrder = 1
-                object GuideLockX: TFloatSpinEditEx
-                  AnchorSideTop.Control = GuideLockY
-                  AnchorSideTop.Side = asrCenter
-                  Left = 32
-                  Height = 28
-                  Hint = 'X'
-                  Top = 28
-                  Width = 90
-                  Constraints.MaxHeight = 28
-                  MaxLength = 0
-                  TabOrder = 0
-                end
-                object GuideLockY: TFloatSpinEditEx
-                  Left = 152
-                  Height = 28
-                  Hint = 'Y'
-                  Top = 28
-                  Width = 90
-                  Constraints.MaxHeight = 28
-                  MaxLength = 0
-                  TabOrder = 1
-                end
-                object GuideSetLock: TCheckBox
-                  Left = 8
-                  Height = 22
-                  Top = 4
-                  Width = 124
-                  Caption = 'Set lock position'
-                  Color = clDefault
-                  ParentColor = False
-                  TabOrder = 2
-                end
-                object Label162: TLabel
-                  AnchorSideTop.Control = GuideLockY
-                  AnchorSideTop.Side = asrCenter
-                  Left = 16
-                  Height = 18
-                  Top = 33
-                  Width = 8
-                  Caption = 'X'
-                  ParentColor = False
-                end
-                object Label163: TLabel
-                  AnchorSideTop.Control = GuideLockY
-                  AnchorSideTop.Side = asrCenter
-                  Left = 136
-                  Height = 18
-                  Top = 33
-                  Width = 9
-                  Caption = 'Y'
-                  ParentColor = False
-                end
+              end
+              object GuideSetLock: TCheckBox
+                Left = 8
+                Height = 22
+                Top = 4
+                Width = 124
+                Caption = 'Set lock position'
+                Color = clDefault
+                ParentColor = False
+                TabOrder = 2
+              end
+              object Label162: TLabel
+                AnchorSideTop.Control = GuideLockY
+                AnchorSideTop.Side = asrCenter
+                Left = 16
+                Height = 18
+                Top = 33
+                Width = 8
+                Caption = 'X'
+                ParentColor = False
+              end
+              object Label163: TLabel
+                AnchorSideTop.Control = GuideLockY
+                AnchorSideTop.Side = asrCenter
+                Left = 136
+                Height = 18
+                Top = 33
+                Width = 9
+                Caption = 'Y'
+                ParentColor = False
               end
             end
           end

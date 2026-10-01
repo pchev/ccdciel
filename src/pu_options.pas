@@ -178,7 +178,6 @@ type
     GuideSetLock: TCheckBox;
     Label162: TLabel;
     Label163: TLabel;
-    Panel29: TPanel;
     MeridianFlipPanel1: TPanel;
     MeridianFlipPanel3: TPanel;
     PanelFinder: TPanel;
@@ -2220,7 +2219,7 @@ begin
   groupbox13.Visible:=(g=agPHD);
   GroupBoxDrift.Visible:=(g=agPHD);
   DitherRAonly.Visible:=(g=agPHD)or(g=agINTERNAL)or(g=agDITHER);
-  panel29.Visible:=(g=agPHD);
+  groupbox34.Visible:=(g=agPHD);
   EarlyDither.Visible:=(g=agPHD);
 end;
 
