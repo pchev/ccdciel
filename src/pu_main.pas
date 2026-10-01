@@ -5346,6 +5346,7 @@ begin
   f_internalguider.CalIssue.Text:=config.GetValue('/InternalGuider/CalIssue','');
   f_internalguider.ShortestPulse:=config.GetValue('/InternalGuider/ShortestPulse',40);
   f_internalguider.LongestPulse:=config.GetValue('/InternalGuider/LongestPulse',2500);
+  f_internalguider.MaxReverse:=config.GetValue('/InternalGuider/MaxReverse',3);
   f_internalguider.minHFD:=config.GetValue('/InternalGuider/MinHFD',1.5);
   f_internalguider.minSNR:=config.GetValue('/InternalGuider/MinSNR',15);
   f_internalguider.use_arcsec:=config.GetValue('/InternalGuider/UnitArcSec',false);
@@ -6008,6 +6009,8 @@ begin
   config.SetValue('/InternalGuider/PixelSize',f_internalguider.pixelsize1.Text);   // store calibration value not affected by current binning
   config.SetValue('/InternalGuider/ShortestPulse',f_internalguider.ShortestPulse);
   config.SetValue('/InternalGuider/LongestPulse',f_internalguider.LongestPulse);
+  config.SetValue('/InternalGuider/MaxReverse',f_internalguider.MaxReverse);
+
   config.SetValue('/InternalGuider/MinHFD',f_internalguider.minHFD);
   config.SetValue('/InternalGuider/MinSNR',f_internalguider.minSNR);
 

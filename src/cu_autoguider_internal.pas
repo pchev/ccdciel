@@ -154,7 +154,7 @@ implementation
 
 const
    nrpointsTrend=50; //number of trend points plotted
-   maxreverse=3; // wait 3 declination pulse in same direction after a reversal
+
 var
   oldtickcount: qword=0;
 
@@ -1226,7 +1226,7 @@ begin
   old_moveRA:=0;
   old_moveDEC:=0;
   LastDecSign:=0;
-  SameDecSignCount:=maxreverse;
+  SameDecSignCount:=Finternalguider.maxreverse;
   LastBacklash:=false;
   FirstDecDirectionChange:=true;
   LastBacklashDuration:=0;
@@ -1332,7 +1332,7 @@ end;
 procedure T_autoguider_internal.pulse_move(pulse_limit_ms : longint);
 var
   moveRA2,cos_decl, DecSign: double;
-  largepulse : boolean;
+  largepulse,smallpulse : boolean;
   NewPulseDEC : longint;
 begin
   pulseRA:=0;
@@ -1381,21 +1381,21 @@ begin
   // except if the correction is more than 3X shortestpulse
   DecSign:=sgn(moveDEC);
   largepulse:=FInitialDither or (round(1000*abs(moveDEC/finternalguider.pulsegainNorth))>(3*finternalguider.ShortestPulse));  // 3 * minimal pulse
-  if (not LastBacklash)and (not finternalguider.SolarTracking) then begin
-    // tracking comet likely make the correction always in the same direction, disable this process in this case
-    if largepulse then begin
+  smallpulse:=(round(1000*abs(moveDEC/finternalguider.pulsegainNorth))<(finternalguider.ShortestPulse  div 2)); // ignore reversal smaller than half the minimal pulse
+  if (not LastBacklash)and (not finternalguider.SolarTracking) then begin  // tracking comet likely make the correction always in the same direction, disable this process in this case
+    if largepulse or (Finternalguider.maxreverse=0) then begin
       // force pulse
       LastDecSign:=DecSign;
-      SameDecSignCount:=maxreverse-1;
+      SameDecSignCount:=Finternalguider.maxreverse-1;
     end;
     if LastDecSign<>0 then begin
       if (LastDecSign=DecSign) then begin
         inc(SameDecSignCount);
-        if SameDecSignCount<maxreverse then begin
+        if SameDecSignCount<Finternalguider.maxreverse then begin
           // wait more
           moveDEC:=0;
         end
-        else if (SameDecSignCount=maxreverse)and(DecSign<>sign(LastBacklashDuration)) then begin
+        else if (SameDecSignCount>=Finternalguider.maxreverse)and(DecSign<>sign(LastBacklashDuration)) then begin
           if FirstDecDirectionChange then begin
             // no backlash compensation for the first change after start guiding
             FirstDecDirectionChange:=false;
@@ -1410,9 +1410,11 @@ begin
         end;
       end
       else begin
-        // initialize new direction
-        SameDecSignCount:=0;
-        moveDEC:=0;
+        if not smallpulse then begin
+          // initialize new direction
+          SameDecSignCount:=0;
+          moveDEC:=0;
+        end;
       end;
     end;
     LastDecSign:=DecSign;
@@ -1791,7 +1793,7 @@ begin
       end
       else begin
        if LastDecSign<>0 then begin
-         if SameDecSignCount>maxreverse then
+         if SameDecSignCount>=Finternalguider.maxreverse then
            finternalguider.LabelStatusDec.Caption:=''
          else begin
            if LastDecSign>0 then

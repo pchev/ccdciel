@@ -902,12 +902,12 @@ object f_internalguider: Tf_internalguider
           TabOrder = 0
           object Panel10: TPanel
             Left = 0
-            Height = 400
+            Height = 440
             Top = 0
             Width = 344
             Align = alTop
             BevelOuter = bvNone
-            ClientHeight = 400
+            ClientHeight = 440
             ClientWidth = 344
             ParentBackground = False
             TabOrder = 1
@@ -1106,7 +1106,7 @@ object f_internalguider: Tf_internalguider
             object CheckBoxBacklash: TCheckBox
               Left = 8
               Height = 22
-              Top = 304
+              Top = 344
               Width = 195
               Caption = 'Use backlash compensation'
               TabOrder = 8
@@ -1115,7 +1115,7 @@ object f_internalguider: Tf_internalguider
             object Backlash: TSpinEditEx
               Left = 200
               Height = 32
-              Top = 336
+              Top = 376
               Width = 72
               Enabled = False
               MaxLength = 0
@@ -1129,7 +1129,7 @@ object f_internalguider: Tf_internalguider
               AnchorSideTop.Side = asrCenter
               Left = 32
               Height = 18
-              Top = 343
+              Top = 383
               Width = 153
               Caption = 'Declination backlash[ms]'
               ParentColor = False
@@ -1138,18 +1138,39 @@ object f_internalguider: Tf_internalguider
               Left = 8
               Height = 22
               Hint = 'For testing. This will disable guiding but still show the trend.'
-              Top = 368
+              Top = 408
               Width = 187
               Caption = 'Disable guiding temporary'
               ParentFont = False
               TabOrder = 10
               OnChange = disable_guiding1Change
             end
+            object MaxReverse1: TSpinEditEx
+              Left = 200
+              Height = 32
+              Hint = '0..10'
+              Top = 304
+              Width = 72
+              MaxLength = 0
+              TabOrder = 11
+              MaxValue = 10
+              NullValue = 0
+              Value = 0
+            end
+            object Label65: TLabel
+              AnchorSideTop.Control = MaxReverse1
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 18
+              Top = 311
+              Width = 153
+              Caption = 'Wait declination reversal '
+            end
           end
           object rgDitherMode: TRadioGroup
             Left = 0
             Height = 57
-            Top = 400
+            Top = 440
             Width = 344
             Align = alTop
             AutoFill = True
@@ -1173,12 +1194,12 @@ object f_internalguider: Tf_internalguider
           end
           object GroupBox3: TGroupBox
             Left = 0
-            Height = 466
-            Top = 457
+            Height = 426
+            Top = 497
             Width = 344
             Align = alClient
             Caption = 'Calibration options'
-            ClientHeight = 437
+            ClientHeight = 397
             ClientWidth = 340
             ParentBackground = False
             TabOrder = 0
@@ -2471,7 +2492,7 @@ object f_internalguider: Tf_internalguider
   object ClearMsgTimer: TTimer
     Enabled = False
     OnTimer = ClearMsgTimerTimer
-    Left = 138
-    Top = 484
+    Left = 72
+    Top = 800
   end
 end

@@ -42,6 +42,7 @@ type
 
   Tf_internalguider = class(TFrame)
     Backlash: TSpinEditEx;
+    MaxReverse1: TSpinEditEx;
     btnSetMultiStarOffset: TButton;
     Button1: TButton;
     btnRefImage: TButton;
@@ -83,6 +84,7 @@ type
     Label62: TLabel;
     Label63: TLabel;
     Label64: TLabel;
+    Label65: TLabel;
     LabelSetMultiOffset: TLabel;
     LabelSetOffset: TLabel;
     Label55: TLabel;
@@ -469,6 +471,8 @@ type
     function GetSoftBinning:boolean;
     procedure SetTotBinning(value:integer);
     function GetTotBinning:integer;
+    procedure SetMaxReverse(value:integer);
+    function GetMaxReverse:integer;
 
   public
     { public declarations }
@@ -576,6 +580,7 @@ type
     property CameraBinning: integer read GetCameraBinning write SetCameraBinning;
     property SoftBinning: boolean read GetSoftBinning write SetSoftBinning;
     property TotBinning: integer read GetTotBinning write SetTotBinning;
+    property MaxReverse: integer read GetMaxReverse write SetMaxReverse;
 
   end;
 
@@ -729,6 +734,7 @@ begin
   CheckBoxTrackSolar1.Caption:=rsActivateSola;
   Label25.Caption:=rsApparentMoti+' ["/min]';
   Label26.Caption:=rsApparentMoti2+' [°]';
+  Label65.Caption:=rsWaitDeclinat;
   CheckBoxBacklash.Caption:=rsUseBacklashC;
   Label27.Caption:=rsDeclinationB;
   rgDitherMode.Caption:=rsDitherMode;
@@ -2316,6 +2322,15 @@ begin
   if GetSoftBinning then result:=2*result;
 end;
 
+procedure Tf_internalguider.SetMaxReverse(value:integer);
+begin
+  MaxReverse1.Value:=value;
+end;
+
+function Tf_internalguider.GetMaxReverse:integer;
+begin
+  result:=MaxReverse1.Value;
+end;
 
 end.
 

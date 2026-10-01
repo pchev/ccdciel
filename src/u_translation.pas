@@ -1563,6 +1563,7 @@ resourcestring
   rsInterrupt = 'Interrupt';
   rsReservedKeyw = 'Reserved keyword';
   rsSyncOffsetTo = 'Sync offset too big: %s° , ignored.';
+  rsWaitDeclinat = 'Wait declination reversal';
 
 implementation
 
