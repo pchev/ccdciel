@@ -5329,7 +5329,7 @@ end;
 
 function CaptureFilename(f:TFits; Directory,DefFrameType,DefObject,DefExp,DefBin:string; sequence,dslr:boolean; seqnum:integer=-1):string;
 var dt: Tdatetime;
-    fn,buf,fileseqstr,fileseqext,blankrep,dateobs: string;
+    fn,buf,fileseqstr,fileseqext,dateobs: string;
     framestr,objectstr,binstr,expstr,filterstr: string;
     ccdtemp,pa: double;
     fileseqnum,i: integer;
@@ -5346,6 +5346,7 @@ begin
   framestr:=trim(framestr);
   if not f.Header.Valueof('OBJECT',objectstr) then objectstr:=DefObject;
   objectstr:=SafeFileName(objectstr);
+  objectstr:=wordspace(objectstr);
   if FileRemoveSpace then objectstr:=StringReplace(objectstr,' ',FilenameSpaceRep,[rfReplaceAll]);
   if dslr or (not f.Header.Valueof('EXPTIME',expstr)) then expstr:=DefExp;
   expstr:=trim(expstr);
@@ -5357,10 +5358,6 @@ begin
   if not f.Header.Valueof('FILTER',filterstr) then filterstr:='';
   filterstr:=trim(filterstr);
   fn:='';
-  if FilenameSep='_' then
-     blankrep:='-'
-  else if FilenameSep='-' then
-     blankrep:='_';
   if SaveStopCapture then
     fn:='interrupted'+FilenameSep;  // mark incomplete exposure
   UseFileSequenceNumber:=false;
@@ -5368,7 +5365,7 @@ begin
     case FileNameOpt[i] of
       fnObj : if FileNameActive[i] then begin
               if framestr=trim(FrameName[0]) then begin
-                  fn:=fn+wordspace(StringReplace(objectstr,FilenameSep,blankrep,[rfReplaceAll]))+FilenameSep;
+                  fn:=fn+objectstr+FilenameSep;
               end
               else
                  fn:=fn+framestr+FilenameSep;
