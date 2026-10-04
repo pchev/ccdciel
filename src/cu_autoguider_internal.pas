@@ -1721,7 +1721,7 @@ begin
        dither_position[0].decposition:=DECposition;
 
        maxpulse:=max(pulseRA,pulseDEC)+1000;//Assume parallel dithering, add one second as dither settle time.
-       FSettleStartTime:=now+(maxpulse/SecsPerDay); // reset the settle start time to after the initial pulse end
+       FSettleStartTime:=now+(maxpulse/mSecsPerDay); // reset the settle start time to after the initial pulse end
 
     end
     else begin //standard control
