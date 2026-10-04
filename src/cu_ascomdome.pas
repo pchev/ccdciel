@@ -102,8 +102,14 @@ begin
   end;
   msg('Interface version: '+inttostr(FInterfaceVersion),9);
   if FInterfaceVersion>=3 then begin
-    V.Connect;
-    WaitConnecting(30000);
+    try
+      V.Connect;
+      WaitConnecting(30000);
+    except
+      FInterfaceVersion:=2;
+      msg('Connect method error, interface version degraded to '+inttostr(FInterfaceVersion),9);
+      V.connected:=true;
+    end;
   end
   else
     V.Connected:=true;
