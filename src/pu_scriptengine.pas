@@ -31,7 +31,7 @@ interface
 
 uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp, fu_devicesconnection, UScaleDPI,
   fu_capture, fu_preview, fu_mount, cu_wheel, cu_mount, cu_camera, cu_focuser, cu_autoguider, cu_astrometry,
-  cu_dome, cu_rotator, cu_safety, cu_weather,
+  cu_dome, cu_rotator, cu_safety, cu_weather, pu_pause,
   fu_cover, cu_cover, fu_internalguider, fu_finder, cu_switch, fu_starprofile,
   Classes, SysUtils, FileUtil, LazFileUtils, Forms, process,
   u_translation, Controls, Graphics, Dialogs, ExtCtrls, CheckLst, Grids, StdCtrls;
@@ -256,6 +256,8 @@ type
     function cmd_runscriptasync(sname,path,args: string):string;
     function cmd_scriptrunning(num: string): boolean;
     function cmd_scriptstop(num: string): string;
+    function cmd_wait(num: string): string;
+    function cmd_waittill(hour: string): string;
     function  RunScriptAsync(sname,path,args: string; notify:boolean=True):integer;
     function  RunScript(sname,path,args: string; notify:boolean=True):boolean;
     function RunPythonAsync(pycmd, pyscript, pypath, args: string; notify: boolean; out num:integer; debug:boolean=false): boolean;
@@ -2328,6 +2330,37 @@ try
   if (i<=0) or (i>MaxPythonScr) then exit;
   StopPython(i);
   result:=msgOK;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_wait(num: string): string;
+var i,n: integer;
+    p: Tf_pause;
+begin
+result:=msgFailed;
+try
+  val(num,i,n);
+  if n<>0 then exit;
+  if (i<=0) then exit;
+  p:=Tf_pause.Create(self);
+  p.Caption:='Pause from script';
+  p.Text:='Wait for '+num+' seconds';
+  if p.Wait(i) then
+    result:=msgOK;
+  p.Free;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_waittill(hour: string): string;
+begin
+result:=msgFailed;
+try
+  if WaitTill(hour,true) then
+    result:=msgOK;
 except
   result:=msgFailed;
 end;

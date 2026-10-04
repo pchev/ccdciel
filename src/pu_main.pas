@@ -17890,6 +17890,18 @@ try
     buf:=f_scriptengine.cmd_scriptstop(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
+  else if method='PAUSE' then begin
+    CheckParamCount(1);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_wait(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='WAIT_TIME' then begin
+    CheckParamCount(1);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_waittill(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
   // method not found
   else begin
     result:=result+'"error": {"code": -32601, "message": "Method not found"}';
