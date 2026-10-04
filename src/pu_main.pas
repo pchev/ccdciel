@@ -7194,6 +7194,7 @@ end;
 Procedure Tf_main.ConnectRotator(Sender: TObject);
 begin
   if rotator.Status<>devDisconnected then exit;
+  rotator.AdjustPierSide:=config.GetValue('/Rotator/AdjustPierSide',true);
   rotator.SoftSync:=config.GetValue('/Rotator/SoftSync',false);
   rotator.SoftLimit:=config.GetValue('/Rotator/SoftLimit',false);
   f_rotator.PanelSoft.Visible:=rotator.SoftSync;
@@ -9334,6 +9335,7 @@ begin
     config.SetValue('/ASCOMRestrotator/Host',f_setup.RotatorARestHost.Text);
     config.SetValue('/ASCOMRestrotator/Port',f_setup.RotatorARestPort.Value);
     config.SetValue('/ASCOMRestrotator/Device',f_setup.RotatorARestDevice.Value);
+    config.SetValue('/Rotator/AdjustPierSide',f_setup.cbAdjustPierSide.Checked);
     config.SetValue('/Rotator/SoftSync',f_setup.cbRotatorSoftSync.Checked);
     config.SetValue('/Rotator/SoftLimit',f_setup.cbRotatorSoftLimit.Checked);
 

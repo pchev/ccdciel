@@ -7,6 +7,7 @@ object f_setup: Tf_setup
   Caption = 'Devices setup'
   ClientHeight = 498
   ClientWidth = 637
+  LCLVersion = '4.8.0.0'
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
@@ -47,9 +48,9 @@ object f_setup: Tf_setup
       Top = 8
       Width = 75
       Caption = 'Help'
-      OnClick = ButtonHelpClick
       ParentFont = False
       TabOrder = 2
+      OnClick = ButtonHelpClick
     end
   end
   object ScrollBox1: TScrollBox
@@ -85,25 +86,25 @@ object f_setup: Tf_setup
       Width = 494
       ActivePage = DeviceInterface
       MultiLine = True
+      Options = [nboMultiLine]
       ParentFont = False
       ShowTabs = False
       TabIndex = 0
       TabOrder = 1
       OnChange = Pagecontrol1Change
-      Options = [nboMultiLine]
       object DeviceInterface: TTabSheet
         Caption = 'Interface'
-        ClientHeight = 450
-        ClientWidth = 490
+        ClientHeight = 454
+        ClientWidth = 494
         ParentFont = False
         object PanelIndiServer: TPanel
           Left = 0
           Height = 127
           Top = 88
-          Width = 490
+          Width = 494
           Align = alTop
           ClientHeight = 127
-          ClientWidth = 490
+          ClientWidth = 494
           ParentFont = False
           TabOrder = 0
           object gbIndistarter: TGroupBox
@@ -113,7 +114,7 @@ object f_setup: Tf_setup
             Width = 176
             Align = alLeft
             Caption = 'Indistarter'
-            ClientHeight = 95
+            ClientHeight = 96
             ClientWidth = 172
             TabOrder = 0
             object cbIndistarterConfig: TComboBox
@@ -121,7 +122,7 @@ object f_setup: Tf_setup
               Height = 32
               Top = 57
               Width = 153
-              ItemHeight = 18
+              ItemHeight = 24
               Style = csDropDownList
               TabOrder = 0
             end
@@ -149,7 +150,7 @@ object f_setup: Tf_setup
             Width = 311
             Align = alLeft
             Caption = 'Indi Server'
-            ClientHeight = 95
+            ClientHeight = 96
             ClientWidth = 307
             TabOrder = 1
             object IndiServer: TEdit
@@ -214,9 +215,9 @@ object f_setup: Tf_setup
               Top = 64
               Width = 261
               Caption = 'Apply to all devices'
-              OnClick = ApplyIndiClick
               ParentFont = False
               TabOrder = 3
+              OnClick = ApplyIndiClick
             end
           end
         end
@@ -224,10 +225,10 @@ object f_setup: Tf_setup
           Left = 0
           Height = 88
           Top = 0
-          Width = 490
+          Width = 494
           Align = alTop
           ClientHeight = 88
-          ClientWidth = 490
+          ClientWidth = 494
           ParentFont = False
           TabOrder = 1
           object Label2: TLabel
@@ -252,12 +253,12 @@ object f_setup: Tf_setup
             Items.Strings = (
               'Default'
             )
-            OnChange = ProfileListChange
             ParentFont = False
             Sorted = True
             Style = csDropDownList
             TabOrder = 0
             Text = 'Default'
+            OnChange = ProfileListChange
           end
           object BtnCopyProfile: TButton
             Left = 97
@@ -266,9 +267,9 @@ object f_setup: Tf_setup
             Top = 49
             Width = 60
             Caption = 'Copy'
-            OnClick = BtnCopyProfileClick
             ParentFont = False
             TabOrder = 1
+            OnClick = BtnCopyProfileClick
           end
           object BtnNewProfile: TButton
             Left = 166
@@ -277,9 +278,9 @@ object f_setup: Tf_setup
             Top = 49
             Width = 71
             Caption = 'New'
-            OnClick = BtnNewProfileClick
             ParentFont = False
             TabOrder = 2
+            OnClick = BtnNewProfileClick
           end
           object BtnDeleteProfile: TButton
             Left = 247
@@ -288,20 +289,20 @@ object f_setup: Tf_setup
             Top = 49
             Width = 71
             Caption = 'Delete'
-            OnClick = BtnDeleteProfileClick
             ParentFont = False
             TabOrder = 3
+            OnClick = BtnDeleteProfileClick
           end
         end
         object Panel10: TGroupBox
           Left = 0
-          Height = 235
+          Height = 239
           Top = 215
-          Width = 490
+          Width = 494
           Align = alClient
           Caption = 'ASCOM Alpaca'
-          ClientHeight = 205
-          ClientWidth = 486
+          ClientHeight = 210
+          ClientWidth = 490
           ParentFont = False
           TabOrder = 2
           object Label70: TLabel
@@ -325,11 +326,11 @@ object f_setup: Tf_setup
               'http:'
               'https:'
             )
-            OnChange = DefaultARestProtocolChange
             ParentFont = False
             Style = csDropDownList
             TabOrder = 0
             Text = 'http:'
+            OnChange = DefaultARestProtocolChange
           end
           object Label71: TLabel
             Left = 93
@@ -383,9 +384,9 @@ object f_setup: Tf_setup
             Top = 165
             Width = 279
             Caption = 'Apply to all devices'
-            OnClick = ApplyAscomRemoteClick
             ParentFont = False
             TabOrder = 3
+            OnClick = ApplyAscomRemoteClick
           end
           object Label107: TLabel
             Left = 13
@@ -433,11 +434,11 @@ object f_setup: Tf_setup
             Top = 23
             Width = 279
             Constraints.MaxHeight = 28
-            ItemHeight = 18
-            OnChange = AlpacaServersChange
+            ItemHeight = 24
             ParentFont = False
             Style = csDropDownList
             TabOrder = 6
+            OnChange = AlpacaServersChange
           end
           object BtnDiscover: TButton
             AnchorSideTop.Control = AlpacaServers
@@ -447,9 +448,9 @@ object f_setup: Tf_setup
             Top = 25
             Width = 82
             Caption = 'Discover'
-            OnClick = BtnDiscoverClick
             ParentFont = False
             TabOrder = 7
+            OnClick = BtnDiscoverClick
           end
           object AlpacaDiscoveryPort: TSpinEditEx
             AnchorSideTop.Control = AlpacaServers
@@ -509,22 +510,22 @@ object f_setup: Tf_setup
             Top = 165
             Width = 174
             Caption = 'Scan this server'
-            OnClick = BtnScanClick
             TabOrder = 9
             Visible = False
+            OnClick = BtnScanClick
           end
         end
       end
       object Camera: TTabSheet
         Caption = 'Camera'
-        ClientHeight = 450
-        ClientWidth = 490
+        ClientHeight = 454
+        ClientWidth = 494
         ParentFont = False
         object PageControlCamera: TPageControl
           Left = 0
-          Height = 410
+          Height = 414
           Top = 40
-          Width = 490
+          Width = 494
           ActivePage = CameraIndi
           Align = alClient
           ParentFont = False
@@ -533,18 +534,18 @@ object f_setup: Tf_setup
           OnChange = PageControlCameraChange
           object CameraIndi: TTabSheet
             Caption = 'CameraIndi'
-            ClientHeight = 375
-            ClientWidth = 486
+            ClientHeight = 379
+            ClientWidth = 488
             ParentFont = False
             object PanelCameraIndi: TPanel
               Left = 0
-              Height = 375
+              Height = 379
               Top = 0
-              Width = 486
+              Width = 488
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 375
-              ClientWidth = 486
+              ClientHeight = 379
+              ClientWidth = 488
               ParentFont = False
               TabOrder = 0
               object CameraIndiDevice: TComboBox
@@ -553,11 +554,11 @@ object f_setup: Tf_setup
                 Top = 50
                 Width = 170
                 Constraints.MaxHeight = 28
-                ItemHeight = 18
-                OnChange = CameraIndiDeviceChange
+                ItemHeight = 24
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 0
+                OnChange = CameraIndiDeviceChange
               end
               object Label3: TLabel
                 AnchorSideTop.Control = CameraIndiDevice
@@ -592,10 +593,10 @@ object f_setup: Tf_setup
                   'Main sensor'
                   'Guider sensor'
                 )
-                OnChange = IndiSensorChange
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 1
+                OnChange = IndiSensorChange
               end
               object CameraAutoLoadConfig: TCheckBox
                 Left = 9
@@ -621,16 +622,16 @@ object f_setup: Tf_setup
                 ChildSizing.ShrinkVertical = crsScaleChilds
                 ChildSizing.Layout = cclLeftToRightThenTopToBottom
                 ChildSizing.ControlsPerLine = 2
-                ClientHeight = 24
+                ClientHeight = 25
                 ClientWidth = 336
                 Columns = 2
                 Items.Strings = (
                   'Network'
                   'RAM Disk'
                 )
-                OnClick = CameraIndiTransfertClick
                 ParentFont = False
                 TabOrder = 3
+                OnClick = CameraIndiTransfertClick
               end
               object CameraDiskPanel: TPanel
                 Left = 0
@@ -727,9 +728,9 @@ object f_setup: Tf_setup
                 Top = 52
                 Width = 75
                 Caption = 'Get'
-                OnClick = GetIndiClick
                 ParentFont = False
                 TabOrder = 6
+                OnClick = GetIndiClick
               end
               object CameraMsg: TLabel
                 Left = 275
@@ -746,8 +747,8 @@ object f_setup: Tf_setup
           end
           object CameraAscom: TTabSheet
             Caption = 'CameraAscom'
-            ClientHeight = 375
-            ClientWidth = 486
+            ClientHeight = 379
+            ClientWidth = 488
             ParentFont = False
             object PanelCameraAscom: TPanel
               Left = 16
@@ -766,9 +767,9 @@ object f_setup: Tf_setup
                 Top = 16
                 Width = 108
                 Caption = 'Choose'
-                OnClick = BtnChooseClick
                 ParentFont = False
                 TabOrder = 0
+                OnClick = BtnChooseClick
               end
               object AscomCamera: TEdit
                 AnchorSideTop.Control = BtnChooseCamera
@@ -788,9 +789,9 @@ object f_setup: Tf_setup
                 Top = 49
                 Width = 108
                 Caption = 'Setup'
-                OnClick = BtnSetupAscomClick
                 ParentFont = False
                 TabOrder = 2
+                OnClick = BtnSetupAscomClick
               end
               object BtnAboutCamera: TButton
                 Tag = 1
@@ -799,9 +800,9 @@ object f_setup: Tf_setup
                 Top = 81
                 Width = 108
                 Caption = 'About'
-                OnClick = BtnAboutAscomClick
                 ParentFont = False
                 TabOrder = 3
+                OnClick = BtnAboutAscomClick
               end
               object FlipImage: TCheckBox
                 Left = 13
@@ -825,18 +826,18 @@ object f_setup: Tf_setup
           end
           object CameraAscomRest: TTabSheet
             Caption = 'CameraAscomRest'
-            ClientHeight = 375
-            ClientWidth = 486
+            ClientHeight = 379
+            ClientWidth = 488
             ParentFont = False
             object Panel2: TPanel
               Left = 0
-              Height = 375
+              Height = 379
               Top = 0
-              Width = 486
+              Width = 488
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 375
-              ClientWidth = 486
+              ClientHeight = 379
+              ClientWidth = 488
               ParentFont = False
               TabOrder = 0
               object FlipImage1: TCheckBox
@@ -860,11 +861,11 @@ object f_setup: Tf_setup
                   'http:'
                   'https:'
                 )
-                OnChange = CameraARestProtocolChange
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 1
                 Text = 'http:'
+                OnChange = CameraARestProtocolChange
               end
               object Label30: TLabel
                 Left = 13
@@ -994,11 +995,11 @@ object f_setup: Tf_setup
                 Top = 5
                 Width = 360
                 Constraints.MaxHeight = 28
-                ItemHeight = 18
-                OnChange = AlpacaCameraListChange
+                ItemHeight = 24
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 7
+                OnChange = AlpacaCameraListChange
               end
               object CameraDateObs1: TCheckBox
                 Left = 16
@@ -1054,9 +1055,9 @@ object f_setup: Tf_setup
                 Top = 66
                 Width = 82
                 Caption = 'Discover'
-                OnClick = BtnDiscoverClick
                 ParentFont = False
                 TabOrder = 9
+                OnClick = BtnDiscoverClick
               end
             end
           end
@@ -1065,11 +1066,11 @@ object f_setup: Tf_setup
           Left = 0
           Height = 40
           Top = 0
-          Width = 490
+          Width = 494
           Align = alTop
           BevelOuter = bvNone
           ClientHeight = 40
-          ClientWidth = 490
+          ClientWidth = 494
           ParentFont = False
           TabOrder = 1
           object DeviceCamera: TLabel
@@ -1085,13 +1086,13 @@ object f_setup: Tf_setup
       end
       object GuideCamera: TTabSheet
         Caption = 'Guide camera'
-        ClientHeight = 450
-        ClientWidth = 490
+        ClientHeight = 454
+        ClientWidth = 494
         object PageControlGuideCamera: TPageControl
           Left = 0
-          Height = 296
+          Height = 300
           Top = 40
-          Width = 490
+          Width = 494
           ActivePage = GuideCameraIndi
           Align = alClient
           ParentFont = False
@@ -1100,18 +1101,18 @@ object f_setup: Tf_setup
           OnChange = PageControlGuideCameraChange
           object GuideCameraIndi: TTabSheet
             Caption = 'CameraIndi'
-            ClientHeight = 261
-            ClientWidth = 486
+            ClientHeight = 265
+            ClientWidth = 488
             ParentFont = False
             object PanelGuideCameraIndi: TPanel
               Left = 0
-              Height = 261
+              Height = 265
               Top = 0
-              Width = 486
+              Width = 488
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 261
-              ClientWidth = 486
+              ClientHeight = 265
+              ClientWidth = 488
               ParentFont = False
               TabOrder = 0
               object GuideCameraIndiDevice: TComboBox
@@ -1120,11 +1121,11 @@ object f_setup: Tf_setup
                 Top = 50
                 Width = 170
                 Constraints.MaxHeight = 28
-                ItemHeight = 18
-                OnChange = GuideCameraIndiDeviceChange
+                ItemHeight = 24
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 0
+                OnChange = GuideCameraIndiDeviceChange
               end
               object Label142: TLabel
                 AnchorSideTop.Control = GuideCameraIndiDevice
@@ -1159,10 +1160,10 @@ object f_setup: Tf_setup
                   'Main sensor'
                   'Guider sensor'
                 )
-                OnChange = GuideIndiSensorChange
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 1
+                OnChange = GuideIndiSensorChange
               end
               object GuideCameraAutoLoadConfig: TCheckBox
                 Left = 9
@@ -1202,10 +1203,10 @@ object f_setup: Tf_setup
                   Top = 0
                   Width = 121
                   Constraints.MaxHeight = 28
-                  OnChange = GuideCameraIndiServerChange
                   ParentFont = False
                   TabOrder = 0
                   Text = 'localhost'
+                  OnChange = GuideCameraIndiServerChange
                 end
                 object Label146: TLabel
                   AnchorSideTop.Control = GuideCameraIndiPort
@@ -1224,10 +1225,10 @@ object f_setup: Tf_setup
                   Top = 0
                   Width = 81
                   Constraints.MaxHeight = 28
-                  OnChange = GuideCameraIndiPortChange
                   ParentFont = False
                   TabOrder = 1
                   Text = '7624'
+                  OnChange = GuideCameraIndiPortChange
                 end
               end
               object GetIndi11: TButton
@@ -1239,9 +1240,9 @@ object f_setup: Tf_setup
                 Top = 52
                 Width = 75
                 Caption = 'Get'
-                OnClick = GetIndiClick
                 ParentFont = False
                 TabOrder = 4
+                OnClick = GetIndiClick
               end
               object GuideCameraMsg: TLabel
                 Left = 275
@@ -1300,23 +1301,23 @@ object f_setup: Tf_setup
                 ChildSizing.ShrinkVertical = crsScaleChilds
                 ChildSizing.Layout = cclLeftToRightThenTopToBottom
                 ChildSizing.ControlsPerLine = 2
-                ClientHeight = 24
+                ClientHeight = 25
                 ClientWidth = 336
                 Columns = 2
                 Items.Strings = (
                   'Network'
                   'RAM Disk'
                 )
-                OnClick = GuideCameraIndiTransfertClick
                 ParentFont = False
                 TabOrder = 6
+                OnClick = GuideCameraIndiTransfertClick
               end
             end
           end
           object GuideCameraAscom: TTabSheet
             Caption = 'CameraAscom'
-            ClientHeight = 261
-            ClientWidth = 486
+            ClientHeight = 265
+            ClientWidth = 488
             ParentFont = False
             object PanelGuideCameraAscom: TPanel
               Left = 16
@@ -1335,9 +1336,9 @@ object f_setup: Tf_setup
                 Top = 16
                 Width = 108
                 Caption = 'Choose'
-                OnClick = BtnChooseClick
                 ParentFont = False
                 TabOrder = 0
+                OnClick = BtnChooseClick
               end
               object AscomGuideCamera: TEdit
                 AnchorSideTop.Control = BtnChooseGuideCamera
@@ -1347,9 +1348,9 @@ object f_setup: Tf_setup
                 Top = 14
                 Width = 210
                 Constraints.MaxHeight = 28
-                OnChange = AscomGuideCameraChange
                 ParentFont = False
                 TabOrder = 1
+                OnChange = AscomGuideCameraChange
               end
               object BtnSetupGuideCamera: TButton
                 Tag = 12
@@ -1358,9 +1359,9 @@ object f_setup: Tf_setup
                 Top = 49
                 Width = 108
                 Caption = 'Setup'
-                OnClick = BtnSetupAscomClick
                 ParentFont = False
                 TabOrder = 2
+                OnClick = BtnSetupAscomClick
               end
               object BtnAboutGuideCamera: TButton
                 Tag = 12
@@ -1369,26 +1370,26 @@ object f_setup: Tf_setup
                 Top = 81
                 Width = 108
                 Caption = 'About'
-                OnClick = BtnAboutAscomClick
                 ParentFont = False
                 TabOrder = 3
+                OnClick = BtnAboutAscomClick
               end
             end
           end
           object GuideCameraAscomRest: TTabSheet
             Caption = 'CameraAscomRest'
-            ClientHeight = 261
-            ClientWidth = 486
+            ClientHeight = 265
+            ClientWidth = 488
             ParentFont = False
             object Panel40: TPanel
               Left = 0
-              Height = 261
+              Height = 265
               Top = 0
-              Width = 486
+              Width = 488
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 261
-              ClientWidth = 486
+              ClientHeight = 265
+              ClientWidth = 488
               ParentFont = False
               TabOrder = 0
               object GuideCameraARestProtocol: TComboBox
@@ -1403,11 +1404,11 @@ object f_setup: Tf_setup
                   'http:'
                   'https:'
                 )
-                OnChange = GuideCameraARestProtocolChange
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 0
                 Text = 'http:'
+                OnChange = GuideCameraARestProtocolChange
               end
               object Label147: TLabel
                 Left = 13
@@ -1424,10 +1425,10 @@ object f_setup: Tf_setup
                 Top = 65
                 Width = 194
                 Constraints.MaxHeight = 28
-                OnChange = GuideCameraARestHostChange
                 ParentFont = False
                 TabOrder = 1
                 Text = '127.0.0.1'
+                OnChange = GuideCameraARestHostChange
               end
               object Label148: TLabel
                 Left = 93
@@ -1540,11 +1541,11 @@ object f_setup: Tf_setup
                 Top = 5
                 Width = 360
                 Constraints.MaxHeight = 28
-                ItemHeight = 18
-                OnChange = AlpacaGuideCameraListChange
+                ItemHeight = 24
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 6
+                OnChange = AlpacaGuideCameraListChange
               end
               object Label154: TLabel
                 Cursor = crHandPoint
@@ -1591,9 +1592,9 @@ object f_setup: Tf_setup
                 Top = 66
                 Width = 82
                 Caption = 'Discover'
-                OnClick = BtnDiscoverClick
                 ParentFont = False
                 TabOrder = 7
+                OnClick = BtnDiscoverClick
               end
             end
           end
@@ -1602,11 +1603,11 @@ object f_setup: Tf_setup
           Left = 0
           Height = 40
           Top = 0
-          Width = 490
+          Width = 494
           Align = alTop
           BevelOuter = bvNone
           ClientHeight = 40
-          ClientWidth = 490
+          ClientWidth = 494
           ParentFont = False
           TabOrder = 1
           object DeviceGuideCamera: TCheckBox
@@ -1615,29 +1616,29 @@ object f_setup: Tf_setup
             Top = 8
             Width = 134
             Caption = 'Use guide camera'
-            OnChange = DeviceGuideCameraChange
             ParentFont = False
             TabOrder = 0
+            OnChange = DeviceGuideCameraChange
           end
         end
         object Panel46: TPanel
           Left = 0
           Height = 114
-          Top = 336
-          Width = 490
+          Top = 340
+          Width = 494
           Align = alBottom
           BevelOuter = bvNone
           ClientHeight = 114
-          ClientWidth = 490
+          ClientWidth = 494
           TabOrder = 2
           object PanelGuiderROI: TPanel
             Left = 0
             Height = 72
             Top = 0
-            Width = 490
+            Width = 494
             Align = alTop
             ClientHeight = 72
-            ClientWidth = 490
+            ClientWidth = 494
             TabOrder = 0
             object Label197: TLabel
               AnchorSideTop.Side = asrCenter
@@ -1779,15 +1780,15 @@ object f_setup: Tf_setup
               Top = 40
               Width = 150
               Caption = 'Full frame'
-              OnClick = btnGuiderFullFrameClick
               TabOrder = 4
+              OnClick = btnGuiderFullFrameClick
             end
           end
           object Label144: TLabel
             Left = 0
             Height = 42
             Top = 72
-            Width = 490
+            Width = 494
             Align = alClient
             AutoSize = False
             Caption = 'Label144'
@@ -1798,13 +1799,13 @@ object f_setup: Tf_setup
       end
       object FinderCamera: TTabSheet
         Caption = 'Finder camera'
-        ClientHeight = 450
-        ClientWidth = 490
+        ClientHeight = 454
+        ClientWidth = 494
         object PageControlFinderCamera: TPageControl
           Left = 0
-          Height = 296
+          Height = 300
           Top = 40
-          Width = 490
+          Width = 494
           ActivePage = FinderCameraIndi
           Align = alClient
           ParentFont = False
@@ -1813,18 +1814,18 @@ object f_setup: Tf_setup
           OnChange = PageControlFinderCameraChange
           object FinderCameraIndi: TTabSheet
             Caption = 'CameraIndi'
-            ClientHeight = 261
-            ClientWidth = 486
+            ClientHeight = 265
+            ClientWidth = 488
             ParentFont = False
             object PanelFinderCameraIndi: TPanel
               Left = 0
-              Height = 261
+              Height = 265
               Top = 0
-              Width = 486
+              Width = 488
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 261
-              ClientWidth = 486
+              ClientHeight = 265
+              ClientWidth = 488
               ParentFont = False
               TabOrder = 0
               object FinderCameraIndiDevice: TComboBox
@@ -1833,11 +1834,11 @@ object f_setup: Tf_setup
                 Top = 50
                 Width = 170
                 Constraints.MaxHeight = 28
-                ItemHeight = 18
-                OnChange = FinderCameraIndiDeviceChange
+                ItemHeight = 24
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 0
+                OnChange = FinderCameraIndiDeviceChange
               end
               object Label156: TLabel
                 AnchorSideTop.Control = FinderCameraIndiDevice
@@ -1872,10 +1873,10 @@ object f_setup: Tf_setup
                   'Main sensor'
                   'Guider sensor'
                 )
-                OnChange = FinderIndiSensorChange
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 1
+                OnChange = FinderIndiSensorChange
               end
               object FinderCameraAutoLoadConfig: TCheckBox
                 Left = 9
@@ -1915,10 +1916,10 @@ object f_setup: Tf_setup
                   Top = 0
                   Width = 121
                   Constraints.MaxHeight = 28
-                  OnChange = FinderCameraIndiServerChange
                   ParentFont = False
                   TabOrder = 0
                   Text = 'localhost'
+                  OnChange = FinderCameraIndiServerChange
                 end
                 object Label159: TLabel
                   AnchorSideTop.Control = FinderCameraIndiPort
@@ -1937,10 +1938,10 @@ object f_setup: Tf_setup
                   Top = 0
                   Width = 81
                   Constraints.MaxHeight = 28
-                  OnChange = FinderCameraIndiPortChange
                   ParentFont = False
                   TabOrder = 1
                   Text = '7624'
+                  OnChange = FinderCameraIndiPortChange
                 end
               end
               object GetIndi12: TButton
@@ -1952,9 +1953,9 @@ object f_setup: Tf_setup
                 Top = 52
                 Width = 75
                 Caption = 'Get'
-                OnClick = GetIndiClick
                 ParentFont = False
                 TabOrder = 4
+                OnClick = GetIndiClick
               end
               object FinderCameraMsg: TLabel
                 Left = 275
@@ -1971,8 +1972,8 @@ object f_setup: Tf_setup
           end
           object FinderCameraAscom: TTabSheet
             Caption = 'CameraAscom'
-            ClientHeight = 261
-            ClientWidth = 486
+            ClientHeight = 265
+            ClientWidth = 488
             ParentFont = False
             object PanelFinderCameraAscom: TPanel
               Left = 16
@@ -1991,9 +1992,9 @@ object f_setup: Tf_setup
                 Top = 16
                 Width = 108
                 Caption = 'Choose'
-                OnClick = BtnChooseClick
                 ParentFont = False
                 TabOrder = 0
+                OnClick = BtnChooseClick
               end
               object AscomFinderCamera: TEdit
                 AnchorSideTop.Control = BtnChooseFinderCamera
@@ -2003,9 +2004,9 @@ object f_setup: Tf_setup
                 Top = 14
                 Width = 210
                 Constraints.MaxHeight = 28
-                OnChange = AscomFinderCameraChange
                 ParentFont = False
                 TabOrder = 1
+                OnChange = AscomFinderCameraChange
               end
               object BtnSetupFinderCamera: TButton
                 Tag = 13
@@ -2014,9 +2015,9 @@ object f_setup: Tf_setup
                 Top = 49
                 Width = 108
                 Caption = 'Setup'
-                OnClick = BtnSetupAscomClick
                 ParentFont = False
                 TabOrder = 2
+                OnClick = BtnSetupAscomClick
               end
               object BtnAboutFinderCamera: TButton
                 Tag = 13
@@ -2025,26 +2026,26 @@ object f_setup: Tf_setup
                 Top = 81
                 Width = 108
                 Caption = 'About'
-                OnClick = BtnAboutAscomClick
                 ParentFont = False
                 TabOrder = 3
+                OnClick = BtnAboutAscomClick
               end
             end
           end
           object FinderCameraAscomRest: TTabSheet
             Caption = 'CameraAscomRest'
-            ClientHeight = 261
-            ClientWidth = 486
+            ClientHeight = 265
+            ClientWidth = 488
             ParentFont = False
             object Panel43: TPanel
               Left = 0
-              Height = 261
+              Height = 265
               Top = 0
-              Width = 486
+              Width = 488
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 261
-              ClientWidth = 486
+              ClientHeight = 265
+              ClientWidth = 488
               ParentFont = False
               TabOrder = 0
               object FinderCameraARestProtocol: TComboBox
@@ -2059,11 +2060,11 @@ object f_setup: Tf_setup
                   'http:'
                   'https:'
                 )
-                OnChange = FinderCameraARestProtocolChange
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 0
                 Text = 'http:'
+                OnChange = FinderCameraARestProtocolChange
               end
               object Label161: TLabel
                 Left = 13
@@ -2080,10 +2081,10 @@ object f_setup: Tf_setup
                 Top = 65
                 Width = 194
                 Constraints.MaxHeight = 28
-                OnChange = FinderCameraARestHostChange
                 ParentFont = False
                 TabOrder = 1
                 Text = '127.0.0.1'
+                OnChange = FinderCameraARestHostChange
               end
               object Label162: TLabel
                 Left = 93
@@ -2196,11 +2197,11 @@ object f_setup: Tf_setup
                 Top = 5
                 Width = 360
                 Constraints.MaxHeight = 28
-                ItemHeight = 18
-                OnChange = AlpacaFinderCameraListChange
+                ItemHeight = 24
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 6
+                OnChange = AlpacaFinderCameraListChange
               end
               object Label168: TLabel
                 Cursor = crHandPoint
@@ -2247,9 +2248,9 @@ object f_setup: Tf_setup
                 Top = 66
                 Width = 82
                 Caption = 'Discover'
-                OnClick = BtnDiscoverClick
                 ParentFont = False
                 TabOrder = 7
+                OnClick = BtnDiscoverClick
               end
             end
           end
@@ -2258,11 +2259,11 @@ object f_setup: Tf_setup
           Left = 0
           Height = 40
           Top = 0
-          Width = 490
+          Width = 494
           Align = alTop
           BevelOuter = bvNone
           ClientHeight = 40
-          ClientWidth = 490
+          ClientWidth = 494
           ParentFont = False
           TabOrder = 1
           object DeviceFinderCamera: TCheckBox
@@ -2271,29 +2272,29 @@ object f_setup: Tf_setup
             Top = 8
             Width = 136
             Caption = 'Use finder camera'
-            OnChange = DeviceFinderCameraChange
             ParentFont = False
             TabOrder = 0
+            OnChange = DeviceFinderCameraChange
           end
         end
         object Panel45: TPanel
           Left = 0
           Height = 114
-          Top = 336
-          Width = 490
+          Top = 340
+          Width = 494
           Align = alBottom
           BevelOuter = bvNone
           ClientHeight = 114
-          ClientWidth = 490
+          ClientWidth = 494
           TabOrder = 2
           object PanelFinderROI: TPanel
             Left = 0
             Height = 72
             Top = 0
-            Width = 490
+            Width = 494
             Align = alTop
             ClientHeight = 72
-            ClientWidth = 490
+            ClientWidth = 494
             TabOrder = 0
             object Label191: TLabel
               AnchorSideTop.Side = asrCenter
@@ -2429,15 +2430,15 @@ object f_setup: Tf_setup
               Top = 40
               Width = 150
               Caption = 'Full frame'
-              OnClick = btnFinderFullFrameClick
               TabOrder = 4
+              OnClick = btnFinderFullFrameClick
             end
           end
           object Label160: TLabel
             Left = 0
             Height = 42
             Top = 72
-            Width = 490
+            Width = 494
             Align = alClient
             AutoSize = False
             Caption = 'Label160'
@@ -2448,14 +2449,14 @@ object f_setup: Tf_setup
       end
       object Filterwheel: TTabSheet
         Caption = 'Filter wheel'
-        ClientHeight = 450
-        ClientWidth = 490
+        ClientHeight = 454
+        ClientWidth = 494
         ParentFont = False
         object PageControlWheel: TPageControl
           Left = 0
-          Height = 410
+          Height = 414
           Top = 40
-          Width = 490
+          Width = 494
           ActivePage = WheelIndi
           Align = alClient
           ParentFont = False
@@ -2464,18 +2465,18 @@ object f_setup: Tf_setup
           OnChange = PageControlWheelChange
           object WheelIndi: TTabSheet
             Caption = 'WheelIndi'
-            ClientHeight = 375
-            ClientWidth = 486
+            ClientHeight = 379
+            ClientWidth = 488
             ParentFont = False
             object PanelWheelIndi: TPanel
               Left = 0
-              Height = 375
+              Height = 379
               Top = 0
-              Width = 486
+              Width = 488
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 375
-              ClientWidth = 486
+              ClientHeight = 379
+              ClientWidth = 488
               ParentFont = False
               TabOrder = 0
               object WheelIndiDevice: TComboBox
@@ -2484,7 +2485,7 @@ object f_setup: Tf_setup
                 Top = 51
                 Width = 170
                 Constraints.MaxHeight = 28
-                ItemHeight = 18
+                ItemHeight = 24
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 0
@@ -2573,9 +2574,9 @@ object f_setup: Tf_setup
                 Top = 53
                 Width = 75
                 Caption = 'Get'
-                OnClick = GetIndiClick
                 ParentFont = False
                 TabOrder = 3
+                OnClick = GetIndiClick
               end
               object WheelMsg: TLabel
                 Left = 275
@@ -2592,8 +2593,8 @@ object f_setup: Tf_setup
           end
           object WheelAscom: TTabSheet
             Caption = 'WheelAscom'
-            ClientHeight = 375
-            ClientWidth = 486
+            ClientHeight = 379
+            ClientWidth = 488
             ParentFont = False
             object PanelWheelAscom: TPanel
               Left = 16
@@ -2612,9 +2613,9 @@ object f_setup: Tf_setup
                 Top = 16
                 Width = 108
                 Caption = 'Choose'
-                OnClick = BtnChooseClick
                 ParentFont = False
                 TabOrder = 0
+                OnClick = BtnChooseClick
               end
               object AscomWheel: TEdit
                 AnchorSideTop.Control = BtnChooseFilter
@@ -2634,9 +2635,9 @@ object f_setup: Tf_setup
                 Top = 81
                 Width = 108
                 Caption = 'About'
-                OnClick = BtnAboutAscomClick
                 ParentFont = False
                 TabOrder = 2
+                OnClick = BtnAboutAscomClick
               end
               object BtnSetupCamera1: TButton
                 Tag = 2
@@ -2645,16 +2646,16 @@ object f_setup: Tf_setup
                 Top = 49
                 Width = 108
                 Caption = 'Setup'
-                OnClick = BtnSetupAscomClick
                 ParentFont = False
                 TabOrder = 3
+                OnClick = BtnSetupAscomClick
               end
             end
           end
           object WheelInCamera: TTabSheet
             Caption = 'WheelInCamera'
-            ClientHeight = 375
-            ClientWidth = 486
+            ClientHeight = 379
+            ClientWidth = 488
             ParentFont = False
             object PanelWheelIncamera: TPanel
               Left = 16
@@ -2681,18 +2682,18 @@ object f_setup: Tf_setup
           end
           object WheelAscomRest: TTabSheet
             Caption = 'WheelAscomRest'
-            ClientHeight = 375
-            ClientWidth = 486
+            ClientHeight = 379
+            ClientWidth = 488
             ParentFont = False
             object Panel3: TPanel
               Left = 0
-              Height = 375
+              Height = 379
               Top = 0
-              Width = 486
+              Width = 488
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 375
-              ClientWidth = 486
+              ClientHeight = 379
+              ClientWidth = 488
               ParentFont = False
               TabOrder = 0
               object WheelARestProtocol: TComboBox
@@ -2707,11 +2708,11 @@ object f_setup: Tf_setup
                   'http:'
                   'https:'
                 )
-                OnChange = WheelARestProtocolChange
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 0
                 Text = 'http:'
+                OnChange = WheelARestProtocolChange
               end
               object Label34: TLabel
                 Left = 13
@@ -2841,11 +2842,11 @@ object f_setup: Tf_setup
                 Top = 5
                 Width = 360
                 Constraints.MaxHeight = 28
-                ItemHeight = 18
-                OnChange = AlpacaWheelListChange
+                ItemHeight = 24
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 6
+                OnChange = AlpacaWheelListChange
               end
               object Label10: TLabel
                 Cursor = crHandPoint
@@ -2880,9 +2881,9 @@ object f_setup: Tf_setup
                 Top = 66
                 Width = 82
                 Caption = 'Discover'
-                OnClick = BtnDiscoverClick
                 ParentFont = False
                 TabOrder = 7
+                OnClick = BtnDiscoverClick
               end
               object DiscoverLed2: TShape
                 AnchorSideLeft.Control = BtnDiscover2
@@ -2900,17 +2901,17 @@ object f_setup: Tf_setup
           end
           object WheelManual: TTabSheet
             Caption = 'WheelManual'
-            ClientHeight = 375
-            ClientWidth = 486
+            ClientHeight = 379
+            ClientWidth = 488
             ParentFont = False
             object Panel32: TPanel
               Left = 0
               Height = 58
               Top = 0
-              Width = 486
+              Width = 488
               Align = alTop
               ClientHeight = 58
-              ClientWidth = 486
+              ClientWidth = 488
               ParentFont = False
               TabOrder = 0
               object Label8: TLabel
@@ -2940,9 +2941,9 @@ object f_setup: Tf_setup
             end
             object ManualFilterName: TStringGrid
               Left = 0
-              Height = 317
+              Height = 321
               Top = 58
-              Width = 486
+              Width = 488
               Align = alClient
               ColCount = 2
               MouseWheelOption = mwGrid
@@ -2958,11 +2959,11 @@ object f_setup: Tf_setup
           Left = 0
           Height = 40
           Top = 0
-          Width = 490
+          Width = 494
           Align = alTop
           BevelOuter = bvNone
           ClientHeight = 40
-          ClientWidth = 490
+          ClientWidth = 494
           ParentFont = False
           TabOrder = 1
           object DeviceFilterWheel: TCheckBox
@@ -2978,18 +2979,18 @@ object f_setup: Tf_setup
       end
       object Focuser: TTabSheet
         Caption = 'Focuser'
-        ClientHeight = 450
-        ClientWidth = 490
+        ClientHeight = 454
+        ClientWidth = 494
         ParentFont = False
         object Panel23: TPanel
           Left = 0
           Height = 40
           Top = 0
-          Width = 490
+          Width = 494
           Align = alTop
           BevelOuter = bvNone
           ClientHeight = 40
-          ClientWidth = 490
+          ClientWidth = 494
           ParentFont = False
           TabOrder = 0
           object DeviceFocuser: TCheckBox
@@ -3004,13 +3005,13 @@ object f_setup: Tf_setup
         end
         object Panel24: TPanel
           Left = 0
-          Height = 410
+          Height = 414
           Top = 40
-          Width = 490
+          Width = 494
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 410
-          ClientWidth = 490
+          ClientHeight = 414
+          ClientWidth = 494
           ParentFont = False
           TabOrder = 1
           object FocuserExternalTemperature: TCheckBox
@@ -3026,7 +3027,7 @@ object f_setup: Tf_setup
             Left = 0
             Height = 323
             Top = 0
-            Width = 490
+            Width = 494
             ActivePage = FocuserIndi
             Align = alTop
             ParentFont = False
@@ -3036,17 +3037,17 @@ object f_setup: Tf_setup
             object FocuserIndi: TTabSheet
               Caption = 'FocuserIndi'
               ClientHeight = 288
-              ClientWidth = 486
+              ClientWidth = 488
               ParentFont = False
               object PanelFocuserIndi: TPanel
                 Left = 0
                 Height = 288
                 Top = 0
-                Width = 486
+                Width = 488
                 Align = alClient
                 BevelOuter = bvNone
                 ClientHeight = 288
-                ClientWidth = 486
+                ClientWidth = 488
                 ParentFont = False
                 TabOrder = 0
                 object FocuserIndiDevice: TComboBox
@@ -3055,7 +3056,7 @@ object f_setup: Tf_setup
                   Top = 51
                   Width = 170
                   Constraints.MaxHeight = 28
-                  ItemHeight = 18
+                  ItemHeight = 24
                   ParentFont = False
                   Style = csDropDownList
                   TabOrder = 0
@@ -3144,9 +3145,9 @@ object f_setup: Tf_setup
                   Top = 53
                   Width = 75
                   Caption = 'Get'
-                  OnClick = GetIndiClick
                   ParentFont = False
                   TabOrder = 3
+                  OnClick = GetIndiClick
                 end
                 object FocuserMsg: TLabel
                   Left = 275
@@ -3164,7 +3165,7 @@ object f_setup: Tf_setup
             object FocuserAscom: TTabSheet
               Caption = 'FocuserAscom'
               ClientHeight = 288
-              ClientWidth = 486
+              ClientWidth = 488
               ParentFont = False
               object PanelFocuserAscom: TPanel
                 Left = 16
@@ -3183,9 +3184,9 @@ object f_setup: Tf_setup
                   Top = 16
                   Width = 108
                   Caption = 'Choose'
-                  OnClick = BtnChooseClick
                   ParentFont = False
                   TabOrder = 0
+                  OnClick = BtnChooseClick
                 end
                 object AscomFocuser: TEdit
                   AnchorSideTop.Control = BtnChooseFocuser
@@ -3205,9 +3206,9 @@ object f_setup: Tf_setup
                   Top = 81
                   Width = 108
                   Caption = 'About'
-                  OnClick = BtnAboutAscomClick
                   ParentFont = False
                   TabOrder = 2
+                  OnClick = BtnAboutAscomClick
                 end
                 object BtnSetupCamera2: TButton
                   Tag = 3
@@ -3216,16 +3217,16 @@ object f_setup: Tf_setup
                   Top = 49
                   Width = 108
                   Caption = 'Setup'
-                  OnClick = BtnSetupAscomClick
                   ParentFont = False
                   TabOrder = 3
+                  OnClick = BtnSetupAscomClick
                 end
               end
             end
             object FocuserInMount: TTabSheet
               Caption = 'FocuserInMount'
               ClientHeight = 288
-              ClientWidth = 486
+              ClientWidth = 488
               ParentFont = False
               TabVisible = False
               object PanelFocuserInMount: TPanel
@@ -3240,7 +3241,7 @@ object f_setup: Tf_setup
                 TabOrder = 0
                 object Label16: TLabel
                   Left = 13
-                  Height = 34
+                  Height = 33
                   Top = 32
                   Width = 219
                   Caption = 'Not implemented!'
@@ -3254,17 +3255,17 @@ object f_setup: Tf_setup
             object FocuserAscomRest: TTabSheet
               Caption = 'FocuserAscomRest'
               ClientHeight = 288
-              ClientWidth = 486
+              ClientWidth = 488
               ParentFont = False
               object Panel4: TPanel
                 Left = 0
                 Height = 288
                 Top = 0
-                Width = 486
+                Width = 488
                 Align = alClient
                 BevelOuter = bvNone
                 ClientHeight = 288
-                ClientWidth = 486
+                ClientWidth = 488
                 ParentFont = False
                 TabOrder = 0
                 object FocuserARestProtocol: TComboBox
@@ -3279,11 +3280,11 @@ object f_setup: Tf_setup
                     'http:'
                     'https:'
                   )
-                  OnChange = FocuserARestProtocolChange
                   ParentFont = False
                   Style = csDropDownList
                   TabOrder = 0
                   Text = 'http:'
+                  OnChange = FocuserARestProtocolChange
                 end
                 object Label38: TLabel
                   Left = 13
@@ -3413,11 +3414,11 @@ object f_setup: Tf_setup
                   Top = 5
                   Width = 360
                   Constraints.MaxHeight = 28
-                  ItemHeight = 18
-                  OnChange = AlpacaFocuserListChange
+                  ItemHeight = 24
                   ParentFont = False
                   Style = csDropDownList
                   TabOrder = 6
+                  OnChange = AlpacaFocuserListChange
                 end
                 object Label13: TLabel
                   Cursor = crHandPoint
@@ -3452,9 +3453,9 @@ object f_setup: Tf_setup
                   Top = 66
                   Width = 82
                   Caption = 'Discover'
-                  OnClick = BtnDiscoverClick
                   ParentFont = False
                   TabOrder = 7
+                  OnClick = BtnDiscoverClick
                 end
                 object DiscoverLed3: TShape
                   AnchorSideLeft.Control = BtnDiscover3
@@ -3475,14 +3476,14 @@ object f_setup: Tf_setup
       end
       object Rotator: TTabSheet
         Caption = 'Rotator'
-        ClientHeight = 450
-        ClientWidth = 490
+        ClientHeight = 454
+        ClientWidth = 494
         ParentFont = False
         object PageControlRotator: TPageControl
           Left = 0
           Height = 300
           Top = 40
-          Width = 490
+          Width = 494
           ActivePage = RotatorIndi
           Align = alTop
           ParentFont = False
@@ -3492,17 +3493,17 @@ object f_setup: Tf_setup
           object RotatorIndi: TTabSheet
             Caption = 'RotatorIndi'
             ClientHeight = 265
-            ClientWidth = 486
+            ClientWidth = 488
             ParentFont = False
             object PanelRotatorIndi: TPanel
               Left = 0
               Height = 265
               Top = 0
-              Width = 486
+              Width = 488
               Align = alClient
               BevelOuter = bvNone
               ClientHeight = 265
-              ClientWidth = 486
+              ClientWidth = 488
               ParentFont = False
               TabOrder = 0
               object RotatorIndiDevice: TComboBox
@@ -3511,7 +3512,7 @@ object f_setup: Tf_setup
                 Top = 51
                 Width = 170
                 Constraints.MaxHeight = 28
-                ItemHeight = 18
+                ItemHeight = 24
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 0
@@ -3600,9 +3601,9 @@ object f_setup: Tf_setup
                 Top = 53
                 Width = 75
                 Caption = 'Get'
-                OnClick = GetIndiClick
                 ParentFont = False
                 TabOrder = 3
+                OnClick = GetIndiClick
               end
               object RotatorMsg: TLabel
                 Left = 275
@@ -3620,7 +3621,7 @@ object f_setup: Tf_setup
           object RotatorAscom: TTabSheet
             Caption = 'RotatorAscom'
             ClientHeight = 265
-            ClientWidth = 486
+            ClientWidth = 488
             ParentFont = False
             object PanelRotatorAscom: TPanel
               Left = 16
@@ -3639,9 +3640,9 @@ object f_setup: Tf_setup
                 Top = 16
                 Width = 108
                 Caption = 'Choose'
-                OnClick = BtnChooseClick
                 ParentFont = False
                 TabOrder = 0
+                OnClick = BtnChooseClick
               end
               object AscomRotator: TEdit
                 AnchorSideTop.Control = BtnChooseRotator
@@ -3661,9 +3662,9 @@ object f_setup: Tf_setup
                 Top = 81
                 Width = 108
                 Caption = 'About'
-                OnClick = BtnAboutAscomClick
                 ParentFont = False
                 TabOrder = 2
+                OnClick = BtnAboutAscomClick
               end
               object BtnSetupRotator: TButton
                 Tag = 5
@@ -3672,26 +3673,26 @@ object f_setup: Tf_setup
                 Top = 49
                 Width = 108
                 Caption = 'Setup'
-                OnClick = BtnSetupAscomClick
                 ParentFont = False
                 TabOrder = 3
+                OnClick = BtnSetupAscomClick
               end
             end
           end
           object RotatorAscomRest: TTabSheet
             Caption = 'RotatorAscomRest'
             ClientHeight = 265
-            ClientWidth = 486
+            ClientWidth = 488
             ParentFont = False
             object Panel5: TPanel
               Left = 0
               Height = 265
               Top = 0
-              Width = 486
+              Width = 488
               Align = alClient
               BevelOuter = bvNone
               ClientHeight = 265
-              ClientWidth = 486
+              ClientWidth = 488
               ParentFont = False
               TabOrder = 0
               object RotatorARestProtocol: TComboBox
@@ -3706,11 +3707,11 @@ object f_setup: Tf_setup
                   'http:'
                   'https:'
                 )
-                OnChange = RotatorARestProtocolChange
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 0
                 Text = 'http:'
+                OnChange = RotatorARestProtocolChange
               end
               object Label42: TLabel
                 Left = 13
@@ -3840,11 +3841,11 @@ object f_setup: Tf_setup
                 Top = 5
                 Width = 360
                 Constraints.MaxHeight = 28
-                ItemHeight = 18
-                OnChange = AlpacaRotatorListChange
+                ItemHeight = 24
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 6
+                OnChange = AlpacaRotatorListChange
               end
               object Label14: TLabel
                 Cursor = crHandPoint
@@ -3879,9 +3880,9 @@ object f_setup: Tf_setup
                 Top = 66
                 Width = 82
                 Caption = 'Discover'
-                OnClick = BtnDiscoverClick
                 ParentFont = False
                 TabOrder = 7
+                OnClick = BtnDiscoverClick
               end
               object DiscoverLed4: TShape
                 AnchorSideLeft.Control = BtnDiscover4
@@ -3902,11 +3903,11 @@ object f_setup: Tf_setup
           Left = 0
           Height = 40
           Top = 0
-          Width = 490
+          Width = 494
           Align = alTop
           BevelOuter = bvNone
           ClientHeight = 40
-          ClientWidth = 490
+          ClientWidth = 494
           ParentFont = False
           TabOrder = 1
           object DeviceRotator: TCheckBox
@@ -3921,47 +3922,55 @@ object f_setup: Tf_setup
         end
         object Panel48: TPanel
           Left = 0
-          Height = 110
+          Height = 114
           Top = 340
-          Width = 490
+          Width = 494
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 110
-          ClientWidth = 490
+          ClientHeight = 114
+          ClientWidth = 494
           TabOrder = 2
           object cbRotatorSoftSync: TCheckBox
-            Left = 18
+            Left = 16
             Height = 22
-            Top = 13
+            Top = 34
             Width = 428
             Caption = 'Use software Sync with sky PA (for use with non compliant rotator)'
-            OnChange = cbRotatorSoftSyncChange
             TabOrder = 0
+            OnChange = cbRotatorSoftSyncChange
           end
           object cbRotatorSoftLimit: TCheckBox
-            Left = 18
+            Left = 16
             Height = 22
-            Top = 44
+            Top = 62
             Width = 277
             Caption = 'Limit rotator angle to 0-180 degree range'
             TabOrder = 1
+          end
+          object cbAdjustPierSide: TCheckBox
+            Left = 16
+            Height = 22
+            Top = 6
+            Width = 309
+            Caption = 'Adjust the PA after the mount pier side change'
+            TabOrder = 2
           end
         end
       end
       object Mount: TTabSheet
         Caption = 'Mount'
-        ClientHeight = 450
-        ClientWidth = 490
+        ClientHeight = 454
+        ClientWidth = 494
         ParentFont = False
         object Panel26: TPanel
           Left = 0
           Height = 40
           Top = 0
-          Width = 490
+          Width = 494
           Align = alTop
           BevelOuter = bvNone
           ClientHeight = 40
-          ClientWidth = 490
+          ClientWidth = 494
           ParentFont = False
           TabOrder = 0
           object DeviceMount: TCheckBox
@@ -3976,13 +3985,13 @@ object f_setup: Tf_setup
         end
         object Panel27: TPanel
           Left = 0
-          Height = 410
+          Height = 414
           Top = 40
-          Width = 490
+          Width = 494
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 410
-          ClientWidth = 490
+          ClientHeight = 414
+          ClientWidth = 494
           ParentFont = False
           TabOrder = 1
           object MountSetDateTime: TCheckBox
@@ -4000,9 +4009,9 @@ object f_setup: Tf_setup
             Top = 302
             Width = 282
             Caption = 'Set mount site long/lat from configuration'
-            OnClick = MountSetObservatoryClick
             ParentFont = False
             TabOrder = 1
+            OnClick = MountSetObservatoryClick
           end
           object MountGetObservatory: TCheckBox
             Left = 16
@@ -4010,15 +4019,15 @@ object f_setup: Tf_setup
             Top = 330
             Width = 222
             Caption = 'Get site long/lat from the mount'
-            OnClick = MountGetObservatoryClick
             ParentFont = False
             TabOrder = 2
+            OnClick = MountGetObservatoryClick
           end
           object PageControlMount: TPageControl
             Left = 0
             Height = 264
             Top = 0
-            Width = 490
+            Width = 494
             ActivePage = MountIndi
             Align = alTop
             ParentFont = False
@@ -4028,17 +4037,17 @@ object f_setup: Tf_setup
             object MountIndi: TTabSheet
               Caption = 'MountIndi'
               ClientHeight = 229
-              ClientWidth = 486
+              ClientWidth = 488
               ParentFont = False
               object PanelMountIndi: TPanel
                 Left = 0
                 Height = 229
                 Top = 0
-                Width = 486
+                Width = 488
                 Align = alClient
                 BevelOuter = bvNone
                 ClientHeight = 229
-                ClientWidth = 486
+                ClientWidth = 488
                 ParentFont = False
                 TabOrder = 0
                 object MountIndiDevice: TComboBox
@@ -4047,7 +4056,7 @@ object f_setup: Tf_setup
                   Top = 51
                   Width = 170
                   Constraints.MaxHeight = 28
-                  ItemHeight = 18
+                  ItemHeight = 24
                   ParentFont = False
                   Style = csDropDownList
                   TabOrder = 0
@@ -4136,9 +4145,9 @@ object f_setup: Tf_setup
                   Top = 53
                   Width = 75
                   Caption = 'Get'
-                  OnClick = GetIndiClick
                   ParentFont = False
                   TabOrder = 3
+                  OnClick = GetIndiClick
                 end
                 object MountMsg: TLabel
                   Left = 275
@@ -4156,7 +4165,7 @@ object f_setup: Tf_setup
             object MountAscom: TTabSheet
               Caption = 'MountAscom'
               ClientHeight = 229
-              ClientWidth = 486
+              ClientWidth = 488
               ParentFont = False
               object PanelMountAscom: TPanel
                 Left = 16
@@ -4175,9 +4184,9 @@ object f_setup: Tf_setup
                   Top = 16
                   Width = 108
                   Caption = 'Choose'
-                  OnClick = BtnChooseClick
                   ParentFont = False
                   TabOrder = 0
+                  OnClick = BtnChooseClick
                 end
                 object AscomMount: TEdit
                   AnchorSideTop.Control = BtnChooseMount
@@ -4197,9 +4206,9 @@ object f_setup: Tf_setup
                   Top = 81
                   Width = 108
                   Caption = 'About'
-                  OnClick = BtnAboutAscomClick
                   ParentFont = False
                   TabOrder = 2
+                  OnClick = BtnAboutAscomClick
                 end
                 object BtnSetupCamera3: TButton
                   Tag = 4
@@ -4208,26 +4217,26 @@ object f_setup: Tf_setup
                   Top = 49
                   Width = 108
                   Caption = 'Setup'
-                  OnClick = BtnSetupAscomClick
                   ParentFont = False
                   TabOrder = 3
+                  OnClick = BtnSetupAscomClick
                 end
               end
             end
             object MountAscomRest: TTabSheet
               Caption = 'MountAscomRest'
               ClientHeight = 229
-              ClientWidth = 486
+              ClientWidth = 488
               ParentFont = False
               object Panel6: TPanel
                 Left = 0
                 Height = 229
                 Top = 0
-                Width = 486
+                Width = 488
                 Align = alClient
                 BevelOuter = bvNone
                 ClientHeight = 229
-                ClientWidth = 486
+                ClientWidth = 488
                 ParentFont = False
                 TabOrder = 0
                 object MountARestProtocol: TComboBox
@@ -4242,11 +4251,11 @@ object f_setup: Tf_setup
                     'http:'
                     'https:'
                   )
-                  OnChange = MountARestProtocolChange
                   ParentFont = False
                   Style = csDropDownList
                   TabOrder = 0
                   Text = 'http:'
+                  OnChange = MountARestProtocolChange
                 end
                 object Label46: TLabel
                   Left = 13
@@ -4376,11 +4385,11 @@ object f_setup: Tf_setup
                   Top = 5
                   Width = 360
                   Constraints.MaxHeight = 28
-                  ItemHeight = 18
-                  OnChange = AlpacaMountListChange
+                  ItemHeight = 24
                   ParentFont = False
                   Style = csDropDownList
                   TabOrder = 6
+                  OnChange = AlpacaMountListChange
                 end
                 object Label23: TLabel
                   Cursor = crHandPoint
@@ -4415,9 +4424,9 @@ object f_setup: Tf_setup
                   Top = 66
                   Width = 82
                   Caption = 'Discover'
-                  OnClick = BtnDiscoverClick
                   ParentFont = False
                   TabOrder = 7
+                  OnClick = BtnDiscoverClick
                 end
                 object DiscoverLed5: TShape
                   AnchorSideLeft.Control = BtnDiscover5
@@ -4438,14 +4447,14 @@ object f_setup: Tf_setup
       end
       object Dome: TTabSheet
         Caption = 'Dome'
-        ClientHeight = 450
-        ClientWidth = 490
+        ClientHeight = 454
+        ClientWidth = 494
         ParentFont = False
         object PageControlDome: TPageControl
           Left = 0
-          Height = 410
+          Height = 414
           Top = 40
-          Width = 490
+          Width = 494
           ActivePage = DomeIndi
           Align = alClient
           ParentFont = False
@@ -4454,18 +4463,18 @@ object f_setup: Tf_setup
           OnChange = PageControlDomeChange
           object DomeIndi: TTabSheet
             Caption = 'DomeIndi'
-            ClientHeight = 375
-            ClientWidth = 486
+            ClientHeight = 379
+            ClientWidth = 488
             ParentFont = False
             object PanelDomeIndi: TPanel
               Left = 0
-              Height = 375
+              Height = 379
               Top = 0
-              Width = 486
+              Width = 488
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 375
-              ClientWidth = 486
+              ClientHeight = 379
+              ClientWidth = 488
               ParentFont = False
               TabOrder = 0
               object DomeIndiDevice: TComboBox
@@ -4474,7 +4483,7 @@ object f_setup: Tf_setup
                 Top = 51
                 Width = 170
                 Constraints.MaxHeight = 28
-                ItemHeight = 18
+                ItemHeight = 24
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 0
@@ -4563,9 +4572,9 @@ object f_setup: Tf_setup
                 Top = 53
                 Width = 75
                 Caption = 'Get'
-                OnClick = GetIndiClick
                 ParentFont = False
                 TabOrder = 3
+                OnClick = GetIndiClick
               end
               object DomeMsg: TLabel
                 Left = 275
@@ -4582,8 +4591,8 @@ object f_setup: Tf_setup
           end
           object DomeAscom: TTabSheet
             Caption = 'DomeAscom'
-            ClientHeight = 375
-            ClientWidth = 486
+            ClientHeight = 379
+            ClientWidth = 488
             ParentFont = False
             object PanelDomeAscom: TPanel
               Left = 16
@@ -4602,9 +4611,9 @@ object f_setup: Tf_setup
                 Top = 16
                 Width = 108
                 Caption = 'Choose'
-                OnClick = BtnChooseClick
                 ParentFont = False
                 TabOrder = 0
+                OnClick = BtnChooseClick
               end
               object AscomDome: TEdit
                 AnchorSideTop.Control = BtnChooseDome
@@ -4624,9 +4633,9 @@ object f_setup: Tf_setup
                 Top = 81
                 Width = 108
                 Caption = 'About'
-                OnClick = BtnAboutAscomClick
                 ParentFont = False
                 TabOrder = 2
+                OnClick = BtnAboutAscomClick
               end
               object BtnSetupDome: TButton
                 Tag = 8
@@ -4635,26 +4644,26 @@ object f_setup: Tf_setup
                 Top = 49
                 Width = 108
                 Caption = 'Setup'
-                OnClick = BtnSetupAscomClick
                 ParentFont = False
                 TabOrder = 3
+                OnClick = BtnSetupAscomClick
               end
             end
           end
           object DomeAscomRest: TTabSheet
             Caption = 'DomeAscomRest'
-            ClientHeight = 375
-            ClientWidth = 486
+            ClientHeight = 379
+            ClientWidth = 488
             ParentFont = False
             object Panel7: TPanel
               Left = 0
-              Height = 375
+              Height = 379
               Top = 0
-              Width = 486
+              Width = 488
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 375
-              ClientWidth = 486
+              ClientHeight = 379
+              ClientWidth = 488
               ParentFont = False
               TabOrder = 0
               object DomeARestProtocol: TComboBox
@@ -4669,11 +4678,11 @@ object f_setup: Tf_setup
                   'http:'
                   'https:'
                 )
-                OnChange = DomeARestProtocolChange
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 0
                 Text = 'http:'
+                OnChange = DomeARestProtocolChange
               end
               object Label50: TLabel
                 Left = 13
@@ -4803,11 +4812,11 @@ object f_setup: Tf_setup
                 Top = 5
                 Width = 360
                 Constraints.MaxHeight = 28
-                ItemHeight = 18
-                OnChange = AlpacaDomeListChange
+                ItemHeight = 24
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 6
+                OnChange = AlpacaDomeListChange
               end
               object Label127: TLabel
                 Cursor = crHandPoint
@@ -4842,9 +4851,9 @@ object f_setup: Tf_setup
                 Top = 66
                 Width = 82
                 Caption = 'Discover'
-                OnClick = BtnDiscoverClick
                 ParentFont = False
                 TabOrder = 7
+                OnClick = BtnDiscoverClick
               end
               object DiscoverLed6: TShape
                 AnchorSideLeft.Control = BtnDiscover6
@@ -4865,11 +4874,11 @@ object f_setup: Tf_setup
           Left = 0
           Height = 40
           Top = 0
-          Width = 490
+          Width = 494
           Align = alTop
           BevelOuter = bvNone
           ClientHeight = 40
-          ClientWidth = 490
+          ClientWidth = 494
           ParentFont = False
           TabOrder = 1
           object DeviceDome: TCheckBox
@@ -4885,14 +4894,14 @@ object f_setup: Tf_setup
       end
       object Weather: TTabSheet
         Caption = 'Weather'
-        ClientHeight = 450
-        ClientWidth = 490
+        ClientHeight = 454
+        ClientWidth = 494
         ParentFont = False
         object PageControlWeather: TPageControl
           Left = 0
-          Height = 410
+          Height = 414
           Top = 40
-          Width = 490
+          Width = 494
           ActivePage = WeatherIndi
           Align = alClient
           ParentFont = False
@@ -4901,18 +4910,18 @@ object f_setup: Tf_setup
           OnChange = PageControlWeatherChange
           object WeatherIndi: TTabSheet
             Caption = 'WeatherIndi'
-            ClientHeight = 375
-            ClientWidth = 486
+            ClientHeight = 379
+            ClientWidth = 488
             ParentFont = False
             object PanelWeatherIndi: TPanel
               Left = 0
-              Height = 375
+              Height = 379
               Top = 0
-              Width = 486
+              Width = 488
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 375
-              ClientWidth = 486
+              ClientHeight = 379
+              ClientWidth = 488
               ParentFont = False
               TabOrder = 0
               object WeatherIndiDevice: TComboBox
@@ -4921,7 +4930,7 @@ object f_setup: Tf_setup
                 Top = 51
                 Width = 170
                 Constraints.MaxHeight = 28
-                ItemHeight = 18
+                ItemHeight = 24
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 0
@@ -5010,9 +5019,9 @@ object f_setup: Tf_setup
                 Top = 53
                 Width = 75
                 Caption = 'Get'
-                OnClick = GetIndiClick
                 ParentFont = False
                 TabOrder = 3
+                OnClick = GetIndiClick
               end
               object WeatherMsg: TLabel
                 Left = 275
@@ -5029,8 +5038,8 @@ object f_setup: Tf_setup
           end
           object WeatherAscom: TTabSheet
             Caption = 'WeatherAscom'
-            ClientHeight = 375
-            ClientWidth = 486
+            ClientHeight = 379
+            ClientWidth = 488
             ParentFont = False
             object PanelWeatherAscom: TPanel
               Left = 16
@@ -5049,9 +5058,9 @@ object f_setup: Tf_setup
                 Top = 16
                 Width = 108
                 Caption = 'Choose'
-                OnClick = BtnChooseClick
                 ParentFont = False
                 TabOrder = 0
+                OnClick = BtnChooseClick
               end
               object AscomWeather: TEdit
                 AnchorSideTop.Control = BtnChooseWeather
@@ -5071,9 +5080,9 @@ object f_setup: Tf_setup
                 Top = 81
                 Width = 108
                 Caption = 'About'
-                OnClick = BtnAboutAscomClick
                 ParentFont = False
                 TabOrder = 2
+                OnClick = BtnAboutAscomClick
               end
               object BtnSetupWeather: TButton
                 Tag = 6
@@ -5082,9 +5091,9 @@ object f_setup: Tf_setup
                 Top = 49
                 Width = 108
                 Caption = 'Setup'
-                OnClick = BtnSetupAscomClick
                 ParentFont = False
                 TabOrder = 3
+                OnClick = BtnSetupAscomClick
               end
               object AscomWeatherType: TRadioGroup
                 Left = 8
@@ -5100,33 +5109,33 @@ object f_setup: Tf_setup
                 ChildSizing.ShrinkVertical = crsScaleChilds
                 ChildSizing.Layout = cclLeftToRightThenTopToBottom
                 ChildSizing.ControlsPerLine = 1
-                ClientHeight = 58
+                ClientHeight = 59
                 ClientWidth = 206
                 ItemIndex = 0
                 Items.Strings = (
                   'Observing condition'
                   'Safety monitor'
                 )
-                OnClick = AscomWeatherTypeClick
                 ParentFont = False
                 TabOrder = 4
+                OnClick = AscomWeatherTypeClick
               end
             end
           end
           object WeatherAscomRest: TTabSheet
             Caption = 'WeatherAscomRest'
-            ClientHeight = 375
-            ClientWidth = 486
+            ClientHeight = 379
+            ClientWidth = 488
             ParentFont = False
             object Panel8: TPanel
               Left = 0
-              Height = 375
+              Height = 379
               Top = 0
-              Width = 486
+              Width = 488
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 375
-              ClientWidth = 486
+              ClientHeight = 379
+              ClientWidth = 488
               ParentFont = False
               TabOrder = 0
               object WeatherARestProtocol: TComboBox
@@ -5141,11 +5150,11 @@ object f_setup: Tf_setup
                   'http:'
                   'https:'
                 )
-                OnChange = WeatherARestProtocolChange
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 0
                 Text = 'http:'
+                OnChange = WeatherARestProtocolChange
               end
               object Label54: TLabel
                 Left = 13
@@ -5234,7 +5243,7 @@ object f_setup: Tf_setup
                 ChildSizing.ShrinkVertical = crsScaleChilds
                 ChildSizing.Layout = cclLeftToRightThenTopToBottom
                 ChildSizing.ControlsPerLine = 1
-                ClientHeight = 58
+                ClientHeight = 59
                 ClientWidth = 270
                 ItemIndex = 0
                 Items.Strings = (
@@ -5290,11 +5299,11 @@ object f_setup: Tf_setup
                 Top = 5
                 Width = 360
                 Constraints.MaxHeight = 28
-                ItemHeight = 18
-                OnChange = AlpacaWeatherListChange
+                ItemHeight = 24
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 7
+                OnChange = AlpacaWeatherListChange
               end
               object Label128: TLabel
                 Cursor = crHandPoint
@@ -5329,9 +5338,9 @@ object f_setup: Tf_setup
                 Top = 66
                 Width = 82
                 Caption = 'Discover'
-                OnClick = BtnDiscoverClick
                 ParentFont = False
                 TabOrder = 8
+                OnClick = BtnDiscoverClick
               end
               object DiscoverLed7: TShape
                 AnchorSideLeft.Control = BtnDiscover7
@@ -5352,11 +5361,11 @@ object f_setup: Tf_setup
           Left = 0
           Height = 40
           Top = 0
-          Width = 490
+          Width = 494
           Align = alTop
           BevelOuter = bvNone
           ClientHeight = 40
-          ClientWidth = 490
+          ClientWidth = 494
           ParentFont = False
           TabOrder = 1
           object DeviceWeather: TCheckBox
@@ -5372,14 +5381,14 @@ object f_setup: Tf_setup
       end
       object Safety: TTabSheet
         Caption = 'Safety'
-        ClientHeight = 450
-        ClientWidth = 490
+        ClientHeight = 454
+        ClientWidth = 494
         ParentFont = False
         object PageControlSafety: TPageControl
           Left = 0
-          Height = 410
+          Height = 414
           Top = 40
-          Width = 490
+          Width = 494
           ActivePage = SafetyIndi
           Align = alClient
           ParentFont = False
@@ -5388,18 +5397,18 @@ object f_setup: Tf_setup
           OnChange = PageControlSafetyChange
           object SafetyIndi: TTabSheet
             Caption = 'SafetyIndi'
-            ClientHeight = 375
-            ClientWidth = 486
+            ClientHeight = 379
+            ClientWidth = 488
             ParentFont = False
             object PanelSafetyIndi: TPanel
               Left = 0
-              Height = 375
+              Height = 379
               Top = 0
-              Width = 486
+              Width = 488
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 375
-              ClientWidth = 486
+              ClientHeight = 379
+              ClientWidth = 488
               ParentFont = False
               TabOrder = 0
               object SafetyIndiDevice: TComboBox
@@ -5408,7 +5417,7 @@ object f_setup: Tf_setup
                 Top = 51
                 Width = 170
                 Constraints.MaxHeight = 28
-                ItemHeight = 18
+                ItemHeight = 24
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 0
@@ -5497,9 +5506,9 @@ object f_setup: Tf_setup
                 Top = 53
                 Width = 75
                 Caption = 'Get'
-                OnClick = GetIndiClick
                 ParentFont = False
                 TabOrder = 3
+                OnClick = GetIndiClick
               end
               object SafetyMsg: TLabel
                 Left = 275
@@ -5516,8 +5525,8 @@ object f_setup: Tf_setup
           end
           object SafetyAscom: TTabSheet
             Caption = 'SafetyAscom'
-            ClientHeight = 375
-            ClientWidth = 486
+            ClientHeight = 379
+            ClientWidth = 488
             ParentFont = False
             object PanelSafetyAscom: TPanel
               Left = 16
@@ -5536,9 +5545,9 @@ object f_setup: Tf_setup
                 Top = 16
                 Width = 108
                 Caption = 'Choose'
-                OnClick = BtnChooseClick
                 ParentFont = False
                 TabOrder = 0
+                OnClick = BtnChooseClick
               end
               object AscomSafety: TEdit
                 AnchorSideTop.Control = BtnChooseSafety
@@ -5558,9 +5567,9 @@ object f_setup: Tf_setup
                 Top = 81
                 Width = 108
                 Caption = 'About'
-                OnClick = BtnAboutAscomClick
                 ParentFont = False
                 TabOrder = 2
+                OnClick = BtnAboutAscomClick
               end
               object BtnSetupSafety: TButton
                 Tag = 7
@@ -5569,26 +5578,26 @@ object f_setup: Tf_setup
                 Top = 49
                 Width = 108
                 Caption = 'Setup'
-                OnClick = BtnSetupAscomClick
                 ParentFont = False
                 TabOrder = 3
+                OnClick = BtnSetupAscomClick
               end
             end
           end
           object SafetyAscomRest: TTabSheet
             Caption = 'SafetyAscomRest'
-            ClientHeight = 375
-            ClientWidth = 486
+            ClientHeight = 379
+            ClientWidth = 488
             ParentFont = False
             object Panel9: TPanel
               Left = 0
-              Height = 375
+              Height = 379
               Top = 0
-              Width = 486
+              Width = 488
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 375
-              ClientWidth = 486
+              ClientHeight = 379
+              ClientWidth = 488
               ParentFont = False
               TabOrder = 0
               object SafetyARestProtocol: TComboBox
@@ -5603,11 +5612,11 @@ object f_setup: Tf_setup
                   'http:'
                   'https:'
                 )
-                OnChange = SafetyARestProtocolChange
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 0
                 Text = 'http:'
+                OnChange = SafetyARestProtocolChange
               end
               object Label58: TLabel
                 Left = 13
@@ -5737,11 +5746,11 @@ object f_setup: Tf_setup
                 Top = 5
                 Width = 360
                 Constraints.MaxHeight = 28
-                ItemHeight = 18
-                OnChange = AlpacaSafetyListChange
+                ItemHeight = 24
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 6
+                OnChange = AlpacaSafetyListChange
               end
               object Label129: TLabel
                 Cursor = crHandPoint
@@ -5776,9 +5785,9 @@ object f_setup: Tf_setup
                 Top = 66
                 Width = 82
                 Caption = 'Discover'
-                OnClick = BtnDiscoverClick
                 ParentFont = False
                 TabOrder = 7
+                OnClick = BtnDiscoverClick
               end
               object DiscoverLed8: TShape
                 AnchorSideLeft.Control = BtnDiscover8
@@ -5799,11 +5808,11 @@ object f_setup: Tf_setup
           Left = 0
           Height = 40
           Top = 0
-          Width = 490
+          Width = 494
           Align = alTop
           BevelOuter = bvNone
           ClientHeight = 40
-          ClientWidth = 490
+          ClientWidth = 494
           ParentFont = False
           TabOrder = 1
           object DeviceSafety: TCheckBox
@@ -5819,14 +5828,14 @@ object f_setup: Tf_setup
       end
       object Watchdog: TTabSheet
         Caption = 'Watchdog'
-        ClientHeight = 450
-        ClientWidth = 490
+        ClientHeight = 454
+        ClientWidth = 494
         ParentFont = False
         object PageControlWatchdog: TPageControl
           Left = 0
-          Height = 410
+          Height = 414
           Top = 40
-          Width = 490
+          Width = 494
           ActivePage = WatchdogIndi
           Align = alClient
           ParentFont = False
@@ -5835,18 +5844,18 @@ object f_setup: Tf_setup
           OnChange = PageControlWatchdogChange
           object WatchdogIndi: TTabSheet
             Caption = 'WatchdogIndi'
-            ClientHeight = 375
-            ClientWidth = 486
+            ClientHeight = 379
+            ClientWidth = 488
             ParentFont = False
             object PanelWatchdogIndi: TPanel
               Left = 0
-              Height = 375
+              Height = 379
               Top = 0
-              Width = 486
+              Width = 488
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 375
-              ClientWidth = 486
+              ClientHeight = 379
+              ClientWidth = 488
               ParentFont = False
               TabOrder = 0
               object WatchdogIndiDevice: TComboBox
@@ -5855,7 +5864,7 @@ object f_setup: Tf_setup
                 Top = 51
                 Width = 170
                 Constraints.MaxHeight = 28
-                ItemHeight = 18
+                ItemHeight = 24
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 0
@@ -5964,9 +5973,9 @@ object f_setup: Tf_setup
                 Top = 53
                 Width = 75
                 Caption = 'Get'
-                OnClick = GetIndiClick
                 ParentFont = False
                 TabOrder = 4
+                OnClick = GetIndiClick
               end
               object WatchdogMsg: TLabel
                 Left = 275
@@ -5986,11 +5995,11 @@ object f_setup: Tf_setup
           Left = 0
           Height = 40
           Top = 0
-          Width = 490
+          Width = 494
           Align = alTop
           BevelOuter = bvNone
           ClientHeight = 40
-          ClientWidth = 490
+          ClientWidth = 494
           ParentFont = False
           TabOrder = 1
           object DeviceWatchdog: TCheckBox
@@ -6006,17 +6015,17 @@ object f_setup: Tf_setup
       end
       object Switch: TTabSheet
         Caption = 'Switch'
-        ClientHeight = 450
-        ClientWidth = 490
+        ClientHeight = 454
+        ClientWidth = 494
         object Panel33: TPanel
           Left = 0
           Height = 40
           Top = 0
-          Width = 490
+          Width = 494
           Align = alTop
           BevelOuter = bvNone
           ClientHeight = 40
-          ClientWidth = 490
+          ClientWidth = 494
           ParentFont = False
           TabOrder = 0
           object DeviceSwitch: TCheckBox
@@ -6064,7 +6073,7 @@ object f_setup: Tf_setup
           Left = 0
           Height = 30
           Top = 40
-          Width = 490
+          Width = 494
           OnChange = SwitchTabControlChange
           OnChanging = SwitchTabControlChanging
           TabIndex = 0
@@ -6079,10 +6088,10 @@ object f_setup: Tf_setup
           Left = 0
           Height = 74
           Top = 70
-          Width = 490
+          Width = 494
           Align = alTop
           ClientHeight = 74
-          ClientWidth = 490
+          ClientWidth = 494
           TabOrder = 3
           object LabelSwitchConnection: TLabel
             Left = 8
@@ -6112,9 +6121,9 @@ object f_setup: Tf_setup
         end
         object PageControlSwitch: TPageControl
           Left = 0
-          Height = 306
+          Height = 310
           Top = 144
-          Width = 490
+          Width = 494
           ActivePage = SwitchIndi
           Align = alClient
           ParentFont = False
@@ -6123,18 +6132,18 @@ object f_setup: Tf_setup
           OnChange = PageControlSwitchChange
           object SwitchIndi: TTabSheet
             Caption = 'SwitchIndi'
-            ClientHeight = 271
-            ClientWidth = 486
+            ClientHeight = 275
+            ClientWidth = 488
             ParentFont = False
             object PanelSwitchIndi: TPanel
               Left = 0
-              Height = 271
+              Height = 275
               Top = 0
-              Width = 486
+              Width = 488
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 271
-              ClientWidth = 486
+              ClientHeight = 275
+              ClientWidth = 488
               ParentFont = False
               TabOrder = 0
               object SwitchIndiDevice: TComboBox
@@ -6143,7 +6152,7 @@ object f_setup: Tf_setup
                 Top = 51
                 Width = 170
                 Constraints.MaxHeight = 28
-                ItemHeight = 18
+                ItemHeight = 24
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 0
@@ -6232,9 +6241,9 @@ object f_setup: Tf_setup
                 Top = 53
                 Width = 75
                 Caption = 'Get'
-                OnClick = GetIndiClick
                 ParentFont = False
                 TabOrder = 3
+                OnClick = GetIndiClick
               end
               object SwitchMsg: TLabel
                 Left = 275
@@ -6251,8 +6260,8 @@ object f_setup: Tf_setup
           end
           object SwitchAscom: TTabSheet
             Caption = 'SwitchAscom'
-            ClientHeight = 271
-            ClientWidth = 486
+            ClientHeight = 275
+            ClientWidth = 488
             ParentFont = False
             object PanelSwitchAscom: TPanel
               Left = 16
@@ -6271,9 +6280,9 @@ object f_setup: Tf_setup
                 Top = 16
                 Width = 108
                 Caption = 'Choose'
-                OnClick = BtnChooseClick
                 ParentFont = False
                 TabOrder = 0
+                OnClick = BtnChooseClick
               end
               object AscomSwitch: TEdit
                 AnchorSideTop.Control = BtnChooseSwitch
@@ -6293,9 +6302,9 @@ object f_setup: Tf_setup
                 Top = 80
                 Width = 108
                 Caption = 'About'
-                OnClick = BtnAboutAscomClick
                 ParentFont = False
                 TabOrder = 2
+                OnClick = BtnAboutAscomClick
               end
               object BtnSetupSwitch: TButton
                 Tag = 10
@@ -6304,26 +6313,26 @@ object f_setup: Tf_setup
                 Top = 48
                 Width = 108
                 Caption = 'Setup'
-                OnClick = BtnSetupAscomClick
                 ParentFont = False
                 TabOrder = 3
+                OnClick = BtnSetupAscomClick
               end
             end
           end
           object SwitchAscomRest: TTabSheet
             Caption = 'SwitchAscomRest'
-            ClientHeight = 271
-            ClientWidth = 486
+            ClientHeight = 275
+            ClientWidth = 488
             ParentFont = False
             object Panel35: TPanel
               Left = 0
-              Height = 271
+              Height = 275
               Top = 0
-              Width = 486
+              Width = 488
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 271
-              ClientWidth = 486
+              ClientHeight = 275
+              ClientWidth = 488
               ParentFont = False
               TabOrder = 0
               object SwitchARestProtocol: TComboBox
@@ -6338,11 +6347,11 @@ object f_setup: Tf_setup
                   'http:'
                   'https:'
                 )
-                OnChange = SwitchARestProtocolChange
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 0
                 Text = 'http:'
+                OnChange = SwitchARestProtocolChange
               end
               object Label111: TLabel
                 Left = 13
@@ -6472,11 +6481,11 @@ object f_setup: Tf_setup
                 Top = 5
                 Width = 360
                 Constraints.MaxHeight = 28
-                ItemHeight = 18
-                OnChange = AlpacaSwitchListChange
+                ItemHeight = 24
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 6
+                OnChange = AlpacaSwitchListChange
               end
               object Label130: TLabel
                 Cursor = crHandPoint
@@ -6511,9 +6520,9 @@ object f_setup: Tf_setup
                 Top = 66
                 Width = 82
                 Caption = 'Discover'
-                OnClick = BtnDiscoverClick
                 ParentFont = False
                 TabOrder = 7
+                OnClick = BtnDiscoverClick
               end
               object DiscoverLed9: TShape
                 AnchorSideLeft.Control = BtnDiscover9
@@ -6533,17 +6542,17 @@ object f_setup: Tf_setup
       end
       object Cover: TTabSheet
         Caption = 'Cover calibrator'
-        ClientHeight = 450
-        ClientWidth = 490
+        ClientHeight = 454
+        ClientWidth = 494
         object Panel36: TPanel
           Left = 0
           Height = 40
           Top = 0
-          Width = 490
+          Width = 494
           Align = alTop
           BevelOuter = bvNone
           ClientHeight = 40
-          ClientWidth = 490
+          ClientWidth = 494
           ParentFont = False
           TabOrder = 0
           object DeviceCover: TCheckBox
@@ -6558,9 +6567,9 @@ object f_setup: Tf_setup
         end
         object PageControlCover: TPageControl
           Left = 0
-          Height = 410
+          Height = 414
           Top = 40
-          Width = 490
+          Width = 494
           ActivePage = CoverIndi
           Align = alClient
           ParentFont = False
@@ -6569,18 +6578,18 @@ object f_setup: Tf_setup
           OnChange = PageControlCoverChange
           object CoverIndi: TTabSheet
             Caption = 'CoverIndi'
-            ClientHeight = 375
-            ClientWidth = 486
+            ClientHeight = 379
+            ClientWidth = 488
             ParentFont = False
             object PanelCoverIndi: TPanel
               Left = 0
-              Height = 375
+              Height = 379
               Top = 0
-              Width = 486
+              Width = 488
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 375
-              ClientWidth = 486
+              ClientHeight = 379
+              ClientWidth = 488
               ParentFont = False
               TabOrder = 0
               object CoverIndiDevice: TComboBox
@@ -6589,7 +6598,7 @@ object f_setup: Tf_setup
                 Top = 51
                 Width = 170
                 Constraints.MaxHeight = 28
-                ItemHeight = 18
+                ItemHeight = 24
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 0
@@ -6678,9 +6687,9 @@ object f_setup: Tf_setup
                 Top = 53
                 Width = 75
                 Caption = 'Get'
-                OnClick = GetIndiClick
                 ParentFont = False
                 TabOrder = 3
+                OnClick = GetIndiClick
               end
               object CoverMsg: TLabel
                 Left = 275
@@ -6697,8 +6706,8 @@ object f_setup: Tf_setup
           end
           object CoverAscom: TTabSheet
             Caption = 'CoverAscom'
-            ClientHeight = 375
-            ClientWidth = 486
+            ClientHeight = 379
+            ClientWidth = 488
             ParentFont = False
             object PanelCoverAscom: TPanel
               Left = 16
@@ -6717,9 +6726,9 @@ object f_setup: Tf_setup
                 Top = 16
                 Width = 108
                 Caption = 'Choose'
-                OnClick = BtnChooseClick
                 ParentFont = False
                 TabOrder = 0
+                OnClick = BtnChooseClick
               end
               object AscomCover: TEdit
                 AnchorSideTop.Control = BtnChooseCover
@@ -6739,9 +6748,9 @@ object f_setup: Tf_setup
                 Top = 81
                 Width = 108
                 Caption = 'About'
-                OnClick = BtnAboutAscomClick
                 ParentFont = False
                 TabOrder = 2
+                OnClick = BtnAboutAscomClick
               end
               object BtnSetupCover: TButton
                 Tag = 11
@@ -6750,26 +6759,26 @@ object f_setup: Tf_setup
                 Top = 49
                 Width = 108
                 Caption = 'Setup'
-                OnClick = BtnSetupAscomClick
                 ParentFont = False
                 TabOrder = 3
+                OnClick = BtnSetupAscomClick
               end
             end
           end
           object CoverAscomRest: TTabSheet
             Caption = 'CoverAscomRest'
-            ClientHeight = 375
-            ClientWidth = 486
+            ClientHeight = 379
+            ClientWidth = 488
             ParentFont = False
             object Panel38: TPanel
               Left = 0
-              Height = 375
+              Height = 379
               Top = 0
-              Width = 486
+              Width = 488
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 375
-              ClientWidth = 486
+              ClientHeight = 379
+              ClientWidth = 488
               ParentFont = False
               TabOrder = 0
               object CoverARestProtocol: TComboBox
@@ -6784,11 +6793,11 @@ object f_setup: Tf_setup
                   'http:'
                   'https:'
                 )
-                OnChange = CoverARestProtocolChange
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 0
                 Text = 'http:'
+                OnChange = CoverARestProtocolChange
               end
               object Label120: TLabel
                 Left = 13
@@ -6918,11 +6927,11 @@ object f_setup: Tf_setup
                 Top = 5
                 Width = 360
                 Constraints.MaxHeight = 28
-                ItemHeight = 18
-                OnChange = AlpacaCoverListChange
+                ItemHeight = 24
                 ParentFont = False
                 Style = csDropDownList
                 TabOrder = 6
+                OnChange = AlpacaCoverListChange
               end
               object Label131: TLabel
                 Cursor = crHandPoint
@@ -6957,9 +6966,9 @@ object f_setup: Tf_setup
                 Top = 66
                 Width = 82
                 Caption = 'Discover'
-                OnClick = BtnDiscoverClick
                 ParentFont = False
                 TabOrder = 7
+                OnClick = BtnDiscoverClick
               end
               object DiscoverLed10: TShape
                 AnchorSideLeft.Control = BtnDiscover10

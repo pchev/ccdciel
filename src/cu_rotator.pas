@@ -44,7 +44,7 @@ T_rotator = class(TComponent)
     FTimeOut: integer;
     Fdevice: string;
     FAutoLoadConfig: boolean;
-    FSoftSync, FSoftLimit: boolean;
+    FAdjustPierSide, FSoftSync, FSoftLimit: boolean;
     FCalibrationAngle: double;
     FReverse: Boolean;
     FMountPierSide, FCalibrationPierSide: TPierSide;
@@ -75,6 +75,7 @@ T_rotator = class(TComponent)
     Procedure Sync(p:double);
     property CalibrationAngle: double read FCalibrationAngle write FCalibrationAngle;
     property Reverse: Boolean read GetReverse write SetReverse;
+    property AdjustPierSide: boolean read FAdjustPierSide write FAdjustPierSide;
     property SoftSync: boolean read FSoftSync write FSoftSync;
     property SoftLimit: boolean read FSoftLimit write FSoftLimit;
     property CalibrationPierSide:TPierSide read FCalibrationPierSide write FCalibrationPierSide;
@@ -187,7 +188,7 @@ end;
 procedure T_rotator.SetMountPierSide(value: TPierSide);
 var x: double;
 begin
-  if (not FSoftSync)and(FMountPierSide<pierUnknown)and(value<pierUnknown)and(FMountPierSide<>value) then begin
+  if FAdjustPierSide and (not FSoftSync)and(FMountPierSide<pierUnknown)and(value<pierUnknown)and(FMountPierSide<>value) then begin
     x:=rmod(GetAngle+180+360,360);
     Sync(x);
   end;

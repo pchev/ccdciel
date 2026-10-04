@@ -1564,6 +1564,7 @@ resourcestring
   rsReservedKeyw = 'Reserved keyword';
   rsSyncOffsetTo = 'Sync offset too big: %s° , ignored.';
   rsWaitDeclinat = 'Wait declination reversal';
+  rsAdjustThePAA = 'Adjust the PA after the mount pier side change';
 
 implementation
 

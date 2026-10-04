@@ -95,6 +95,7 @@ type
     BtnSetupCover: TButton;
     btnGuiderFullFrame: TButton;
     ButtonHelp: TButton;
+    cbAdjustPierSide: TCheckBox;
     GuideCameraDiskPanel: TPanel;
     GuideCameraIndiTransfert: TRadioGroup;
     GuideCameraIndiTransfertDir: TEdit;
@@ -1194,6 +1195,7 @@ begin
   BtnSetupRotator.Caption:=rsSetup;
   Label11.Caption:=rsDevices;
   RotatorAutoLoadConfig.Caption:=rsLoadConfigur;
+  cbAdjustPierSide.Caption:=rsAdjustThePAA;
   cbRotatorSoftSync.Caption:=rsUseSoftwareS;
   cbRotatorSoftLimit.Caption:=rsLimitRotator;
   Mount.Caption:=rsMount;
@@ -1596,6 +1598,7 @@ RotatorARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestrotator/Protocol',0);
 RotatorARestHost.Text:=conf.GetValue('/ASCOMRestrotator/Host','127.0.0.1');
 RotatorARestPort.Value:=conf.GetValue('/ASCOMRestrotator/Port',11111);
 RotatorARestDevice.Value:=conf.GetValue('/ASCOMRestrotator/Device',0);
+cbAdjustPierSide.Checked:=config.GetValue('/Rotator/AdjustPierSide',true);
 cbRotatorSoftSync.Checked:=config.GetValue('/Rotator/SoftSync',false);
 if cbRotatorSoftSync.Checked then begin
   cbRotatorSoftLimit.Enabled:=true;
