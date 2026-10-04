@@ -1542,7 +1542,6 @@ begin
      end;
    end;
    SaveDoneCount;
-   if assigned(FonEndSequence) then FonEndSequence(nil);
    CurrentTargetName:='';
    CurrentTargetInfo:='[" "," ",0,0,0]';
    CurrentStepName:='';
@@ -3326,6 +3325,7 @@ var scriptfound:boolean;
     i:integer;
     sc,param: string;
 begin
+ if OnErrorRunScript or AtEndStopTracking or AtEndPark or AtEndCloseDome or AtEndWarmCamera or AtEndRunScript or AtEndShutdown then begin
   f_pause.Caption:=rsTerminationO;
   f_pause.Text := rsDoYouWantToR2;
   if not f_pause.Wait(20, true, rsYes, rsNo) then begin
@@ -3353,6 +3353,9 @@ begin
       msg(Format(rsFileNotFound,[sc+'.script']),1);
     end;
   end;
+ end
+ else
+  msg(rsNoTerminatio, 1);
 end;
 
 procedure T_Targets.RunEndAction(confirm: boolean=true);

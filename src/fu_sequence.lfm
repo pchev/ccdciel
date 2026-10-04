@@ -5,9 +5,10 @@ object f_sequence: Tf_sequence
   Width = 212
   ClientHeight = 580
   ClientWidth = 212
-  OnResize = FrameResize
+  LCLVersion = '4.8.0.0'
   ParentFont = False
   TabOrder = 0
+  OnResize = FrameResize
   object Title1: TLabel
     Left = 0
     Height = 20
@@ -189,113 +190,113 @@ object f_sequence: Tf_sequence
       TabOrder = 1
       object BtnLoadTargets: TButton
         Left = 0
-        Height = 27
+        Height = 28
         Top = 0
         Width = 88
         Caption = 'Load'
-        OnClick = BtnLoadTargetsClick
         ParentFont = False
         TabOrder = 0
+        OnClick = BtnLoadTargetsClick
       end
       object BtnNewTargets: TButton
         Left = 88
-        Height = 27
+        Height = 28
         Top = 0
         Width = 62
         Caption = 'New'
-        OnClick = BtnEditTargetsClick
         ParentFont = False
         TabOrder = 1
+        OnClick = BtnEditTargetsClick
       end
       object BtnEditTargets: TButton
         Left = 150
-        Height = 27
+        Height = 28
         Top = 0
         Width = 62
         Caption = 'Edit'
-        OnClick = BtnEditTargetsClick
         ParentFont = False
         TabOrder = 2
+        OnClick = BtnEditTargetsClick
       end
       object BtnStatus: TButton
         Left = 0
         Height = 27
-        Top = 27
+        Top = 28
         Width = 88
         Caption = 'Status'
-        OnClick = BtnStatusClick
         ParentFont = False
         TabOrder = 7
+        OnClick = BtnStatusClick
       end
       object BtnReset: TButton
         Left = 88
         Height = 27
-        Top = 27
+        Top = 28
         Width = 62
         Caption = 'Reset'
-        OnClick = BtnResetClick
         ParentFont = False
         TabOrder = 3
+        OnClick = BtnResetClick
       end
       object BtnManage: TButton
         Left = 150
         Height = 27
-        Top = 27
+        Top = 28
         Width = 62
         Caption = 'Manage'
-        OnClick = BtnManageClick
         ParentFont = False
         TabOrder = 8
+        OnClick = BtnManageClick
       end
       object BtnStart: TButton
         Left = 0
         Height = 28
-        Top = 54
+        Top = 55
         Width = 88
         Caption = 'Start'
-        OnClick = BtnStartClick
         ParentFont = False
         TabOrder = 4
+        OnClick = BtnStartClick
       end
       object BtnPause: TButton
         Left = 88
         Height = 28
-        Top = 54
+        Top = 55
         Width = 62
         Caption = 'Pause'
-        OnClick = BtnPauseClick
         ParentFont = False
         TabOrder = 6
+        OnClick = BtnPauseClick
       end
       object BtnStop: TButton
         Left = 150
         Height = 28
-        Top = 54
+        Top = 55
         Width = 62
         Caption = 'Stop'
-        OnClick = BtnStopClick
         ParentFont = False
         TabOrder = 5
+        OnClick = BtnStopClick
       end
       object BtnSkip: TButton
         Left = 0
-        Height = 28
-        Top = 82
+        Height = 27
+        Top = 83
         Width = 88
         Caption = 'Restart exposure'
-        OnClick = BtnSkipClick
         ParentFont = False
         TabOrder = 9
+        OnClick = BtnSkipClick
       end
       object BtnAutofocus: TButton
         Left = 88
-        Height = 28
-        Top = 82
+        Height = 27
+        Top = 83
         Width = 62
         Caption = 'Autofocus'
-        OnClick = BtnAutofocusClick
         ParentFont = False
         TabOrder = 10
+        OnClick = BtnAutofocusClick
       end
     end
     object led: TShape
@@ -316,9 +317,9 @@ object f_sequence: Tf_sequence
       Top = 112
       Width = 123
       Caption = 'Run unattended'
-      OnChange = UnattendedChange
       ParentFont = False
       TabOrder = 2
+      OnChange = UnattendedChange
     end
   end
   object Splitter1: TSplitter
@@ -379,6 +380,7 @@ object f_sequence: Tf_sequence
   end
   object NextSequenceTimer: TTimer
     Enabled = False
+    Interval = 30000
     OnTimer = NextSequenceTimerTimer
     Left = 34
     Top = 133
