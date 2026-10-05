@@ -16675,8 +16675,10 @@ begin
     until (now > endt) or
           (TCPDaemon.Finished
            {$ifdef mswindows} and ((TCPDaemon4 = nil) or TCPDaemon4.Finished){$endif});
-    TCPDaemon.WaitFor;
-    FreeAndNil(TCPDaemon);
+    if TCPDaemon.Finished then begin
+      TCPDaemon.WaitFor;
+      FreeAndNil(TCPDaemon);
+    end;
     {$ifdef mswindows}
     if TCPDaemon4 <> nil then begin
       TCPDaemon4.WaitFor;
