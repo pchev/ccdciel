@@ -16669,7 +16669,7 @@ begin
     // Application.ProcessMessages, which services the Synchronize queue - a
     // plain WaitFor here would deadlock, because the daemon and its clients use
     // Synchronize to reach the main thread.
-    endt := now + 10/secperday;
+    endt := now + 5/secperday;
     repeat
       Wait(0.2);
     until (now > endt) or
@@ -16680,7 +16680,7 @@ begin
       FreeAndNil(TCPDaemon);
     end;
     {$ifdef mswindows}
-    if TCPDaemon4 <> nil then begin
+    if (TCPDaemon4 <> nil) and TCPDaemon4.Finished then begin
       TCPDaemon4.WaitFor;
       FreeAndNil(TCPDaemon4);
     end;
