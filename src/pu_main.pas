@@ -11690,7 +11690,7 @@ if (camera.Status=devConnected)and(not autofocusing) then begin
     e:=camera.ExposureRange.min
   else
     e:=StrToFloatDef(f_capture.ExpTime.Text,-1);
-  if e<0 then begin
+  if (e<0) or ((ftype<>BIAS) and (e=0)) then begin
     NewMessage(Format(rsInvalidExpos, [f_capture.ExpTime.Text]),1);
     f_capture.Stop;
     RunningCapture:=false;
