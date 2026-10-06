@@ -17,6 +17,7 @@ object f_dark: Tf_dark
     Top = 32
     Width = 84
     MaxValue = 60
+    MinValue = 1
     TabOrder = 0
     Value = 5
     OnChange = TotalChange
