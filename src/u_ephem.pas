@@ -276,7 +276,7 @@ b := deg2rad * 5.128 * sin(F);
 e := deg2rad * (23.4397 - 0.00000036 * d);
 // Moon Right Ascension and Declination
 ra:=arctan2(sin(l) * cos(e) - tan(b) * sin(e), cos(l));
-de:=sin(sin(b) * cos(e) + cos(b) * sin(e) * sin(l));
+de:=arcsin(sin(b) * cos(e) + cos(b) * sin(e) * sin(l));
 ra:=rmod(ra+pi2,pi2);
 // phase
 t:=(jdn-2415020)/36525;  { meeus 15.1 }
