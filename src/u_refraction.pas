@@ -91,7 +91,7 @@ begin
         begin
           h1 := pid2 - h;
           sla_REFCO(ObsElevation, 273.15 + ObsTemperature, ObsPressure,
-                    ObsHumidity, RefractionWavelength, deg2rad * ObsLatitude, ObsTlr/1000,
+                    ObsHumidity/100, RefractionWavelength, deg2rad * ObsLatitude, ObsTlr/1000,
                     1E-8, ObsRefA, ObsRefb);
           sla_REFZ(h1, ObsRefA, ObsRefB, h);
           if (COS(h) < ZBREAK) then
