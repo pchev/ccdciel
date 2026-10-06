@@ -15569,12 +15569,6 @@ begin
  RawStream:=TMemoryStream.Create;
  FitsStream:=TMemoryStream.Create;
  try
-   // 2024 fix (report item 7d): FitsStream is normally adopted by
-   // "fits.Stream:=FitsStream" (TFits.SetStream takes ownership and frees the
-   // previous stream). That is why it is absent from the finally block. But it
-   // leaked whenever the assignment was skipped - the "size<2880" branch below,
-   // or any exception raised before it. FitsStream is now nil'd at the moment
-   // ownership passes, so the finally can free it unconditionally.
    // load picture
    ext:=ExtractFileExt(fn);
    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'LoadFromFile');{$endif}
@@ -15588,7 +15582,6 @@ begin
      // assign new image
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Copy FITS stream');{$endif}
      fits.Stream:=FitsStream;
-     FitsStream:=nil;   // 2024 (item 7d): ownership has passed to fits
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Load FITS stream');{$endif}
      fits.LoadStream;
      // draw new image
@@ -15607,8 +15600,6 @@ begin
  finally
    // Free resources
    RawStream.Free;
-   FitsStream.Free;   // 2024 (item 7d): nil after a successful hand-over, so
-                      // this only fires on the paths that used to leak
  end;
  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'LoadRawFile end');{$endif}
 end;
@@ -15634,7 +15625,6 @@ begin
    else begin
      // assign new image
      fits.Stream:=FitsStream;
-     FitsStream:=nil;   // 2024 (item 7d): ownership has passed to fits
      fits.LoadStream;
      if fits.HeaderInfo.valid and fits.HeaderInfo.solved then begin
        fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
@@ -15653,8 +15643,6 @@ begin
  finally
    // Free resources
    PictStream.Free;
-   FitsStream.Free;   // 2024 (item 7d): nil after a successful hand-over to
-                      // fits.Stream, so this only fires on the error paths
  end;
 end;
 
@@ -15686,18 +15674,7 @@ end;
  procedure Tf_main.CCDCIELMessageHandler(var Message: TLMessage);
 var buf:string;
 begin
-  if AppClose then begin
-    // 2024 fix (report item 7e): bailing out here used to leak the PChar that
-    // the posting thread allocated with strnew(). These three message types are
-    // the only ones that carry an allocation, and this handler is the only
-    // place it can be released, so dispose of it before leaving.
-    case Message.wParam of
-      M_AstrometryDone, M_AstrometryMsg, M_Message:
-        if Message.LParam<>0 then
-          try StrDispose(PChar(Message.LParam)); except end;
-    end;
-    exit;
-  end;
+  if AppClose then exit;
   case Message.wParam of
     M_AutoguiderStatusChange: AutoguiderStatus(nil);
     M_AutoguiderMessage: if autoguider.ErrorDesc<>'' then begin
@@ -16610,11 +16587,6 @@ begin
     defaultIP:='::0';
   {$endif}
   try
-    // 2024 fix (report item 4): never overwrite a live daemon reference. The
-    // old code would orphan the running thread - still holding the listening
-    // socket - so the new bind then failed on the port it had just leaked.
-    if (TCPDaemon <> nil) then
-      StopServer;
     TCPDaemon := TTCPDaemon.Create;
     TCPDaemon.onErrorMsg := @TCPShowError;
     TCPDaemon.onShowSocket := @TCPShowSocket;
@@ -16643,48 +16615,23 @@ end;
 
 procedure Tf_main.StopServer;
 var
-  endt: TDateTime;
+  i: integer;
 begin
-  // 2024 fix (report item 4): TTCPDaemon is no longer FreeOnTerminate, so this
-  // reference stays valid until we free it here. Reading TCPDaemon.Finished
-  // used to be a use-after-free in its own right.
-  if (TCPDaemon = nil) then
+  if (TCPDaemon = nil)or TCPDaemon.Finished then
     exit;
   try
     screen.cursor := crHourglass;
     NewMessage(rsTCPIPServerS,1);
-    // The loop that used to set stoping on every TCPDaemon.TCPThrd[i] from here
-    // is gone: the client threads are now stopped and freed by the daemon
-    // itself (TTCPDaemon.ReleaseAllClients), which is the thread that owns the
-    // array. Reaching into it from the main thread was an unsynchronised race.
+    for i := 1 to Maxclient do
+      if (TCPDaemon.TCPThrd[i] <> nil) and (TCPDaemon.TCPThrd[i].sock <> nil) and (not TCPDaemon.TCPThrd[i].terminated) then
+      begin
+        TCPDaemon.TCPThrd[i].stoping := True;
+      end;
     TCPDaemon.stoping := True;
-    TCPDaemon.Terminate;
     {$ifdef mswindows}
-    if TCPDaemon4 <> nil then begin
-      TCPDaemon4.stoping := True;
-      TCPDaemon4.Terminate;
-    end;
+    TCPDaemon4.stoping := True;
     {$endif}
-    // Wait for the accept loops to leave. Wait() calls
-    // Application.ProcessMessages, which services the Synchronize queue - a
-    // plain WaitFor here would deadlock, because the daemon and its clients use
-    // Synchronize to reach the main thread.
-    endt := now + 5/secperday;
-    repeat
-      Wait(0.2);
-    until (now > endt) or
-          (TCPDaemon.Finished
-           {$ifdef mswindows} and ((TCPDaemon4 = nil) or TCPDaemon4.Finished){$endif});
-    if TCPDaemon.Finished then begin
-      TCPDaemon.WaitFor;
-      FreeAndNil(TCPDaemon);
-    end;
-    {$ifdef mswindows}
-    if (TCPDaemon4 <> nil) and TCPDaemon4.Finished then begin
-      TCPDaemon4.WaitFor;
-      FreeAndNil(TCPDaemon4);
-    end;
-    {$endif}
+    Wait(1);
     screen.cursor := crDefault;
   except
     screen.cursor := crDefault;

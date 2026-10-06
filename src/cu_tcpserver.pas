@@ -58,9 +58,6 @@ type
     id: integer;
     abort, stoping: boolean;
     remoteip, remoteport: string;
-    // 2024 addition (report item 10f): last unexpected error seen by Execute,
-    // so a crashed client thread is at least diagnosable.
-    LastClientError: string;
     constructor Create(hsock: tSocket);
     procedure Execute; override;
     procedure SendData(str: string);
@@ -71,10 +68,7 @@ type
     property sock: TTCPBlockSocket read FSock;
     property ConnectTime: double read FConnectTime;
     property Terminated;
-    // 2024 fix (report item 10e): this property used to be named onTerminate,
-    // which silently hid the inherited TThread.OnTerminate (a TNotifyEvent).
-    // Renamed so the inherited member stays available and reachable.
-    property onSlotFree: TIntProc read FTerminate write FTerminate;
+    property onTerminate: TIntProc read FTerminate write FTerminate;
     property onExecuteCmd: TExCmd read FExecuteCmd write FExecuteCmd;
     property onGetImage: TGetImage read  FGetImage write FGetImage;
     property onExecuteJSON: TExJSON read FExecuteJSON write FExecuteJSON;
@@ -92,16 +86,11 @@ type
     procedure ShowError;
     procedure ThrdTerminate(var i: integer);
     function GetIPport: string;
-    // 2024 fix (report item 4): client threads are no longer FreeOnTerminate,
-    // so the daemon owns them and must release them itself.
-    procedure ReleaseClient(n: integer);
-    procedure ReleaseAllClients;
   public
     stoping: boolean;
     TCPThrd: array [1..Maxclient] of TTCPThrd;
     ThrdActive: array [1..Maxclient] of boolean;
     constructor Create;
-    destructor Destroy; override;
     procedure Execute; override;
     procedure ShowSocket;
     property IPaddr: string read FIPaddr write FIPaddr;
@@ -129,66 +118,13 @@ Const
   {$else}
   NoSocket = -1;
   {$endif}
-  // 2024 addition (report items 10a/10b): upper bound on the body of a single
-  // HTTP request. The server is reachable by any client that can open the port,
-  // so an announced or streamed body must never be trusted for sizing.
-  MaxRequestBody = 8 * 1024 * 1024;
 
 constructor TTCPDaemon.Create;
 var i: integer;
 begin
   inherited Create(True);
-  // 2024 fix (report item 4): this used to be FreeOnTerminate := True while
-  // pu_main kept the object in a field and went on reading TCPDaemon.Finished,
-  // .stoping and .TCPThrd[] after the thread had destroyed itself - a
-  // use-after-free that the "if TCPDaemon<>nil" guards could not catch, because
-  // the reference was never nil'd. The owner (Tf_main.StopServer) now waits for
-  // the thread and frees it explicitly.
-  FreeOnTerminate := False;
-  for i:=1 to Maxclient do begin
-    TCPThrd[i]:=nil;
-    ThrdActive[i]:=False;
-  end;
-end;
-
-destructor TTCPDaemon.Destroy;
-begin
-  // safety net: Execute's finally block normally does this already
-  ReleaseAllClients;
-  inherited Destroy;
-end;
-
-// 2024 addition (report item 4): wait for one finished client thread and free
-// it, clearing the slot so no dangling pointer is ever left behind.
-// Only ever called from the daemon thread itself.
-procedure TTCPDaemon.ReleaseClient(n: integer);
-begin
-  if (n<1) or (n>Maxclient) then exit;
-  if TCPThrd[n]=nil then exit;
-  try
-    TCPThrd[n].stoping := True;
-    TCPThrd[n].Terminate;
-    TCPThrd[n].WaitFor;
-    TCPThrd[n].Free;
-  except
-    // never let a failing client teardown kill the daemon
-  end;
-  TCPThrd[n] := nil;
-  ThrdActive[n] := False;
-end;
-
-procedure TTCPDaemon.ReleaseAllClients;
-var i: integer;
-begin
-  // ask every client to stop first, then collect them, so the shutdown of n
-  // clients costs one timeout instead of n
-  for i := 1 to Maxclient do
-    if TCPThrd[i]<>nil then begin
-      TCPThrd[i].stoping := True;
-      TCPThrd[i].Terminate;
-    end;
-  for i := 1 to Maxclient do
-    ReleaseClient(i);
+  FreeOnTerminate := True;
+  for i:=1 to Maxclient do TCPThrd[i]:=nil;
 end;
 
 procedure TTCPDaemon.ShowError;
@@ -229,7 +165,6 @@ end;
 procedure TTCPDaemon.Execute;
 var
   ClientSock: TSocket;
-  RefuseSock: TTCPBlockSocket;
   i, n: integer;
 begin
   //writetrace('start tcp deamon');
@@ -243,38 +178,29 @@ begin
     begin
       //writetrace('create socket');
       CreateSocket;
-      if lasterror <> 0 then begin
+      if lasterror <> 0 then
         Synchronize(@ShowError);
-        exit;   // 2024 fix (report item 10d): fatal, do not enter the accept loop
-      end;
       MaxLineLength := 1024;
       //writetrace('setlinger');
       setLinger(True, 15000);
       if lasterror <> 0 then
-        Synchronize(@ShowError);   // not fatal, keep going
+        Synchronize(@ShowError);
       //socket timeout for accept
       SetTimeout(50);
       if lasterror <> 0 then
-        Synchronize(@ShowError);   // not fatal, keep going
+        Synchronize(@ShowError);
       //writetrace('bind to '+fipaddr+' '+fipport);
       bind(FIPaddr, FIPport);
       if (lasterror=9)and(FIPaddr='::0') then begin
         FIPaddr:='0.0.0.0';
         bind(FIPaddr, FIPport);
       end;
-      // 2024 fix (report item 10d): a failed bind - typically "port already in
-      // use" after a restart - used to be reported and then ignored, leaving the
-      // thread spinning forever on Accept against an unbound socket.
-      if lasterror <> 0 then begin
+      if lasterror <> 0 then
         Synchronize(@ShowError);
-        exit;
-      end;
       //writetrace('listen');
       listen;
-      if lasterror <> 0 then begin
+      if lasterror <> 0 then
         Synchronize(@ShowError);
-        exit;
-      end;
       Synchronize(@ShowSocket);
       //writetrace('start main loop');
       repeat
@@ -285,26 +211,19 @@ begin
         begin
           if lastError = 0 then
           begin
-            // 2024 fix (report item 4): look for a slot that is free or holds a
-            // thread that has finished. The old test dereferenced TCPThrd[i]
-            // even though the object could already have destroyed itself; now
-            // the objects live until we release them here, so the test is safe.
             n := -1;
             for i := 1 to Maxclient do
-              if (TCPThrd[i] = nil) or (not ThrdActive[i]) or
-                (TCPThrd[i].Finished) then
+              if (not ThrdActive[i]) or
+                (TCPThrd[i] = nil) or (TCPThrd[i].Fsock = nil) or
+                (TCPThrd[i].terminated) then
               begin
                 n := i;
                 break;
               end;
             if n > 0 then
             begin
-              // collect the previous occupant of this slot before overwriting
-              // the reference - this is where the old code leaked the thread
-              // object and left a dangling pointer in the array
-              ReleaseClient(n);
               TCPThrd[n] := TTCPThrd.Create(ClientSock);
-              TCPThrd[n].onSlotFree := @ThrdTerminate;
+              TCPThrd[n].onTerminate := @ThrdTerminate;
               TCPThrd[n].onExecuteCmd := FExecuteCmd;
               TCPThrd[n].onExecuteJSON := FExecuteJSON;
               TCPThrd[n].onGetImage := FGetImage;
@@ -313,24 +232,24 @@ begin
               TCPThrd[n].Start;
             end
             else
-            begin
-              // 2024 fix (report item 4): sending the 503 no longer needs a
-              // thread at all. The old code created a TTCPThrd it never
-              // started, reached into its private Fsock field and then called
-              // Free on a suspended thread.
-              RefuseSock := TTCPBlockSocket.Create;
-              try
-                RefuseSock.socket := ClientSock;
-                RefuseSock.GetSins;
-                RefuseSock.MaxLineLength := 1024;
-                RefuseSock.SendString('HTTP/1.0 503' + CRLF);
-                RefuseSock.SendString('' + CRLF);
-                RefuseSock.SendString(msgFailed + ' Maximum connection reach!' + CRLF);
-                RefuseSock.CloseSocket;
-              finally
-                RefuseSock.Free;
+              with TTCPThrd.Create(ClientSock) do
+              begin
+                Fsock := TTCPBlockSocket.Create;
+                Fsock.socket := CSock;
+                Fsock.GetSins;
+                Fsock.MaxLineLength := 1024;
+                if not terminated then
+                begin
+                  if Fsock <> nil then begin
+                   Fsock.SendString('HTTP/1.0 503' + CRLF);
+                   Fsock.SendString('' + CRLF);
+                   Fsock.SendString(msgFailed + ' Maximum connection reach!' + CRLF);
+                  end;
+                  Fsock.CloseSocket;
+                  Fsock.Free;
+                end;
+                Free;
               end;
-            end;
           end
           else if lasterror <> 0 then
             Synchronize(@ShowError);
@@ -339,11 +258,6 @@ begin
     end;
   finally
     //  Suspended:=true;
-    // 2024 fix (report item 4): shut the clients down from the thread that owns
-    // them, before the daemon itself goes away. This also replaces the loop
-    // Tf_main.StopServer used to run over TCPDaemon.TCPThrd[], which touched
-    // the array from the main thread with no synchronisation.
-    ReleaseAllClients;
     Sock.AbortSocket;
     Sock.Free;
     //  terminate;
@@ -353,10 +267,7 @@ end;
 constructor TTCPThrd.Create(Hsock: TSocket);
 begin
   inherited Create(True);
-  // 2024 fix (report item 4): the daemon keeps a reference to this object in
-  // TCPThrd[] and must be able to inspect it after the connection ends, so the
-  // thread may not destroy itself. TTCPDaemon.ReleaseClient frees it.
-  FreeOnTerminate := False;
+  FreeOnTerminate := True;
   Csock := Hsock;
   abort := False;
   id:=-1;
@@ -366,7 +277,6 @@ procedure TTCPThrd.Execute;
 var
   s,su,buf,hdr: string;
   cl: integer;
-  bodybuf: TMemoryStream;   // 2024: bounded accumulation of a chunked body
 begin
   try
     Fsock := TTCPBlockSocket.Create;
@@ -415,43 +325,12 @@ begin
               until LastError<>0;
               Fbody:='';
               if cl>0 then begin
-                // 2024 fix (report item 10a): the announced Content-Length used
-                // to be passed straight to RecvBufferStr, so an unauthenticated
-                // client could force an arbitrarily large allocation just by
-                // claiming a huge body. Refuse anything over the limit.
-                if cl>MaxRequestBody then begin
-                  SendString('HTTP/1.0 413' + CRLF);
-                  SendString('' + CRLF);
-                  SendString(msgFailed + ' Request body too large!' + CRLF);
-                  break;
-                end;
                 Fbody:=RecvBufferStr(cl,500);
               end
               else if cl=0 then begin
-                // 2024 fix (report item 10b): this loop used to run until the
-                // peer errored out, with no size limit and O(n^2) string
-                // concatenation. Bounded now, and accumulated in a stream.
-                bodybuf:=TMemoryStream.Create;
-                try
-                  repeat
-                    buf:=RecvPacket(500);
-                    if buf<>'' then
-                      bodybuf.Write(buf[1],Length(buf));
-                    if bodybuf.Size>MaxRequestBody then begin
-                      SendString('HTTP/1.0 413' + CRLF);
-                      SendString('' + CRLF);
-                      SendString(msgFailed + ' Request body too large!' + CRLF);
-                      break;
-                    end;
-                  until LastError<>0;
-                  SetLength(Fbody,bodybuf.Size);
-                  if bodybuf.Size>0 then begin
-                    bodybuf.Position:=0;
-                    bodybuf.Read(Fbody[1],bodybuf.Size);
-                  end;
-                finally
-                  bodybuf.Free;
-                end;
+                repeat
+                  Fbody:=Fbody+RecvPacket(500);
+                until LastError<>0;
               end;
               FHttpRequest:=s;
               Synchronize(@ProcessPost);
@@ -482,12 +361,6 @@ begin
       Fsock.Free;
     end;
   except
-    // 2024 (report item 10f): this used to be a bare "except end", so a failing
-    // client thread left no trace at all. There is no logging channel usable
-    // from this thread without a Synchronize, so at least record the reason
-    // where the daemon can pick it up.
-    on E: Exception do
-      LastClientError := E.Message;
   end;
 end;
 
