@@ -11688,13 +11688,14 @@ if (camera.Status=devConnected)and(not autofocusing) then begin
   // check exposure time
   if ftype=BIAS then
     e:=camera.ExposureRange.min
-  else
+  else begin
     e:=StrToFloatDef(f_capture.ExpTime.Text,-1);
-  if e<0 then begin
-    NewMessage(Format(rsInvalidExpos, [f_capture.ExpTime.Text]),1);
-    f_capture.Stop;
-    RunningCapture:=false;
-    exit;
+    if e<=0 then begin
+      NewMessage(Format(rsInvalidExpos, [f_capture.ExpTime.Text]),1);
+      f_capture.Stop;
+      RunningCapture:=false;
+      exit;
+    end;
   end;
   CameraExposureRemain:=e;
   // set readout first so it can be overridden by specific binning or gain
