@@ -130,7 +130,7 @@ begin
     planetarium.onReceiveData:=@recvdata;
     recvdata('');
   end;
-  if PanelAltAz.Visible then msginfo.Caption:='Search object name, click on planetarium or type the coordinates';
+  if PanelAltAz.Visible then msginfo.Caption:=rsSearchObject;
 end;
 
 procedure Tf_goto.GotoAstrometryChange(Sender: TObject);
@@ -202,7 +202,7 @@ begin
            Obj.Text:=naam2+'_'+naam3; {Add two object names}
         linepos:=$FFFFFF; {Stop searching}
         found:=true;
-        LabelResolver.Caption:='From internal database';
+        LabelResolver.Caption:=rsFromInternal;
      end;
     until linepos>=$FFFFFF;{Found object or end of database}
     if not found then begin
@@ -218,7 +218,7 @@ begin
     if not found then begin
       Ra.Text:='';
       De.Text:='';
-      LabelResolver.Caption:='Not found!';
+      LabelResolver.Caption:=rsNotFound;
     end
     else begin
       if PanelPxSz.Visible then begin
@@ -282,11 +282,11 @@ procedure Tf_goto.ButtonOKClick(Sender: TObject);
 begin
   if PanelAltAz.Visible then begin
     if LabelAlt.Caption='-' then begin
-      ShowMessage('Cannot slew to unknown coordinates');
+      ShowMessage(rsCannotSlewTo);
       exit;
     end;
     if StrToFloatDef(LabelAlt.Caption,-1)<0 then begin
-      ShowMessage('Cannot slew below the horizon');
+      ShowMessage(rsCannotSlewBe);
       exit;
     end;
   end;
