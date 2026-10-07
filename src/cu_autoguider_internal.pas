@@ -1365,7 +1365,7 @@ begin
   if moveRA2<0 then //going West
   begin
     pulseRA:=min(pulse_limit_ms,round(1000*abs(moveRA2/finternalguider.pulsegainWest))); {duration msec}
-    moveRA := -abs(pulseRA * finternalguider.pulsegainEast/1000)*cos_decl; // next expected move west in pixels
+    moveRA := -abs(pulseRA * finternalguider.pulsegainWest/1000)*cos_decl; // next expected move west in pixels
     if pulseRA>finternalguider.shortestPulse then
     begin
       //msg('West: '+inttostr(pulseRA),3);
@@ -1470,7 +1470,7 @@ begin
   if moveDEC<0 then //go South
   begin
     pulseDEC:=min(pulse_limit_ms,round(1000*abs(moveDEC/finternalguider.pulsegainSouth))); {duration msec}
-    moveDec :=  -abs(pulseDEC * finternalguider.pulsegainNorth/1000);  // next expected move
+    moveDec :=  -abs(pulseDEC * finternalguider.pulsegainSouth/1000);  // next expected move
     if pulseDEC>finternalguider.shortestPulse then
     begin
       //msg('South: '+inttostr(pulseDEC),3);

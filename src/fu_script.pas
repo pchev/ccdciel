@@ -396,7 +396,10 @@ begin
     ns.ShowModal;
     if ns.ModalResult<>mrOK then exit;
     txt:=trim(ns.Edit1.text);
-    if txt='' then exit;
+    if txt='' then begin
+      ShowMessage(rsScriptNameRe);
+      exit;
+    end;
     fn:=slash(ConfigDir)+txt+'.script';
     if ns.Downloaded then begin
       LoadScriptList;

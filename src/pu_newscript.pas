@@ -4,7 +4,7 @@ unit pu_newscript;
 
 interface
 
-uses  u_translation, pu_downloadscript,
+uses  u_translation, pu_downloadscript, UScaleDPI,
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls;
 
 type
@@ -51,6 +51,7 @@ end;
 
 procedure Tf_newscript.FormCreate(Sender: TObject);
 begin
+ ScaleDPI(Self);
  SetLang;
 end;
 
