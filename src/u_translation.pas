@@ -1565,6 +1565,7 @@ resourcestring
   rsSyncOffsetTo = 'Sync offset too big: %s° , ignored.';
   rsWaitDeclinat = 'Wait declination reversal';
   rsAdjustThePAA = 'Adjust the PA after the mount pier side change';
+  rsScriptNameRe = 'Please enter a script name';
 
 implementation
 
