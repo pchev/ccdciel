@@ -2512,7 +2512,7 @@ begin
       end;
     end;
 
-    if t.starttime=-2 then begin   // really circumpolar on local horizon
+    if (t.endset)and(t.starttime=-2) then begin   // really circumpolar on local horizon
       // test if skipped
       if t.skip then begin
         skipmsg:='';
