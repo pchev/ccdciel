@@ -3,6 +3,7 @@ Telescope; scope_unpark; Unpark the telescope
 Telescope; scope_position; Show the telescope position
 Telescope; scope_alignment; Make a telescope pointing model
 Telescope; eqmod_alignment; Make a Eqmod telescope pointing model
+Camera; setgain; Set the camera gain, can be used in sequence for capture with different gain
 Filter; focuser_position_per_filter; Setting focuser position per filters, version 2025-11-15
 Preprocessing; siril.pkg; Preprocessing scripts for Bias,Dark,Flat,Light using Siril (require to install Siril)
 Spectroscope; UVEX4.pkg; Scripts for the UVEX4 spectroscope using both Alpaca and serial link

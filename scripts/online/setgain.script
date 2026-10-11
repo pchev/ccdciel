@@ -1,0 +1,21 @@
+# Python program to set the camera gain in CCDciel
+# see: https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference
+
+from ccdciel import ccdcielex
+import sys
+
+# process the gain parameters
+try:
+  if len(sys.argv) < 2 :
+    raise Exception('Missing parameter')
+  gain = int(sys.argv[1])
+except Exception as ex:
+  print('Invalid gain: ',ex)
+  sys.exit(1)
+
+try:
+  ccdcielex('Camera_SetGain',gain)
+except Exception as ex:
+  print('Error setting the gain: ',ex)
+  sys.exit(1)
+
