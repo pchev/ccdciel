@@ -1,0 +1,84 @@
+# Python program for CCDciel
+# see: https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference
+#
+
+# Use this script to light the neon calibration lamp in parallel during the spectra exposure.
+# It need to be set in Capture or Sequence to run before every exposure. 
+# The parameter must be the total calibration exposure time, half is done at the start of the exposure and half at the end.
+
+from ccdciel import ccdciel
+import configparser
+import time
+import sys
+import os
+
+mode = '3' # start and end of exposure
+
+# the first parameters contain the action code and eventually the exposure time and stack count
+if len(sys.argv) >= 2 :
+  captureparam = sys.argv[1].split(',')
+  action = int(captureparam[0])
+  if len(captureparam)>=2:
+     exptime = float(captureparam[1])
+  if len(captureparam)>=3:
+     stackcount = int(captureparam[2])
+  else:
+     stackcount = 1
+  if len(captureparam)>=4:
+     currentframe = int(captureparam[3])
+  else:
+     currentframe = 0
+  if len(captureparam)>=5:
+     totalframe = int(captureparam[4])
+  else:
+     totalframe = 0
+else:
+  sys.exit(1)
+
+# process additional parameters
+if len(sys.argv) >= 3 :
+  calexp=float(sys.argv[2])
+else:
+  sys.exit(1)
+
+param=str(round(calexp+1))+';'+mode+';'+str(round(exptime+1))
+
+if action == 0:
+   #print(f"we start an exposure of {exptime} seconds")
+   # current script directory
+   scriptdir = os.path.dirname(os.path.abspath(sys.argv[0]))
+   # read connection from config
+   try:
+     config = configparser.ConfigParser()
+     config.read(os.path.join(scriptdir,'CalibLight_config.script'))
+     connection=config['settings']['connection']
+   except Exception as ex:
+     print('CalibLight connection setting not found in CalibLight_config')
+     sys.exit(1)
+  
+   if connection=='alpaca':
+      from alpaca import management
+      from alpaca import switch
+
+      try:
+        server=config['alpaca']['server']
+      except Exception as ex:
+        print('Server configuration not found. Please run CalibLight_Discovery')
+        sys.exit(1)
+      try :
+          ccdciel('LogMsg','Connecting to CalibLight Alpaca server at '+server)
+          calib = switch.Switch(server,0)
+          calib.Connected=True
+          ccdciel('LogMsg','Change CalibLight FIL1 to '+f"{param}")
+
+          r=calib.Action('fil1ext',param)
+          print(r)
+
+      except Exception as ex:
+          print('Error: '+type(ex).__name__,'-',ex)
+          sys.exit(1)
+    
+   else:
+      print('Invalid connection '+connection+' in CalibLight_config. Please run CalibLight_Discovery')
+      sys.exit(1)
+     

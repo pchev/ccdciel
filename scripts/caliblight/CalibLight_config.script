@@ -1,0 +1,7 @@
+# Use CalibLight_Discovery to setup this file
+[settings]
+connection = alpaca
+
+[alpaca]
+server = 
+

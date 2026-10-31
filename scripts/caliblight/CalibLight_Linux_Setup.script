@@ -1,0 +1,68 @@
+import serial
+import sys
+import time
+
+# This script is to simplify the CalibLight setup on Linux.
+#
+# On Windows the preference is to use CalibLightControl: https://spectro-uvex.tech/?p=12433#programmation-arduino
+
+# Run this script to configure the CalibLight internal eeprom for the Wifi connection.
+# This must be done again every time a new version of the CalibLight software is instaled.
+# The CalibLight must be connected by the USB port for this operation, then the USB must be disconnected.
+
+# the USB serial port:
+#portCom = '/dev/ttyACM0'
+#portCom = 'COM5'
+
+# the Wifi ssid and password to use:
+Wifi       = ''
+WifiPass   = ''
+
+# Other important setup that must be set every time a new version of the CalibLight software is installed:
+AngleClose = '180'
+AngleOpen  = '0'
+Mode       = '3'
+
+try:
+    if (Wifi=='')or(WifiPass==''):
+       raise Exception('Please configure the parameters in this scripts')
+
+    ser = serial.Serial(portCom, 115200, timeout=1)
+    time.sleep(1)
+    if ser.is_open:
+
+        command=':CSAC;'+AngleClose+';#'
+        ser.write(command.encode('ascii'))
+        time.sleep(1)
+        bs = ser.readline().decode("ascii", errors="ignore").strip()
+        if bs:
+          print(f"Response: {bs}")
+
+        command=':CSAO;'+AngleOpen+';#'
+        ser.write(command.encode('ascii'))
+        time.sleep(1)
+        bs = ser.readline().decode("ascii", errors="ignore").strip()
+        if bs:
+          print(f"Response: {bs}")
+
+        command=':CSMO;'+Mode+';#'
+        ser.write(command.encode('ascii'))
+        time.sleep(1)
+        bs = ser.readline().decode("ascii", errors="ignore").strip()
+        if bs:
+          print(f"Response: {bs}")
+
+        command=':CSWI;'+Wifi+';'+WifiPass+';#'
+        ser.write(command.encode('ascii'))
+        time.sleep(1)
+        bs = ser.readline().decode("ascii", errors="ignore").strip()
+        if bs:
+          print(f"Response: {bs}")
+        ser.close()
+    else:
+        print("ERROR : Cannot open the serial port.")
+
+except Exception as ex:
+    print(f"ERROR : {ex}")
+    if 'ser' in locals() and ser.is_open:
+        ser.close()
