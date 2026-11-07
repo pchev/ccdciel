@@ -30,7 +30,7 @@ uses
   netdb,
   {$endif}
   u_global,
-  httpsend, blcksock, XMLRead, DOM,
+  httpsend, blcksock, synacode, XMLRead, DOM,
   SysUtils, Classes;
 
 type
@@ -178,18 +178,34 @@ end;
 
 function SearchOnline(n: string;out rname,resolv: string; out rra,rdec: double; out maglist:TMagnitudeList): boolean;
 var
-  url,cat:string;
+  url,cat,nn:string;
   http: THTTPSend;
   ts,tms: integer;
 begin
 
   result:=false;
 
-  cat:='~SNVA';   // Simbad, then NED
   num:=n;
+  url:=sesame_url[SesameNum,1];
 
-  url:='https://cds.unistra.fr/cgi-bin/nph-sesame';
-  url:=url+'/-oxF/'+cat+'?'+trim(StringReplace(num,' ','%20',[rfReplaceAll]));
+  case SesameNum of
+   1: begin  // CDS Strasbourg
+       cat:='~SNVA';  // search all source Simbad,Ned,Vizier
+       nn := EncodeURLElement(n);
+       url:=url+'/-oxF/'+cat+'?'+trim(nn);
+      end;
+   2: begin  // Hardward
+       cat:='S';      // Only Simbad available
+       nn := EncodeURLElement(n);
+       url:=url+'/-oxF/'+cat+'?'+trim(nn);
+      end;
+   3: begin  // IDA
+       // Only Simbad, no source parameter, space encoding is not accepted
+       url:=url+'/'+'-ox'+'/?'+StringReplace(n,' ','',[rfReplaceAll]);
+      end;
+   else exit;
+  end;
+
   http:=THTTPSend.Create;
   http.Sock.SocksIP:='';
   http.ProxyHost:='';

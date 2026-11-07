@@ -359,6 +359,11 @@ const
   smin = '''';
   ssec = '"';
   ellipsis = #$E2+#$80+#$A6;
+  sesame_maxurl = 3;
+  sesame_url: array [1..sesame_maxurl, 1..2] of string = (
+      ('https://cds.unistra.fr/cgi-bin/nph-sesame', 'CDS - Strasbourg, France'),
+      ('https://vizier.cfa.harvard.edu/viz-bin/nph-sesame', 'CFA Harvard - USA'),
+      ('https://vizier.idia.ac.za/viz-bin/nph-sesame', 'IDIA - South Africa'));
   URL_DOWNLOAD='https://sourceforge.net/projects/ccdciel/files/';
   URL_BUGREPORT='https://www.ap-i.net/mantis/set_project.php?project_id=3';
   URL_CHANGELOG='https://groups.io/g/ccdciel/search?q=%23newversion&ct=1';
@@ -460,7 +465,7 @@ var
   MeridianScript,MeridianScriptPath,MeridianScriptArgs: string;
   PHD2GuideSetLock,InternalGuiderSetLockPosition: boolean;
   PHD2GuideLockX, PHD2GuideLockY: double;
-  astrometryResolver: integer;
+  astrometryResolver, SesameNum: integer;
   LastROIname: string;
   OrigX, OrigY,img_Height,img_Width,GuideOrigX, GuideOrigY,guideimg_Height,guideimg_Width : integer;
   FinderOrigX, FinderOrigY,finderimg_Height,finderimg_Width : integer;

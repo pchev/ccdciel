@@ -34,10 +34,13 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    OnlineSearch: TComboBox;
     GainEdit: TSpinEditEx;
     ISObox: TComboBox;
+    Label197: TLabel;
     LabelNoGain: TLabel;
     OffsetEdit: TSpinEditEx;
+    Panel29: TPanel;
     PanelGain: TPanel;
     PanelOffset: TPanel;
     BrightStarOffset: TSpinEditEx;
@@ -149,6 +152,7 @@ type
     HNSKYParam: TEdit;
     CdCParam: TEdit;
     sgCustomType: TStringGrid;
+    OnlineSearchDefault: TButton;
     temperature: TFloatEdit;
     tlrate: TFloatEdit;
     tbFilterstrength: TTrackBar;
@@ -835,6 +839,7 @@ type
     procedure MinutesPastMeridianChange(Sender: TObject);
     procedure MinutesPastMeridianMinChange(Sender: TObject);
     procedure ObservatoryDBChange(Sender: TObject);
+    procedure OnlineSearchDefaultClick(Sender: TObject);
     procedure PageControl1Changing(Sender: TObject; var AllowChange: Boolean);
     procedure PanelLeftMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure PixelSizeFromCameraChange(Sender: TObject);
@@ -937,6 +942,9 @@ begin
   PageControl1.ActivePageIndex:=0;
   CustomHeader.RowCount:=MaxCustomHeaders+1;
   FinderSolver.Clear;
+  OnlineSearch.Clear;
+  for i:=1 to sesame_maxurl do
+    OnlineSearch.Items.Add(sesame_url[i,2]);
   for i:=0 to 4 do
     FinderSolver.Items.Add(ResolverName[i]);
   b:=TSpeedButton.Create(self);
@@ -1742,6 +1750,11 @@ begin
    ElevationMin.Value:=obsdb.GetValue('/'+obskey+'/ElevationMin',ElevationMin.Value);
    obsdb.Free;
  end;
+end;
+
+procedure Tf_option.OnlineSearchDefaultClick(Sender: TObject);
+begin
+  OnlineSearch.ItemIndex:=0;
 end;
 
 procedure Tf_option.ObservatoryDBDeleteClick(Sender: TObject);

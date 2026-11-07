@@ -221,11 +221,11 @@ object f_option: Tf_option
         end
         object Panel11: TPanel
           Left = 0
-          Height = 282
-          Top = 432
+          Height = 232
+          Top = 482
           Width = 559
           Align = alClient
-          ClientHeight = 282
+          ClientHeight = 232
           ClientWidth = 559
           ParentFont = False
           TabOrder = 2
@@ -317,7 +317,7 @@ object f_option: Tf_option
         object Panel26: TPanel
           Left = 0
           Height = 50
-          Top = 282
+          Top = 332
           Width = 559
           Align = alTop
           ClientHeight = 50
@@ -363,7 +363,7 @@ object f_option: Tf_option
         object Panel27: TPanel
           Left = 0
           Height = 50
-          Top = 382
+          Top = 432
           Width = 559
           Align = alTop
           ClientHeight = 50
@@ -417,7 +417,7 @@ object f_option: Tf_option
         object Panel28: TPanel
           Left = 0
           Height = 50
-          Top = 332
+          Top = 382
           Width = 559
           Align = alTop
           ClientHeight = 50
@@ -466,6 +466,48 @@ object f_option: Tf_option
             ParentFont = False
             TabOrder = 2
             OnClick = LogDirDefaultClick
+          end
+        end
+        object Panel29: TPanel
+          Left = 0
+          Height = 50
+          Top = 282
+          Width = 559
+          Align = alTop
+          ClientHeight = 50
+          ClientWidth = 559
+          TabOrder = 7
+          object Label197: TLabel
+            AnchorSideTop.Control = OnlineSearch
+            AnchorSideTop.Side = asrCenter
+            Left = 8
+            Height = 18
+            Top = 15
+            Width = 84
+            Caption = 'Online search'
+            ParentColor = False
+            ParentFont = False
+          end
+          object OnlineSearchDefault: TButton
+            AnchorSideTop.Control = OnlineSearch
+            AnchorSideTop.Side = asrCenter
+            Left = 404
+            Height = 25
+            Top = 12
+            Width = 85
+            Caption = 'Default'
+            ParentFont = False
+            TabOrder = 0
+            OnClick = OnlineSearchDefaultClick
+          end
+          object OnlineSearch: TComboBox
+            Left = 165
+            Height = 32
+            Top = 8
+            Width = 219
+            ItemHeight = 24
+            Style = csDropDownList
+            TabOrder = 1
           end
         end
       end

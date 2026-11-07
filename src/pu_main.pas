@@ -5103,6 +5103,7 @@ begin
     CustomHeaders[i].key:=config.GetValue('/Files/CustomHeader/Key'+inttostr(i),'');
     CustomHeaders[i].value:=config.GetValue('/Files/CustomHeader/Value'+inttostr(i),'');
   end;
+  SesameNum:=config.GetValue('/Files/SesameNum',1);
   ObsLatitude:=config.GetValue('/Info/ObservatoryLatitude',0.0);
   ObsLongitude:=config.GetValue('/Info/ObservatoryLongitude',0.0);
   ObsElevation:=config.GetValue('/Info/ObservatoryElevation',0.0);
@@ -9545,6 +9546,7 @@ begin
    f_option.SeqDir.Text:=globalconfig.GetValue('/Files/Sequence',SequenceDir);
    f_option.LogDir.Text:=config.GetValue('/Files/LogDir',LogDir);
    f_option.TCPIPport.Value:=config.GetValue('/Files/TCPIPConfigPort',3277);
+   f_option.OnlineSearch.ItemIndex:=config.GetValue('/Files/SesameNum',1)-1;
    f_option.PythonCmd.Text:=config.GetValue('/Script/PythonCmd',PythonCmd);
    f_option.cbHighlightColor.ItemIndex:=config.GetValue('/GUI/HighlightColor',TitleColor);
    f_option.FolderOptions.RowCount:=SubDirCount;
@@ -10114,6 +10116,7 @@ begin
      config.SetValue('/Files/TmpDir',f_option.TempDir.Text);
      config.SetValue('/Files/LogDir',f_option.LogDir.Text);
      config.SetValue('/Files/TCPIPConfigPort',f_option.TCPIPport.Value);
+     config.SetValue('/Files/SesameNum',f_option.OnlineSearch.ItemIndex+1);
      config.SetValue('/Script/PythonCmd',f_option.PythonCmd.Text);
      config.SetValue('/GUI/HighlightColor',f_option.cbHighlightColor.ItemIndex);
      for i:=0 to SubDirCount-1 do begin
