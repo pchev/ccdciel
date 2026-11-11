@@ -13025,7 +13025,7 @@ begin
   if not GUIready then begin
      f_indigui:=Tf_indigui.Create(self);
      ScaleDPI(f_indigui);
-     f_indigui.onDestroy:=@GUIdestroy;
+     f_indigui.onGuiDestroy:=@GUIdestroy;
      f_indigui.IndiServer:=config.GetValue('/INDIcamera/Server','');
      f_indigui.IndiPort:=config.GetValue('/INDIcamera/ServerPort','');
      GUIready:=true;
