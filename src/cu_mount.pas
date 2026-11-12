@@ -102,6 +102,7 @@ T_mount = class(TComponent)
     {$endif}
     constructor Create(AOwner: TComponent);override;
     destructor  Destroy; override;
+    procedure  ResetEquinoxJD;
     procedure SlewToSkyFlatPosition;
     procedure SlewToDomeFlatPosition;
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string=''); virtual; abstract;
@@ -221,6 +222,12 @@ begin
     FEquinoxJD:=Jd(trunc(Equinox),1,1,12);
  end;
  result:=FEquinoxJD;
+end;
+
+procedure T_mount.ResetEquinoxJD;
+begin
+  FEquinoxJD:=NullCoord;
+  GetEquinoxJD;
 end;
 
 procedure T_mount.SlewToSkyFlatPosition;

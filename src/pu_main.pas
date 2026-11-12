@@ -287,6 +287,7 @@ type
     PageFinder: TTabSheet;
     FinderMeasureTimer: TTimer;
     DisconnectTimer: TTimer;
+    LongRunTimer: TTimer;
     TimerStampTimer: TTimer;
     MenuPdfHelp: TMenuItem;
     MenuOnlineHelp: TMenuItem;
@@ -454,6 +455,7 @@ type
     procedure GuiderMeasureTimerTimer(Sender: TObject);
     procedure GuiderPopUpmenu1Popup(Sender: TObject);
     procedure ImageExit(Sender: TObject);
+    procedure LongRunTimerTimer(Sender: TObject);
     procedure MeasureConeError1Click(Sender: TObject);
     procedure MenuAscomSwitchSetupClick(Sender: TObject);
     procedure MenuAlpacaSwitchSetupClick(Sender: TObject);
@@ -19106,6 +19108,20 @@ procedure Tf_main.ImageExit(Sender: TObject);
 begin
   if copy(StatusBar1.Panels[panelstatus].Text,1,6)='J2000:' then
     StatusBar1.Panels[panelstatus].Text:='';
+end;
+
+procedure Tf_main.LongRunTimerTimer(Sender: TObject);
+begin
+// thing to do when the program run for a long time, i.e. many days
+// this timer run every 12 hours = 43200000 ms
+try
+  LongRunTimer.Enabled:=false;
+  InitCoord;
+  mount.ResetEquinoxJD;
+  planetarium.InitTimer.Enabled:=true;
+finally
+  LongRunTimer.Enabled:=true;
+end;
 end;
 
 procedure Tf_main.MeasureConeError1Click(Sender: TObject);
