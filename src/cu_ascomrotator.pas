@@ -300,7 +300,10 @@ begin
 {$ifdef mswindows}
 if not VarIsEmpty(V) then begin
 try
-  V.MoveMechanical(p);
+  if FInterfaceVersion>=3 then
+    V.MoveMechanical(p)
+  else
+    V.MoveAbsolute(p);
   WaitRotatorMoving(120000);
 
   except
@@ -316,7 +319,10 @@ begin
  {$ifdef mswindows}
  if not VarIsEmpty(V) then begin
  try
-   result:=V.MechanicalPosition;
+   if FInterfaceVersion>=3 then
+     result:=V.MechanicalPosition
+   else
+     result:=V.Position;
    except
     on E: Exception do msg('Get position error: ' + E.Message,0);
    end;

@@ -277,9 +277,11 @@ procedure T_ascomrestrotator.SetMechAngle(p:double);
 begin
  if FStatus<>devConnected then exit;
  try
-   V.Put('movemechanical',['Position',FormatFloat(f2,p)]);
+   if FInterfaceVersion>=3 then
+     V.Put('movemechanical',['Position',FormatFloat(f2,p)])
+   else
+     V.Put('moveabsolute',['Position',FormatFloat(f2,p)]);
    WaitRotatorMoving(120000);
-
    except
     on E: Exception do msg('Error, can''t move to. ' + E.Message,0);
    end;
@@ -290,7 +292,10 @@ begin
  result:=0;
  if FStatus<>devConnected then exit;
  try
-   result:=V.Get('mechanicalposition').AsFloat;
+   if FInterfaceVersion>=3 then
+     result:=V.Get('mechanicalposition').AsFloat
+   else
+     result:=V.Get('position').AsFloat;
  except
     on E: Exception do msg('Get position error: ' + E.Message,0);
  end;
