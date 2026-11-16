@@ -8413,9 +8413,8 @@ end;
 Procedure Tf_main.RotatorAngleChange(Sender: TObject);
 begin
  f_rotator.Angle.Value:=rotator.Angle;
- f_rotator.MechAngle.Caption:=FormatFloat(f2,rotator.MechAngle);
- if rotator.SoftLimit then f_rotator.Angle180.Caption:=FormatFloat(f2,rmod(f_rotator.Angle.Value+360+180,360));
  if rotator.SoftSync then begin
+   if rotator.SoftLimit then f_rotator.Angle180.Caption:=FormatFloat(f2,rmod(f_rotator.Angle.Value+360+180,360));
    f_rotator.CalAngle.Caption:=FormatFloat(f2,rotator.CalibrationAngle);
    if rotator.CalibrationPierSide=pierEast
       then f_rotator.CalAngle.Caption:=f_rotator.CalAngle.Caption+' E'
