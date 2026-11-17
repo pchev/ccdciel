@@ -212,7 +212,7 @@ begin
   if Connected then begin
     try
       p:=GetAngle;
-      if p<>stAngle then begin
+      if abs(p-stAngle)>1E-2 then begin
         stAngle:=p;
         if Assigned(FonAngleChange) then FonAngleChange(self);
       end;
