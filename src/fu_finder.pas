@@ -27,7 +27,7 @@ interface
 
 uses  UScaleDPI, u_global, u_utils, Graphics, Dialogs, u_translation, cu_camera, indiapi,
       fu_visu, cu_astrometry, pu_findercalibration, math, LCLIntf, cu_waitthread,
-  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls, SpinEx, Buttons, Menus;
+  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls, SpinEx, Buttons, Menus, EditBtn;
 
 type
 
@@ -46,6 +46,7 @@ type
     cbSaveImages: TCheckBox;
     cbSoftBinning: TCheckBox;
     Cooler: TCheckBox;
+    DirectoryEdit1: TDirectoryEdit;
     ExpDelay: TSpinEditEx;
     Label19: TLabel;
     Label59: TLabel;
@@ -92,6 +93,7 @@ type
     procedure cbSoftBinningChange(Sender: TObject);
     procedure ClearMsgTimerTimer(Sender: TObject);
     procedure CoolerClick(Sender: TObject);
+    procedure DirectoryEdit1Change(Sender: TObject);
     procedure GainChange(Sender: TObject);
     procedure MenuItemCaptureDarkClick(Sender: TObject);
     procedure MenuItemClearDarkClick(Sender: TObject);
@@ -183,6 +185,7 @@ begin
  Panel1.ChildSizing.LeftRightSpacing:=8;
  Panel1.ChildSizing.VerticalSpacing:=4;
  {$endif}
+ FinderCapturePath:='';
  FinderCapturingDark:=false;
  FinderPreviewLoop:=false;
  visu.BtnBullsEye.Down:=true;
@@ -401,6 +404,11 @@ end;
 procedure Tf_finder.CoolerClick(Sender: TObject);
 begin
   if Assigned(FonSetCooler) then FonSetCooler(self);
+end;
+
+procedure Tf_finder.DirectoryEdit1Change(Sender: TObject);
+begin
+  FinderCapturePath:=DirectoryEdit1.Directory;
 end;
 
 procedure Tf_finder.GainChange(Sender: TObject);

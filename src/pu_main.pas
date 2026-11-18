@@ -5110,6 +5110,7 @@ begin
   OpenPictureDialog1.InitialDir:=config.GetValue('/Files/CapturePath',defCapturePath);
   BaseCapturePath:=config.GetValue('/Files/CapturePath',defCapturePath);
   if copy(BaseCapturePath,1,1)='.' then BaseCapturePath:=ExpandFileName(slash(Appdir)+BaseCapturePath);
+  f_finder.DirectoryEdit1.Directory:=BaseCapturePath;
   f_video.VideoCaptureDir.Text:=config.GetValue('/Files/VideoCapturePath','/tmp');
   CustomHeaderNum:=config.GetValue('/Files/CustomHeader/Num',0);
   for i:=1 to CustomHeaderNum do begin
@@ -19613,7 +19614,9 @@ begin
 
   if f_finder.cbSaveImages.Checked then begin
     // save image
-    if CurrentSequenceDirectory<>'' then
+    if (FinderCapturePath<>'')and(FinderCapturePath<>BaseCapturePath) then
+      fn:=FinderCapturePath
+    else if CurrentSequenceDirectory<>'' then
       fn:=CurrentSequenceDirectory
     else
       fn:=BaseCapturePath;

@@ -42,7 +42,7 @@ object f_finder: Tf_finder
     object GroupBox1: TGroupBox
       Left = 0
       Height = 164
-      Top = 144
+      Top = 184
       Width = 354
       Align = alTop
       Caption = 'Target position in finder image'
@@ -122,12 +122,12 @@ object f_finder: Tf_finder
     end
     object Panel2: TPanel
       Left = 0
-      Height = 144
+      Height = 184
       Top = 0
       Width = 354
       Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 144
+      ClientHeight = 184
       ClientWidth = 354
       ParentBackground = False
       TabOrder = 1
@@ -166,7 +166,7 @@ object f_finder: Tf_finder
       object cbSaveImages: TCheckBox
         Left = 8
         Height = 22
-        Top = 70
+        Top = 72
         Width = 100
         Caption = 'Save images'
         TabOrder = 2
@@ -174,7 +174,7 @@ object f_finder: Tf_finder
       object LabelInfo: TLabel
         Left = 8
         Height = 18
-        Top = 95
+        Top = 132
         Width = 58
         Caption = 'LabelInfo'
         ParentColor = False
@@ -182,7 +182,7 @@ object f_finder: Tf_finder
       object ButtonDark: TButton
         Left = 8
         Height = 25
-        Top = 112
+        Top = 151
         Width = 75
         Caption = 'Dark'
         TabOrder = 3
@@ -191,9 +191,9 @@ object f_finder: Tf_finder
       object cbFilterNoise: TCheckBox
         AnchorSideTop.Control = ButtonDark
         AnchorSideTop.Side = asrCenter
-        Left = 112
+        Left = 114
         Height = 22
-        Top = 113
+        Top = 152
         Width = 92
         Caption = 'Noise filter'
         TabOrder = 4
@@ -203,9 +203,9 @@ object f_finder: Tf_finder
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = cbFilterNoise
         AnchorSideTop.Side = asrCenter
-        Left = 212
+        Left = 214
         Height = 32
-        Top = 108
+        Top = 147
         Width = 50
         BorderSpacing.Left = 8
         ItemHeight = 24
@@ -263,11 +263,23 @@ object f_finder: Tf_finder
         NullValue = 0
         Value = 0
       end
+      object DirectoryEdit1: TDirectoryEdit
+        Left = 8
+        Height = 32
+        Top = 96
+        Width = 312
+        ShowHidden = False
+        ButtonWidth = 23
+        NumGlyphs = 1
+        MaxLength = 0
+        TabOrder = 7
+        OnChange = DirectoryEdit1Change
+      end
     end
     object PanelTemperature: TPanel
       Left = 0
       Height = 60
-      Top = 434
+      Top = 474
       Width = 354
       Align = alTop
       BevelOuter = bvNone
@@ -335,7 +347,7 @@ object f_finder: Tf_finder
     object PanelGain: TPanel
       Left = 0
       Height = 34
-      Top = 366
+      Top = 406
       Width = 354
       Align = alTop
       BevelOuter = bvNone
@@ -368,7 +380,7 @@ object f_finder: Tf_finder
     object PanelOffset: TPanel
       Left = 0
       Height = 34
-      Top = 400
+      Top = 440
       Width = 354
       Align = alTop
       BevelOuter = bvNone
@@ -401,7 +413,7 @@ object f_finder: Tf_finder
     object PanelBinning: TPanel
       Left = 0
       Height = 58
-      Top = 308
+      Top = 348
       Width = 354
       Align = alTop
       BevelOuter = bvNone
@@ -447,12 +459,12 @@ object f_finder: Tf_finder
     end
     object Panel4: TPanel
       Left = 0
-      Height = 306
-      Top = 494
+      Height = 266
+      Top = 534
       Width = 354
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 306
+      ClientHeight = 266
       ClientWidth = 354
       ParentBackground = False
       ParentColor = False
