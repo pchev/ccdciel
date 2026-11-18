@@ -3671,7 +3671,7 @@ end;
 procedure Tf_main.UpdConfig(oldver:string);
 var ok,b1,b2,b3:boolean;
     i,j,n: integer;
-    f: double;
+    f,x,y: double;
     msg,buf,val: string;
 begin
 try
@@ -3867,6 +3867,16 @@ try
        end;
        if msg<>'' then MessageDlg(caption,'Delete reserved custom header '+crlf+msg,mtWarning,[mbOK],0);
      end;
+  end;
+  if oldver<'0.9.98' then begin
+    x:=config.GetValue('/Finder/OffsetX',0.0);
+    y:=config.GetValue('/Finder/OffsetY',0.0);
+    config.SetValue('/Finder/OffsetEX',x);
+    config.SetValue('/Finder/OffsetEY',y);
+    config.SetValue('/Finder/OffsetWX',x);
+    config.SetValue('/Finder/OffsetWY',y);
+    config.DeleteValue('/Finder/OffsetX');
+    config.DeleteValue('/Finder/OffsetY');
   end;
   if config.Modified then begin
      config.SetValue('/Configuration/Version',ccdcielver);
@@ -4409,8 +4419,10 @@ begin
     astrometry.FinderBinning:=bin;
     f_finder.ShowCalibration;
     config.SetValue('/Finder/Binning',astrometry.FinderBinning);
-    config.SetValue('/Finder/OffsetX',astrometry.FinderOffsetX);
-    config.SetValue('/Finder/OffsetY',astrometry.FinderOffsetY);
+    config.SetValue('/Finder/OffsetWX',astrometry.FinderOffsetX);
+    config.SetValue('/Finder/OffsetWY',astrometry.FinderOffsetY);
+    config.SetValue('/Finder/OffsetEX',astrometry.FinderOffsetX);
+    config.SetValue('/Finder/OffsetEY',astrometry.FinderOffsetY);
   end;
 end;
 
@@ -5439,8 +5451,9 @@ begin
   CdCAdjustFrame:=config.GetValue('/Planetarium/CdCAdjustFrame',true);
   PlanetariumShowAstrometry:=config.GetValue('/Planetarium/ShowAstrometry',false);
 
-  astrometry.FinderOffsetX:=config.GetValue('/Finder/OffsetX',0.0);
-  astrometry.FinderOffsetY:=config.GetValue('/Finder/OffsetY',0.0);
+  buf:=f_finder.PierSide;
+  astrometry.FinderOffsetX:=config.GetValue('/Finder/Offset'+buf+'X',0.0);
+  astrometry.FinderOffsetY:=config.GetValue('/Finder/Offset'+buf+'Y',0.0);
   astrometry.FinderBinning:=config.GetValue('/Finder/Binning',1);
   astrometry.FinderSoftBinning:=config.GetValue('/Finder/SoftBinning',1);
   f_finder.cbSoftBinning.Checked:=(astrometry.FinderSoftBinning=2);
@@ -5986,6 +5999,7 @@ procedure Tf_main.SaveInternalGuiderSettings;
 var so:TSlitOffset;
     ref:TStarAutoexposureRef;
     i,n: integer;
+    buf: string;
 begin
   config.SetValue('/InternalGuider/RaGain',f_internalguider.ragain);
   config.SetValue('/InternalGuider/DecGain',f_internalguider.decgain);
@@ -6078,8 +6092,10 @@ begin
   config.SetValue('/InternalGuider/SpiralDither',f_internalguider.SpiralDither);
 
   // finder offset need to be saved at the same time
-  config.SetValue('/Finder/OffsetX',astrometry.FinderOffsetX);
-  config.SetValue('/Finder/OffsetY',astrometry.FinderOffsetY);
+
+  buf:=f_finder.PierSide;
+  config.SetValue('/Finder/Offset'+buf+'X',astrometry.FinderOffsetX);
+  config.SetValue('/Finder/Offset'+buf+'Y',astrometry.FinderOffsetY);
   config.SetValue('/Finder/Binning',astrometry.FinderBinning);
   config.SetValue('/Finder/Visu/Gamma',f_finder.visu.Gamma.Value);
   config.SetValue('/Finder/Visu/ClipRange',f_finder.visu.BtnClipRange.Down);
@@ -8520,6 +8536,12 @@ if rotator.Status=devConnected then begin
    rotator.MountPierSide:=mount.PierSide;
    RotatorAngleChange(self);
 end;
+if mount.PierSide=pierEast then
+  f_finder.PierSide:='W'      // pointing direction, same as internal guider
+else if mount.PierSide=pierWest then
+  f_finder.PierSide:='E'
+else
+  f_finder.PierSide:='-'
 end;
 
 Procedure Tf_main.MountTrackingChange(Sender: TObject);

@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  UScaleDPI, u_global, u_utils, Graphics, Dialogs, u_translation, cu_camera, indiapi,
-      fu_visu, cu_astrometry, pu_findercalibration, math,
+      fu_visu, cu_astrometry, pu_findercalibration, math, LCLIntf,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls, SpinEx, Buttons, Menus;
 
 type
@@ -46,6 +46,7 @@ type
     cbSaveImages: TCheckBox;
     cbSoftBinning: TCheckBox;
     Cooler: TCheckBox;
+    lblPierSide: TEdit;
     Gain: TSpinEditEx;
     Label14: TLabel;
     Label15: TLabel;
@@ -114,6 +115,8 @@ type
     function GetFilterNoise:Boolean;
     procedure SetFilterStrength(value:integer);
     function GetFilterStrength:integer;
+    procedure SetPierSide(value:string);
+    function GetPierSide: string;
   public
     { public declarations }
     visu: Tf_visu;
@@ -131,6 +134,7 @@ type
     property DrawSettingChange: boolean read FDrawSettingChange write FDrawSettingChange;
     property FilterNoise: boolean read GetFilterNoise write SetFilterNoise;
     property FilterStrength: integer read GetFilterStrength write SetFilterStrength;
+    property PierSide: string read GetPierSide write SetPierSide;
     property onStart: TNotifyEvent read FonStart write FonStart;
     property onStop: TNotifyEvent read FonStop write FonStop;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
@@ -310,6 +314,7 @@ procedure Tf_finder.ButtonCalibrateClick(Sender: TObject);
 var exp,ra2000,de2000:double;
     bin,sgain,soffset: integer;
     restartloop:boolean;
+    buf: string;
 begin
 if (FCamera.Status=devConnected) then begin
   restartloop:=FinderPreviewLoop;
@@ -340,7 +345,10 @@ if (FCamera.Status=devConnected) then begin
     if FAstrometry.LastResult and FAstrometry.GetFinderOffset(ra2000,de2000) then begin
       ShowCalibration;
       FAstrometry.FinderBinning:=bin;
-      msg(rsNewFinderCal, 3);
+      buf:=GetPierSide;
+      config.SetValue('/Finder/Offset'+buf+'X',FAstrometry.FinderOffsetX);
+      config.SetValue('/Finder/Offset'+buf+'Y',FAstrometry.FinderOffsetY);
+      msg(rsNewFinderCal+', '+rsSideOfPier+'='+buf, 3);
       msg(Format(rsMainImageCen, [OffsetX.Text, OffsetY.Text]), 3);
     end
     else begin
@@ -444,7 +452,8 @@ end;
 
 procedure Tf_finder.BinningChange(Sender: TObject);
 var oldbin,newbin: integer;
-    scaling: double;
+    scaling,x,y: double;
+    buf: string;
 begin
   oldbin:=FAstrometry.FinderBinning*FAstrometry.FinderSoftBinning;
   newbin:=Binning.Value;
@@ -459,11 +468,19 @@ begin
   FAstrometry.FinderOffsetX:=FAstrometry.FinderOffsetX*scaling;
   FAstrometry.FinderOffsetY:=FAstrometry.FinderOffsetY*scaling;
   FAstrometry.FinderBinning:=Binning.Value;
-  config.SetValue('/Finder/OffsetX',astrometry.FinderOffsetX);
-  config.SetValue('/Finder/OffsetY',astrometry.FinderOffsetY);
+  buf:=GetPierSide;
+  config.SetValue('/Finder/Offset'+buf+'X',astrometry.FinderOffsetX);
+  config.SetValue('/Finder/Offset'+buf+'Y',astrometry.FinderOffsetY);
   config.SetValue('/Finder/Binning',astrometry.FinderBinning);
   config.SetValue('/PrecSlew/Binning',Binning.Value);
   config.SetValue('/Finder/SoftBinning',FAstrometry.FinderSoftBinning);
+  if buf='W' then buf:='E' else buf:='W';
+  x:=config.GetValue('/Finder/Offset'+buf+'X',0);
+  y:=config.GetValue('/Finder/Offset'+buf+'Y',0);
+  x:=x*scaling;
+  y:=y*scaling;
+  config.SetValue('/Finder/Offset'+buf+'X',x);
+  config.SetValue('/Finder/Offset'+buf+'Y',y);
   ShowCalibration;
   if FinderPreviewLoop then begin
     StopLoop;
@@ -534,6 +551,25 @@ end;
 function Tf_finder.GetFilterStrength:integer;
 begin
   result:=cbFilterstrength.ItemIndex+1;
+end;
+
+procedure Tf_finder.SetPierSide(value:string);
+var buf: string;
+begin
+  lblPierSide.Text:=value;   // pointing direction, same as internal guider
+  buf:=GetPierSide;
+  astrometry.FinderOffsetX:=config.GetValue('/Finder/Offset'+buf+'X',0.0);
+  astrometry.FinderOffsetY:=config.GetValue('/Finder/Offset'+buf+'Y',0.0);
+  ShowCalibration;
+  PostMessage(MsgHandle, LM_CCDCIEL, M_RedrawFinderImage, 0);
+end;
+
+function Tf_finder.GetPierSide: string;
+begin
+  if lblPierSide.Text='W' then    // only W/E response here
+    result:='W'
+  else
+    result:='E';
 end;
 
 end.

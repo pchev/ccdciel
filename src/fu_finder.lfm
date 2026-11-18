@@ -89,7 +89,7 @@ object f_finder: Tf_finder
         OnChange = OffsetYChange
       end
       object ButtonCalibrate: TButton
-        Left = 7
+        Left = 8
         Height = 25
         Hint = 'Calibrate the posiiton of the target in the finder image'
         Top = 100
@@ -108,6 +108,16 @@ object f_finder: Tf_finder
         Caption = 'Mouse position'
         GroupIndex = 1
         OnClick = ButtonMousePositionClick
+      end
+      object lblPierSide: TEdit
+        Left = 229
+        Height = 32
+        Hint = 'Mount pier side'
+        Top = 8
+        Width = 40
+        ReadOnly = True
+        TabOrder = 3
+        Text = '-'
       end
     end
     object Panel2: TPanel
