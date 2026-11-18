@@ -3893,8 +3893,7 @@ begin
   AppClose:=true;
 
   SaveSettings;
-  if Autoguider.AutoguiderType=agINTERNAL then
-    SaveInternalGuiderSettings;
+  SaveInternalGuiderSettings;
   SaveConfig;
 
   try
@@ -5460,6 +5459,7 @@ begin
   f_finder.Binning.Value:=config.GetValue('/PrecSlew/Binning',1);
   f_finder.ShowCalibration;
   f_finder.PreviewExp.Value:=config.GetValue('/PrecSlew/Exposure',10.0);
+  f_finder.ExpDelay.Value:=config.GetValue('/Finder/ExpDelay',0);
   if findercamera.Status=devDisconnected then begin
     f_finder.Gain.Value:=config.GetValue('/Finder/Gain',0);
     f_finder.Offset.Value:=config.GetValue('/Finder/Offset',0);
@@ -6103,6 +6103,7 @@ begin
   config.SetValue('/Finder/Temperature',f_finder.Temperature.Value);
   config.SetValue('/Finder/FilterNoise',f_finder.FilterNoise);
   config.SetValue('/Finder/FilterStrength',f_finder.FilterStrength);
+  config.SetValue('/Finder/ExpDelay',f_finder.ExpDelay.Value);
 
   // star autoexposure in sequence editor
   n:=f_autoexposurestep.cbRef.Items.Count;
@@ -9143,8 +9144,7 @@ end;
 procedure Tf_main.MenuSaveConfigClick(Sender: TObject);
 begin
  SaveSettings;
- if Autoguider.AutoguiderType=agINTERNAL then
-   SaveInternalGuiderSettings;
+ SaveInternalGuiderSettings;
  SaveConfig;
 end;
 
@@ -10558,8 +10558,7 @@ begin
 
      SetSequenceDir(f_option.SeqDir.Text);
 
-     if TAutoguiderType(f_option.AutoguiderType)=agINTERNAL then
-       SaveInternalGuiderSettings;
+     SaveInternalGuiderSettings;
 
      SaveConfig;
 
@@ -19642,6 +19641,7 @@ begin
   DrawFinderImage(displayimage);
   // start next exposure
   if FinderPreviewLoop and (not FinderCancelPreviewLoop) then begin
+    f_finder.SetExposureStartTime;
     Application.QueueAsyncCall(@f_finder.StartExposureAsync,0);
     FFinderProgress:=0;
   end

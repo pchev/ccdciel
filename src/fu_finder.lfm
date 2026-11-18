@@ -2,9 +2,9 @@ object f_finder: Tf_finder
   Left = 0
   Height = 800
   Top = 0
-  Width = 281
+  Width = 354
   ClientHeight = 800
-  ClientWidth = 281
+  ClientWidth = 354
   LCLVersion = '4.8.0.0'
   ParentFont = False
   TabOrder = 0
@@ -14,7 +14,7 @@ object f_finder: Tf_finder
     Left = 0
     Height = 20
     Top = 0
-    Width = 281
+    Width = 354
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -30,11 +30,11 @@ object f_finder: Tf_finder
     Left = 0
     Height = 800
     Top = 20
-    Width = 281
+    Width = 354
     Align = alTop
     BevelOuter = bvNone
     ClientHeight = 800
-    ClientWidth = 281
+    ClientWidth = 354
     ParentBackground = False
     ParentColor = False
     ParentFont = False
@@ -43,11 +43,11 @@ object f_finder: Tf_finder
       Left = 0
       Height = 164
       Top = 144
-      Width = 281
+      Width = 354
       Align = alTop
       Caption = 'Target position in finder image'
       ClientHeight = 135
-      ClientWidth = 277
+      ClientWidth = 350
       ParentBackground = False
       TabOrder = 0
       object Label1: TLabel
@@ -124,11 +124,11 @@ object f_finder: Tf_finder
       Left = 0
       Height = 144
       Top = 0
-      Width = 281
+      Width = 354
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 144
-      ClientWidth = 281
+      ClientWidth = 354
       ParentBackground = False
       TabOrder = 1
       object BtnPreviewLoop: TButton
@@ -221,16 +221,58 @@ object f_finder: Tf_finder
         TabOrder = 5
         Text = '1'
       end
+      object Label59: TLabel
+        AnchorSideLeft.Control = ExpDelay
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = Label19
+        Left = 302
+        Height = 18
+        Top = 45
+        Width = 20
+        BorderSpacing.Left = 6
+        Caption = 'sec'
+        ParentColor = False
+      end
+      object Label19: TLabel
+        AnchorSideLeft.Control = PreviewExp
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = PreviewExp
+        AnchorSideTop.Side = asrCenter
+        Left = 226
+        Height = 18
+        Top = 45
+        Width = 8
+        BorderSpacing.Left = 6
+        Caption = '+'
+        ParentColor = False
+      end
+      object ExpDelay: TSpinEditEx
+        AnchorSideLeft.Control = Label19
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = Label19
+        AnchorSideTop.Side = asrCenter
+        Left = 238
+        Height = 32
+        Hint = 'Delay between exposures in seconds'
+        Top = 38
+        Width = 58
+        BorderSpacing.Left = 4
+        MaxLength = 0
+        TabOrder = 6
+        MaxValue = 60
+        NullValue = 0
+        Value = 0
+      end
     end
     object PanelTemperature: TPanel
       Left = 0
       Height = 60
       Top = 434
-      Width = 281
+      Width = 354
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 60
-      ClientWidth = 281
+      ClientWidth = 354
       ParentBackground = False
       TabOrder = 2
       object Label21: TLabel
@@ -294,11 +336,11 @@ object f_finder: Tf_finder
       Left = 0
       Height = 34
       Top = 366
-      Width = 281
+      Width = 354
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 34
-      ClientWidth = 281
+      ClientWidth = 354
       ParentBackground = False
       TabOrder = 3
       object Label15: TLabel
@@ -327,11 +369,11 @@ object f_finder: Tf_finder
       Left = 0
       Height = 34
       Top = 400
-      Width = 281
+      Width = 354
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 34
-      ClientWidth = 281
+      ClientWidth = 354
       ParentBackground = False
       TabOrder = 4
       object Label16: TLabel
@@ -360,11 +402,11 @@ object f_finder: Tf_finder
       Left = 0
       Height = 58
       Top = 308
-      Width = 281
+      Width = 354
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 58
-      ClientWidth = 281
+      ClientWidth = 354
       ParentBackground = False
       TabOrder = 5
       object Label14: TLabel
@@ -407,11 +449,11 @@ object f_finder: Tf_finder
       Left = 0
       Height = 306
       Top = 494
-      Width = 281
+      Width = 354
       Align = alClient
       BevelOuter = bvNone
       ClientHeight = 306
-      ClientWidth = 281
+      ClientWidth = 354
       ParentBackground = False
       ParentColor = False
       TabOrder = 6
@@ -431,10 +473,10 @@ object f_finder: Tf_finder
     Left = 0
     Height = 50
     Top = 800
-    Width = 281
+    Width = 354
     Align = alTop
     ClientHeight = 50
-    ClientWidth = 281
+    ClientWidth = 354
     TabOrder = 1
     Visible = False
     object Button1: TButton
@@ -448,8 +490,8 @@ object f_finder: Tf_finder
     end
   end
   object PopupMenuDark: TPopupMenu
-    Left = 232
-    Top = 24
+    Left = 24
+    Top = 544
     object MenuItemDarkInfo: TMenuItem
       Caption = 'MenuItemDarkInfo'
       OnClick = MenuItemDarkInfoClick

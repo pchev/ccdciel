@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  UScaleDPI, u_global, u_utils, Graphics, Dialogs, u_translation, cu_camera, indiapi,
-      fu_visu, cu_astrometry, pu_findercalibration, math, LCLIntf,
+      fu_visu, cu_astrometry, pu_findercalibration, math, LCLIntf, cu_waitthread,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls, SpinEx, Buttons, Menus;
 
 type
@@ -46,6 +46,9 @@ type
     cbSaveImages: TCheckBox;
     cbSoftBinning: TCheckBox;
     Cooler: TCheckBox;
+    ExpDelay: TSpinEditEx;
+    Label19: TLabel;
+    Label59: TLabel;
     lblPierSide: TEdit;
     Gain: TSpinEditEx;
     Label14: TLabel;
@@ -107,6 +110,7 @@ type
     FDrawSettingChange: boolean;
     LoopExp:double;
     LoopBin,LoopGain,LoopOffset: integer;
+    NextExposureStartTime: double;
     procedure msg(txt:string; level: integer);
     procedure ForceRedraw;
     Procedure Redraw(Sender: TObject);
@@ -125,6 +129,7 @@ type
     procedure SetLang;
     procedure SetTitleColor;
     procedure ShowCalibration;
+    procedure SetExposureStartTime;
     Procedure StartExposureAsync(Data: PtrInt);
     procedure StartLoop;
     procedure StopLoop(abort: boolean=true);
@@ -181,6 +186,7 @@ begin
  FinderCapturingDark:=false;
  FinderPreviewLoop:=false;
  visu.BtnBullsEye.Down:=true;
+ NextExposureStartTime:=0;
  LabelInfo.Caption:='';
 end;
 
@@ -245,6 +251,7 @@ begin
   FCamera.SaveFrames:=false;
   FCamera.AlignFrames:=false;
   FCamera.FrameType:=LIGHT;
+  NextExposureStartTime:=0;
   if Assigned(FonStart) then FonStart(self);
   Application.QueueAsyncCall(@StartExposureAsync,0);
 end;
@@ -267,9 +274,21 @@ begin
   LabelInfo.Caption := rsStop;
 end;
 
+procedure Tf_finder.SetExposureStartTime;
+begin
+  NextExposureStartTime:=now+ExpDelay.Value/SecsPerDay;
+end;
+
 Procedure Tf_finder.StartExposureAsync(Data: PtrInt);
 begin
  if (FCamera.Status=devConnected) then begin
+   // check start delay
+   if now<NextExposureStartTime then begin
+     if not FinderPreviewLoop then exit;
+     LabelInfo.Caption:=rsWaiting+ellipsis;
+     WaitExecute(50,@StartExposureAsync,0);
+     exit;
+   end;
    LoopExp:=max(FCamera.ExposureRange.min,PreviewExp.Value);
    LoopGain:=config.GetValue('/Finder/Gain',NullInt);
    LoopOffset:=config.GetValue('/Finder/Offset',NullInt);
