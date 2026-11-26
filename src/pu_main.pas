@@ -51,7 +51,7 @@ uses
   cu_ascomrestrotator, cu_ascomrestsafety, cu_ascomrestweather, cu_ascomrestwheel, pu_polaralign, pu_polaralign2, pu_collimation,
   cu_switch, cu_ascomswitch, cu_ascomrestswitch, cu_indiswitch, cu_cover, cu_ascomcover, cu_ascomrestcover, cu_indicover,
   u_annotation, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase, lclplatformdef, Grids,
-  LazUTF8, Classes, dynlibs, LCLType, LMessages, IniFiles, IntfGraphics, FPImage, GraphType, LCLIntf,
+  LazUTF8, Classes, dynlibs, LCLType, LMessages, IniFiles, IntfGraphics, FPImage, GraphType, LCLIntf, LazVersion,
   SysUtils, FileUtil, LazFileUtils, LazSysUtils, Forms, Controls, Math, Graphics, Dialogs, u_speech,
   StdCtrls, ExtCtrls, Menus, ComCtrls, Buttons, Types, u_translation;
 
