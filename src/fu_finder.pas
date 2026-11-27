@@ -528,11 +528,9 @@ end;
 
 function Tf_finder.Snapshot(exp: double; fn: string): boolean;
 var bin,sgain,soffset: integer;
-    restartloop:boolean;
 begin
 try
   if (FCamera.Status=devConnected) then begin
-    restartloop:=FinderPreviewLoop;
     if FinderPreviewLoop then begin
       StopLoop;
       wait(1);
@@ -548,7 +546,6 @@ try
       exit;
     end;
     FCamera.Fits.SaveToFile(fn);
-    if restartloop then StartLoop;
     result:=true;
   end
   else begin
