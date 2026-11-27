@@ -168,6 +168,7 @@ type
     function cmd_FinderStopLoop:string;
     function cmd_FinderSaveImages(onoff:string):string;
     function cmd_FinderSnapshot(exp,basefn,count:string):string;
+    function cmd_SetFinderCapturePath(value:string):string;
     function cmd_SetFinderTargetXY(sx,sy: string):string;
     function cmd_InternalGuiderSnapshot(exp,basefn,count:string):string;
     function cmd_InternalGuiderSaveFitsFile(basefn:string):string;
@@ -1018,6 +1019,12 @@ begin
  except
    result:=msgFailed;
  end;
+end;
+
+function Tf_scriptengine.cmd_SetFinderCapturePath(value:string):string;
+begin
+  FinderCapturePath:=value;
+  FFinder.DirectoryEdit1.Directory:=value;
 end;
 
 function Tf_scriptengine.cmd_InternalGuiderSnapshot(exp,basefn,count:string):string;

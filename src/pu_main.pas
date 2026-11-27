@@ -17673,6 +17673,12 @@ try
    buf:=f_scriptengine.cmd_FinderStartLoop(buf1);
    result:=result+'"result":{"status": "'+buf+'"}';
   end
+  else if method='FINDER_CAPTURE_PATH' then begin
+   CheckParamCount(1);
+   buf1:=trim(value[attrib.IndexOf('params.0')]);
+   buf:=f_scriptengine.cmd_SetFinderCapturePath(buf1);
+   result:=result+'"result":{"status": "'+buf+'"}';
+  end
   else if method='FINDER_SNAPSHOT' then begin
    CheckParamCount(2);
    buf1:=trim(value[attrib.IndexOf('params.0')]);
