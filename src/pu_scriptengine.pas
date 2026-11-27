@@ -1023,8 +1023,14 @@ end;
 
 function Tf_scriptengine.cmd_SetFinderCapturePath(value:string):string;
 begin
+result:=msgFailed;
+try
   FinderCapturePath:=value;
   FFinder.DirectoryEdit1.Directory:=value;
+  result:=msgOK;
+except
+  result:=msgFailed;
+end;
 end;
 
 function Tf_scriptengine.cmd_InternalGuiderSnapshot(exp,basefn,count:string):string;
