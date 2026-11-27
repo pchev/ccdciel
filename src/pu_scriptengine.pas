@@ -991,7 +991,9 @@ begin
  if n=0 then
    val(count,c,n);
  if n=0 then begin;
-   if CurrentSequenceDirectory<>'' then
+   if (FinderCapturePath<>'')and(FinderCapturePath<>BaseCapturePath) then
+     dir:=FinderCapturePath
+   else if CurrentSequenceDirectory<>'' then
      dir:=CurrentSequenceDirectory
    else
      dir:=BaseCapturePath;
